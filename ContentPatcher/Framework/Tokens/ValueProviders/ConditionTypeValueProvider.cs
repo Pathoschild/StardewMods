@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -13,16 +13,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet? AllowedRootValues;
+        private readonly IImmutableSet<string>? AllowedRootValues;
 
         /// <summary>Get the current values.</summary>
-        private readonly Func<InvariantHashSet> FetchValues;
+        private readonly Func<IImmutableSet<string>> FetchValues;
 
         /// <summary>Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</summary>
         private readonly Func<bool>? IsValidInContextImpl;
 
         /// <summary>The values as of the last context update.</summary>
-        private readonly InvariantHashSet Values = new();
+        private IImmutableSet<string> Values = ImmutableSets.Empty;
 
 
         /*********
@@ -38,8 +38,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(type, mayReturnMultipleValues)
         {
             this.IsValidInContextImpl = isValidInContext;
-            this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
-            this.FetchValues = () => new InvariantHashSet(values());
+            this.AllowedRootValues = allowedValues != null ? ImmutableSets.From(allowedValues) : null;
+            this.FetchValues = () => ImmutableSets.From(values());
         }
 
         /// <summary>Construct an instance.</summary>
@@ -56,14 +56,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             return this.IsChanged(this.Values, () =>
             {
-                this.Values.Clear();
-                if (this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl()))
-                    this.Values.AddMany(this.FetchValues());
+                return this.Values = this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl())
+                    ? ImmutableSets.From(this.FetchValues())
+                    : this.Values.Clear();
             });
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;

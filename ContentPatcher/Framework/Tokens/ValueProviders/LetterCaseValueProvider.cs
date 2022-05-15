@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -39,9 +39,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, out IImmutableSet<string> allowedValues)
         {
-            allowedValues = new InvariantHashSet(this.GetValues(input));
+            allowedValues = ImmutableSets.From(this.GetValues(input));
             return true;
         }
 
@@ -50,14 +50,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            string output = this.Type switch
+            string? output = this.Type switch
             {
-                ConditionType.Lowercase => input.TokenString!.Value!.ToLowerInvariant(),
-                ConditionType.Uppercase => input.TokenString!.Value!.ToUpperInvariant(),
+                ConditionType.Lowercase => input.TokenString?.Value?.ToLowerInvariant(),
+                ConditionType.Uppercase => input.TokenString?.Value?.ToUpperInvariant(),
                 _ => throw new NotSupportedException($"Unimplemented letter case type '{this.Type}'.") // should never happen
             };
 
-            return new[] { output };
+            return ImmutableSets.FromValue(output ?? string.Empty);
         }
     }
 }

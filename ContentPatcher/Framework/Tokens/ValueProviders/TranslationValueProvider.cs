@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -54,7 +53,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // get translation
             string? key = input.GetFirstPositionalArg();
             if (string.IsNullOrWhiteSpace(key))
-                return Array.Empty<string>();
+                return ImmutableSets.Empty;
             Translation translation = this.TranslationHelper.Get(key);
 
             // add tokens
@@ -74,7 +73,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     .UsePlaceholder(false); // allow setting a blank default
             }
 
-            return new string[] { translation };
+            return ImmutableSets.FromValue(translation);
         }
 
 

@@ -45,9 +45,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
 
-        /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily means it succeeded (e.g. the file may not have existed).</summary>
-        private bool AttemptedDataLoad;
-
         /// <summary>The cached JSON serializer used to apply JSON structures to a model.</summary>
         private readonly Lazy<JsonSerializer> Serializer = new(() => new()
         {
@@ -126,59 +123,54 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
-            // skip: don't need to handle a data file
-            if (!this.HasFromAsset)
-                return base.UpdateContext(context);
-
-            // skip: file already loaded and target didn't change
-            if (!this.ManagedRawTargetAsset!.UpdateContext(context) && this.AttemptedDataLoad)
-                return base.UpdateContext(context);
-
-            // reload non-data changes
-            this.Contextuals
-                .Remove(this.Records)
-                .Remove(this.Fields)
-                .Remove(this.MoveRecords);
-            base.UpdateContext(context);
-
-            // reload data
-            this.Records = Array.Empty<EditDataPatchRecord>();
-            this.Fields = Array.Empty<EditDataPatchField>();
-            this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
-            if (this.IsReady)
+            // need to reload data for legacy FromFile
+            if (this.HasFromAsset && this.ManagedRawFromAsset.UpdateContext(context))
             {
-                if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord>? records, out List<EditDataPatchField>? fields, out List<EditDataPatchMoveRecord>? moveEntries, out string? error))
-                {
-                    this.Records = records.ToArray();
-                    this.Fields = fields.ToArray();
-                    this.MoveRecords = moveEntries.ToArray();
-                }
-                else
-                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
+                // reload non-data changes
+                this.Contextuals
+                    .Remove(this.Records)
+                    .Remove(this.Fields)
+                    .Remove(this.MoveRecords);
+                base.UpdateContext(context);
 
-                this.AttemptedDataLoad = true;
+                // reload data
+                this.Records = Array.Empty<EditDataPatchRecord>();
+                this.Fields = Array.Empty<EditDataPatchField>();
+                this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
+                if (this.IsReady)
+                {
+                    if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord>? records, out List<EditDataPatchField>? fields, out List<EditDataPatchMoveRecord>? moveEntries, out string? error))
+                    {
+                        this.Records = records.ToArray();
+                        this.Fields = fields.ToArray();
+                        this.MoveRecords = moveEntries.ToArray();
+                    }
+                    else
+                        this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
+                }
+
+                // update context
+                this.Contextuals
+                    .Add(this.Records)
+                    .Add(this.Fields)
+                    .Add(this.MoveRecords)
+                    .UpdateContext(context);
+                this.IsReady = this.IsReady && this.Contextuals.IsReady;
+
+                return this.MarkUpdated();
             }
 
-            // update context
-            this.Contextuals
-                .Add(this.Records)
-                .Add(this.Fields)
-                .Add(this.MoveRecords)
-                .UpdateContext(context);
-            this.IsReady = this.IsReady && this.Contextuals.IsReady;
-
-            return this.MarkUpdated();
+            // no custom logic needed
+            return base.UpdateContext(context);
         }
 
         /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
-            string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
-
             // get editor
             if (!this.EditorFactory.TryGetEditorFor(asset.Data, out IKeyValueEditor? editor))
             {
-                this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true)}", LogLevel.Warn);
+                this.WarnForPatch(this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true));
                 return;
             }
 
@@ -197,7 +189,7 @@ namespace ContentPatcher.Framework.Patches
 
                     if (!this.EditorFactory.TryGetEditorFor(data, out editor))
                     {
-                        this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key))}", LogLevel.Warn);
+                        this.WarnForPatch(this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key)));
                         return;
                     }
                 }
@@ -304,7 +296,6 @@ namespace ContentPatcher.Framework.Patches
             int i = 0;
             foreach (EditDataPatchRecord record in this.Records)
             {
-                string errorPrefix = $"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}";
                 i++;
 
                 // get entry info
@@ -313,7 +304,7 @@ namespace ContentPatcher.Framework.Patches
 
                 // validate
                 if (!editor.CanAddEntries && !editor.HasEntry(key))
-                    this.Monitor.Log($"{errorPrefix}: this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model.", LogLevel.Warn);
+                    this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model.");
 
                 // apply string
                 else if (valueType == typeof(string))
@@ -323,7 +314,7 @@ namespace ContentPatcher.Framework.Patches
                     else if (record.Value.Value is JValue field)
                         editor.SetEntry(key, field);
                     else
-                        this.Monitor.Log($"{errorPrefix}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                        this.WarnForRecord(i, $"this asset has string values (but {record.Value.Value.Type} values were provided).");
                 }
 
                 // apply object
@@ -334,7 +325,7 @@ namespace ContentPatcher.Framework.Patches
                     else if (record.Value.Value is JObject field)
                         editor.SetEntry(key, field);
                     else
-                        this.Monitor.Log($"{errorPrefix}: this asset has {valueType} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                        this.WarnForRecord(i, $"this asset has {valueType} values (but {record.Value.Value.Type} values were provided).");
                 }
             }
         }
@@ -346,8 +337,6 @@ namespace ContentPatcher.Framework.Patches
         {
             foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value!))
             {
-                string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
-
                 // get entry info
                 object key = editor.ParseKey(recordGroup.Key);
                 Type? valueType = editor.GetEntryType(key);
@@ -355,7 +344,7 @@ namespace ContentPatcher.Framework.Patches
                 // skip if doesn't exist
                 if (!editor.HasEntry(key))
                 {
-                    this.Monitor.Log($"{errorPrefix}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
+                    this.WarnForField($"there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.");
                     continue;
                 }
 
@@ -367,12 +356,12 @@ namespace ContentPatcher.Framework.Patches
                     {
                         if (!int.TryParse(field.FieldKey.Value, out int index))
                         {
-                            this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\" instead)).", LogLevel.Warn);
+                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\" instead)).");
                             continue;
                         }
                         if (index < 0 || index > actualFields.Length - 1)
                         {
-                            this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {index} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {index} (must be 0 to {actualFields.Length - 1}).");
                             continue;
                         }
 
@@ -562,6 +551,29 @@ namespace ContentPatcher.Framework.Patches
                 ? '^'
                 : '/';
         }
+
+        /// <summary>Log a warning for an issue when applying the patch.</summary>
+        /// <param name="message">The message to log.</param>
+        private void WarnForPatch(string message)
+        {
+            this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+        }
+
+        /// <summary>Log a warning for an issue when applying a field edit.</summary>
+        /// <param name="message">The message to log.</param>
+        private void WarnForField(string message)
+        {
+            this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+        }
+
+        /// <summary>Log a warning for an issue when applying a record.</summary>
+        /// <param name="index">The index of the record in the <see cref="Records"/> list.</param>
+        /// <param name="message">The message to log.</param>
+        private void WarnForRecord(int index, string message)
+        {
+            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{index}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+        }
+
 
         /// <summary>If an editor can't be constructed for a given data structure, get a human-readable error indicating why.</summary>
         /// <param name="nounPhrase">A noun phase </param>

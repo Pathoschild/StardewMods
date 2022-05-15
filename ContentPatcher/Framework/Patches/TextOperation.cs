@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Patches
         public TextOperation(TextOperationType operation, IManagedTokenString[] target, IManagedTokenString value, string? delimiter)
         {
             this.Operation = operation;
-            this.Target = target.Cast<ITokenString>().ToArray();
+            this.Target = target.ToArray<ITokenString>();
             this.Value = value;
             this.Delimiter = delimiter ?? string.Empty;
 
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

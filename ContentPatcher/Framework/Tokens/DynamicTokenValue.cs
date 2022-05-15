@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 
@@ -60,7 +61,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

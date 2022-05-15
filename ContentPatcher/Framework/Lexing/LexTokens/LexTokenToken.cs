@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -48,9 +49,9 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>Get the unique ID of the mod which provides this token, if applicable.</summary>
         public string? GetProviderModId()
         {
-            string[] nameParts = this.Name.Split(InternalConstants.ModTokenSeparator, 2);
+            string[] nameParts = this.Name.Split(InternalConstants.ModTokenSeparator, 2, StringSplitOptions.TrimEntries);
             return nameParts.Length == 2
-                ? nameParts[0].Trim()
+                ? nameParts[0]
                 : null;
         }
 

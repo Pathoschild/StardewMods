@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -72,7 +73,7 @@ namespace ContentPatcher.Framework.Migrations
             bool isQuery = condition.Name?.EqualsIgnoreCase(nameof(ConditionType.Query)) == true;
             if (isQuery)
             {
-                InvariantHashSet? values = condition.Values?.SplitValuesUnique();
+                IImmutableSet<string>? values = condition.Values?.SplitValuesUnique();
                 if (values?.Any() == true && values.All(p => bool.TryParse(p, out bool _)))
                 {
                     error = "using boolean query expressions";

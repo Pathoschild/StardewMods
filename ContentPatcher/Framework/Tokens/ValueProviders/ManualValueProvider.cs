@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Pathoschild.Stardew.Common.Utilities;
+using System.Linq;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -14,13 +15,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly bool IsBounded;
 
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private InvariantHashSet? AllowedRootValues;
+        private IImmutableSet<string>? AllowedRootValues = ImmutableSets.Empty;
 
         /// <summary>The current values.</summary>
-        private InvariantHashSet Values = new();
+        private IImmutableSet<string> Values = ImmutableSets.Empty;
 
         /// <summary>The tokens which the values use.</summary>
-        private readonly InvariantHashSet TokensUsed = new();
+        private IImmutableSet<string> TokensUsed = ImmutableSets.Empty;
 
 
         /*********
@@ -34,7 +35,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.IsBounded = isBounded;
 
-            this.AllowedRootValues = new InvariantHashSet();
             this.SetReady(false); // not ready until initialized
         }
 
@@ -54,17 +54,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // get possible values from literal token
-            InvariantHashSet splitValues = possibleValues.SplitValuesUnique();
-            foreach (string value in splitValues)
-                this.AllowedRootValues.Add(value.Trim());
-            this.MayReturnMultipleValuesForRoot = this.MayReturnMultipleValuesForRoot || splitValues.Count > 1;
+            IImmutableSet<string> splitValues = possibleValues.SplitValuesUnique();
+            this.AllowedRootValues = this.AllowedRootValues.Union(
+                possibleValues.SplitValuesUnique()
+            );
+            if (splitValues.Count > 1)
+                this.MayReturnMultipleValuesForRoot = true;
         }
 
         /// <summary>Add token names which this token may depend on.</summary>
         /// <param name="tokens">The token names used.</param>
         public void AddTokensUsed(IEnumerable<string> tokens)
         {
-            this.TokensUsed.AddMany(tokens);
+            this.TokensUsed = this.TokensUsed.AddMany(tokens);
         }
 
         /// <summary>Set the current values.</summary>
@@ -85,13 +87,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Value provider API
         ****/
         /// <inheritdoc />
-        public override IEnumerable<string> GetTokensUsed()
+        public override IImmutableSet<string> GetTokensUsed()
         {
             return this.TokensUsed;
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             allowedValues = this.IsBounded
                 ? this.AllowedRootValues

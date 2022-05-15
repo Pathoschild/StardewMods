@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -39,12 +40,12 @@ namespace ContentPatcher.Framework.Patches
         private bool FromAssetExistsImpl;
 
         /// <summary>The <see cref="RawFromAsset"/> with support for managing its state.</summary>
-        private IManagedTokenString? ManagedRawFromAsset { get; }
+        protected IManagedTokenString? ManagedRawFromAsset { get; }
 
         /// <summary>The <see cref="RawTargetAsset"/> with support for managing its state.</summary>
         protected IManagedTokenString? ManagedRawTargetAsset { get; }
 
-        /// <summary>Whether the patch has a 'From' field specified, regardless of whether it's ready.</summary>
+        /// <summary>Whether the patch has a 'FromFile' field specified, regardless of whether it's ready.</summary>
         [MemberNotNullWhen(true, nameof(Patch.RawFromAsset), nameof(Patch.ManagedRawFromAsset))]
         protected bool HasFromAsset => this.RawFromAsset != null && this.ManagedRawFromAsset != null;
 
@@ -186,7 +187,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public virtual IEnumerable<string> GetTokensUsed()
+        public virtual IImmutableSet<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

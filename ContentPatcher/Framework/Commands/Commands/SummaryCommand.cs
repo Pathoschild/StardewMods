@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -102,7 +103,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             // parse arguments
             bool showFull = false;
             bool sort = true;
-            var forModIds = new InvariantHashSet();
+            InvariantHashSet forModIds = new();
             foreach (string arg in args)
             {
                 // flags
@@ -143,12 +144,12 @@ namespace ContentPatcher.Framework.Commands.Commands
                 var tokensByProvider =
                     (
                         from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
-                        let inputArgs = token.GetAllowedInputArguments()?.ToArray()
+                        let inputArgs = token.GetAllowedInputArguments()
                         let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : Array.Empty<string>()
                         let isMultiValue =
-                            inputArgs?.Length > 1
+                            inputArgs?.Count > 1
                             || rootValues.Length > 1
-                            || (inputArgs?.Length == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input"))), sort).Count() > 1)
+                            || (inputArgs?.Count == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs.First(), path.With(token.Name, "input"))), sort).Count() > 1)
                         let mod = (token as ModProvidedToken)?.Mod
                         orderby isMultiValue // single-value tokens first, then alphabetically
                         select new { Mod = (IManifest?)mod, Token = token }
@@ -181,7 +182,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine("[ ] n/a");
                         else if (token.RequiresInput)
                         {
-                            InvariantHashSet? allowedInputs = token.GetAllowedInputArguments();
+                            IImmutableSet<string>? allowedInputs = token.GetAllowedInputArguments();
                             if (allowedInputs?.Any() == true)
                             {
                                 bool isFirst = true;
@@ -389,11 +390,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log update rate issues
                         if (patch.Patch != null)
                         {
-                            foreach ((UpdateRate rate, string label, InvariantHashSet tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
+                            foreach ((UpdateRate rate, string label, IImmutableSet<string> tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
                             {
                                 if (!patch.Patch.UpdateRate.HasFlag(rate))
                                 {
-                                    var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+                                    IImmutableSet<string> tokensUsed = patch.Patch.GetTokensUsed();
 
                                     string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
                                     if (locationTokensUsed.Any())

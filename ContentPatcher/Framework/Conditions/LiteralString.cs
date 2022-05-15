@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
@@ -57,9 +58,9 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
-            return Enumerable.Empty<string>();
+            return ImmutableSets.Empty;
         }
 
         /// <inheritdoc />

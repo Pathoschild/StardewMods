@@ -22,11 +22,5 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <param name="value">The single value to add.</param>
         public InvariantHashSet(string value)
             : base(new[] { value }, StringComparer.OrdinalIgnoreCase) { }
-
-        /// <summary>Get a hashset for boolean true/false.</summary>
-        public static InvariantHashSet Boolean()
-        {
-            return new InvariantHashSet(new[] { "true", "false" });
-        }
     }
 }

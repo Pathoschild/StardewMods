@@ -55,7 +55,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             return this.TryParseRange(input, out int min, out int max, out _)
                 ? Enumerable.Range(start: min, count: max - min + 1).Select(p => p.ToString())
-                : Enumerable.Empty<string>(); // error will be shown in validation
+                : ImmutableSets.Empty; // error will be shown in validation
         }
 
 
@@ -71,50 +71,42 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             min = 0;
             max = 0;
-            string errorPrefix = $"invalid input ('{input.TokenString}')";
 
             // check if input provided
             if (!input.HasPositionalArgs)
-            {
-                error = $"{errorPrefix}, token {this.Name} requires input arguments.";
-                return false;
-            }
+                return this.ParseError(input, $"token {this.Name} requires input arguments", out error);
 
             // validate length
             if (input.PositionalArgs.Length != 2)
-            {
-                error = $"{errorPrefix}, must specify a minimum and maximum value like {{{{{this.Name}:0,20}}}}.";
-                return false;
-            }
+                return this.ParseError(input, $"must specify a minimum and maximum value like {{{{{this.Name}:0,20}}}}", out error);
 
             // parse min/max values
             if (!int.TryParse(input.PositionalArgs[0], out min))
-            {
-                error = $"{errorPrefix}, can't parse min value '{input.PositionalArgs[0]}' as an integer.";
-                return false;
-            }
+                return this.ParseError(input, $"can't parse min value '{input.PositionalArgs[0]}' as an integer", out error);
             if (!int.TryParse(input.PositionalArgs[1], out max))
-            {
-                error = $"{errorPrefix}, can't parse max value '{input.PositionalArgs[1]}' as an integer.";
-                return false;
-            }
+                return this.ParseError(input, $"can't parse max value '{input.PositionalArgs[1]}' as an integer", out error);
 
             // validate range
             if (min > max)
-            {
-                error = $"{errorPrefix}, min value '{min}' can't be greater than max value '{max}'.";
-                return false;
-            }
+                return this.ParseError(input, $"min value '{min}' can't be greater than max value '{max}'", out error);
 
             int count = (max - min) + 1;
             if (count > RangeValueProvider.MaxCount)
-            {
-                error = $"{errorPrefix}, range can't exceed {RangeValueProvider.MaxCount} numbers (specified range would contain {count} numbers).";
-                return false;
-            }
+                return this.ParseError(input, $"range can't exceed {RangeValueProvider.MaxCount} numbers (specified range would contain {count} numbers)", out error);
 
             error = null;
             return true;
+        }
+
+        /// <summary>Build an error message for a parse issue.</summary>
+        /// <param name="input">The input for which parsing failed.</param>
+        /// <param name="message">The message to log.</param>
+        /// <param name="error">The constructed error message.</param>
+        /// <returns>Returns <c>false</c> for convenience.</returns>
+        private bool ParseError(IInputArguments input, string message, out string error)
+        {
+            error = $"invalid input('{input.TokenString}'), {message}.";
+            return false;
         }
     }
 }

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using ContentPatcher.Framework.Tokens.ValueProviders;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Tokens
@@ -64,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override IEnumerable<string> GetTokensUsed()
+        public override IImmutableSet<string> GetTokensUsed()
         {
             try
             {
@@ -73,7 +71,7 @@ namespace ContentPatcher.Framework.Tokens
             catch (Exception ex)
             {
                 this.Log(ex);
-                return Enumerable.Empty<string>();
+                return ImmutableSets.Empty;
             }
         }
 
@@ -121,7 +119,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, [NotNullWhen(false)] out string? error)
+        public override bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, IContext context, [NotNullWhen(false)] out string? error)
         {
             try
             {
@@ -136,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet? GetAllowedInputArguments()
+        public override IImmutableSet<string>? GetAllowedInputArguments()
         {
             try
             {
@@ -150,7 +148,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             try
             {
@@ -189,7 +187,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override IEnumerable<string> GetValues(IInputArguments input)
+        public override IImmutableSet<string> GetValues(IInputArguments input)
         {
             try
             {
@@ -202,7 +200,7 @@ namespace ContentPatcher.Framework.Tokens
             catch (Exception ex)
             {
                 this.Log(ex);
-                return Enumerable.Empty<string>();
+                return ImmutableSets.Empty;
             }
         }
 

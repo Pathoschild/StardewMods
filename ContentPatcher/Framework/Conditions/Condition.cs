@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -35,17 +33,15 @@ namespace ContentPatcher.Framework.Conditions
         public ITokenString Values { get; }
 
         /// <summary>The current values from <see cref="Values"/>.</summary>
-        public InvariantHashSet? CurrentValues { get; private set; }
+        public IImmutableSet<string> CurrentValues { get; private set; }
 
         /// <inheritdoc />
         public bool IsMutable => this.IsTokenMutable || this.Contextuals.IsMutable;
 
         /// <inheritdoc />
-        [MemberNotNullWhen(true, nameof(Condition.CurrentValues))]
-        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
+        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
 
         /// <summary>Whether the condition matches the current context.</summary>
-        [MemberNotNullWhen(true, nameof(Condition.CurrentValues))]
         public bool IsMatch { get; private set; }
 
 
@@ -71,8 +67,9 @@ namespace ContentPatcher.Framework.Conditions
                 .Add(values);
 
             // init immutable values
-            if (this.Values.IsReady)
-                this.CurrentValues = this.Values.SplitValuesUnique();
+            this.CurrentValues = this.Values.IsReady
+                ? this.Values.SplitValuesUnique()
+                : ImmutableSets.Empty;
         }
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
@@ -112,7 +109,7 @@ namespace ContentPatcher.Framework.Conditions
             }
             else
             {
-                this.CurrentValues = new InvariantHashSet();
+                this.CurrentValues = ImmutableSets.Empty;
                 this.IsMatch = false;
             }
 
@@ -123,11 +120,13 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
-            yield return this.Name;
-            foreach (string token in this.Contextuals.GetTokensUsed())
-                yield return token;
+            return ImmutableSets.From(
+                this.Contextuals
+                    .GetTokensUsed()
+                    .Concat(new[] { this.Name })
+            );
         }
 
         /// <inheritdoc />

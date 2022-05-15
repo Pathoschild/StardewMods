@@ -10,6 +10,13 @@ namespace ContentPatcher.Framework.Patches.EditData
     internal class KeyValueEditorFactory
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>A cache of editor constructors by data type.</summary>
+        private static readonly Dictionary<Type, Func<object, IKeyValueEditor>?> CachedConstructors = new();
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Get an editor for the given data structure, if it can be edited.</summary>
@@ -23,6 +30,33 @@ namespace ContentPatcher.Framework.Patches.EditData
             if (data == null || type == null)
                 return false;
 
+            // get factory
+            if (!KeyValueEditorFactory.CachedConstructors.TryGetValue(type, out Func<object, IKeyValueEditor>? getEditor))
+            {
+                if (!this.TryGetConstructorWithoutCache(type, out getEditor))
+                    getEditor = null;
+                KeyValueEditorFactory.CachedConstructors[type] = getEditor;
+            }
+
+            // build editor
+            if (getEditor != null)
+            {
+                editor = getEditor(data);
+                return true;
+            }
+
+            return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get an editor constructor for the given data structure (if it can be edited), ignoring the factory cache.</summary>
+        /// <param name="type">The data type to edit.</param>
+        /// <param name="getEditor">A callback which creates an editor for data of the given type, else <c>null</c>.</param>
+        private bool TryGetConstructorWithoutCache(Type type, [NotNullWhen(true)] out Func<object, IKeyValueEditor>? getEditor)
+        {
             // handle dictionary
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
@@ -37,15 +71,13 @@ namespace ContentPatcher.Framework.Patches.EditData
                 if (valueType == null)
                     throw new InvalidOperationException("Can't parse the asset's dictionary value type.");
 
-                // get underlying apply method
-                MethodInfo? method = this.GetType().GetMethod(nameof(this.GetDictionaryEditor), BindingFlags.Instance | BindingFlags.NonPublic);
+                // get constructor builder
+                MethodInfo? method = this.GetType().GetMethod(nameof(this.GetConstructorForDictionary), BindingFlags.Instance | BindingFlags.NonPublic);
                 if (method == null)
-                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.GetDictionaryEditor)} method.");
+                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.GetConstructorForDictionary)} method.");
 
-                // invoke method
-                editor = (IKeyValueEditor)method
-                    .MakeGenericMethod(keyType, valueType)
-                    .Invoke(this, new[] { data })!;
+                // create callback
+                getEditor = (Func<object, IKeyValueEditor>)method.MakeGenericMethod(keyType, valueType).Invoke(this, null)!;
                 return true;
             }
 
@@ -57,48 +89,42 @@ namespace ContentPatcher.Framework.Patches.EditData
                 if (keyType == null)
                     throw new InvalidOperationException("Can't parse the asset's list value type.");
 
-                // get underlying apply method
-                MethodInfo? method = this.GetType().GetMethod(nameof(this.GetListEditor), BindingFlags.Instance | BindingFlags.NonPublic);
+                // get constructor builder
+                MethodInfo? method = this.GetType().GetMethod(nameof(this.GetConstructorForList), BindingFlags.Instance | BindingFlags.NonPublic);
                 if (method == null)
-                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.GetListEditor)} method.");
+                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.GetConstructorForList)} method.");
 
-                // invoke method
-                editor = (IKeyValueEditor)method
-                    .MakeGenericMethod(keyType)
-                    .Invoke(this, new[] { data })!;
+                // create callback
+                getEditor = (Func<object, IKeyValueEditor>)method.MakeGenericMethod(keyType).Invoke(this, null)!;
                 return true;
             }
 
             // data model
             if (!type.IsValueType && !type.IsGenericType && type != typeof(string))
             {
-                editor = new ModelKeyValueEditor(data);
+                getEditor = data => new ModelKeyValueEditor(data);
                 return true;
             }
 
             // unknown type
+            getEditor = null;
             return false;
         }
 
 
-        /*********
-        ** Private methods
-        *********/
         /// <summary>Get an editor for a dictionary.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>
-        /// <param name="data">The data to edit.</param>
-        private IKeyValueEditor GetDictionaryEditor<TKey, TValue>(IDictionary<TKey, TValue> data)
+        private Func<object, IKeyValueEditor> GetConstructorForDictionary<TKey, TValue>()
         {
-            return new DictionaryKeyValueEditor<TKey, TValue>(data);
+            return data => new DictionaryKeyValueEditor<TKey, TValue>((IDictionary<TKey, TValue>)data);
         }
 
         /// <summary>Get an editor for a list.</summary>
         /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="data">The data to edit.</param>
-        private IKeyValueEditor GetListEditor<TValue>(IList<TValue> data)
+        private Func<object, IKeyValueEditor> GetConstructorForList<TValue>()
         {
-            return new ListKeyValueEditor<TValue>(data);
+            return data => new ListKeyValueEditor<TValue>((IList<TValue>)data);
         }
     }
 }

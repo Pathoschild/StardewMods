@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Lexing;
@@ -26,12 +27,12 @@ namespace ContentPatcher.Framework.Tokens
         internal const string InputSeparatorKey = "inputSeparator";
 
         /// <summary>The argument names handled by Content Patcher.</summary>
-        private static readonly ISet<string> ReservedArgKeys = new InvariantHashSet
+        private static readonly IImmutableSet<string> ReservedArgKeys = ImmutableSets.From(new[]
         {
             InputArguments.ContainsKey,
             InputArguments.ValueAtKey,
             InputArguments.InputSeparatorKey
-        };
+        });
 
         /****
         ** State
@@ -86,9 +87,11 @@ namespace ContentPatcher.Framework.Tokens
         ** Metadata
         ****/
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         public bool HasNamedArgs => this.NamedArgs.Any();
 
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         public bool HasPositionalArgs => this.PositionalArgs.Any();
 
         /// <inheritdoc />

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using ContentPatcher.Framework.Conditions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -38,7 +37,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return new[] { input.PositionalArgs.Length.ToString(CultureInfo.InvariantCulture) };
+            return ImmutableSets.FromValue(input.PositionalArgs.Length);
         }
     }
 }

@@ -63,6 +63,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        public Func<string, string>? NormalizeValue { get; protected set; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Try to create a convention wrapper for a given token instance.</summary>
@@ -129,6 +137,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                     && TryMap<ConventionDelegates.GetValues>(out error)
                     && TryMap<ConventionDelegates.UpdateContext>(out error);
             }
+            if (succeeded && result.NormalizeValueImpl is not null)
+                result.NormalizeValue = value => result.NormalizeValueImpl(value);
 
             wrapper = succeeded ? result : null;
             return succeeded;
@@ -221,15 +231,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
             error = null;
 
             return this.TryValidateValuesImpl?.Invoke(input, values, out error) ?? true;
-        }
-
-        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
-        /// <param name="value">The raw value.</param>
-        public string? NormalizeValue(string? value)
-        {
-            return this.NormalizeValueImpl != null
-                ? this.NormalizeValueImpl(value)
-                : value;
         }
 
 
@@ -335,8 +336,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                 return $"method {name} is a generic method, which isn't supported.";
 
             // check arguments
-            ParameterInfo[] sourceParams = source.GetParameters().ToArray();
-            ParameterInfo[] targetParams = target.GetParameters().ToArray();
+            ParameterInfo[] sourceParams = source.GetParameters();
+            ParameterInfo[] targetParams = target.GetParameters();
             if (sourceParams.Length != targetParams.Length)
                 return $"method {name} has {targetParams.Length} arguments, but expected {sourceParams.Length}.";
 
@@ -345,11 +346,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                 ParameterInfo sourceParam = sourceParams[i];
                 ParameterInfo targetParam = targetParams[i];
 
-                string paramErrorPrefix = $"method {name} > parameter {i + 1} ({targetParam.Name}) ";
                 if (sourceParam.ParameterType != targetParam.ParameterType)
-                    return $"{paramErrorPrefix} has type {GetTypeName(targetParam.ParameterType)}, but expected {GetTypeName(sourceParam.ParameterType)}.";
+                    return $"method {name} > parameter {i + 1} ({targetParam.Name}) has type {GetTypeName(targetParam.ParameterType)}, but expected {GetTypeName(sourceParam.ParameterType)}.";
                 if (sourceParam.Attributes != targetParam.Attributes)
-                    return $"{paramErrorPrefix} has attributes {targetParam.Attributes}, but expected {sourceParam.Attributes}.";
+                    return $"method {name} > parameter {i + 1} ({targetParam.Name}) has attributes {targetParam.Attributes}, but expected {sourceParam.Attributes}.";
             }
 
             // unknown reason

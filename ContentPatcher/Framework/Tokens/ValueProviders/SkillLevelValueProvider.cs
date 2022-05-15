@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>The player's current skill levels.</summary>
         private readonly Dictionary<Skill, int> SkillLevels = new();
+
+        /// <summary>The valid skill values.</summary>
+        private readonly IImmutableSet<string> ValidValues = ImmutableSets.From(Enum.GetNames(typeof(Skill)));
 
 
         /*********
@@ -63,9 +66,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidPositionalArgs()
+        public override IImmutableSet<string> GetValidPositionalArgs()
         {
-            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
+            return this.ValidValues;
         }
 
         /// <inheritdoc />
@@ -76,8 +79,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.HasPositionalArgs)
             {
                 return this.TryParseEnum(input.GetFirstPositionalArg(), out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level)
-                    ? new[] { level.ToString() }
-                    : Enumerable.Empty<string>();
+                    ? ImmutableSets.FromValue(level)
+                    : ImmutableSets.Empty;
             }
             else
             {

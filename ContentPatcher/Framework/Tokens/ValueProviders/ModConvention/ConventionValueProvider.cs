@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 {
@@ -38,8 +38,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <remarks>This is cached to ensure it never changes outside a context update (even if the mod token is otherwise incorrectly changing without a context update), since that would cause subtle hard-to-troubleshoot bugs where patches don't update correctly in some cases.</remarks>
         public bool IsReady { get; private set; }
 
-        /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
+        /// <inheritdoc />
         public bool BypassesContextValidation => false;
+
+        /// <inheritdoc />
+        public Func<string, string>? NormalizeValue => this.Provider.NormalizeValue;
 
 
         /*********
@@ -68,23 +71,23 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public bool TryValidateValues(IInputArguments input, InvariantHashSet values, [NotNullWhen(false)] out string? error)
+        public bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, [NotNullWhen(false)] out string? error)
         {
             return this.Provider.TryValidateValues(this.ToApiInput(input), values, out error);
         }
 
         /// <inheritdoc />
-        public InvariantHashSet GetValidPositionalArgs()
+        public IImmutableSet<string> GetValidPositionalArgs()
         {
-            return new InvariantHashSet(this.Provider.GetValidInputs());
+            return ImmutableSets.From(this.Provider.GetValidInputs());
         }
 
         /// <inheritdoc />
-        public bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             if (this.Provider.HasBoundedValues(this.ToApiInput(input), out IEnumerable<string>? values))
             {
-                allowedValues = new InvariantHashSet(values);
+                allowedValues = ImmutableSets.From(values);
                 return true;
             }
 
@@ -105,12 +108,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public string? NormalizeValue(string? value)
-        {
-            return this.Provider.NormalizeValue(value);
-        }
-
-        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             bool wasReady = this.IsReady;
@@ -128,9 +125,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
-            return Array.Empty<string>();
+            return ImmutableSets.Empty;
         }
 
 

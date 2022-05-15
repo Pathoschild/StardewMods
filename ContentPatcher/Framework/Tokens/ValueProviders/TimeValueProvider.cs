@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using ContentPatcher.Framework.Conditions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -26,6 +25,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Time, mayReturnMultipleValuesForRoot: false)
         {
             this.SaveReader = saveReader;
+            this.NormalizeValue = this.NormalizeValueImpl;
         }
 
         /// <inheritdoc />
@@ -35,7 +35,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 string? oldTime = this.TimeOfDay;
                 this.TimeOfDay = this.MarkReady(this.SaveReader.IsReady)
-                    ? this.NormalizeValue(this.SaveReader.GetTime())
+                    ? this.NormalizeValueImpl(this.SaveReader.GetTime())
                     : null;
                 return oldTime != this.TimeOfDay;
             });
@@ -57,25 +57,28 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <inheritdoc />
-        public override string? NormalizeValue(string? value)
-        {
-            value = value?.Trim();
-            if (string.IsNullOrEmpty(value))
-                return value;
-
-            return value.TrimStart('0').PadLeft(4, '0');
-        }
-
 
         /*********
         ** Private methods
         *********/
         /// <summary>Normalize a time value to 24-hour military format.</summary>
-        /// <param name="value">The value to normalize.</param>
-        private string? NormalizeValue(int value)
+        /// <param name="value">The value to normalize, already trimmed and non-empty.</param>
+        private string NormalizeValueImpl(string value)
         {
-            return this.NormalizeValue(value.ToString(CultureInfo.InvariantCulture));
+            if (value.Length > 4)
+                value = value.TrimStart('0');
+
+            if (value.Length < 4)
+                value = value.PadLeft(4, '0');
+
+            return value;
+        }
+
+        /// <summary>Normalize a time value to 24-hour military format.</summary>
+        /// <param name="value">The value to normalize.</param>
+        private string NormalizeValueImpl(int value)
+        {
+            return value.ToString("D4");
         }
     }
 }

@@ -25,17 +25,19 @@ namespace ContentPatcher.Framework.Tokens
         KeyValuePair<string, IInputArgumentValue>[] ReservedArgsList { get; }
 
         /// <summary>Whether any <see cref="NamedArgs"/> were provided.</summary>
+        [MemberNotNullWhen(true, nameof(IInputArguments.TokenString))]
         bool HasNamedArgs { get; }
 
         /// <summary>Whether any <see cref="PositionalArgs"/> were provided.</summary>
+        [MemberNotNullWhen(true, nameof(IInputArguments.TokenString))]
         bool HasPositionalArgs { get; }
 
         /// <summary>Whether the input arguments contain tokens that may change depending on the context.</summary>
-        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
+        [MemberNotNullWhen(true, nameof(IInputArguments.TokenString))]
         bool IsMutable { get; }
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
+        [MemberNotNullWhen(true, nameof(IInputArguments.TokenString))]
         bool IsReady { get; }
 
 

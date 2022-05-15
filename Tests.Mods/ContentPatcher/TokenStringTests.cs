@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using FluentAssertions;
 using NUnit.Framework;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 {
@@ -100,7 +99,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         /// <param name="values">The token values.</param>
         private IToken GetImmutableToken(string name, params string[] values)
         {
-            IValueProvider valueProvider = new ImmutableValueProvider(name, new InvariantHashSet(values));
+            IValueProvider valueProvider = new ImmutableValueProvider(name, ImmutableSets.From(values));
             return new Token(valueProvider);
         }
 

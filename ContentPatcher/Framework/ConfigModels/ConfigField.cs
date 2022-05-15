@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -11,10 +11,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The values to allow.</summary>
-        public InvariantHashSet AllowValues { get; }
+        public IImmutableSet<string> AllowValues { get; }
 
         /// <summary>The default values if the field is missing or (if <see cref="AllowBlank"/> is <c>false</c>) blank.</summary>
-        public InvariantHashSet DefaultValues { get; }
+        public IImmutableSet<string> DefaultValues { get; }
 
         /// <summary>Whether to allow blank values.</summary>
         public bool AllowBlank { get; }
@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public bool AllowMultiple { get; }
 
         /// <summary>The value read from the player settings.</summary>
-        public InvariantHashSet Value { get; }
+        public IImmutableSet<string> Value { get; private set; }
 
         /// <summary>An optional explanation of the config field for players.</summary>
         public string? Description { get; }
@@ -43,11 +43,11 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
         /// <param name="description">An optional explanation of the config field for players.</param>
         /// <param name="section">An optional section key to group related fields.</param>
-        public ConfigField(InvariantHashSet? allowValues, InvariantHashSet? defaultValues, InvariantHashSet? value, bool allowBlank, bool allowMultiple, string? description, string? section)
+        public ConfigField(IImmutableSet<string>? allowValues, IImmutableSet<string>? defaultValues, IImmutableSet<string>? value, bool allowBlank, bool allowMultiple, string? description, string? section)
         {
-            this.AllowValues = allowValues ?? new();
-            this.DefaultValues = defaultValues ?? new();
-            this.Value = value ?? new();
+            this.AllowValues = allowValues ?? ImmutableSets.Empty;
+            this.DefaultValues = defaultValues ?? ImmutableSets.Empty;
+            this.Value = value ?? ImmutableSets.Empty;
             this.AllowBlank = allowBlank;
             this.AllowMultiple = allowMultiple;
             this.Description = description;
@@ -57,6 +57,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>Get whether the field represents a boolean value.</summary>
         public bool IsBoolean()
         {
+            if (object.ReferenceEquals(this.AllowValues, ImmutableSets.Boolean))
+                return true;
+
             return
                 this.AllowValues.Count == 2
                 && this.AllowValues.Contains(true.ToString())
@@ -87,6 +90,13 @@ namespace ContentPatcher.Framework.ConfigModels
             min = parsedValues.First();
             max = parsedValues.Last();
             return max - min == parsedValues.Count - 1; // each value is unique and guaranteed integer, so can check the number of increments between min and max
+        }
+
+        /// <summary>Override the config value.</summary>
+        /// <param name="value">The config value to set.</param>
+        public void SetValue(IImmutableSet<string> value)
+        {
+            this.Value = value;
         }
     }
 }

@@ -107,7 +107,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             }
 
             // init export path
-            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", string.Join("_", assetName.Split(Path.GetInvalidFileNameChars())));
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", string.Join('_', assetName.Split(Path.GetInvalidFileNameChars())));
             Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export

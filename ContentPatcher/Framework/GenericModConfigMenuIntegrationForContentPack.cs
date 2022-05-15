@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.ConfigModels;
@@ -25,7 +26,7 @@ namespace ContentPatcher.Framework
         private readonly GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> ConfigMenu;
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        private readonly Func<string, InvariantHashSet> ParseCommaDelimitedField;
+        private readonly Func<string, IImmutableSet<string>> ParseCommaDelimitedField;
 
 
         /*********
@@ -46,7 +47,7 @@ namespace ContentPatcher.Framework
         /// <param name="parseCommaDelimitedField">The Generic Mod Config Menu integration.</param>
         /// <param name="config">The config model.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
-        public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, InvariantHashSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
+        public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, IImmutableSet<string>> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
         {
             this.ContentPack = contentPack;
             this.Config = config;
@@ -122,14 +123,14 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddTextbox(
                     name: GetName,
                     tooltip: GetDescription,
-                    get: _ => string.Join(", ", field.Value.ToArray()),
+                    get: _ => string.Join(", ", field.Value),
                     set: (_, newValue) =>
                     {
-                        InvariantHashSet values = this.ParseCommaDelimitedField(newValue);
+                        IImmutableSet<string> values = this.ParseCommaDelimitedField(newValue);
 
-                        field.Value.ReplaceWith(field.AllowMultiple
+                        field.SetValue(field.AllowMultiple || values.Count <= 1
                             ? values
-                            : values.Take(1)
+                            : ImmutableSets.FromValue(values.First())
                         );
                     }
                 );
@@ -147,14 +148,14 @@ namespace ContentPatcher.Framework
                         set: (_, selected) =>
                         {
                             // toggle value
-                            if (selected)
-                                field.Value.Add(value);
-                            else
-                                field.Value.Remove(value);
+                            field.SetValue(selected
+                                ? field.Value.Add(value)
+                                : field.Value.Remove(value)
+                            );
 
                             // set default if blank
                             if (!field.AllowBlank && !field.Value.Any())
-                                field.Value.ReplaceWith(new InvariantHashSet(field.DefaultValues));
+                                field.SetValue(field.DefaultValues);
                         }
                     );
                 }
@@ -167,11 +168,9 @@ namespace ContentPatcher.Framework
                     name: GetName,
                     tooltip: GetDescription,
                     get: _ => field.Value.Contains(true.ToString()),
-                    set: (_, selected) =>
-                    {
-                        field.Value.Clear();
-                        field.Value.Add(selected.ToString().ToLower());
-                    }
+                    set: (_, selected) => field.SetValue(
+                        ImmutableSets.FromValue(selected)
+                    )
                 );
             }
 
@@ -186,7 +185,11 @@ namespace ContentPatcher.Framework
                     name: GetName,
                     tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
-                    set: (_, val) => field.Value.ReplaceWith(new[] { val.ToString(CultureInfo.InvariantCulture) }),
+                    set: (_, val) => field.SetValue(
+                        ImmutableSets.FromValue(
+                            val.ToString(CultureInfo.InvariantCulture)
+                        )
+                    ),
                     min: min,
                     max: max
                 );
@@ -203,7 +206,9 @@ namespace ContentPatcher.Framework
                     name: GetName,
                     tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
-                    set: (_, newValue) => field.Value.ReplaceWith(new[] { newValue }),
+                    set: (_, newValue) => field.SetValue(
+                        ImmutableSets.FromValue(newValue)
+                    ),
                     allowedValues: choices.ToArray(),
                     formatAllowedValue: GetValueText
                 );
@@ -224,7 +229,7 @@ namespace ContentPatcher.Framework
         private void Reset()
         {
             foreach (ConfigField configField in this.Config.Values)
-                configField.Value.ReplaceWith(configField.DefaultValues);
+                configField.SetValue(configField.DefaultValues);
         }
 
         /// <summary>Get a translation if it exists, else get the fallback text.</summary>

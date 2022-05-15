@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         protected bool MayReturnMultipleValuesForInput { get; set; }
 
         /// <summary>The named input arguments recognized by this value provider.</summary>
-        protected InvariantHashSet ValidNamedArguments { get; } = new();
+        protected IImmutableSet<string> ValidNamedArguments { get; set; } = ImmutableSets.Empty;
 
         /// <summary>Whether to allow any named arguments, instead of validating <see cref="ValidNamedArguments"/>.</summary>
         protected bool AllowAnyNamedArguments { get; set; }
@@ -53,6 +53,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public bool BypassesContextValidation { get; protected set; } = false;
 
+        /// <inheritdoc />
+        public Func<string, string>? NormalizeValue { get; protected set; }
+
 
         /*********
         ** Public methods
@@ -64,9 +67,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public virtual IEnumerable<string> GetTokensUsed()
+        public virtual IImmutableSet<string> GetTokensUsed()
         {
-            return Enumerable.Empty<string>();
+            return ImmutableSets.Empty;
         }
 
         /// <inheritdoc />
@@ -108,7 +111,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     // check values
                     if (input.TokenString.Value != InternalConstants.TokenPlaceholder)
                     {
-                        InvariantHashSet? validInputs = this.GetValidPositionalArgs();
+                        IImmutableSet<string>? validInputs = this.GetValidPositionalArgs();
                         if (validInputs?.Any() == true)
                         {
                             if (input.PositionalArgs.Any(arg => !validInputs.Contains(arg)))
@@ -146,7 +149,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public virtual bool TryValidateValues(IInputArguments input, InvariantHashSet values, [NotNullWhen(false)] out string? error)
+        public virtual bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, [NotNullWhen(false)] out string? error)
         {
             if (!this.TryValidateInput(input, out error))
                 return false;
@@ -165,7 +168,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     return false;
                 }
             }
-            else if (this.HasBoundedValues(input, out InvariantHashSet? validValues))
+            else if (this.HasBoundedValues(input, out IImmutableSet<string>? validValues))
             {
                 string[] invalidValues = values
                     .Where(p => !validValues.Contains(p))
@@ -185,13 +188,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public virtual InvariantHashSet? GetValidPositionalArgs()
+        public virtual IImmutableSet<string>? GetValidPositionalArgs()
         {
             return null;
         }
 
         /// <inheritdoc />
-        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             allowedValues = null;
             return false;
@@ -209,13 +212,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
             this.AssertInput(input);
-            return Array.Empty<string>();
-        }
-
-        /// <inheritdoc />
-        public virtual string? NormalizeValue(string? value)
-        {
-            return value;
+            return ImmutableSets.Empty;
         }
 
 
@@ -295,11 +292,25 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="values">The underlying values to check.</param>
         /// <param name="action">The action to perform.</param>
+        protected bool IsChanged<T>(IImmutableSet<T> values, Func<IImmutableSet<T>> action)
+        {
+            return this.IsChanged(() =>
+            {
+                IImmutableSet<T> oldValues = values;
+                IImmutableSet<T> newValues = action();
+                return this.IsChanged(oldValues, newValues);
+            });
+        }
+
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="values">The underlying values to check.</param>
+        /// <param name="action">The action to perform.</param>
         protected bool IsChanged<T>(ISet<T> values, Action action)
         {
             return this.IsChanged(() =>
             {
-                HashSet<T> oldValues = new(values);
+                ISet<T> oldValues = new HashSet<T>(values);
                 action();
                 return this.IsChanged(oldValues, values);
             });
@@ -334,16 +345,32 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="newValues">The new values to check.</param>
         protected bool IsChanged<T>(ISet<T> oldValues, ISet<T> newValues)
         {
-            return newValues.Count != oldValues.Count || newValues.Any(p => !oldValues.Contains(p));
+            return
+                newValues.Count != oldValues.Count
+                || newValues.Any(p => !oldValues.Contains(p));
+        }
+
+        /// <summary>Get whether the values in a collection changed.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="oldValues">The old values to check.</param>
+        /// <param name="newValues">The new values to check.</param>
+        protected bool IsChanged<T>(IImmutableSet<T> oldValues, IImmutableSet<T> newValues)
+        {
+            return
+                !object.ReferenceEquals(oldValues, newValues)
+                && (
+                    newValues.Count != oldValues.Count
+                    || newValues.Any(p => !oldValues.Contains(p))
+                );
         }
 
         /// <summary>Format an optional value to return from <see cref="GetValues"/>.</summary>
         /// <param name="value">The value to format.</param>
-        protected static IEnumerable<string> WrapOptionalValue(string? value)
+        protected static IImmutableSet<string> WrapOptionalValue(string? value)
         {
             return string.IsNullOrWhiteSpace(value)
-                ? Array.Empty<string>()
-                : new[] { value };
+                ? ImmutableSets.Empty
+                : ImmutableSets.FromValue(value);
         }
     }
 }
