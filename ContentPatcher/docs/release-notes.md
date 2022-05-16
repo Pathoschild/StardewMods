@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.26.3
+Released 16 May 2022 for SMAPI 3.14.0 or later.
+
+* Fixed token normalization not applied to conditions in 1.26.2.
+
 ## 1.26.2
 Released 15 May 2022 for SMAPI 3.14.0 or later.
 
