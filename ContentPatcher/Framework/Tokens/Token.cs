@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens
         public bool BypassesContextValidation => this.Values.BypassesContextValidation;
 
         /// <inheritdoc />
-        public Func<string, string>? NormalizeValue { get; protected set; }
+        public Func<string, string>? NormalizeValue => this.Values.NormalizeValue;
 
 
         /*********
