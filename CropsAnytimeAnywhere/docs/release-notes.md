@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.4.5
+Released 17 May 2022 for SMAPI 3.14.0 or later.
+
+* Fixed out-of-season crops still dying overnight in 1.4.3+ if Json Assets is installed.
+
 ## 1.4.4
 Released 15 May 2022 for SMAPI 3.14.0 or later.
 

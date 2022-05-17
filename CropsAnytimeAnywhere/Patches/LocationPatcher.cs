@@ -226,12 +226,16 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="name">The method name.</param>
         private static bool CallStackIncludes(Type type, string name)
         {
+            string patchedPrefix = $"{type.FullName}.{name}_PatchedBy<"; // Harmony patches replace the method with a dynamic method instance that isn't on the original type
+
             return new StackTrace()
                 .GetFrames()
                 .Any(frame =>
                     frame.GetMethod() is { } method
-                    && method.DeclaringType == type
-                    && method.Name == name
+                    && (
+                        (method.DeclaringType == type && method.Name == name)
+                        || method.Name.StartsWith(patchedPrefix)
+                    )
                 );
         }
     }
