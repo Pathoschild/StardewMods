@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         protected bool MayReturnMultipleValuesForInput { get; set; }
 
         /// <summary>The named input arguments recognized by this value provider.</summary>
-        protected IInvariantSet ValidNamedArguments { get; set; } = ImmutableSets.Empty;
+        protected IInvariantSet ValidNamedArguments { get; set; } = InvariantSets.Empty;
 
         /// <summary>Whether to allow any named arguments, instead of validating <see cref="ValidNamedArguments"/>.</summary>
         protected bool AllowAnyNamedArguments { get; set; }
@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public virtual IInvariantSet GetTokensUsed()
         {
-            return ImmutableSets.Empty;
+            return InvariantSets.Empty;
         }
 
         /// <inheritdoc />
@@ -212,7 +212,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
             this.AssertInput(input);
-            return ImmutableSets.Empty;
+            return InvariantSets.Empty;
         }
 
 
@@ -365,8 +365,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         protected static IInvariantSet WrapOptionalValue(string? value)
         {
             return string.IsNullOrWhiteSpace(value)
-                ? ImmutableSets.Empty
-                : ImmutableSets.FromValue(value);
+                ? InvariantSets.Empty
+                : InvariantSets.FromValue(value);
         }
     }
 }

@@ -51,8 +51,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, IInvariantSet>[] TokensWithSpecialUpdateRates { get; } = {
-            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", ImmutableSets.From(new[] { ConditionType.LocationContext.ToString(), ConditionType.LocationName.ToString(), ConditionType.LocationUniqueName.ToString(), ConditionType.IsOutdoors.ToString() })),
-            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", ImmutableSets.FromValue(ConditionType.Time.ToString()))
+            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", InvariantSets.From(new[] { ConditionType.LocationContext.ToString(), ConditionType.LocationName.ToString(), ConditionType.LocationUniqueName.ToString(), ConditionType.IsOutdoors.ToString() })),
+            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", InvariantSets.FromValue(ConditionType.Time.ToString()))
         };
 
 

@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<bool>? IsValidInContextImpl;
 
         /// <summary>The values as of the last context update.</summary>
-        private IInvariantSet Values = ImmutableSets.Empty;
+        private IInvariantSet Values = InvariantSets.Empty;
 
 
         /*********
@@ -38,8 +38,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(type, mayReturnMultipleValues)
         {
             this.IsValidInContextImpl = isValidInContext;
-            this.AllowedRootValues = allowedValues != null ? ImmutableSets.From(allowedValues) : null;
-            this.FetchValues = () => ImmutableSets.From(values());
+            this.AllowedRootValues = allowedValues != null ? InvariantSets.From(allowedValues) : null;
+            this.FetchValues = () => InvariantSets.From(values());
         }
 
         /// <summary>Construct an instance.</summary>
@@ -57,8 +57,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Values, () =>
             {
                 return this.Values = this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl())
-                    ? ImmutableSets.From(this.FetchValues())
-                    : ImmutableSets.Empty;
+                    ? InvariantSets.From(this.FetchValues())
+                    : InvariantSets.Empty;
             });
         }
 

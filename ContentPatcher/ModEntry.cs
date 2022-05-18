@@ -321,7 +321,7 @@ namespace ContentPatcher
         /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
         private IInvariantSet GetInstalledMods()
         {
-            return ImmutableSets.From(
+            return InvariantSets.From(
                 this.Helper.ModRegistry
                     .GetAll()
                     .Select(p => p.Manifest.UniqueID)
@@ -362,8 +362,8 @@ namespace ContentPatcher
         private IManagedConditions ParseConditionsForApi(IManifest manifest, InvariantDictionary<string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null)
         {
             IInvariantSet assumeModIdsLookup = assumeModIds is not null
-                ? ImmutableSets.From(assumeModIds)
-                : ImmutableSets.FromValue(manifest.UniqueID);
+                ? InvariantSets.From(assumeModIds)
+                : InvariantSets.FromValue(manifest.UniqueID);
             IMigration migrator = new AggregateMigration(formatVersion, this.GetFormatVersions(null));
 
             return new ApiManagedConditions(
@@ -435,9 +435,9 @@ namespace ContentPatcher
         private IInvariantSet ParseCommaDelimitedField(string? field)
         {
             if (string.IsNullOrWhiteSpace(field))
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
 
-            return ImmutableSets.From(
+            return InvariantSets.From(
                 field.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             );
         }

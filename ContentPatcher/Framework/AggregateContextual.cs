@@ -127,7 +127,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IInvariantSet GetTokensUsed()
         {
-            return ImmutableSets.From(
+            return InvariantSets.From(
                 this.ValuesImpl.SelectMany(p => p.GetTokensUsed())
             );
         }

@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<IEnumerable<string>?> GetValueImpl;
 
         /// <summary>The current values.</summary>
-        private IInvariantSet Values = ImmutableSets.Empty;
+        private IInvariantSet Values = InvariantSets.Empty;
 
 
         /*********
@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             return this.IsReady
                 ? this.Values
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
 
         /// <inheritdoc />
@@ -49,8 +49,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 IEnumerable<string>? raw = this.GetValueImpl();
                 this.Values = raw != null
-                    ? ImmutableSets.From(raw)
-                    : ImmutableSets.Empty;
+                    ? InvariantSets.From(raw)
+                    : InvariantSets.Empty;
 
                 this.MarkReady(this.Values.Any());
 

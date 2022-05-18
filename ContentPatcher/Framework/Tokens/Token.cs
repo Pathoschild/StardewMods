@@ -141,7 +141,7 @@ namespace ContentPatcher.Framework.Tokens
             // 'contains' limited to true/false
             if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
             {
-                allowedValues = ImmutableSets.Boolean;
+                allowedValues = InvariantSets.Boolean;
                 return true;
             }
 
@@ -182,7 +182,7 @@ namespace ContentPatcher.Framework.Tokens
                 }
             }
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
 
@@ -206,7 +206,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             // skip empty search
             if (string.IsNullOrWhiteSpace(argValue.Raw))
-                return ImmutableSets.False;
+                return InvariantSets.False;
 
             // get search values
             string[] search = argValue.Parsed;
@@ -219,9 +219,9 @@ namespace ContentPatcher.Framework.Tokens
             // get result
             bool found = values is IInvariantSet set
                 ? set.Overlaps(search)
-                : ImmutableSets.From(search).Overlaps(values);
+                : InvariantSets.From(search).Overlaps(values);
 
-            return ImmutableSets.FromValue(found);
+            return InvariantSets.FromValue(found);
         }
 
         /// <summary>Apply the <see cref="InputArguments.ValueAtKey"/> argument.</summary>
@@ -239,8 +239,8 @@ namespace ContentPatcher.Framework.Tokens
 
             // get value at index (negative index = from end)
             if (Math.Abs(index) >= list.Count)
-                return ImmutableSets.Empty;
-            return ImmutableSets.FromValue(index >= 0
+                return InvariantSets.Empty;
+            return InvariantSets.FromValue(index >= 0
                 ? list[index]
                 : list[list.Count + index]
             );

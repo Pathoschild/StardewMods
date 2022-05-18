@@ -90,7 +90,7 @@ namespace ContentPatcher.Framework
         public IInvariantSet GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken? token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? ImmutableSets.Empty;
+            return token?.GetValues(input) ?? InvariantSets.Empty;
         }
 
         /// <summary>Set a local token value.</summary>

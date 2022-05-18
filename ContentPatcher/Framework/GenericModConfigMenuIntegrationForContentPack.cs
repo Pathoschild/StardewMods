@@ -129,7 +129,7 @@ namespace ContentPatcher.Framework
 
                         field.SetValue(field.AllowMultiple || values.Count <= 1
                             ? values
-                            : ImmutableSets.FromValue(values.First())
+                            : InvariantSets.FromValue(values.First())
                         );
                     }
                 );
@@ -168,7 +168,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => field.Value.Contains(true.ToString()),
                     set: (_, selected) => field.SetValue(
-                        ImmutableSets.FromValue(selected)
+                        InvariantSets.FromValue(selected)
                     )
                 );
             }
@@ -185,7 +185,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
                     set: (_, val) => field.SetValue(
-                        ImmutableSets.FromValue(
+                        InvariantSets.FromValue(
                             val.ToString(CultureInfo.InvariantCulture)
                         )
                     ),
@@ -206,7 +206,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
                     set: (_, newValue) => field.SetValue(
-                        ImmutableSets.FromValue(newValue)
+                        InvariantSets.FromValue(newValue)
                     ),
                     allowedValues: choices.ToArray(),
                     formatAllowedValue: GetValueText

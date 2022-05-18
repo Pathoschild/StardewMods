@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out IInvariantSet allowedValues)
         {
-            allowedValues = ImmutableSets.Boolean;
+            allowedValues = InvariantSets.Boolean;
             return true;
         }
 
@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return ImmutableSets.FromValue(
+            return InvariantSets.FromValue(
                 this.GetPathExists(input.GetPositionalSegment())
             );
         }

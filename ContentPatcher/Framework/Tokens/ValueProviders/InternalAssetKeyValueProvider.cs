@@ -44,8 +44,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             string? path = input.GetPositionalSegment();
 
             return !string.IsNullOrWhiteSpace(path)
-                ? ImmutableSets.FromValue(this.GetInternalAssetKey(path).Name)
-                : ImmutableSets.Empty;
+                ? InvariantSets.FromValue(this.GetInternalAssetKey(path).Name)
+                : InvariantSets.Empty;
         }
     }
 }

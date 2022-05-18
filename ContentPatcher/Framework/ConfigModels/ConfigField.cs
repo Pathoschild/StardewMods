@@ -45,9 +45,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="section">An optional section key to group related fields.</param>
         public ConfigField(IInvariantSet? allowValues, IInvariantSet? defaultValues, IInvariantSet? value, bool allowBlank, bool allowMultiple, string? description, string? section)
         {
-            this.AllowValues = allowValues ?? ImmutableSets.Empty;
-            this.DefaultValues = defaultValues ?? ImmutableSets.Empty;
-            this.Value = value ?? ImmutableSets.Empty;
+            this.AllowValues = allowValues ?? InvariantSets.Empty;
+            this.DefaultValues = defaultValues ?? InvariantSets.Empty;
+            this.Value = value ?? InvariantSets.Empty;
             this.AllowBlank = allowBlank;
             this.AllowMultiple = allowMultiple;
             this.Description = description;
@@ -57,7 +57,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>Get whether the field represents a boolean value.</summary>
         public bool IsBoolean()
         {
-            if (object.ReferenceEquals(this.AllowValues, ImmutableSets.Boolean))
+            if (object.ReferenceEquals(this.AllowValues, InvariantSets.Boolean))
                 return true;
 
             return

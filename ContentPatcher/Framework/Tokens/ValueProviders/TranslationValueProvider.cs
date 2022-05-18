@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // get translation
             string? key = input.GetFirstPositionalArg();
             if (string.IsNullOrWhiteSpace(key))
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
             Translation translation = this.TranslationHelper.Get(key);
 
             // add tokens
@@ -73,7 +73,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     .UsePlaceholder(false); // allow setting a blank default
             }
 
-            return ImmutableSets.FromValue(translation);
+            return InvariantSets.FromValue(translation);
         }
 
 

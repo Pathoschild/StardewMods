@@ -127,7 +127,7 @@ namespace ContentPatcher.Framework
 
                     // inject default if needed
                     if (!defaultValues.Any() && !field.AllowBlank)
-                        defaultValues = ImmutableSets.FromValue(allowValues.First());
+                        defaultValues = InvariantSets.FromValue(allowValues.First());
                 }
 
                 // validate allowed values
@@ -157,7 +157,7 @@ namespace ContentPatcher.Framework
                 schema[rawKey] = new ConfigField(
                     allowValues: allowValues,
                     defaultValues: defaultValues,
-                    value: ImmutableSets.Empty,
+                    value: InvariantSets.Empty,
                     allowBlank: field.AllowBlank,
                     allowMultiple: field.AllowMultiple,
                     description: field.Description,

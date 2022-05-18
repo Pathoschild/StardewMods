@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Conditions
             // init immutable values
             this.CurrentValues = this.Values.IsReady
                 ? this.Values.SplitValuesUnique()
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
@@ -109,7 +109,7 @@ namespace ContentPatcher.Framework.Conditions
             }
             else
             {
-                this.CurrentValues = ImmutableSets.Empty;
+                this.CurrentValues = InvariantSets.Empty;
                 this.IsMatch = false;
             }
 

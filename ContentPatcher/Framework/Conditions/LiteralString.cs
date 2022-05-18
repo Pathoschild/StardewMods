@@ -60,7 +60,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <inheritdoc />
         public IInvariantSet GetTokensUsed()
         {
-            return ImmutableSets.Empty;
+            return InvariantSets.Empty;
         }
 
         /// <inheritdoc />

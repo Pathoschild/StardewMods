@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override IInvariantSet GetValidPositionalArgs()
         {
-            return ImmutableSets.From(this.Values.Keys);
+            return InvariantSets.From(this.Values.Keys);
         }
 
         /// <inheritdoc />
@@ -60,8 +60,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.HasPositionalArgs)
             {
                 return this.Values.TryGetValue(input.GetFirstPositionalArg()!, out string? value)
-                    ? ImmutableSets.FromValue(value)
-                    : ImmutableSets.Empty;
+                    ? InvariantSets.FromValue(value)
+                    : InvariantSets.Empty;
             }
             else
                 return this.Values.Select(pair => $"{pair.Key}:{pair.Value}");

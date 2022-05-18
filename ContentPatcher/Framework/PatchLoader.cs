@@ -138,7 +138,7 @@ namespace ContentPatcher.Framework
             // no conditions
             if (raw == null || !raw.Any())
             {
-                immutableRequiredModIDs = ImmutableSets.Empty;
+                immutableRequiredModIDs = InvariantSets.Empty;
                 conditions = Array.Empty<Condition>();
                 error = null;
                 return true;
@@ -151,7 +151,7 @@ namespace ContentPatcher.Framework
             {
                 if (!this.TryParseCondition(key, value, tokenParser, path.With(key), out Condition? condition, ref requiredModIds, out error))
                 {
-                    immutableRequiredModIDs = ImmutableSets.Empty;
+                    immutableRequiredModIDs = InvariantSets.Empty;
                     conditions = Array.Empty<Condition>();
                     return false;
                 }
@@ -736,7 +736,7 @@ namespace ContentPatcher.Framework
 
                 // validate high-level issues
                 {
-                    var tokensUsed = ImmutableSets.From(patch.GetTokensUsed());
+                    var tokensUsed = InvariantSets.From(patch.GetTokensUsed());
 
                     // any field uses {{FromFile}} without a FromFile field
                     foreach (ConditionType token in InternalConstants.FromFileTokens)

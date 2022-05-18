@@ -79,7 +79,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <inheritdoc />
         public IInvariantSet GetValidPositionalArgs()
         {
-            return ImmutableSets.From(this.Provider.GetValidInputs());
+            return InvariantSets.From(this.Provider.GetValidInputs());
         }
 
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         {
             if (this.Provider.HasBoundedValues(this.ToApiInput(input), out IEnumerable<string>? values))
             {
-                allowedValues = ImmutableSets.From(values);
+                allowedValues = InvariantSets.From(values);
                 return true;
             }
 
@@ -127,7 +127,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <inheritdoc />
         public IInvariantSet GetTokensUsed()
         {
-            return ImmutableSets.Empty;
+            return InvariantSets.Empty;
         }
 
 

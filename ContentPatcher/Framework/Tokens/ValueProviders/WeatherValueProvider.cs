@@ -23,10 +23,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             .ToDictionary(p => p, _ => Weather.Sun);
 
         /// <summary>The weather values that can be returned by this token.</summary>
-        private readonly IInvariantSet ValidWeathers = ImmutableSets.From(Enum.GetNames(typeof(Weather)));
+        private readonly IInvariantSet ValidWeathers = InvariantSets.From(Enum.GetNames(typeof(Weather)));
 
         /// <summary>The input arguments recognized by this token.</summary>
-        private readonly IInvariantSet ValidInputKeys = ImmutableSets.From(Enum.GetNames(typeof(LocationContext)).Concat(new[] { "Current" }));
+        private readonly IInvariantSet ValidInputKeys = InvariantSets.From(Enum.GetNames(typeof(LocationContext)).Concat(new[] { "Current" }));
 
         /// <summary>The context for the current location.</summary>
         private LocationContext CurrentLocation;
@@ -97,7 +97,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     : Weather.Sun.ToString() // the game treats an invalid context (e.g. MAX) as always sunny
                 );
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
 

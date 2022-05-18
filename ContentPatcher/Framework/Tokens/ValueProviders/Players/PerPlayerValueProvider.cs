@@ -47,8 +47,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             : base(type, mayReturnMultipleValues)
         {
             this.SaveReader = saveReader;
-            this.AllowedRootValues = allowedValues != null ? ImmutableSets.From(allowedValues) : null;
-            this.FetchValues = player => ImmutableSets.From(values(player));
+            this.AllowedRootValues = allowedValues != null ? InvariantSets.From(allowedValues) : null;
+            this.FetchValues = player => InvariantSets.From(values(player));
             this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
         }
 
@@ -144,7 +144,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             var playerIds = new HashSet<long>();
             return this.TryParseInput(input, playerIds, out _)
                 ? this.GetValuesFor(playerIds)
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
 
 
@@ -219,7 +219,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         {
             return this.Values.TryGetValue(playerId, out IInvariantSet? set)
                 ? set
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
     }
 }

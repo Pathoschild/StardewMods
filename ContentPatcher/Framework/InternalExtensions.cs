@@ -94,7 +94,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
             if (string.IsNullOrWhiteSpace(tokenStr?.Value))
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
 
             string[] values = tokenStr.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             if (normalize != null)
@@ -103,7 +103,7 @@ namespace ContentPatcher.Framework
                     values[i] = normalize(values[i]);
             }
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
         /****

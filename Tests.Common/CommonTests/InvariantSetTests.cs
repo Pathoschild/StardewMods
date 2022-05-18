@@ -5,7 +5,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
 {
     /// <summary>Unit tests for <see cref="InvariantSet"/>.</summary>
     [TestFixture]
-    class InvariantHashSetTests
+    class InvariantSetTests
     {
         /*********
         ** Unit tests

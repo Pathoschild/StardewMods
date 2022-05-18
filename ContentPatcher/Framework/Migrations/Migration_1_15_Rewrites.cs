@@ -161,7 +161,7 @@ namespace ContentPatcher.Framework.Migrations
                     names.Remove(name);
             }
 
-            return names?.Lock() ?? ImmutableSets.Empty;
+            return names?.Lock() ?? InvariantSets.Empty;
         }
     }
 }

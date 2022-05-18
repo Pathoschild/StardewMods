@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
-    /// <summary>Provides singleton instances of <see cref="ImmutableHashSet{T}"/> for common values when possible.</summary>
-    internal static class ImmutableSets
+    /// <summary>Provides singleton instances of <see cref="IInvariantSet"/> for common values when possible.</summary>
+    internal static class InvariantSets
     {
         /*********
         ** Fields
@@ -44,7 +43,7 @@ namespace ContentPatcher.Framework
         public static readonly IInvariantSet False = new InvariantSet("false");
 
         /// <summary>A set containing only 'true' and 'false'.</summary>
-        public static readonly IInvariantSet Boolean = new InvariantSet(new[] { "true", "false" });
+        public static readonly IInvariantSet Boolean = new InvariantSet("true", "false");
 
 
         /*********
@@ -66,17 +65,17 @@ namespace ContentPatcher.Framework
                     switch (list.Count)
                     {
                         case 0:
-                            return ImmutableSets.Empty;
+                            return InvariantSets.Empty;
 
                         case 1:
-                            return ImmutableSets.FromValue(list[0]);
+                            return InvariantSets.FromValue(list[0]);
 
                         case 2 when bool.TryParse(list[0], out bool left) && bool.TryParse(list[1], out bool right):
                             if (left != right)
-                                return ImmutableSets.Boolean;
+                                return InvariantSets.Boolean;
                             return left
-                                ? ImmutableSets.True
-                                : ImmutableSets.False;
+                                ? InvariantSets.True
+                                : InvariantSets.False;
                     }
                     break;
             }
@@ -86,7 +85,7 @@ namespace ContentPatcher.Framework
                 ? mutableSet.GetImmutable()
                 : new InvariantSet(values);
             return result.Count == 0
-                ? ImmutableSets.Empty
+                ? InvariantSets.Empty
                 : result;
         }
 
@@ -95,8 +94,8 @@ namespace ContentPatcher.Framework
         public static IInvariantSet FromValue(bool value)
         {
             return value
-                ? ImmutableSets.True
-                : ImmutableSets.False;
+                ? InvariantSets.True
+                : InvariantSets.False;
         }
 
         /// <summary>Get an immutable set containing only the given value.</summary>
@@ -105,8 +104,8 @@ namespace ContentPatcher.Framework
         {
             return value switch
             {
-                0 => ImmutableSets.Zero,
-                1 => ImmutableSets.One,
+                0 => InvariantSets.Zero,
+                1 => InvariantSets.One,
                 _ => new InvariantSet(value.ToString())
             };
         }
@@ -116,7 +115,7 @@ namespace ContentPatcher.Framework
         public static IInvariantSet FromValue(string value)
         {
             return
-                ImmutableSets.FromPredefinedValueOnly(value)
+                InvariantSets.FromPredefinedValueOnly(value)
                 ?? new InvariantSet(value);
         }
 
@@ -131,24 +130,24 @@ namespace ContentPatcher.Framework
             if (bool.TryParse(value, out bool boolean))
             {
                 return boolean
-                    ? ImmutableSets.True
-                    : ImmutableSets.False;
+                    ? InvariantSets.True
+                    : InvariantSets.False;
             }
 
             return value switch
             {
                 // blank string
-                "" => ImmutableSets.BlankString,
+                "" => InvariantSets.BlankString,
 
                 // common digits
-                "0" => ImmutableSets.Zero,
-                "1" => ImmutableSets.One,
+                "0" => InvariantSets.Zero,
+                "1" => InvariantSets.One,
 
                 // season
-                "spring" or "Spring" => ImmutableSets.Spring,
-                "summer" or "Summer" => ImmutableSets.Summer,
-                "fall" or "Fall" => ImmutableSets.Fall,
-                "winter" or "Winter" => ImmutableSets.Winter,
+                "spring" or "Spring" => InvariantSets.Spring,
+                "summer" or "Summer" => InvariantSets.Summer,
+                "fall" or "Fall" => InvariantSets.Fall,
+                "winter" or "Winter" => InvariantSets.Winter,
 
                 // custom
                 _ => null

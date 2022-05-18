@@ -71,7 +71,7 @@ namespace ContentPatcher.Framework.Tokens
             catch (Exception ex)
             {
                 this.Log(ex);
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
             }
         }
 
@@ -200,7 +200,7 @@ namespace ContentPatcher.Framework.Tokens
             catch (Exception ex)
             {
                 this.Log(ex);
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
             }
         }
 

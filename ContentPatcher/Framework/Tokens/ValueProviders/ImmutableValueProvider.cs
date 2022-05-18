@@ -30,7 +30,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public ImmutableValueProvider(string name, IInvariantSet? values, IInvariantSet? allowedValues = null, bool? canHaveMultipleValues = null, bool isMutable = false)
             : base(name, mayReturnMultipleValuesForRoot: false)
         {
-            this.Values = values ?? ImmutableSets.Empty;
+            this.Values = values ?? InvariantSets.Empty;
             this.AllowedRootValues = allowedValues?.Any() == true ? allowedValues : null;
             this.MayReturnMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
             this.IsMutable = isMutable;

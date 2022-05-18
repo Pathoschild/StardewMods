@@ -26,7 +26,7 @@ namespace ContentPatcher.Framework.Tokens
         internal const string InputSeparatorKey = "inputSeparator";
 
         /// <summary>The argument names handled by Content Patcher.</summary>
-        private static readonly IInvariantSet ReservedArgKeys = ImmutableSets.From(new[]
+        private static readonly IInvariantSet ReservedArgKeys = InvariantSets.From(new[]
         {
             InputArguments.ContainsKey,
             InputArguments.ValueAtKey,

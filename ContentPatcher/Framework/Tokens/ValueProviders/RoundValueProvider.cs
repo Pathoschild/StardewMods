@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             if (this.TryParseAndRound(input, out decimal value, out _))
             {
-                allowedValues = ImmutableSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
+                allowedValues = InvariantSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
             else
@@ -84,7 +84,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryParseAndRound(input, out decimal value, out string? parseError))
                 throw new InvalidOperationException($"Invalid input value '{input.TokenString}': {parseError}"); // should never happen
 
-            return ImmutableSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
+            return InvariantSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
         }
 
 

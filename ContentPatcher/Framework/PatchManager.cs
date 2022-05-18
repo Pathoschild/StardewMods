@@ -640,7 +640,7 @@ namespace ContentPatcher.Framework
                 ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
 
                 // get direct tokens
-                IInvariantSet tokensUsed = ImmutableSets.From(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
+                IInvariantSet tokensUsed = InvariantSets.From(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
                 foreach (string tokenName in tokensUsed)
                     IndexForToken(tokenName);
 

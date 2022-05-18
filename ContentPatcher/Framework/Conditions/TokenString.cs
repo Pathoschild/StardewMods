@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Conditions
         private static readonly Lexer Lexer = Lexer.Instance;
 
         /// <summary>The token names used in the string.</summary>
-        private readonly IInvariantSet TokensUsed = ImmutableSets.Empty;
+        private readonly IInvariantSet TokensUsed = InvariantSets.Empty;
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new();
@@ -126,7 +126,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // set metadata
             if (tokensUsed != null)
-                this.TokensUsed = ImmutableSets.From(tokensUsed);
+                this.TokensUsed = InvariantSets.From(tokensUsed);
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
             this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);

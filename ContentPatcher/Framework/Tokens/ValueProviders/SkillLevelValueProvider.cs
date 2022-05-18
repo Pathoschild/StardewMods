@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Dictionary<Skill, int> SkillLevels = new();
 
         /// <summary>The valid skill values.</summary>
-        private readonly IInvariantSet ValidValues = ImmutableSets.From(Enum.GetNames(typeof(Skill)));
+        private readonly IInvariantSet ValidValues = InvariantSets.From(Enum.GetNames(typeof(Skill)));
 
 
         /*********
@@ -79,8 +79,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.HasPositionalArgs)
             {
                 return this.TryParseEnum(input.GetFirstPositionalArg(), out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level)
-                    ? ImmutableSets.FromValue(level)
-                    : ImmutableSets.Empty;
+                    ? InvariantSets.FromValue(level)
+                    : InvariantSets.Empty;
             }
             else
             {

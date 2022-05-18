@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         /// <param name="values">The token values.</param>
         private IToken GetImmutableToken(string name, params string[] values)
         {
-            IValueProvider valueProvider = new ImmutableValueProvider(name, ImmutableSets.From(values));
+            IValueProvider valueProvider = new ImmutableValueProvider(name, InvariantSets.From(values));
             return new Token(valueProvider);
         }
 

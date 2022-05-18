@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private MutableInvariantSet? AllowedRootValues = new();
 
         /// <summary>The current values.</summary>
-        private IInvariantSet Values = ImmutableSets.Empty;
+        private IInvariantSet Values = InvariantSets.Empty;
 
 
         /*********

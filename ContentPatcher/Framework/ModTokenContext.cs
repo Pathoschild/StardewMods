@@ -223,7 +223,7 @@ namespace ContentPatcher.Framework
         {
             return this.TokenDependents.TryGetValue(token, out MutableInvariantSet? affectedTokens)
                 ? affectedTokens.GetImmutable()
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
 
         /****
@@ -270,7 +270,7 @@ namespace ContentPatcher.Framework
         public IInvariantSet GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken? token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? ImmutableSets.Empty;
+            return token?.GetValues(input) ?? InvariantSets.Empty;
         }
 
 
