@@ -12,6 +12,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Further performance optimizations.
 * Fixed config UI dropdown values no longer matching order listed in `ConfigSchema`.
+* Fixed custom tokens sometimes failing in SMAPI 3.14 with '_rejected token … because it could not be mapped_' error.
 
 ## 1.26.3
 Released 16 May 2022 for SMAPI 3.14.0 or later.

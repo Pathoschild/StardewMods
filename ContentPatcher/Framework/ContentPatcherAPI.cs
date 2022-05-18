@@ -106,7 +106,10 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public void RegisterToken(IManifest mod, string name, object token)
         {
-            this.RegisterValueProviderByConvention(mod, name, token);
+            if (token is Func<IEnumerable<string>?> getValue) // Pintail proxying sometimes chooses the wrong overload
+                this.RegisterValueProvider(mod, new ModSimpleValueProvider(name, getValue));
+            else
+                this.RegisterValueProviderByConvention(mod, name, token);
         }
 
 
