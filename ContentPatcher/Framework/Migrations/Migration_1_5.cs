@@ -19,15 +19,15 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 5, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.FarmCave.ToString(),
-                ConditionType.FarmhouseUpgrade.ToString(),
-                ConditionType.FarmName.ToString(),
-                ConditionType.HasFile.ToString(),
-                ConditionType.HasProfession.ToString(),
-                ConditionType.PlayerGender.ToString(),
-                ConditionType.PlayerName.ToString(),
-                ConditionType.PreferredPet.ToString(),
-                ConditionType.Year.ToString()
+                nameof(ConditionType.FarmCave),
+                nameof(ConditionType.FarmhouseUpgrade),
+                nameof(ConditionType.FarmName),
+                nameof(ConditionType.HasFile),
+                nameof(ConditionType.HasProfession),
+                nameof(ConditionType.PlayerGender),
+                nameof(ConditionType.PlayerName),
+                nameof(ConditionType.PreferredPet),
+                nameof(ConditionType.Year)
             );
         }
 

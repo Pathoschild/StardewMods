@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             return
                 lexToken is LexTokenToken token
-                && token.Name.EqualsIgnoreCase(ConditionType.Render.ToString())
+                && token.Name.EqualsIgnoreCase(nameof(ConditionType.Render))
                 && !this.IgnoreRenderStrings.Contains(lexToken.ToString());
         }
 

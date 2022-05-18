@@ -24,9 +24,9 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 25, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.AbsoluteFilePath.ToString(),
-                ConditionType.FormatAssetName.ToString(),
-                ConditionType.InternalAssetKey.ToString()
+                nameof(ConditionType.AbsoluteFilePath),
+                nameof(ConditionType.FormatAssetName),
+                nameof(ConditionType.InternalAssetKey)
             );
         }
 

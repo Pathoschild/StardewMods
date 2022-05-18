@@ -1307,7 +1307,7 @@ namespace ContentPatcher.Framework
         private int GetConditionParseOrder(string key, string? value)
         {
             // parse HasMod conditions first (they allow mod-provided tokens in other conditions)
-            if (key.Contains(ConditionType.HasMod.ToString()))
+            if (key.Contains(nameof(ConditionType.HasMod)))
             {
                 return !this.Lexer.MightContainTokens(key) && !this.Lexer.MightContainTokens(value)
                     ? 1 // check immutable conditions first

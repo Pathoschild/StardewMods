@@ -51,8 +51,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, IInvariantSet>[] TokensWithSpecialUpdateRates { get; } = {
-            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", InvariantSets.From(new[] { ConditionType.LocationContext.ToString(), ConditionType.LocationName.ToString(), ConditionType.LocationUniqueName.ToString(), ConditionType.IsOutdoors.ToString() })),
-            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", InvariantSets.FromValue(ConditionType.Time.ToString()))
+            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", InvariantSets.From(new[] { nameof(ConditionType.LocationContext), nameof(ConditionType.LocationName), nameof(ConditionType.LocationUniqueName), nameof(ConditionType.IsOutdoors) })),
+            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", InvariantSets.FromValue(nameof(ConditionType.Time)))
         };
 
 
@@ -136,7 +136,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // special case: language change implies i18n change
-                if (changedTokens.Contains(ConditionType.Language.ToString()))
+                if (changedTokens.Contains(nameof(ConditionType.Language)))
                     changedTokens.Add(ConditionType.I18n.ToString());
 
                 changedGlobalTokens = changedTokens.Lock();
@@ -263,7 +263,7 @@ namespace ContentPatcher.Framework
                 new RenderValueProvider(),
 
                 // metadata
-                new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true),
+                new ImmutableValueProvider(nameof(ConditionType.HasMod), installedMods, canHaveMultipleValues: true),
                 new HasValueValueProvider(),
                 new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper)),
 

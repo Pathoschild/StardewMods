@@ -21,10 +21,10 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 7, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.HasReadLetter.ToString(),
-                ConditionType.HasValue.ToString(),
-                ConditionType.IsCommunityCenterComplete.ToString(),
-                ConditionType.IsMainPlayer.ToString()
+                nameof(ConditionType.HasReadLetter),
+                nameof(ConditionType.HasValue),
+                nameof(ConditionType.IsCommunityCenterComplete),
+                nameof(ConditionType.IsMainPlayer)
             );
         }
 

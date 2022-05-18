@@ -20,11 +20,11 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 10, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.HasDialogueAnswer.ToString(),
-                ConditionType.HavingChild.ToString(),
-                ConditionType.IsJojaMartComplete.ToString(),
-                ConditionType.Pregnant.ToString(),
-                ConditionType.Random.ToString()
+                nameof(ConditionType.HasDialogueAnswer),
+                nameof(ConditionType.HavingChild),
+                nameof(ConditionType.IsJojaMartComplete),
+                nameof(ConditionType.Pregnant),
+                nameof(ConditionType.Random)
             );
         }
 

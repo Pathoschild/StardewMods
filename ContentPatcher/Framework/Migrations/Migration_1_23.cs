@@ -29,10 +29,10 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 23, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.ChildGenders.ToString(),
-                ConditionType.ChildNames.ToString(),
-                ConditionType.Count.ToString(),
-                ConditionType.HasCaughtFish.ToString()
+                nameof(ConditionType.ChildGenders),
+                nameof(ConditionType.ChildNames),
+                nameof(ConditionType.Count),
+                nameof(ConditionType.HasCaughtFish)
             );
         }
 

@@ -22,12 +22,12 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 24, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.HasCookingRecipe.ToString(),
-                ConditionType.HasCraftingRecipe.ToString(),
-                ConditionType.LocationOwnerId.ToString(),
-                ConditionType.Merge.ToString(),
-                ConditionType.Roommate.ToString(),
-                ConditionType.PathPart.ToString()
+                nameof(ConditionType.HasCookingRecipe),
+                nameof(ConditionType.HasCraftingRecipe),
+                nameof(ConditionType.LocationOwnerId),
+                nameof(ConditionType.Merge),
+                nameof(ConditionType.Roommate),
+                nameof(ConditionType.PathPart)
             );
         }
 
@@ -71,12 +71,12 @@ namespace ContentPatcher.Framework.Migrations
             if (type == ConditionType.Spouse)
             {
                 lexToken = new LexTokenToken(
-                    name: ConditionType.Merge.ToString(),
+                    name: nameof(ConditionType.Merge),
                     inputArgs: new LexTokenInput(new ILexToken[]
                     {
-                        new LexTokenToken(ConditionType.Roommate.ToString(), null, impliedBraces: false),
+                        new LexTokenToken(nameof(ConditionType.Roommate), null, impliedBraces: false),
                         new LexTokenLiteral(","),
-                        new LexTokenToken(ConditionType.Spouse.ToString(), token.InputArgs, impliedBraces: false)
+                        new LexTokenToken(nameof(ConditionType.Spouse), token.InputArgs, impliedBraces: false)
                     }),
                     impliedBraces: token.ImpliedBraces
                 );

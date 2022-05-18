@@ -17,8 +17,8 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 14, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.FromFile.ToString(),
-                ConditionType.Round.ToString()
+                nameof(ConditionType.FromFile),
+                nameof(ConditionType.Round)
             );
         }
     }

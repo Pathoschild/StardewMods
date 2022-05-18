@@ -28,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 19, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.Time.ToString()
+                nameof(ConditionType.Time)
             );
         }
 

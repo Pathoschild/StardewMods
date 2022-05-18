@@ -17,12 +17,12 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 4, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.DayEvent.ToString(),
-                ConditionType.HasFlag.ToString(),
-                ConditionType.HasSeenEvent.ToString(),
-                ConditionType.Hearts.ToString(),
-                ConditionType.Relationship.ToString(),
-                ConditionType.Spouse.ToString()
+                nameof(ConditionType.DayEvent),
+                nameof(ConditionType.HasFlag),
+                nameof(ConditionType.HasSeenEvent),
+                nameof(ConditionType.Hearts),
+                nameof(ConditionType.Relationship),
+                nameof(ConditionType.Spouse)
             );
         }
     }

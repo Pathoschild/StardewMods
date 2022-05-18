@@ -21,8 +21,8 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 20, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.LocationContext.ToString(),
-                ConditionType.LocationUniqueName.ToString()
+                nameof(ConditionType.LocationContext),
+                nameof(ConditionType.LocationUniqueName)
             );
         }
 
@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;
 
-            string weatherName = ConditionType.Weather.ToString();
+            string weatherName = nameof(ConditionType.Weather);
 
             // 1.20 adds input arguments for Weather token, and changes default from valley to current context
             if (lexToken is LexTokenToken token && token.Name.EqualsIgnoreCase(weatherName))

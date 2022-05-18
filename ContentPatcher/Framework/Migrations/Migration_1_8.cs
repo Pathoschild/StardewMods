@@ -20,10 +20,10 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 8, 0))
         {
             this.AddedTokens = new InvariantSet(
-                ConditionType.IsOutdoors.ToString(),
-                ConditionType.LocationName.ToString(),
-                ConditionType.Target.ToString(),
-                ConditionType.TargetWithoutPath.ToString()
+                nameof(ConditionType.IsOutdoors),
+                nameof(ConditionType.LocationName),
+                nameof(ConditionType.Target),
+                nameof(ConditionType.TargetWithoutPath)
             );
         }
 

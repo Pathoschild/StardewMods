@@ -293,16 +293,16 @@ namespace ContentPatcher.Framework.Patches
             if (this.RawTargetAsset.IsReady)
             {
                 this.TargetAsset = this.ParseAssetNameImpl(this.RawTargetAsset.Value!);
-                context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset.Name);
-                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), System.IO.Path.GetDirectoryName(this.TargetAsset.Name));
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset.Name));
+                context.SetLocalValue(nameof(ConditionType.Target), this.TargetAsset.Name);
+                context.SetLocalValue(nameof(ConditionType.TargetPathOnly), System.IO.Path.GetDirectoryName(this.TargetAsset.Name));
+                context.SetLocalValue(nameof(ConditionType.TargetWithoutPath), System.IO.Path.GetFileName(this.TargetAsset.Name));
             }
             else
             {
                 this.TargetAsset = null;
-                context.SetLocalValue(ConditionType.Target.ToString(), "", ready: false);
-                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "", ready: false);
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.Target), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.TargetPathOnly), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.TargetWithoutPath), "", ready: false);
             }
 
             return changed;
@@ -317,7 +317,7 @@ namespace ContentPatcher.Framework.Patches
             if (!this.HasFromAsset)
             {
                 this.FromAsset = null;
-                context.SetLocalValue(ConditionType.FromFile.ToString(), "");
+                context.SetLocalValue(nameof(ConditionType.FromFile), "");
                 return false;
             }
 
@@ -326,12 +326,12 @@ namespace ContentPatcher.Framework.Patches
             if (this.RawFromAsset.IsReady)
             {
                 this.FromAsset = this.NormalizeLocalAssetPath(this.RawFromAsset.Value!, logName: $"{nameof(PatchConfig.FromFile)} field");
-                context.SetLocalValue(ConditionType.FromFile.ToString(), this.FromAsset);
+                context.SetLocalValue(nameof(ConditionType.FromFile), this.FromAsset);
             }
             else
             {
                 this.FromAsset = null;
-                context.SetLocalValue(ConditionType.FromFile.ToString(), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.FromFile), "", ready: false);
             }
 
             return changed;
