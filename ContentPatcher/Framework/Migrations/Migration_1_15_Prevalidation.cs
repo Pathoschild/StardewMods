@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_15_Prevalidation()
             : base(new SemanticVersion(1, 15, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.HasConversationTopic.ToString()
             );
         }

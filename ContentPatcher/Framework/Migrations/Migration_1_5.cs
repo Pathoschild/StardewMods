@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_5()
             : base(new SemanticVersion(1, 5, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.FarmCave.ToString(),
                 ConditionType.FarmhouseUpgrade.ToString(),
                 ConditionType.FarmName.ToString(),

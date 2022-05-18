@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_11()
             : base(new SemanticVersion(1, 11, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.Lowercase.ToString(),
                 ConditionType.Uppercase.ToString()
             );

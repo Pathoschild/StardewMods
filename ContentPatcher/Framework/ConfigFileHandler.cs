@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -20,7 +19,7 @@ namespace ContentPatcher.Framework
         private readonly string Filename;
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        private readonly Func<string?, IImmutableSet<string>> ParseCommaDelimitedField;
+        private readonly Func<string?, IInvariantSet> ParseCommaDelimitedField;
 
         /// <summary>A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</summary>
         private readonly Action<IContentPack, string, string> LogWarning;
@@ -33,7 +32,7 @@ namespace ContentPatcher.Framework
         /// <param name="filename">The name of the config file.</param>
         /// <param name="parseCommandDelimitedField">Parse a comma-delimited set of case-insensitive condition values.</param>
         /// <param name="logWarning">A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</param>
-        public ConfigFileHandler(string filename, Func<string?, IImmutableSet<string>> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
+        public ConfigFileHandler(string filename, Func<string?, IInvariantSet> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
         {
             this.Filename = filename;
             this.ParseCommaDelimitedField = parseCommandDelimitedField;
@@ -113,8 +112,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // read allowed/default values
-                IImmutableSet<string> allowValues = this.ParseCommaDelimitedField(field.AllowValues);
-                IImmutableSet<string> defaultValues = this.ParseCommaDelimitedField(field.Default);
+                IInvariantSet allowValues = this.ParseCommaDelimitedField(field.AllowValues);
+                IInvariantSet defaultValues = this.ParseCommaDelimitedField(field.Default);
 
                 // pre-1.7 behaviour
                 if (formatVersion.IsOlderThan("1.7"))
@@ -179,11 +178,11 @@ namespace ContentPatcher.Framework
                 return;
 
             // read raw config
-            InvariantDictionary<IImmutableSet<string>> configValues = new(
+            InvariantDictionary<IInvariantSet> configValues = new(
                 from entry in (contentPack.ReadJsonFile<InvariantDictionary<string>>(this.Filename) ?? new())
                 let key = entry.Key.Trim()
                 let value = this.ParseCommaDelimitedField(entry.Value)
-                select new KeyValuePair<string, IImmutableSet<string>>(key, value)
+                select new KeyValuePair<string, IInvariantSet>(key, value)
             );
 
             // remove invalid values
@@ -197,7 +196,7 @@ namespace ContentPatcher.Framework
             foreach (string key in config.Keys)
             {
                 ConfigField field = config[key];
-                if (!configValues.TryGetValue(key, out IImmutableSet<string>? values) || (!field.AllowBlank && !values.Any()))
+                if (!configValues.TryGetValue(key, out IInvariantSet? values) || (!field.AllowBlank && !values.Any()))
                     configValues[key] = field.DefaultValues;
             }
 

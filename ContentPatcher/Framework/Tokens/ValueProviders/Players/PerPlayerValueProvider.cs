@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -20,13 +19,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         private readonly TokenSaveReader SaveReader;
 
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly IImmutableSet<string>? AllowedRootValues;
+        private readonly IInvariantSet? AllowedRootValues;
 
         /// <summary>Get the current values for a player.</summary>
-        private readonly Func<Farmer, IImmutableSet<string>> FetchValues;
+        private readonly Func<Farmer, IInvariantSet> FetchValues;
 
         /// <summary>The values as of the last context update.</summary>
-        private readonly IDictionary<long, IImmutableSet<string>> Values = new Dictionary<long, IImmutableSet<string>>();
+        private readonly IDictionary<long, IInvariantSet> Values = new Dictionary<long, IInvariantSet>();
 
         /// <summary>The player ID for the host player.</summary>
         private long HostPlayerId;
@@ -86,8 +85,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                     {
                         // get values
                         long id = player.UniqueMultiplayerID;
-                        IImmutableSet<string> newValues = this.FetchValues(player);
-                        if (!this.Values.TryGetValue(id, out IImmutableSet<string>? oldValues))
+                        IInvariantSet newValues = this.FetchValues(player);
+                        if (!this.Values.TryGetValue(id, out IInvariantSet? oldValues))
                             oldValues = null;
 
                         // track changes
@@ -128,7 +127,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;
@@ -208,7 +207,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             HashSet<string> values = new();
             foreach (long id in playerIds)
             {
-                if (this.Values.TryGetValue(id, out IImmutableSet<string>? set))
+                if (this.Values.TryGetValue(id, out IInvariantSet? set))
                     values.AddMany(set);
             }
             return values;
@@ -216,9 +215,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 
         /// <summary>Get the cached values for the given player ID.</summary>
         /// <param name="playerId">The player ID.</param>
-        private IImmutableSet<string> GetValuesFor(long playerId)
+        private IInvariantSet GetValuesFor(long playerId)
         {
-            return this.Values.TryGetValue(playerId, out IImmutableSet<string>? set)
+            return this.Values.TryGetValue(playerId, out IInvariantSet? set)
                 ? set
                 : ImmutableSets.Empty;
         }

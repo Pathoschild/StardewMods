@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -14,14 +13,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the value provider can only contain those values that are explicitly added as possible values.</summary>
         private readonly bool IsBounded;
 
+        /// <summary>The tokens which the values use.</summary>
+        private readonly MutableInvariantSet TokensUsed = new();
+
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private IImmutableSet<string>? AllowedRootValues = ImmutableSets.Empty;
+        private MutableInvariantSet? AllowedRootValues = new();
 
         /// <summary>The current values.</summary>
-        private IImmutableSet<string> Values = ImmutableSets.Empty;
-
-        /// <summary>The tokens which the values use.</summary>
-        private IImmutableSet<string> TokensUsed = ImmutableSets.Empty;
+        private IInvariantSet Values = ImmutableSets.Empty;
 
 
         /*********
@@ -54,10 +53,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // get possible values from literal token
-            IImmutableSet<string> splitValues = possibleValues.SplitValuesUnique();
-            this.AllowedRootValues = this.AllowedRootValues.Union(
-                possibleValues.SplitValuesUnique()
-            );
+            IInvariantSet splitValues = possibleValues.SplitValuesUnique();
+            this.AllowedRootValues.AddMany(possibleValues.SplitValuesUnique());
             if (splitValues.Count > 1)
                 this.MayReturnMultipleValuesForRoot = true;
         }
@@ -66,7 +63,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="tokens">The token names used.</param>
         public void AddTokensUsed(IEnumerable<string> tokens)
         {
-            this.TokensUsed = this.TokensUsed.AddMany(tokens);
+            this.TokensUsed.AddMany(tokens);
         }
 
         /// <summary>Set the current values.</summary>
@@ -87,16 +84,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Value provider API
         ****/
         /// <inheritdoc />
-        public override IImmutableSet<string> GetTokensUsed()
+        public override IInvariantSet GetTokensUsed()
         {
-            return this.TokensUsed;
+            return this.TokensUsed.GetImmutable();
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             allowedValues = this.IsBounded
-                ? this.AllowedRootValues
+                ? this.AllowedRootValues?.GetImmutable()
                 : null;
             return allowedValues != null;
         }

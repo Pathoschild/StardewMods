@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<IEnumerable<string>?> GetValueImpl;
 
         /// <summary>The current values.</summary>
-        private IImmutableSet<string> Values = ImmutableSets.Empty;
+        private IInvariantSet Values = ImmutableSets.Empty;
 
 
         /*********

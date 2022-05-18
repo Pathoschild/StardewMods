@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_6()
             : base(new SemanticVersion(1, 6, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.HasWalletItem.ToString(),
                 ConditionType.SkillLevel.ToString()
             );

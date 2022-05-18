@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_10()
             : base(new SemanticVersion(1, 10, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.HasDialogueAnswer.ToString(),
                 ConditionType.HavingChild.ToString(),
                 ConditionType.IsJojaMartComplete.ToString(),

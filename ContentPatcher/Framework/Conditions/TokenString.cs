@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Conditions
         private static readonly Lexer Lexer = Lexer.Instance;
 
         /// <summary>The token names used in the string.</summary>
-        private readonly IImmutableSet<string> TokensUsed = ImmutableSets.Empty;
+        private readonly IInvariantSet TokensUsed = ImmutableSets.Empty;
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new();
@@ -143,7 +143,7 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.TokensUsed;
         }

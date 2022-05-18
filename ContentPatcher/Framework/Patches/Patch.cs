@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -187,7 +186,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public virtual IImmutableSet<string> GetTokensUsed()
+        public virtual IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

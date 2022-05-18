@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_24()
             : base(new SemanticVersion(1, 24, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.HasCookingRecipe.ToString(),
                 ConditionType.HasCraftingRecipe.ToString(),
                 ConditionType.LocationOwnerId.ToString(),

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -11,10 +11,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The values to allow.</summary>
-        public IImmutableSet<string> AllowValues { get; }
+        public IInvariantSet AllowValues { get; }
 
         /// <summary>The default values if the field is missing or (if <see cref="AllowBlank"/> is <c>false</c>) blank.</summary>
-        public IImmutableSet<string> DefaultValues { get; }
+        public IInvariantSet DefaultValues { get; }
 
         /// <summary>Whether to allow blank values.</summary>
         public bool AllowBlank { get; }
@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public bool AllowMultiple { get; }
 
         /// <summary>The value read from the player settings.</summary>
-        public IImmutableSet<string> Value { get; private set; }
+        public IInvariantSet Value { get; private set; }
 
         /// <summary>An optional explanation of the config field for players.</summary>
         public string? Description { get; }
@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
         /// <param name="description">An optional explanation of the config field for players.</param>
         /// <param name="section">An optional section key to group related fields.</param>
-        public ConfigField(IImmutableSet<string>? allowValues, IImmutableSet<string>? defaultValues, IImmutableSet<string>? value, bool allowBlank, bool allowMultiple, string? description, string? section)
+        public ConfigField(IInvariantSet? allowValues, IInvariantSet? defaultValues, IInvariantSet? value, bool allowBlank, bool allowMultiple, string? description, string? section)
         {
             this.AllowValues = allowValues ?? ImmutableSets.Empty;
             this.DefaultValues = defaultValues ?? ImmutableSets.Empty;
@@ -94,7 +94,7 @@ namespace ContentPatcher.Framework.ConfigModels
 
         /// <summary>Override the config value.</summary>
         /// <param name="value">The config value to set.</param>
-        public void SetValue(IImmutableSet<string> value)
+        public void SetValue(IInvariantSet value)
         {
             this.Value = value;
         }

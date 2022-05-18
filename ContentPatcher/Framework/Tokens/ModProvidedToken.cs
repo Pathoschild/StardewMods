@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Tokens.ValueProviders;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Tokens
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override IImmutableSet<string> GetTokensUsed()
+        public override IInvariantSet GetTokensUsed()
         {
             try
             {
@@ -119,7 +119,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, IContext context, [NotNullWhen(false)] out string? error)
+        public override bool TryValidateValues(IInputArguments input, IInvariantSet values, IContext context, [NotNullWhen(false)] out string? error)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override IImmutableSet<string>? GetAllowedInputArguments()
+        public override IInvariantSet? GetAllowedInputArguments()
         {
             try
             {
@@ -148,7 +148,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             try
             {
@@ -187,7 +187,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override IImmutableSet<string> GetValues(IInputArguments input)
+        public override IInvariantSet GetValues(IInputArguments input)
         {
             try
             {

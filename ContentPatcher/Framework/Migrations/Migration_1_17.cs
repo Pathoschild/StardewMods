@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_17()
             : base(new SemanticVersion(1, 17, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.TargetPathOnly.ToString()
             );
         }

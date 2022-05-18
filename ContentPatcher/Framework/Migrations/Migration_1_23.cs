@@ -28,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_23()
             : base(new SemanticVersion(1, 23, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.ChildGenders.ToString(),
                 ConditionType.ChildNames.ToString(),
                 ConditionType.Count.ToString(),

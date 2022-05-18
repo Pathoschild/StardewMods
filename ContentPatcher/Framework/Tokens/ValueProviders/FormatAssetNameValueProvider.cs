@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.FormatAssetName, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.ValidNamedArguments.Add("separator");
+            this.ValidNamedArguments = ImmutableSets.FromValue("separator");
         }
 
         /// <inheritdoc />

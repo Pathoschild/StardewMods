@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_4()
             : base(new SemanticVersion(1, 4, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.DayEvent.ToString(),
                 ConditionType.HasFlag.ToString(),
                 ConditionType.HasSeenEvent.ToString(),

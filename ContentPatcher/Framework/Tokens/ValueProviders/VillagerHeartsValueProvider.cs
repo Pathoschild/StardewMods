@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -52,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override IImmutableSet<string> GetValidPositionalArgs()
+        public override IInvariantSet GetValidPositionalArgs()
         {
             return ImmutableSets.From(this.Values.Keys);
         }

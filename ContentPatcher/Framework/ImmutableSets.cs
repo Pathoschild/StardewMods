@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -10,44 +10,41 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>The string comparer to use for all immutable sets.</summary>
-        private static readonly IEqualityComparer<string> Comparer = StringComparer.OrdinalIgnoreCase;
-
         /// <summary>A set containing only <see cref="string.Empty"/>.</summary>
-        private static readonly IImmutableSet<string> BlankString = new[] { string.Empty }.ToImmutableHashSet();
+        private static readonly IInvariantSet BlankString = new InvariantSet(string.Empty);
 
         /// <summary>A set containing only '0'.</summary>
-        private static readonly IImmutableSet<string> Zero = new[] { "0" }.ToImmutableHashSet();
+        private static readonly IInvariantSet Zero = new InvariantSet("0");
 
         /// <summary>A set containing only '1'.</summary>
-        private static readonly IImmutableSet<string> One = new[] { "1" }.ToImmutableHashSet();
+        private static readonly IInvariantSet One = new InvariantSet("1");
 
         /// <summary>A set containing only 'spring'.</summary>
-        private static readonly IImmutableSet<string> Spring = new[] { "spring" }.ToImmutableHashSet();
+        private static readonly IInvariantSet Spring = new InvariantSet("spring");
 
         /// <summary>A set containing only 'summer'.</summary>
-        private static readonly IImmutableSet<string> Summer = new[] { "summer" }.ToImmutableHashSet();
+        private static readonly IInvariantSet Summer = new InvariantSet("summer");
 
         /// <summary>A set containing only 'fall'.</summary>
-        private static readonly IImmutableSet<string> Fall = new[] { "fall" }.ToImmutableHashSet();
+        private static readonly IInvariantSet Fall = new InvariantSet("fall");
 
         /// <summary>A set containing only 'winter'.</summary>
-        private static readonly IImmutableSet<string> Winter = new[] { "winter" }.ToImmutableHashSet();
+        private static readonly IInvariantSet Winter = new InvariantSet("winter");
 
         /*********
         ** Accessors
         *********/
         /// <summary>An empty set.</summary>
-        public static readonly IImmutableSet<string> Empty = Array.Empty<string>().ToImmutableHashSet(ImmutableSets.Comparer);
+        public static readonly IInvariantSet Empty = InvariantSet.Empty;
 
         /// <summary>A set containing only 'true'.</summary>
-        public static readonly IImmutableSet<string> True = new[] { "true" }.ToImmutableHashSet(ImmutableSets.Comparer);
+        public static readonly IInvariantSet True = new InvariantSet("true");
 
         /// <summary>A set containing only 'false'.</summary>
-        public static readonly IImmutableSet<string> False = new[] { "false" }.ToImmutableHashSet(ImmutableSets.Comparer);
+        public static readonly IInvariantSet False = new InvariantSet("false");
 
         /// <summary>A set containing only 'true' and 'false'.</summary>
-        public static readonly IImmutableSet<string> Boolean = new[] { "true", "false" }.ToImmutableHashSet(ImmutableSets.Comparer);
+        public static readonly IInvariantSet Boolean = new InvariantSet(new[] { "true", "false" });
 
 
         /*********
@@ -55,14 +52,14 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Get an immutable set for the given values.</summary>
         /// <param name="values">The values for which to get a set.</param>
-        public static IImmutableSet<string> From(IEnumerable<string> values)
+        public static IInvariantSet From(IEnumerable<string> values)
         {
             // shortcut predefined values
             switch (values)
             {
-                // already an immutable set
-                case ImmutableHashSet<string> set:
-                    return set.WithComparer(ImmutableSets.Comparer);
+                // already an invariant set
+                case IInvariantSet set:
+                    return set;
 
                 // use predefined set if possible
                 case IList<string> list:
@@ -85,7 +82,9 @@ namespace ContentPatcher.Framework
             }
 
             // create custom set
-            ImmutableHashSet<string> result = values.ToImmutableHashSet(ImmutableSets.Comparer);
+            IInvariantSet result = values is MutableInvariantSet mutableSet
+                ? mutableSet.GetImmutable()
+                : new InvariantSet(values);
             return result.Count == 0
                 ? ImmutableSets.Empty
                 : result;
@@ -93,7 +92,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get an immutable set containing only the given value.</summary>
         /// <param name="value">The set value.</param>
-        public static IImmutableSet<string> FromValue(bool value)
+        public static IInvariantSet FromValue(bool value)
         {
             return value
                 ? ImmutableSets.True
@@ -102,23 +101,23 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get an immutable set containing only the given value.</summary>
         /// <param name="value">The set value.</param>
-        public static IImmutableSet<string> FromValue(int value)
+        public static IInvariantSet FromValue(int value)
         {
             return value switch
             {
                 0 => ImmutableSets.Zero,
                 1 => ImmutableSets.One,
-                _ => new[] { value.ToString() }.ToImmutableHashSet(ImmutableSets.Comparer)
+                _ => new InvariantSet(value.ToString())
             };
         }
 
         /// <summary>Get an immutable set containing only the given value.</summary>
         /// <param name="value">The set value.</param>
-        public static IImmutableSet<string> FromValue(string value)
+        public static IInvariantSet FromValue(string value)
         {
             return
                 ImmutableSets.FromPredefinedValueOnly(value)
-                ?? new[] { value }.ToImmutableHashSet(ImmutableSets.Comparer);
+                ?? new InvariantSet(value);
         }
 
 
@@ -127,7 +126,7 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Get an immutable set containing the given value, if it matches any predefined value.</summary>
         /// <param name="value">The value for which to get a set.</param>
-        private static IImmutableSet<string>? FromPredefinedValueOnly(string value)
+        private static IInvariantSet? FromPredefinedValueOnly(string value)
         {
             if (bool.TryParse(value, out bool boolean))
             {

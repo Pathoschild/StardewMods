@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework
         private readonly HashSet<IAssetName> AssetsWithRemovedPatches = new();
 
         /// <summary>The token changes queued for periodic update types.</summary>
-        private readonly IDictionary<ContextUpdateType, InvariantHashSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, InvariantHashSet>
+        private readonly IDictionary<ContextUpdateType, MutableInvariantSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, MutableInvariantSet>
         {
             [ContextUpdateType.OnTimeChange] = new(),
             [ContextUpdateType.OnLocationChange] = new(),
@@ -105,34 +105,39 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         /// <param name="updateType">The context update type.</param>
-        public void UpdateContext(IGameContentHelper contentHelper, InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
+        public void UpdateContext(IGameContentHelper contentHelper, IInvariantSet globalChangedTokens, ContextUpdateType updateType)
         {
             this.Monitor.VerboseLog($"Updating context for {updateType} tick...");
 
             // Patches can have variable update rates, so we keep track of updated tokens here so
             // we update patches at their next update point.
-            if (updateType == ContextUpdateType.All)
             {
-                // all token updates apply at day start
-                globalChangedTokens = new InvariantHashSet(globalChangedTokens);
-                foreach (var tokenQueue in this.QueuedTokenChanges.Values)
+                MutableInvariantSet affectedTokens = new MutableInvariantSet(globalChangedTokens);
+
+                if (updateType == ContextUpdateType.All)
                 {
-                    globalChangedTokens.AddMany(tokenQueue);
-                    tokenQueue.Clear();
+                    // all token updates apply at day start
+                    foreach (MutableInvariantSet tokenQueue in this.QueuedTokenChanges.Values)
+                    {
+                        affectedTokens.UnionWith(tokenQueue);
+                        tokenQueue.Clear();
+                    }
                 }
-            }
-            else
-            {
-                // queue token changes for other update points
-                foreach (KeyValuePair<ContextUpdateType, InvariantHashSet> pair in this.QueuedTokenChanges)
+                else
                 {
-                    if (pair.Key != updateType)
-                        pair.Value.AddMany(globalChangedTokens);
+                    // queue token changes for other update points
+                    foreach ((ContextUpdateType curType, MutableInvariantSet queued) in this.QueuedTokenChanges)
+                    {
+                        if (curType != updateType)
+                            queued.AddMany(globalChangedTokens);
+                    }
+
+                    // get queued changes for the current update point
+                    affectedTokens.AddMany(this.QueuedTokenChanges[updateType]);
+                    this.QueuedTokenChanges[updateType].Clear();
                 }
 
-                // get queued changes for the current update point
-                globalChangedTokens.AddMany(this.QueuedTokenChanges[updateType]);
-                this.QueuedTokenChanges[updateType].Clear();
+                globalChangedTokens = affectedTokens.Lock();
             }
 
             // get changes to apply
@@ -556,7 +561,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get the tokens which need a context update.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         /// <param name="updateType">The context update type.</param>
-        private HashSet<IPatch> GetPatchesToUpdate(InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
+        private HashSet<IPatch> GetPatchesToUpdate(IInvariantSet globalChangedTokens, ContextUpdateType updateType)
         {
             // add patches which depend on a changed token
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
@@ -635,7 +640,7 @@ namespace ContentPatcher.Framework
                 ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
 
                 // get direct tokens
-                InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
+                IInvariantSet tokensUsed = ImmutableSets.From(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
                 foreach (string tokenName in tokensUsed)
                     IndexForToken(tokenName);
 

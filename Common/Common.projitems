@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\MultiFertilizer\MultiFertilizerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\IInvariantSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\MutableInvariantSet.cs" />
     <Compile Include="..\Common\Commands\GenericHelpCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ICommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />

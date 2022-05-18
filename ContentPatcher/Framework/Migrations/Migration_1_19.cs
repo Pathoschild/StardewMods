@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -28,7 +27,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_19()
             : base(new SemanticVersion(1, 19, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.Time.ToString()
             );
         }
@@ -73,7 +72,7 @@ namespace ContentPatcher.Framework.Migrations
             bool isQuery = condition.Name?.EqualsIgnoreCase(nameof(ConditionType.Query)) == true;
             if (isQuery)
             {
-                IImmutableSet<string>? values = condition.Values?.SplitValuesUnique();
+                IInvariantSet? values = condition.Values?.SplitValuesUnique();
                 if (values?.Any() == true && values.All(p => bool.TryParse(p, out bool _)))
                 {
                     error = "using boolean query expressions";

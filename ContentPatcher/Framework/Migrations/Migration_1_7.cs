@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_7()
             : base(new SemanticVersion(1, 7, 0))
         {
-            this.AddedTokens.AddMany(
+            this.AddedTokens = new InvariantSet(
                 ConditionType.HasReadLetter.ToString(),
                 ConditionType.HasValue.ToString(),
                 ConditionType.IsCommunityCenterComplete.ToString(),

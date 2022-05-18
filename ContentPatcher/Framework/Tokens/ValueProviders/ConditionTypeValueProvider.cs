@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -13,16 +13,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly IImmutableSet<string>? AllowedRootValues;
+        private readonly IInvariantSet? AllowedRootValues;
 
         /// <summary>Get the current values.</summary>
-        private readonly Func<IImmutableSet<string>> FetchValues;
+        private readonly Func<IInvariantSet> FetchValues;
 
         /// <summary>Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</summary>
         private readonly Func<bool>? IsValidInContextImpl;
 
         /// <summary>The values as of the last context update.</summary>
-        private IImmutableSet<string> Values = ImmutableSets.Empty;
+        private IInvariantSet Values = ImmutableSets.Empty;
 
 
         /*********
@@ -58,12 +58,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 return this.Values = this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl())
                     ? ImmutableSets.From(this.FetchValues())
-                    : this.Values.Clear();
+                    : ImmutableSets.Empty;
             });
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;

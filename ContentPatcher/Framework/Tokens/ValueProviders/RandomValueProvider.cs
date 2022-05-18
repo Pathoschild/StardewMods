@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Random, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.ValidNamedArguments = this.ValidNamedArguments.Add("key");
+            this.ValidNamedArguments = ImmutableSets.FromValue("key");
             this.BaseSeed = this.GenerateBaseSeed();
         }
 
@@ -56,7 +56,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             allowedValues = !input.IsMutable
                 ? ImmutableSets.From(input.PositionalArgs)

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -320,7 +319,7 @@ namespace ContentPatcher
         }
 
         /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
-        private IImmutableSet<string> GetInstalledMods()
+        private IInvariantSet GetInstalledMods()
         {
             return ImmutableSets.From(
                 this.Helper.ModRegistry
@@ -362,7 +361,7 @@ namespace ContentPatcher
         /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
         private IManagedConditions ParseConditionsForApi(IManifest manifest, InvariantDictionary<string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null)
         {
-            IImmutableSet<string> assumeModIdsLookup = assumeModIds is not null
+            IInvariantSet assumeModIdsLookup = assumeModIds is not null
                 ? ImmutableSets.From(assumeModIds)
                 : ImmutableSets.FromValue(manifest.UniqueID);
             IMigration migrator = new AggregateMigration(formatVersion, this.GetFormatVersions(null));
@@ -433,7 +432,7 @@ namespace ContentPatcher
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
         /// <param name="field">The field value to parse.</param>
-        private IImmutableSet<string> ParseCommaDelimitedField(string? field)
+        private IInvariantSet ParseCommaDelimitedField(string? field)
         {
             if (string.IsNullOrWhiteSpace(field))
                 return ImmutableSets.Empty;

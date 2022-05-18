@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -12,10 +12,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly IImmutableSet<string>? AllowedRootValues;
+        private readonly IInvariantSet? AllowedRootValues;
 
         /// <summary>The current token values.</summary>
-        private readonly IImmutableSet<string> Values;
+        private readonly IInvariantSet Values;
 
 
         /*********
@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
         /// <param name="canHaveMultipleValues">Whether the root may contain multiple values (or <c>null</c> to set it based on the given values).</param>
         /// <param name="isMutable">Whether to mark the value provider as mutable. The value provider will be immutable regardless, but this avoids optimizations in cases where the value provider may be replaced later.</param>
-        public ImmutableValueProvider(string name, IImmutableSet<string>? values, IImmutableSet<string>? allowedValues = null, bool? canHaveMultipleValues = null, bool isMutable = false)
+        public ImmutableValueProvider(string name, IInvariantSet? values, IInvariantSet? allowedValues = null, bool? canHaveMultipleValues = null, bool isMutable = false)
             : base(name, mayReturnMultipleValuesForRoot: false)
         {
             this.Values = values ?? ImmutableSets.Empty;
@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;
