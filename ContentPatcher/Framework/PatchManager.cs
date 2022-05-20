@@ -50,7 +50,7 @@ namespace ContentPatcher.Framework
         private readonly SortedSet<IPatch> Patches = new(PatchIndexComparer.Instance);
 
         /// <summary>The patches to apply, indexed by token.</summary>
-        private readonly InvariantDictionary<SortedSet<IPatch>> PatchesAffectedByToken = new();
+        private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new();
 
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private readonly Dictionary<IAssetName, SortedSet<IPatch>> PatchesByCurrentTarget = new();
@@ -369,7 +369,7 @@ namespace ContentPatcher.Framework
                 list.Clear();
             if (patchListChanged)
             {
-                foreach (SortedSet<IPatch> set in this.PatchesAffectedByToken.Values)
+                foreach (HashSet<IPatch> set in this.PatchesAffectedByToken.Values)
                     set.Clear();
             }
 
@@ -591,7 +591,7 @@ namespace ContentPatcher.Framework
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
             foreach (string tokenName in globalChangedTokens)
             {
-                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affectedPatches))
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch>? affectedPatches))
                 {
                     foreach (IPatch patch in affectedPatches)
                     {
@@ -655,8 +655,8 @@ namespace ContentPatcher.Framework
             {
                 void IndexForToken(string tokenName)
                 {
-                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affected))
-                        this.PatchesAffectedByToken[tokenName] = affected = new SortedSet<IPatch>(PatchIndexComparer.Instance);
+                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch>? affected))
+                        this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>();
                     affected.Add(patch);
                 }
 
