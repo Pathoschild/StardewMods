@@ -17,6 +17,14 @@ using xTile;
 
 namespace ContentPatcher.Framework
 {
+    //
+    // Optimization notes:
+    //   - Don't clear PatchesAffectedByToken / PatchesByCurrentTarget when reindexing/removing
+    //     patches. Dictionary inserts are much more expensive than lookups, so this leads to
+    //     thrashing where the same keys are repeatedly removed & re-added and the dictionary tree
+    //     gets repeatedly rebalanced.
+    //
+
     /// <summary>Manages loaded patches.</summary>
     internal class PatchManager
     {
@@ -357,9 +365,13 @@ namespace ContentPatcher.Framework
         public void Reindex(bool patchListChanged)
         {
             // reset
-            this.PatchesByCurrentTarget.Clear();
+            foreach (var list in this.PatchesByCurrentTarget.Values)
+                list.Clear();
             if (patchListChanged)
-                this.PatchesAffectedByToken.Clear();
+            {
+                foreach (SortedSet<IPatch> set in this.PatchesAffectedByToken.Values)
+                    set.Clear();
+            }
 
             // reindex
             foreach (IPatch patch in this.Patches)
@@ -670,26 +682,12 @@ namespace ContentPatcher.Framework
         private void RemovePatchFromIndexes(IPatch patch)
         {
             // by asset name
-            foreach ((IAssetName name, ISet<IPatch> list) in this.PatchesByCurrentTarget.ToArray())
-            {
-                if (list.Contains(patch))
-                {
-                    list.Remove(patch);
-                    if (!list.Any())
-                        this.PatchesByCurrentTarget.Remove(name);
-                }
-            }
+            foreach (ISet<IPatch> list in this.PatchesByCurrentTarget.Values)
+                list.Remove(patch);
 
             // by token
-            foreach ((string key, ISet<IPatch> list) in this.PatchesAffectedByToken.ToArray())
-            {
-                if (list.Contains(patch))
-                {
-                    list.Remove(patch);
-                    if (!list.Any())
-                        this.PatchesAffectedByToken.Remove(key);
-                }
-            }
+            foreach (ISet<IPatch> list in this.PatchesAffectedByToken.Values)
+                list.Remove(patch);
         }
     }
 }
