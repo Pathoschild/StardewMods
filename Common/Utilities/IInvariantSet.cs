@@ -17,7 +17,11 @@ namespace Pathoschild.Stardew.Common.Utilities
         IInvariantSet GetWith(ICollection<string> other);
 
         /// <summary>Get an invariant set with the given value removed from this set's values.</summary>
-        /// <param name="other">The value to add.</param>
+        /// <param name="other">The value to remove.</param>
         IInvariantSet GetWithout(string other);
+
+        /// <summary>Get an invariant set with the given values removed from this set's values.</summary>
+        /// <param name="other">The values to remove.</param>
+        IInvariantSet GetWithout(IEnumerable<string> other);
     }
 }

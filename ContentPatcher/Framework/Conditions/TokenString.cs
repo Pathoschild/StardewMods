@@ -68,13 +68,13 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
         public TokenString(string raw, IContext context, LogPathBuilder path)
-            : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
+            : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
+        public TokenString(IEnumerable<ILexToken> lexTokens, IContext context, LogPathBuilder path)
         {
             this.Path = path.ToString();
 

@@ -97,7 +97,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="rawValue">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public void AddDynamicToken(string name, IManagedTokenString rawValue, IEnumerable<Condition> conditions)
+        public void AddDynamicToken(string name, IManagedTokenString rawValue, Condition[] conditions)
         {
             // validate
             if (this.ParentContext.Contains(name, enforceContext: false))

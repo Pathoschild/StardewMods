@@ -138,7 +138,7 @@ namespace ContentPatcher.Framework
                 }
                 if (allowValues.Any() && defaultValues.Any())
                 {
-                    string[] invalidValues = defaultValues.ExceptIgnoreCase(allowValues).ToArray();
+                    IInvariantSet invalidValues = defaultValues.GetWithout(allowValues);
                     if (invalidValues.Any())
                     {
                         logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowValues)}.");
@@ -216,7 +216,7 @@ namespace ContentPatcher.Framework
                 // validate allow-values
                 if (field.AllowValues.Any())
                 {
-                    string[] invalidValues = field.Value.ExceptIgnoreCase(field.AllowValues).ToArray();
+                    IInvariantSet invalidValues = field.Value.GetWithout(field.AllowValues);
                     if (invalidValues.Any())
                     {
                         logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");

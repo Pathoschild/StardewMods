@@ -167,6 +167,29 @@ namespace Pathoschild.Stardew.Common.Utilities
             return new InvariantSet(copy);
         }
 
+        /// <inheritdoc cref="IInvariantSet" />
+        public IInvariantSet GetWithout(IEnumerable<string> other)
+        {
+            HashSet<string>? copy = null;
+
+            foreach (string value in other)
+            {
+                if (copy is null)
+                {
+                    if (!this.Contains(value))
+                        continue; // avoid copying set if no items are removed
+
+                    copy = this.CreateSet(this);
+                }
+
+                copy.Remove(value);
+            }
+
+            return copy is not null
+                ? new InvariantSet(copy)
+                : this;
+        }
+
 
         /*********
         ** Private methods

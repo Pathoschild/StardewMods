@@ -81,13 +81,8 @@ namespace ContentPatcher.Framework
             // get token parser for fake context
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);
 
-            // ignore null patches with a warning
-            PatchConfig[] patches = rawPatches
-                .WhereNotNull()
-                .ToArray();
-
             // preprocess patches
-            patches = this.SplitPatches(patches).ToArray();
+            PatchConfig[] patches = this.SplitPatches(rawPatches.WhereNotNull()).ToArray();
             this.UniquelyNamePatches(patches);
 
             // load patches
@@ -826,7 +821,7 @@ namespace ContentPatcher.Framework
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
                 // create text operation entry
-                textOperations.Add(new TextOperation(operationType, target.ToArray(), value, operation.Delimiter));
+                textOperations.Add(new TextOperation(operationType, target, value, operation.Delimiter));
             }
 
             error = null;
