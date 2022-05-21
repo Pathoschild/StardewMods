@@ -254,7 +254,6 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
-                hasTargetChanges = hasTargetChanges || wasTargetAsset != null && patch.TargetAsset == null;
                 hasTargetChanges = hasTargetChanges || (wasTargetAsset != null && patch.TargetAsset == null);
                 hasTargetChanges = hasTargetChanges || (wasTargetAsset == null && patch.TargetAsset != null);
                 hasTargetChanges = hasTargetChanges || (wasTargetAsset != null && patch.TargetAsset != null && !wasTargetAsset.IsEquivalentTo(patch.TargetAsset));
