@@ -254,9 +254,8 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
-                hasTargetChanges = hasTargetChanges || (wasTargetAsset != null && patch.TargetAsset == null);
-                hasTargetChanges = hasTargetChanges || (wasTargetAsset == null && patch.TargetAsset != null);
-                hasTargetChanges = hasTargetChanges || (wasTargetAsset != null && patch.TargetAsset != null && !wasTargetAsset.IsEquivalentTo(patch.TargetAsset));
+                // Short circuit if its already true, otherwise test if they are not equal, and on the event old is null, check if new is not null (different)
+                hasTargetChanges = hasTargetChanges || (!wasTargetAsset?.Equals(patch.TargetAsset) ?? patch.TargetAsset != null);
                 // log change
                 verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
                 if (this.Monitor.IsVerbose)
