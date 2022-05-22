@@ -9,15 +9,25 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Farm layout", // TODO
+
     "config.campfire.name": "캠프파이어 추가",
     "config.campfire.tooltip": "농가 앞에 기능성 캠프파이어를 추가하세요.",
 
     "config.islands.name": "섬 추가",
     "config.islands.tooltip": "육지 면적이 넓은 바다 섬을 추가하세요.",
 
-    "config.beach-sounds.name": "해변 소리 재생",
-    "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다.",
-
     "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+
+    /****
+    ** Farm options
+    ****/
+    "config.other-farm-options": "Other farm options", // TODO
+
+    "config.beach-sounds.name": "해변 소리 재생",
+    "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다."
 }

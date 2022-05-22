@@ -9,15 +9,25 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Farm layout", // TODO
+
     "config.campfire.name": "Додати вогнище",
     "config.campfire.tooltip": "Додає працездатне вогнище перед фермерським будинком.",
 
     "config.islands.name": "Додати острови",
     "config.islands.tooltip": "Додає океанські острови з додатковою площею суші.",
 
-    "config.beach-sounds.name": "Програвати звуки пляжу",
-    "config.beach-sounds.tooltip": "Програє фонову музику на пляжі (тобто звуки хвиль) на пляжній фермі.",
-
     "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+
+    /****
+    ** Farm options
+    ****/
+    "config.other-farm-options": "Other farm options", // TODO
+
+    "config.beach-sounds.name": "Програвати звуки пляжу",
+    "config.beach-sounds.tooltip": "Програє фонову музику на пляжі (тобто звуки хвиль) на пляжній фермі."
 }

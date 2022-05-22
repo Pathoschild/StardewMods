@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming option
+* Added sections in config UI.
+
 ## 2.2.0
 Released 09 May 2022 for SMAPI 3.14.0 or later.
 

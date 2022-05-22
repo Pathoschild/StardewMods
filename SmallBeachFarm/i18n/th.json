@@ -9,15 +9,25 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Farm layout", // TODO
+
     "config.campfire.name": "เพิ่มแคมป์ไฟ",
     "config.campfire.tooltip": "เพิ่มแคมป์ไฟที่ใช้งานได้ด้านหน้าบ้านไร่",
 
     "config.islands.name": "เพิ่มเกาะ",
     "config.islands.tooltip": "เพิ่มเกาะในมหาสมุทรพร้อมพื้นที่พิเศษ",
 
-    "config.beach-sounds.name": "เล่นเสียงชายหาด",
-    "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด",
-
     "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+
+    /****
+    ** Farm options
+    ****/
+    "config.other-farm-options": "Other farm options", // TODO
+
+    "config.beach-sounds.name": "เล่นเสียงชายหาด",
+    "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด"
 }

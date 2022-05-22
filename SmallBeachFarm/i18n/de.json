@@ -9,15 +9,25 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Farm layout", // TODO
+
     "config.campfire.name": "Lagerfeuer hinzufügen",
     "config.campfire.tooltip": "Füge ein funktionierendes Lagerfeuer vor dem Farmhaus hinzu.",
 
     "config.islands.name": "Inseln hinzufügen",
     "config.islands.tooltip": "Füge Meeresinseln mit zusätzlicher Landfläche hinzu.",
 
-    "config.beach-sounds.name": "Strandgeräusche abspielen",
-    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab.",
-
     "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+
+    /****
+    ** Farm options
+    ****/
+    "config.other-farm-options": "Other farm options", // TODO
+
+    "config.beach-sounds.name": "Strandgeräusche abspielen",
+    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab."
 }

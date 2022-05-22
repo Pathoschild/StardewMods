@@ -90,11 +90,12 @@ file in a text editor to configure the mod.
 
 Here's what you can change:
 
-setting         | default | what it affects
-:-------------- | :------ | :------------------
-`AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
-`EnableIslands` | `false` | Whether to add ocean islands with extra land area.
-`UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
+setting           | default | what it affects
+:---------------- | :------ | :------------------
+`AddCampfire`     | `true`  | Whether to add a functional campfire in front of the farmhouse.
+`EnableIslands`   | `false` | Whether to add ocean islands with extra land area.
+`UseBeachMusic`   | `false` | Whether to use the beach's background music (i.e. wave sounds) on the beach farm.
+`ShippingBinPath` | `true`  | Whether to place the stone path tiles in front of the default shipping bin position.
 
 ## FAQs
 ### Compatibility
