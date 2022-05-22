@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -44,11 +42,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="parentToken">The token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(ManagedManualToken parentToken, IManagedTokenString value, IEnumerable<Condition> conditions)
+        public DynamicTokenValue(ManagedManualToken parentToken, IManagedTokenString value, Condition[] conditions)
         {
             this.ParentToken = parentToken;
             this.Value = value;
-            this.Conditions = conditions.ToArray();
+            this.Conditions = conditions;
             this.Contextuals = new AggregateContextual()
                 .Add(value)
                 .Add(this.Conditions);
@@ -61,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

@@ -16,9 +16,9 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_22()
             : base(new SemanticVersion(1, 22, 0))
         {
-            this.AddedTokens.AddMany(
-                ConditionType.FirstValidFile.ToString(),
-                ConditionType.HasActiveQuest.ToString()
+            this.AddedTokens = new InvariantSet(
+                nameof(ConditionType.FirstValidFile),
+                nameof(ConditionType.HasActiveQuest)
             );
         }
     }

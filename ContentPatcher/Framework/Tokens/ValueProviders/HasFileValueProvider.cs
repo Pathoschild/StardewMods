@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -38,9 +38,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out IImmutableSet<string> allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, out IInvariantSet allowedValues)
         {
-            allowedValues = ImmutableSets.Boolean;
+            allowedValues = InvariantSets.Boolean;
             return true;
         }
 
@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return ImmutableSets.FromValue(
+            return InvariantSets.FromValue(
                 this.GetPathExists(input.GetPositionalSegment())
             );
         }

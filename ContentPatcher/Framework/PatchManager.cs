@@ -17,15 +17,23 @@ using xTile;
 
 namespace ContentPatcher.Framework
 {
+    //
+    // Optimization notes:
+    //   - Don't clear PatchesAffectedByToken / PatchesByCurrentTarget when reindexing/removing
+    //     patches. Dictionary inserts are much more expensive than lookups, so this leads to
+    //     thrashing where the same keys are repeatedly removed & re-added and the dictionary tree
+    //     gets repeatedly rebalanced.
+    //
+
     /// <summary>Manages loaded patches.</summary>
     internal class PatchManager
     {
         /*********
         ** Fields
         *********/
-        /****
-        ** State
-        ****/
+        /// <summary>Whether to apply changes from each content pack in a separate operation.</summary>
+        private readonly bool GroupEditsByMod;
+
         /// <summary>Manages the available contextual tokens.</summary>
         private readonly TokenManager TokenManager;
 
@@ -42,7 +50,7 @@ namespace ContentPatcher.Framework
         private readonly SortedSet<IPatch> Patches = new(PatchIndexComparer.Instance);
 
         /// <summary>The patches to apply, indexed by token.</summary>
-        private readonly InvariantDictionary<SortedSet<IPatch>> PatchesAffectedByToken = new();
+        private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new();
 
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private readonly Dictionary<IAssetName, SortedSet<IPatch>> PatchesByCurrentTarget = new();
@@ -54,7 +62,7 @@ namespace ContentPatcher.Framework
         private readonly HashSet<IAssetName> AssetsWithRemovedPatches = new();
 
         /// <summary>The token changes queued for periodic update types.</summary>
-        private readonly IDictionary<ContextUpdateType, InvariantHashSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, InvariantHashSet>
+        private readonly IDictionary<ContextUpdateType, MutableInvariantSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, MutableInvariantSet>
         {
             [ContextUpdateType.OnTimeChange] = new(),
             [ContextUpdateType.OnLocationChange] = new(),
@@ -69,11 +77,13 @@ namespace ContentPatcher.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tokenManager">Manages the available contextual tokens.</param>
         /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators)
+        /// <param name="groupEditsByMod">Whether to apply changes from each content pack in a separate operation.</param>
+        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators, bool groupEditsByMod)
         {
             this.Monitor = monitor;
             this.TokenManager = tokenManager;
             this.AssetValidators = assetValidators;
+            this.GroupEditsByMod = groupEditsByMod;
         }
 
         /****
@@ -105,34 +115,39 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         /// <param name="updateType">The context update type.</param>
-        public void UpdateContext(IGameContentHelper contentHelper, InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
+        public void UpdateContext(IGameContentHelper contentHelper, IInvariantSet globalChangedTokens, ContextUpdateType updateType)
         {
             this.Monitor.VerboseLog($"Updating context for {updateType} tick...");
 
             // Patches can have variable update rates, so we keep track of updated tokens here so
             // we update patches at their next update point.
-            if (updateType == ContextUpdateType.All)
             {
-                // all token updates apply at day start
-                globalChangedTokens = new InvariantHashSet(globalChangedTokens);
-                foreach (var tokenQueue in this.QueuedTokenChanges.Values)
+                MutableInvariantSet affectedTokens = new MutableInvariantSet(globalChangedTokens);
+
+                if (updateType == ContextUpdateType.All)
                 {
-                    globalChangedTokens.AddMany(tokenQueue);
-                    tokenQueue.Clear();
+                    // all token updates apply at day start
+                    foreach (MutableInvariantSet tokenQueue in this.QueuedTokenChanges.Values)
+                    {
+                        affectedTokens.UnionWith(tokenQueue);
+                        tokenQueue.Clear();
+                    }
                 }
-            }
-            else
-            {
-                // queue token changes for other update points
-                foreach (KeyValuePair<ContextUpdateType, InvariantHashSet> pair in this.QueuedTokenChanges)
+                else
                 {
-                    if (pair.Key != updateType)
-                        pair.Value.AddMany(globalChangedTokens);
+                    // queue token changes for other update points
+                    foreach ((ContextUpdateType curType, MutableInvariantSet queued) in this.QueuedTokenChanges)
+                    {
+                        if (curType != updateType)
+                            queued.AddMany(globalChangedTokens);
+                    }
+
+                    // get queued changes for the current update point
+                    affectedTokens.AddMany(this.QueuedTokenChanges[updateType]);
+                    this.QueuedTokenChanges[updateType].Clear();
                 }
 
-                // get queued changes for the current update point
-                globalChangedTokens.AddMany(this.QueuedTokenChanges[updateType]);
-                this.QueuedTokenChanges[updateType].Clear();
+                globalChangedTokens = affectedTokens.Lock();
             }
 
             // get changes to apply
@@ -155,6 +170,7 @@ namespace ContentPatcher.Framework
             // update patches
             IAssetName? prevAssetName = null;
             HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
+            bool anyTargetsChanged = false;
             while (patchQueue.Any())
             {
                 IPatch patch = patchQueue.Dequeue();
@@ -237,6 +253,10 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
+                // track whether the target asset changed
+                if (!anyTargetsChanged)
+                    anyTargetsChanged = !wasTargetAsset?.IsEquivalentTo(patch.TargetAsset) ?? patch.TargetAsset is not null;
+
                 // log change
                 verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
                 if (this.Monitor.IsVerbose)
@@ -252,8 +272,9 @@ namespace ContentPatcher.Framework
                 }
             }
 
-            // reset indexes
-            this.Reindex(patchListChanged: false);
+            // reset indexes if targets changed
+            if (anyTargetsChanged)
+                this.Reindex(patchListChanged: false);
 
             // log changes
             if (verbosePatchesReloaded?.Count > 0)
@@ -350,9 +371,13 @@ namespace ContentPatcher.Framework
         public void Reindex(bool patchListChanged)
         {
             // reset
-            this.PatchesByCurrentTarget.Clear();
+            foreach (var list in this.PatchesByCurrentTarget.Values)
+                list.Clear();
             if (patchListChanged)
-                this.PatchesAffectedByToken.Clear();
+            {
+                foreach (HashSet<IPatch> set in this.PatchesAffectedByToken.Values)
+                    set.Clear();
+            }
 
             // reindex
             foreach (IPatch patch in this.Patches)
@@ -473,14 +498,24 @@ namespace ContentPatcher.Framework
             // apply edit patches
             if (editors.Any())
             {
-                List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
-                foreach (List<IPatch> group in editGroups)
+                if (this.GroupEditsByMod)
                 {
-                    List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
+                    List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
+                    foreach (List<IPatch> group in editGroups)
+                    {
+                        List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
+                        e.Edit(
+                            apply: data => this.ApplyEdits<T>(patches, data),
+                            priority: AssetEditPriority.Default,
+                            onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
+                        );
+                    }
+                }
+                else
+                {
                     e.Edit(
-                        apply: data => this.ApplyEdits<T>(patches, data),
-                        priority: AssetEditPriority.Default,
-                        onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
+                        apply: data => this.ApplyEdits<T>(editors, data),
+                        priority: AssetEditPriority.Default
                     );
                 }
             }
@@ -520,7 +555,7 @@ namespace ContentPatcher.Framework
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="patches">The patches to apply.</param>
         /// <param name="asset">The asset data to edit.</param>
-        private void ApplyEdits<T>(List<IPatch> patches, IAssetData asset)
+        private void ApplyEdits<T>(ICollection<IPatch> patches, IAssetData asset)
             where T : notnull
         {
             foreach (IPatch patch in patches)
@@ -556,13 +591,13 @@ namespace ContentPatcher.Framework
         /// <summary>Get the tokens which need a context update.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         /// <param name="updateType">The context update type.</param>
-        private HashSet<IPatch> GetPatchesToUpdate(InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
+        private HashSet<IPatch> GetPatchesToUpdate(IInvariantSet globalChangedTokens, ContextUpdateType updateType)
         {
             // add patches which depend on a changed token
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
             foreach (string tokenName in globalChangedTokens)
             {
-                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affectedPatches))
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch>? affectedPatches))
                 {
                     foreach (IPatch patch in affectedPatches)
                     {
@@ -626,8 +661,8 @@ namespace ContentPatcher.Framework
             {
                 void IndexForToken(string tokenName)
                 {
-                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affected))
-                        this.PatchesAffectedByToken[tokenName] = affected = new SortedSet<IPatch>(PatchIndexComparer.Instance);
+                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch>? affected))
+                        this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>();
                     affected.Add(patch);
                 }
 
@@ -635,7 +670,7 @@ namespace ContentPatcher.Framework
                 ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
 
                 // get direct tokens
-                InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
+                IInvariantSet tokensUsed = InvariantSets.From(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
                 foreach (string tokenName in tokensUsed)
                     IndexForToken(tokenName);
 
@@ -653,26 +688,12 @@ namespace ContentPatcher.Framework
         private void RemovePatchFromIndexes(IPatch patch)
         {
             // by asset name
-            foreach ((IAssetName name, ISet<IPatch> list) in this.PatchesByCurrentTarget.ToArray())
-            {
-                if (list.Contains(patch))
-                {
-                    list.Remove(patch);
-                    if (!list.Any())
-                        this.PatchesByCurrentTarget.Remove(name);
-                }
-            }
+            foreach (ISet<IPatch> list in this.PatchesByCurrentTarget.Values)
+                list.Remove(patch);
 
             // by token
-            foreach ((string key, ISet<IPatch> list) in this.PatchesAffectedByToken.ToArray())
-            {
-                if (list.Contains(patch))
-                {
-                    list.Remove(patch);
-                    if (!list.Any())
-                        this.PatchesAffectedByToken.Remove(key);
-                }
-            }
+            foreach (ISet<IPatch> list in this.PatchesAffectedByToken.Values)
+                list.Remove(patch);
         }
     }
 }

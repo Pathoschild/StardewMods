@@ -54,8 +54,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 throw new InvalidOperationException(error); // shouldn't happen since we check the input in TryValidateInput
 
             return part != null
-                ? ImmutableSets.FromValue(part)
-                : ImmutableSets.Empty;
+                ? InvariantSets.FromValue(part)
+                : InvariantSets.Empty;
         }
 
 

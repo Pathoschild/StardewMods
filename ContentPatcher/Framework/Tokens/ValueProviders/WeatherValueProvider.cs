@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -23,10 +23,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             .ToDictionary(p => p, _ => Weather.Sun);
 
         /// <summary>The weather values that can be returned by this token.</summary>
-        private readonly IImmutableSet<string> ValidWeathers = ImmutableSets.From(Enum.GetNames(typeof(Weather)));
+        private readonly IInvariantSet ValidWeathers = InvariantSets.From(Enum.GetNames(typeof(Weather)));
 
         /// <summary>The input arguments recognized by this token.</summary>
-        private readonly IImmutableSet<string> ValidInputKeys = ImmutableSets.From(Enum.GetNames(typeof(LocationContext)).Concat(new[] { "Current" }));
+        private readonly IInvariantSet ValidInputKeys = InvariantSets.From(Enum.GetNames(typeof(LocationContext)).Concat(new[] { "Current" }));
 
         /// <summary>The context for the current location.</summary>
         private LocationContext CurrentLocation;
@@ -73,13 +73,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override IImmutableSet<string> GetValidPositionalArgs()
+        public override IInvariantSet GetValidPositionalArgs()
         {
             return this.ValidInputKeys;
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out IImmutableSet<string> allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, out IInvariantSet allowedValues)
         {
             allowedValues = this.ValidWeathers;
             return true;
@@ -97,7 +97,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     : Weather.Sun.ToString() // the game treats an invalid context (e.g. MAX) as always sunny
                 );
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
 

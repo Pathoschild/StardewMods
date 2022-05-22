@@ -23,10 +23,10 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_25()
             : base(new SemanticVersion(1, 25, 0))
         {
-            this.AddedTokens.AddMany(
-                ConditionType.AbsoluteFilePath.ToString(),
-                ConditionType.FormatAssetName.ToString(),
-                ConditionType.InternalAssetKey.ToString()
+            this.AddedTokens = new InvariantSet(
+                nameof(ConditionType.AbsoluteFilePath),
+                nameof(ConditionType.FormatAssetName),
+                nameof(ConditionType.InternalAssetKey)
             );
         }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -52,6 +51,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the patch has a 'Target' field specified, regardless of whether it's ready.</summary>
         [MemberNotNullWhen(true, nameof(Patch.RawTargetAsset), nameof(Patch.ManagedRawTargetAsset))]
         protected bool HasTargetAsset => this.RawTargetAsset != null && this.ManagedRawTargetAsset != null;
+
+        /// <summary>The cached result for <see cref="GetTokensUsed"/>.</summary>
+        protected IInvariantSet? TokensUsedCache;
 
 
         /*********
@@ -187,9 +189,9 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public virtual IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
-            return this.Contextuals.GetTokensUsed();
+            return this.TokensUsedCache ??= this.Contextuals.GetTokensUsed();
         }
 
         /// <inheritdoc />
@@ -294,16 +296,16 @@ namespace ContentPatcher.Framework.Patches
             if (this.RawTargetAsset.IsReady)
             {
                 this.TargetAsset = this.ParseAssetNameImpl(this.RawTargetAsset.Value!);
-                context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset.Name);
-                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), System.IO.Path.GetDirectoryName(this.TargetAsset.Name));
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset.Name));
+                context.SetLocalValue(nameof(ConditionType.Target), this.TargetAsset.Name);
+                context.SetLocalValue(nameof(ConditionType.TargetPathOnly), System.IO.Path.GetDirectoryName(this.TargetAsset.Name));
+                context.SetLocalValue(nameof(ConditionType.TargetWithoutPath), System.IO.Path.GetFileName(this.TargetAsset.Name));
             }
             else
             {
                 this.TargetAsset = null;
-                context.SetLocalValue(ConditionType.Target.ToString(), "", ready: false);
-                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "", ready: false);
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.Target), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.TargetPathOnly), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.TargetWithoutPath), "", ready: false);
             }
 
             return changed;
@@ -318,7 +320,7 @@ namespace ContentPatcher.Framework.Patches
             if (!this.HasFromAsset)
             {
                 this.FromAsset = null;
-                context.SetLocalValue(ConditionType.FromFile.ToString(), "");
+                context.SetLocalValue(nameof(ConditionType.FromFile), "");
                 return false;
             }
 
@@ -327,12 +329,12 @@ namespace ContentPatcher.Framework.Patches
             if (this.RawFromAsset.IsReady)
             {
                 this.FromAsset = this.NormalizeLocalAssetPath(this.RawFromAsset.Value!, logName: $"{nameof(PatchConfig.FromFile)} field");
-                context.SetLocalValue(ConditionType.FromFile.ToString(), this.FromAsset);
+                context.SetLocalValue(nameof(ConditionType.FromFile), this.FromAsset);
             }
             else
             {
                 this.FromAsset = null;
-                context.SetLocalValue(ConditionType.FromFile.ToString(), "", ready: false);
+                context.SetLocalValue(nameof(ConditionType.FromFile), "", ready: false);
             }
 
             return changed;

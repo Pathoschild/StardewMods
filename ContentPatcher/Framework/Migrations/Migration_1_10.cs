@@ -19,12 +19,12 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_10()
             : base(new SemanticVersion(1, 10, 0))
         {
-            this.AddedTokens.AddMany(
-                ConditionType.HasDialogueAnswer.ToString(),
-                ConditionType.HavingChild.ToString(),
-                ConditionType.IsJojaMartComplete.ToString(),
-                ConditionType.Pregnant.ToString(),
-                ConditionType.Random.ToString()
+            this.AddedTokens = new InvariantSet(
+                nameof(ConditionType.HasDialogueAnswer),
+                nameof(ConditionType.HavingChild),
+                nameof(ConditionType.IsJojaMartComplete),
+                nameof(ConditionType.Pregnant),
+                nameof(ConditionType.Random)
             );
         }
 

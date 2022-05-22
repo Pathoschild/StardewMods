@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return ImmutableSets.FromValue(input.TokenString?.Value ?? string.Empty);
+            return InvariantSets.FromValue(input.TokenString?.Value ?? string.Empty);
         }
     }
 }

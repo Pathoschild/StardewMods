@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -103,7 +102,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             // parse arguments
             bool showFull = false;
             bool sort = true;
-            InvariantHashSet forModIds = new();
+            MutableInvariantSet forModIds = new();
             foreach (string arg in args)
             {
                 // flags
@@ -182,7 +181,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine("[ ] n/a");
                         else if (token.RequiresInput)
                         {
-                            IImmutableSet<string>? allowedInputs = token.GetAllowedInputArguments();
+                            IInvariantSet? allowedInputs = token.GetAllowedInputArguments();
                             if (allowedInputs?.Any() == true)
                             {
                                 bool isFirst = true;
@@ -390,11 +389,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log update rate issues
                         if (patch.Patch != null)
                         {
-                            foreach ((UpdateRate rate, string label, IImmutableSet<string> tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
+                            foreach ((UpdateRate rate, string label, IInvariantSet tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
                             {
                                 if (!patch.Patch.UpdateRate.HasFlag(rate))
                                 {
-                                    IImmutableSet<string> tokensUsed = patch.Patch.GetTokensUsed();
+                                    IInvariantSet tokensUsed = patch.Patch.GetTokensUsed();
 
                                     string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
                                     if (locationTokensUsed.Any())
@@ -409,7 +408,7 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                     // print patch effects
                     {
-                        IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.OrdinalIgnoreCase);
+                        IDictionary<string, MutableInvariantSet> effectsByPatch = new Dictionary<string, MutableInvariantSet>(StringComparer.OrdinalIgnoreCase);
                         foreach (PatchInfo patch in patchGroup)
                         {
                             if (!patch.IsApplied || patch.Patch == null)
@@ -421,8 +420,8 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                             if (patch.ParsedTargetAsset?.Value != null)
                             {
-                                if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet? effects))
-                                    effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
+                                if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out MutableInvariantSet? effects))
+                                    effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new MutableInvariantSet();
 
                                 effects.AddMany(patch.GetChangeLabels());
                             }
@@ -437,7 +436,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
                             output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
-                            foreach ((string target, InvariantHashSet patchesForTarget) in effectsByPatch.OrderByHuman(p => p.Key))
+                            foreach ((string target, MutableInvariantSet patchesForTarget) in effectsByPatch.OrderByHuman(p => p.Key))
                                 output.AppendLine($"      {target}{"".PadRight(maxAssetNameWidth - target.Length)} | {string.Join("; ", patchesForTarget.OrderByHuman())}");
                         }
                         else

@@ -28,11 +28,11 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_23()
             : base(new SemanticVersion(1, 23, 0))
         {
-            this.AddedTokens.AddMany(
-                ConditionType.ChildGenders.ToString(),
-                ConditionType.ChildNames.ToString(),
-                ConditionType.Count.ToString(),
-                ConditionType.HasCaughtFish.ToString()
+            this.AddedTokens = new InvariantSet(
+                nameof(ConditionType.ChildGenders),
+                nameof(ConditionType.ChildNames),
+                nameof(ConditionType.Count),
+                nameof(ConditionType.HasCaughtFish)
             );
         }
 

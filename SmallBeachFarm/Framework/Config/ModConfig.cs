@@ -14,5 +14,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework.Config
 
         /// <summary>Place the stone path tiles in front of the default shipping bin position.</summary>
         public bool ShippingBinPath { get; set; } = true;
+
+        /// <summary>The default value for the 'spawn monsters at night' option when creating a new save.</summary>
+        public bool DefaultSpawnMonstersAtNight { get; set; } = false;
     }
 }

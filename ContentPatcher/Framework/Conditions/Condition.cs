@@ -1,6 +1,6 @@
-using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -33,7 +33,7 @@ namespace ContentPatcher.Framework.Conditions
         public ITokenString Values { get; }
 
         /// <summary>The current values from <see cref="Values"/>.</summary>
-        public IImmutableSet<string> CurrentValues { get; private set; }
+        public IInvariantSet CurrentValues { get; private set; }
 
         /// <inheritdoc />
         public bool IsMutable => this.IsTokenMutable || this.Contextuals.IsMutable;
@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Conditions
             // init immutable values
             this.CurrentValues = this.Values.IsReady
                 ? this.Values.SplitValuesUnique()
-                : ImmutableSets.Empty;
+                : InvariantSets.Empty;
         }
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
@@ -109,7 +109,7 @@ namespace ContentPatcher.Framework.Conditions
             }
             else
             {
-                this.CurrentValues = ImmutableSets.Empty;
+                this.CurrentValues = InvariantSets.Empty;
                 this.IsMatch = false;
             }
 
@@ -120,13 +120,11 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
-            return ImmutableSets.From(
-                this.Contextuals
-                    .GetTokensUsed()
-                    .Concat(new[] { this.Name })
-            );
+            return this.Contextuals
+                .GetTokensUsed()
+                .GetWith(this.Name);
         }
 
         /// <inheritdoc />

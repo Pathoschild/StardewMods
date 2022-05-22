@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     get: config => string.Join(", ", config.DisabledInLocations.Where(name => !name.Equals(MinesName, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p, StringComparer.OrdinalIgnoreCase)),
                     set: (config, value) =>
                     {
-                        InvariantHashSet parsed = new InvariantHashSet(value.Split(',').Select(p => p.Trim()).Where(p => p != string.Empty));
+                        MutableInvariantSet parsed = new(value.Split(',').Select(p => p.Trim()).Where(p => p != string.Empty));
                         if (config.DisabledInLocations.Contains(MinesName))
                             parsed.Add(MinesName);
 

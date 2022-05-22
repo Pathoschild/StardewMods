@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.ConfigModels;
@@ -26,7 +25,7 @@ namespace ContentPatcher.Framework
         private readonly GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> ConfigMenu;
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        private readonly Func<string, IImmutableSet<string>> ParseCommaDelimitedField;
+        private readonly Func<string, IInvariantSet> ParseCommaDelimitedField;
 
 
         /*********
@@ -47,7 +46,7 @@ namespace ContentPatcher.Framework
         /// <param name="parseCommaDelimitedField">The Generic Mod Config Menu integration.</param>
         /// <param name="config">The config model.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
-        public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, IImmutableSet<string>> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
+        public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, IInvariantSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
         {
             this.ContentPack = contentPack;
             this.Config = config;
@@ -126,11 +125,11 @@ namespace ContentPatcher.Framework
                     get: _ => string.Join(", ", field.Value),
                     set: (_, newValue) =>
                     {
-                        IImmutableSet<string> values = this.ParseCommaDelimitedField(newValue);
+                        IInvariantSet values = this.ParseCommaDelimitedField(newValue);
 
                         field.SetValue(field.AllowMultiple || values.Count <= 1
                             ? values
-                            : ImmutableSets.FromValue(values.First())
+                            : InvariantSets.FromValue(values.First())
                         );
                     }
                 );
@@ -149,8 +148,8 @@ namespace ContentPatcher.Framework
                         {
                             // toggle value
                             field.SetValue(selected
-                                ? field.Value.Add(value)
-                                : field.Value.Remove(value)
+                                ? field.Value.GetWith(value)
+                                : field.Value.GetWithout(value)
                             );
 
                             // set default if blank
@@ -169,7 +168,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => field.Value.Contains(true.ToString()),
                     set: (_, selected) => field.SetValue(
-                        ImmutableSets.FromValue(selected)
+                        InvariantSets.FromValue(selected)
                     )
                 );
             }
@@ -186,7 +185,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
                     set: (_, val) => field.SetValue(
-                        ImmutableSets.FromValue(
+                        InvariantSets.FromValue(
                             val.ToString(CultureInfo.InvariantCulture)
                         )
                     ),
@@ -207,7 +206,7 @@ namespace ContentPatcher.Framework
                     tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
                     set: (_, newValue) => field.SetValue(
-                        ImmutableSets.FromValue(newValue)
+                        InvariantSets.FromValue(newValue)
                     ),
                     allowedValues: choices.ToArray(),
                     formatAllowedValue: GetValueText

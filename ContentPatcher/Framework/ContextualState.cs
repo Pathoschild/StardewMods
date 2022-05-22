@@ -8,6 +8,22 @@ namespace ContentPatcher.Framework
     internal class ContextualState : IContextualState
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The backing field for <see cref="InvalidTokens"/>.</summary>
+        private readonly MutableInvariantSet InvalidTokensImpl = new();
+
+        /// <summary>The backing field for <see cref="UnreadyTokens"/>.</summary>
+        private readonly MutableInvariantSet UnreadyTokensImpl = new();
+
+        /// <summary>The backing field for <see cref="UnavailableModTokens"/>.</summary>
+        private readonly MutableInvariantSet UnavailableModTokensImpl = new();
+
+        /// <summary>The backing field for <see cref="Errors"/>.</summary>
+        private readonly MutableInvariantSet ErrorsImpl = new();
+
+
+        /*********
         ** Accessors
         *********/
         /// <inheritdoc />
@@ -20,16 +36,16 @@ namespace ContentPatcher.Framework
         public bool IsReady => this.IsInScope && !this.Errors.Any();
 
         /// <inheritdoc />
-        public InvariantHashSet InvalidTokens { get; } = new();
+        public IInvariantSet InvalidTokens => this.InvalidTokensImpl.GetImmutable();
 
         /// <inheritdoc />
-        public InvariantHashSet UnreadyTokens { get; } = new();
+        public IInvariantSet UnreadyTokens => this.UnreadyTokensImpl.GetImmutable();
 
         /// <inheritdoc />
-        public InvariantHashSet UnavailableModTokens { get; } = new();
+        public IInvariantSet UnavailableModTokens => this.UnavailableModTokensImpl.GetImmutable();
 
         /// <inheritdoc />
-        public InvariantHashSet Errors { get; } = new();
+        public IInvariantSet Errors => this.ErrorsImpl.GetImmutable();
 
 
         /*********
@@ -38,9 +54,9 @@ namespace ContentPatcher.Framework
         /// <summary>Mark the instance valid.</summary>
         public ContextualState Reset()
         {
-            this.InvalidTokens.Clear();
-            this.UnreadyTokens.Clear();
-            this.Errors.Clear();
+            this.InvalidTokensImpl.Clear();
+            this.UnreadyTokensImpl.Clear();
+            this.ErrorsImpl.Clear();
             return this;
         }
 
@@ -54,11 +70,18 @@ namespace ContentPatcher.Framework
         /// <param name="other">The other contextual state to copy.</param>
         public ContextualState MergeFrom(IContextualState? other)
         {
-            if (other != null)
+            if (other is ContextualState otherState)
             {
-                this.AddRange(this.InvalidTokens, other.InvalidTokens);
-                this.AddRange(this.UnreadyTokens, other.UnreadyTokens);
-                this.AddRange(this.Errors, other.Errors);
+                // avoid creating immutable copies unnecessarily
+                this.AddRange(this.InvalidTokensImpl, otherState.InvalidTokensImpl);
+                this.AddRange(this.UnreadyTokensImpl, otherState.UnreadyTokensImpl);
+                this.AddRange(this.ErrorsImpl, otherState.ErrorsImpl);
+            }
+            else if (other != null)
+            {
+                this.AddRange(this.InvalidTokensImpl, other.InvalidTokens);
+                this.AddRange(this.UnreadyTokensImpl, other.UnreadyTokens);
+                this.AddRange(this.ErrorsImpl, other.Errors);
             }
             return this;
         }
@@ -67,7 +90,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokens">The tokens to add.</param>
         public ContextualState AddInvalidTokens(params string[]? tokens)
         {
-            this.AddRange(this.InvalidTokens, tokens);
+            this.AddRange(this.InvalidTokensImpl, tokens);
             return this;
         }
 
@@ -75,7 +98,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokens">The tokens to add.</param>
         public ContextualState AddUnreadyTokens(params string[]? tokens)
         {
-            this.AddRange(this.UnreadyTokens, tokens);
+            this.AddRange(this.UnreadyTokensImpl, tokens);
             return this;
         }
 
@@ -83,7 +106,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokens">The tokens to add.</param>
         public ContextualState AddUnavailableModTokens(params string[]? tokens)
         {
-            this.AddRange(this.UnavailableModTokens, tokens);
+            this.AddRange(this.UnavailableModTokensImpl, tokens);
             return this;
         }
 
@@ -91,7 +114,7 @@ namespace ContentPatcher.Framework
         /// <param name="errors">The tokens to add.</param>
         public ContextualState AddErrors(params string[]? errors)
         {
-            this.AddRange(this.Errors, errors);
+            this.AddRange(this.ErrorsImpl, errors);
             return this;
         }
 
@@ -102,7 +125,7 @@ namespace ContentPatcher.Framework
         /// <summary>Add a range of values to a target set.</summary>
         /// <param name="target">The set to update.</param>
         /// <param name="source">The values to add.</param>
-        private void AddRange(ISet<string> target, IEnumerable<string>? source)
+        private void AddRange(MutableInvariantSet target, IEnumerable<string>? source)
         {
             if (source == null)
                 return;

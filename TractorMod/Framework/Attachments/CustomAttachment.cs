@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Fields
         *********/
         /// <summary>The enabled custom tool or item names.</summary>
-        private readonly InvariantHashSet CustomNames;
+        private readonly InvariantSet CustomNames;
 
 
         /*********
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public CustomAttachment(string[] customAttachments, IModRegistry modRegistry, IReflectionHelper reflection)
             : base(modRegistry, reflection)
         {
-            this.CustomNames = new InvariantHashSet(customAttachments);
+            this.CustomNames = new InvariantSet(customAttachments);
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>

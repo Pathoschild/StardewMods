@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -83,7 +83,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

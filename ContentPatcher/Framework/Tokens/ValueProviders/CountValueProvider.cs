@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return ImmutableSets.FromValue(input.PositionalArgs.Length);
+            return InvariantSets.FromValue(input.PositionalArgs.Length);
         }
     }
 }

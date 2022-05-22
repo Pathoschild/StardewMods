@@ -16,13 +16,13 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_4()
             : base(new SemanticVersion(1, 4, 0))
         {
-            this.AddedTokens.AddMany(
-                ConditionType.DayEvent.ToString(),
-                ConditionType.HasFlag.ToString(),
-                ConditionType.HasSeenEvent.ToString(),
-                ConditionType.Hearts.ToString(),
-                ConditionType.Relationship.ToString(),
-                ConditionType.Spouse.ToString()
+            this.AddedTokens = new InvariantSet(
+                nameof(ConditionType.DayEvent),
+                nameof(ConditionType.HasFlag),
+                nameof(ConditionType.HasSeenEvent),
+                nameof(ConditionType.Hearts),
+                nameof(ConditionType.Relationship),
+                nameof(ConditionType.Spouse)
             );
         }
     }

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using Pathoschild.Stardew.Common.Utilities;
 using xTile.Dimensions;
 
 namespace ContentPatcher.Framework.Tokens
@@ -73,7 +73,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

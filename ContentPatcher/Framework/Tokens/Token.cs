@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Tokens.ValueProviders;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual IImmutableSet<string> GetTokensUsed()
+        public virtual IInvariantSet GetTokensUsed()
         {
             return this.Values.GetTokensUsed();
         }
@@ -102,7 +102,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, IContext context, [NotNullWhen(false)] out string? error)
+        public virtual bool TryValidateValues(IInputArguments input, IInvariantSet values, IContext context, [NotNullWhen(false)] out string? error)
         {
             // 'contains' limited to true/false
             if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
@@ -130,18 +130,18 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual IImmutableSet<string>? GetAllowedInputArguments()
+        public virtual IInvariantSet? GetAllowedInputArguments()
         {
             return this.Values.GetValidPositionalArgs();
         }
 
         /// <inheritdoc />
-        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
+        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IInvariantSet? allowedValues)
         {
             // 'contains' limited to true/false
             if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
             {
-                allowedValues = ImmutableSets.Boolean;
+                allowedValues = InvariantSets.Boolean;
                 return true;
             }
 
@@ -165,7 +165,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual IImmutableSet<string> GetValues(IInputArguments input)
+        public virtual IInvariantSet GetValues(IInputArguments input)
         {
             // default logic
             IEnumerable<string> values = this.Values.GetValues(input);
@@ -182,7 +182,7 @@ namespace ContentPatcher.Framework.Tokens
                 }
             }
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
 
@@ -202,11 +202,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Apply the <see cref="InputArguments.ContainsKey"/> argument.</summary>
         /// <param name="values">The underlying values to modify.</param>
         /// <param name="argValue">The argument value.</param>
-        private IImmutableSet<string> ApplyContains(IEnumerable<string> values, IInputArgumentValue argValue)
+        private IInvariantSet ApplyContains(IEnumerable<string> values, IInputArgumentValue argValue)
         {
             // skip empty search
             if (string.IsNullOrWhiteSpace(argValue.Raw))
-                return ImmutableSets.False;
+                return InvariantSets.False;
 
             // get search values
             string[] search = argValue.Parsed;
@@ -217,17 +217,17 @@ namespace ContentPatcher.Framework.Tokens
             }
 
             // get result
-            bool found = values is IImmutableSet<string> set
+            bool found = values is IInvariantSet set
                 ? set.Overlaps(search)
-                : ImmutableSets.From(search).Overlaps(values);
+                : InvariantSets.From(search).Overlaps(values);
 
-            return ImmutableSets.FromValue(found);
+            return InvariantSets.FromValue(found);
         }
 
         /// <summary>Apply the <see cref="InputArguments.ValueAtKey"/> argument.</summary>
         /// <param name="values">The underlying values to modify.</param>
         /// <param name="argValue">The argument value.</param>
-        private IImmutableSet<string> ApplyValueAt(IEnumerable<string> values, IInputArgumentValue argValue)
+        private IInvariantSet ApplyValueAt(IEnumerable<string> values, IInputArgumentValue argValue)
         {
             // parse index
             if (!int.TryParse(argValue.Raw, out int index))
@@ -239,8 +239,8 @@ namespace ContentPatcher.Framework.Tokens
 
             // get value at index (negative index = from end)
             if (Math.Abs(index) >= list.Count)
-                return ImmutableSets.Empty;
-            return ImmutableSets.FromValue(index >= 0
+                return InvariantSets.Empty;
+            return InvariantSets.FromValue(index >= 0
                 ? list[index]
                 : list[list.Count + index]
             );

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -104,6 +103,9 @@ namespace ContentPatcher
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
+
+            if (!this.Config.GroupEditsByMod)
+                this.Monitor.Log("Grouping edits by mod is disabled in config.json. This will reduce the usefulness of log info.");
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
@@ -306,7 +308,8 @@ namespace ContentPatcher
                 monitor: this.Monitor,
                 installedMods: this.GetInstalledMods(),
                 modTokens: modTokens,
-                assetValidators: this.AssetValidators()
+                assetValidators: this.AssetValidators(),
+                groupEditsByMod: this.Config.GroupEditsByMod
             );
         }
 
@@ -320,9 +323,9 @@ namespace ContentPatcher
         }
 
         /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
-        private IImmutableSet<string> GetInstalledMods()
+        private IInvariantSet GetInstalledMods()
         {
-            return ImmutableSets.From(
+            return InvariantSets.From(
                 this.Helper.ModRegistry
                     .GetAll()
                     .Select(p => p.Manifest.UniqueID)
@@ -362,9 +365,9 @@ namespace ContentPatcher
         /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
         private IManagedConditions ParseConditionsForApi(IManifest manifest, InvariantDictionary<string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null)
         {
-            IImmutableSet<string> assumeModIdsLookup = assumeModIds is not null
-                ? ImmutableSets.From(assumeModIds)
-                : ImmutableSets.FromValue(manifest.UniqueID);
+            IInvariantSet assumeModIdsLookup = assumeModIds is not null
+                ? InvariantSets.From(assumeModIds)
+                : InvariantSets.FromValue(manifest.UniqueID);
             IMigration migrator = new AggregateMigration(formatVersion, this.GetFormatVersions(null));
 
             return new ApiManagedConditions(
@@ -433,12 +436,12 @@ namespace ContentPatcher
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
         /// <param name="field">The field value to parse.</param>
-        private IImmutableSet<string> ParseCommaDelimitedField(string? field)
+        private IInvariantSet ParseCommaDelimitedField(string? field)
         {
             if (string.IsNullOrWhiteSpace(field))
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
 
-            return ImmutableSets.From(
+            return InvariantSets.From(
                 field.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             );
         }

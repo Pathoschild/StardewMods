@@ -3,9 +3,9 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.Tests.Common.CommonTests
 {
-    /// <summary>Unit tests for <see cref="InvariantHashSet"/>.</summary>
+    /// <summary>Unit tests for <see cref="InvariantSet"/>.</summary>
     [TestFixture]
-    class InvariantHashSetTests
+    class InvariantSetTests
     {
         /*********
         ** Unit tests
@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         [TestCase("a", "A", "a", ExpectedResult = 1)]
         public int Add_Count(params string[] values)
         {
-            InvariantHashSet set = new InvariantHashSet(values);
+            InvariantSet set = new(values);
             return set.Count;
         }
 
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         [TestCase("á", "a", "b", "c", ExpectedResult = false)]
         public bool Contains(string search, params string[] values)
         {
-            InvariantHashSet set = new InvariantHashSet(values);
+            InvariantSet set = new(values);
             return set.Contains(search);
         }
     }

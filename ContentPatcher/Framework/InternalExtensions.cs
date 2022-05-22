@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -89,13 +88,13 @@ namespace ContentPatcher.Framework
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static IImmutableSet<string> SplitValuesUnique(this ITokenString? tokenStr, Func<string, string>? normalize = null)
+        public static IInvariantSet SplitValuesUnique(this ITokenString? tokenStr, Func<string, string>? normalize = null)
         {
             if (tokenStr?.IsReady is false)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
             if (string.IsNullOrWhiteSpace(tokenStr?.Value))
-                return ImmutableSets.Empty;
+                return InvariantSets.Empty;
 
             string[] values = tokenStr.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             if (normalize != null)
@@ -104,7 +103,7 @@ namespace ContentPatcher.Framework
                     values[i] = normalize(values[i]);
             }
 
-            return ImmutableSets.From(values);
+            return InvariantSets.From(values);
         }
 
         /****

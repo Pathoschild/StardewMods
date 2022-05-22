@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.22.1
+Released 22 May 2022 for SMAPI 3.14.0 or later.
+
+* Internal changes to support Content Patcher.
+
 ## 1.22.0
 Released 09 May 2022 for SMAPI 3.14.0 or later.
 

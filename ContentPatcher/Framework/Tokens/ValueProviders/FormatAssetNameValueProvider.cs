@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.FormatAssetName, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.ValidNamedArguments.Add("separator");
+            this.ValidNamedArguments = InvariantSets.FromValue("separator");
         }
 
         /// <inheritdoc />
@@ -41,10 +41,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (input.NamedArgs.TryGetValue("separator", out IInputArgumentValue? separator))
                     path = path.Replace(PathUtilities.PreferredAssetSeparator.ToString(), separator.Parsed.FirstOrDefault());
 
-                return ImmutableSets.FromValue(path);
+                return InvariantSets.FromValue(path);
             }
 
-            return ImmutableSets.Empty;
+            return InvariantSets.Empty;
         }
     }
 }

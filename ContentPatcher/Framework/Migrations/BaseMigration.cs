@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Migrations
         ** Private methods
         *********/
         /// <summary>The tokens added in this format version.</summary>
-        protected InvariantHashSet AddedTokens { get; } = new();
+        protected InvariantSet? AddedTokens { get; set; }
 
 
         /*********
@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework.Migrations
             if (lexToken is LexTokenToken token)
             {
                 // tokens which need a higher version
-                if (this.AddedTokens.Contains(token.Name))
+                if (this.AddedTokens?.Contains(token.Name) == true)
                 {
                     error = this.GetNounPhraseError($"using token {token.Name}");
                     return false;

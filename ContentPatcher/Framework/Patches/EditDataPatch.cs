@@ -156,6 +156,7 @@ namespace ContentPatcher.Framework.Patches
                     .Add(this.MoveRecords)
                     .UpdateContext(context);
                 this.IsReady = this.IsReady && this.Contextuals.IsReady;
+                this.TokensUsedCache = null;
 
                 return this.MarkUpdated();
             }

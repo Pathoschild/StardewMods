@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
@@ -34,7 +34,6 @@ namespace ContentPatcher.Framework.Tokens.Json
             this.SetValue = setValue;
         }
 
-
         /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
@@ -44,7 +43,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.TokenString.GetTokensUsed();
         }

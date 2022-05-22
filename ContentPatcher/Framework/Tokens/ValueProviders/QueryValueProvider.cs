@@ -61,9 +61,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             return output switch
             {
-                "True" => ImmutableSets.True,
-                "False" => ImmutableSets.False,
-                _ => ImmutableSets.FromValue(output)
+                "True" => InvariantSets.True,
+                "False" => InvariantSets.False,
+                _ => InvariantSets.FromValue(output)
             };
         }
 

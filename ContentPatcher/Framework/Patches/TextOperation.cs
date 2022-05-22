@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -46,7 +47,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="target">The specific text field to change as a breadcrumb path. Each value in the list represents a field to navigate into.</param>
         /// <param name="value">The value to append or prepend.</param>
         /// <param name="delimiter">If the target field already has a value, text to add between the previous and inserted values, if any.</param>
-        public TextOperation(TextOperationType operation, IManagedTokenString[] target, IManagedTokenString value, string? delimiter)
+        public TextOperation(TextOperationType operation, ICollection<IManagedTokenString> target, IManagedTokenString value, string? delimiter)
         {
             this.Operation = operation;
             this.Target = target.ToArray<ITokenString>();
@@ -65,7 +66,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

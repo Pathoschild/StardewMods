@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Conditions
         private static readonly Lexer Lexer = Lexer.Instance;
 
         /// <summary>The token names used in the string.</summary>
-        private readonly IImmutableSet<string> TokensUsed = ImmutableSets.Empty;
+        private readonly IInvariantSet TokensUsed = InvariantSets.Empty;
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new();
@@ -68,13 +68,13 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
         public TokenString(string raw, IContext context, LogPathBuilder path)
-            : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
+            : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
+        public TokenString(IEnumerable<ILexToken> lexTokens, IContext context, LogPathBuilder path)
         {
             this.Path = path.ToString();
 
@@ -126,7 +126,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // set metadata
             if (tokensUsed != null)
-                this.TokensUsed = ImmutableSets.From(tokensUsed);
+                this.TokensUsed = InvariantSets.From(tokensUsed);
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
             this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);
@@ -143,7 +143,7 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.TokensUsed;
         }

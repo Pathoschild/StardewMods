@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\MultiFertilizer\MultiFertilizerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\IInvariantSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\MutableInvariantSet.cs" />
     <Compile Include="..\Common\Commands\GenericHelpCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\ICommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
@@ -63,7 +65,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\HumanSortComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ConstraintSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantHashSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ObjectReferenceComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\SetExtensions.cs" />
   </ItemGroup>

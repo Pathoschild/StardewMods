@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }

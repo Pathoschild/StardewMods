@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
@@ -39,7 +38,7 @@ namespace ContentPatcher.Framework
         private readonly InvariantDictionary<string> AliasTokenNames = new();
 
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
-        private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new();
+        private InvariantDictionary<MutableInvariantSet> TokenDependents { get; } = new();
 
         /// <summary>Whether any tokens haven't received a context update yet.</summary>
         private bool HasNewTokens;
@@ -98,7 +97,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="rawValue">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public void AddDynamicToken(string name, IManagedTokenString rawValue, IEnumerable<Condition> conditions)
+        public void AddDynamicToken(string name, IManagedTokenString rawValue, Condition[] conditions)
         {
             // validate
             if (this.ParentContext.Contains(name, enforceContext: false))
@@ -116,7 +115,7 @@ namespace ContentPatcher.Framework
 
             // create token value handler
             var tokenValue = new DynamicTokenValue(managed, rawValue, conditions);
-            IImmutableSet<string> tokensUsed = tokenValue.GetTokensUsed();
+            IInvariantSet tokensUsed = tokenValue.GetTokensUsed();
 
             // save value info
             managed.ValueProvider.AddTokensUsed(tokensUsed);
@@ -125,7 +124,7 @@ namespace ContentPatcher.Framework
 
             // track tokens which should trigger an update to this token
             Queue<string> tokenQueue = new(tokensUsed);
-            InvariantHashSet visited = new();
+            MutableInvariantSet visited = new();
             while (tokenQueue.Any())
             {
                 // get token name
@@ -141,7 +140,7 @@ namespace ContentPatcher.Framework
                         tokenQueue.Enqueue(nextTokenName);
 
                     // add new token as a dependent of the used token
-                    if (!this.TokenDependents.TryGetValue(usedToken.Name, out InvariantHashSet? used))
+                    if (!this.TokenDependents.TryGetValue(usedToken.Name, out MutableInvariantSet? used))
                         this.TokenDependents.Add(usedToken.Name, used = new());
 
                     used.Add(name);
@@ -173,7 +172,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Update the current context.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
-        public void UpdateContext(InvariantHashSet globalChangedTokens)
+        public void UpdateContext(IInvariantSet globalChangedTokens)
         {
             // update local standard tokens
             //
@@ -222,9 +221,9 @@ namespace ContentPatcher.Framework
         /// <param name="token">The token name to check.</param>
         public IEnumerable<string> GetTokensAffectedBy(string token)
         {
-            return this.TokenDependents.TryGetValue(token, out InvariantHashSet? affectedTokens)
-                ? affectedTokens
-                : Enumerable.Empty<string>();
+            return this.TokenDependents.TryGetValue(token, out MutableInvariantSet? affectedTokens)
+                ? affectedTokens.GetImmutable()
+                : InvariantSets.Empty;
         }
 
         /****
@@ -268,10 +267,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IImmutableSet<string> GetValues(string name, IInputArguments input, bool enforceContext)
+        public IInvariantSet GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken? token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? ImmutableSets.Empty;
+            return token?.GetValues(input) ?? InvariantSets.Empty;
         }
 
 

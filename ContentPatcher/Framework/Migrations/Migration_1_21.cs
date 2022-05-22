@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Migrations
                 // This converts them to 'When' conditions for backwards compatibility.
                 if (!string.IsNullOrWhiteSpace(patch.Enabled))
                 {
-                    ILexToken[] bits = this.Lexer.ParseBits(patch.Enabled, impliedBraces: false, trim: true).ToArray();
+                    ILexToken[] bits = this.Lexer.ParseBits(patch.Enabled, impliedBraces: false, trim: true).Take(2).ToArray();
                     if (bits.Length == 1 && bits[0].Type == LexTokenType.Token)
                     {
                         string renderStr = this.NormalizeLexicalString($"{ConditionType.Render}:{bits[0].ToString()}", impliedBraces: true);
@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             return
                 lexToken is LexTokenToken token
-                && token.Name.EqualsIgnoreCase(ConditionType.Render.ToString())
+                && token.Name.EqualsIgnoreCase(nameof(ConditionType.Render))
                 && !this.IgnoreRenderStrings.Contains(lexToken.ToString());
         }
 
