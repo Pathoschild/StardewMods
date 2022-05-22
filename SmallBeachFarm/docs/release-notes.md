@@ -5,6 +5,7 @@
 * Added 'spawn monsters by default' config option (default false).  
   _This sets the default value for the 'spawn monsters at night' option when creating a new save. This has no effect on existing saves (see [how to toggle it for an existing save](https://stardewvalleywiki.com/Monsters#Monsters_on_The_Farm))._
 * Added sections in config UI.
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
 
 ## 2.2.0
 Released 09 May 2022 for SMAPI 3.14.0 or later.
