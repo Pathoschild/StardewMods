@@ -52,6 +52,9 @@ namespace ContentPatcher.Framework.Patches
         [MemberNotNullWhen(true, nameof(Patch.RawTargetAsset), nameof(Patch.ManagedRawTargetAsset))]
         protected bool HasTargetAsset => this.RawTargetAsset != null && this.ManagedRawTargetAsset != null;
 
+        /// <summary>The cached result for <see cref="GetTokensUsed"/>.</summary>
+        protected IInvariantSet? TokensUsedCache;
+
 
         /*********
         ** Accessors
@@ -186,9 +189,9 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <inheritdoc />
-        public virtual IInvariantSet GetTokensUsed()
+        public IInvariantSet GetTokensUsed()
         {
-            return this.Contextuals.GetTokensUsed();
+            return this.TokensUsedCache ??= this.Contextuals.GetTokensUsed();
         }
 
         /// <inheritdoc />

@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Optimized peformance during context updates.
+* Optimized peformance during startup and context updates.
 * Optimized redundant reindex on context updates (thanks to SinZ163!).
 * Fixed config UI dropdown values no longer matching order listed in `ConfigSchema`.
 * Fixed custom tokens sometimes failing in SMAPI 3.14 with '_rejected token … because it could not be mapped_' error.
