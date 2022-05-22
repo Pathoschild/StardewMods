@@ -170,6 +170,7 @@ namespace ContentPatcher.Framework
             // update patches
             IAssetName? prevAssetName = null;
             HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
+            bool anyTargetsChanged = false;
             while (patchQueue.Any())
             {
                 IPatch patch = patchQueue.Dequeue();
@@ -252,6 +253,10 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
+                // track whether the target asset changed
+                if (!anyTargetsChanged)
+                    anyTargetsChanged = !wasTargetAsset?.IsEquivalentTo(patch.TargetAsset) ?? patch.TargetAsset is not null;
+
                 // log change
                 verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
                 if (this.Monitor.IsVerbose)
@@ -267,8 +272,9 @@ namespace ContentPatcher.Framework
                 }
             }
 
-            // reset indexes
-            this.Reindex(patchListChanged: false);
+            // reset indexes if targets changed
+            if (anyTargetsChanged)
+                this.Reindex(patchListChanged: false);
 
             // log changes
             if (verbosePatchesReloaded?.Count > 0)
