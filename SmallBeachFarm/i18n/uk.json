@@ -20,8 +20,8 @@
     "config.islands.name": "Додати острови",
     "config.islands.tooltip": "Додає океанські острови з додатковою площею суші.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "Прокласти шлях до ящика для продажу",
+    "config.shipping-bin-path.tooltip": "Розставляє кам'яні плити перед ящиком для продажу у грі.",
 
     /****
     ** Farm options
