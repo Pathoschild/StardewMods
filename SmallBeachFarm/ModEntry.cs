@@ -78,10 +78,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             // hook Harmony patch
             HarmonyPatcher.Apply(this,
                 new FarmPatcher(
-                    this.Monitor,
+                    monitor: this.Monitor,
                     config: this.Config,
                     isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
                     getFishType: this.GetFishType
+                ),
+                new CharacterCustomizationPatcher(
+                    config: this.Config,
+                    farmTypeId: this.ModManifest.UniqueID
                 )
             );
         }

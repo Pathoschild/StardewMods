@@ -29,5 +29,8 @@
     "config.other-farm-options": "Other farm options", // TODO
 
     "config.beach-sounds.name": "Strandgeräusche abspielen",
-    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab."
+    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab.",
+
+    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
+    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves." // TODO
 }

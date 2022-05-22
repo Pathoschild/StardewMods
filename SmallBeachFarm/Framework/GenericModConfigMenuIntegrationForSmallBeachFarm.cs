@@ -70,6 +70,12 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     tooltip: I18n.Config_BeachSounds_Tooltip,
                     get: config => config.UseBeachMusic,
                     set: (config, value) => config.UseBeachMusic = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_SpawnMonsters_Name,
+                    tooltip: I18n.Config_SpawnMonsters_Tooltip,
+                    get: config => config.DefaultSpawnMonstersAtNight,
+                    set: (config, value) => config.DefaultSpawnMonstersAtNight = value
                 );
         }
     }

@@ -29,5 +29,8 @@
     "config.other-farm-options": "Other farm options", // TODO
 
     "config.beach-sounds.name": "Програвати звуки пляжу",
-    "config.beach-sounds.tooltip": "Програє фонову музику на пляжі (тобто звуки хвиль) на пляжній фермі."
+    "config.beach-sounds.tooltip": "Програє фонову музику на пляжі (тобто звуки хвиль) на пляжній фермі.",
+
+    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
+    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves." // TODO
 }
