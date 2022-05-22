@@ -170,8 +170,7 @@ namespace ContentPatcher.Framework
             // update patches
             IAssetName? prevAssetName = null;
             HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
-
-            bool hasTargetChanges = false;
+            bool anyTargetsChanged = false;
             while (patchQueue.Any())
             {
                 IPatch patch = patchQueue.Dequeue();
@@ -254,8 +253,10 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
-                // Short circuit if its already true, otherwise test if they are not equal, and on the event old is null, check if new is not null (different)
-                hasTargetChanges = hasTargetChanges || (!wasTargetAsset?.Equals(patch.TargetAsset) ?? patch.TargetAsset != null);
+                // track whether the target asset changed
+                if (!anyTargetsChanged)
+                    anyTargetsChanged = !wasTargetAsset?.IsEquivalentTo(patch.TargetAsset) ?? patch.TargetAsset is not null;
+
                 // log change
                 verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
                 if (this.Monitor.IsVerbose)
@@ -271,11 +272,9 @@ namespace ContentPatcher.Framework
                 }
             }
 
-            if (hasTargetChanges)
-            {
-                // reset indexes
+            // reset indexes if targets changed
+            if (anyTargetsChanged)
                 this.Reindex(patchListChanged: false);
-            }
 
             // log changes
             if (verbosePatchesReloaded?.Count > 0)
