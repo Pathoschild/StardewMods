@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed world area data and some config values not loaded correctly in Automate 1.26.0.
+
 ## 1.22.1
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 
