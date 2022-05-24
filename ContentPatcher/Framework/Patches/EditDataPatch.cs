@@ -51,6 +51,9 @@ namespace ContentPatcher.Framework.Patches
             ObjectCreationHandling = ObjectCreationHandling.Replace
         });
 
+        /// <summary>Whether the file specified by <see cref="Patch.FromAsset"/> has been loaded at least once for this patch.</summary>
+        private bool HasEverLoadedFromFile;
+
 
         /*********
         ** Accessors
@@ -124,8 +127,10 @@ namespace ContentPatcher.Framework.Patches
         public override bool UpdateContext(IContext context)
         {
             // need to reload data for legacy FromFile
-            if (this.HasFromAsset && this.ManagedRawFromAsset.UpdateContext(context))
+            if (this.HasFromAsset && (this.ManagedRawFromAsset.UpdateContext(context) || !this.HasEverLoadedFromFile))
             {
+                this.HasEverLoadedFromFile = true;
+
                 // reload non-data changes
                 this.Contextuals
                     .Remove(this.Records)
