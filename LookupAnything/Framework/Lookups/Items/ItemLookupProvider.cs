@@ -300,7 +300,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 ****/
                 default:
                     {
-                        Item? item = this.Reflection.GetField<Item?>(menu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
+                        Item? item = this.Reflection.GetField<Item?>(targetMenu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
                         if (item != null)
                             return this.BuildSubject(item, ObjectContext.Inventory, null);
                     }
