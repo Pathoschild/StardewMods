@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed support for hovered items in custom game menu pages (thanks to KhloeLeclair!).
+
 ## 1.37.1
 Released 09 May 2022 for SMAPI 3.14.0 or later.
 
