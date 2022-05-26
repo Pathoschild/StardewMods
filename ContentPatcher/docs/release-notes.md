@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Optimized token updates.
+* Improved `EditImage` performance by migrating to SMAPI 3.15's new `IRawTextureData` asset type.
 
 ## 1.26.6
 Released 05 June 2022 for SMAPI 3.14.0 or later.
