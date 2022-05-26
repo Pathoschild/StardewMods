@@ -87,10 +87,29 @@ namespace ContentPatcher.Framework.Patches
                 return;
             }
 
-            // fetch data
+            // get editor
             IAssetDataForImage editor = asset.AsImage();
-            Texture2D source = this.ContentPack.ModContent.Load<Texture2D>(this.FromAsset);
-            if (!this.TryReadArea(this.FromArea, 0, 0, source.Width, source.Height, out Rectangle sourceArea, out string? error))
+
+            // read source file
+            IRawTextureData? rawSource = null;
+            Texture2D? fullSource = null;
+            int sourceWidth;
+            int sourceHeight;
+            if (string.Equals(System.IO.Path.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase))
+            {
+                fullSource = this.ContentPack.ModContent.Load<Texture2D>(this.FromAsset);
+                sourceWidth = fullSource.Width;
+                sourceHeight = fullSource.Height;
+            }
+            else
+            {
+                rawSource = this.ContentPack.ModContent.Load<IRawTextureData>(this.FromAsset);
+                sourceWidth = rawSource.Width;
+                sourceHeight = rawSource.Height;
+            }
+
+            // fetch data
+            if (!this.TryReadArea(this.FromArea, 0, 0, sourceWidth, sourceHeight, out Rectangle sourceArea, out string? error))
             {
                 this.Warn($"the source area is invalid: {error}.");
                 return;
@@ -129,7 +148,10 @@ namespace ContentPatcher.Framework.Patches
             this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
 
             // apply source image
-            editor.PatchImage(source, sourceArea, targetArea, (PatchMode)this.PatchMode);
+            if (rawSource is not null)
+                editor.PatchImage(rawSource, sourceArea, targetArea, (PatchMode)this.PatchMode);
+            else
+                editor.PatchImage(fullSource!, sourceArea, targetArea, (PatchMode)this.PatchMode);
         }
 
         /// <inheritdoc />
