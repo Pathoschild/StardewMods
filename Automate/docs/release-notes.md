@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.26.1
+Released 27 May 2022 for SMAPI 3.14.0 or later.
+
 * Fixed some config values not loaded correctly in Automate 1.26.0.
 * Improved translations. Thanks to mukers (added Russian)!
 
