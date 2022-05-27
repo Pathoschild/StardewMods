@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.26.0</Version>
+    <Version>1.26.1</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 
@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

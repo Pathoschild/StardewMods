@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -9,6 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</summary>
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
         public IDictionary<string, HashSet<string>> WorldAreas { get; } = new Dictionary<string, HashSet<string>>();
     }
 }

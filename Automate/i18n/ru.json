@@ -1,0 +1,35 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Основные опции",
+    "config.enabled.name": "Включено",
+    "config.enabled.desc": "Следует ли включать функции автоматизации. Если этот параметр отключен, никакие машины не будут автоматизированы и каналы соединения не будет работать.",
+    "config.junimo-huts-output-gems.name": "Хижины Джунимо могут собирать драгоценные камни",
+    "config.junimo-huts-output-gems.desc": "Можно ли вытаскивать драгоценные камни из хижин Джунимо. Если включено, то вы не сможете изменить цвета Джунимо, положив драгоценные камни в их хижину",
+    "config.automation-interval.name": "Автоматизированный интервал",
+    "config.automation-interval.desc": "Количество тиков между каждым процессом автоматизации (60 раз в секунду, 120 раз в две секунды и т.д.).",
+    "config.toggle-overlay-key.name": "Клавиша переключения каналов соединения",
+    "config.toggle-overlay-key.desc": "Клавиша, которая показывает каналы соединения для автоматизации.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Совместимость с модами",
+    "config.better-junimos.name": "Better Junimos",
+    "config.better-junimos.desc": "Включите совместимость с Better Junimos. Если он включен, Джунимо не будут удобрять почву или сеять семена.",
+    "config.warn-for-missing-bridge-mod.name": "Предупреждение об отсутствии bridge mod",
+    "config.warn-for-missing-bridge-mod.desc": "Регистрация предупреждение во время запуска, если вы установили custom-machine мод, который требует отдельного патча, если он не установлен.",
+
+    // connectors
+    "config.title.connectors": "Включение соединений",
+    "config.connector.desc": "Соединяет ли {{itemName}} вместе с машинами и сундуками.",
+    "config.custom-connectors.name": "Пользовательские соединения",
+    "config.custom-connectors.desc": "Точное название предмета на английском, который соединит соседние машины вместе. Вы можете перечислить несколько предметов с помощью запятых.", // note: названия пользовательских предметов должны быть английскими даже при воспроизведении на других языках
+
+    // machine overrides
+    "config.title.machine-overrides": "Машины отправки товаров",
+    "config.override.ShippingBin-name": "Ящик продажи",
+    "config.override.MiniShippingBin-name": "Мини-ящик для отгрузок",
+    "config.override.desc": "Следует ли автоматизировать{{machineName}} .",
+    "config.custom-overrides-note": "Для получения информации о пользовательских машин отправки товаров см. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure за помощью обращайтесь непосредственно к редактированию файла config.json."
+}

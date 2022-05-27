@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.26.5
+Released 27 May 2022 for SMAPI 3.14.0 or later.
+
+* Fixed `EditData` patches in older content packs not applied correctly if `FromFile` has an immutable value.
+
 ## 1.26.4
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 

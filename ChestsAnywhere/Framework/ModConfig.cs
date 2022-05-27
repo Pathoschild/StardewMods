@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -25,6 +26,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The locations in which to disable remote chest lookups.</summary>
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
         public HashSet<string> DisabledInLocations { get; } = new(StringComparer.OrdinalIgnoreCase);
     }
 }
