@@ -1,0 +1,72 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Общие параметры",
+
+    "config.disable-eat-prompt.name": "Отключить предложение поесть или выпить",
+    "config.disable-eat-prompt.tooltip": "Предлагает пропустить подтверждение для еды и воды",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Скорость Анимации Игрока",
+
+    "config.eat-or-drink.name": "Есть/пить",
+    "config.eat-or-drink.tooltip": "Как быстро вы едите и пьете. Значение по умолчанию  {{defaultValue}}x.",
+
+    "config.fish.name": "Рыбалка",
+    "config.fish.tooltip": "Скорость заброса и намотки удочки при ловле рыбы (не влияет на мини-игру). По умолчанию {{defaultValue}}x, советуют {{suggestedValue}}x.",
+
+    "config.harvest.name": "Сбор урожая",
+    "config.harvest.tooltip": "Как быстро вы собираете урожай и корм вручную. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Игра на лошадиной дудочке",
+    "config.horse-flute.tooltip": "Как быстро вы играете на лошадиной дудочке. Значение по умолчанию  {{defaultValue}}x.",
+
+    "config.milk.name": "Доение Молока",
+    "config.milk.tooltip": "Как быстро вы используете ведро для молока. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.mount.name": "Залезание/слияние",
+    "config.mount.tooltip": "Как быстро вы залазите/слазите на/с лошадей (включая пользовательских маунтов, таких как Tractor Mod). Значение по умолчанию  {{defaultValue}}x.",
+
+    "config.shear.name": "Ножницы",
+    "config.shear.tooltip": "Как быстро вы используете ножницы. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.tool.name": "Размахивание инструментами",
+    "config.tool.tooltip": "Как быстро вы размахиваете своим оружием. По умолчанию {{defaultValue}}x, советуем {{suggestedValue}}x.",
+
+    "config.weapon.name": "Размахивание оружием",
+    "config.weapon.tooltip": "Как быстро вы размахиваете своим оружием. По умолчанию {{defaultValue}}x, советуем {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Скорость Анимации в Мире",
+
+    "config.break-geodes.name": "Разбитие Жеодов",
+    "config.break-geodes.tooltip": "Как быстро кузнец ломает жеоды для вас. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Слоты Казино",
+    "config.casino-slots.tooltip": "Как быстро вращаются слоты казино. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.bus.name": "Автобус Пэм",
+    "config.bus.tooltip": "Как быстро Пэм ездит на своем автобусе в пустыню и обратно. Значение по умолчанию {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Падение деревьев",
+    "config.tree-fall.tooltip": "Как быстро падают деревья после того, как вы их срубили. По умолчанию {{defaultValue}}x, советуем {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Скорость Анимации Пользовательского Интерфейса",
+
+    "config.title-menu.name": "Переходы в меню названия игры",
+    "config.title-menu.tooltip": "Как быстро меню названия игры загружается. Значение по умолчанию  {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Загрузка игрового мерцания",
+    "config.load-game-blink.tooltip": "Как быстро происходит задержка мерцанием после нажатия на слот загрузки-сохранения. По умолчанию  {{defaultValue}}x."
+}
