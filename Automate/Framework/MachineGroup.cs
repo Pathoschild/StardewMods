@@ -15,11 +15,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The number of milliseconds to pause output for a given item ID when the connected chests can't accept it.</summary>
+        private readonly int OutputPauseMilliseconds = 5000;
+
         /// <summary>The number of milliseconds to pause machines when they crash.</summary>
-        private readonly int ErrorPauseMilliseconds = 30000;
+        private readonly int MachinePauseMilliseconds = 30000;
 
         /// <summary>Machines which are temporarily paused, with the game time in milliseconds when their pause expires.</summary>
-        private readonly IDictionary<IMachine, double> MachinePauseExpiries = new Dictionary<IMachine, double>(new ObjectReferenceComparer<IMachine>());
+        private readonly Dictionary<IMachine, double> MachinePauseExpiries = new(new ObjectReferenceComparer<IMachine>());
+
+        /// <summary>The output items which are temporarily paused, with the game time in milliseconds when their pause expires.</summary>
+        private readonly Dictionary<string, double> OutputPauseExpiries = new();
 
         /// <summary>The storage manager for the group.</summary>
         protected readonly StorageManager StorageManager;
@@ -77,11 +83,15 @@ namespace Pathoschild.Stardew.Automate.Framework
             // clear expired timers
             if (this.MachinePauseExpiries.Count > 0)
             {
-                foreach ((IMachine? machine, double expiryTime) in this.MachinePauseExpiries.ToArray())
-                {
-                    if (curTime >= expiryTime)
-                        this.MachinePauseExpiries.Remove(machine);
-                }
+                IMachine[] expired = this.MachinePauseExpiries.Where(p => curTime >= p.Value).Select(p => p.Key).ToArray();
+                foreach (IMachine machine in expired)
+                    this.MachinePauseExpiries.Remove(machine);
+            }
+            if (this.OutputPauseExpiries.Count > 0)
+            {
+                string[] expired = this.OutputPauseExpiries.Where(p => curTime >= p.Value).Select(p => p.Key).ToArray();
+                foreach (string itemId in expired)
+                    this.OutputPauseExpiries.Remove(itemId);
             }
 
             // get machines ready for input/output
@@ -112,9 +122,30 @@ namespace Pathoschild.Stardew.Automate.Framework
                 ITrackedStack? output = null;
                 try
                 {
+                    // get output
                     output = machine.GetOutput();
-                    if ((output is null || storage.TryPush(output)) && machine.GetState() == MachineState.Empty)
-                        inputReady.Add(machine);
+                    if (output is null)
+                    {
+                        if (machine.GetState() is MachineState.Empty)
+                            inputReady.Add(machine);
+                        continue;
+                    }
+
+                    // check if ignored
+                    string outputKey = $"{output.Type}:{output.Sample.ParentSheetIndex}";
+                    if (this.OutputPauseExpiries.ContainsKey(outputKey))
+                        continue;
+
+                    // try to push output
+                    if (storage.TryPush(output))
+                    {
+                        if (machine.GetState() is MachineState.Empty)
+                            inputReady.Add(machine);
+                        continue;
+                    }
+
+                    // ignore output that can't be stored in chest
+                    this.OutputPauseExpiries[outputKey] = curTime + this.OutputPauseMilliseconds;
                 }
                 catch (Exception ex)
                 {
@@ -128,9 +159,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                             error += $", preserved item #{outputObj.preservedParentSheetIndex.Value}";
                         error += ").";
                     }
-                    error += $" Machine paused for {this.ErrorPauseMilliseconds / 1000}s.";
+                    error += $" Machine paused for {this.MachinePauseMilliseconds / 1000}s.";
 
-                    this.MachinePauseExpiries[machine] = curTime + this.ErrorPauseMilliseconds;
+                    this.MachinePauseExpiries[machine] = curTime + this.MachinePauseMilliseconds;
                     throw new InvalidOperationException(error, ex);
                 }
             }
