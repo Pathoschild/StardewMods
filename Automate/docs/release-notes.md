@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed performance impact when many machines have output ready, but the chests they're connected to are all full.
+
 ## 1.26.1
 Released 27 May 2022 for SMAPI 3.14.0 or later.
 
