@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Fixed performance impact when many machines have output ready, but the chests they're connected to are all full.
+* Optimized location change tracking to avoid rescanning machines unnecessarily.
+* Optimized edge case where many machines have output ready but their connected chests are all full.
 
 ## 1.26.1
 Released 27 May 2022 for SMAPI 3.14.0 or later.

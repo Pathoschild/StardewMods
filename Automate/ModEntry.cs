@@ -215,7 +215,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnBuildingListChanged(object? sender, BuildingListChangedEventArgs e)
         {
-            if (!this.EnableAutomation)
+            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             if (e.Location is BuildableGameLocation buildableLocation && e.Added.Concat(e.Removed).Any(building => this.MachineManager.Factory.IsAutomatable(buildableLocation, new Vector2(building.tileX.Value, building.tileY.Value), building)))
@@ -230,7 +230,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnObjectListChanged(object? sender, ObjectListChangedEventArgs e)
         {
-            if (!this.EnableAutomation)
+            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             if (e.Added.Concat(e.Removed).Any(obj => this.MachineManager.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
@@ -245,7 +245,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnTerrainFeatureListChanged(object? sender, TerrainFeatureListChangedEventArgs e)
         {
-            if (!this.EnableAutomation)
+            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             if (e.Added.Concat(e.Removed).Any(obj => this.MachineManager.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))

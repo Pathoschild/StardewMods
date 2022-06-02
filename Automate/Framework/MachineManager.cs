@@ -150,6 +150,13 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.ReloadQueue.Add(location);
         }
 
+        /// <summary>Get whether a reload is already queued for a location.</summary>
+        /// <param name="location">The location to reload.</param>
+        public bool IsReloadQueued(GameLocation location)
+        {
+            return this.ReloadQueue.Contains(location);
+        }
+
         /// <summary>Queue locations for which to reload machines when <see cref="ReloadQueuedLocations"/> is called.</summary>
         /// <param name="locations">The locations to reload.</param>
         public void QueueReload(IEnumerable<GameLocation> locations)
