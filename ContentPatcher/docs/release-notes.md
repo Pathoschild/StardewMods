@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Improved error when adding an invalid entry to a data model asset.
+
 ## 1.26.5
 Released 27 May 2022 for SMAPI 3.14.0 or later.
 

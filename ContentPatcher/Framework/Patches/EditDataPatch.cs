@@ -64,10 +64,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="entries">The parsed data entry changes.</param>
         /// <param name="fields">The parsed data field changes.</param>
         /// <param name="moveEntries">The parsed move entry records.</param>
-        /// <param name="targetFields">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
+        /// <param name="targetField">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetFields, [NotNullWhen(false)] out string? error);
+        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetField, [NotNullWhen(false)] out string? error);
 
 
         /*********
@@ -310,7 +310,12 @@ namespace ContentPatcher.Framework.Patches
 
                 // validate
                 if (!editor.CanAddEntries && !editor.HasEntry(key))
-                    this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model.");
+                {
+                    if (editor is ModelKeyValueEditor modelEditor)
+                        this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model, must be one of: {string.Join(", ", modelEditor.FieldNames)}.");
+                    else
+                        this.WarnForRecord(i, $"this asset doesn't allow adding new entries, and the entry '{record.Key.Value}' isn't defined in the model.");
+                }
 
                 // apply string
                 else if (valueType == typeof(string))
