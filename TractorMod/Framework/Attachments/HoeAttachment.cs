@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             return
-                (this.Config.TillDirt || this.Config.ClearWeeds)
+                (this.Config.TillDirt || this.Config.ClearWeeds || this.Config.DigArtifactSpots)
                 && tool is Hoe;
         }
 

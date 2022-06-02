@@ -30,7 +30,7 @@
     "config.milk.name": "Доение Молока",
     "config.milk.tooltip": "Как быстро вы используете ведро для молока. Значение по умолчанию {{defaultValue}}x.",
 
-    "config.mount.name": "Залезание/слияние",
+    "config.mount.name": "Залезание/слезание",
     "config.mount.tooltip": "Как быстро вы залазите/слазите на/с лошадей (включая пользовательских маунтов, таких как Tractor Mod). Значение по умолчанию  {{defaultValue}}x.",
 
     "config.shear.name": "Ножницы",
