@@ -272,7 +272,7 @@ entry.
 This affects all of the change fields (e.g. `Fields`, `Entries`, `TextOperations`, etc).
 
 ### Format
-`TargetFields` describes a path to 'drill into' relative to the entire data asset.
+`TargetField` describes a path to 'drill into' relative to the entire data asset.
 
 For example, `"TargetField": [ "Crafts Room", "BundleSets", "#0", "Bundles", "#0" ]` will...
 1. select the `Crafts Room` entry;
