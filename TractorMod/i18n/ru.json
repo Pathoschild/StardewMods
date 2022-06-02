@@ -122,6 +122,7 @@
     ****/
     "config.clear-debris.name": "Уборка Мусора",
     "config.clear-debris.tooltip": "Будет убирать сорняки, ветки, большие пни и брёвна.",
+    "config.clear-debris.tooltip": "Будет убирать ветки, большие пни и брёвна.",
 
     "config.clear-weeds.name": "Уборка Сорняков",
     "config.clear-weeds.tooltip": "Будет срубать сорняки.",
