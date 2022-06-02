@@ -504,19 +504,16 @@
  </tile>
  <tile id="419">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="420">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="421">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
@@ -544,20 +541,13 @@
    <property name="Water" value="T"/>
   </properties>
  </tile>
- <tile id="453">
-  <properties>
-   <property name="Passable" value="T"/>
-  </properties>
- </tile>
  <tile id="454">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="455">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
@@ -569,19 +559,16 @@
  </tile>
  <tile id="470">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="471">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="472">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
@@ -593,37 +580,31 @@
  </tile>
  <tile id="487">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="488">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="489">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="504">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="505">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
  <tile id="506">
   <properties>
-   <property name="Passable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>

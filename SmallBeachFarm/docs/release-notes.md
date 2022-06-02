@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added optional fishing tier (disabled by default).
+
 ## 2.3.0
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 

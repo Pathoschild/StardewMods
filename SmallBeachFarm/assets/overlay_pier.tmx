@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="5" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="61">
+ <tileset firstgid="1" source="spring_beach.tsx"/>
+ <layer id="3" name="Buildings" width="5" height="7">
+  <data encoding="csv">
+0,0,0,0,0,
+436,0,0,0,440,
+487,0,0,0,491,
+504,0,0,0,508,
+487,0,0,331,491,
+504,0,0,284,508,
+0,522,523,524,0
+</data>
+ </layer>
+ <layer id="14" name="Back" width="5" height="7">
+  <data encoding="csv">
+0,454,455,456,0,
+0,471,472,473,0,
+0,488,489,490,0,
+0,505,506,507,0,
+0,488,489,490,0,
+0,505,506,507,0,
+0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="4" name="Buildings">
+  <object id="59" name="TileData" x="48" y="80" width="16" height="16">
+   <properties>
+    <property name="Passable" value="T"/>
+   </properties>
+  </object>
+  <object id="60" name="TileData" x="48" y="64" width="16" height="16">
+   <properties>
+    <property name="Action" value="playSound waterSlosh"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="13" name="Back"/>
+</map>
