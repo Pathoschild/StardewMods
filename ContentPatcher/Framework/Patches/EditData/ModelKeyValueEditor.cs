@@ -20,6 +20,13 @@ namespace ContentPatcher.Framework.Patches.EditData
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The field names defined for this model.</summary>
+        public IEnumerable<string> FieldNames => this.FieldMap.Value.Keys.OrderByHuman();
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
