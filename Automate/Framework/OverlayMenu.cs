@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -20,8 +19,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The padding to apply to tile backgrounds to make the grid visible.</summary>
         private readonly int TileGap = 1;
 
-        /// <summary>A machine group lookup by tile coordinate.</summary>
-        private readonly IDictionary<Vector2, IMachineGroup> GroupTiles;
+        /// <summary>The machine data for the current location.</summary>
+        private readonly MachineDataForLocation? MachineData;
 
 
         /*********
@@ -31,19 +30,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="machineGroups">The machine groups to display.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IEnumerable<IMachineGroup> machineGroups)
+        /// <param name="machineData">The machine groups to display.</param>
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, MachineDataForLocation? machineData)
             : base(events, inputHelper, reflection)
         {
-            // init machine groups
-            machineGroups = machineGroups.ToArray();
-            this.GroupTiles =
-                (
-                    from machineGroup in machineGroups
-                    from tile in machineGroup.Tiles
-                    select new { tile, machineGroup }
-                )
-                .ToDictionary(p => p.tile, p => p.machineGroup);
+            this.MachineData = machineData;
         }
 
 
@@ -67,20 +58,19 @@ namespace Pathoschild.Stardew.Automate.Framework
                 int tileSize = Game1.tileSize;
 
                 // get machine group
-                this.GroupTiles.TryGetValue(tile, out IMachineGroup? group);
-                bool isGrouped = group != null;
-                bool isActive = isGrouped && group!.HasInternalAutomation;
+                IMachineGroup? group = null;
+                Color? color = null;
+                if (this.MachineData is not null)
+                {
+                    if (this.MachineData.ActiveTiles.TryGetValue(tile, out group))
+                        color = Color.Green * 0.2f;
+                    else if (this.MachineData.DisabledTiles.TryGetValue(tile, out group) || this.MachineData.OutdatedTiles.ContainsKey(tile))
+                        color = Color.Red * 0.2f;
+                }
+                color ??= Color.Black * 0.5f;
 
                 // draw background
-                {
-                    Color color = Color.Black * 0.5f;
-                    if (isActive)
-                        color = Color.Green * 0.2f;
-                    else if (isGrouped)
-                        color = Color.Red * 0.2f;
-
-                    spriteBatch.DrawLine(screenX + this.TileGap, screenY + this.TileGap, new Vector2(tileSize - this.TileGap * 2, tileSize - this.TileGap * 2), color);
-                }
+                spriteBatch.DrawLine(screenX + this.TileGap, screenY + this.TileGap, new Vector2(tileSize - this.TileGap * 2, tileSize - this.TileGap * 2), color);
 
                 // draw group edge borders
                 if (group != null)

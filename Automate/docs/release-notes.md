@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Optimized location change tracking to avoid rescanning machines unnecessarily.
+* The `U` overlay now shows a live view of the actual machine state, instead of rescanning machines.
+* Rewrote location change tracking to minimize machine rescans.
 * Optimized edge case where many machines have output ready but their connected chests are all full.
 
 ## 1.26.1

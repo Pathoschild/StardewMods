@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -10,7 +11,6 @@ using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -218,11 +218,11 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
-            if (e.Location is BuildableGameLocation buildableLocation && e.Added.Concat(e.Removed).Any(building => this.MachineManager.Factory.IsAutomatable(buildableLocation, new Vector2(building.tileX.Value, building.tileY.Value), building)))
-            {
-                this.Monitor.VerboseLog($"Building list changed in {e.Location.Name}, reloading its machines.");
-                this.MachineManager.QueueReload(e.Location);
-            }
+            this.Monitor.VerboseLog(
+                this.ReloadIfNeeded(e.Location, this.GetDiffList(e.Added, e.Removed, BaseMachine.GetTileAreaFor))
+                    ? $"Building list changed in {e.Location.Name}, reloading its machines."
+                    : $"Building list changed in {e.Location.Name}, but no reload is needed."
+            );
         }
 
         /// <inheritdoc cref="IWorldEvents.ObjectListChanged"/>
@@ -233,11 +233,11 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
-            if (e.Added.Concat(e.Removed).Any(obj => this.MachineManager.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
-            {
-                this.Monitor.VerboseLog($"Object list changed in {e.Location.Name}, reloading its machines.");
-                this.MachineManager.QueueReload(e.Location);
-            }
+            this.Monitor.VerboseLog(
+                this.ReloadIfNeeded(e.Location, this.GetDiffList(e.Added, e.Removed))
+                    ? $"Object list changed in {e.Location.Name}, reloading its machines."
+                    : $"Object list changed in {e.Location.Name}, but no reload is needed."
+            );
         }
 
         /// <inheritdoc cref="IWorldEvents.TerrainFeatureListChanged"/>
@@ -248,11 +248,11 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
-            if (e.Added.Concat(e.Removed).Any(obj => this.MachineManager.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
-            {
-                this.Monitor.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading its machines.");
-                this.MachineManager.QueueReload(e.Location);
-            }
+            this.Monitor.VerboseLog(
+                this.ReloadIfNeeded(e.Location, this.GetDiffList(e.Added, e.Removed))
+                    ? $"Terrain feature list changed in {e.Location.Name}, reloading its machines."
+                    : $"Terrain feature list changed in {e.Location.Name}, but no reload is needed."
+            );
         }
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
@@ -409,7 +409,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Enable the overlay.</summary>
         private void EnableOverlay()
         {
-            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.Factory.GetMachineGroups(Game1.currentLocation));
+            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.GetMachineDataFor(Game1.currentLocation));
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>
@@ -421,5 +421,95 @@ namespace Pathoschild.Stardew.Automate
                 this.EnableOverlay();
             }
         }
+
+        /// <summary>Rescan machines in a location if added/removed entities may change active automation.</summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="location">The location whose entities changed.</param>
+        /// <param name="entities">The entities that were added or removed.</param>
+        private bool ReloadIfNeeded<TEntity>(GameLocation location, IEnumerable<DiffEntry<TEntity>> entities)
+            where TEntity : notnull
+        {
+            MachineDataForLocation? data = this.MachineManager.GetMachineDataFor(location);
+
+            bool shouldReload = false;
+            foreach ((Rectangle tileArea, TEntity entity, bool isAdded) in entities)
+            {
+                // ignore unknown entity
+                IAutomatable? automateable = this.MachineManager.Factory.GetEntityFor(location, new Vector2(tileArea.X, tileArea.Y), entity);
+                if (automateable is null)
+                    continue;
+
+                // reload if added to an unknown location
+                if (data is null)
+                {
+                    if (isAdded)
+                    {
+                        shouldReload = true;
+                        break;
+                    }
+
+                    continue;
+                }
+
+                // reload if potentially connected to a chest
+                if (isAdded)
+                {
+                    shouldReload = automateable is IContainer
+                        ? data.ContainsOrAdjacent(tileArea)
+                        : data.IsConnectedToChest(tileArea);
+
+                    if (shouldReload)
+                        break;
+                }
+
+                // reload if removed from a machine group
+                else if (data.Contains(tileArea, trackedOnly: true))
+                {
+                    shouldReload = true;
+                    break;
+                }
+
+                // else track entity change
+                data.MarkOutdated(tileArea, automateable);
+            }
+
+            if (shouldReload)
+                this.MachineManager.QueueReload(location);
+
+            return shouldReload;
+        }
+
+        /// <summary>Get a standardized list of changed entities.</summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="added">The added entities.</param>
+        /// <param name="removed">The removed entities.</param>
+        private IEnumerable<DiffEntry<TEntity>> GetDiffList<TEntity>(IEnumerable<KeyValuePair<Vector2, TEntity>> added, IEnumerable<KeyValuePair<Vector2, TEntity>> removed)
+            where TEntity : notnull
+        {
+            return
+                added.Select(cur => new DiffEntry<TEntity>(new Rectangle((int)cur.Key.X, (int)cur.Key.Y, 1, 1), cur.Value, true))
+                .Concat(removed.Select(cur => new DiffEntry<TEntity>(new Rectangle((int)cur.Key.X, (int)cur.Key.Y, 1, 1), cur.Value, false)));
+        }
+
+        /// <summary>Get a standardized list of changed entities.</summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="added">The added entities.</param>
+        /// <param name="removed">The removed entities.</param>
+        /// <param name="getTileArea">Get the tile area for an entity.</param>
+        private IEnumerable<DiffEntry<TEntity>> GetDiffList<TEntity>(IEnumerable<TEntity> added, IEnumerable<TEntity> removed, Func<TEntity, Rectangle> getTileArea)
+            where TEntity : notnull
+        {
+            return
+                added.Select(cur => new DiffEntry<TEntity>(getTileArea(cur), cur, true))
+                .Concat(removed.Select(cur => new DiffEntry<TEntity>(getTileArea(cur), cur, false)));
+        }
+
+        /// <summary>A standardized entity change.</summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="TileArea">The tile area covered by the entity.</param>
+        /// <param name="Entity">The entity value.</param>
+        /// <param name="Added">Whether the entity was added (else removed).</param>
+        private readonly record struct DiffEntry<TEntity>(Rectangle TileArea, TEntity Entity, bool Added)
+            where TEntity : notnull;
     }
 }

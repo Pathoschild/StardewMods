@@ -27,10 +27,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
         private readonly JunimoMachineGroup JunimoMachineGroup;
 
-        /// <summary>The machines to process.</summary>
+        /// <summary>The machine data for each location.</summary>
+        private readonly Dictionary<GameLocation, MachineDataForLocation> MachineData = new();
+
+        /// <summary>The cached machines to process.</summary>
         private readonly List<IMachineGroup> ActiveMachineGroups = new();
 
-        /// <summary>The disabled machine groups (e.g. machines not connected to a chest).</summary>
+        /// <summary>The cached disabled machine groups (e.g. machines not connected to a chest).</summary>
         private readonly List<IMachineGroup> DisabledMachineGroups = new();
 
         /// <summary>The locations that should be removed on the next update tick.</summary>
@@ -116,11 +119,24 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /****
+        ** Machine state
+        ****/
+        /// <summary>Get the machine state for a location, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        public MachineDataForLocation? GetMachineDataFor(GameLocation location)
+        {
+            return this.MachineData.TryGetValue(location, out MachineDataForLocation? data)
+                ? data
+                : null;
+        }
+
+        /****
         ** State management
         ****/
         /// <summary>Clear all registered machines.</summary>
         public void Clear()
         {
+            this.MachineData.Clear();
             this.ActiveMachineGroups.Clear();
             this.DisabledMachineGroups.Clear();
             this.JunimoMachineGroup.RemoveAll(_ => true);
@@ -202,6 +218,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 HashSet<string> locationKeys = new(locations.Concat(removedLocations).Select(this.Factory.GetLocationKey));
                 this.Monitor.VerboseLog($"Reloading machines in {locationKeys.Count} locations: {string.Join(", ", locationKeys)}...");
 
+                this.MachineData.RemoveAll((_, data) => locationKeys.Contains(data.LocationKey));
                 this.DisabledMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
                 this.ActiveMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
                 junimoGroupChanged = this.JunimoMachineGroup.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
@@ -210,6 +227,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             // add new groups
             foreach (GameLocation location in locations)
             {
+                string locationKey = this.Factory.GetLocationKey(location);
+
                 // collect new groups
                 List<IMachineGroup> active = new();
                 List<IMachineGroup> disabled = new();
@@ -227,6 +246,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 }
 
                 // add groups
+                this.MachineData.Add(location, new MachineDataForLocation(locationKey, active, disabled));
                 this.DisabledMachineGroups.AddRange(disabled);
                 this.ActiveMachineGroups.AddRange(active);
                 if (junimo.Any())
