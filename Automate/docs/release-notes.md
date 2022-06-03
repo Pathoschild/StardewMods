@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * The `U` overlay now shows a live view of the actual machine state, instead of rescanning machines.
+* Added `automate reset` console command to force Automate to rescan for machines.
 * Rewrote location change tracking to minimize machine rescans.
 * Optimized edge case where many machines have output ready but their connected chests are all full.
 
