@@ -141,7 +141,7 @@ namespace ContentPatcher.Framework.Patches
                         rawPatches: content.Changes,
                         rootIndexPath: this.IndexPath,
                         path: this.GetIncludedLogPath(this.FromAsset),
-                        reindex: true,
+                        reindex: false,
                         parentPatch: this
                     );
                     this.IsApplied = true;
