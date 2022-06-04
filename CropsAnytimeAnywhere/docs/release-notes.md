@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed out-of-season fruit trees not producing output in 1.4.3+.
+
 ## 1.4.5
 Released 17 May 2022 for SMAPI 3.14.0 or later.
 
