@@ -82,7 +82,7 @@ namespace ContentPatcher.Framework.Patches
 
             // unload previous patches
             if (!string.IsNullOrWhiteSpace(previousFilePath))
-                this.PatchLoader.UnloadPatchesLoadedBy(this, reindex: false);
+                this.PatchLoader.UnloadPatchesLoadedBy(this);
 
             // load new patches
             this.AttemptedDataLoad = this.Conditions.All(p => p.IsMatch);
@@ -141,7 +141,6 @@ namespace ContentPatcher.Framework.Patches
                         rawPatches: content.Changes,
                         rootIndexPath: this.IndexPath,
                         path: this.GetIncludedLogPath(this.FromAsset),
-                        reindex: true,
                         parentPatch: this
                     );
                     this.IsApplied = true;

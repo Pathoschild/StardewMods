@@ -338,7 +338,6 @@ namespace ContentPatcher.Framework
                         rawPatches: content.Changes,
                         rootIndexPath: new[] { current.Index },
                         path: current.LogPath,
-                        reindex: false,
                         parentPatch: null
                     );
 
@@ -356,8 +355,6 @@ namespace ContentPatcher.Framework
             }
 
             this.CustomLocationManager.EnforceUniqueNames();
-
-            this.PatchManager.Reindex(patchListChanged: true);
         }
 
         /// <summary>Reapply a content pack when its configuration changes.</summary>
@@ -380,13 +377,12 @@ namespace ContentPatcher.Framework
             }
 
             // update patches
-            this.PatchLoader.UnloadPatchesLoadedBy(contentPack, false);
+            this.PatchLoader.UnloadPatchesLoadedBy(contentPack);
             this.PatchLoader.LoadPatches(
                 contentPack: contentPack,
                 rawPatches: contentPack.Content.Changes,
                 rootIndexPath: new[] { contentPack.Index },
                 path: contentPack.LogPath,
-                reindex: true,
                 parentPatch: null
             );
         }
