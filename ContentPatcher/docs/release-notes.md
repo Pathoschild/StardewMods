@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Optimized patch updates.
 * Improved error when adding an invalid entry to a data model asset.
 
 ## 1.26.5

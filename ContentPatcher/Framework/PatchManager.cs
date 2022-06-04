@@ -672,13 +672,11 @@ namespace ContentPatcher.Framework
                 // get direct tokens
                 IInvariantSet tokensUsed = InvariantSets.From(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
                 foreach (string tokenName in tokensUsed)
+                {
                     IndexForToken(tokenName);
 
-                // get indirect tokens
-                foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
-                {
-                    if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
-                        IndexForToken(token.Name);
+                    foreach (string dependency in modContext.GetTokensWhichAffect(tokenName))
+                        IndexForToken(dependency);
                 }
             }
         }
