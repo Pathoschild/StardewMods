@@ -72,6 +72,8 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the patches that were loaded.</returns>
         public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch? parentPatch)
         {
+            bool verbose = this.Monitor.IsVerbose;
+
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
@@ -92,7 +94,8 @@ namespace ContentPatcher.Framework
             {
                 index++;
                 var localPath = path.With(patch.LogName!);
-                this.Monitor.VerboseLog($"   loading {localPath}...");
+                if (verbose)
+                    this.Monitor.Log($"   loading {localPath}...");
                 IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
                 if (loaded != null)
                     loadedPatches.Add(loaded);

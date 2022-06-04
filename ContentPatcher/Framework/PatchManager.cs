@@ -117,7 +117,10 @@ namespace ContentPatcher.Framework
         /// <param name="updateType">The context update type.</param>
         public void UpdateContext(IGameContentHelper contentHelper, IInvariantSet globalChangedTokens, ContextUpdateType updateType)
         {
-            this.Monitor.VerboseLog($"Updating context for {updateType} tick...");
+            bool verbose = this.Monitor.IsVerbose;
+
+            if (verbose)
+                this.Monitor.Log($"Updating context for {updateType} tick...");
 
             // Patches can have variable update rates, so we keep track of updated tokens here so
             // we update patches at their next update point.
@@ -163,7 +166,7 @@ namespace ContentPatcher.Framework
             this.AssetsWithRemovedPatches.Clear();
 
             // init for verbose logging
-            List<PatchAuditChange>? verbosePatchesReloaded = this.Monitor.IsVerbose
+            List<PatchAuditChange>? verbosePatchesReloaded = verbose
                 ? new()
                 : null;
 
@@ -176,9 +179,9 @@ namespace ContentPatcher.Framework
                 IPatch patch = patchQueue.Dequeue();
 
                 // log asset name
-                if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
+                if (verbose && prevAssetName != patch.TargetAsset)
                 {
-                    this.Monitor.VerboseLog($"   {patch.TargetAsset}:");
+                    this.Monitor.Log($"   {patch.TargetAsset}:");
                     prevAssetName = patch.TargetAsset;
                 }
 
@@ -258,9 +261,10 @@ namespace ContentPatcher.Framework
                     anyTargetsChanged = !wasTargetAsset?.IsEquivalentTo(patch.TargetAsset) ?? patch.TargetAsset is not null;
 
                 // log change
-                verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
-                if (this.Monitor.IsVerbose)
+                if (verbose)
                 {
+                    verbosePatchesReloaded!.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
+
                     IList<string> changes = new List<string>();
                     if (wasReady != isReady)
                         changes.Add(isReady ? "enabled" : "disabled");
@@ -268,7 +272,7 @@ namespace ContentPatcher.Framework
                         changes.Add($"target: {wasTargetAsset} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
-                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.Path}: {(changes.Any() ? changesStr : "OK")}");
+                    this.Monitor.Log($"      [{(isReady ? "X" : " ")}] {patch.Path}: {(changes.Any() ? changesStr : "OK")}");
                 }
             }
 
@@ -314,12 +318,13 @@ namespace ContentPatcher.Framework
             // reload assets if needed
             if (reloadAssetNames.Any())
             {
-                if (this.Monitor.IsVerbose)
-                    this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByHuman(p => p.Name))}");
+                if (verbose)
+                    this.Monitor.Log($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByHuman(p => p.Name))}");
                 contentHelper.InvalidateCache(asset =>
                 {
                     bool match = reloadAssetNames.Contains(asset.NameWithoutLocale);
-                    this.Monitor.VerboseLog($"      [{(match ? "X" : " ")}] reload {asset.Name}");
+                    if (verbose)
+                        this.Monitor.Log($"      [{(match ? "X" : " ")}] reload {asset.Name}");
                     return match;
                 });
             }
@@ -338,7 +343,8 @@ namespace ContentPatcher.Framework
             patch.UpdateContext(modContext);
 
             // add to patch list
-            this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
+            if (this.Monitor.IsVerbose)
+                this.Monitor.Log($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
             this.PendingPatches.Add(patch);
 
@@ -353,7 +359,8 @@ namespace ContentPatcher.Framework
         public void Remove(IPatch patch, bool reindex = true)
         {
             // remove from patch list
-            this.Monitor.VerboseLog($"      removed {patch.Path}.");
+            if (this.Monitor.IsVerbose)
+                this.Monitor.Log($"      removed {patch.Path}.");
             if (!this.Patches.Remove(patch))
                 return;
 
@@ -522,7 +529,7 @@ namespace ContentPatcher.Framework
 
             // log result
             if (this.Monitor.IsVerbose)
-                this.Monitor.VerboseLog($"asset requested: can [{(loaders.Any() ? "X" : " ")}] load [{(editors.Any() ? "X" : " ")}] edit {assetName}");
+                this.Monitor.Log($"asset requested: can [{(loaders.Any() ? "X" : " ")}] load [{(editors.Any() ? "X" : " ")}] edit {assetName}");
         }
 
         /// <summary>Apply a load patch to an asset.</summary>
@@ -534,7 +541,7 @@ namespace ContentPatcher.Framework
             where T : notnull
         {
             if (this.Monitor.IsVerbose)
-                this.Monitor.VerboseLog($"Patch \"{patch.Path}\" loaded {assetName}.");
+                this.Monitor.Log($"Patch \"{patch.Path}\" loaded {assetName}.");
 
             T data = patch.Load<T>(assetName);
 
@@ -561,7 +568,7 @@ namespace ContentPatcher.Framework
             foreach (IPatch patch in patches)
             {
                 if (this.Monitor.IsVerbose)
-                    this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.Name}.");
+                    this.Monitor.Log($"Applied patch \"{patch.Path}\" to {asset.Name}.");
 
                 try
                 {
