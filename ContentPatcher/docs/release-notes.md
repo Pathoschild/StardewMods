@@ -9,8 +9,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Optimized patch updates to reduce load times and in-game performance impact.
+## 1.26.6
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Rewrote patch change tracking, which should significantly improve load times and performance in some cases.
 * Improved error when adding an invalid entry to a data model asset.
 
 ## 1.26.5

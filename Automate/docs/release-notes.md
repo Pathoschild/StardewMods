@@ -1,10 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* The `U` overlay now shows a live view of the actual machine state, instead of rescanning machines.
+## 1.27.0
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Rewrote location change tracking to fix lag in some cases.
+* The automation overlay now shows a live view of the actual automation state, instead of rescanning machines.
 * Added `automate reset` console command to force Automate to rescan for machines.
-* Rewrote location change tracking to minimize machine rescans.
 * Optimized edge case where many machines have output ready but their connected chests are all full.
 
 ## 1.26.1
