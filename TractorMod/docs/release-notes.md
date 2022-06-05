@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 4.15.3
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Fixed hoe not digging artifact spots if you disable all the other hoe features.
+* Improved translations. Thanks to mukers (updated Russian)!
+
 ## 4.15.2
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 

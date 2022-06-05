@@ -37,8 +37,8 @@ namespace ContentPatcher.Framework
         /// <summary>The alias token names defined for the content pack.</summary>
         private readonly InvariantDictionary<string> AliasTokenNames = new();
 
-        /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
-        private InvariantDictionary<MutableInvariantSet> TokenDependents { get; } = new();
+        /// <summary>For each dynamic token name, the other token names which may change its values.</summary>
+        private InvariantDictionary<MutableInvariantSet> TokenDependencies { get; } = new();
 
         /// <summary>Whether any tokens haven't received a context update yet.</summary>
         private bool HasNewTokens;
@@ -115,35 +115,34 @@ namespace ContentPatcher.Framework
 
             // create token value handler
             var tokenValue = new DynamicTokenValue(managed, rawValue, conditions);
-            IInvariantSet tokensUsed = tokenValue.GetTokensUsed();
+            IInvariantSet tokensUsed = tokenValue.GetTokensUsed().GetWithout(name);
 
             // save value info
             managed.ValueProvider.AddTokensUsed(tokensUsed);
             managed.ValueProvider.AddAllowedValues(rawValue);
             this.DynamicTokenValues.Add(tokenValue);
 
-            // track tokens which should trigger an update to this token
-            Queue<string> tokenQueue = new(tokensUsed);
-            MutableInvariantSet visited = new();
-            while (tokenQueue.Any())
+            // track tokens which may change its value
+            if (tokensUsed.Any())
             {
-                // get token name
-                string usedTokenName = tokenQueue.Dequeue();
-                if (!visited.Add(usedTokenName))
-                    continue;
+                if (!this.TokenDependencies.TryGetValue(name, out MutableInvariantSet? dependencies))
+                    this.TokenDependencies[name] = dependencies = new MutableInvariantSet();
 
-                // if the used token uses other tokens, they may affect the one being added too
-                IToken? usedToken = this.GetToken(usedTokenName, enforceContext: false);
-                if (usedToken != null)
+                Queue<string> tokenQueue = new(tokensUsed);
+                while (tokenQueue.Any())
                 {
-                    foreach (string nextTokenName in usedToken.GetTokensUsed())
-                        tokenQueue.Enqueue(nextTokenName);
+                    // add dependency
+                    string dependency = tokenQueue.Dequeue();
+                    if (!dependencies.Add(dependency))
+                        continue;
 
-                    // add new token as a dependent of the used token
-                    if (!this.TokenDependents.TryGetValue(usedToken.Name, out MutableInvariantSet? used))
-                        this.TokenDependents.Add(usedToken.Name, used = new());
-
-                    used.Add(name);
+                    // queue indirect dependencies
+                    IInvariantSet? indirect = this.GetToken(dependency, enforceContext: false)?.GetTokensUsed();
+                    if (indirect?.Count > 0)
+                    {
+                        foreach (string nextTokenName in indirect)
+                            tokenQueue.Enqueue(nextTokenName);
+                    }
                 }
             }
 
@@ -217,13 +216,13 @@ namespace ContentPatcher.Framework
             this.HasNewTokens = false;
         }
 
-        /// <summary>Get the tokens affected by changes to a given token.</summary>
+        /// <summary>Get the tokens which may affect the given token's values.</summary>
         /// <param name="token">The token name to check.</param>
-        public IEnumerable<string> GetTokensAffectedBy(string token)
+        public IInvariantSet GetTokensWhichAffect(string token)
         {
-            return this.TokenDependents.TryGetValue(token, out MutableInvariantSet? affectedTokens)
-                ? affectedTokens.GetImmutable()
-                : InvariantSets.Empty;
+            return this.TokenDependencies.TryGetValue(token, out MutableInvariantSet? tokens)
+                ? tokens.GetImmutable()
+                : InvariantSet.Empty;
         }
 
         /****

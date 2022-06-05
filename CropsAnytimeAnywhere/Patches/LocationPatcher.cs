@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.TerrainFeatures;
 using xTile.ObjectModel;
 using xTile.Tiles;
 
@@ -216,27 +216,46 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <summary>Get whether the game is currently clearing tilled dirt.</summary>
         private static bool IsGameClearingTilledDirt()
         {
-            return Game1.fadeToBlack
-                && LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate))
-                && !LocationPatcher.CallStackIncludes(typeof(HoeDirt), nameof(HoeDirt.dayUpdate));
+            // The game clears tilled dirt directly in GameLocation.DayUpdate, which also calls other methods like
+            // FruitTree.dayUpdate. We still need to override when called from the nested day updates so crops, trees,
+            // etc will grow.
+            if (Game1.fadeToBlack)
+            {
+                StackFrame[] frames = new StackTrace(skipFrames: 3).GetFrames(); // skip this method, the patch method, and the original method being patched
+                foreach (StackFrame frame in frames)
+                {
+                    MethodBase? method = frame.GetMethod();
+                    if (method is null)
+                        continue;
+
+                    if (method.Name.Contains("dayUpdate", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (LocationPatcher.IsMethod<GameLocation>(method, nameof(GameLocation.DayUpdate)))
+                            return true;
+                        return false;
+                    }
+
+                    if (method.Name.Contains("newDay", StringComparison.OrdinalIgnoreCase))
+                        return false;
+                }
+            }
+
+            return false;
         }
 
-        /// <summary>Get whether the given method appears in the call stack.</summary>
-        /// <param name="type">The type which declared the method.</param>
-        /// <param name="name">The method name.</param>
-        private static bool CallStackIncludes(Type type, string name)
+        /// <summary>Get whether the method has the expected declaring type and name.</summary>
+        /// <typeparam name="TDeclaringType">The type which defines the expected method.</typeparam>
+        /// <param name="actualMethod">The actual method to check.</param>
+        /// <param name="expectedName">The expected method name.</param>
+        public static bool IsMethod<TDeclaringType>(MethodBase actualMethod, string expectedName)
         {
-            string patchedPrefix = $"{type.FullName}.{name}_PatchedBy<"; // Harmony patches replace the method with a dynamic method instance that isn't on the original type
+            // original method
+            if (actualMethod.DeclaringType == typeof(TDeclaringType) && actualMethod.Name == expectedName)
+                return true;
 
-            return new StackTrace()
-                .GetFrames()
-                .Any(frame =>
-                    frame.GetMethod() is { } method
-                    && (
-                        (method.DeclaringType == type && method.Name == name)
-                        || method.Name.StartsWith(patchedPrefix)
-                    )
-                );
+            // patched method
+            // note: Harmony patches replace the method with a dynamic method instance that isn't on the original type
+            return actualMethod.Name.StartsWith($"{typeof(TDeclaringType).FullName}.{expectedName}_PatchedBy<");
         }
     }
 }

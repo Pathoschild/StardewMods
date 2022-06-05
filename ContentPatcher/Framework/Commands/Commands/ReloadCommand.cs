@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             }
 
             // unload patches
-            patchLoader.UnloadPatchesLoadedBy(pack, false);
+            patchLoader.UnloadPatchesLoadedBy(pack);
 
             // load pack patches
             if (!pack.TryReloadContent(out string? loadContentError))
@@ -84,7 +84,6 @@ namespace ContentPatcher.Framework.Commands.Commands
                 rawPatches: pack.Content.Changes,
                 rootIndexPath: new[] { pack.Index },
                 path: new LogPathBuilder(pack.Manifest.Name),
-                reindex: true,
                 parentPatch: null
             );
 

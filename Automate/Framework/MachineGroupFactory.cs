@@ -89,31 +89,19 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
-        /// <summary>Get whether an object is automatable.</summary>
+        /// <summary>Get a machine, container, or connector from the given entity, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
-        /// <param name="obj">The object to check.</param>
-        public bool IsAutomatable(GameLocation location, Vector2 tile, SObject obj)
+        /// <param name="entity">The entity to check.</param>
+        public IAutomatable? GetEntityFor(GameLocation location, Vector2 tile, object entity)
         {
-            return this.GetEntityFor(location, tile, obj) != null;
-        }
-
-        /// <summary>Get whether a terrain feature is automatable.</summary>
-        /// <param name="location">The location to check.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <param name="terrainFeature">The terrain feature to check.</param>
-        public bool IsAutomatable(GameLocation location, Vector2 tile, TerrainFeature terrainFeature)
-        {
-            return this.GetEntityFor(location, tile, terrainFeature) != null;
-        }
-
-        /// <summary>Get whether a building is automatable.</summary>
-        /// <param name="location">The location to check.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <param name="building">The building to check.</param>
-        public bool IsAutomatable(BuildableGameLocation location, Vector2 tile, Building building)
-        {
-            return this.GetEntityFor(location, tile, building) != null;
+            return entity switch
+            {
+                SObject obj => this.GetEntityFor(location, tile, obj),
+                TerrainFeature feature => this.GetEntityFor(location, tile, feature),
+                Building building when location is BuildableGameLocation buildableLocation => this.GetEntityFor(buildableLocation, tile, building),
+                _ => null
+            };
         }
 
         /// <summary>Get the registered automation factories.</summary>

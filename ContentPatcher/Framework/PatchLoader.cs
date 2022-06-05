@@ -67,11 +67,12 @@ namespace ContentPatcher.Framework
         /// <param name="rawPatches">The raw patches to load.</param>
         /// <param name="rootIndexPath">The path of indexes from the root <c>content.json</c> to the root which is loading patches; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <returns>Returns the patches that were loaded.</returns>
-        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch? parentPatch)
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
         {
+            bool verbose = this.Monitor.IsVerbose;
+
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
@@ -92,33 +93,28 @@ namespace ContentPatcher.Framework
             {
                 index++;
                 var localPath = path.With(patch.LogName!);
-                this.Monitor.VerboseLog($"   loading {localPath}...");
-                IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                if (verbose)
+                    this.Monitor.Log($"   loading {localPath}...");
+                IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
                 if (loaded != null)
                     loadedPatches.Add(loaded);
             }
-
-            // rebuild indexes
-            if (reindex)
-                this.PatchManager.Reindex(patchListChanged: true);
 
             return loadedPatches;
         }
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given patch.</summary>
         /// <param name="parentPatch">The parent patch for which to unload descendants.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        public void UnloadPatchesLoadedBy(IPatch parentPatch, bool reindex)
+        public void UnloadPatchesLoadedBy(IPatch parentPatch)
         {
-            this.UnloadPatches(patch => this.IsDescendant(parent: parentPatch, child: patch), reindex);
+            this.UnloadPatches(patch => this.IsDescendant(parent: parentPatch, child: patch));
         }
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given content pack.</summary>
         /// <param name="pack">The content pack for which to unload descendants.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        public void UnloadPatchesLoadedBy(RawContentPack pack, bool reindex)
+        public void UnloadPatchesLoadedBy(RawContentPack pack)
         {
-            this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack, reindex);
+            this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack);
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>
@@ -316,17 +312,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Unload patches matching a condition.</summary>
         /// <param name="where">Matches patches to unload.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        private void UnloadPatches(Func<IPatch, bool> where, bool reindex)
+        private void UnloadPatches(Func<IPatch, bool> where)
         {
             IPatch[] removePatches = this.PatchManager.GetPatches().Where(where).ToArray();
             if (removePatches.Any())
             {
                 foreach (IPatch patch in removePatches)
-                    this.PatchManager.Remove(patch, reindex: false);
-
-                if (reindex)
-                    this.PatchManager.Reindex(patchListChanged: true);
+                    this.PatchManager.Remove(patch);
             }
         }
 
@@ -336,11 +328,10 @@ namespace ContentPatcher.Framework
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
         /// <returns>The patch that was loaded, or <c>null</c> if it failed to load.</returns>
-        private IPatch? LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch? parentPatch, Action<string> logSkip)
+        private IPatch? LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, Patch? parentPatch, Action<string> logSkip)
         {
             var pack = rawContentPack.ContentPack;
             PatchType? action = null;
@@ -749,7 +740,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // save patch
-                this.PatchManager.Add(patch, reindex);
+                this.PatchManager.Add(patch);
                 return patch;
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
@@ -17,6 +18,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
+using xTile.Layers;
 using xTile.Tiles;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -134,18 +136,21 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         Map map = this.Helper.ModContent.Load<Map>("assets/farm.tmx");
                         IAssetDataForMap editor = this.Helper.ModContent.GetPatchHelper(map).AsMap();
                         TileSheet outdoorTilesheet = map.GetTileSheet("untitled tile sheet");
+                        Layer buildingsLayer = map.GetLayer("Buildings");
+                        Layer backLayer = map.GetLayer("Back");
 
                         // add islands
                         if (this.Config.EnableIslands)
                         {
-                            Map islands = this.Helper.ModContent.Load<Map>("assets/islands.tmx");
-                            editor.PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
+                            Map islands = this.Helper.ModContent.Load<Map>("assets/overlay_islands.tmx");
+                            Size size = islands.GetSizeInTiles();
+
+                            editor.PatchMap(source: islands, targetArea: new Rectangle(0, 26, size.Width, size.Height));
                         }
 
                         // add campfire
                         if (this.Config.AddCampfire)
                         {
-                            var buildingsLayer = map.GetLayer("Buildings");
                             buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
                             buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, outdoorTilesheet, BlendMode.Alpha, 242); // campfire
                         }
@@ -153,12 +158,40 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         // remove shipping bin path
                         if (!this.Config.ShippingBinPath)
                         {
-                            var backLayer = map.GetLayer("Back");
                             for (int x = 71; x <= 72; x++)
                             {
                                 for (int y = 14; y <= 15; y++)
                                     backLayer.Tiles[x, y] = new StaticTile(backLayer, outdoorTilesheet, BlendMode.Alpha, 175); // grass tile
                             }
+                        }
+
+                        // add fishing pier
+                        if (this.Config.AddFishingPier)
+                        {
+                            // load overlay
+                            Map pier = this.Helper.ModContent.Load<Map>("assets/overlay_pier.tmx");
+                            Size size = pier.GetSizeInTiles();
+
+                            // get target position
+                            Point position = this.Config.CustomFishingPierPosition;
+                            if (position == Point.Zero)
+                                position = new Point(70, 26);
+
+                            // remove building tiles which block movement on the pier
+                            {
+                                var pierBack = pier.GetLayer("Back");
+                                for (int x = 0; x < size.Width; x++)
+                                {
+                                    for (int y = 0; y < size.Height; y++)
+                                    {
+                                        if (pierBack.Tiles[x, y] is not null)
+                                            buildingsLayer.Tiles[position.X + x, position.Y + y] = null;
+                                    }
+                                }
+                            }
+
+                            // apply overlay
+                            editor.PatchMap(source: pier, targetArea: new Rectangle(position.X, position.Y, size.Width, size.Height));
                         }
 
                         // apply tilesheet recolors

@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.4.0
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Added optional fishing pier (disabled by default).
+
 ## 2.3.0
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 

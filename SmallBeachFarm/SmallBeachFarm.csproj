@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.3.0</Version>
+    <Version>2.4.0</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 

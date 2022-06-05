@@ -30,6 +30,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         {
             return new ICommand[]
             {
+                new ResetCommand(monitor, machineManager),
                 new SummaryCommand(monitor, config, machineManager)
             };
         }
