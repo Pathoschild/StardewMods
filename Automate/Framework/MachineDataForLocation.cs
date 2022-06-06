@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -41,21 +42,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether the given area contains a tracked automateable.</summary>
+        /// <summary>Get whether the tile area intersects a machine group which meets the minimum requirements for automation (regardless of whether the machines are currently running).</summary>
         /// <param name="tileArea">The tile area to check.</param>
-        /// <param name="trackedOnly">Whether to ignore outdated tiles.</param>
-        public bool Contains(Rectangle tileArea, bool trackedOnly)
+        public bool IntersectsAutomatedGroup(Rectangle tileArea)
         {
             var activeTiles = this.ActiveTiles;
-            var disabledTiles = this.DisabledTiles;
-            var outdatedTiles = this.OutdatedTiles;
 
             foreach (Vector2 tile in tileArea.GetTiles())
             {
-                if (activeTiles.ContainsKey(tile) || disabledTiles.ContainsKey(tile))
-                    return true;
-
-                if (!trackedOnly && outdatedTiles.ContainsKey(tile))
+                if (activeTiles.TryGetValue(tile, out IMachineGroup? group) && group.HasInternalAutomation)
                     return true;
             }
 

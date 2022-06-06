@@ -462,8 +462,8 @@ namespace Pathoschild.Stardew.Automate
                         break;
                 }
 
-                // reload if removed from a machine group
-                else if (data.Contains(tileArea, trackedOnly: true))
+                // reload if removed from a valid machine group
+                if (data.IntersectsAutomatedGroup(tileArea))
                 {
                     shouldReload = true;
                     break;
