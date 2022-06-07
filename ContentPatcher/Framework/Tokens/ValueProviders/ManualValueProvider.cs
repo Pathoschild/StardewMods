@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.Common.Utilities;
@@ -71,6 +72,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public void SetValue(ITokenString? values)
         {
             this.Values = values.SplitValuesUnique();
+        }
+
+        /// <summary>Set the current values.</summary>
+        /// <param name="values">The values to set.</param>
+        public void SetValue(IInvariantSet values)
+        {
+            this.Values = values ?? throw new ArgumentNullException(nameof(values));
         }
 
         /// <summary>Set whether the token is valid for the current context.</summary>
