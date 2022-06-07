@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Optimized token updates.
+
 ## 1.26.6
 Released 05 June 2022 for SMAPI 3.14.0 or later.
 
