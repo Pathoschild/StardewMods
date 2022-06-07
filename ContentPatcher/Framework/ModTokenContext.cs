@@ -40,6 +40,9 @@ namespace ContentPatcher.Framework
         /// <summary>For each dynamic token name, the other token names which may change its values.</summary>
         private InvariantDictionary<MutableInvariantSet> TokenDependencies { get; } = new();
 
+        /// <summary>For each token name, the dynamic token names whose values it may change.</summary>
+        private InvariantDictionary<MutableInvariantSet> TokenDependents { get; } = new();
+
         /// <summary>Whether any tokens haven't received a context update yet.</summary>
         private bool HasNewTokens;
 
@@ -122,7 +125,7 @@ namespace ContentPatcher.Framework
             managed.ValueProvider.AddAllowedValues(rawValue);
             this.DynamicTokenValues.Add(tokenValue);
 
-            // track tokens which may change its value
+            // track token dependencies
             if (tokensUsed.Any())
             {
                 if (!this.TokenDependencies.TryGetValue(name, out MutableInvariantSet? dependencies))
@@ -131,10 +134,18 @@ namespace ContentPatcher.Framework
                 Queue<string> tokenQueue = new(tokensUsed);
                 while (tokenQueue.Any())
                 {
-                    // add dependency
+                    // track token => dependency
                     string dependency = tokenQueue.Dequeue();
                     if (!dependencies.Add(dependency))
                         continue;
+
+                    // track dependency => token
+                    {
+                        if (!this.TokenDependents.TryGetValue(dependency, out MutableInvariantSet? dependents))
+                            this.TokenDependents[dependency] = dependents = new MutableInvariantSet();
+
+                        dependents.Add(name);
+                    }
 
                     // queue indirect dependencies
                     IInvariantSet? indirect = this.GetToken(dependency, enforceContext: false)?.GetTokensUsed();
@@ -173,15 +184,31 @@ namespace ContentPatcher.Framework
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(IInvariantSet globalChangedTokens)
         {
+            bool shouldResetDynamicTokens = this.HasNewTokens;
+
             // update local standard tokens
-            //
             // Some local tokens may change independently (e.g. Random), so we need to update all
             // standard tokens here.
-            bool localTokensChanged = false;
             foreach (IToken token in this.LocalContext.GetTokens(enforceContext: false))
             {
-                if (token.IsMutable)
-                    localTokensChanged |= token.UpdateContext(this);
+                if (token.IsMutable && token.UpdateContext(this))
+                {
+                    if (this.TokenDependents.ContainsKey(token.Name))
+                        shouldResetDynamicTokens = true;
+                }
+            }
+
+            // handle global token changes
+            if (!shouldResetDynamicTokens && globalChangedTokens.Any())
+            {
+                foreach (string token in globalChangedTokens)
+                {
+                    if (this.TokenDependents.ContainsKey(token))
+                    {
+                        shouldResetDynamicTokens = true;
+                        break;
+                    }
+                }
             }
 
             // reset dynamic tokens
@@ -191,7 +218,7 @@ namespace ContentPatcher.Framework
             // globalChangedTokens isn't trivial. Instead we track which global tokens are used
             // indirectly through dynamic tokens via AddDynamicToken, and use that to decide which
             // patches to update.
-            if (globalChangedTokens.Any() || localTokensChanged || this.HasNewTokens)
+            if (shouldResetDynamicTokens)
             {
                 foreach (ManagedManualToken managed in this.DynamicTokens.Values)
                 {
