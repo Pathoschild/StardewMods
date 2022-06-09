@@ -79,7 +79,7 @@
     "config.chop-trees-seeds.name": "Срубка Деревьев (Семечки)",
     "config.chop-trees-seeds.tooltip": "Будет срубать семена обычных деревьев.",
 
-    "config.chop-trees-saplings.name": "Срубка Фруктовых Деревьев (Саженцев)",
+    "config.chop-trees-saplings.name": "Срубка Деревьев (Саженцев)",
     "config.chop-trees-saplings.tooltip": "Будет срубать обычные деревья, которые еще не полностью выросли.",
 
     "config.chop-trees-grown.name": "Срубка Деревьев (Выросших)",
