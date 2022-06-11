@@ -31,6 +31,16 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
         private bool ResizedLastImage;
 
+        /// <summary>A lookup of image file paths to whether they have PyTK scaling information.</summary>
+        private static readonly Dictionary<string, bool> IsPyTkScaled = new(StringComparer.OrdinalIgnoreCase);
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether to enable legacy compatibility mode for PyTK scale-up textures.</summary>
+        internal static bool EnablePyTkLegacyMode;
+
 
         /*********
         ** Public methods
@@ -161,6 +171,26 @@ namespace ContentPatcher.Framework.Patches
         {
             // disable raw data for .xnb files (which SMAPI can't read as raw data)
             bool canUseRawData = !string.Equals(PathHelper.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
+
+            // disable raw data if PyTK will rescale the image (until it supports raw data)
+            if (canUseRawData && EditImagePatch.EnablePyTkLegacyMode)
+            {
+                if (!EditImagePatch.IsPyTkScaled.TryGetValue(fromAsset, out bool isScaled))
+                {
+                    string? dirPath = PathHelper.GetDirectoryName(fromAsset);
+                    string fileName = $"{PathHelper.GetFileNameWithoutExtension(fromAsset)}.pytk.json";
+
+                    string path = dirPath is not null
+                        ? PathHelper.Combine(dirPath, fileName)
+                        : fileName;
+
+                    EditImagePatch.IsPyTkScaled[fromAsset] = isScaled = this.ContentPack.HasFile(path);
+                }
+
+                canUseRawData = !isScaled;
+                if (!canUseRawData)
+                    this.Monitor.LogOnce("Enabled compatibility mode for PyTK scaled textures. This won't cause any issues, but may impact performance.", LogLevel.Warn);
+            }
 
             // load image
             if (canUseRawData)
