@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {

@@ -58,13 +58,19 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.MachineGroups.AddRange(groups);
         }
 
-        /// <summary>Remove machine groups from the collection.</summary>
-        /// <param name="match">A predicate which returns true for locations that should be removed.</param>
-        /// <returns>Returns whether any machine groups were removed.</returns>
-        /// <remarks>Make sure to call <see cref="Rebuild"/> after making changes.</remarks>
-        public bool RemoveAll(Predicate<IMachineGroup> match)
+        /// <summary>Remove all machine groups in the collection.</summary>
+        public void Clear()
         {
-            return this.MachineGroups.RemoveAll(match) > 0;
+            this.MachineGroups.Clear();
+        }
+
+        /// <summary>Remove all machine groups within the given locations.</summary>
+        /// <param name="locationKeys">The location keys as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        public bool RemoveLocations(ISet<string> locationKeys)
+        {
+            return this.MachineGroups.RemoveAll(
+                group => locationKeys.Contains(group.LocationKey!)
+            ) > 0;
         }
 
         /// <summary>Rebuild the aggregate group for changes to the underlying machine groups.</summary>
