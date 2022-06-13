@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The storage manager for the group.</summary>
         protected readonly StorageManager StorageManager;
 
+        /// <summary>The backing field for <see cref="Tiles"/>.</summary>
+        protected HashSet<Vector2> TilesImpl;
+
 
         /*********
         ** Accessors
@@ -44,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IContainer[] Containers { get; protected set; }
 
         /// <inheritdoc />
-        public IReadOnlySet<Vector2> Tiles { get; protected set; }
+        public IReadOnlySet<Vector2> Tiles => this.TilesImpl;
 
         /// <inheritdoc />
         [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
@@ -68,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.LocationKey = locationKey;
             this.Machines = machines.ToArray();
             this.Containers = containers.ToArray();
-            this.Tiles = new HashSet<Vector2>(tiles);
+            this.TilesImpl = new HashSet<Vector2>(tiles);
 
             this.IsJunimoGroup = this.Containers.Any(p => p.IsJunimoChest);
             this.StorageManager = buildStorage(this.Containers);

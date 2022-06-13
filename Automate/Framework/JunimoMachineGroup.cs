@@ -62,6 +62,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         public void Clear()
         {
             this.MachineGroups.Clear();
+
+            this.StorageManager.SetContainers(Array.Empty<IContainer>());
+
+            this.Containers = Array.Empty<IContainer>();
+            this.Machines = Array.Empty<IMachine>();
+            this.TilesImpl.Clear();
         }
 
         /// <summary>Remove all machine groups within the given locations.</summary>
@@ -81,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             int junimoChests = 0;
             this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
-            this.Tiles = new HashSet<Vector2>(this.MachineGroups.SelectMany(p => p.Tiles));
+            this.TilesImpl = new HashSet<Vector2>(this.MachineGroups.SelectMany(p => p.Tiles));
         }
 
 

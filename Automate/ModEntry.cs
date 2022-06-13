@@ -35,8 +35,11 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Handles console commands from players.</summary>
         private CommandHandler CommandHandler = null!; // set in Entry
 
-        /// <summary>Whether to enable automation for the current save.</summary>
-        private bool EnableAutomation => Context.IsMainPlayer && this.Config.Enabled;
+        /// <summary>Whether to automate machines for the current save.</summary>
+        private bool EnableAutomation => this.Config.Enabled && Context.IsMainPlayer;
+
+        /// <summary>Whether to track machine changes for the current save.</summary>
+        private bool EnableAutomationChangeTracking => this.Config.Enabled && (Context.IsMainPlayer || this.CurrentOverlay is not null);
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
@@ -192,7 +195,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnLocationListChanged(object? sender, LocationListChangedEventArgs e)
         {
-            if (!this.EnableAutomation)
+            if (!this.EnableAutomationChangeTracking)
                 return;
 
             this.Monitor.VerboseLog("Location list changed, reloading machines in affected locations.");
@@ -215,7 +218,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnBuildingListChanged(object? sender, BuildingListChangedEventArgs e)
         {
-            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
+            if (!this.EnableAutomationChangeTracking || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             this.Monitor.VerboseLog(
@@ -230,7 +233,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnObjectListChanged(object? sender, ObjectListChangedEventArgs e)
         {
-            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
+            if (!this.EnableAutomationChangeTracking || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             this.Monitor.VerboseLog(
@@ -245,7 +248,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnTerrainFeatureListChanged(object? sender, TerrainFeatureListChangedEventArgs e)
         {
-            if (!this.EnableAutomation || this.MachineManager.IsReloadQueued(e.Location))
+            if (!this.EnableAutomationChangeTracking || this.MachineManager.IsReloadQueued(e.Location))
                 return;
 
             this.Monitor.VerboseLog(
@@ -260,24 +263,35 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
-            if (!Context.IsWorldReady || !this.EnableAutomation)
+            if (!Context.IsWorldReady)
                 return;
+
+            bool enableAutomation = this.EnableAutomation;
+            bool enableChangeTracking = this.EnableAutomationChangeTracking;
 
             try
             {
-                // handle delay
-                this.AutomateCountdown--;
-                if (this.AutomateCountdown > 0)
-                    return;
-                this.AutomateCountdown = this.Config.AutomationInterval;
-
                 // reload machines if needed
-                if (this.MachineManager.ReloadQueuedLocations())
-                    this.ResetOverlayIfShown();
+                if (enableAutomation || enableChangeTracking)
+                {
+                    if (this.MachineManager.ReloadQueuedLocations())
+                        this.ResetOverlayIfShown();
+                }
 
-                // process machines
-                foreach (IMachineGroup group in this.MachineManager.GetActiveMachineGroups())
-                    group.Automate();
+                // apply automation
+                if (enableAutomation)
+                {
+                    // handle delay
+                    this.AutomateCountdown--;
+                    if (this.AutomateCountdown > 0)
+                        return;
+                    this.AutomateCountdown = this.Config.AutomationInterval;
+
+
+                    // process machines
+                    foreach (IMachineGroup group in this.MachineManager.GetActiveMachineGroups())
+                        group.Automate();
+                }
             }
             catch (Exception ex)
             {
@@ -409,6 +423,12 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Enable the overlay.</summary>
         private void EnableOverlay()
         {
+            if (!Context.IsMainPlayer)
+            {
+                this.MachineManager.Reset();
+                this.MachineManager.ReloadQueuedLocations();
+            }
+
             this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.GetMachineDataFor(Game1.currentLocation), this.MachineManager.JunimoMachineGroup);
         }
 
