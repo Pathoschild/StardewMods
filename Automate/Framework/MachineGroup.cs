@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IContainer[] Containers { get; protected set; }
 
         /// <inheritdoc />
-        public Vector2[] Tiles { get; protected set; }
+        public IReadOnlySet<Vector2> Tiles { get; protected set; }
 
         /// <inheritdoc />
         [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.LocationKey = locationKey;
             this.Machines = machines.ToArray();
             this.Containers = containers.ToArray();
-            this.Tiles = tiles.ToArray();
+            this.Tiles = new HashSet<Vector2>(tiles);
 
             this.IsJunimoGroup = this.Containers.Any(p => p.IsJunimoChest);
             this.StorageManager = buildStorage(this.Containers);

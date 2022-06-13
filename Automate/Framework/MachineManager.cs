@@ -24,9 +24,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The internal mod data.</summary>
         private readonly DataModel Data;
 
-        /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
-        private readonly JunimoMachineGroup JunimoMachineGroup;
-
         /// <summary>The machine data for each location.</summary>
         private readonly Dictionary<string, MachineDataForLocation> MachineData = new();
 
@@ -48,6 +45,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Constructs machine groups.</summary>
         public MachineGroupFactory Factory { get; }
+
+        /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
+        public JunimoMachineGroup JunimoMachineGroup { get; }
 
 
         /*********

@@ -409,7 +409,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Enable the overlay.</summary>
         private void EnableOverlay()
         {
-            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.GetMachineDataFor(Game1.currentLocation));
+            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.GetMachineDataFor(Game1.currentLocation), this.MachineManager.JunimoMachineGroup);
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>

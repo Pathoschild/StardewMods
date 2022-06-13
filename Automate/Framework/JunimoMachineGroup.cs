@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             int junimoChests = 0;
             this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
-            this.Tiles = this.MachineGroups.SelectMany(p => p.Tiles).ToArray();
+            this.Tiles = new HashSet<Vector2>(this.MachineGroups.SelectMany(p => p.Tiles));
         }
 
 
