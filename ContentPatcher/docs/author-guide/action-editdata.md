@@ -110,7 +110,7 @@ That also applies to data models. For example, this is one entry from `Data/Movi
     "Title": "Mysterium",
     "Description": "Peer behind the midnight veil... You must experience to believe!",
     "Tags": [ "horror", "art" ],
-    "Scenes": [ /* omitted for brevity * ],
+    "Scenes": [ /* omitted for brevity */ ]
 }
 ```
 
