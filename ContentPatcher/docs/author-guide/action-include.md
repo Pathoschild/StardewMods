@@ -24,7 +24,7 @@ The included file must be a `.json` file which only contains a `Changes` field:
 ```js
 {
     "Changes": [
-        /* patches defined here like usual /*
+        /* patches defined here like usual */
     ]
 }
 ```
