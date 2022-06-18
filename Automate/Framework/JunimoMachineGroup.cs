@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Add machine groups to the collection.</summary>
         /// <param name="groups">The groups to add.</param>
         /// <remarks>Make sure to call <see cref="Rebuild"/> after making changes.</remarks>
-        public void Add(params IMachineGroup[] groups)
+        public void Add(IList<IMachineGroup> groups)
         {
             this.MachineGroups.AddRange(groups);
         }

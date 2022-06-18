@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.27.2
+Released 18 June 2022 for SMAPI 3.14.0 or later.
+
+* Fixed machines not indexed correctly in 1.27.1.
+
 ## 1.27.1
 Released 17 June 2022 for SMAPI 3.14.0 or later.
 
