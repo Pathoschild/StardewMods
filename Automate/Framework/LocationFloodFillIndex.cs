@@ -55,20 +55,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             // objects
             foreach ((Vector2 tile, Object obj) in location.netObjects.Pairs)
-                yield return new KeyValuePair<Vector2, object>(tile, obj);
+                yield return new(tile, obj);
             foreach ((Vector2 tile, Object obj) in location.overlayObjects)
-                yield return new KeyValuePair<Vector2, object>(tile, obj);
+                yield return new(tile, obj);
 
             // furniture
             foreach (Furniture furniture in location.furniture)
-                yield return new KeyValuePair<Vector2, object>(furniture.TileLocation, furniture);
+                yield return new(furniture.TileLocation, furniture);
 
             // terrain features
             foreach ((Vector2 originTile, TerrainFeature feature) in location.terrainFeatures.Pairs)
             {
                 Rectangle box = this.AbsoluteToTileArea(feature.getBoundingBox(originTile));
                 foreach (Vector2 tile in this.GetTilesIn(box))
-                    yield return new KeyValuePair<Vector2, object>(tile, feature);
+                    yield return new(tile, feature);
             }
 
             // large terrain features
@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 Rectangle box = this.AbsoluteToTileArea(feature.getBoundingBox());
                 foreach (Vector2 tile in this.GetTilesIn(box))
-                    yield return new KeyValuePair<Vector2, object>(tile, feature);
+                    yield return new(tile, feature);
             }
 
             // buildings
@@ -84,22 +84,32 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
+                    Rectangle tileArea = new(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     foreach (Vector2 tile in this.GetTilesIn(tileArea))
-                        yield return new KeyValuePair<Vector2, object>(tile, building);
+                        yield return new(tile, building);
                 }
             }
         }
 
         /// <summary>Get the tiles included in a tile area.</summary>
         /// <param name="area">The tile area.</param>
-        private IEnumerable<Vector2> GetTilesIn(Rectangle area)
+        private Vector2[] GetTilesIn(Rectangle area)
         {
-            for (int x = area.X; x < area.Right; x++)
+            Vector2[] tiles = new Vector2[area.Width * area.Height];
+
+            if (tiles.Length == 1)
+                tiles[0] = new Vector2(area.X, area.Y);
+            else
             {
-                for (int y = area.Y; y < area.Bottom; y++)
-                    yield return new Vector2(x, y);
+                int i = 0;
+                for (int y = area.Y, bottom = area.Bottom; y < bottom; y++)
+                {
+                    for (int x = area.X, right = area.Right; x < right; x++)
+                        tiles[i++] = new Vector2(x, y);
+                }
             }
+
+            return tiles;
         }
 
         /// <summary>Get a tile area for a given absolute pixel area.</summary>
