@@ -255,11 +255,16 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 // add groups
                 this.MachineData[locationKey] = new MachineDataForLocation(locationKey, active, disabled);
+
+                // track change
                 if (junimo.Any())
                 {
-                    this.JunimoMachineGroup.Add(junimo.ToArray());
+                    this.JunimoMachineGroup.Add(junimo);
                     junimoGroupChanged = true;
+                    anyChanged = true;
                 }
+                else if (active.Any())
+                    anyChanged = true;
             }
 
             // rebuild caches
