@@ -161,7 +161,7 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -181,7 +181,7 @@ for an item:
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -200,7 +200,7 @@ You can also delete an entry by setting its value to `null`. For example, this d
 recreate it with different conditions:
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -237,7 +237,7 @@ The order is often important for list assets (e.g. the game will use the first e
 `MoveEntries` field. For example, this moves the `Abigail` entry using each possible operation:
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -325,7 +325,7 @@ the entire entry:
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",

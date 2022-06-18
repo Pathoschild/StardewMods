@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.27.1
+Released 17 June 2022 for SMAPI 3.14.0 or later.
+
 * Optimized to avoid rescan when a machine is removed from an inactive machine group.
 * Fixed error when placing machines in a building which was upgraded on the same day after 1.27.0.
 * Fixed automation overlay not showing groups connected to a Junimo chest after 1.27.0.
