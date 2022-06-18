@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -22,6 +21,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The machine data for the current location.</summary>
         private readonly MachineDataForLocation? MachineData;
 
+        /// <summary>The machine group for machines connected to Junimo chests.</summary>
+        private readonly JunimoMachineGroup JunimoGroup;
+
 
         /*********
         ** Public methods
@@ -31,10 +33,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="machineData">The machine groups to display.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, MachineDataForLocation? machineData)
+        /// <param name="junimoGroup">The machine group for machines connected to Junimo chests.</param>
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, MachineDataForLocation? machineData, JunimoMachineGroup junimoGroup)
             : base(events, inputHelper, reflection)
         {
             this.MachineData = machineData;
+            this.JunimoGroup = junimoGroup;
         }
 
 
@@ -60,7 +64,14 @@ namespace Pathoschild.Stardew.Automate.Framework
                 // get machine group
                 IMachineGroup? group = null;
                 Color? color = null;
-                if (this.MachineData is not null)
+                if (this.JunimoGroup.Tiles.Contains(tile))
+                {
+                    color = this.JunimoGroup.HasInternalAutomation
+                        ? Color.Green * 0.2f
+                        : Color.Red * 0.2f;
+                    group = this.JunimoGroup;
+                }
+                else if (this.MachineData is not null)
                 {
                     if (this.MachineData.ActiveTiles.TryGetValue(tile, out group))
                         color = Color.Green * 0.2f;

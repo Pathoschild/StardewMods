@@ -38,7 +38,13 @@ namespace ContentPatcher.Framework
         private readonly InvariantDictionary<string> AliasTokenNames = new();
 
         /// <summary>For each dynamic token name, the other token names which may change its values.</summary>
-        private InvariantDictionary<MutableInvariantSet> TokenDependencies { get; } = new();
+        private InvariantDictionary<MutableInvariantSet> DynamicTokenDependencies { get; } = new();
+
+        /// <summary>For each token name, the dynamic token names whose values it may change.</summary>
+        private InvariantDictionary<MutableInvariantSet> DynamicTokenDependents { get; } = new();
+
+        /// <summary>The set of dynamic tokens which are dependencies or dependents for another dynamic token.</summary>
+        private MutableInvariantSet InterdependentTokens { get; } = new();
 
         /// <summary>Whether any tokens haven't received a context update yet.</summary>
         private bool HasNewTokens;
@@ -122,19 +128,34 @@ namespace ContentPatcher.Framework
             managed.ValueProvider.AddAllowedValues(rawValue);
             this.DynamicTokenValues.Add(tokenValue);
 
-            // track tokens which may change its value
+            // track token dependencies
             if (tokensUsed.Any())
             {
-                if (!this.TokenDependencies.TryGetValue(name, out MutableInvariantSet? dependencies))
-                    this.TokenDependencies[name] = dependencies = new MutableInvariantSet();
+                if (!this.DynamicTokenDependencies.TryGetValue(name, out MutableInvariantSet? dependencies))
+                    this.DynamicTokenDependencies[name] = dependencies = new MutableInvariantSet();
 
                 Queue<string> tokenQueue = new(tokensUsed);
                 while (tokenQueue.Any())
                 {
-                    // add dependency
+                    // track token => dependency
                     string dependency = tokenQueue.Dequeue();
                     if (!dependencies.Add(dependency))
                         continue;
+
+                    // track dependency => token
+                    {
+                        if (!this.DynamicTokenDependents.TryGetValue(dependency, out MutableInvariantSet? dependents))
+                            this.DynamicTokenDependents[dependency] = dependents = new MutableInvariantSet();
+
+                        dependents.Add(name);
+                    }
+
+                    // track dynamic token inter-dependencies
+                    if (this.DynamicTokens.ContainsKey(dependency))
+                    {
+                        this.InterdependentTokens.Add(dependency);
+                        this.InterdependentTokens.Add(name);
+                    }
 
                     // queue indirect dependencies
                     IInvariantSet? indirect = this.GetToken(dependency, enforceContext: false)?.GetTokensUsed();
@@ -173,41 +194,81 @@ namespace ContentPatcher.Framework
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(IInvariantSet globalChangedTokens)
         {
+            bool resetDynamicTokens = this.HasNewTokens;
+            MutableInvariantSet? updateDynamicTokens = null;
+
             // update local standard tokens
-            //
             // Some local tokens may change independently (e.g. Random), so we need to update all
-            // standard tokens here.
-            bool localTokensChanged = false;
+            // of them here.
             foreach (IToken token in this.LocalContext.GetTokens(enforceContext: false))
             {
-                if (token.IsMutable)
-                    localTokensChanged |= token.UpdateContext(this);
+                if (token.IsMutable && token.UpdateContext(this))
+                {
+                    if (!resetDynamicTokens && this.DynamicTokenDependents.TryGetValue(token.Name, out MutableInvariantSet? dependents))
+                    {
+                        updateDynamicTokens ??= new MutableInvariantSet();
+                        updateDynamicTokens.AddMany(dependents);
+                    }
+                }
             }
 
-            // reset dynamic tokens
-            //
-            // Since dynamic token values are affected by the order they're defined (e.g. one
-            // dynamic token can use the value of another), only updating tokens affected by
-            // globalChangedTokens isn't trivial. Instead we track which global tokens are used
-            // indirectly through dynamic tokens via AddDynamicToken, and use that to decide which
-            // patches to update.
-            if (globalChangedTokens.Any() || localTokensChanged || this.HasNewTokens)
+            // update dynamic tokens
+            if (this.DynamicTokens.Any())
             {
-                foreach (ManagedManualToken managed in this.DynamicTokens.Values)
+                // find dynamic tokens affected for global token changes
+                if (!resetDynamicTokens)
                 {
-                    managed.ValueProvider.SetValue(null);
-                    managed.ValueProvider.SetReady(false);
+                    foreach (string token in globalChangedTokens)
+                    {
+                        if (this.DynamicTokenDependents.TryGetValue(token, out MutableInvariantSet? dependents))
+                        {
+                            updateDynamicTokens ??= new MutableInvariantSet();
+                            updateDynamicTokens.AddMany(dependents);
+                        }
+                    }
                 }
 
-                foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+                // trigger a full reset if interdependent tokens changed
+                //
+                // Since dynamic token values are affected by the order they're defined (e.g. one
+                // dynamic token can use the value of another), only updating the values that
+                // changed isn't trivial. Instead Content Patcher will track which global tokens
+                // were used indirectly when deciding which patches to update.
+                if (!resetDynamicTokens && updateDynamicTokens != null && this.InterdependentTokens.Count > 0)
                 {
-                    tokenValue.UpdateContext(this);
-                    if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
+                    foreach (string token in updateDynamicTokens)
                     {
-                        ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+                        resetDynamicTokens = this.InterdependentTokens.Contains(token);
+                        if (resetDynamicTokens)
+                            break;
+                    }
+                }
 
-                        valueProvider.SetValue(tokenValue.Value);
-                        valueProvider.SetReady(true);
+                // update dynamic tokens
+                if (resetDynamicTokens || updateDynamicTokens != null)
+                {
+                    foreach ((string name, ManagedManualToken managed) in this.DynamicTokens)
+                    {
+                        if (resetDynamicTokens || updateDynamicTokens!.Contains(name))
+                        {
+                            managed.ValueProvider.SetValue(InvariantSet.Empty);
+                            managed.ValueProvider.SetReady(false);
+                        }
+                    }
+
+                    foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+                    {
+                        if (!resetDynamicTokens && !updateDynamicTokens!.Contains(tokenValue.Name))
+                            continue;
+
+                        tokenValue.UpdateContext(this);
+                        if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
+                        {
+                            ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+
+                            valueProvider.SetValue(tokenValue.Value);
+                            valueProvider.SetReady(true);
+                        }
                     }
                 }
             }
@@ -220,7 +281,7 @@ namespace ContentPatcher.Framework
         /// <param name="token">The token name to check.</param>
         public IInvariantSet GetTokensWhichAffect(string token)
         {
-            return this.TokenDependencies.TryGetValue(token, out MutableInvariantSet? tokens)
+            return this.DynamicTokenDependencies.TryGetValue(token, out MutableInvariantSet? tokens)
                 ? tokens.GetImmutable()
                 : InvariantSet.Empty;
         }

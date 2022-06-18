@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
@@ -19,7 +20,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         IContainer[] Containers { get; }
 
         /// <summary>The tiles comprising the group.</summary>
-        Vector2[] Tiles { get; }
+        IReadOnlySet<Vector2> Tiles { get; }
 
         /// <summary>Whether the machine group is linked to a Junimo chest.</summary>
         [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]

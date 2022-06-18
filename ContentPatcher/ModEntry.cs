@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
+using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common.Utilities;
@@ -59,7 +60,8 @@ namespace ContentPatcher
             new Migration_1_23(),
             new Migration_1_24(),
             new Migration_1_25(),
-            new Migration_1_26()
+            new Migration_1_26(),
+            new Migration_1_27()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -106,6 +108,10 @@ namespace ContentPatcher
 
             if (!this.Config.GroupEditsByMod)
                 this.Monitor.Log("Grouping edits by mod is disabled in config.json. This will reduce the usefulness of log info.");
+
+            // enable temporary PyTK legacy mode
+            IModInfo? pyTk = helper.ModRegistry.Get("Platonymous.Toolkit");
+            EditImagePatch.EnablePyTkLegacyMode = pyTk is not null && pyTk.Manifest.Version.IsOlderThan("1.23.1");
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>

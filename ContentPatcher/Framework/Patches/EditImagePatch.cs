@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using PathHelper = System.IO.Path;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -29,6 +30,16 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
         private bool ResizedLastImage;
+
+        /// <summary>A lookup of image file paths to whether they have PyTK scaling information.</summary>
+        private static readonly Dictionary<string, bool> IsPyTkScaled = new(StringComparer.OrdinalIgnoreCase);
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether to enable legacy compatibility mode for PyTK scale-up textures.</summary>
+        internal static bool EnablePyTkLegacyMode;
 
 
         /*********
@@ -87,10 +98,12 @@ namespace ContentPatcher.Framework.Patches
                 return;
             }
 
-            // fetch data
+            // get editor
             IAssetDataForImage editor = asset.AsImage();
-            Texture2D source = this.ContentPack.ModContent.Load<Texture2D>(this.FromAsset);
-            if (!this.TryReadArea(this.FromArea, 0, 0, source.Width, source.Height, out Rectangle sourceArea, out string? error))
+
+            // fetch data
+            this.LoadSourceImage(this.FromAsset, out int sourceWidth, out int sourceHeight, out IRawTextureData? rawSource, out Texture2D? fullSource);
+            if (!this.TryReadArea(this.FromArea, 0, 0, sourceWidth, sourceHeight, out Rectangle sourceArea, out string? error))
             {
                 this.Warn($"the source area is invalid: {error}.");
                 return;
@@ -129,7 +142,10 @@ namespace ContentPatcher.Framework.Patches
             this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
 
             // apply source image
-            editor.PatchImage(source, sourceArea, targetArea, (PatchMode)this.PatchMode);
+            if (rawSource is not null)
+                editor.PatchImage(rawSource, sourceArea, targetArea, (PatchMode)this.PatchMode);
+            else
+                editor.PatchImage(fullSource!, sourceArea, targetArea, (PatchMode)this.PatchMode);
         }
 
         /// <inheritdoc />
@@ -145,6 +161,54 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
+        /// <summary>Load the source image to apply to the target asset.</summary>
+        /// <param name="fromAsset">The local path to the source image file.</param>
+        /// <param name="width">The width of the loaded image.</param>
+        /// <param name="height">The height of the loaded image.</param>
+        /// <param name="rawData">The raw image data, if supported for the image file type.</param>
+        /// <param name="fullTexture">The full texture instance, if <paramref name="rawData"/> is null.</param>
+        private void LoadSourceImage(string fromAsset, out int width, out int height, out IRawTextureData? rawData, out Texture2D? fullTexture)
+        {
+            // disable raw data for .xnb files (which SMAPI can't read as raw data)
+            bool canUseRawData = !string.Equals(PathHelper.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
+
+            // disable raw data if PyTK will rescale the image (until it supports raw data)
+            if (canUseRawData && EditImagePatch.EnablePyTkLegacyMode)
+            {
+                if (!EditImagePatch.IsPyTkScaled.TryGetValue(fromAsset, out bool isScaled))
+                {
+                    string? dirPath = PathHelper.GetDirectoryName(fromAsset);
+                    string fileName = $"{PathHelper.GetFileNameWithoutExtension(fromAsset)}.pytk.json";
+
+                    string path = dirPath is not null
+                        ? PathHelper.Combine(dirPath, fileName)
+                        : fileName;
+
+                    EditImagePatch.IsPyTkScaled[fromAsset] = isScaled = this.ContentPack.HasFile(path);
+                }
+
+                canUseRawData = !isScaled;
+                if (!canUseRawData)
+                    this.Monitor.LogOnce("Enabled compatibility mode for PyTK scaled textures. This won't cause any issues, but may impact performance.", LogLevel.Warn);
+            }
+
+            // load image
+            if (canUseRawData)
+            {
+                rawData = this.ContentPack.ModContent.Load<IRawTextureData>(fromAsset);
+                fullTexture = null;
+                width = rawData.Width;
+                height = rawData.Height;
+            }
+            else
+            {
+                rawData = null;
+                fullTexture = this.ContentPack.ModContent.Load<Texture2D>(fromAsset);
+                width = fullTexture.Width;
+                height = fullTexture.Height;
+            }
+        }
+
         /// <summary>Log a warning for an issue when applying the patch.</summary>
         /// <param name="message">The message to log.</param>
         /// <param name="level">The message log level.</param>

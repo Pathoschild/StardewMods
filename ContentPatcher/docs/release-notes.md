@@ -9,6 +9,12 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.27.0
+Released 17 June 2022 for SMAPI 3.15.0 or later. See the [release highlights](https://www.patreon.com/posts/67923889).
+
+* Migrated image edits to SMAPI's new [`IRawTextureData` asset type](https://stardewvalleywiki.com/Modding:Migrate_to_SMAPI_4.0#Raw_texture_data) to reduce load times and improve performance.
+* Optimized token updates to reduce in-game lag for some players.
+
 ## 1.26.6
 Released 05 June 2022 for SMAPI 3.14.0 or later.
 

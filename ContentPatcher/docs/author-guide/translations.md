@@ -96,13 +96,13 @@ You can inject the translated text directly into your patches using the `i18n`
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",
             "Target": "Data/ObjectInformation",
             "Entries": {
-                "Example.ModId_Pufferchick": "Pufferchick/1200/100/Seeds -74/{{i18n: item.name}}/{{i18n: item description}}////0/Mods\\Example.ModId\\Objects"
+                "Example.ModId_Pufferchick": "Pufferchick/1200/100/Seeds -74/{{i18n: item.name}}/{{i18n: item.description}}////0/Mods\\Example.ModId\\Objects"
             }
         }
     ]
@@ -123,7 +123,7 @@ For example, let's say you have this translation:
 
 If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_").
 You can pass in the token like this instead: `{{i18n: today |dayOfWeek={{DayOfWeek}} }}`, in which
-it'll show something like "_today is Monday_".
+case it'll show something like "_today is Monday_".
 
 ### What else can I do with translations?
 The feature is essentially a text storage system, so there's a lot of ways you can use it.
@@ -133,7 +133,7 @@ which edits every festival in the game to add dynamic dialogue based on the tran
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.27.0",
     "Changes": [
         {
             "Action": "EditData",

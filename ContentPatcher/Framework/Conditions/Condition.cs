@@ -97,7 +97,7 @@ namespace ContentPatcher.Framework.Conditions
             // get token
             IToken? token = context.GetToken(this.Name, enforceContext: true);
             if (token == null)
-                this.State.AddUnreadyTokens(this.Name);
+                this.State.AddUnreadyToken(this.Name);
 
             // update values
             if (this.IsReady && token != null)

@@ -86,35 +86,35 @@ namespace ContentPatcher.Framework
             return this;
         }
 
-        /// <summary>Add unknown tokens required by the instance.</summary>
-        /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddInvalidTokens(params string[]? tokens)
+        /// <summary>Add an unknown token required by the instance.</summary>
+        /// <param name="token">The token name to add.</param>
+        public ContextualState AddInvalidToken(string token)
         {
-            this.AddRange(this.InvalidTokensImpl, tokens);
+            this.InvalidTokensImpl.Add(token);
             return this;
         }
 
-        /// <summary>Add valid tokens required by the instance which aren't available in the current context.</summary>
-        /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddUnreadyTokens(params string[]? tokens)
+        /// <summary>Add a valid token required by the instance which isn't available in the current context.</summary>
+        /// <param name="token">The token name to add.</param>
+        public ContextualState AddUnreadyToken(string token)
         {
-            this.AddRange(this.UnreadyTokensImpl, tokens);
+            this.UnreadyTokensImpl.Add(token);
             return this;
         }
 
-        /// <summary>Add tokens which are provided by a mod which isn't installed, if any.</summary>
-        /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddUnavailableModTokens(params string[]? tokens)
+        /// <summary>Add a token which is provided by a mod which isn't installed, if any.</summary>
+        /// <param name="token">The token name to add.</param>
+        public ContextualState AddUnavailableModToken(string token)
         {
-            this.AddRange(this.UnavailableModTokensImpl, tokens);
+            this.UnavailableModTokensImpl.Add(token);
             return this;
         }
 
-        /// <summary>Add error phrases indicating why the instance is not ready to use.</summary>
-        /// <param name="errors">The tokens to add.</param>
-        public ContextualState AddErrors(params string[]? errors)
+        /// <summary>Add an error phrase indicating why the instance is not ready to use.</summary>
+        /// <param name="error">The error phrase to add.</param>
+        public ContextualState AddError(string error)
         {
-            this.AddRange(this.ErrorsImpl, errors);
+            this.ErrorsImpl.Add(error);
             return this;
         }
 

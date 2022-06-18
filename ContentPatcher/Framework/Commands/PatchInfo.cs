@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Commands
                 parsedType: patch.ParsedType,
                 conditions: Array.Empty<Condition>(),
                 matchesContext: false,
-                state: new ContextualState().AddErrors(patch.ReasonDisabled),
+                state: new ContextualState().AddError(patch.ReasonDisabled),
                 contentPack: patch.ContentPack
             )
         {

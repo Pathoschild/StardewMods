@@ -58,13 +58,25 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.MachineGroups.AddRange(groups);
         }
 
-        /// <summary>Remove machine groups from the collection.</summary>
-        /// <param name="match">A predicate which returns true for locations that should be removed.</param>
-        /// <returns>Returns whether any machine groups were removed.</returns>
-        /// <remarks>Make sure to call <see cref="Rebuild"/> after making changes.</remarks>
-        public bool RemoveAll(Predicate<IMachineGroup> match)
+        /// <summary>Remove all machine groups in the collection.</summary>
+        public void Clear()
         {
-            return this.MachineGroups.RemoveAll(match) > 0;
+            this.MachineGroups.Clear();
+
+            this.StorageManager.SetContainers(Array.Empty<IContainer>());
+
+            this.Containers = Array.Empty<IContainer>();
+            this.Machines = Array.Empty<IMachine>();
+            this.TilesImpl.Clear();
+        }
+
+        /// <summary>Remove all machine groups within the given locations.</summary>
+        /// <param name="locationKeys">The location keys as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        public bool RemoveLocations(ISet<string> locationKeys)
+        {
+            return this.MachineGroups.RemoveAll(
+                group => locationKeys.Contains(group.LocationKey!)
+            ) > 0;
         }
 
         /// <summary>Rebuild the aggregate group for changes to the underlying machine groups.</summary>
@@ -75,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             int junimoChests = 0;
             this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
-            this.Tiles = this.MachineGroups.SelectMany(p => p.Tiles).ToArray();
+            this.TilesImpl = new HashSet<Vector2>(this.MachineGroups.SelectMany(p => p.Tiles));
         }
 
 
