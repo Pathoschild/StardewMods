@@ -1515,7 +1515,7 @@ A `Random` token changes its choices on day start by default. If you want random
 within a day, you need to make two changes:
 
 * Specify a [patch update rate](../author-guide.md#update-rate) so the patch itself updates more often.
-* Use a [pinned key](#pinned-key) to set the seed to a value which changes more often. For example,
+* Use a [pinned key](#pinned-keys) to set the seed to a value which changes more often. For example,
   this would change every time the in-game time changes:
   ```
   {{Random: a, b, c |key={{Time}} }}
@@ -1870,7 +1870,7 @@ token](#dynamic-tokens):
 ```js
 {
     "Format": "1.26.0",
-    "DynamicValues": [
+    "DynamicTokens": [
         {
             "Name": "PufferchickId",
             "Value": "{{spacechase0.jsonAssets/ObjectId: pufferchick}}"

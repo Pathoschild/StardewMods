@@ -123,7 +123,7 @@ For example, let's say you have this translation:
 
 If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_").
 You can pass in the token like this instead: `{{i18n: today |dayOfWeek={{DayOfWeek}} }}`, in which
-it'll show something like "_today is Monday_".
+case it'll show something like "_today is Monday_".
 
 ### What else can I do with translations?
 The feature is essentially a text storage system, so there's a lot of ways you can use it.
