@@ -146,7 +146,7 @@ You can list any number of patches, and you can apply multiple patches to the sa
 applied one after another in the order listed).
 
 ## Features
-**Note:** these are ordered by how often content packs use them. You don't need to know or use all
+>**Note:** these are ordered by how often content packs use them. You don't need to know or use all
 of these features.
 
 ### Actions
