@@ -165,7 +165,7 @@ a lower priority), but you won't know which ones will get them first. You can [c
 settings](#per-machine-settings) to set the priority for individual machine types and make them
 predictable.
 
-**Note**
+> **Note**
 If all higher-priority machines are busy, any remaining items may go into lower-priority
 machines.
 
