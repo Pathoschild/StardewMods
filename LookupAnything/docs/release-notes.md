@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed lookup error when a child's `daysOld` field indicates they were born before the game started.
+
 ## 1.37.2
 Released 27 May 2022 for SMAPI 3.14.0 or later.
 
