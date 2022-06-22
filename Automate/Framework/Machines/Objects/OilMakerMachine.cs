@@ -18,7 +18,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 430,
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 432, null, false, true, false, false),
+                output: input => {
+                    SObject item = new SObject(Vector2.Zero, 432, null, false, true, false, false);
+                    item.Quality = ((SObject) input).Quality;
+                    return item;
+                },
                 minutes: 360
             ),
 
@@ -36,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 inputCount: 1,
                 output: _ => new SObject(Vector2.Zero, 247, null, false, true, false, false),
                 minutes: 1000
-            ), 
+            ),
 
             // sunflower => oil
             new Recipe(

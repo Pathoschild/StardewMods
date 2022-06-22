@@ -49,12 +49,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 int seedID = SeedMakerMachine.SeedLookup[crop.Sample.ParentSheetIndex];
 
                 Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + (int)machine.TileLocation.X + (int)machine.TileLocation.Y * 77 + Game1.timeOfDay);
-                machine.heldObject.Value = new SObject(seedID, random.Next(1, 4));
+
+                // LINE ADDITION
+                int quality = ((SObject)crop.Sample).Quality;
+
+                // LOGIC CHANGE, ADD ON QUALITY
+                machine.heldObject.Value = new SObject(seedID, random.Next(1, 4) + Math.Max(quality * 2, 1));
                 if (random.NextDouble() < 0.005)
                     machine.heldObject.Value = new SObject(499, 1);
                 else if (random.NextDouble() < 0.02)
-                    machine.heldObject.Value = new SObject(770, random.Next(1, 5));
+                    machine.heldObject.Value = new SObject(770, random.Next(1, 5) + Math.Max(quality * 2, 1));
                 machine.MinutesUntilReady = 20;
+
                 return true;
             }
 

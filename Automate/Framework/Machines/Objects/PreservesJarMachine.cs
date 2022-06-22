@@ -29,6 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         preserve = { Value = SObject.PreserveType.Jelly },
                         preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
+                    jelly.Quality = ((SObject) input).Quality;
                     return jelly;
                 },
                 minutes: 4000
@@ -47,6 +48,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         preserve = { Value = SObject.PreserveType.Pickle },
                         preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
+                    item.Quality = ((SObject) input).Quality;
                     return item;
 
                 },
