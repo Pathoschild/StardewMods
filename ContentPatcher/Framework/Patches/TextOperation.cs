@@ -93,16 +93,84 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="text">The input to modify.</param>
         public string Apply(string? text)
         {
+            string? value = this.Value.Value;
+            if (value is null)
+                return text ?? "";
+
             string delimiter = string.IsNullOrEmpty(text)
                 ? ""
                 : this.Delimiter;
 
             return this.Operation switch
             {
-                TextOperationType.Append => text + delimiter + this.Value.Value,
-                TextOperationType.Prepend => this.Value.Value + delimiter + text,
+                TextOperationType.Append => this.Append(value, text, delimiter),
+                TextOperationType.Prepend => this.Prepend(value, text, delimiter),
+                TextOperationType.RemoveFirstOccurrence => this.RemoveFirstOccurrence(value, text, delimiter),
+                TextOperationType.RemoveLastOccurrence => this.RemoveLastOccurrence(value, text, delimiter),
+                TextOperationType.RemoveAllOccurrences => this.RemoveAllOccurrences(value, text, delimiter),
                 _ => throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.")
             };
+        }
+
+        private string Append(string value, string? text, string delimiter)
+        {
+            return text + delimiter + value;
+        }
+
+        private string Prepend(string value, string? text, string delimiter)
+        {
+            return value + delimiter + text;
+        }
+
+        private string RemoveFirstOccurrence(string value, string? text, string delimiter)
+        {
+            if (text is null)
+                return "";
+            if (delimiter == "")
+                return text ?? "";
+            List<string> split = text.Split(delimiter).ToList();
+            for (int i = 0; i < split.Count; i++)
+            {
+                if (split[i] == value)
+                {
+                    split.RemoveAt(i);
+                    break;
+                }
+            }
+            return string.Join(delimiter, split);
+        }
+
+        private string RemoveLastOccurrence(string value, string? text, string delimiter)
+        {
+            if (text is null)
+                return "";
+            if (delimiter == "")
+                return text ?? "";
+            List<string> split = text.Split(delimiter).ToList();
+            for (int i = split.Count - 1; i >= 0; i--)
+            {
+                if (split[i] == value)
+                {
+                    split.RemoveAt(i);
+                    break;
+                }
+            }
+            return string.Join(delimiter, split);
+        }
+
+        private string RemoveAllOccurrences(string value, string? text, string delimiter)
+        {
+            if (text is null)
+                return "";
+            if (delimiter == "")
+                return text ?? "";
+            List<string> split = text.Split(delimiter).ToList();
+            for (int i = split.Count - 1; i >= 0; i--)
+            {
+                if (split[i] == value)
+                    split.RemoveAt(i);
+            }
+            return string.Join(delimiter, split);
         }
     }
 }

@@ -33,7 +33,10 @@ Each text operation is represented by a model with these fields:
 <td><code>Operation</code></td>
 <td>
 
-The text operation to perform. One of `Append` (add text after the current value) or `Prepend` (add text before the current value).
+The text operation to perform. One of `Append` (add text after the current value), `Prepend` (add text before the current value),
+`RemoveFirstOccurrence` (remove the first occurrence of the text in the current value),
+`RemoveLastOccurrence` (remove the last occurrence of the text in the current value)
+or `RemoveAllOccurrences` (remove all the occurrences of the text in the current value).
 
 </td>
 </tr>
@@ -65,8 +68,8 @@ This field supports [tokens](../author-guide.md#tokens) and capitalisation doesn
 <td><code>Delimiter</code></td>
 <td>
 
-_(optional)_ If the target field already has a value, text to add between the previous and inserted
-values.
+_(optional / required with the `Remove*` text operations)_ Text that separates the entries in the value.
+This is the text that will be added between the previous and inserted values when appending/prepending, or the text that will be used to separate entries in the value when removing.
 
 </td>
 </tr>
@@ -101,6 +104,23 @@ Here's the same example, but appending to the existing entry using a text operat
          "Target": ["Entries", "Universal_Love"],
          "Value": "127 128",
          "Delimiter": " " // if there are already values, add a space between them and the new ones
+      }
+   ]
+}
+```
+
+Yet another example, this time removing a part of an existing entry using a text operation:
+
+```js
+{
+   "Action": "EditData",
+   "Target": "Data/NPCGiftTastes",
+   "TextOperations": [
+      {
+         "Operation": "RemoveAllOccurrences",
+         "Target": ["Entries", "Universal_Love"],
+         "Value": "74", // Prismatic Shard is no longer a universal love
+         "Delimiter": " " // the delimiter in this case is required
       }
    ]
 }
