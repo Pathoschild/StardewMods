@@ -9,11 +9,14 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed typo in PyTK compatibility message (it applies to PyTK 1.23.0 or earlier, not 1.23.1).
+
 ## 1.27.1
 Released 19 June 2022 for SMAPI 3.15.0 or later.
 
 * Fixed compatibility with PyTK's scale-up feature.  
-  _When PyTK 1.23.1 or earlier is installed, this will disable the main performance improvements in Content Patcher 1.27.0._
+  _When PyTK 1.23.0 or earlier is installed, this will disable the main performance improvements in Content Patcher 1.27.0._
 
 ## 1.27.0
 Released 17 June 2022 for SMAPI 3.15.0 or later. See the [release highlights](https://www.patreon.com/posts/67923889).

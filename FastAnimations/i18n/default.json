@@ -24,7 +24,7 @@
     "config.harvest.name": "Harvest",
     "config.harvest.tooltip": "How fast you harvest crops and forage by hand. Default {{defaultValue}}x.",
 
-    "config.horse-flute.name": "PLay Horse Flute",
+    "config.horse-flute.name": "Play Horse Flute",
     "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.",
 
     "config.milk.name": "Milk",
