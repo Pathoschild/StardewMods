@@ -36,6 +36,9 @@
     "config.shear.name": "Shear",
     "config.shear.tooltip": "How fast you use the shears. Default {{defaultValue}}x.",
 
+    "config.slingshot.name": "Use slingshot",
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+
     "config.tool.name": "Swing tool",
     "config.tool.tooltip": "How fast you swing your tools (except weapons & fishing rod). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
 

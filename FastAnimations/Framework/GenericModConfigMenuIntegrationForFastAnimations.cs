@@ -119,6 +119,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     max: maxSpeed
                 )
                 .AddNumberField(
+                    name: I18n.Config_Slingshot_Name,
+                    tooltip: () => I18n.Config_Slingshot_Tooltip(defaultValue: defaultConfig.UseSlingshotSpeed, suggestedValue: 1.1),
+                    get: config => config.UseSlingshotSpeed,
+                    set: (config, value) => config.UseSlingshotSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
+                .AddNumberField(
                     name: I18n.Config_Weapon_Name,
                     tooltip: () => I18n.Config_Weapon_Tooltip(defaultValue: defaultConfig.WeaponSwingSpeed, suggestedValue: 4),
                     get: config => config.WeaponSwingSpeed,
