@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The padding to apply to tile backgrounds to make the grid visible.</summary>
         private readonly int TileGap = 1;
 
+        /// <summary>The unique key for the current location.</summary>
+        private readonly string LocationKey;
+
         /// <summary>The machine data for the current location.</summary>
         private readonly MachineDataForLocation? MachineData;
 
@@ -32,11 +36,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
+        /// <param name="locationKey">The unique key for the current location.</param>
         /// <param name="machineData">The machine groups to display.</param>
         /// <param name="junimoGroup">The machine group for machines connected to Junimo chests.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, MachineDataForLocation? machineData, JunimoMachineGroup junimoGroup)
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, string locationKey, MachineDataForLocation? machineData, JunimoMachineGroup junimoGroup)
             : base(events, inputHelper, reflection)
         {
+            this.LocationKey = locationKey;
             this.MachineData = machineData;
             this.JunimoGroup = junimoGroup;
         }
@@ -54,6 +60,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return;
 
             // draw each tile
+            IReadOnlySet<Vector2> junimoChestTiles = this.JunimoGroup.GetTiles(this.LocationKey);
             foreach (Vector2 tile in TileHelper.GetVisibleTiles(expand: 1))
             {
                 // get tile's screen coordinates
@@ -64,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 // get machine group
                 IMachineGroup? group = null;
                 Color? color = null;
-                if (this.JunimoGroup.Tiles.Contains(tile))
+                if (junimoChestTiles.Contains(tile))
                 {
                     color = this.JunimoGroup.HasInternalAutomation
                         ? Color.Green * 0.2f
@@ -108,20 +115,22 @@ namespace Pathoschild.Stardew.Automate.Framework
             float screenY = tile.Y * Game1.tileSize - Game1.viewport.Y;
             float tileSize = Game1.tileSize;
 
+            IReadOnlySet<Vector2> tiles = group.GetTiles(this.LocationKey);
+
             // top
-            if (!group.Tiles.Contains(new Vector2(tile.X, tile.Y - 1)))
+            if (!tiles.Contains(new Vector2(tile.X, tile.Y - 1)))
                 spriteBatch.DrawLine(screenX, screenY, new Vector2(tileSize, borderSize), color); // top
 
             // bottom
-            if (!group.Tiles.Contains(new Vector2(tile.X, tile.Y + 1)))
+            if (!tiles.Contains(new Vector2(tile.X, tile.Y + 1)))
                 spriteBatch.DrawLine(screenX, screenY + tileSize, new Vector2(tileSize, borderSize), color); // bottom
 
             // left
-            if (!group.Tiles.Contains(new Vector2(tile.X - 1, tile.Y)))
+            if (!tiles.Contains(new Vector2(tile.X - 1, tile.Y)))
                 spriteBatch.DrawLine(screenX, screenY, new Vector2(borderSize, tileSize), color); // left
 
             // right
-            if (!group.Tiles.Contains(new Vector2(tile.X + 1, tile.Y)))
+            if (!tiles.Contains(new Vector2(tile.X + 1, tile.Y)))
                 spriteBatch.DrawLine(screenX + tileSize, screenY, new Vector2(borderSize, tileSize), color); // right
         }
     }

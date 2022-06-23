@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -16,6 +17,9 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>The underlying machine groups.</summary>
         private readonly List<IMachineGroup> MachineGroups = new();
+
+        /// <summary>A map of covered tiles by location key, if loaded.</summary>
+        private Dictionary<string, IReadOnlySet<Vector2>>? Tiles;
 
 
         /*********
@@ -67,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             this.Containers = Array.Empty<IContainer>();
             this.Machines = Array.Empty<IMachine>();
-            this.TilesImpl.Clear();
+            this.Tiles = null;
         }
 
         /// <summary>Remove all machine groups within the given locations.</summary>
@@ -87,7 +91,17 @@ namespace Pathoschild.Stardew.Automate.Framework
             int junimoChests = 0;
             this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
-            this.TilesImpl = new HashSet<Vector2>(this.MachineGroups.SelectMany(p => p.Tiles));
+            this.Tiles = null;
+        }
+
+        /// <inheritdoc />
+        public override IReadOnlySet<Vector2> GetTiles(string locationKey)
+        {
+            this.Tiles ??= this.BuildTileMap();
+
+            return this.Tiles.TryGetValue(locationKey, out IReadOnlySet<Vector2>? tiles)
+                ? tiles
+                : ImmutableHashSet<Vector2>.Empty;
         }
 
 
@@ -103,6 +117,23 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (!container.IsJunimoChest || ++junimoChests == 1)
                     yield return container;
             }
+        }
+
+        /// <summary>Build a map of covered tiles by location key.</summary>
+        private Dictionary<string, IReadOnlySet<Vector2>> BuildTileMap()
+        {
+            Dictionary<string, IReadOnlySet<Vector2>> tiles = new();
+
+            foreach (IGrouping<string?, IMachineGroup> groupByLocation in this.MachineGroups.GroupBy(p => p.LocationKey))
+            {
+                string? locationKey = groupByLocation.Key;
+                if (locationKey is null)
+                    continue; // ???
+
+                tiles[locationKey] = new HashSet<Vector2>(groupByLocation.SelectMany(p => p.GetTiles(locationKey)));
+            }
+
+            return tiles;
         }
     }
 }

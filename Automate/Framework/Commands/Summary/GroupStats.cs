@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
                 this.Name = "Distributed group";
             else
             {
-                Vector2 tile = machineGroup.Tiles.First();
+                Vector2 tile = machineGroup.GetTiles(machineGroup.LocationKey).FirstOrDefault();
                 this.Name = $"Group at ({tile.X}, {tile.Y})";
             }
 
