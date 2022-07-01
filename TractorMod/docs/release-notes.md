@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error using a tool on a custom terrain feature from Farm Type Manager if you haven't used the tool manually yet.
+
 ## 4.15.4
 Released 17 June 2022 for SMAPI 3.14.0 or later.
 

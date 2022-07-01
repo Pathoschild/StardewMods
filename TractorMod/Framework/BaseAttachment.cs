@@ -282,7 +282,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
                     {
                         clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
-                        applyTool = tool => feature.performToolAction(tool, 0, tile, location);
+                        applyTool = tool =>
+                        {
+                            this.Reflection.GetField<Farmer>(tool, "lastUser").SetValue(player);
+                            return feature.performToolAction(tool, 0, tile, location);
+                        };
                         return true;
                     }
                 }
