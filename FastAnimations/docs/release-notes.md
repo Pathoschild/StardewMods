@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for slingshot animations.
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
 
 ## 1.10.2
 Released 05 June 2022 for SMAPI 3.14.0 or later.
