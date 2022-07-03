@@ -36,8 +36,8 @@
     "config.shear.name": "Ножиці",
     "config.shear.tooltip": "Як швидко ви використовуєте ножиці. За замовчуванням: {{defaultValue}}x.",
 
-    "config.slingshot.name": "Use slingshot", // TODO
-    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
+    "config.slingshot.name": "Використання рогатки",
+    "config.slingshot.tooltip": "Як швидко ви малюєте, використовуючи рогатку. За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
 
     "config.tool.name": "Розмахування інструментом",
     "config.tool.tooltip": "Як швидко ви розмахуєте своїми інструментами (За винятком зброї та вудки). За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
