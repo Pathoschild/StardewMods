@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Fixed patches with tokenized `Target` fields not correctly reapplied on token change after 1.26.6.
 * Fixed typo in PyTK compatibility message (it applies to PyTK 1.23.0 or earlier, not 1.23.1).
 
 ## 1.27.1
