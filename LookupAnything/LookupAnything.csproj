@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.37.2</Version>
+    <Version>1.37.3</Version>
     <RootNamespace>Pathoschild.Stardew.LookupAnything</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 

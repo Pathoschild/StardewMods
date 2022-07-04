@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.27.3
+Released 04 July 2022 for SMAPI 3.14.0 or later.
+
 * Fixed machine scan failing if another mod adds broken furniture or terrain features.
 * Fixed overlay showing Junimo chest tiles from other locations.
 * Improved translations. Thanks to martin66789 (updated Hungarian)!
