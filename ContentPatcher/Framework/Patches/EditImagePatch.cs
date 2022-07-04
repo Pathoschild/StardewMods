@@ -167,7 +167,7 @@ namespace ContentPatcher.Framework.Patches
         private void LoadSourceImage(string fromAsset, out int width, out int height, out IRawTextureData? rawData, out Texture2D? fullTexture)
         {
             // disable raw data for .xnb files (which SMAPI can't read as raw data)
-            bool canUseRawData = !string.Equals(PathHelper.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
+            bool canUseRawData = !string.Equals(PathHelper.GetExtension(fromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
 
             // disable raw data if PyTK is installed
             if (canUseRawData && EditImagePatch.EnablePyTkLegacyMode)
