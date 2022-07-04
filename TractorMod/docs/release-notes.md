@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added compatibility warning when Harvest With Scythe is installed.
 * Fixed error using a tool on a custom terrain feature from Farm Type Manager if you haven't used the tool manually yet.
 
 ## 4.15.4
