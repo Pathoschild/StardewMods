@@ -167,7 +167,7 @@ namespace ContentPatcher.Framework.Patches
         private void LoadSourceImage(string fromAsset, out int width, out int height, out IRawTextureData? rawData, out Texture2D? fullTexture)
         {
             // disable raw data for .xnb files (which SMAPI can't read as raw data)
-            bool canUseRawData = !string.Equals(PathHelper.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
+            bool canUseRawData = !string.Equals(PathHelper.GetExtension(fromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
 
             // disable raw data if PyTK is installed
             if (canUseRawData && EditImagePatch.EnablePyTkLegacyMode)
@@ -177,7 +177,7 @@ namespace ContentPatcher.Framework.Patches
                 // current file has a '.pytk.json' rescale file though, since PyTK may still
                 // rescale it if the original asset or another edit gets rescaled.
                 canUseRawData = false;
-                this.Monitor.LogOnce("Enabled compatibility mode for PyTK 1.23.1 or earlier. This won't cause any issues, but may impact performance.", LogLevel.Warn);
+                this.Monitor.LogOnce("Enabled compatibility mode for PyTK 1.23.0 or earlier. This won't cause any issues, but may impact performance.", LogLevel.Warn);
             }
 
             // load image

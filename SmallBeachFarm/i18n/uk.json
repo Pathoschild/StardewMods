@@ -12,24 +12,24 @@
     /****
     ** Farm options
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    "config.farm-options-section": "Інші налаштування ферми",
 
     "config.beach-sounds.name": "Програвати звуки пляжу",
     "config.beach-sounds.tooltip": "Програє фонову музику на пляжі (тобто звуки хвиль) на пляжній фермі.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "Породжувати монстрів за замовч.",
+    "config.spawn-monsters.tooltip": "Значення за замовчуванням для параметра «породження монстрів уночі» під час створення нового збереження. Ви й надалі можете змінити параметр, коли створюєте нове збереження. (Не впливає на наявні збереження).",
 
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "Макет ферми",
 
     "config.campfire.name": "Додати вогнище",
     "config.campfire.tooltip": "Додає працездатне вогнище перед фермерським будинком.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "Додати рибальську пристань",
+    "config.pier.tooltip": "Додає пристань, на якій ви можете ловити рибу.",
 
     "config.islands.name": "Додати острови",
     "config.islands.tooltip": "Додає океанські острови з додатковою площею суші.",
@@ -40,12 +40,11 @@
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "Місця на фермі",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "Риболовна пристань (X координата)",
+    "config.pier-x.tooltip": "Позиція клітини за кооодинатою X, на якій слід розташувати рибальську пристань, якщо ввімкнено цей параметр. Встановіть значення координат X та Y на нуль, щоб розмістити її автоматично.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "Риболовна пристань (Y координата)",
+    "config.pier-y.tooltip": "Позиція клітини за кооодинатою Y, на якій слід розташувати рибальську пристань, якщо ввімкнено цей параметр. Встановіть значення координат X та Y на нуль, щоб розмістити її автоматично."
 }

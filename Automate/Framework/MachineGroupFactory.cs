@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -73,10 +74,11 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
-        public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location, IMonitor monitor)
         {
             MachineGroupBuilder builder = new(this.GetLocationKey(location), this.SortMachines, this.BuildStorage);
-            LocationFloodFillIndex locationIndex = new(location);
+            LocationFloodFillIndex locationIndex = new(location, monitor);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())
             {

@@ -33,6 +33,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for shearing.</summary>
         public float ShearSpeed { get; set; } = 5;
 
+        /// <summary>The speed multiplier for using slingshot.</summary>
+        public float UseSlingshotSpeed { get; set; } = 1;
+
         /// <summary>The speed multiplier for using tools.</summary>
         public float ToolSwingSpeed { get; set; } = 1;
 

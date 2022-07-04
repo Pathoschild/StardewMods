@@ -241,7 +241,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 List<IMachineGroup> active = new();
                 List<IMachineGroup> disabled = new();
                 List<IMachineGroup> junimo = new();
-                foreach (IMachineGroup group in this.Factory.GetMachineGroups(location))
+                foreach (IMachineGroup group in this.Factory.GetMachineGroups(location, this.Monitor))
                 {
                     if (!group.HasInternalAutomation)
                         disabled.Add(group);

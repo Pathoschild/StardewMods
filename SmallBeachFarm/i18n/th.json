@@ -12,7 +12,7 @@
     /****
     ** Farm options
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    "config.farm-options-section": "Other farm options", // TODO
 
     "config.beach-sounds.name": "เล่นเสียงชายหาด",
     "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด",

@@ -19,10 +19,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         private readonly Dictionary<Vector2, IAutomatable> OutdatedTilesImpl = new();
 
         /// <summary>The backing field for <see cref="ActiveTiles"/>.</summary>
-        private readonly Lazy<Dictionary<Vector2, IMachineGroup>> ActiveTilesImpl = new(() => GetTileLookup(ActiveMachineGroups));
+        private readonly Lazy<Dictionary<Vector2, IMachineGroup>> ActiveTilesImpl = new(() => GetTileLookup(LocationKey, ActiveMachineGroups));
 
         /// <summary>The backing field for <see cref="DisabledTiles"/>.</summary>
-        private readonly Lazy<Dictionary<Vector2, IMachineGroup>> DisabledTilesImpl = new(() => GetTileLookup(DisabledMachineGroups));
+        private readonly Lazy<Dictionary<Vector2, IMachineGroup>> DisabledTilesImpl = new(() => GetTileLookup(LocationKey, DisabledMachineGroups));
 
 
         /*********
@@ -112,13 +112,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Private methods
         *********/
         /// <summary>Get a lookup of machine groups by the tile positions they contain.</summary>
+        /// <param name="locationKey">The location key for which to get tiles.</param>
         /// <param name="machineGroups">The machine group to index.</param>
-        private static Dictionary<Vector2, IMachineGroup> GetTileLookup(IEnumerable<IMachineGroup> machineGroups)
+        private static Dictionary<Vector2, IMachineGroup> GetTileLookup(string locationKey, IEnumerable<IMachineGroup> machineGroups)
         {
             return
                 (
                     from machineGroup in machineGroups
-                    from tile in machineGroup.Tiles
+                    from tile in machineGroup.GetTiles(locationKey)
                     group machineGroup by tile into tileGroup
                     select tileGroup
                 )

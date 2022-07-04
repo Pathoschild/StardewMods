@@ -12,7 +12,7 @@
     /****
     ** Farm options
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    "config.farm-options-section": "Other farm options", // TODO
 
     "config.beach-sounds.name": "Plaj sesleri çal",
     "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar.",

@@ -13,9 +13,10 @@ automatically pull raw items from the chest and push processed items into it.
   * [Machine priority](#machine-priority)
   * [Machine pipelines](#machine-pipelines)
 * [Configure](#configure)
-  * [config.json](#configjson)
-  * [In-game settings](#in-game-settings)
+  * [In-game mod settings](#in-game-mod-settings)
+  * [In-game chest settings](#in-game-chest-settings)
   * [Per-machine settings](#per-machine-settings)
+  * [config.json](#configjson)
 * [Compatibility](#compatibility)
 * [Troubleshooting](#troubleshooting)
   * [In-game overlay](#in-game-overlay)
@@ -277,7 +278,7 @@ to next group  │ │  hopper  │
 </dl>
 
 ## Configure
-### In-game settings
+### In-game mod settings
 If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
 you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
 the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
@@ -285,7 +286,8 @@ section.
 
 ![](screenshots/generic-config-menu.png)
 
-Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) also lets you set
+### In-game chest settings
+Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) lets you set
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
@@ -304,6 +306,40 @@ This adds three options for Automate:
   * _Never take items from this chest._
 
 (To configure chest automation from another mod, see the [technical documentation](technical.md#can-i-change-in-game-settings-without-chests-anywhere).)
+
+### Per-machine settings
+_This is advanced; most players won't need to configure Automate to this extent._
+
+You can set some options for individual machine types by [editing the `config.json`](#configure),
+and adding an entry to the `MachineOverrides` field. If a machine isn't listed in that field, it'll
+use the default values defined in `assets/data.json`. This works for all automated machines,
+including those added by other mods.
+
+Each entry in `MachineOverrides` is identified by the internal machine type ID (_not_ the machine
+name you see in-game). You can [run the `automate summary` command](#console-commands) to see a list
+of machines being automated; the names shown in the list are the machine type IDs.
+
+
+For example:
+```js
+"MachineOverrides": {
+    "ShippingBin": {
+        "Enabled": true,
+        "Priority": -1
+    },
+    "Tapper": {
+        "Enabled": true,
+        "Priority": 0
+    },
+}
+```
+
+Available options for each machine:
+
+field | purpose
+----- | -------
+`Enabled` | Whether the machine type should be automated (default `true`).
+`Priority` | The order in which this machine should be processed relative to other machines (default `0`). Higher values are processed first for both input and output.
 
 ### config.json
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -396,40 +432,6 @@ field | result
   </td>
 </tr>
 </table>
-
-### Per-machine settings
-_This is advanced; most players won't need to configure Automate to this extent._
-
-You can set some options for individual machine types by [editing the `config.json`](#configure),
-and adding an entry to the `MachineOverrides` field. If a machine isn't listed in that field, it'll
-use the default values defined in `assets/data.json`. This works for all automated machines,
-including those added by other mods.
-
-Each entry in `MachineOverrides` is identified by the internal machine type ID (_not_ the machine
-name you see in-game). You can [run the `automate summary` command](#console-commands) to see a list
-of machines being automated; the names shown in the list are the machine type IDs.
-
-
-For example:
-```js
-"MachineOverrides": {
-    "ShippingBin": {
-        "Enabled": true,
-        "Priority": -1
-    },
-    "Tapper": {
-        "Enabled": true,
-        "Priority": 0
-    },
-}
-```
-
-Available options for each machine:
-
-field | purpose
------ | -------
-`Enabled` | Whether the machine type should be automated (default `true`).
-`Priority` | The order in which this machine should be processed relative to other machines (default `0`). Higher values are processed first for both input and output.
 
 ## Compatibility
 Automate is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and

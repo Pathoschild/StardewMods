@@ -36,6 +36,9 @@
     "config.shear.name": "剪毛",
     "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}x。",
 
+    "config.slingshot.name": "Use slingshot", // TODO
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
+
     "config.tool.name": "使用工具",
     "config.tool.tooltip": "使用工具（除去武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 

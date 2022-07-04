@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -19,9 +20,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The containers in the group.</summary>
         IContainer[] Containers { get; }
 
-        /// <summary>The tiles comprising the group.</summary>
-        IReadOnlySet<Vector2> Tiles { get; }
-
         /// <summary>Whether the machine group is linked to a Junimo chest.</summary>
         [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
         bool IsJunimoGroup { get; }
@@ -35,5 +33,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Automate the machines inside the group.</summary>
         void Automate();
+
+        /// <summary>Get the tiles covered by this machine group.</summary>
+        /// <param name="locationKey">The location key for which to get tiles.</param>
+        IReadOnlySet<Vector2> GetTiles(string locationKey);
     }
 }

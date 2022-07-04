@@ -12,7 +12,7 @@
     /****
     ** Farm options
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    "config.farm-options-section": "Other farm options", // TODO
 
     "config.beach-sounds.name": "해변 소리 재생",
     "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다.",

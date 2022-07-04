@@ -641,7 +641,7 @@ namespace ContentPatcher.Framework
                 IAssetName? curTarget = patch.TargetAsset;
                 IAssetName? prevTarget = prevValues.Target;
 
-                if (isNew || (prevTarget?.IsEquivalentTo(curTarget) ?? curTarget is not null))
+                if (isNew || (!prevTarget?.IsEquivalentTo(curTarget) ?? curTarget is not null))
                 {
                     if (this.Monitor.IsVerbose)
                         this.Monitor.Log($"[patch index: by target] {patch.Path}: {(prevTarget is not null ? $"{prevTarget} > " : "")}{patch.TargetAsset}");

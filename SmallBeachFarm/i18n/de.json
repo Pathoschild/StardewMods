@@ -12,7 +12,7 @@
     /****
     ** Farm options
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    "config.farm-options-section": "Other farm options", // TODO
 
     "config.beach-sounds.name": "Strandgeräusche abspielen",
     "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab.",

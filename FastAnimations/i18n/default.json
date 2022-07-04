@@ -24,7 +24,7 @@
     "config.harvest.name": "Harvest",
     "config.harvest.tooltip": "How fast you harvest crops and forage by hand. Default {{defaultValue}}x.",
 
-    "config.horse-flute.name": "PLay Horse Flute",
+    "config.horse-flute.name": "Play Horse Flute",
     "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.",
 
     "config.milk.name": "Milk",
@@ -35,6 +35,9 @@
 
     "config.shear.name": "Shear",
     "config.shear.tooltip": "How fast you use the shears. Default {{defaultValue}}x.",
+
+    "config.slingshot.name": "Use slingshot",
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
 
     "config.tool.name": "Swing tool",
     "config.tool.tooltip": "How fast you swing your tools (except weapons & fishing rod). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",

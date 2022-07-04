@@ -4,10 +4,10 @@
     *********/
     // main options
     "config.title.main-options": "Fő beállítások",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.enabled.name": "Engedélyezve",
+    "config.enabled.desc": "Az automatizálási funkciók engedélyezése. Ha ez ki van kapcsolva, akkor egyetlen gép sem lesz automatizálva, és az átfedés sem jelenik meg.",
     "config.junimo-huts-output-gems.name": "Drágakövek begyűjtése",
-    "config.junimo-huts-output-gems.desc": "A Junimo kunyhók begyűjtik a drágakövek. Ha igaz, akkor nem tudod majd megváltoztatni a Junimo kunyhók színét azzal, hogy drágaköveket helyezel el a kunyhókon.",
+    "config.junimo-huts-output-gems.desc": "A Junimo kunyhók begyűjtik a drágakövek. Ha igaz, akkor nem tudod majd megváltoztatni a Junimo kunyhók színét azzal, hogy drágaköveket helyezel el rajtuk.",
     "config.automation-interval.name": "Automatizálási időköz",
     "config.automation-interval.desc": "Az egyes automatizálási folyamatok közötti időközök száma (60 másodpercenként egyszer, 120 másodpercenként kétszer stb).",
     "config.toggle-overlay-key.name": "Átfedés váltó gomb",
@@ -16,7 +16,7 @@
     // mod compatibility
     "config.title.mod-compatibility": "Mod kompatibilitás",
     "config.better-junimos.name": "Jobb Junimok",
-    "config.better-junimos.desc": "Better Junimos mod kompatibilitás engedélyezése. Ha telepítve van, a Junimo kunyhók nem fognak kiadni műtrágyát és vetőmagot.",
+    "config.better-junimos.desc": "Better Junimos mod kompatibilitás engedélyezése. Ha telepítve van, a Junimo kunyhók nem fognak kiadni műtrágyát és vetőmagvat.",
     "config.warn-for-missing-bridge-mod.name": "Figyelmeztetés hiányzó mod miatt",
     "config.warn-for-missing-bridge-mod.desc": "Naplózzon-e figyelmeztetést indításkor, ha olyan egyedi gép modot telepítesz, melyhez külön kompatibilitási javítás szükséges, ami nincs telepítve.",
 
@@ -24,7 +24,7 @@
     "config.title.connectors": "Engedélyezett csatlakozók",
     "config.connector.desc": "A {{itemName}} összekapcsolja a gépeket és a ládákat.",
     "config.custom-connectors.name": "Egyedi csatlakozók",
-    "config.custom-connectors.desc": "A szomszédos gépeket összekötő elemek pontos angol neve. Több elemet is felsorolhat vesszővel elválasztva.", // Megjegyzés: A csatlakozók nevének angolnak kell lennie, még akkor is, ha más nyelvet használ.
+    "config.custom-connectors.desc": "A szomszédos gépeket összekötő elemek pontos angol neve. Több elemet is felsorolhat vesszővel elválasztva.", // Megjegyzés: A csatlakozók neveinek angolnak kell lennie, még akkor is, ha más nyelvet használsz.
 
     // machine overrides
     "config.title.machine-overrides": "Gépi felülbírálások",

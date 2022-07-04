@@ -141,6 +141,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new MountHorseHandler(config.MountOrDismountSpeed);
             if (config.ShearSpeed > 1)
                 yield return new ShearingHandler(config.ShearSpeed);
+            if (config.UseSlingshotSpeed > 1)
+                yield return new SlingshotHandler(config.UseSlingshotSpeed);
             if (config.ToolSwingSpeed > 1)
                 yield return new ToolSwingHandler(config.ToolSwingSpeed);
             if (config.WeaponSwingSpeed > 1)

@@ -165,6 +165,10 @@ namespace Pathoschild.Stardew.TractorMod
                 monitor: this.Monitor,
                 manifest: this.ModManifest
             ).Register();
+
+            // warn about incompatible mods
+            if (this.Helper.ModRegistry.IsLoaded("bcmpinc.HarvestWithScythe"))
+                this.Monitor.Log("The 'Harvest With Scythe' mod is compatible with Tractor Mod, but it may break some tractor scythe features. You can ignore this warning if you don't have any scythe issues.", LogLevel.Warn);
         }
 
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>

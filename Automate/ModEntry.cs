@@ -429,7 +429,14 @@ namespace Pathoschild.Stardew.Automate
                 this.MachineManager.ReloadQueuedLocations();
             }
 
-            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.MachineManager.GetMachineDataFor(Game1.currentLocation), this.MachineManager.JunimoMachineGroup);
+            this.CurrentOverlay ??= new OverlayMenu(
+                events: this.Helper.Events,
+                inputHelper: this.Helper.Input,
+                reflection: this.Helper.Reflection,
+                locationKey: this.MachineManager.Factory.GetLocationKey(Game1.currentLocation),
+                machineData: this.MachineManager.GetMachineDataFor(Game1.currentLocation),
+                junimoGroup: this.MachineManager.JunimoMachineGroup
+            );
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>
