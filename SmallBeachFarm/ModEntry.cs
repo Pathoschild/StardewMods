@@ -259,6 +259,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
+            if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm? farm))
+                return;
+
             // when the player first loads the save, fix the broken TV if needed
             if (Context.IsMainPlayer && Game1.currentLocation is FarmHouse farmhouse && Game1.dayOfMonth == 1 && Game1.currentSeason == "spring" && Game1.year == 1)
             {

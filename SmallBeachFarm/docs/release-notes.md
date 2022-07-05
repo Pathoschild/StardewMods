@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed TV replacement applied to other farm types.
+
 ## 2.4.1
 Released 04 July 2022 for SMAPI 3.14.0 or later.
 
