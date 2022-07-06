@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
 using StardewModdingAPI;
@@ -234,6 +235,14 @@ namespace Pathoschild.Stardew.SkipIntro
             // skip animation
             while (TitleMenu.subMenu == null)
                 menu.update(Game1.currentGameTime);
+
+            // prevent a crash in CoopMenu.gameWindowSizeChanged if it's called before connectionFinished
+            if (TitleMenu.subMenu is CoopMenu { joinTab: null } coop)
+            {
+                coop.joinTab = new ClickableComponent(Rectangle.Empty, "");
+                coop.hostTab = new ClickableComponent(Rectangle.Empty, "");
+                coop.refreshButton = new ClickableComponent(Rectangle.Empty, "");
+            }
 
             // set next step
             return this.Config.SkipTo == Screen.HostCoop
