@@ -508,6 +508,16 @@ You can edit Tractor Mod's textures by patching two assets:
 Only edits (i.e. `EditImage` in content packs or `IAssetEditor` in C#) are allowed. Tractor Mod
 will load the base asset itself to ensure compatibility.
 
+For example, here's how you'd edit the tractor sprite using [Content Patcher](https://stardewvalleywiki.com/Modding:Content_Patcher):
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Mods/Pathoschild.TractorMod/Tractor",
+   "FromFile": "assets/custom-tractor.png"
+}
+```
+
 ## Compatibility
 Tractor Mod is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer.
