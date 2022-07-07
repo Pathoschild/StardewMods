@@ -96,7 +96,17 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
-            if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
+            if (this.SummonKey.JustPressed())
+            {
+                this.SummonHorse();
+                this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
+            }
+        }
+
+        /// <summary>Summons the horse.</summary>
+        private void SummonHorse()
+        {
+            if (this.CanPlayFlute(Game1.player))
             {
                 int[] warpRestrictions = Utility.GetHorseWarpRestrictionsForFarmer(Game1.player).ToArray();
 
@@ -107,8 +117,6 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                 }
                 else
                     this.HorseFlute.Value.performUseAction(Game1.currentLocation);
-
-                this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
             }
         }
 

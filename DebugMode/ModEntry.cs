@@ -110,9 +110,7 @@ namespace Pathoschild.Stardew.DebugMode
             // toggle debug menu
             if (this.Keys.ToggleDebug.JustPressed())
             {
-                this.ShowOverlay.Value = !this.ShowOverlay.Value;
-                if (this.Config.AllowGameDebug)
-                    this.GameDebugMode = !this.GameDebugMode;
+                this.ToggleDebugMenu();
             }
 
             // suppress dangerous actions
@@ -124,6 +122,14 @@ namespace Pathoschild.Stardew.DebugMode
                         this.Helper.Input.Suppress(button);
                 }
             }
+        }
+
+        /// <summary>Toggles the debug menu.</summary>
+        private void ToggleDebugMenu()
+        {
+            this.ShowOverlay.Value = !this.ShowOverlay.Value;
+            if (this.Config.AllowGameDebug)
+                this.GameDebugMode = !this.GameDebugMode;
         }
 
         /// <inheritdoc cref="IPlayerEvents.Warped"/>

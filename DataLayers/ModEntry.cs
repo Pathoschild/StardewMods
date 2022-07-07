@@ -162,16 +162,7 @@ namespace Pathoschild.Stardew.DataLayers
                 // toggle overlay
                 if (keys.ToggleLayer.JustPressed())
                 {
-                    if (overlayVisible)
-                    {
-                        this.CurrentOverlay.Value!.Dispose();
-                        this.CurrentOverlay.Value = null;
-                    }
-                    else
-                    {
-                        this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
-                        this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
-                    }
+                    this.ToggleLayers();
                     this.Helper.Input.SuppressActiveKeybinds(keys.ToggleLayer);
                 }
 
@@ -204,6 +195,21 @@ namespace Pathoschild.Stardew.DataLayers
                     }
                 }
             });
+        }
+
+        /// <summary>Toggles the data layers.</summary>
+        private void ToggleLayers()
+        {
+            if (this.CurrentOverlay.Value != null)
+            {
+                this.CurrentOverlay.Value!.Dispose();
+                this.CurrentOverlay.Value = null;
+            }
+            else
+            {
+                this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
+            }
         }
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
