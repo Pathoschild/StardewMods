@@ -176,7 +176,6 @@
     /****
     ** Other
     ****/
-    // TODO
     "config.milk-pail.name": "Abilita il secchio del latte",
     "config.milk-pail.tooltip": "Scegli se vuoi raccogliere il latte dagli animali della fattoria usando il secchio del latte.",
 
