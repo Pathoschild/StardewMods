@@ -817,7 +817,7 @@ namespace ContentPatcher.Framework
                     return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set when using the {Enum.GetName(operationType)} text operation.", out error);
 
                 // create text operation entry
-                textOperations.Add(new TextOperation(operationType, target, value, operation.Delimiter));
+                textOperations.Add(new AppendOrPrependTextOperation(operationType, target, value, operation.Delimiter));
             }
 
             error = null;

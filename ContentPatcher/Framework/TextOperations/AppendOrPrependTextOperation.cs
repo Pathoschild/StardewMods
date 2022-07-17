@@ -5,8 +5,8 @@ using ContentPatcher.Framework.Constants;
 
 namespace ContentPatcher.Framework.TextOperations
 {
-    /// <summary>An entry in an edit patch to perform a text operation over an existing value.</summary>
-    internal class TextOperation : BaseTextOperation
+    /// <summary>A text operation which appends or prepends text to a field's current value.</summary>
+    internal class AppendOrPrependTextOperation : BaseTextOperation
     {
         /*********
         ** Accessors
@@ -26,7 +26,7 @@ namespace ContentPatcher.Framework.TextOperations
         /// <param name="target">The specific text field to change as a breadcrumb path. Each value in the list represents a field to navigate into.</param>
         /// <param name="value">The value to append or prepend.</param>
         /// <param name="delimiter">If the target field already has a value, text to add between the previous and inserted values, if any.</param>
-        public TextOperation(TextOperationType operation, ICollection<IManagedTokenString> target, IManagedTokenString value, string? delimiter)
+        public AppendOrPrependTextOperation(TextOperationType operation, ICollection<IManagedTokenString> target, IManagedTokenString value, string? delimiter)
             : base(operation, target)
         {
             this.Value = value;
