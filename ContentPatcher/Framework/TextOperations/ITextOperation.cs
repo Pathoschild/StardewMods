@@ -23,6 +23,6 @@ namespace ContentPatcher.Framework.TextOperations
 
         /// <summary>Get a copy of the input with the text operation applied.</summary>
         /// <param name="text">The input to modify.</param>
-        string Apply(string? text);
+        string? Apply(string? text);
     }
 }

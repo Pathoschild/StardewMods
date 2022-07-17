@@ -11,10 +11,10 @@ namespace ContentPatcher.Framework.TextOperations
         ** Accessors
         *********/
         /// <summary>The value to append or prepend.</summary>
-        public ITokenString Value { get; set; }
+        public ITokenString Value { get; }
 
         /// <summary>If the target field already has a value, text to add between the previous and inserted values, if any.</summary>
-        public string Delimiter { get; set; }
+        public string Delimiter { get; }
 
 
         /*********

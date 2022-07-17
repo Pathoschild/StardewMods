@@ -117,7 +117,7 @@ Yet another example, this time removing a part of an existing entry using a text
    "Target": "Data/NPCGiftTastes",
    "TextOperations": [
       {
-         "Operation": "RemoveAllOccurrences",
+         "Operation": "RemoveDelimited",
          "Target": ["Entries", "Universal_Love"],
          "Value": "74", // Prismatic Shard is no longer a universal love
          "Delimiter": " " // the delimiter in this case is required

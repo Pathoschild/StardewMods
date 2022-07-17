@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Constants;
@@ -11,11 +10,14 @@ namespace ContentPatcher.Framework.TextOperations
         /*********
         ** Accessors
         *********/
-        /// <summary>The value to append or prepend.</summary>
-        public ITokenString Value { get; set; }
+        /// <summary>The value to remove from the text.</summary>
+        public ITokenString Search { get; }
 
-        /// <summary>If the target field already has a value, text to add between the previous and inserted values, if any.</summary>
-        public string Delimiter { get; set; }
+        /// <summary>The text between values in a delimited string.</summary>
+        public string Delimiter { get; }
+
+        /// <summary>Which delimited values should be removed.</summary>
+        public TextOperationReplaceMode ReplaceMode { get; }
 
 
         /*********
@@ -24,86 +26,70 @@ namespace ContentPatcher.Framework.TextOperations
         /// <summary>Construct an instance.</summary>
         /// <param name="operation">The text operation to perform.</param>
         /// <param name="target">The specific text field to change as a breadcrumb path. Each value in the list represents a field to navigate into.</param>
-        /// <param name="value">The value to append or prepend.</param>
-        /// <param name="delimiter">If the target field already has a value, text to add between the previous and inserted values, if any.</param>
-        public RemoveDelimitedTextOperation(TextOperationType operation, ICollection<IManagedTokenString> target, IManagedTokenString value, string? delimiter)
+        /// <param name="search">The value to remove from the text.</param>
+        /// <param name="delimiter">The text between values in a delimited string.</param>
+        /// <param name="replaceMode">Which delimited values should be removed.</param>
+        public RemoveDelimitedTextOperation(TextOperationType operation, ICollection<IManagedTokenString> target, IManagedTokenString search, string delimiter, TextOperationReplaceMode replaceMode)
             : base(operation, target)
         {
-            this.Value = value;
-            this.Delimiter = delimiter ?? string.Empty;
+            this.Search = search;
+            this.Delimiter = delimiter;
+            this.ReplaceMode = replaceMode;
 
-            this.Contextuals.Add(value);
+            this.Contextuals.Add(search);
         }
 
         /// <inheritdoc />
-        public override string Apply(string? text)
+        public override string? Apply(string? text)
         {
-            string? value = this.Value.Value;
-            if (value is null)
-                return text ?? "";
+            if (string.IsNullOrEmpty(text))
+                return text;
 
-            string delimiter = string.IsNullOrEmpty(text)
-                ? ""
-                : this.Delimiter;
+            // get search
+            string? search = this.Search.Value;
+            if (search is null)
+                return text!;
 
-            return this.Operation switch
+            // apply
+            List<string> values = text.Split(this.Delimiter).ToList();
+            bool replaced = false;
+            switch (this.ReplaceMode)
             {
-                TextOperationType.RemoveFirstOccurrence => this.RemoveFirstOccurrence(value, text, delimiter),
-                TextOperationType.RemoveLastOccurrence => this.RemoveLastOccurrence(value, text, delimiter),
-                TextOperationType.RemoveAllOccurrences => this.RemoveAllOccurrences(value, text, delimiter),
-                _ => throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.")
-            };
-        }
-
-        private string RemoveFirstOccurrence(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = 0; i < split.Count; i++)
-            {
-                if (split[i] == value)
-                {
-                    split.RemoveAt(i);
+                case TextOperationReplaceMode.First:
+                    for (int i = 0; i < values.Count; i++)
+                    {
+                        if (values[i] == search)
+                        {
+                            replaced = true;
+                            values.RemoveAt(i);
+                            break;
+                        }
+                    }
                     break;
-                }
-            }
-            return string.Join(delimiter, split);
-        }
 
-        private string RemoveLastOccurrence(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = split.Count - 1; i >= 0; i--)
-            {
-                if (split[i] == value)
-                {
-                    split.RemoveAt(i);
+                case TextOperationReplaceMode.Last:
+                case TextOperationReplaceMode.All:
+                    {
+                        bool removeAll = this.ReplaceMode == TextOperationReplaceMode.All;
+
+                        for (int i = values.Count - 1; i >= 0; i--)
+                        {
+                            if (values[i] == search)
+                            {
+                                replaced = true;
+                                values.RemoveAt(i);
+                                if (!removeAll)
+                                    break;
+                            }
+                        }
+                    }
                     break;
-                }
             }
-            return string.Join(delimiter, split);
-        }
 
-        private string RemoveAllOccurrences(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = split.Count - 1; i >= 0; i--)
-            {
-                if (split[i] == value)
-                    split.RemoveAt(i);
-            }
-            return string.Join(delimiter, split);
+            // update field
+            return replaced
+                ? string.Join(this.Delimiter, values)
+                : text;
         }
     }
 }

@@ -68,7 +68,7 @@ namespace ContentPatcher.Framework.TextOperations
 
         /// <summary>Get a copy of the input with the text operation applied.</summary>
         /// <param name="text">The input to modify.</param>
-        public abstract string Apply(string? text);
+        public abstract string? Apply(string? text);
 
 
         /*********

@@ -24,17 +24,17 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            // 1.28 adds Remove(First/Last/All)Occurrence(s) TextOperations
+            // 1.28 adds the RemoveDelimited text operation
             foreach (PatchConfig? patch in content.Changes)
             {
                 if (this.HasAction(patch, PatchType.EditData))
                 {
                     foreach (TextOperationConfig? operation in patch.TextOperations)
                     {
-                        var operationType = this.GetEnum<TextOperationType>(operation?.Operation);
-                        if (operationType is TextOperationType.RemoveFirstOccurrence or TextOperationType.RemoveLastOccurrence or TextOperationType.RemoveAllOccurrences)
+                        TextOperationType? operationType = this.GetEnum<TextOperationType>(operation?.Operation);
+                        if (operationType is TextOperationType.RemoveDelimited)
                         {
-                            error = this.GetNounPhraseError($"using {Enum.GetName(operationType.Value)} {nameof(operation.Operation)}");
+                            error = this.GetNounPhraseError($"using {nameof(patch.TextOperations)} of type {operationType.Value}");
                             return false;
                         }
                     }

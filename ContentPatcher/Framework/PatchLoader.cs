@@ -812,22 +812,44 @@ namespace ContentPatcher.Framework
                 if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string? valueError, out IManagedTokenString? value))
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
+                // parse search
+                if (!tokenParser.TryParseString(operation.Search, assumeModIds, localPath.With(nameof(operation.Search)), out string? searchError, out IManagedTokenString? search))
+                    return Fail($"{errorPrefix}: the {nameof(operation.Search)} value '{operation.Search}' couldn't be parsed: {searchError}", out error);
+
+                // parse replace mode
+                TextOperationReplaceMode replaceMode;
+                if (operation.ReplaceMode is null)
+                    replaceMode = TextOperationReplaceMode.All;
+                else if (!Enum.TryParse(operation.ReplaceMode, true, out replaceMode))
+                    return Fail($"{errorPrefix}: invalid {nameof(operation.ReplaceMode)} value '{operation.ReplaceMode}', expected one of: {string.Join(", ", Enum.GetNames(typeof(TextOperationReplaceMode)))}", out error);
+
                 // get operation instance
                 ITextOperation parsedOperation;
                 switch (operationType)
                 {
                     case TextOperationType.Append:
                     case TextOperationType.Prepend:
-                        parsedOperation = new AppendOrPrependTextOperation(operationType, target, value, operation.Delimiter);
+                        parsedOperation = new AppendOrPrependTextOperation(
+                            operation: operationType,
+                            target: target,
+                            value: value,
+                            delimiter: operation.Delimiter
+                        );
                         break;
 
-                    case TextOperationType.RemoveAllOccurrences:
-                    case TextOperationType.RemoveFirstOccurrence:
-                    case TextOperationType.RemoveLastOccurrence:
+                    case TextOperationType.RemoveDelimited:
                         if (string.IsNullOrEmpty(operation.Delimiter))
-                            return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set when using the {Enum.GetName(operationType)} text operation.", out error);
+                            return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set for a {operationType} text operation.", out error);
+                        if (string.IsNullOrWhiteSpace(search.Raw))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Search)} value must be set for a {operationType} text operation.", out error);
 
-                        parsedOperation = new RemoveDelimitedTextOperation(operationType, target, value, operation.Delimiter);
+                        parsedOperation = new RemoveDelimitedTextOperation(
+                            operation: operationType,
+                            target: target,
+                            search: search,
+                            delimiter: operation.Delimiter,
+                            replaceMode: replaceMode
+                        );
                         break;
 
                     default:
