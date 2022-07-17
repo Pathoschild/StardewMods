@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Constants;
 
 namespace ContentPatcher.Framework.TextOperations
@@ -48,42 +47,65 @@ namespace ContentPatcher.Framework.TextOperations
             // get search
             string? search = this.Search.Value;
             if (search is null)
-                return text!;
+                return text;
 
             // apply
-            List<string> values = text.Split(this.Delimiter).ToList();
+            IReadOnlyList<string> values = text.Split(this.Delimiter);
             bool replaced = false;
-            switch (this.ReplaceMode)
             {
-                case TextOperationReplaceMode.First:
-                    for (int i = 0; i < values.Count; i++)
-                    {
-                        if (values[i] == search)
-                        {
-                            replaced = true;
-                            values.RemoveAt(i);
-                            break;
-                        }
-                    }
-                    break;
-
-                case TextOperationReplaceMode.Last:
-                case TextOperationReplaceMode.All:
-                    {
-                        bool removeAll = this.ReplaceMode == TextOperationReplaceMode.All;
-
-                        for (int i = values.Count - 1; i >= 0; i--)
+                int prevCount = values.Count;
+                switch (this.ReplaceMode)
+                {
+                    case TextOperationReplaceMode.First:
+                        for (int i = 0; i < prevCount; i++)
                         {
                             if (values[i] == search)
                             {
+                                List<string> modified = new(values);
+                                modified.RemoveAt(i);
+                                values = modified;
+
                                 replaced = true;
-                                values.RemoveAt(i);
-                                if (!removeAll)
-                                    break;
+                                break;
                             }
                         }
-                    }
-                    break;
+                        break;
+
+                    case TextOperationReplaceMode.Last:
+                        for (int i = prevCount - 1; i >= 0; i--)
+                        {
+                            if (values[i] == search)
+                            {
+                                List<string> modified = new(values);
+                                modified.RemoveAt(i);
+                                values = modified;
+
+                                replaced = true;
+                                break;
+                            }
+                        }
+                        break;
+
+                    case TextOperationReplaceMode.All:
+                        {
+                            List<string>? modified = null;
+
+                            for (int i = prevCount - 1; i >= 0; i--)
+                            {
+                                if (values[i] == search)
+                                {
+                                    modified ??= new List<string>(values);
+                                    modified.RemoveAt(i);
+
+                                    replaced = true;
+                                }
+                            }
+
+                            if (modified is not null)
+                                values = modified;
+                        }
+                        break;
+                }
             }
 
             // update field
