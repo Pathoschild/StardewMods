@@ -10,9 +10,9 @@
     ** Generic Mod Config Menu UI
     *********/
     "config.title.general-options": "Opzioni generali",
-    "config.enabled-message.name": "Mostra messaggi abilitati",
+    "config.enabled-message.name": "Mostra quando abilitato",
     "config.enabled-message.desc": "Scegli se mostrare un messaggio di gioco nell'angolo dello schermo quando la modalità noclip è abilitata.",
-    "config.disabled-message.name": "Mostra messaggi disabilitati",
+    "config.disabled-message.name": "Mostra quando disabilitato",
     "config.disabled-message.desc": "Scegli se mostrare un messaggio di gioco nell'angolo dello schermo quando la modalità noclip è disabilitata.",
 
     "config.title.controls": "Controlli",
