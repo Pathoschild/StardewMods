@@ -96,20 +96,8 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
-            if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
-            {
-                int[] warpRestrictions = Utility.GetHorseWarpRestrictionsForFarmer(Game1.player).ToArray();
-
-                if (warpRestrictions.Length == 1 && warpRestrictions[0] == 2 && this.TryFallbackSummonHorse())
-                {
-                    // GetHorseWarpRestrictionsForFarmer patch failed (usually on macOS), but we
-                    // were able to fallback to summoning the horse manually.
-                }
-                else
-                    this.HorseFlute.Value.performUseAction(Game1.currentLocation);
-
+            if (this.SummonKey.JustPressed() && this.TryUseHorseFlute())
                 this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
-            }
         }
 
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
@@ -145,6 +133,25 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)
             if (Game1.CurrentEvent != null)
                 Game1.player.mount.dismount();
+        }
+
+        /// <summary>Use the horse flute, if allowed in the current context.</summary>
+        /// <returns>Returns whether the horse flute was used.</returns>
+        private bool TryUseHorseFlute()
+        {
+            if (!this.CanPlayFlute(Game1.player))
+                return false;
+
+            int[] warpRestrictions = Utility.GetHorseWarpRestrictionsForFarmer(Game1.player).ToArray();
+            if (warpRestrictions.Length == 1 && warpRestrictions[0] == 2 && this.TryFallbackSummonHorse())
+            {
+                // GetHorseWarpRestrictionsForFarmer patch failed (usually on macOS), but we
+                // were able to fallback to summoning the horse manually.
+            }
+            else
+                this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+
+            return true;
         }
 
         /// <summary>Summon the horse manually if the <see cref="UtilityPatcher.After_GetHorseWarpRestrictionsForFarmer"/> patch isn't working for some reason.</summary>
