@@ -812,12 +812,30 @@ namespace ContentPatcher.Framework
                 if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string? valueError, out IManagedTokenString? value))
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
-                // validate delimiter for `Remove*` text operations
-                if (operationType is TextOperationType.RemoveFirstOccurrence or TextOperationType.RemoveLastOccurrence or TextOperationType.RemoveAllOccurrences && string.IsNullOrEmpty(operation.Delimiter))
-                    return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set when using the {Enum.GetName(operationType)} text operation.", out error);
+                // get operation instance
+                ITextOperation parsedOperation;
+                switch (operationType)
+                {
+                    case TextOperationType.Append:
+                    case TextOperationType.Prepend:
+                        parsedOperation = new AppendOrPrependTextOperation(operationType, target, value, operation.Delimiter);
+                        break;
+
+                    case TextOperationType.RemoveAllOccurrences:
+                    case TextOperationType.RemoveFirstOccurrence:
+                    case TextOperationType.RemoveLastOccurrence:
+                        if (string.IsNullOrEmpty(operation.Delimiter))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set when using the {Enum.GetName(operationType)} text operation.", out error);
+
+                        parsedOperation = new RemoveDelimitedTextOperation(operationType, target, value, operation.Delimiter);
+                        break;
+
+                    default:
+                        return Fail($"{errorPrefix}: unsupported text operation type '{operationType}'", out error);
+                }
 
                 // create text operation entry
-                textOperations.Add(new AppendOrPrependTextOperation(operationType, target, value, operation.Delimiter));
+                textOperations.Add(parsedOperation);
             }
 
             error = null;

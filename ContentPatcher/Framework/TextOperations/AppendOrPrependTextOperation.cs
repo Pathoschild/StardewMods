@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Constants;
 
 namespace ContentPatcher.Framework.TextOperations
@@ -35,8 +34,7 @@ namespace ContentPatcher.Framework.TextOperations
             this.Contextuals.Add(value);
         }
 
-        /// <summary>Get a copy of the input with the text operation applied.</summary>
-        /// <param name="text">The input to modify.</param>
+        /// <inheritdoc />
         public override string Apply(string? text)
         {
             string? value = this.Value.Value;
@@ -51,62 +49,8 @@ namespace ContentPatcher.Framework.TextOperations
             {
                 TextOperationType.Append => text + delimiter + value,
                 TextOperationType.Prepend => value + delimiter + text,
-                TextOperationType.RemoveFirstOccurrence => this.RemoveFirstOccurrence(value, text, delimiter),
-                TextOperationType.RemoveLastOccurrence => this.RemoveLastOccurrence(value, text, delimiter),
-                TextOperationType.RemoveAllOccurrences => this.RemoveAllOccurrences(value, text, delimiter),
                 _ => throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.")
             };
-        }
-
-        private string RemoveFirstOccurrence(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = 0; i < split.Count; i++)
-            {
-                if (split[i] == value)
-                {
-                    split.RemoveAt(i);
-                    break;
-                }
-            }
-            return string.Join(delimiter, split);
-        }
-
-        private string RemoveLastOccurrence(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = split.Count - 1; i >= 0; i--)
-            {
-                if (split[i] == value)
-                {
-                    split.RemoveAt(i);
-                    break;
-                }
-            }
-            return string.Join(delimiter, split);
-        }
-
-        private string RemoveAllOccurrences(string value, string? text, string delimiter)
-        {
-            if (text is null)
-                return "";
-            if (delimiter == "")
-                return text ?? "";
-            List<string> split = text.Split(delimiter).ToList();
-            for (int i = split.Count - 1; i >= 0; i--)
-            {
-                if (split[i] == value)
-                    split.RemoveAt(i);
-            }
-            return string.Join(delimiter, split);
         }
     }
 }
