@@ -197,7 +197,20 @@ namespace Pathoschild.Stardew.DataLayers
             });
         }
 
-        /// <summary>Toggles the data layers.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
+        {
+            DataLayerOverlay? overlay = this.CurrentOverlay.Value;
+            if (overlay != null)
+            {
+                overlay.Update();
+                this.LastLayerId = overlay.CurrentLayer.Id;
+            }
+        }
+
+        /// <summary>Toggle the overlay.</summary>
         private void ToggleLayers()
         {
             if (this.CurrentOverlay.Value != null)
@@ -209,19 +222,6 @@ namespace Pathoschild.Stardew.DataLayers
             {
                 this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
                 this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
-            }
-        }
-
-        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
-        {
-            DataLayerOverlay? overlay = this.CurrentOverlay.Value;
-            if (overlay != null)
-            {
-                overlay.Update();
-                this.LastLayerId = overlay.CurrentLayer.Id;
             }
         }
 
