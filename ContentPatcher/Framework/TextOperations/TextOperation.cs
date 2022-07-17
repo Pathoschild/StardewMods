@@ -5,10 +5,10 @@ using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
-namespace ContentPatcher.Framework.Patches
+namespace ContentPatcher.Framework.TextOperations
 {
     /// <summary>An entry in an edit patch to perform a text operation over an existing value.</summary>
-    internal class TextOperation : IContextual
+    internal class TextOperation : ITextOperation
     {
         /*********
         ** Fields

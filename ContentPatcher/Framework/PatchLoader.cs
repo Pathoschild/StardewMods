@@ -8,6 +8,7 @@ using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
@@ -512,7 +513,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // save
@@ -668,7 +669,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // read from/to asset areas
@@ -757,7 +758,7 @@ namespace ContentPatcher.Framework
         /// <param name="textOperations">The parsed text operations.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, [NotNullWhen(false)] out string? error)
+        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<ITextOperation> textOperations, [NotNullWhen(false)] out string? error)
         {
             bool Fail(string reason, out string outReason)
             {
@@ -766,7 +767,7 @@ namespace ContentPatcher.Framework
             }
 
             // get empty list
-            textOperations = new List<TextOperation>();
+            textOperations = new List<ITextOperation>();
             if (!patch.TextOperations.Any())
             {
                 error = null;
@@ -798,7 +799,7 @@ namespace ContentPatcher.Framework
                 List<IManagedTokenString> target = new List<IManagedTokenString>();
                 foreach (string? field in operation.Target)
                 {
-                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
+                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperationConfig.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
                         return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
                     target.Add(parsed);
                 }
