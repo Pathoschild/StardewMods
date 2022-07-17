@@ -24,11 +24,11 @@
     "label.automate-options": "Automatizza",
     "label.automate-store": "Metti gli oggetti in questo baule",
     "label.automate-store-first": "Metti prima gli oggetti nel baule",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "Non mettere mai oggetti in questo baule",
     "label.automate-take": "Prendi oggetti da questo baule",
     "label.automate-take-first": "Prendi prima gli oggetti da questo baule",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
+    "label.automate-take-disabled": "Non prendere mai oggetti da questo baule",
+    "label.automate-prevent-remove-stacks": "Evita di rimuovere l'ultimo oggetto da un mucchio",
 
     // button labels
     "button.edit-chest": "modifica baule",
@@ -50,52 +50,48 @@
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.show-hover-tooltips.name": "Show hover tooltips",
-    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
-    "config.enable-shipping-bin.name": "Enable shipping bin",
-    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
-    "config.add-organize-player-items.name": "Add organize player items button",
-    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
-    "config.range.name": "Range",
-    "config.range.desc": "The range at which chests are accessible through the menu.",
-    "config.range.unlimited": "All chests",
-    "config.range.currentWorldArea": "Chests within the current world area",
-    "config.range.currentLocation": "Chests within the current location",
-    "config.range.none": "None (can't access chests remotely)",
+    "config.title.general-options": "Opzioni generali",
+    "config.show-hover-tooltips.name": "Mostra consigli al passaggio del mouse",
+    "config.show-hover-tooltips.desc": "Scegli se mostrare il nome del baule in un consiglio quando si indica un baule.",
+    "config.enable-shipping-bin.name": "Abilita Cassetta delle Spedizioni",
+    "config.enable-shipping-bin.desc": "Scegli se abilitare l'accesso alla cassetta delle spedizioni.",
+    "config.add-organize-player-items.name": "Aggiungi il pulsante per organizzare gli elementi del giocatore",
+    "config.add-organize-player-items.desc": "Scegli se aggiungere o meno un pulsante 'organizza' nell'IU dei bauli per l'inventario del giocatore.",
+    "config.range.name": "Raggio",
+    "config.range.desc": "Il raggio a cui i bauli sono accessibili attraverso il menu.",
+    "config.range.unlimited": "Tutti i bauli",
+    "config.range.currentWorldArea": "Bauli nell'area del mondo attuale",
+    "config.range.currentLocation": "Bauli all'interno della posizione attuale",
+    "config.range.none": "Nessuno (non si può accedere ai bauli da remoto)",
 
     // general controls
-    // TODO
-    "config.title.general-controls": "General controls",
-    "config.toggle-ui-key.name": "Toggle UI",
-    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+    "config.title.general-controls": "Controlli generali",
+    "config.toggle-ui-key.name": "Attiva IU",
+    "config.toggle-ui-key.desc": "I tasti che mostrano o nascondono l'interfaccia utente dello scrigno.",
 
     // controls when chest UI is open
-    // TODO
-    "config.title.menu-controls": "Controls when chest UI is open",
-    "config.edit-chest.name": "Edit chest",
-    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
-    "config.sort-items.name": "Sort items",
-    "config.sort-items.desc": "The keys which sort items in the current chest.",
-    "config.navigate-prev-chest.name": "Navigate: previous chest",
-    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
-    "config.navigate-next-chest.name": "Navigate: next chest",
-    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
-    "config.navigate-prev-category.name": "Navigate: previous category",
-    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
-    "config.navigate-next-category.name": "Navigate: next category",
-    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
-    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
-    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
-    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+    "config.title.menu-controls": "Controlla quando l'interfaccia utente del baule è aperta",
+    "config.edit-chest.name": "Modifica baule",
+    "config.edit-chest.desc": "I tasti che modificano le opzioni del baule attuale.",
+    "config.sort-items.name": "Ordina gli oggetti",
+    "config.sort-items.desc": "I tasti che ordinano gli oggetti nel baule attuale.",
+    "config.navigate-prev-chest.name": "Naviga: baule precedente",
+    "config.navigate-prev-chest.desc": "I tasti che consentono di passare al baule precedente quando il menu è aperto.",
+    "config.navigate-next-chest.name": "Naviga: baule successivo",
+    "config.navigate-next-chest.desc": "I tasti che consentono di passare al baule successivo quando il menu è aperto.",
+    "config.navigate-prev-category.name": "Naviga: categoria precedente",
+    "config.navigate-prev-category.desc": "I tasti che consentono di passare alla categoria precedente quando il menu è aperto.",
+    "config.navigate-next-category.name": "Naviga: categoria successiva",
+    "config.navigate-next-category.desc": "I tasti che consentono di passare alla categoria successiva quando il menu è aperto.",
+    "config.hold-to-scroll-categories.name": "Tieni premuto per scorrere le categorie",
+    "config.hold-to-scroll-categories.desc": "I tasti che, se tenuti premuti, consentono di scorrere il menu a tendina delle categorie con la rotella del mouse.",
+    "config.hold-to-scroll-chests.name": "Tieni premuto per scorrere i bauli",
+    "config.hold-to-scroll-chests.desc": "I tasti che, se tenuti premuti, consentono di scorrere il menu a tendina dei bauli con la rotella del mouse.",
 
     // disable in locations
-    // TODO
-    "config.title.disable-in-locations": "Disable in locations",
-    "config.disable-mines.name": "Mines and Skull Cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
-    "config.disable-custom-names.name": "Custom location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+    "config.title.disable-in-locations": "Disattiva nelle località",
+    "config.disable-mines.name": "Miniere e Caverna del Teschio",
+    "config.disable-mines.desc": "Scegli se disattivare l'accesso ai forzieri nelle miniere o nella Caverna del Teschio.",
+    "config.disable-custom-names.name": "Nomi personalizzati di luoghi",
+    "config.disable-custom-names.desc": "I nomi interni (come mostrato dalla modalità Debug) delle posizioni da cui disabilitare l'accesso ai forzieri. È possibile elencarne di diversi con le virgole."
 }
