@@ -3,22 +3,22 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    "config.title.main-options": "Haupt Optionen",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
-    "config.junimo-huts-output-gems.name": "Junimo Hütten geben Edelsteine aus",
-    "config.junimo-huts-output-gems.desc": "Ob man Edelsteine aus den Junimo Hütten ziehen kann. Wenn dies der Fall ist, können die Farben der Junimo nicht mehr verändert werden, indem man Edelsteine in ihre Hütte legt.",
-    "config.automation-interval.name": "Automatisierung Intervall",
-    "config.automation-interval.desc": "Die Anzahl der Ticks zwischen den einzelnen Automatisierungsprozessen (60 für einmal pro Sekunde, 120 für alle zwei Sekunden, usw.).",
-    "config.toggle-overlay-key.name": "Umschaltbare Overlay Taste",
-    "config.toggle-overlay-key.desc": "Die Tasten, mit denen das Automatisierungs Overlay umgeschaltet wird.",
+    "config.title.main-options": "Haupt-Optionen",
+    "config.enabled.name": "Aktiviert",
+    "config.enabled.desc": "Ob automatisierte Funktionen verwendet werden sollen. Wenn deaktiviert werden Maschinen nicht automatisiert und das Overlay erscheint nicht.",
+    "config.junimo-huts-output-gems.name": "Junimo-Hütten geben Edelsteine aus",
+    "config.junimo-huts-output-gems.desc": "Ob Edelsteine aus Junimo-Hütten gezogen werden können. Ist dies der Fall, können die Farben von Junimos nicht mehr verändert werden, indem man Edelsteine in ihre Hütte legt.",
+    "config.automation-interval.name": "Automatisierungs-Intervall",
+    "config.automation-interval.desc": "Die Anzahl der Ticks zwischen den einzelnen Automatisierungsprozessen (60: 1x pro Sekunde, 120: alle zwei Sekunden usw.).",
+    "config.toggle-overlay-key.name": "Taste zum Umschalten des Overlays",
+    "config.toggle-overlay-key.desc": "Die Tasten, mit denen das Automatisierungs-Overlay umgeschaltet wird.",
 
     // mod compatibility
-    "config.title.mod-compatibility": "Mod Kompatibilität",
+    "config.title.mod-compatibility": "Mod-Kompatibilität",
     "config.better-junimos.name": "Better Junimos",
-    "config.better-junimos.desc": "Aktivieren Sie die Kompatibilität mit Better Junimos. Wenn es installiert ist, werden Junimo-Hütten keinen Dünger oder Samen abgeben.",
-    "config.warn-for-missing-bridge-mod.name": "Warnung für fehlenden Bridge Mod",
-    "config.warn-for-missing-bridge-mod.desc": "Ob eine Warnung beim Start protokolliert werden soll, wenn Sie einen Custom-Machine-Mod installiert haben, der einen separaten Kompatibilitäts-Patch erfordert, der nicht installiert ist.",
+    "config.better-junimos.desc": "Kompatibilität mit 'Better Junimos' aktivieren. Wenn installiert, geben Junimo-Hütten weder Dünger noch Saatgut aus.",
+    "config.warn-for-missing-bridge-mod.name": "Warnung für fehlende Brücken-Mod",
+    "config.warn-for-missing-bridge-mod.desc": "Ob eine Warnung beim Start protokolliert werden soll, wenn eine Custom Machine-Mod installiert ist, die einen separaten, nicht installierten Kompatibilitäts-Patch erfordert.",
 
     // connectors
     "config.title.connectors": "Aktivierte Konnektoren",
@@ -27,9 +27,9 @@
     "config.custom-connectors.desc": "Die exakten englischen Bezeichnungen für Gegenstände, die benachbarte Maschinen miteinander verbinden. Mehrere Elemente können mit Kommas aufgeführt werden.", // note: connector names must be English even when playing in other languages
 
     // machine overrides
-    "config.title.machine-overrides": "Überschreibungen von Maschinen",
+    "config.title.machine-overrides": "Überbrückung von Maschinen",
     "config.override.ShippingBin-name": "Versandbehälter",
     "config.override.MiniShippingBin-name": "Mini-Versandbehälter",
-    "config.override.desc": "Ob die {{machineName}} Automatisierung aktiviert werden soll.",
-    "config.custom-overrides-note": "Für benutzerdefinierte Überschreibungen finden Sie unter https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure Hilfe, um die Datei config.json direkt zu bearbeiten."
+    "config.override.desc": "Ob Automatisierung für {{machineName}} aktiviert werden soll.",
+    "config.custom-overrides-note": "Für benutzerdefinierte Überbrückungen finden Sie unter https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure Hilfe, um die Datei config.json direkt zu bearbeiten."
 }
