@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed child birthday calculation (thanks to iBug!).
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.37.3
