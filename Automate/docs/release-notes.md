@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to LeecanIt (added Italian) and NightFright2k19 (updated German)!
+* Improved translations. Thanks to alpeerkaraca (updated Turkish), LeecanIt (added Italian), and NightFright2k19 (updated German)!
 
 ## 1.27.3
 Released 04 July 2022 for SMAPI 3.14.0 or later.
