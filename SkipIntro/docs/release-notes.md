@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.10
+Released 18 August 2022 for SMAPI 3.14.0 or later.
+
+* Fixed crash if the game window is resized while transitioning to the co-op screen.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 1.9.9
 Released 09 May 2022 for SMAPI 3.14.0 or later.
 

@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Salta a",
+    "config.skip-to.tooltip": "Scegli a quale schermata saltare. Predefinita: Schermata dei Titoli.",
+    "config.skip-to.values.title-menu": "Schermata del titolo",
+    "config.skip-to.values.load-menu": "Menu dei salvataggi",
+    "config.skip-to.values.join-coop": "Unisciti a co-op",
+    "config.skip-to.values.host-coop": "Ospita co-op"
+}

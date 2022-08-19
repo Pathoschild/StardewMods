@@ -8,6 +8,7 @@ using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
@@ -512,7 +513,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // save
@@ -668,7 +669,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // read from/to asset areas
@@ -757,7 +758,7 @@ namespace ContentPatcher.Framework
         /// <param name="textOperations">The parsed text operations.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, [NotNullWhen(false)] out string? error)
+        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<ITextOperation> textOperations, [NotNullWhen(false)] out string? error)
         {
             bool Fail(string reason, out string outReason)
             {
@@ -766,7 +767,7 @@ namespace ContentPatcher.Framework
             }
 
             // get empty list
-            textOperations = new List<TextOperation>();
+            textOperations = new List<ITextOperation>();
             if (!patch.TextOperations.Any())
             {
                 error = null;
@@ -798,7 +799,7 @@ namespace ContentPatcher.Framework
                 List<IManagedTokenString> target = new List<IManagedTokenString>();
                 foreach (string? field in operation.Target)
                 {
-                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
+                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperationConfig.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
                         return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
                     target.Add(parsed);
                 }
@@ -811,8 +812,52 @@ namespace ContentPatcher.Framework
                 if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string? valueError, out IManagedTokenString? value))
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
+                // parse search
+                if (!tokenParser.TryParseString(operation.Search, assumeModIds, localPath.With(nameof(operation.Search)), out string? searchError, out IManagedTokenString? search))
+                    return Fail($"{errorPrefix}: the {nameof(operation.Search)} value '{operation.Search}' couldn't be parsed: {searchError}", out error);
+
+                // parse replace mode
+                TextOperationReplaceMode replaceMode;
+                if (operation.ReplaceMode is null)
+                    replaceMode = TextOperationReplaceMode.All;
+                else if (!Enum.TryParse(operation.ReplaceMode, true, out replaceMode))
+                    return Fail($"{errorPrefix}: invalid {nameof(operation.ReplaceMode)} value '{operation.ReplaceMode}', expected one of: {string.Join(", ", Enum.GetNames(typeof(TextOperationReplaceMode)))}", out error);
+
+                // get operation instance
+                ITextOperation parsedOperation;
+                switch (operationType)
+                {
+                    case TextOperationType.Append:
+                    case TextOperationType.Prepend:
+                        parsedOperation = new AppendOrPrependTextOperation(
+                            operation: operationType,
+                            target: target,
+                            value: value,
+                            delimiter: operation.Delimiter
+                        );
+                        break;
+
+                    case TextOperationType.RemoveDelimited:
+                        if (string.IsNullOrEmpty(operation.Delimiter))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set for a {operationType} text operation.", out error);
+                        if (string.IsNullOrWhiteSpace(search.Raw))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Search)} value must be set for a {operationType} text operation.", out error);
+
+                        parsedOperation = new RemoveDelimitedTextOperation(
+                            operation: operationType,
+                            target: target,
+                            search: search,
+                            delimiter: operation.Delimiter,
+                            replaceMode: replaceMode
+                        );
+                        break;
+
+                    default:
+                        return Fail($"{errorPrefix}: unsupported text operation type '{operationType}'", out error);
+                }
+
                 // create text operation entry
-                textOperations.Add(new TextOperation(operationType, target, value, operation.Delimiter));
+                textOperations.Add(parsedOperation);
             }
 
             error = null;

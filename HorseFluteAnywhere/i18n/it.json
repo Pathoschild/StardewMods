@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Flauto equino richiesto",
+    "config.require-flute.description": "Scegli se è necessario l'oggetto flauto equino nell'inventario per evocare un cavallo. Predefinito falso.",
+
+    "config.summon-horse-button.name": "Pulsante Evoca cavallo",
+    "config.summon-horse-button.description": "Il pulsante da premere per suonare il flauto ed evocare un cavallo. Predefinito {{defaultValue}}."
+}

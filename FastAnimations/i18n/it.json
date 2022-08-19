@@ -1,0 +1,75 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Opzioni generali",
+
+    "config.disable-eat-prompt.name": "Disattiva richiesta di mangiare/bere",
+    "config.disable-eat-prompt.tooltip": "Scegli se saltare la richiesta di conferma che chiede se si vuole davvero mangiare/bere qualcosa.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Velocità di animazione del giocatore",
+
+    "config.eat-or-drink.name": "Mangiare/bere",
+    "config.eat-or-drink.tooltip": "Quanto mangia o beve veloce. Predefinito {{defaultValue}}x.",
+
+    "config.fish.name": "Pescare",
+    "config.fish.tooltip": "Velocità di lancio e di ritorno durante la pesca (non influisce sul minigioco). Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
+
+    "config.harvest.name": "Raccolta",
+    "config.harvest.tooltip": "Velocità di raccolta dei raccolti e del foraggio a mano. Predefinito {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Suonare il flauto equino",
+    "config.horse-flute.tooltip": "Quanto veloce suoni il flauto equino. Predefinito {{defaultValue}}x.",
+
+    "config.milk.name": "Mungere",
+    "config.milk.tooltip": "Quanto velocemente si usa il secchio del latte. Predefinito {{defaultValue}}x.",
+
+    "config.mount.name": "Montare/smontare",
+    "config.mount.tooltip": "Velocità di montaggio/smontaggio dei cavalli (comprese le cavalcature personalizzate come la Tractor Mod). Predefinito {{defaultValue}}x.",
+
+    "config.shear.name": "Tosare",
+    "config.shear.tooltip": "Velocità di utilizzo delle cesoie. Predefinito {{defaultValue}}x.",
+
+    "config.slingshot.name": "Usare la fionda",
+    "config.slingshot.tooltip": "Velocità di estrazione quando si usano le fionde. Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
+
+    "config.tool.name": "Oscillazione strumenti",
+    "config.tool.tooltip": "Velocità di oscillazione degli strumenti (eccetto armi e canna da pesca). Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
+
+    "config.weapon.name": "Oscillazione arma",
+    "config.weapon.tooltip": "Velocità di brandeggio delle armi. Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Velocità di animazione del mondo",
+
+    "config.break-geodes.name": "Rompere geodi",
+    "config.break-geodes.tooltip": "Velocità con cui il fabbro rompe i geodi per te. Predefinito {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Slot del casinò",
+    "config.casino-slots.tooltip": "Velocità di rotazione delle slot del casinò. Predefinito {{defaultValue}}x.",
+
+    "config.bus.name": "Autobus di Pam",
+    "config.bus.tooltip": "La velocità con cui Pam guida il suo autobus per andare e tornare dal deserto. Predefinito {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Caduta degli alberi",
+    "config.tree-fall.tooltip": "Velocità con cui gli alberi cadono dopo essere stati abbattuti. Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Velocità animazioni IU",
+
+    "config.title-menu.name": "Transizioni del menu principale",
+    "config.title-menu.tooltip": "Velocità di transizione del menu principale tra le schermate. Predefinito {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Lampeggiamento del caricamento della partita",
+    "config.load-game-blink.tooltip": "La velocità con cui avviene il ritardo del lampeggiamento degli slot dopo aver fatto clic su uno slot di caricamento-salvataggio. Predefinito {{defaultValue}}x."
+}

@@ -1,0 +1,50 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Small Beach Farm",
+    "farm.description": "Una piccola e fertile spiaggia tascabile, dove si possono pescare sia pesci di fiume che di mare.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Opzioni fattoria",
+
+    "config.beach-sounds.name": "Riproduci i suoni della spiaggia",
+    "config.beach-sounds.tooltip": "Riproduce i suoni di sottofondo della spiaggia (ad esempio il suono delle onde) nella fattoria sulla spiaggia.",
+
+    "config.spawn-monsters.name": "Genera mostri di base",
+    "config.spawn-monsters.tooltip": "Il valore predefinito per l'opzione 'genera mostri di notte' quando si crea un nuovo salvataggio. È comunque possibile modificare l'opzione quando si crea un nuovo salvataggio. Questo non ha effetto sui salvataggi esistenti.",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Layout della fattoria",
+
+    "config.campfire.name": "Aggiungi falò",
+    "config.campfire.tooltip": "Aggiunge un falò funzionante davanti alla cascina.",
+
+    "config.pier.name": "Aggiungi un molo per la pesca",
+    "config.pier.tooltip": "Aggiunge un molo dove poter pescare.",
+
+    "config.islands.name": "Aggiungi isole",
+    "config.islands.tooltip": "Aggiunge isole oceaniche con un'area di terra extra.",
+
+    "config.shipping-bin-path.name": "Aggiungi percorso Cassetta delle Spedizioni",
+    "config.shipping-bin-path.tooltip": "Posizionare le piastrelle del percorso in pietra davanti alla posizione predefinita della Cassetta delle Spedizioni.",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "Posizioni fattoria",
+
+    "config.pier-x.name": "Molo per la pesca X",
+    "config.pier-x.tooltip": "La posizione della piastrella in cui aggiungere il molo di pesca, se abilitato. Impostare sia X che Y su zero per posizionarlo automaticamente.",
+
+    "config.pier-y.name": "Molo per la pesca Y",
+    "config.pier-y.tooltip": "La posizione della piastrella in cui aggiungere il molo di pesca, se abilitato. Impostare sia X che Y su zero per posizionarlo automaticamente."
+}

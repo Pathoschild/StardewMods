@@ -1,0 +1,35 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Opzioni principali",
+    "config.enabled.name": "Abilitata",
+    "config.enabled.desc": "Scegli se abilitare l'automazione. Se disabilitata, i macchinari non saranno automatizzati e non camparirà l'overlay.",
+    "config.junimo-huts-output-gems.name": "Capanne Junimo producono gemme",
+    "config.junimo-huts-output-gems.desc": "Scegli se estrarre le gemme dalle capanne dei Junimo. Se abilitato, non sarà possibile cambiare i colori dei Junimo mettendo delle gemme nelle loro capanne.",
+    "config.automation-interval.name": "Intervallo di automazione",
+    "config.automation-interval.desc": "Il numero di tick tra ogni processo di automazione (60 per una volta al secondo, 120 per ogni due secondi, ecc.).",
+    "config.toggle-overlay-key.name": "Imposta il tasto overlay",
+    "config.toggle-overlay-key.desc": "I tasti che attivano l'overlay dell'automazione.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Compatibilità con le mod",
+    "config.better-junimos.name": "Better Junimos",
+    "config.better-junimos.desc": "Abilita la compatibilità con Better Junimos. Se è installato, le capanne Junimo non produrranno fertilizzanti o semi.",
+    "config.warn-for-missing-bridge-mod.name": "Avvertimento per la mancanza di mod.",
+    "config.warn-for-missing-bridge-mod.desc": "Scegli se registrare un avviso all'avvio se si è installata una macchina personalizzata che richiede una patch di compatibilità separata che non è installata.",
+
+    // connectors
+    "config.title.connectors": "Connettori abilitati",
+    "config.connector.desc": "Scegli se {{itemName}} collega tra loro macchinari e bauli.",
+    "config.custom-connectors.name": "Connettori personalizzati",
+    "config.custom-connectors.desc": "I nomi inglesi esatti degli elementi che collegano tra loro macchinari adiacenti. È possibile elencare più elementi con le virgole.", // note: connector names must be English even when playing in other languages
+
+    // machine overrides
+    "config.title.machine-overrides": "Sovrascrittura macchinari",
+    "config.override.ShippingBin-name": "Cassetta delle Spedizioni",
+    "config.override.MiniShippingBin-name": "Mini-Cassetta per Spedizioni",
+    "config.override.desc": "Scegli se abilitare l'automazione di {{machineName}}.",
+    "config.custom-overrides-note": "Per sovrascritture personalizzate, vedi https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure se ti serve una mano per modificare config.json direttamente."
+}

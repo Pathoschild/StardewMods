@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.28.0
+Released 18 August 2022 for SMAPI 3.14.0 or later. See the [release highlights](https://www.patreon.com/posts/70722755).
+
+* Added `RemoveDelimited` text operation (thanks to Shockah!).
+
 ## 1.27.2
 Released 04 July 2022 for SMAPI 3.15.0 or later.
 
