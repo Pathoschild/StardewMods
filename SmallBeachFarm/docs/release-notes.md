@@ -1,8 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed TV replacement applied to other farm types.
+## 2.4.2
+Released 18 August 2022 for SMAPI 3.14.0 or later.
+
+* Fixed broken-TV replacement applied to other farm types.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 2.4.1

@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1.16
+Released 18 August 2022 for SMAPI 3.14.0 or later.
+
 * Internal changes to support Toolbar Icons.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
