@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* The `automate summary` command now shows all the connected locations for a Junimo chest group.
 * Fixed error using `automate summary` with an unlimited chest from the Chests and Pouches mod.
 
 ## 1.27.4
