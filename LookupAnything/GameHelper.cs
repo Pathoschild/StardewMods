@@ -908,13 +908,11 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
 
                 // create recipe
-                if (blueprint.itemsRequired.Any())
+                RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(blueprint);
+                if (ingredients.Any(p => p.Matches(input)))
                 {
                     Building building = new Building(blueprint, Vector2.Zero);
-                    var recipe = new RecipeModel(blueprint, building);
-
-                    if (recipe.Ingredients.Any(p => p.Matches(input)))
-                        yield return recipe;
+                    yield return new RecipeModel(blueprint, building, ingredients);
                 }
             }
         }
