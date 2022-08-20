@@ -911,7 +911,16 @@ namespace Pathoschild.Stardew.LookupAnything
                 RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(blueprint);
                 if (ingredients.Any(p => p.Matches(input)))
                 {
-                    Building building = new Building(blueprint, Vector2.Zero);
+                    Building building;
+                    try
+                    {
+                        building = new Building(blueprint, Vector2.Zero);
+                    }
+                    catch
+                    {
+                        continue; // ignore recipe if the building data is invalid
+                    }
+
                     yield return new RecipeModel(blueprint, building, ingredients);
                 }
             }
