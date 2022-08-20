@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Tiles = new HashSet<Vector2>(tiles);
 
             this.IsJunimoGroup = this.Containers.Any(p => p.IsJunimoChest);
-            this.StorageManager = buildStorage(this.Containers);
+            this.StorageManager = buildStorage(this.GetUniqueContainers(this.Containers));
         }
 
         /// <inheritdoc />
@@ -185,6 +185,21 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (!machine.SetInput(storage))
                     ignoreMachines.Add(machine.MachineTypeID); // if the machine can't process available input, no need to ask every instance of its type
             }
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get container instances, ensuring that only one container instance is returned for each shared inventory.</summary>
+        /// <param name="containers">The containers to filter.</param>
+        protected IContainer[] GetUniqueContainers(IEnumerable<IContainer> containers)
+        {
+            HashSet<object> seenInventories = new(new ObjectReferenceComparer<object>());
+
+            return containers
+                .Where(container => seenInventories.Add(container.InventoryReferenceId))
+                .ToArray();
         }
     }
 }

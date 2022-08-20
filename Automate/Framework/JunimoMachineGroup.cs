@@ -86,12 +86,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Rebuild the aggregate group for changes to the underlying machine groups.</summary>
         public void Rebuild()
         {
-            this.StorageManager.SetContainers(this.GetUniqueContainers());
-
-            int junimoChests = 0;
-            this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
+            this.Containers = this.GetUniqueContainers(this.MachineGroups.SelectMany(p => p.Containers));
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
             this.Tiles = null;
+
+            this.StorageManager.SetContainers(this.Containers);
         }
 
         /// <inheritdoc />
@@ -108,17 +107,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the unique containers from the underlying machine groups.</summary>
-        private IEnumerable<IContainer> GetUniqueContainers()
-        {
-            int junimoChests = 0;
-            foreach (IContainer container in this.MachineGroups.SelectMany(p => p.Containers))
-            {
-                if (!container.IsJunimoChest || ++junimoChests == 1)
-                    yield return container;
-            }
-        }
-
         /// <summary>Build a map of covered tiles by location key.</summary>
         private Dictionary<string, IReadOnlySet<Vector2>> BuildTileMap()
         {
