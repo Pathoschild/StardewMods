@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error using `automate summary` with an unlimited chest from the Chests and Pouches mod.
+
 ## 1.27.4
 Released 18 August 2022 for SMAPI 3.14.0 or later.
 

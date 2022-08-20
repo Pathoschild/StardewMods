@@ -158,8 +158,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         {
             foreach (GroupStats group in stats.Locations.SelectMany(p => p.MachineGroups))
             {
-                bool chestsFull = group.Containers.Sum(p => p.FilledSlots) >= group.Containers.Sum(p => p.TotalSlots);
-                if (!chestsFull)
+                ulong filledSlots = 0;
+                ulong totalSlots = 0;
+                foreach (var container in group.Containers)
+                {
+                    filledSlots += (ulong)container.FilledSlots;
+                    totalSlots += (ulong) container.TotalSlots;
+                }
+
+                if (filledSlots < totalSlots)
                     continue;
 
                 bool hasOutputReady = group.Machines.Any(p => p.States.ContainsKey(MachineState.Done));
