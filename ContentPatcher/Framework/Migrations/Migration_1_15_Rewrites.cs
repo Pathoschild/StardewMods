@@ -11,7 +11,7 @@ using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
-    /// <summary>Migrate patches to format version 1.15.</summary>
+    /// <summary>Migrates patches to format version 1.15.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
     internal class Migration_1_15_Rewrites : BaseMigration
     {

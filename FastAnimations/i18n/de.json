@@ -24,7 +24,7 @@
     "config.harvest.name": "Ernten",
     "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
 
-    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.name": "Play Horse Flute", // TODO
     "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
 
     "config.milk.name": "Melken",
@@ -35,6 +35,9 @@
 
     "config.shear.name": "Scheren",
     "config.shear.tooltip": "Wie schnell Sie die Schere verwenden. Standardwert {{defaultValue}}x.",
+
+    "config.slingshot.name": "Use slingshot", // TODO
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
 
     "config.tool.name": "Werkzeug schwingen",
     "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",

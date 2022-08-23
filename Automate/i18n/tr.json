@@ -4,8 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "Ana Seçenekler",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.enabled.name": "Etkin",
+    "config.enabled.desc": "Otomasyon özelliklerinin aktifleştirilip aktifleştirilmeyeceği. Devre dışı bırakıldıysa hiçbir makine otomatik olarak çalışmaz.",
     "config.junimo-huts-output-gems.name": "Junimo kulübelerinden değerli taş çıkar",
     "config.junimo-huts-output-gems.desc": "Junimo kulübelerinden değerli taş çıkıp çıkmayacağı. Eğer etkinse, kulübelerine değerli taşlar yerleştirerek Junimo renklerini değiştiremezsiniz.",
     "config.automation-interval.name": "Otomasyon aralığı",

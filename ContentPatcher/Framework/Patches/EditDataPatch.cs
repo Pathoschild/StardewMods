@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Patches.EditData;
+using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -40,7 +41,7 @@ namespace ContentPatcher.Framework.Patches
         private EditDataPatchMoveRecord[] MoveRecords;
 
         /// <summary>The text operations to apply to existing values.</summary>
-        private readonly TextOperation[] TextOperations;
+        private readonly ITextOperation[] TextOperations;
 
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
@@ -90,7 +91,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<TextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<ITextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -108,7 +109,7 @@ namespace ContentPatcher.Framework.Patches
             this.Records = records?.ToArray() ?? Array.Empty<EditDataPatchRecord>();
             this.Fields = fields?.ToArray() ?? Array.Empty<EditDataPatchField>();
             this.MoveRecords = moveRecords?.ToArray() ?? Array.Empty<EditDataPatchMoveRecord>();
-            this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
+            this.TextOperations = textOperations?.ToArray() ?? Array.Empty<ITextOperation>();
             this.TargetField = targetField?.ToArray() ?? Array.Empty<IManagedTokenString>();
             this.Monitor = monitor;
             this.TryParseFields = tryParseFields;
@@ -474,7 +475,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
         /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
         /// <returns>Returns whether applying the operation succeeded.</returns>
-        private bool TryApplyTextOperation(TextOperation operation, IKeyValueEditor editor, char fieldDelimiter, [NotNullWhen(false)] out string? error)
+        private bool TryApplyTextOperation(ITextOperation operation, IKeyValueEditor editor, char fieldDelimiter, [NotNullWhen(false)] out string? error)
         {
             var targetRoot = operation.GetTargetRoot();
             switch (targetRoot)

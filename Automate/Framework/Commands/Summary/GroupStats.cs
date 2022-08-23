@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
 {
@@ -20,6 +21,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         /// <summary>Whether this group represents all the chests connected to a Junimo chest.</summary>
         public bool IsJunimoGroup { get; }
 
+        /// <summary>The underlying machine group.</summary>
+        public IMachineGroup MachineGroup { get; }
+
 
         /*********
         ** Public methods
@@ -28,9 +32,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         /// <param name="machineGroup">The machine group to analyze.</param>
         public GroupStats(IMachineGroup machineGroup)
         {
-            this.Name = machineGroup.IsJunimoGroup
-                ? "Distributed group"
-                : $"Group at ({machineGroup.Tiles[0].X}, {machineGroup.Tiles[0].Y})";
+            this.MachineGroup = machineGroup;
+
+            if (machineGroup.IsJunimoGroup)
+                this.Name = "Distributed group";
+            else
+            {
+                Vector2 tile = machineGroup.GetTiles(machineGroup.LocationKey).FirstOrDefault();
+                this.Name = $"Group at ({tile.X}, {tile.Y})";
+            }
 
             this.IsJunimoGroup = machineGroup.IsJunimoGroup;
 

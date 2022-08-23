@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
@@ -16,6 +17,9 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>The underlying machine groups.</summary>
         private readonly List<IMachineGroup> MachineGroups = new();
+
+        /// <summary>A map of covered tiles by location key, if loaded.</summary>
+        private Dictionary<string, IReadOnlySet<Vector2>>? Tiles;
 
 
         /*********
@@ -53,44 +57,71 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Add machine groups to the collection.</summary>
         /// <param name="groups">The groups to add.</param>
         /// <remarks>Make sure to call <see cref="Rebuild"/> after making changes.</remarks>
-        public void Add(params IMachineGroup[] groups)
+        public void Add(IList<IMachineGroup> groups)
         {
             this.MachineGroups.AddRange(groups);
         }
 
-        /// <summary>Remove machine groups from the collection.</summary>
-        /// <param name="match">A predicate which returns true for locations that should be removed.</param>
-        /// <returns>Returns whether any machine groups were removed.</returns>
-        /// <remarks>Make sure to call <see cref="Rebuild"/> after making changes.</remarks>
-        public bool RemoveAll(Predicate<IMachineGroup> match)
+        /// <summary>Remove all machine groups in the collection.</summary>
+        public void Clear()
         {
-            return this.MachineGroups.RemoveAll(match) > 0;
+            this.MachineGroups.Clear();
+
+            this.StorageManager.SetContainers(Array.Empty<IContainer>());
+
+            this.Containers = Array.Empty<IContainer>();
+            this.Machines = Array.Empty<IMachine>();
+            this.Tiles = null;
+        }
+
+        /// <summary>Remove all machine groups within the given locations.</summary>
+        /// <param name="locationKeys">The location keys as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        public bool RemoveLocations(ISet<string> locationKeys)
+        {
+            return this.MachineGroups.RemoveAll(
+                group => locationKeys.Contains(group.LocationKey!)
+            ) > 0;
         }
 
         /// <summary>Rebuild the aggregate group for changes to the underlying machine groups.</summary>
         public void Rebuild()
         {
-            this.StorageManager.SetContainers(this.GetUniqueContainers());
-
-            int junimoChests = 0;
-            this.Containers = this.MachineGroups.SelectMany(p => p.Containers).Where(p => !p.IsJunimoChest || ++junimoChests == 1).ToArray();
+            this.Containers = this.GetUniqueContainers(this.MachineGroups.SelectMany(p => p.Containers));
             this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
-            this.Tiles = this.MachineGroups.SelectMany(p => p.Tiles).ToArray();
+            this.Tiles = null;
+
+            this.StorageManager.SetContainers(this.Containers);
+        }
+
+        /// <inheritdoc />
+        public override IReadOnlySet<Vector2> GetTiles(string locationKey)
+        {
+            this.Tiles ??= this.BuildTileMap();
+
+            return this.Tiles.TryGetValue(locationKey, out IReadOnlySet<Vector2>? tiles)
+                ? tiles
+                : ImmutableHashSet<Vector2>.Empty;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the unique containers from the underlying machine groups.</summary>
-        private IEnumerable<IContainer> GetUniqueContainers()
+        /// <summary>Build a map of covered tiles by location key.</summary>
+        private Dictionary<string, IReadOnlySet<Vector2>> BuildTileMap()
         {
-            int junimoChests = 0;
-            foreach (IContainer container in this.MachineGroups.SelectMany(p => p.Containers))
+            Dictionary<string, IReadOnlySet<Vector2>> tiles = new();
+
+            foreach (IGrouping<string?, IMachineGroup> groupByLocation in this.MachineGroups.GroupBy(p => p.LocationKey))
             {
-                if (!container.IsJunimoChest || ++junimoChests == 1)
-                    yield return container;
+                string? locationKey = groupByLocation.Key;
+                if (locationKey is null)
+                    continue; // ???
+
+                tiles[locationKey] = new HashSet<Vector2>(groupByLocation.SelectMany(p => p.GetTiles(locationKey)));
             }
+
+            return tiles;
         }
     }
 }

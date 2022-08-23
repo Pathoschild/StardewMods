@@ -156,7 +156,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.FromAssetExistsImpl = this.ContentPack.HasFile(this.FromAsset);
                 if (!this.FromAssetExistsImpl && this.Conditions.All(p => p.IsMatch))
-                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} '{this.FromAsset}' does not exist");
+                    this.State.AddError($"{nameof(PatchConfig.FromFile)} '{this.FromAsset}' does not exist");
             }
 
             // update

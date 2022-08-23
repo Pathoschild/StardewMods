@@ -24,7 +24,7 @@ The included file must be a `.json` file which only contains a `Changes` field:
 ```js
 {
     "Changes": [
-        /* patches defined here like usual /*
+        /* patches defined here like usual */
     ]
 }
 ```
@@ -62,7 +62,7 @@ In the simplest case, you can use this to organize your patches into subfiles:
 
 ```js
 {
-   "Format": "1.26.0",
+   "Format": "1.28.0",
    "Changes": [
       {
          "Action": "Include",
@@ -76,7 +76,7 @@ You can combine this with tokens and conditions to load files dynamically:
 
 ```js
 {
-   "Format": "1.26.0",
+   "Format": "1.28.0",
    "Changes": [
       {
          "Action": "Include",

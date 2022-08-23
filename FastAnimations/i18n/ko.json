@@ -24,7 +24,7 @@
     "config.harvest.name": "수확",
     "config.harvest.tooltip": "손으로 작물과 채집물을 수확하는 속도. 기본값 {{defaultValue}}.",
 
-    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.name": "Play Horse Flute", // TODO
     "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
 
     "config.milk.name": "우유",
@@ -35,6 +35,9 @@
 
     "config.shear.name": "가위",
     "config.shear.tooltip": "가위를 사용하는 속도. 기본값 {{defaultValue}}.",
+
+    "config.slingshot.name": "Use slingshot", // TODO
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
 
     "config.tool.name": "도구 스윙",
     "config.tool.tooltip": "도구를 휘두르는 속도(무기 및 낚싯대 제외). 기본값 {{defaultValue}}, 추천 {{suggestedValue}}.",

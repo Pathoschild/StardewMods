@@ -52,7 +52,7 @@
     // general options
     "config.title.general-options": "常规选项",
     "config.show-hover-tooltips.name": "显示工具菜单",
-    "config.show-hover-tooltips.desc": "当您指向箱子时，是否在工具提示中显示箱子名称。",
+    "config.show-hover-tooltips.desc": "当你指向箱子时，是否在工具提示中显示箱子名称。",
     "config.enable-shipping-bin.name": "启用出货箱",
     "config.enable-shipping-bin.desc": "是否能够访问出货箱。",
     "config.add-organize-player-items.name": "添加背包整理按钮",
@@ -65,33 +65,33 @@
     "config.range.none": "无（无法远程访问箱子）",
 
     // general controls
-    "config.title.general-controls": "快捷键",
-    "config.toggle-ui-key.name": "UI显示快捷键",
-    "config.toggle-ui-key.desc": "按键绑定打开/关闭箱子",
+    "config.title.general-controls": "常规控制",
+    "config.toggle-ui-key.name": "切换UI",
+    "config.toggle-ui-key.desc": "显示或隐藏箱子UI的按键",
 
     // controls when chest UI is open
     "config.title.menu-controls": "箱子UI打开时控制设置",
     "config.edit-chest.name": "编辑箱子",
-    "config.edit-chest.desc": "编辑当前箱子选项的键。",
+    "config.edit-chest.desc": "编辑当前箱子选项的按键。",
     "config.sort-items.name": "整理箱子内物品",
-    "config.sort-items.desc": "按键整理箱子内物品",
+    "config.sort-items.desc": "整理箱子内物品的按键",
     "config.navigate-prev-chest.name": "导航：上一个箱子",
-    "config.navigate-prev-chest.desc": "在菜单打开时导航到上一个箱子的键",
+    "config.navigate-prev-chest.desc": "在菜单打开时导航到上一个箱子的按键",
     "config.navigate-next-chest.name": "导航：下一个箱子",
-    "config.navigate-next-chest.desc": "菜单打开时导航到下一个胸部的键",
-    "config.navigate-prev-category.name": "导航：上一个类别",
-    "config.navigate-prev-category.desc": "在菜单打开时导航到上一个类别的键",
-    "config.navigate-next-category.name": "导航：下一个类别",
-    "config.navigate-next-category.desc": "在菜单打开时导航到下一个类别的键",
-    "config.hold-to-scroll-categories.name": "暂停滚动类别",
-    "config.hold-to-scroll-categories.desc": "键，在保持时，启用鼠标滚轮下拉类别的键",
-    "config.hold-to-scroll-chests.name": "滚动胸部",
-    "config.hold-to-scroll-chests.desc": "保持键，当保持时，使使用鼠标滚轮滚动箱子下拉列表",
+    "config.navigate-next-chest.desc": "菜单打开时导航到下一个箱子的按键",
+    "config.navigate-prev-category.name": "导航：上一个分类",
+    "config.navigate-prev-category.desc": "在菜单打开时导航到上一个分类的按键",
+    "config.navigate-next-category.name": "导航：下一个分类",
+    "config.navigate-next-category.desc": "在菜单打开时导航到下一个分类的按键",
+    "config.hold-to-scroll-categories.name": "按住以滚动分类",
+    "config.hold-to-scroll-categories.desc": "按住时，可以用鼠标滚轮滚动分类的下拉菜单",
+    "config.hold-to-scroll-chests.name": "按住以滚动箱子",
+    "config.hold-to-scroll-chests.desc": "按住时，可以用鼠标滚轮滚动箱子的下拉菜单",
 
     // disable in locations
     "config.title.disable-in-locations": "在以下位置禁用",
-    "config.disable-mines.name": "矿洞和骷髅洞",
-    "config.disable-mines.desc": "是否在矿洞或骷髅洞穴中禁用箱子。",
+    "config.disable-mines.name": "矿井和骷髅洞穴",
+    "config.disable-mines.desc": "是否在矿井或骷髅洞穴中禁用箱子。",
     "config.disable-custom-names.name": "自定义位置名称",
-    "config.disable-custom-names.desc": "用于禁用访问箱子的位置的内部名称（如调试模式Mod所示）。 您可以用逗号列出多个。"
+    "config.disable-custom-names.desc": "用于禁用访问箱子的位置的内部名称（如调试模式Mod所示）。 你可以用逗号列出多个。"
 }

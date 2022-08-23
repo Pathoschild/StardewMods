@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Pathoschild.Stardew.Automate.Framework.Commands.Summary;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common.Commands;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Automate.Framework.Commands
@@ -139,6 +141,40 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
                             foreach (var containerGroup in group.Containers)
                                 report.AppendLine($"          {containerGroup.Count} x {containerGroup.Name} ({containerGroup.FilledSlots}/{containerGroup.TotalSlots} full)");
 
+                            // list Junimo chests
+                            if (group.IsJunimoGroup)
+                            {
+                                report.AppendLine();
+
+                                Dictionary<string, IContainer[]> junimoChestsByLocation = group.MachineGroup.Containers
+                                    .GroupBy(p => p.Location.NameOrUniqueName)
+                                    .ToDictionary(
+                                        p => p.Key,
+                                        p =>
+                                        {
+                                            IContainer[] chests = p
+                                                .OrderBy(p => p.TileArea.X)
+                                                .ThenBy(p => p.TileArea.Y)
+                                                .ToArray();
+
+                                            IContainer[] junimoChests = chests.Where(p => p.IsJunimoChest).ToArray();
+                                            return junimoChests.Any()
+                                                ? junimoChests
+                                                : chests; // special case: no Junimo chests in this location, but we're still connected somehow. This is most likely a custom connected chest from another mod, so just list all of them.
+                                        }
+                                    );
+
+                                if (junimoChestsByLocation.Any())
+                                {
+                                    report.AppendLine($"          Connected to Junimo chests in {junimoChestsByLocation.Count} location{(junimoChestsByLocation.Count > 1 ? "s" : "")}:");
+                                    foreach ((string locationName, IContainer[] chests) in junimoChestsByLocation.OrderBy(p => p.Key, new HumanSortComparer()))
+                                    {
+                                        foreach (IContainer chest in chests)
+                                            report.AppendLine($"              - {locationName} ({chest.TileArea.X}, {chest.TileArea.Y})");
+                                    }
+                                }
+                            }
+
                             report.AppendLine();
                         }
 
@@ -158,8 +194,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         {
             foreach (GroupStats group in stats.Locations.SelectMany(p => p.MachineGroups))
             {
-                bool chestsFull = group.Containers.Sum(p => p.FilledSlots) >= group.Containers.Sum(p => p.TotalSlots);
-                if (!chestsFull)
+                ulong filledSlots = 0;
+                ulong totalSlots = 0;
+                foreach (var container in group.Containers)
+                {
+                    filledSlots += (ulong)container.FilledSlots;
+                    totalSlots += (ulong)container.TotalSlots;
+                }
+
+                if (filledSlots < totalSlots)
                     continue;
 
                 bool hasOutputReady = group.Machines.Any(p => p.States.ContainsKey(MachineState.Done));

@@ -11,6 +11,31 @@ namespace Pathoschild.Stardew.Common
         ** Public methods
         *********/
         /****
+        ** Dictionary
+        ****/
+        /// <summary>Remove all matching values from the dictionary.</summary>
+        /// <typeparam name="TKey">The dictionary key type.</typeparam>
+        /// <typeparam name="TValue">The dictionary value type.</typeparam>
+        /// <param name="dictionary">The dictionary whose values to remove.</param>
+        /// <param name="where">A callback which returns true if the entry should be removed.</param>
+        /// <returns>Returns whether any values were removed.</returns>
+        public static bool RemoveAll<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, Func<TKey, TValue, bool> where)
+        {
+            List<TKey> removeKeys = new();
+            foreach ((TKey key, TValue value) in dictionary)
+            {
+                if (where(key, value))
+                    removeKeys.Add(key);
+            }
+
+            foreach (TKey key in removeKeys)
+                dictionary.Remove(key);
+
+            return removeKeys.Count is not 0;
+        }
+
+
+        /****
         ** Nullability
         ****/
         /// <summary>Get all non-null values from the collection.</summary>

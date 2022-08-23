@@ -10,12 +10,26 @@
     ** Generic Mod Config Menu UI
     *********/
     /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Other farm options", // TODO
+
+    "config.beach-sounds.name": "Plaj sesleri çal",
+    "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar.",
+
+    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
+    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+
+    /****
     ** Farm layout
     ****/
     "config.farm-layout-section": "Farm layout", // TODO
 
     "config.campfire.name": "Kamp ateşi ekle",
     "config.campfire.tooltip": "Çiftlik evinin önüne işlevsel bir kamp ateşi ekler.",
+
+    "config.pier.name": "Add fishing pier", // TODO
+    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
 
     "config.islands.name": "Adalar ekle",
     "config.islands.tooltip": "Ekstra arazi alanına sahip okyanus adaları ekler.",
@@ -24,13 +38,14 @@
     "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
 
     /****
-    ** Farm options
+    ** Farm positions
     ****/
-    "config.other-farm-options": "Other farm options", // TODO
+    // TODO
+    "config.farm-positions-section": "Farm positions",
 
-    "config.beach-sounds.name": "Plaj sesleri çal",
-    "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar.",
+    "config.pier-x.name": "Fishing pier X",
+    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves." // TODO
+    "config.pier-y.name": "Fishing pier Y",
+    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
 }

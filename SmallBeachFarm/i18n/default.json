@@ -10,12 +10,26 @@
     ** Generic Mod Config Menu UI
     *********/
     /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Farm options",
+
+    "config.beach-sounds.name": "Play beach sounds",
+    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm.",
+
+    "config.spawn-monsters.name": "Spawn monsters by default",
+    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.",
+
+    /****
     ** Farm layout
     ****/
     "config.farm-layout-section": "Farm layout",
 
     "config.campfire.name": "Add campfire",
     "config.campfire.tooltip": "Add a functional campfire in front of the farmhouse.",
+
+    "config.pier.name": "Add fishing pier",
+    "config.pier.tooltip": "Add a pier where you can fish.",
 
     "config.islands.name": "Add islands",
     "config.islands.tooltip": "Add ocean islands with extra land area.",
@@ -24,13 +38,13 @@
     "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.",
 
     /****
-    ** Farm options
+    ** Farm positions
     ****/
-    "config.other-farm-options": "Other farm options",
+    "config.farm-positions-section": "Farm positions",
 
-    "config.beach-sounds.name": "Play beach sounds",
-    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm.",
+    "config.pier-x.name": "Fishing pier X",
+    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default",
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves."
+    "config.pier-y.name": "Fishing pier Y",
+    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
 }

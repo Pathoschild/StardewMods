@@ -189,8 +189,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private IEnumerable<ICustomField> GetDataForChild(Child child)
         {
             // birthday
-            SDate birthday = SDate.Now().AddDays(-child.daysOld.Value);
-            yield return new GenericField(I18n.Npc_Birthday(), birthday.ToLocaleString(withYear: true));
+            yield return new GenericField(I18n.Npc_Birthday(), this.GetChildBirthdayString(child));
 
             // age
             {
@@ -444,6 +443,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     tasteGroup => tasteGroup.Key,
                     tasteGroup => tasteGroup.ToArray()
                 );
+        }
+
+        /// <summary>Get a child's translated birthday based on their <see cref="Child.daysOld"/> field.</summary>
+        /// <param name="child">The child instance.</param>
+        private string GetChildBirthdayString(Child child)
+        {
+            int daysOld = child.daysOld.Value;
+
+            try
+            {
+                return SDate
+                    .Now()
+                    .AddDays(-daysOld)
+                    .ToLocaleString(withYear: true);
+            }
+            catch (ArithmeticException)
+            {
+                // The player probably changed the game date, so the birthday would be before the
+                // game started. We'll just drop the year number from the output in that case.
+                return new SDate(Game1.dayOfMonth, Game1.currentSeason, 100_000_000)
+                    .AddDays(-daysOld)
+                    .ToLocaleString(withYear: false);
+            }
         }
 
         /// <summary>Get the number of days until a child grows to the next stage.</summary>

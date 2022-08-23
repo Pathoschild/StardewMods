@@ -110,7 +110,7 @@ That also applies to data models. For example, this is one entry from `Data/Movi
     "Title": "Mysterium",
     "Description": "Peer behind the midnight veil... You must experience to believe!",
     "Tags": [ "horror", "art" ],
-    "Scenes": [ /* omitted for brevity * ],
+    "Scenes": [ /* omitted for brevity */ ]
 }
 ```
 
@@ -137,7 +137,7 @@ And at least one of these:
 field      | purpose
 ---------- | -------
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](../author-guide.md#tokens) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
-`Entries`  | The entries in the data file you want to add/replace/delete, indexed by ID. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](../author-guide.md#tokens) in entry keys and values.<br /><br />For list values, see also `AppendEntries` and `MoveEntries`.
+`Entries`  | The entries in the data file you want to add/replace/delete, indexed by ID. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](../author-guide.md#tokens) in entry keys and values.<br /><br />For list values, see also `MoveEntries`.
 `MoveEntries` | _(List assets only)_ Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
 `TextOperations` | <p>Change the value of an existing string entry or field; see _[text operations](../author-guide.md#text-operations)_ for more info.</p><p>To change an entry, use the format `["Entries", "entry key"]` and replace `"entry key"` with the key you'd specify for `Entries` above. If the entry doesn't exist, it'll be created and the text operation will be applied as if it was an empty string.</p><p>To change a field, use the format `["Fields", "entry key", "field key"]` and replace `"entry key"` and `"field key"` with the keys you'd specify for `Fields` above. If the entry doesn't exist, the operation will fail with an error message. If the field doesn't exist, it'll be created if the entry is an object, or fail with an error if the entry is a delimited string. Currently you can only target top-level fields.</p>
 
@@ -161,7 +161,7 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -181,7 +181,7 @@ for an item:
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -200,7 +200,7 @@ You can also delete an entry by setting its value to `null`. For example, this d
 recreate it with different conditions:
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -237,7 +237,7 @@ The order is often important for list assets (e.g. the game will use the first e
 `MoveEntries` field. For example, this moves the `Abigail` entry using each possible operation:
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -325,7 +325,7 @@ the entire entry:
 
 ```js
 {
-    "Format": "1.26.0",
+    "Format": "1.28.0",
     "Changes": [
         {
             "Action": "EditData",

@@ -110,9 +110,7 @@ namespace Pathoschild.Stardew.DebugMode
             // toggle debug menu
             if (this.Keys.ToggleDebug.JustPressed())
             {
-                this.ShowOverlay.Value = !this.ShowOverlay.Value;
-                if (this.Config.AllowGameDebug)
-                    this.GameDebugMode = !this.GameDebugMode;
+                this.ToggleDebugMenu();
             }
 
             // suppress dangerous actions
@@ -147,6 +145,14 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Methods
         ****/
+        /// <summary>Toggle the debug menu.</summary>
+        private void ToggleDebugMenu()
+        {
+            this.ShowOverlay.Value = !this.ShowOverlay.Value;
+            if (this.Config.AllowGameDebug)
+                this.GameDebugMode = !this.GameDebugMode;
+        }
+
         /// <summary>Correct the player's position when they warp into an area.</summary>
         /// <param name="location">The location the player entered.</param>
         /// <param name="player">The player who just warped.</param>

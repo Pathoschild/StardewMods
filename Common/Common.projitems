@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Commands\GenericCommandHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\MultiFertilizer\MultiFertilizerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\IInvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\MutableInvariantSet.cs" />

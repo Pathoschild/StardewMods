@@ -123,7 +123,7 @@ namespace ContentPatcher.Framework.Locations
                     .GroupBy(p => p.ModName)
                     .OrderByHuman(p => p.Key);
 
-                this.Monitor.VerboseLog($"Adding {customLocations.Length} locations:\n- {string.Join("\n- ", locationsByPack.Select(group => $"{group.Key}: {string.Join(", ", group.Select(p => p.Name))}"))}.");
+                this.Monitor.Log($"Adding {customLocations.Length} locations:\n- {string.Join("\n- ", locationsByPack.Select(group => $"{group.Key}: {string.Join(", ", group.Select(p => p.Name))}"))}.");
             }
 
             // add locations

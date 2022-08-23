@@ -9,8 +9,33 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Improved `EditImage` performance by migrating to SMAPI 3.15's new `IRawTextureData` asset type.
+## 1.28.0
+Released 18 August 2022 for SMAPI 3.14.0 or later. See the [release highlights](https://www.patreon.com/posts/70722755).
+
+* Added `RemoveDelimited` text operation (thanks to Shockah!).
+
+## 1.27.2
+Released 04 July 2022 for SMAPI 3.15.0 or later.
+
+* Fixed patches with tokenized `Target` fields not correctly reapplied on token change after 1.26.6.
+* Fixed typo in PyTK compatibility message (it applies to PyTK 1.23.0 or earlier, not 1.23.1).
+
+## 1.27.1
+Released 19 June 2022 for SMAPI 3.15.0 or later.
+
+* Fixed compatibility with PyTK's scale-up feature.  
+  _When PyTK 1.23.0 or earlier is installed, this will disable the main performance improvements in Content Patcher 1.27.0._
+
+## 1.27.0
+Released 17 June 2022 for SMAPI 3.15.0 or later. See the [release highlights](https://www.patreon.com/posts/67923889).
+
+* Migrated image edits to SMAPI's new [`IRawTextureData` asset type](https://stardewvalleywiki.com/Modding:Migrate_to_SMAPI_4.0#Raw_texture_data) to reduce load times and improve performance.
+* Optimized token updates to reduce in-game lag for some players.
+
+## 1.26.6
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Rewrote patch change tracking, which should significantly improve load times and performance in some cases.
 * Improved error when adding an invalid entry to a data model asset.
 
 ## 1.26.5

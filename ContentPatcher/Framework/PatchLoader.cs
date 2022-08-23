@@ -8,6 +8,7 @@ using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
@@ -67,11 +68,12 @@ namespace ContentPatcher.Framework
         /// <param name="rawPatches">The raw patches to load.</param>
         /// <param name="rootIndexPath">The path of indexes from the root <c>content.json</c> to the root which is loading patches; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <returns>Returns the patches that were loaded.</returns>
-        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch? parentPatch)
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
         {
+            bool verbose = this.Monitor.IsVerbose;
+
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
@@ -92,33 +94,28 @@ namespace ContentPatcher.Framework
             {
                 index++;
                 var localPath = path.With(patch.LogName!);
-                this.Monitor.VerboseLog($"   loading {localPath}...");
-                IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                if (verbose)
+                    this.Monitor.Log($"   loading {localPath}...");
+                IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
                 if (loaded != null)
                     loadedPatches.Add(loaded);
             }
-
-            // rebuild indexes
-            if (reindex)
-                this.PatchManager.Reindex(patchListChanged: true);
 
             return loadedPatches;
         }
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given patch.</summary>
         /// <param name="parentPatch">The parent patch for which to unload descendants.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        public void UnloadPatchesLoadedBy(IPatch parentPatch, bool reindex)
+        public void UnloadPatchesLoadedBy(IPatch parentPatch)
         {
-            this.UnloadPatches(patch => this.IsDescendant(parent: parentPatch, child: patch), reindex);
+            this.UnloadPatches(patch => this.IsDescendant(parent: parentPatch, child: patch));
         }
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given content pack.</summary>
         /// <param name="pack">The content pack for which to unload descendants.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        public void UnloadPatchesLoadedBy(RawContentPack pack, bool reindex)
+        public void UnloadPatchesLoadedBy(RawContentPack pack)
         {
-            this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack, reindex);
+            this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack);
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>
@@ -316,17 +313,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Unload patches matching a condition.</summary>
         /// <param name="where">Matches patches to unload.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
-        private void UnloadPatches(Func<IPatch, bool> where, bool reindex)
+        private void UnloadPatches(Func<IPatch, bool> where)
         {
             IPatch[] removePatches = this.PatchManager.GetPatches().Where(where).ToArray();
             if (removePatches.Any())
             {
                 foreach (IPatch patch in removePatches)
-                    this.PatchManager.Remove(patch, reindex: false);
-
-                if (reindex)
-                    this.PatchManager.Reindex(patchListChanged: true);
+                    this.PatchManager.Remove(patch);
             }
         }
 
@@ -336,11 +329,10 @@ namespace ContentPatcher.Framework
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
         /// <returns>The patch that was loaded, or <c>null</c> if it failed to load.</returns>
-        private IPatch? LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch? parentPatch, Action<string> logSkip)
+        private IPatch? LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, Patch? parentPatch, Action<string> logSkip)
         {
             var pack = rawContentPack.ContentPack;
             PatchType? action = null;
@@ -521,7 +513,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // save
@@ -677,7 +669,7 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // read from/to asset areas
@@ -749,7 +741,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // save patch
-                this.PatchManager.Add(patch, reindex);
+                this.PatchManager.Add(patch);
                 return patch;
             }
             catch (Exception ex)
@@ -766,7 +758,7 @@ namespace ContentPatcher.Framework
         /// <param name="textOperations">The parsed text operations.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, [NotNullWhen(false)] out string? error)
+        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out IList<ITextOperation> textOperations, [NotNullWhen(false)] out string? error)
         {
             bool Fail(string reason, out string outReason)
             {
@@ -775,7 +767,7 @@ namespace ContentPatcher.Framework
             }
 
             // get empty list
-            textOperations = new List<TextOperation>();
+            textOperations = new List<ITextOperation>();
             if (!patch.TextOperations.Any())
             {
                 error = null;
@@ -807,7 +799,7 @@ namespace ContentPatcher.Framework
                 List<IManagedTokenString> target = new List<IManagedTokenString>();
                 foreach (string? field in operation.Target)
                 {
-                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
+                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperationConfig.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
                         return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
                     target.Add(parsed);
                 }
@@ -820,8 +812,52 @@ namespace ContentPatcher.Framework
                 if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string? valueError, out IManagedTokenString? value))
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
+                // parse search
+                if (!tokenParser.TryParseString(operation.Search, assumeModIds, localPath.With(nameof(operation.Search)), out string? searchError, out IManagedTokenString? search))
+                    return Fail($"{errorPrefix}: the {nameof(operation.Search)} value '{operation.Search}' couldn't be parsed: {searchError}", out error);
+
+                // parse replace mode
+                TextOperationReplaceMode replaceMode;
+                if (operation.ReplaceMode is null)
+                    replaceMode = TextOperationReplaceMode.All;
+                else if (!Enum.TryParse(operation.ReplaceMode, true, out replaceMode))
+                    return Fail($"{errorPrefix}: invalid {nameof(operation.ReplaceMode)} value '{operation.ReplaceMode}', expected one of: {string.Join(", ", Enum.GetNames(typeof(TextOperationReplaceMode)))}", out error);
+
+                // get operation instance
+                ITextOperation parsedOperation;
+                switch (operationType)
+                {
+                    case TextOperationType.Append:
+                    case TextOperationType.Prepend:
+                        parsedOperation = new AppendOrPrependTextOperation(
+                            operation: operationType,
+                            target: target,
+                            value: value,
+                            delimiter: operation.Delimiter
+                        );
+                        break;
+
+                    case TextOperationType.RemoveDelimited:
+                        if (string.IsNullOrEmpty(operation.Delimiter))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set for a {operationType} text operation.", out error);
+                        if (string.IsNullOrWhiteSpace(search.Raw))
+                            return Fail($"{errorPrefix}: the {nameof(operation.Search)} value must be set for a {operationType} text operation.", out error);
+
+                        parsedOperation = new RemoveDelimitedTextOperation(
+                            operation: operationType,
+                            target: target,
+                            search: search,
+                            delimiter: operation.Delimiter,
+                            replaceMode: replaceMode
+                        );
+                        break;
+
+                    default:
+                        return Fail($"{errorPrefix}: unsupported text operation type '{operationType}'", out error);
+                }
+
                 // create text operation entry
-                textOperations.Add(new TextOperation(operationType, target, value, operation.Delimiter));
+                textOperations.Add(parsedOperation);
             }
 
             error = null;

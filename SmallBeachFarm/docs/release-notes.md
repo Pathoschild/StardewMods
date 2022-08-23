@@ -1,6 +1,22 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.4.2
+Released 18 August 2022 for SMAPI 3.14.0 or later.
+
+* Fixed broken-TV replacement applied to other farm types.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
+## 2.4.1
+Released 04 July 2022 for SMAPI 3.14.0 or later.
+
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
+
+## 2.4.0
+Released 05 June 2022 for SMAPI 3.14.0 or later.
+
+* Added optional fishing pier (disabled by default).
+
 ## 2.3.0
 Released 22 May 2022 for SMAPI 3.14.0 or later.
 

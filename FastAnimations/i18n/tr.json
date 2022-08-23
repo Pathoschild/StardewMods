@@ -24,7 +24,7 @@
     "config.harvest.name": "Hasat",
     "config.harvest.tooltip": "Mahsulleri ve yemleri elle ne kadar hızlı hasat ettiğiniz. Varsayılan {{defaultValue}}x.",
 
-    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.name": "Play Horse Flute", // TODO
     "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
 
     "config.milk.name": "Süt",
@@ -35,6 +35,9 @@
 
     "config.shear.name": "Kırpma",
     "config.shear.tooltip": "Makasları ne kadar hızlı kullandığınız. Varsayılan {{defaultValue}}x.",
+
+    "config.slingshot.name": "Use slingshot", // TODO
+    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
 
     "config.tool.name": "Sallama aracı",
     "config.tool.tooltip": "Aletlerinizi ne kadar hızlı salladığınız (silahlar ve olta hariç). Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",

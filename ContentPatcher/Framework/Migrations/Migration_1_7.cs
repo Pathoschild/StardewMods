@@ -9,7 +9,7 @@ using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
-    /// <summary>Migrate patches to format version 1.7.</summary>
+    /// <summary>Migrates patches to format version 1.7.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
     internal class Migration_1_7 : BaseMigration
     {

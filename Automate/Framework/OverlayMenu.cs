@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -20,8 +19,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The padding to apply to tile backgrounds to make the grid visible.</summary>
         private readonly int TileGap = 1;
 
-        /// <summary>A machine group lookup by tile coordinate.</summary>
-        private readonly IDictionary<Vector2, IMachineGroup> GroupTiles;
+        /// <summary>The unique key for the current location.</summary>
+        private readonly string LocationKey;
+
+        /// <summary>The machine data for the current location.</summary>
+        private readonly MachineDataForLocation? MachineData;
+
+        /// <summary>The machine group for machines connected to Junimo chests.</summary>
+        private readonly JunimoMachineGroup JunimoGroup;
 
 
         /*********
@@ -31,19 +36,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="machineGroups">The machine groups to display.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IEnumerable<IMachineGroup> machineGroups)
+        /// <param name="locationKey">The unique key for the current location.</param>
+        /// <param name="machineData">The machine groups to display.</param>
+        /// <param name="junimoGroup">The machine group for machines connected to Junimo chests.</param>
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, string locationKey, MachineDataForLocation? machineData, JunimoMachineGroup junimoGroup)
             : base(events, inputHelper, reflection)
         {
-            // init machine groups
-            machineGroups = machineGroups.ToArray();
-            this.GroupTiles =
-                (
-                    from machineGroup in machineGroups
-                    from tile in machineGroup.Tiles
-                    select new { tile, machineGroup }
-                )
-                .ToDictionary(p => p.tile, p => p.machineGroup);
+            this.LocationKey = locationKey;
+            this.MachineData = machineData;
+            this.JunimoGroup = junimoGroup;
         }
 
 
@@ -59,6 +60,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return;
 
             // draw each tile
+            IReadOnlySet<Vector2> junimoChestTiles = this.JunimoGroup.GetTiles(this.LocationKey);
             foreach (Vector2 tile in TileHelper.GetVisibleTiles(expand: 1))
             {
                 // get tile's screen coordinates
@@ -67,20 +69,26 @@ namespace Pathoschild.Stardew.Automate.Framework
                 int tileSize = Game1.tileSize;
 
                 // get machine group
-                this.GroupTiles.TryGetValue(tile, out IMachineGroup? group);
-                bool isGrouped = group != null;
-                bool isActive = isGrouped && group!.HasInternalAutomation;
+                IMachineGroup? group = null;
+                Color? color = null;
+                if (junimoChestTiles.Contains(tile))
+                {
+                    color = this.JunimoGroup.HasInternalAutomation
+                        ? Color.Green * 0.2f
+                        : Color.Red * 0.2f;
+                    group = this.JunimoGroup;
+                }
+                else if (this.MachineData is not null)
+                {
+                    if (this.MachineData.ActiveTiles.TryGetValue(tile, out group))
+                        color = Color.Green * 0.2f;
+                    else if (this.MachineData.DisabledTiles.TryGetValue(tile, out group) || this.MachineData.OutdatedTiles.ContainsKey(tile))
+                        color = Color.Red * 0.2f;
+                }
+                color ??= Color.Black * 0.5f;
 
                 // draw background
-                {
-                    Color color = Color.Black * 0.5f;
-                    if (isActive)
-                        color = Color.Green * 0.2f;
-                    else if (isGrouped)
-                        color = Color.Red * 0.2f;
-
-                    spriteBatch.DrawLine(screenX + this.TileGap, screenY + this.TileGap, new Vector2(tileSize - this.TileGap * 2, tileSize - this.TileGap * 2), color);
-                }
+                spriteBatch.DrawLine(screenX + this.TileGap, screenY + this.TileGap, new Vector2(tileSize - this.TileGap * 2, tileSize - this.TileGap * 2), color);
 
                 // draw group edge borders
                 if (group != null)
@@ -107,20 +115,22 @@ namespace Pathoschild.Stardew.Automate.Framework
             float screenY = tile.Y * Game1.tileSize - Game1.viewport.Y;
             float tileSize = Game1.tileSize;
 
+            IReadOnlySet<Vector2> tiles = group.GetTiles(this.LocationKey);
+
             // top
-            if (!group.Tiles.Contains(new Vector2(tile.X, tile.Y - 1)))
+            if (!tiles.Contains(new Vector2(tile.X, tile.Y - 1)))
                 spriteBatch.DrawLine(screenX, screenY, new Vector2(tileSize, borderSize), color); // top
 
             // bottom
-            if (!group.Tiles.Contains(new Vector2(tile.X, tile.Y + 1)))
+            if (!tiles.Contains(new Vector2(tile.X, tile.Y + 1)))
                 spriteBatch.DrawLine(screenX, screenY + tileSize, new Vector2(tileSize, borderSize), color); // bottom
 
             // left
-            if (!group.Tiles.Contains(new Vector2(tile.X - 1, tile.Y)))
+            if (!tiles.Contains(new Vector2(tile.X - 1, tile.Y)))
                 spriteBatch.DrawLine(screenX, screenY, new Vector2(borderSize, tileSize), color); // left
 
             // right
-            if (!group.Tiles.Contains(new Vector2(tile.X + 1, tile.Y)))
+            if (!tiles.Contains(new Vector2(tile.X + 1, tile.Y)))
                 spriteBatch.DrawLine(screenX + tileSize, screenY, new Vector2(borderSize, tileSize), color); // right
         }
     }

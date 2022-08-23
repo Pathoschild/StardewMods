@@ -1,6 +1,21 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed item lookup error if a mod added broken building data.
+* Internal optimizations.
+
+## 1.37.4
+Released 18 August 2022 for SMAPI 3.14.0 or later.
+
+* Fixed child birthday calculation (thanks to iBug!).
+* Improved translations. Thanks to LeecanIt (updated Italian)!
+
+## 1.37.3
+Released 04 July 2022 for SMAPI 3.14.0 or later.
+
+* Fixed lookup error when a child's `daysOld` field indicates they were born before the game started.
+
 ## 1.37.2
 Released 27 May 2022 for SMAPI 3.14.0 or later.
 

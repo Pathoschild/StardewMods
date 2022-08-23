@@ -9,14 +9,13 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enabled-message.name": "Show enabled message",
-    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
-    "config.disabled-message.name": "Show disabled message",
-    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+    "config.title.general-options": "Általános beállítások",
+    "config.enabled-message.name": "'Bekapcsolva' üzenet megjelenítése",
+    "config.enabled-message.desc": "Játékbeli üzenet a képernyő sarkában, ha a noclip mod be van kapcsolva.",
+    "config.disabled-message.name": "'Kikapcsolva' üzenet megjelenítése",
+    "config.disabled-message.desc": "Játékbeli üzenet a képernyő sarkában, amikor a noclip mod ki van kapcsolva.",
 
-    "config.title.controls": "Controls",
-    "config.toggle-key.name": "Toggle key",
-    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
+    "config.title.controls": "Vezérlők",
+    "config.toggle-key.name": "Kapcsoló billentyű",
+    "config.toggle-key.desc": "A noclip modot be- és kikapcsoló billentyű."
 }

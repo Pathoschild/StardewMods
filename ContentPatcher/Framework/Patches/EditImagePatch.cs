@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using PathHelper = System.IO.Path;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -29,6 +30,13 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
         private bool ResizedLastImage;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether to enable legacy compatibility mode for PyTK scale-up textures.</summary>
+        internal static bool EnablePyTkLegacyMode;
 
 
         /*********
@@ -90,25 +98,8 @@ namespace ContentPatcher.Framework.Patches
             // get editor
             IAssetDataForImage editor = asset.AsImage();
 
-            // read source file
-            IRawTextureData? rawSource = null;
-            Texture2D? fullSource = null;
-            int sourceWidth;
-            int sourceHeight;
-            if (string.Equals(System.IO.Path.GetExtension(this.FromAsset), ".xnb", StringComparison.OrdinalIgnoreCase))
-            {
-                fullSource = this.ContentPack.ModContent.Load<Texture2D>(this.FromAsset);
-                sourceWidth = fullSource.Width;
-                sourceHeight = fullSource.Height;
-            }
-            else
-            {
-                rawSource = this.ContentPack.ModContent.Load<IRawTextureData>(this.FromAsset);
-                sourceWidth = rawSource.Width;
-                sourceHeight = rawSource.Height;
-            }
-
             // fetch data
+            this.LoadSourceImage(this.FromAsset, out int sourceWidth, out int sourceHeight, out IRawTextureData? rawSource, out Texture2D? fullSource);
             if (!this.TryReadArea(this.FromArea, 0, 0, sourceWidth, sourceHeight, out Rectangle sourceArea, out string? error))
             {
                 this.Warn($"the source area is invalid: {error}.");
@@ -167,6 +158,45 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
+        /// <summary>Load the source image to apply to the target asset.</summary>
+        /// <param name="fromAsset">The local path to the source image file.</param>
+        /// <param name="width">The width of the loaded image.</param>
+        /// <param name="height">The height of the loaded image.</param>
+        /// <param name="rawData">The raw image data, if supported for the image file type.</param>
+        /// <param name="fullTexture">The full texture instance, if <paramref name="rawData"/> is null.</param>
+        private void LoadSourceImage(string fromAsset, out int width, out int height, out IRawTextureData? rawData, out Texture2D? fullTexture)
+        {
+            // disable raw data for .xnb files (which SMAPI can't read as raw data)
+            bool canUseRawData = !string.Equals(PathHelper.GetExtension(fromAsset), ".xnb", StringComparison.OrdinalIgnoreCase);
+
+            // disable raw data if PyTK is installed
+            if (canUseRawData && EditImagePatch.EnablePyTkLegacyMode)
+            {
+                // PyTK intercepts Texture2D file loads to rescale them (e.g. for HD portraits),
+                // but doesn't support IRawTextureData loads yet. We can't just check if the
+                // current file has a '.pytk.json' rescale file though, since PyTK may still
+                // rescale it if the original asset or another edit gets rescaled.
+                canUseRawData = false;
+                this.Monitor.LogOnce("Enabled compatibility mode for PyTK 1.23.0 or earlier. This won't cause any issues, but may impact performance.", LogLevel.Warn);
+            }
+
+            // load image
+            if (canUseRawData)
+            {
+                rawData = this.ContentPack.ModContent.Load<IRawTextureData>(fromAsset);
+                fullTexture = null;
+                width = rawData.Width;
+                height = rawData.Height;
+            }
+            else
+            {
+                rawData = null;
+                fullTexture = this.ContentPack.ModContent.Load<Texture2D>(fromAsset);
+                width = fullTexture.Width;
+                height = fullTexture.Height;
+            }
+        }
+
         /// <summary>Log a warning for an issue when applying the patch.</summary>
         /// <param name="message">The message to log.</param>
         /// <param name="level">The message log level.</param>

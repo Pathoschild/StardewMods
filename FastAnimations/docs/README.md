@@ -41,8 +41,9 @@ Here's what you can change:
   `MilkSpeed`          | 5×      | How fast you use the milk pail.
   `MountOrDismountSpeed` | 2×    | How fast you mount/dismount horses (including custom mounts like Tractor Mod).
   `ShearSpeed`         | 5×      | How fast you use the shears.
+  `SlingshotSpeed`     | 1×      | How fast you use slingshots.<br /><small>(Suggested value: 1.1×.)</small>
   `ToolSwingSpeed`     | 1×      | How fast you swing your tools (except weapons & fishing rod).<br /><small>(Suggested value: 2×.)</small>
-  `WeaponSwingSpeed`   | 1×      | How fast you swing your weapons.<br /><small>(Suggested value: 4×.)</small>
+  `WeaponSwingSpeed`   | 1×      | How fast you swing your melee weapons.<br /><small>(Suggested value: 4×.)</small>
 
   World animations:
 
