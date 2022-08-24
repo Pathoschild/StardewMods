@@ -15,7 +15,9 @@ namespace ContentPatcher.Framework.Lexing
         ** Fields
         *********/
         /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
+        // private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
+
+        private static readonly char[] SplitPattern = new[] { '{', '}', '|', ':' };
 
 
         /*********
@@ -35,12 +37,72 @@ namespace ContentPatcher.Framework.Lexing
             // special cases
             if (rawText is null)
                 yield break;
-            if (rawText is "true" or "false" || string.IsNullOrWhiteSpace(rawText))
+
+            if (rawText.Length == 0)
             {
-                yield return new LexBit(LexBitType.Literal, rawText);
+                yield return new LexBit(LexBitType.Literal, string.Empty);
                 yield break;
             }
 
+            int lastMatch = 0;
+            int start = 0;
+            int index;
+            while (true)
+            {
+                index = rawText.IndexOfAny(SplitPattern, start);
+                if (index == -1)
+                {
+                    if (lastMatch < rawText.Length)
+                        yield return new LexBit(LexBitType.Literal, rawText[lastMatch..]);
+                    yield break;
+                }
+                else
+                {
+
+                    switch (rawText[index])
+                    {
+                        case '{':
+                        case '}':
+                            char match = rawText[index];
+                            if (index < rawText.Length - 1 && match == rawText[index + 1])
+                            {
+                                if (lastMatch != index)
+                                    yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                                start = index + 2;
+                                lastMatch = start;
+                                yield return match == '{'
+                                    ? new LexBit(LexBitType.StartToken, "{{")
+                                    : new LexBit(LexBitType.EndToken, "}}");
+                                break;
+                            }
+                            else
+                            {
+                                // not a real match, this is a { or } alone
+                                // advance past and try again.
+                                start = index + 1;
+                                break;
+                            }
+                        case '|':
+                            if (lastMatch != index)
+                                yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                            yield return new LexBit(LexBitType.NamedInputArgSeparator, "|");
+                            start = index + 1;
+                            lastMatch = start;
+                            break;
+                        case ':':
+                            if (lastMatch != index)
+                                yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                            yield return new LexBit(LexBitType.PositionalInputArgSeparator, ":");
+                            start = index + 1;
+                            lastMatch = start;
+                            break;
+                        default:
+                            throw new InvalidOperationException("Not supposed to get here at all, lol");
+                    }
+                }
+            }
+
+            /*
             // parse
             string[] parts = Lexer.LexicalSplitPattern.Split(rawText);
             foreach (string part in parts)
@@ -59,6 +121,7 @@ namespace ContentPatcher.Framework.Lexing
 
                 yield return new LexBit(type, part);
             }
+            */
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
@@ -206,7 +269,7 @@ namespace ContentPatcher.Framework.Lexing
                     }
                 }
             }
-            string rawInput = string.Join("", input.Select(p => p.Text));
+            
             LinkedList<ILexToken> tokens;
             try
             {
@@ -214,6 +277,7 @@ namespace ContentPatcher.Framework.Lexing
             }
             catch (Exception ex)
             {
+                string rawInput = string.Join("", input.Select(p => p.Text));
                 throw new InvalidOperationException($"Error parsing '{rawInput}' as a tokenizable string", ex);
             }
 
