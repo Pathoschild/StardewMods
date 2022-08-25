@@ -14,9 +14,7 @@ namespace ContentPatcher.Framework.Lexing
         /*********
         ** Fields
         *********/
-        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        // private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
-
+        /// <summary>The four characters to split by for lexical splitting. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments.</summary>
         private static readonly char[] SplitPattern = new[] { '{', '}', '|', ':' };
 
 
@@ -44,26 +42,28 @@ namespace ContentPatcher.Framework.Lexing
                 yield break;
             }
 
+            int length = rawText.Length;
+
             int lastMatch = 0;
             int start = 0;
             int index;
-            while (true)
+
+            do
             {
                 index = rawText.IndexOfAny(SplitPattern, start);
                 if (index == -1)
                 {
-                    if (lastMatch < rawText.Length)
+                    if (lastMatch < length)
                         yield return new LexBit(LexBitType.Literal, rawText[lastMatch..]);
                     yield break;
                 }
                 else
                 {
-
-                    switch (rawText[index])
+                    char match = rawText[index];
+                    switch (match)
                     {
                         case '{':
                         case '}':
-                            char match = rawText[index];
                             if (index < rawText.Length - 1 && match == rawText[index + 1])
                             {
                                 if (lastMatch != index)
@@ -97,31 +97,10 @@ namespace ContentPatcher.Framework.Lexing
                             lastMatch = start;
                             break;
                         default:
-                            throw new InvalidOperationException("Not supposed to get here at all, lol");
+                            throw new InvalidOperationException("How did we get here?");
                     }
                 }
-            }
-
-            /*
-            // parse
-            string[] parts = Lexer.LexicalSplitPattern.Split(rawText);
-            foreach (string part in parts)
-            {
-                if (part == string.Empty)
-                    continue; // split artifact
-
-                LexBitType type = part switch
-                {
-                    "{{" => LexBitType.StartToken,
-                    "}}" => LexBitType.EndToken,
-                    InternalConstants.PositionalInputArgSeparator => LexBitType.PositionalInputArgSeparator,
-                    InternalConstants.NamedInputArgSeparator => LexBitType.NamedInputArgSeparator,
-                    _ => LexBitType.Literal
-                };
-
-                yield return new LexBit(type, part);
-            }
-            */
+            } while (lastMatch < length);
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
