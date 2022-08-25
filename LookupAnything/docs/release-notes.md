@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed item lookup 'needed for' not listing bundles which use categories.
 * Fixed item lookup error if a mod added broken building data.
 * Internal optimizations.
 
