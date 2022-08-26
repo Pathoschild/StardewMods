@@ -36,14 +36,17 @@ namespace ContentPatcher.Framework.Lexing
             if (rawText is null)
                 yield break;
 
+            // Empty string - the rest of the function
+            // avoids yielding out empty strings
+            // so this must be handled special.
             if (rawText.Length == 0)
             {
                 yield return new LexBit(LexBitType.Literal, string.Empty);
                 yield break;
             }
 
+            // parse
             int length = rawText.Length;
-
             int lastMatch = 0;
             int start = 0;
             int index;
