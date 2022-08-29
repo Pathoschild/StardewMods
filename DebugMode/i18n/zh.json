@@ -3,29 +3,26 @@
     ** Debug info
     *********/
     // labels shown on the debug screen
-    "label.tile": "地格",
+    "label.tile": "坐标",
     "label.map": "地图",
     "label.menu": "菜单",
     "label.submenu": "子菜单",
-    "label.minigame": "迷你游戏",
+    "label.minigame": "小游戏",
     "label.festival-name": "节日",
-    "label.event-id": "事件标识",
+    "label.event-id": "事件ID",
     "label.event-script": "事件脚本",
-    "label.song": "歌",
-
-
+    "label.song": "音乐",
     /*********
     ** Generic Mod Config Menu UI
     *********/
     // general options
     "config.title.general-options": "常规",
-    "config.enable-game-debug.name": "启用热键",
-    "config.enable-game-debug.desc": "显示详细调试信息，并启用热键功能，如：5键传送至海滩。",
+    "config.enable-game-debug.name": "启用游戏调试热键",
+    "config.enable-game-debug.desc": "当显示调试信息时，一并启用游戏调试热键功能，如：按 5 键传送至海滩。",
     "config.enable-dangerous-hotkeys.name": "启用危险热键",
     "config.enable-dangerous-hotkeys.desc": "在已启用热键的前提下，启用那些潜在可能毁档的热键，如：跳过今天、随机玩家装扮、随机室内装潢。",
-
     // controls
     "config.title.controls": "键位",
-    "config.toggle-debug-key.name": "调试信息",
-    "config.toggle-debug-key.desc": "开/关调试信息。"
+    "config.toggle-debug-key.name": "开关调试信息",
+    "config.toggle-debug-key.desc": "开/关调试信息的按键。"
 }
