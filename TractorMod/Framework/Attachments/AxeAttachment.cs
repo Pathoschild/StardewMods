@@ -141,6 +141,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             var config = this.Config;
 
+            // stump
+            if (tree.stump.Value)
+                return config.CutTreeStumps;
+
             // seed
             if (tree.growthStage.Value == Tree.seedStage)
                 return config.ClearTreeSeeds;

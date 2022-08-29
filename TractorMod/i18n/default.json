@@ -85,6 +85,9 @@
     "config.chop-trees-grown.name": "Chop Trees (Grown)",
     "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
 
+    "config.chop-trees-stumps.name": "Chop Trees (Stumps)",
+    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)",
+
     "config.chop-bushes.name": "Chop Bushes",
     "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
 
