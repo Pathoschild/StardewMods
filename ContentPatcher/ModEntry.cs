@@ -112,7 +112,7 @@ namespace ContentPatcher
 
             // enable temporary PyTK legacy mode
             IModInfo? pyTk = helper.ModRegistry.Get("Platonymous.Toolkit");
-            EditImagePatch.EnablePyTkLegacyMode = pyTk is not null && pyTk.Manifest.Version.IsOlderThan("1.23.1");
+            EditImagePatch.EnablePyTkLegacyMode = pyTk is not null && pyTk.Manifest.Version.IsOlderThan("1.24.0");
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>

@@ -116,12 +116,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Construct an instance.</summary>
         /// <param name="recipe">The recipe to parse.</param>
-        public RecipeModel(CraftingRecipe recipe)
+        /// <param name="ingredients">The items needed to craft the recipe, or <c>null</c> to parse them from the recipe.</param>
+        public RecipeModel(CraftingRecipe recipe, RecipeIngredientModel[]? ingredients = null)
             : this(
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
-                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                ingredients: ingredients ?? RecipeModel.ParseIngredients(recipe),
                 item: _ => recipe.createItem(),
                 isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
@@ -136,14 +137,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Construct an instance.</summary>
         /// <param name="blueprint">The building blueprint.</param>
         /// <param name="building">A sample building constructed by the blueprint.</param>
-        public RecipeModel(BluePrint blueprint, Building building)
+        /// <param name="ingredients">The items needed to construct the blueprint, or <c>null</c> to parse them from the blueprint.</param>
+        public RecipeModel(BluePrint blueprint, Building building, RecipeIngredientModel[]? ingredients = null)
             : this(
                 key: blueprint.displayName,
                 type: RecipeType.BuildingBlueprint,
                 displayType: I18n.Building_Construction(),
-                ingredients: blueprint.itemsRequired
-                    .Select(ingredient => new RecipeIngredientModel(ingredient.Key, ingredient.Value))
-                    .ToArray(),
+                ingredients: ingredients ?? RecipeModel.ParseIngredients(blueprint),
                 item: _ => null,
                 isKnown: () => true,
                 machineParentSheetIndex: null,
@@ -174,6 +174,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 isForMachine: other.IsForMachine
             )
         { }
+
+        /// <summary>Parse the ingredients for a recipe.</summary>
+        /// <param name="recipe">The crafting recipe.</param>
+        public static RecipeIngredientModel[] ParseIngredients(CraftingRecipe recipe)
+        {
+            return recipe.recipeList
+                .Select(p => new RecipeIngredientModel(p.Key, p.Value))
+                .ToArray();
+        }
+
+        /// <summary>Parse the ingredients for a recipe.</summary>
+        /// <param name="blueprint">The building blueprint.</param>
+        public static RecipeIngredientModel[] ParseIngredients(BluePrint blueprint)
+        {
+            return blueprint.itemsRequired
+                .Select(ingredient => new RecipeIngredientModel(ingredient.Key, ingredient.Value))
+                .ToArray();
+        }
 
         /// <summary>Create the item crafted by this recipe if it's valid.</summary>
         /// <param name="ingredient">The optional ingredient for which to create an item.</param>

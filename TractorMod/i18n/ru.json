@@ -85,6 +85,9 @@
     "config.chop-trees-grown.name": "Срубка Деревьев (Выросших)",
     "config.chop-trees-grown.tooltip": "Будет срубать выросшие обычные деревья.",
 
+    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
+    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+
     "config.chop-bushes.name": "Срубка Кустов",
     "config.chop-bushes.tooltip": "Будет срубать кусты, которые можно срубить (не волокна).",
 

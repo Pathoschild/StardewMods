@@ -177,7 +177,7 @@ namespace ContentPatcher.Framework.Patches
                 // current file has a '.pytk.json' rescale file though, since PyTK may still
                 // rescale it if the original asset or another edit gets rescaled.
                 canUseRawData = false;
-                this.Monitor.LogOnce("Enabled compatibility mode for PyTK 1.23.0 or earlier. This won't cause any issues, but may impact performance.", LogLevel.Warn);
+                this.Monitor.LogOnce("Enabled compatibility mode for PyTK 1.23.* or earlier. This won't cause any issues, but may impact performance.", LogLevel.Warn);
             }
 
             // load image

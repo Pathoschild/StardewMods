@@ -162,6 +162,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.Axe.CutGrownTrees = value
                 )
                 .AddCheckbox(
+                    name: I18n.Config_ChopTreesStumps_Name,
+                    tooltip: I18n.Config_ChopTreesStumps_Tooltip,
+                    get: config => config.StandardAttachments.Axe.CutTreeStumps,
+                    set: (config, value) => config.StandardAttachments.Axe.CutTreeStumps = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_ChopBushes_Name,
                     tooltip: I18n.Config_ChopBushes_Tooltip,
                     get: config => config.StandardAttachments.Axe.CutBushes,

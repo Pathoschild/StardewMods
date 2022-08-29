@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         /// <summary>Whether this group represents all the chests connected to a Junimo chest.</summary>
         public bool IsJunimoGroup { get; }
 
+        /// <summary>The underlying machine group.</summary>
+        public IMachineGroup MachineGroup { get; }
+
 
         /*********
         ** Public methods
@@ -29,6 +32,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         /// <param name="machineGroup">The machine group to analyze.</param>
         public GroupStats(IMachineGroup machineGroup)
         {
+            this.MachineGroup = machineGroup;
+
             if (machineGroup.IsJunimoGroup)
                 this.Name = "Distributed group";
             else

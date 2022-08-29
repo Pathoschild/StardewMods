@@ -9,8 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.28.1
+Released 29 August 2022 for SMAPI 3.15.0 or later.
+
+* Updated compatibility workaround for the recent PyTK update.
+
 ## 1.28.0
-Released 18 August 2022 for SMAPI 3.14.0 or later. See the [release highlights](https://www.patreon.com/posts/70722755).
+Released 18 August 2022 for SMAPI 3.15.0 or later. See the [release highlights](https://www.patreon.com/posts/70722755).
 
 * Added `RemoveDelimited` text operation (thanks to Shockah!).
 

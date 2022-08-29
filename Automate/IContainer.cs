@@ -19,6 +19,10 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Whether this is a Junimo chest, which shares a global inventory with all other Junimo chests.</summary>
         bool IsJunimoChest { get; }
 
+        /// <summary>An object instance which uniquely identifies the underlying inventory.</summary>
+        /// <remarks>Normal chests should have a unique instance, while chests with shared inventories (like Junimo Chests) should share this instance too. This isn't necessarily the inventory itself, though that's the default implementation.</remarks>
+        object InventoryReferenceId { get; }
+
 
         /*********
         ** Public methods

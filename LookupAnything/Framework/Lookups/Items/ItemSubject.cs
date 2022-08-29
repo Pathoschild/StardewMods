@@ -855,7 +855,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private IEnumerable<BundleIngredientModel> GetIngredientsFromBundle(BundleModel bundle, SObject item)
         {
             return bundle.Ingredients
-                .Where(p => p.ItemID == item.ParentSheetIndex && p.Quality <= (ItemQuality)item.Quality); // get ingredients
+                .Where(required =>
+                {
+                    if (required.ItemID == -1)
+                        return false; // monetary bundle
+
+                    if (required.ItemID != (required.ItemID < 0 ? item.Category : item.ParentSheetIndex))
+                        return false;
+
+                    if ((ItemQuality)item.Quality < required.Quality)
+                        return false;
+
+                    return true;
+                });
         }
 
         /// <summary>Get whether an ingredient is still needed for a bundle.</summary>

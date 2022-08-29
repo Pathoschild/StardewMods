@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
@@ -41,6 +42,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <inheritdoc />
         public Rectangle TileArea { get; }
 
+        /// <inheritdoc />
+        public object InventoryReferenceId { get; }
+
+
 
         /*********
         ** Public methods
@@ -50,11 +55,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="location">The location which contains the container.</param>
         /// <param name="tile">The tile area covered by the container.</param>
         /// <param name="migrateLegacyOptions">Whether to migrate legacy chest options, if applicable.</param>
+        [SuppressMessage("SMAPI.CommonErrors", "AvoidImplicitNetFieldCast", Justification = "We're deliberately referencing the net list here.")]
         public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool migrateLegacyOptions = true)
         {
             this.Chest = chest;
             this.Location = location;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+            this.InventoryReferenceId = chest.items;
 
             if (migrateLegacyOptions)
                 this.MigrateLegacyOptions();
