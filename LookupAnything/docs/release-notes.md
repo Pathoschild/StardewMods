@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.37.5
+Released 29 August 2022 for SMAPI 3.14.0 or later.
+
 * Fixed item lookup 'needed for' not listing bundles which use categories.
 * Fixed item lookup error if a mod added broken building data.
 * Internal optimizations.

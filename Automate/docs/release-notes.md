@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.27.5
+Released 29 August 2022 for SMAPI 3.14.0 or later.
+
 * The `automate summary` command now shows all the connected locations for a Junimo chest group.
 * Fixed error using `automate summary` with an unlimited chest from the Chests and Pouches mod.
 * Internal changes to simplify supporting custom linked chests in future versions.

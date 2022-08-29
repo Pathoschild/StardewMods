@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.16.0
+Released 29 August 2022 for SMAPI 3.14.0 or later.
+
 * Added option to chop tree stumps with the axe (enabled by default) separately from chopping grown trees.
 
 ## 4.15.6
