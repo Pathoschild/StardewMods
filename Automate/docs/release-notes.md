@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed deconstructor accepting items it normally wouldn't.
+
 ## 1.27.5
 Released 29 August 2022 for SMAPI 3.14.0 or later.
 
