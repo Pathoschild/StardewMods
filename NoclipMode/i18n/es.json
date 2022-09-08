@@ -2,21 +2,20 @@
     /*********
     ** In-game messages
     *********/
-    "enabled-message": "Noclip ha sido habilitado; empuja {{button}} otra vez para inhabilitarlo.",
-    "disabled-message": "Noclip ha sido inhabilitado; empuja {{button}} otra vez para habilitarlo.",
+    "enabled-message": "Noclip ha sido habilitado; apretar {{button}} otra vez para inhabilitarlo.",
+    "disabled-message": "Noclip ha sido inhabilitado; apretar {{button}} otra vez para habilitarlo.",
 
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enabled-message.name": "Show enabled message",
-    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
-    "config.disabled-message.name": "Show disabled message",
-    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+    "config.title.general-options": "Opciones Generales",
+    "config.enabled-message.name": "Mostrar mensaje habilitado",
+    "config.enabled-message.desc": "Muestra un mensaje en el juego, en la esquina de la pantalla cuando el modo No Clip está activado.",
+    "config.disabled-message.name": "Mostrar mensaje deshabilitado",
+    "config.disabled-message.desc": "Muestra un mensaje en el juego, en la esquina de la pantalla cuando el modo No Clip está desactivado.",
 
-    "config.title.controls": "Controls",
-    "config.toggle-key.name": "Toggle key",
-    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
+    "config.title.controls": "Controles",
+    "config.toggle-key.name": "Alternar Tecla",
+    "config.toggle-key.desc": "Las teclas que activan o desactivan el modo No Clip en el juego."
 }
