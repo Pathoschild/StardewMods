@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             tool = tool.AssertNotNull();
 
             // break stones
-            if (this.Config.ClearDebris && tileObj?.Name == "Stone")
+            if (this.Config.ClearDebris && tileObj?.IsBreakableStone() == true)
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // break flooring & paths
@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
 
             // clear weeds
-            if (this.Config.ClearWeeds && this.IsWeed(tileObj))
+            if (this.Config.ClearWeeds && tileObj?.IsWeeds() == true)
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // handle dirt

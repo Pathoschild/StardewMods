@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Ein freundlicher Geist, der Müll beseitigt.",
 
     // item types
-    "data.type.debris": "Verwilderung",
-    "data.type.stone": "Stein",
     "data.type.container": "Behältniss",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Brütet Eier zu Küken und Entchen aus.",
-    "data.item.broken-branch.name": "Zerbrochener Ast",
-    "data.item.broken-branch.description": "Ein Zerbrochener Ast. Zerschlage ihn mit deiner Axt um Holz zu bekommen.",
-    "data.item.stone.name": "Stein",
-    "data.item.stone.description": "Ein unscheinbarer grauer Stein. Zerbreche ihn um Steine zu bekommen.",
-    "data.item.geode.name": "Geodenader",
-    "data.item.geode.description": "Baue sie ab, um eine Geode zu bekommen.",
-    "data.item.frozen-geode.name": "Gefrorene Geodenader",
-    "data.item.frozen-geode.description": "Baue sie ab, um eine gefrorene Geode zu bekommen.",
-    "data.item.magma-geode.name": "Magmageodenader",
-    "data.item.magma-geode.description": "Baue sie ab, um eine Magma-Geode zu bekommen.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Gras",
-    "data.item.weed.description": "Unscheinbares Gras. Kann gemischte Samen oder Fasern enthalten.",
-    "data.item.fertile-weed.name": "Fruchtbares Gras",
-    "data.item.fertile-weed.description": "Lässt garantiert wilde Samen fallen.",
-    "data.item.ice-crystal.name": "Eiskristall",
-    "data.item.ice-crystal.description": "Ein unscheinbarer Eiskristall. Sehr geringe Chance verfeinerten Quartz zu enthalten.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Amethystader",
-    "data.item.amethyst-node.description": "Baue sie ab, um Amethysten zu bekommen.",
-    "data.item.aquamarine-node.name": "Aquamarinader",
-    "data.item.aquamarine-node.description": "Baue sie ab, um Aquamarine zu bekommen.",
-    "data.item.diamond-node.name": "Diamantader",
-    "data.item.diamond-node.description": "Baue sie ab, um Diamanten zu bekommen.",
-    "data.item.emerald-node.name": "Smaragdader",
-    "data.item.emerald-node.description": "Baue sie ab, um Smaragde zu bekommen.",
-    "data.item.gem-node.name": "Edelsteinader",
-    "data.item.gem-node.description": "Baue sie ab, um Smaragde, Aquamarine, Rubine, Amethysten, Topase, Jade, oder Diamanten zu bekommen.",
-    "data.item.jade-node.name": "Jadeader",
-    "data.item.jade-node.description": "Baue sie ab, um Jade zu bekommen.",
-    "data.item.mystic-stone.name": "Mystischer Stein",
-    "data.item.mystic-stone.description": "Baue ihn ab, um seltene Erze oder Juwelen zu bekommen. Beinhaltet prismatische Scherbe.",
-    "data.item.prismatic-node.name": "Prismatische Ader",
-    "data.item.prismatic-node.description": "Baue sie ab,um prismatische Scherben zu bekommen.",
-    "data.item.ruby-node.name": "Rubinader",
-    "data.item.ruby-node.description": "Baue sie ab, um Rubine zu bekommen.",
-    "data.item.topaz-node.name": "Topasader",
-    "data.item.topaz-node.description": "Baue sie ab, um Topase zu bekommen.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Schlackenscherbenader",
-    "data.item.cinder-shard-node.description": "Baue sie ab um eine Schlackenscherbe zu bekommen.",
-    "data.item.copper-node.name": "Kupferader",
-    "data.item.copper-node.description": "Baue sie ab, um Kupfererz zu bekommen.",
-    "data.item.gold-node.name": "Goldader",
-    "data.item.gold-node.description": "Baue sie ab, um Golderz zu bekommen.",
-    "data.item.iridium-node.name": "Iridiumader",
-    "data.item.iridium-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
-    "data.item.iron-node.name": "Eisenader",
-    "data.item.iron-node.description": "Baue sie ab, um Eisenerz zu bekommen.",
-    "data.item.omni-geode-node.name": "Omni-Geoden-Ader",
-    "data.item.omni-geode-node.description": "Baue sie ab um eine Omni-Geode zu bekommen.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Farbiger Stein",
-    "data.item.colored-stone.description": "Ein unscheinbarer Stein. Kann Stein, Erz oder Geoden enthalten.",
-    "data.item.mine-stone.name": "Stein",
-    "data.item.mine-stone.description": "Bau sie ab um Stein oder mit Glück Kohle zu bekommen.",
-
-    // other stones
-    "data.item.clay-stone.name": "Lehmstein",
-    "data.item.clay-stone.description": "Zerbrich ihn ab um Lehm zu bekommen.",
-    "data.item.fossil-stone.name": "Fossilien stein",
-    "data.item.fossil-stone.description": "Zerbrich ihn um Fossilien oder Knochen zu bekommen.",
-
-    // mine containers
     "data.item.barrel.name": "Fass",
     "data.item.barrel.description": "Zerschlage es um verschiedenes Gut zu erhalten.",
     "data.item.box.name": "Kiste",

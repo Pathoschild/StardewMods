@@ -283,7 +283,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <returns>Returns whether it was harvested.</returns>
         private bool TryHarvestWeeds([NotNullWhen(true)] SObject? weeds, GameLocation location, Vector2 tile, Farmer player, Tool tool)
         {
-            if (this.Config.ClearWeeds && this.IsWeed(weeds))
+            if (this.Config.ClearWeeds && weeds?.IsWeeds() == true)
             {
                 this.UseToolOnTile(tool, tile, player, location); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
                 weeds.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed

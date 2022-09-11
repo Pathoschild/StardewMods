@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Przyjazny duch, który sprząta śmieci.",
 
     // item types
-    "data.type.debris": "Pozostałość",
-    "data.type.stone": "Skała",
     "data.type.container": "Kontener",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Tutaj z jaj wylęgają się młode kury i kaczki.",
-    "data.item.broken-branch.name": "Złamana Gałąź",
-    "data.item.broken-branch.description": "Zwykła złamana gałąź. Uderz siekierą, aby uzyskać drewno.",
-    "data.item.stone.name": "Kamień",
-    "data.item.stone.description": "Zwykła szara skała. Rozbij, aby uzyskać kamień.",
-    "data.item.geode.name": "Złoże Geod",
-    "data.item.geode.description": "Rozbij, aby uzyskać geody.",
-    "data.item.frozen-geode.name": "Złoże Lodowych Geod",
-    "data.item.frozen-geode.description": "Rozbij, aby uzyskać lodowe geody.",
-    "data.item.magma-geode.name": "Złoże Magmowych Geod",
-    "data.item.magma-geode.description": "Rozbij, aby uzyskać magmowe geody.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Chwast",
-    "data.item.weed.description": "Zwykły chwast. Może zawierać włókna lub zmieszane nasiona.",
-    "data.item.fertile-weed.name": "Płodny Chwast",
-    "data.item.fertile-weed.description": "Gwarantuje wypadnięcie dzikich nasion.",
-    "data.item.ice-crystal.name": "Lodowy Kryształ",
-    "data.item.ice-crystal.description": "Zwykły lodowy kryształ. Bardzo mała szansa na wypadnięcie rafinowanego kwarcu.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Złoże Ametystów",
-    "data.item.amethyst-node.description": "Rozbij, aby uzyskać ametysty.",
-    "data.item.aquamarine-node.name": "Złoże Akwamarynów",
-    "data.item.aquamarine-node.description": "Rozbij, aby uzyskać akwamaryny.",
-    "data.item.diamond-node.name": "Złoże Diamentów",
-    "data.item.diamond-node.description": "Rozbij, aby uzyskać diamenty.",
-    "data.item.emerald-node.name": "Złoże Szmaragdów",
-    "data.item.emerald-node.description": "Rozbij, aby uzyskać szmaragdy.",
-    "data.item.gem-node.name": "Złoże Klejnotów",
-    "data.item.gem-node.description": "Rozbij, aby uzyskać szmaragdy, akwamaryny, rubiny, ametysty, topazy, jadeity lub diamenty.",
-    "data.item.jade-node.name": "Złoże Jadeitów",
-    "data.item.jade-node.description": "Rozbij, aby uzyskać jadeity.",
-    "data.item.mystic-stone.name": "Mistyczny Kamień",
-    "data.item.mystic-stone.description": "Rozbij, aby uzyskać rzadkie klejnoty i rudy, w tym pryzmatyczne odłamki.",
-    "data.item.prismatic-node.name": "Pryzmatyczne Złoże",
-    "data.item.prismatic-node.description": "Rozbij, aby uzyskać pryzmatyczne odłamki.",
-    "data.item.ruby-node.name": "Złoże Rubinów",
-    "data.item.ruby-node.description": "Rozbij, aby uzyskać rubiny.",
-    "data.item.topaz-node.name": "Złoże Topazów",
-    "data.item.topaz-node.description": "Rozbij, aby uzyskać topazy.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Złoże Odłamków Popiołu",
-    "data.item.cinder-shard-node.description": "Rozbij, aby uzyskać odłamki popiołu.",
-    "data.item.copper-node.name": "Złoże Miedzi",
-    "data.item.copper-node.description": "Rozbij, aby uzyskać rudę miedzi.",
-    "data.item.gold-node.name": "Złoże Złota",
-    "data.item.gold-node.description": "Rozbij, aby uzyskać rudę złota.",
-    "data.item.iridium-node.name": "Złoże Irydu",
-    "data.item.iridium-node.description": "Rozbij, aby uzyskać rudę irydu.",
-    "data.item.iron-node.name": "Złoże Żelaza",
-    "data.item.iron-node.description": "Rozbij, aby uzyskać rudę żelaza.",
-    "data.item.omni-geode-node.name": "Złoże Geody Omni",
-    "data.item.omni-geode-node.description": "Rozbij, aby uzyskać geodę omni.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Kolorowy Kamień",
-    "data.item.colored-stone.description": "Zwykła skała. Może zawierać kamień, rudy lub geody.",
-    "data.item.mine-stone.name": "Kamień",
-    "data.item.mine-stone.description": "Rozbij, aby uzyskać kamień z szansą na wypadnięcie węgla.",
-
-    // other stones
-    "data.item.clay-stone.name": "Skamieniała Glina",
-    "data.item.clay-stone.description": "Rozbij, aby uzyskać glinę.",
-    "data.item.fossil-stone.name": "Skamielina",
-    "data.item.fossil-stone.description": "Rozbij, aby uzyskać skamieliny i kości.",
-
-    // mine containers
     "data.item.barrel.name": "Beczka",
     "data.item.barrel.description": "Zniszcz, aby uzyskać rozmaite przedmioty.",
     "data.item.box.name": "Skrzynka",

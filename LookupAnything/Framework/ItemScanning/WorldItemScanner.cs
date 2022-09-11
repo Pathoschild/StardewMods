@@ -135,7 +135,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 && (
                     obj.IsSpawnedObject
                     || obj.isForage(null) // location argument is only used to check if it's on the beach, in which case everything is forage
-                    || (obj is not Chest && obj.Name is "Weeds" or "Stone" or "Twig")
+                    || obj.Category == SObject.litterCategory
                 );
         }
 

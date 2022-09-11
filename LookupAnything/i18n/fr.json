@@ -86,68 +86,10 @@
     "data.npc.trash-bear.description": "Un esprit amical qui nettoie les déchets.",
 
     // item types
-    "data.type.debris": "Débris",
-    "data.type.stone": "Pierre",
     "data.type.container": "Contenant",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
-    "data.item.broken-branch.name": "Branche cassée",
-    "data.item.broken-branch.description": "Une branche cassée. A couper avec une hache pour obtenir du bois.",
-    "data.item.stone.name": "Pierre",
-    "data.item.stone.description": "Une pierre grise. A casser avec une pioche pour obtenir de la pierre.",
-    "data.item.geode.name": "Filon de géode",
-    "data.item.geode.description": "A casser pour obtenir des géodes.",
-    "data.item.frozen-geode.name": "Filon de géode gelée",
-    "data.item.frozen-geode.description": "A casser pour obtenir des géodes gelées.",
-    "data.item.magma-geode.name": "Filon de géode de lave",
-    "data.item.magma-geode.description": "A casser pour obtenir des géodes de lave.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Herbe",
-    "data.item.weed.description": "Une herbe. Peut donner des fibres ou des graines..",
-    "data.item.fertile-weed.name": "Herbe fertile",
-    "data.item.fertile-weed.description": "Donne des graines.",
-    "data.item.ice-crystal.name": "Cristal de glace",
-    "data.item.ice-crystal.description": "Un cristal de glace. A une petite chance de contenir du quartz.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Filon d'améthyste",
-    "data.item.amethyst-node.description": "A casser pour obtenir de l'améthyste.",
-    "data.item.aquamarine-node.name": "Filon d'aigue-marine",
-    "data.item.aquamarine-node.description": "A casser pour obtenir de l'aigue-marine.",
-    "data.item.diamond-node.name": "Filon de diamant",
-    "data.item.diamond-node.description": "A casser pour obtenir du diamant.",
-    "data.item.emerald-node.name": "Filon d'émeraude",
-    "data.item.emerald-node.description": "A casser pour obtenir de l'émeraude.",
-    "data.item.gem-node.name": "Filon de gemme",
-    "data.item.gem-node.description": "A casser pour obtenir de l'émeraude, de l'aigue-marine, du rubis, de l'améthyste, de la topaze, de la jade, ou du diamant.",
-    "data.item.jade-node.name": "Filon de jade",
-    "data.item.jade-node.description": "A casser pour obtenir de la jade.",
-    "data.item.mystic-stone.name": "Pierre mystique",
-    "data.item.mystic-stone.description": "A casser pour obtenir des gemmes et minerais rares, dont du tesson prismatique.",
-    "data.item.prismatic-node.name": "Filon prismatique",
-    "data.item.prismatic-node.description": "A casser pour obtenir du tesson prismatique.",
-    "data.item.ruby-node.name": "Filon de rubis",
-    "data.item.ruby-node.description": "A casser pour obtenir du rubis.",
-    "data.item.topaz-node.name": "Filon de topaze",
-    "data.item.topaz-node.description": "A casser pour obtenir de la topaze.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Filon d'éclats de braise",
-    "data.item.cinder-shard-node.description": "A casser pour obtenir des éclats de braise.",
-    "data.item.copper-node.name": "Filon de cuivre",
-    "data.item.copper-node.description": "A casser pour obtenir du minerais de cuivre.",
-    "data.item.gold-node.name": "Filon d'or",
-    "data.item.gold-node.description": "A casser pour obtenir du minerais d'or.",
-    "data.item.iridium-node.name": "Filon d'iridium",
-    "data.item.iridium-node.description": "A casser pour obtenir du minerais d'iridium.",
-    "data.item.iron-node.name": "Filon de fer",
-    "data.item.iron-node.description": "A casser pour obtenir du minerais du fer.",
-    "data.item.omni-geode-node.name": "Filon de Géode-omni",
-    "data.item.omni-geode-node.description": "A casser pour obtenir des géodes-omni.",
-
-    // mine stones
     "data.item.colored-stone.name": "Pierre colorée",
     "data.item.colored-stone.description": "Une pierre. Peut contenir de la pierre, du minerais ou des géodes.",
     "data.item.mine-stone.name": "Pierre",
