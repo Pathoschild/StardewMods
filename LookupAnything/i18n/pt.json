@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Um espírito amigável que limpa o lixo.",
 
     // item types
-    "data.type.debris": "Detritos",
-    "data.type.stone": "Pedra",
     "data.type.container": "Contêiner",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Chocam ovos que depois viram pintinhos ou patinhos.",
-    "data.item.broken-branch.name": "Galho Quebrado",
-    "data.item.broken-branch.description": "Um galho quebrado. Corte-o com um machado para obter madeira.",
-    "data.item.stone.name": "Pedra",
-    "data.item.stone.description": "Uma pedra cinza indefinida. Quebre-a para obter pedras.",
-    "data.item.geode.name": "Pedra de Geodo",
-    "data.item.geode.description": "Quebre-a para obter Geodos.",
-    "data.item.frozen-geode.name": "Pedra de Geodo Congelado",
-    "data.item.frozen-geode.description": "Quebre-a para obter geodos congelados.",
-    "data.item.magma-geode.name": "Pedra de geodo de magma",
-    "data.item.magma-geode.description": "Quebre-a para obter Geodos de magma.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Mato",
-    "data.item.weed.description": "Uma mato sem descrição. Pode conter fibras ou sementes mistas.",
-    "data.item.fertile-weed.name": "Mato fértil",
-    "data.item.fertile-weed.description": "É garantido conter sementes mistas.",
-    "data.item.ice-crystal.name": "Cristal de Gelo",
-    "data.item.ice-crystal.description": "Um cristal de gelo sem descrição. Tem uma chance bem pequena de colher quartzo refinado.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Nó de Ametista",
-    "data.item.amethyst-node.description": "Quebre-o para obter ametistas.",
-    "data.item.aquamarine-node.name": "Nó de Água-Marinha",
-    "data.item.aquamarine-node.description": "Quebre-o para obter água-marinhas.",
-    "data.item.diamond-node.name": "Nó de Diamantes",
-    "data.item.diamond-node.description": "Quebre-o para obter diamantes",
-    "data.item.emerald-node.name": "Nó de Esmeralda",
-    "data.item.emerald-node.description": "Quebre-o para obter esmeraldas.",
-    "data.item.gem-node.name": "Nó de Gemas",
-    "data.item.gem-node.description": "Quebre-o para obter esmeraldas, água-marinhas, rubis, ametistas, topázios, jades, ou diamantes.",
-    "data.item.jade-node.name": "Nó de Jade",
-    "data.item.jade-node.description": "Quebre-o para obter jades.",
-    "data.item.mystic-stone.name": "Rocha Mística",
-    "data.item.mystic-stone.description": "Quebre-o para obter gemas raras ou minérios, incluindo o fragmentos prismáticos.",
-    "data.item.prismatic-node.name": "Nó Prismático",
-    "data.item.prismatic-node.description": "Quebre-o para obter fragmentos prismáticos.",
-    "data.item.ruby-node.name": "Nó de Rubi",
-    "data.item.ruby-node.description": "Quebre-o para obter rubis.",
-    "data.item.topaz-node.name": "Nó de Topázio",
-    "data.item.topaz-node.description": "Quebre-o para obter topázios.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Nó de Brasa",
-    "data.item.cinder-shard-node.description": "Quebre-o para obter fragmentos de brasa",
-    "data.item.copper-node.name": "Nó de Cobre",
-    "data.item.copper-node.description": "Quebre-o para obter minérios de cobre.",
-    "data.item.gold-node.name": "Nó de Ouro",
-    "data.item.gold-node.description": "Quebre-o para obter minérios de ouro.",
-    "data.item.iridium-node.name": "Nó de Irídio",
-    "data.item.iridium-node.description": "Quebre-o para obter minérios de irídio.",
-    "data.item.iron-node.name": "Nó de Ferro",
-    "data.item.iron-node.description": "Quebre-o pra obter minérios de ferro.",
-    "data.item.omni-geode-node.name": "Nó de Omnigeodo",
-    "data.item.omni-geode-node.description": "Quebre-o pra obter omnigeodos.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Rocha Colorida",
-    "data.item.colored-stone.description": "Uma rocha indescritível. Talvez possa conter pedras, minérios, ou geodos.",
-    "data.item.mine-stone.name": "Pedra",
-    "data.item.mine-stone.description": "Quebre-a para obter pedras com uma chance de carvão.",
-
-    // other stones
-    "data.item.clay-stone.name": "Nó de Argila",
-    "data.item.clay-stone.description": "Quebre-o para obter argilas.",
-    "data.item.fossil-stone.name": "Nó de Ossos",
-    "data.item.fossil-stone.description": "Quebre-o para obter ossos e fósseis.",
-
-    // mine containers
     "data.item.barrel.name": "Barril",
     "data.item.barrel.description": "Quebre pra receber bens diversos.",
     "data.item.box.name": "Caixa",

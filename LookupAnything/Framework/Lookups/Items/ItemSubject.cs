@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             bool isMovieTicket = obj?.QualifiedItemId == "(O)809";
 
             // get overrides
-            bool showInventoryFields = !this.IsSpawnedStoneNode();
+            bool showInventoryFields = obj?.IsBreakableStone() != true;
             {
                 ItemData? objData = this.Metadata.GetObject(item, this.Context);
                 if (objData != null)
@@ -917,15 +917,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 .GetIngredientsFromBundle(bundle, item)
                 .Where(p => this.IsIngredientNeeded(bundle, p))
                 .Sum(p => p.Stack);
-        }
-
-        /// <summary>Get whether the target is a spawned stone or mining node on the ground.</summary>
-        private bool IsSpawnedStoneNode()
-        {
-            return
-                this.Context == ObjectContext.World
-                && this.Target is (SObject and not Chest)
-                && this.Name == "Stone";
         }
     }
 }

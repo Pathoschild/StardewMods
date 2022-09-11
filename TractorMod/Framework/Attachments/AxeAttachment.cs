@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             tool = tool.AssertNotNull();
 
             // clear debris
-            if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
+            if (this.Config.ClearDebris && tileObj != null && (tileObj.IsTwig() || tileObj.IsWeeds()))
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // cut terrain features

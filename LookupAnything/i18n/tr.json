@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Çöpleri temizleyen arkadaş canlısı bir ruh.",
 
     // item types
-    "data.type.debris": "Moloz",
-    "data.type.stone": "Taş",
     "data.type.container": "Konteyner",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Yumurtadan yavru tavuklar ve ördekler çıkarır.",
-    "data.item.broken-branch.name": "Kırık Dal",
-    "data.item.broken-branch.description": "Kırık bir dal. Odun elde etmek için balta ile kırın.",
-    "data.item.stone.name": "Taş",
-    "data.item.stone.description": "Sıradan bir gri taş. Taş elde etmek için kırın.",
-    "data.item.geode.name": "Jeot Cevheri",
-    "data.item.geode.description": "Jeot elde etmek için kırın.",
-    "data.item.frozen-geode.name": "Donmuş Jeot Cevheri",
-    "data.item.frozen-geode.description": "Donmuş jeot elde etmek için kırın.",
-    "data.item.magma-geode.name": "Yanık Jeot Cevheri",
-    "data.item.magma-geode.description": "Yanık jeot elde etmek için kırın.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Yabani Ot",
-    "data.item.weed.description": "Sıradan bir ot. Lif veya karışık tohum içerebilir.",
-    "data.item.fertile-weed.name": "Verimli Yabani Ot",
-    "data.item.fertile-weed.description": "Karışık tohum düşürme garantili.",
-    "data.item.ice-crystal.name": "Buz Kristali",
-    "data.item.ice-crystal.description": "Sıradan bir buz kristali. Çok düşük şansla işlenmiş kuvars içerebilir.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Ametist Cevheri",
-    "data.item.amethyst-node.description": "Ametist elde etmek için kırın.",
-    "data.item.aquamarine-node.name": "Gök Zümrütü Cevheri",
-    "data.item.aquamarine-node.description": "Gök zümrütü elde etmek için kırın.",
-    "data.item.diamond-node.name": "Elmas Cevheri",
-    "data.item.diamond-node.description": "Elmas elde etmek için kırın.",
-    "data.item.emerald-node.name": "Zümrüt Cevheri",
-    "data.item.emerald-node.description": "Zümrüt elde etmek için kırın.",
-    "data.item.gem-node.name": "Değerli Taş Cevheri",
-    "data.item.gem-node.description": "Zümrüt, gök zümrütü, yakut, ametist, topaz, yeşim, yada elmas elde etmek için kırın.",
-    "data.item.jade-node.name": "Yeşim Cevheri",
-    "data.item.jade-node.description": "Yeşim elde etmek için kırın.",
-    "data.item.mystic-stone.name": "Mistik Taş",
-    "data.item.mystic-stone.description": "Ender mücevherler ve cevherler elde etmek için kırın, prizma parçasıda çıkabilir.",
-    "data.item.prismatic-node.name": "Prizma Cevheri",
-    "data.item.prismatic-node.description": "Prizma parçası elde etmek için kırın.",
-    "data.item.ruby-node.name": "Yakut Cevheri",
-    "data.item.ruby-node.description": "Yakut elde etmek için kırın.",
-    "data.item.topaz-node.name": "Topaz Cevheri",
-    "data.item.topaz-node.description": "Topaz elde etmek için kırın.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Yıldız Parçaçığı Cevheri",
-    "data.item.cinder-shard-node.description": "Yıldız parçaçığı elde etmek için kırın.",
-    "data.item.copper-node.name": "Bakır Cevheri",
-    "data.item.copper-node.description": "Bakır elde etmek için kırın.",
-    "data.item.gold-node.name": "Altın Cevheri",
-    "data.item.gold-node.description": "Altın elde etmek için kırın.",
-    "data.item.iridium-node.name": "İridyum Cevheri",
-    "data.item.iridium-node.description": " İridyum elde etmek için kırın.",
-    "data.item.iron-node.name": "Demir Cevheri",
-    "data.item.iron-node.description": "Demir elde etmek için kırın.",
-    "data.item.omni-geode-node.name": "Bütünjeot Cevheri",
-    "data.item.omni-geode-node.description": "Bütünjeot elde etmek için kırın.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Renkli Taş",
-    "data.item.colored-stone.description": "Sıradan bir taş. İçinde taş, cevher ya da jeot olabilir.",
-    "data.item.mine-stone.name": "Taş",
-    "data.item.mine-stone.description": "Taş ve ufak bir şans ile kömür elde etmek için kırın.",
-
-    // other stones
-    "data.item.clay-stone.name": "Kil Taşı",
-    "data.item.clay-stone.description": "Kil elde etmek için kır.",
-    "data.item.fossil-stone.name": "Fosilleşmiş Taş",
-    "data.item.fossil-stone.description": "Fosil ve kemik elde etmek için kır.",
-
-    // mine containers
     "data.item.barrel.name": "Fıçı",
     "data.item.barrel.description": "Çeşitli eşyalar elde etmek için parçala.",
     "data.item.box.name": "Kutu",
