@@ -338,7 +338,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // from item
             {
-                Item input = this.GameHelper.GetObjectById(id);
+                Item input = ItemRegistry.Create(id);
 
                 if (input is SObject obj)
                 {

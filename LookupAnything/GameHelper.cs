@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything
         //private readonly ProducerFrameworkModIntegration ProducerFrameworkMod;
 
         /// <summary>Parses the raw game data into usable models.</summary>
-        private readonly DataParser DataParser;
+        private readonly DataParser DataParser = new();
 
         /// <summary>Scans the game world for owned items.</summary>
         private readonly WorldItemScanner WorldItemScanner;
@@ -81,7 +81,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="reflection">Simplifies access to protected code.</param>
         public GameHelper(Metadata metadata, IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
-            this.DataParser = new DataParser(this);
             this.Metadata = metadata;
             this.Monitor = monitor;
             this.WorldItemScanner = new WorldItemScanner(reflection);
@@ -433,51 +432,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 if (needsItem)
                     yield return quest;
-            }
-        }
-
-        /// <summary>Get an object by its unqualified item ID if it can be parsed.</summary>
-        /// <param name="id">The qualified item ID.</param>
-        /// <param name="obj">The constructed object.</param>
-        /// <param name="stack">The number of items in the stack.</param>
-        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
-        public bool TryGetObjectBySpriteIndex(string id, [NotNullWhen(true)] out SObject? obj, int stack = 1, bool bigcraftable = false)
-        {
-            try
-            {
-                obj = this.GetObjectById(id, stack, bigcraftable);
-                return true;
-            }
-            catch
-            {
-                obj = null;
-                return false;
-            }
-        }
-
-        /// <summary>Get an object by its unqualified item ID.</summary>
-        /// <param name="id">The unqualified ID.</param>
-        /// <param name="stack">The number of items in the stack.</param>
-        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
-        public SObject GetObjectById(string id, int stack = 1, bool bigcraftable = false)
-        {
-            try
-            {
-                return bigcraftable
-                    ? new SObject(Vector2.Zero, id) { stack = { stack } }
-                    : new SObject(id, stack);
-            }
-            catch (Exception ex)
-            {
-                string error = $"The game can't construct {(bigcraftable ? "bigcraftable" : "object")} #{id}.";
-
-                var data = bigcraftable ? Game1.bigCraftablesInformation : Game1.objectInformation;
-                if (data != null && data.TryGetValue(id, out string? dataStr))
-                    error += $"\nRaw data: {dataStr}";
-                else
-                    error += " No raw data found.";
-
-                throw new InvalidOperationException(error, ex);
             }
         }
 
