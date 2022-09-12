@@ -238,13 +238,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 var checkboxes = new List<KeyValuePair<IFormattedText[], bool>>();
                 for (int i = 0; i < maxQuests; i++)
                 {
-                    string index = cave.IndexForRequest(i);
-                    if (!CommonHelper.IsItemId(index))
+                    string wantedKey = cave.IndexForRequest(i);
+                    if (!CommonHelper.IsItemId(wantedKey))
                         continue;
 
                     checkboxes.Add(
                         CheckboxListField.Checkbox(
-                            text: this.GameHelper.GetObjectById(index).DisplayName,
+                            text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
                             value: questsDone > i
                         )
                     );
@@ -336,7 +336,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
                 string itemWantedIndex = this.Reflection.GetField<string>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), this.GameHelper.GetObjectById(itemWantedIndex), this.Codex);
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(itemWantedIndex), this.Codex);
             }
 
             // show progress

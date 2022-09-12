@@ -346,8 +346,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     .Select(drop =>
                     {
                         // build display string
-                        SObject obj = this.GameHelper.GetObjectById(drop.ItemID);
-                        string summary = obj.DisplayName;
+                        string summary = ItemRegistry.GetDataOrErrorItem(drop.ItemID).DisplayName;
                         if (drop.MinCount != drop.MaxCount)
                             summary += $" ({I18n.Generic_Range(min: drop.MinCount, max: drop.MaxCount)})";
                         else if (drop.MinCount > 1)

@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                     : 0.75f;
 
                 if (tree.hasSeed.Value)
-                    yield return new ItemIconField(this.GameHelper, I18n.Tree_Seed(), this.GameHelper.GetObjectById(data.SeedItemId), this.Codex);
+                    yield return new ItemIconField(this.GameHelper, I18n.Tree_Seed(), ItemRegistry.Create(data.SeedItemId), this.Codex);
                 else
                 {
                     List<string> lines = new(2);

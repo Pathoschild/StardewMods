@@ -22,22 +22,8 @@ namespace Pathoschild.Stardew.LookupAnything
     internal class DataParser
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>Provides utility methods for interacting with the game code.</summary>
-        private readonly GameHelper GameHelper;
-
-
-        /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        public DataParser(GameHelper gameHelper)
-        {
-            this.GameHelper = gameHelper;
-        }
-
         /// <summary>Read parsed data about the Community Center bundles.</summary>
         /// <param name="monitor">The monitor with which to log errors.</param>
         /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
@@ -393,7 +379,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // machine recipes
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
-                let machine = this.GameHelper.GetObjectById(entry.MachineID, bigcraftable: true)
+                let machineName = ItemRegistry.GetDataOrErrorItem("(BC)" + entry.MachineID).DisplayName
 
                 from recipe in entry.Recipes
                 from output in recipe.PossibleOutputs
@@ -402,7 +388,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 select new RecipeModel(
                     key: null,
                     type: RecipeType.MachineInput,
-                    displayType: machine.DisplayName,
+                    displayType: machineName,
                     ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.QualifiedItemId, outputId, output),
                     isKnown: () => true,
@@ -448,36 +434,40 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
         /// <param name="output">The output data, if applicable.</param>
-        private SObject CreateRecipeItem(string? inputID, string outputID, MachineRecipeOutputData? output)
+        private Item CreateRecipeItem(string? inputID, string outputID, MachineRecipeOutputData? output)
         {
-            SObject item = this.GameHelper.GetObjectById(outputID);
-            if (inputID != null)
-            {
-                switch (outputID)
-                {
-                    case "342":
-                        item.preserve.Value = SObject.PreserveType.Pickle;
-                        item.preservedParentSheetIndex.Value = inputID;
-                        break;
-                    case "344":
-                        item.preserve.Value = SObject.PreserveType.Jelly;
-                        item.preservedParentSheetIndex.Value = inputID;
-                        break;
-                    case "348":
-                        item.preserve.Value = SObject.PreserveType.Wine;
-                        item.preservedParentSheetIndex.Value = inputID;
-                        break;
-                    case "350":
-                        item.preserve.Value = SObject.PreserveType.Juice;
-                        item.preservedParentSheetIndex.Value = inputID;
-                        break;
-                }
-            }
+            Item item = ItemRegistry.Create(outputID);
 
-            if (output != null)
+            if (item is SObject obj)
             {
-                item.preservedParentSheetIndex.Value = output.PreservedParentSheetIndex ?? item.preservedParentSheetIndex.Value;
-                item.preserve.Value = output.PreserveType ?? item.preserve.Value;
+                if (inputID != null)
+                {
+                    switch (outputID)
+                    {
+                        case "342":
+                            obj.preserve.Value = SObject.PreserveType.Pickle;
+                            obj.preservedParentSheetIndex.Value = inputID;
+                            break;
+                        case "344":
+                            obj.preserve.Value = SObject.PreserveType.Jelly;
+                            obj.preservedParentSheetIndex.Value = inputID;
+                            break;
+                        case "348":
+                            obj.preserve.Value = SObject.PreserveType.Wine;
+                            obj.preservedParentSheetIndex.Value = inputID;
+                            break;
+                        case "350":
+                            obj.preserve.Value = SObject.PreserveType.Juice;
+                            obj.preservedParentSheetIndex.Value = inputID;
+                            break;
+                    }
+                }
+
+                if (output != null)
+                {
+                    obj.preservedParentSheetIndex.Value = output.PreservedParentSheetIndex ?? obj.preservedParentSheetIndex.Value;
+                    obj.preserve.Value = output.PreserveType ?? obj.preserve.Value;
+                }
             }
 
             return item;

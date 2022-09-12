@@ -183,8 +183,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             if (component.containsPoint(cursorX, cursorY))
                             {
                                 string itemID = component.name.Split(' ')[0];
-                                SObject obj = this.GameHelper.GetObjectById(itemID);
-                                return this.BuildSubject(obj, ObjectContext.Inventory, null, knownQuality: false);
+                                Item item = ItemRegistry.Create(itemID);
+                                return this.BuildSubject(item, ObjectContext.Inventory, null, knownQuality: false);
                             }
                         }
                     }
@@ -257,7 +257,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             {
                                 Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
                                 var ingredient = bundle.ingredients[i];
-                                var item = this.GameHelper.GetObjectById(ingredient.id, ingredient.stack);
+                                var item = ItemRegistry.Create(ingredient.id, ingredient.stack);
                                 item.Quality = ingredient.quality;
                                 return this.BuildSubject(item, ObjectContext.Inventory, null);
                             }
@@ -284,7 +284,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                             // empty slot
                             if (CommonHelper.IsItemId(slot.label))
-                                return this.BuildSubject(this.GameHelper.GetObjectById(slot.label), ObjectContext.Inventory, null, knownQuality: false);
+                                return this.BuildSubject(ItemRegistry.Create(slot.label), ObjectContext.Inventory, null, knownQuality: false);
                         }
                     }
                     break;
@@ -367,7 +367,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 progressionMode: config.ProgressionMode,
                 highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
                 showGiftTastes: config.ShowGiftTastes,
-                item: this.GameHelper.GetObjectById(indexOfHarvest),
+                item: ItemRegistry.Create(indexOfHarvest),
                 context: context,
                 location: dirt?.Location,
                 knownQuality: false,
