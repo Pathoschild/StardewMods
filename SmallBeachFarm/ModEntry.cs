@@ -137,6 +137,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         TileSheet outdoorTilesheet = map.GetTileSheet("untitled tile sheet");
                         Layer buildingsLayer = map.GetLayer("Buildings");
                         Layer backLayer = map.GetLayer("Back");
+                        Layer behindBackLayer = map.GetLayer("Back-1");
 
                         // add islands
                         if (this.Config.EnableIslands)
@@ -150,7 +151,10 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         // add campfire
                         if (this.Config.AddCampfire)
                         {
-                            buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
+                            var groundTile = backLayer.Tiles[65, 23];
+
+                            behindBackLayer.Tiles[65, 23] = new StaticTile(behindBackLayer, groundTile.TileSheet, groundTile.BlendMode, groundTile.TileIndex); // copy ground tile to layer under back, so we can put the driftwood pile on the back layer
+                            backLayer.Tiles[65, 23] = new StaticTile(backLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
                             buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, outdoorTilesheet, BlendMode.Alpha, 242); // campfire
                         }
 

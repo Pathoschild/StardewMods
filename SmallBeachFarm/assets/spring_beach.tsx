@@ -311,7 +311,7 @@
  </tile>
  <tile id="157">
   <properties>
-   <property name="Passable" value="T"/>
+   <property name="Diggable" value="T"/>
    <property name="Type" value="Wood"/>
   </properties>
  </tile>
