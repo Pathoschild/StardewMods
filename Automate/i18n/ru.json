@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "Совместимость с модами",
     "config.better-junimos.name": "Better Junimos",
     "config.better-junimos.desc": "Включите совместимость с Better Junimos. Если он включен, Джунимо не будут удобрять почву или сеять семена.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "Предупреждение об отсутствии bridge mod",
     "config.warn-for-missing-bridge-mod.desc": "Регистрация предупреждение во время запуска, если вы установили custom-machine мод, который требует отдельного патча, если он не установлен.",
 

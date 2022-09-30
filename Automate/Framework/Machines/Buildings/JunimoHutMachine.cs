@@ -1,6 +1,7 @@
 using System.Linq;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
@@ -12,6 +13,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Fields
         *********/
+        /// <summary>Whether seeds should be treated as Junimo hut inputs.<summary>
+        private readonly bool AllowSeedInput;
+
+        /// <summary>Whether fertilizer should be treated as Junimo hut inputs.<summary>
+        private readonly bool AllowFertilizerInput;
+
         /// <summary>Whether seeds should be ignored when selecting output.</summary>
         private readonly bool IgnoreSeedOutput;
 
@@ -31,12 +38,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
+        /// <param name="allowSeedInput">Whether seeds are allowed as an input.</param>
+        /// <param name="allowFertilizerInput">Whether fertilizers are allowed as an input.</param>
         /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
         /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
         /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput, bool ignoreFertilizerOutput, bool pullGemstonesFromJunimoHuts)
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool allowSeedInput, bool allowFertilizerInput, bool ignoreSeedOutput, bool ignoreFertilizerOutput, bool pullGemstonesFromJunimoHuts)
             : base(hut, location, BaseMachine.GetTileAreaFor(hut))
         {
+            this.AllowSeedInput = allowSeedInput;
+            this.AllowFertilizerInput = allowFertilizerInput;
             this.IgnoreSeedOutput = ignoreSeedOutput;
             this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
             this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
@@ -47,6 +58,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             if (this.Machine.isUnderConstruction())
                 return MachineState.Disabled;
+            if (this.AllowSeedInput || this.AllowFertilizerInput)
+                return MachineState.Empty;
 
             return this.GetNextOutput() != null
                 ? MachineState.Done
@@ -64,7 +77,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            return false; // no input
+            // get next item
+            ITrackedStack? tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && ((this.AllowSeedInput && (obj.Category == SObject.SeedsCategory)) || (this.AllowFertilizerInput && (obj.Category == SObject.fertilizerCategory))));
+            if (tracker == null)
+                return false;
+
+            // place item in output chest
+            SObject item = (SObject)tracker.Take(1)!;
+            this.Output.addItem(item);
+            return true;
         }
 
 

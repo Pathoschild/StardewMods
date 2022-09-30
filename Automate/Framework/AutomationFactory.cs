@@ -257,7 +257,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                     {
                         var config = this.Config();
                         bool betterJunimosCompat = config.ModCompatibility.BetterJunimos && this.IsBetterJunimosLoaded;
-                        return new JunimoHutMachine(hut, location, ignoreSeedOutput: betterJunimosCompat, ignoreFertilizerOutput: betterJunimosCompat, pullGemstonesFromJunimoHuts: config.PullGemstonesFromJunimoHuts);
+                        bool allowSeedInput = betterJunimosCompat && config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts;
+                        bool allowFertilizerInput = betterJunimosCompat && config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts;
+                        return new JunimoHutMachine(hut, location, allowSeedInput: allowSeedInput, allowFertilizerInput: allowFertilizerInput, ignoreSeedOutput: betterJunimosCompat, ignoreFertilizerOutput: betterJunimosCompat, pullGemstonesFromJunimoHuts: config.PullGemstonesFromJunimoHuts);
                     }
 
                 case Mill mill:

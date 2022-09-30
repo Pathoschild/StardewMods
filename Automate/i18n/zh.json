@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "模组兼容性",
     "config.better-junimos.name": "Better Junimos（更好的祝尼魔）",
     "config.better-junimos.desc": "启用与 Better Junimos 的兼容性。 如果安装该模组，祝尼魔小屋不会输出肥料或种子",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "缺少连接模块警告",
     "config.warn-for-missing-bridge-mod.desc": "如果你安装了自定义机器模组但未安装其所需要另外安装的兼容性补丁，是否在启动时记录警告",
 

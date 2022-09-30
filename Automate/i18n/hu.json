@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "Mod kompatibilitás",
     "config.better-junimos.name": "Jobb Junimok",
     "config.better-junimos.desc": "Better Junimos mod kompatibilitás engedélyezése. Ha telepítve van, a Junimo kunyhók nem fognak kiadni műtrágyát és vetőmagvat.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "Figyelmeztetés hiányzó mod miatt",
     "config.warn-for-missing-bridge-mod.desc": "Naplózzon-e figyelmeztetést indításkor, ha olyan egyedi gép modot telepítesz, melyhez külön kompatibilitási javítás szükséges, ami nincs telepítve.",
 

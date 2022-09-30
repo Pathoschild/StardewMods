@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "모드 호환성",
     "config.better-junimos.name": "Better Junimos(더 나은 주니모)",
     "config.better-junimos.desc": "Better Junimos 모드와의 호환성을 사용하도록 설정합니다.\n설치된 경우 주니모 오두막은 비료나 씨앗을 생산하지 않습니다.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "연결 모드 누락 경고",
     "config.warn-for-missing-bridge-mod.desc": "설치되지 않은 별도의 호환성 패치가 필요한 사용자 지정 모드를 설치한 경우 시작 시 경고를 기록할지 여부.",
 

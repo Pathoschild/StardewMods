@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "Сумісність модів",
     "config.better-junimos.name": "Better Junimos",
     "config.better-junimos.desc": "Увімкнення сумісністі з Better Junimos. Якщо увімкнено, то будиночки Джунімо не видаватимуть добрива чи насіння.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "Попередженння про відсутність моду Bridge Mod",
     "config.warn-for-missing-bridge-mod.desc": "Реєстрування попередження під час запуску, якщо ви встановили спеціальний мод, котрий вимагає окремого моду, який не встановлено.",
 

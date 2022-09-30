@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "Mod-Kompatibilität",
     "config.better-junimos.name": "Better Junimos",
     "config.better-junimos.desc": "Kompatibilität mit 'Better Junimos' aktivieren. Wenn installiert, geben Junimo-Hütten weder Dünger noch Saatgut aus.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "Warnung für fehlende Brücken-Mod",
     "config.warn-for-missing-bridge-mod.desc": "Ob eine Warnung beim Start protokolliert werden soll, wenn eine Custom Machine-Mod installiert ist, die einen separaten, nicht installierten Kompatibilitäts-Patch erfordert.",
 

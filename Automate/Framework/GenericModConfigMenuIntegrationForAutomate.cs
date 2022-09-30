@@ -88,6 +88,18 @@ namespace Pathoschild.Stardew.Automate.Framework
                     set: (config, value) => config.ModCompatibility.BetterJunimos = value
                 )
                 .AddCheckbox(
+                    name: I18n.Config_BetterJunimosTransferSeedsToJunimoHuts_Name,
+                    tooltip: I18n.Config_BetterJunimosTransferSeedsToJunimoHuts_Desc,
+                    get: config => config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts,
+                    set: (config, value) => config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_BetterJunimosTransferFertilizersToJunimoHuts_Name,
+                    tooltip: I18n.Config_BetterJunimosTransferFertilizersToJunimoHuts_Desc,
+                    get: config => config.ModCompatibility.BetterJunimosTransferFertilizersToJunimoHuts,
+                    set: (config, value) => config.ModCompatibility.BetterJunimosTransferFertilizersToJunimoHuts = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_WarnForMissingBridgeMod_Name,
                     tooltip: I18n.Config_WarnForMissingBridgeMod_Desc,
                     get: config => config.ModCompatibility.WarnForMissingBridgeMod,

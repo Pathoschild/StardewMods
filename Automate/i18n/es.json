@@ -17,6 +17,10 @@
     "config.title.mod-compatibility": "Compatibilidad con los mods",
     "config.better-junimos.name": "Better Junimos",
     "config.better-junimos.desc": "Habilitar compatibilidad con Better Junimos. Si se instala, las cabañas de Junimo no producirán abono ni semillas.",
+    "config.better-junimos-transfer-seeds-to-junimo-huts.name": "Better Junimos: Transfer seeds", // TODO
+    "config.better-junimos-transfer-seeds-to-junimo-huts.desc": "If set, Junimo huts will accept seeds from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.name": "Better Junimos: Transfer fertilizers", // TODO
+    "config.better-junimos-transfer-fertilizers-to-junimo-huts.desc": "If set, Junimo huts will accept fertilizers from connected chests. Does nothing if Better Junimos mod compatibility is disabled.", // TODO
     "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod",
     "config.warn-for-missing-bridge-mod.desc": "Si se registra una advertencia al inicio si se ha instalado un mod de máquina personalizada que requiere un parche de compatibilidad separado que no está instalado.",
 
