@@ -77,6 +77,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
+            if (!this.AllowFertilizerInput && !this.AllowSeedInput)
+                return false;
+
             // get next item
             ITrackedStack? tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && ((this.AllowSeedInput && (obj.Category == SObject.SeedsCategory)) || (this.AllowFertilizerInput && (obj.Category == SObject.fertilizerCategory))));
             if (tracker == null)
