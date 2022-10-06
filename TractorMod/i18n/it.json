@@ -85,8 +85,8 @@
     "config.chop-trees-grown.name": "Taglia alberi (Cresciuti)",
     "config.chop-trees-grown.tooltip": "Scegli se vuoi eliminare gli alberi non da frutto cresciuti.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+    "config.chop-trees-stumps.name": "Taglia alberi (Ceppi)",
+    "config.chop-trees-stumps.tooltip": "Scegli se vuoi eliminare i ceppi degli alberi non da frutto. (Questa opzione non tiene in conto i ceppi giganti, quelli vengono considerati come detriti.)",
 
     "config.chop-bushes.name": "Taglia cespugli",
     "config.chop-bushes.tooltip": "Scegli se vuoi eliminare i cespugli che possono essere tagliati.",
