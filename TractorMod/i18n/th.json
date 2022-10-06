@@ -1,4 +1,4 @@
-{
+﻿{
     /*********
     ** Tractor
     *********/
@@ -13,7 +13,6 @@
     /****
     ** Section titles
     ****/
-    // TODO
     "config.main-options": "ตัวเลือกหลัก",
     "config.controls": "การควบคุม",
     "config.axe": "คุณสมบัติขวาน",
@@ -30,7 +29,6 @@
     /****
     ** Main options
     ****/
-    // TODO
     "config.distance.name": "ระยะทาง",
     "config.distance.tooltip": "จำนวนไทล์ในแต่ละทิศทางรอบๆรถแทรกเตอร์นั้นจะส่งผลกระทบ (นอกเหนือจากไทล์ด้านล่าง) ค่าเริ่มต้น {{defaultValue}}; ค่าของ {{maxRecommendedValue}} จะครอบคลุมหน้าจอที่มองเห็นได้เกือบทั้งหมด และค่าที่สูงขึ้นอาจส่งผลเสียต่อประสิทธิภาพของเกม",
 
@@ -56,7 +54,6 @@
     /****
     ** Keybind options
     ****/
-    // TODO
     "config.summon-key.name": "เรียกรถแทรกเตอร์",
     "config.summon-key.tooltip": "วาร์ปรถแทรกเตอร์ที่มีอยู่ไปยังตำแหน่งของคุณ แบ็คสเปซเริ่มต้น",
 
@@ -70,7 +67,6 @@
     /****
     ** Trees & bushes
     ****/
-    // TODO
     "config.chop-fruit-trees-seeds.name": "สับต้นผลไม้ (เมล็ด)",
     "config.chop-fruit-trees-seeds.tooltip": "รวมถึงจะเป็นการขจัดเมล็ดต้นผลไม้ก็ตาม",
 
@@ -101,7 +97,6 @@
     /****
     ** Crops/forage/grass
     ****/
-    // TODO
     "config.clear-dead-crops.name": "จัดการพืชที่ตายแล้ว",
     "config.clear-dead-crops.tooltip": "รวมถึงทำลายพืชผลที่ตายแล้ว",
 
@@ -127,7 +122,6 @@
     /****
     ** Debris
     ****/
-    // TODO
     "config.clear-debris.name": "ขจัดเศษซาก",
     "config.clear-debris.tooltip": "รวมถึงทำลายเศษซาก เช่น วัชพืช กิ่งไม้ ตอไม้ยักษ์ และท่อนซุงที่ร่วงหล่น",
 
@@ -138,7 +132,6 @@
     /****
     ** Dirt
     ****/
-    // TODO
     "config.till-dirt.name": "กลบดิน",
     "config.till-dirt.tooltip": "รวมถึงทำการกลบดินที่ว่าง",
 
@@ -152,7 +145,6 @@
     /****
     ** Mining
     ****/
-    // TODO
     "config.break-boulders-and-meteorites.name": "ทำลายก้อนหินและอุกกาบาต",
     "config.break-boulders-and-meteorites.tooltip": "รวมถึงทำลายก้อนหินและอุกกาบาต",
 
@@ -163,7 +155,6 @@
     /****
     ** Placed items
     ****/
-    // TODO
     "config.break-flooring.name": "ทำลายพื้น",
     "config.break-flooring.tooltip": "รวมถึงวางพื้นวาง.",
 
@@ -180,7 +171,6 @@
     /****
     ** Melee
     ****/
-    // TODO
     "config.Attack-monsters.name": "โจมตีมอนเตอร์",
     "config.Attack-monsters.tooltip": "รวมถึงโจมตีมอนสเตอร์ (สิ่งนี้มีกำลังมากเกินไปเนื่องจากความเร็วของเครื่องมือรถแทรกเตอร์)",
 
@@ -188,7 +178,6 @@
     /****
     ** Other
     ****/
-    // TODO
     "config.milk-pail.name": "เปิดใช้งานที่ดูดนมวัว",
     "config.milk-pail.tooltip": "รวมถึงเป็นการเก็บนมจากสัตว์เลี้ยงในฟาร์มโดยใช้ถังนม",
 

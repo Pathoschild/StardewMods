@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed 'hide on key up' option closing lookup while the key is held.
+* Improved translations. Thanks to Becks723 (updated Chinese)!
 
 ## 1.37.5
 Released 29 August 2022 for SMAPI 3.14.0 or later.
