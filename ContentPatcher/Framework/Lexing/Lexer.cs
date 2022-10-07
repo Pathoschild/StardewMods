@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -14,8 +13,20 @@ namespace ContentPatcher.Framework.Lexing
         /*********
         ** Fields
         *********/
+        /// <summary>The character which (as a pair) starts a token.</summary>
+        private const char StartTokenChar = '{';
+
+        /// <summary>The character which (as a pair) ends a token.</summary>
+        private const char EndTokenChar = '}';
+
+        /// <summary>The character which starts named input arguments within a token.</summary>
+        private const char NamedInputChar = '|';
+
+        /// <summary>The character which starts named positional arguments within a token.</summary>
+        private const char PositionalInputChar = ':';
+
         /// <summary>The four characters to split by for lexical splitting. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments.</summary>
-        private static readonly char[] SplitPattern = new[] { '{', '}', '|', ':' };
+        private static readonly char[] SplitPattern = new[] { Lexer.StartTokenChar, Lexer.EndTokenChar, Lexer.PositionalInputChar, Lexer.NamedInputChar };
 
 
         /*********
@@ -65,17 +76,17 @@ namespace ContentPatcher.Framework.Lexing
                     char match = rawText[index];
                     switch (match)
                     {
-                        case '{':
-                        case '}':
+                        case Lexer.StartTokenChar:
+                        case Lexer.EndTokenChar:
                             if (index < rawText.Length - 1 && match == rawText[index + 1])
                             {
                                 if (lastMatch != index)
                                     yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
                                 start = index + 2;
                                 lastMatch = start;
-                                yield return match == '{'
-                                    ? new LexBit(LexBitType.StartToken, "{{")
-                                    : new LexBit(LexBitType.EndToken, "}}");
+                                yield return match == Lexer.StartTokenChar
+                                    ? new LexBit(LexBitType.StartToken, "" + Lexer.StartTokenChar + Lexer.StartTokenChar)
+                                    : new LexBit(LexBitType.EndToken, "" + Lexer.EndTokenChar + Lexer.EndTokenChar);
                                 break;
                             }
                             else
@@ -85,20 +96,23 @@ namespace ContentPatcher.Framework.Lexing
                                 start = index + 1;
                                 break;
                             }
-                        case '|':
+
+                        case Lexer.NamedInputChar:
                             if (lastMatch != index)
                                 yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
-                            yield return new LexBit(LexBitType.NamedInputArgSeparator, "|");
+                            yield return new LexBit(LexBitType.NamedInputArgSeparator, "" + Lexer.NamedInputChar);
                             start = index + 1;
                             lastMatch = start;
                             break;
-                        case ':':
+
+                        case Lexer.PositionalInputChar:
                             if (lastMatch != index)
                                 yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
-                            yield return new LexBit(LexBitType.PositionalInputArgSeparator, ":");
+                            yield return new LexBit(LexBitType.PositionalInputArgSeparator, "" + Lexer.PositionalInputChar);
                             start = index + 1;
                             lastMatch = start;
                             break;
+
                         default:
                             throw new InvalidOperationException("How did we get here?");
                     }
@@ -251,7 +265,7 @@ namespace ContentPatcher.Framework.Lexing
                     }
                 }
             }
-            
+
             LinkedList<ILexToken> tokens;
             try
             {
@@ -326,7 +340,7 @@ namespace ContentPatcher.Framework.Lexing
             // start token
             if (!impliedBraces)
             {
-                LexBit startToken = GetNextAndAssert("start of token ('{{')");
+                LexBit startToken = GetNextAndAssert("start of token ('" + Lexer.StartTokenChar + Lexer.StartTokenChar + "')");
                 if (startToken.Type != LexBitType.StartToken)
                     throw new LexFormatException($"Unexpected {startToken.Type} at start of token.");
             }
@@ -356,7 +370,7 @@ namespace ContentPatcher.Framework.Lexing
             // end token
             if (!impliedBraces)
             {
-                LexBit endToken = GetNextAndAssert("end of token ('}}')");
+                LexBit endToken = GetNextAndAssert("end of token ('" + Lexer.EndTokenChar + Lexer.EndTokenChar + "')");
                 if (endToken.Type != LexBitType.EndToken)
                     throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }
