@@ -59,6 +59,11 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             "[ ]<StartToken:{{>[  Relationship ]<PositionalInputArgSeparator::>[ Abigail ]<EndToken:}}>[   ]",
             "[ ]<Token:Relationship input=<input:[Abigail]>>[   ]"
         )]
+        [TestCase(
+            "{{{  Relationship : } { Abigail | input={x} }}",
+            "<StartToken:{{>[{  Relationship ]<PositionalInputArgSeparator::>[ } { Abigail ]<NamedInputArgSeparator:|>[ input={x} ]<EndToken:}}>",
+            "<Token:{  Relationship input=<input:[} { Abigail | input={x}]>>"
+        )]
         public void ParseTokenizedString(string input, string expectedBits, string expectedTokens)
         {
             // act

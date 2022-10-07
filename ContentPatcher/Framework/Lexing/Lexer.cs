@@ -47,9 +47,7 @@ namespace ContentPatcher.Framework.Lexing
             if (rawText is null)
                 yield break;
 
-            // Empty string - the rest of the function
-            // avoids yielding out empty strings
-            // so this must be handled special.
+            // handle empty string (the rest of the function will avoid yielding empty strings)
             if (rawText.Length == 0)
             {
                 yield return new LexBit(LexBitType.Literal, string.Empty);
@@ -58,66 +56,63 @@ namespace ContentPatcher.Framework.Lexing
 
             // parse
             int length = rawText.Length;
+            int maxIndex = length - 1;
             int lastMatch = 0;
             int start = 0;
-            int index;
 
-            do
+            while (lastMatch < length)
             {
-                index = rawText.IndexOfAny(SplitPattern, start);
+                int index = rawText.IndexOfAny(Lexer.SplitPattern, start);
                 if (index == -1)
                 {
                     if (lastMatch < length)
                         yield return new LexBit(LexBitType.Literal, rawText[lastMatch..]);
                     yield break;
                 }
-                else
+
+                char match = rawText[index];
+                switch (match)
                 {
-                    char match = rawText[index];
-                    switch (match)
-                    {
-                        case Lexer.StartTokenChar:
-                        case Lexer.EndTokenChar:
-                            if (index < rawText.Length - 1 && match == rawText[index + 1])
-                            {
-                                if (lastMatch != index)
-                                    yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
-                                start = index + 2;
-                                lastMatch = start;
-                                yield return match == Lexer.StartTokenChar
-                                    ? new LexBit(LexBitType.StartToken, "" + Lexer.StartTokenChar + Lexer.StartTokenChar)
-                                    : new LexBit(LexBitType.EndToken, "" + Lexer.EndTokenChar + Lexer.EndTokenChar);
-                                break;
-                            }
-                            else
-                            {
-                                // not a real match, this is a { or } alone
-                                // advance past and try again.
-                                start = index + 1;
-                                break;
-                            }
-
-                        case Lexer.NamedInputChar:
-                            if (lastMatch != index)
-                                yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
-                            yield return new LexBit(LexBitType.NamedInputArgSeparator, "" + Lexer.NamedInputChar);
+                    case Lexer.StartTokenChar:
+                    case Lexer.EndTokenChar:
+                        if (index >= maxIndex || match != rawText[index + 1]) // not a pair
+                        {
                             start = index + 1;
-                            lastMatch = start;
                             break;
+                        }
 
-                        case Lexer.PositionalInputChar:
-                            if (lastMatch != index)
-                                yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
-                            yield return new LexBit(LexBitType.PositionalInputArgSeparator, "" + Lexer.PositionalInputChar);
-                            start = index + 1;
-                            lastMatch = start;
-                            break;
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return match == Lexer.StartTokenChar
+                            ? new LexBit(LexBitType.StartToken, "" + Lexer.StartTokenChar + Lexer.StartTokenChar)
+                            : new LexBit(LexBitType.EndToken, "" + Lexer.EndTokenChar + Lexer.EndTokenChar);
 
-                        default:
-                            throw new InvalidOperationException("How did we get here?");
-                    }
+                        start = index + 2;
+                        lastMatch = start;
+                        break;
+
+                    case Lexer.NamedInputChar:
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return new LexBit(LexBitType.NamedInputArgSeparator, "" + Lexer.NamedInputChar);
+
+                        start = index + 1;
+                        lastMatch = start;
+                        break;
+
+                    case Lexer.PositionalInputChar:
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return new LexBit(LexBitType.PositionalInputArgSeparator, "" + Lexer.PositionalInputChar);
+
+                        start = index + 1;
+                        lastMatch = start;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Found invalid lexical token '{match}' while parsing string '{rawText}'. This is a bug in Content Patcher's lexer.");
                 }
-            } while (lastMatch < length);
+            }
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
