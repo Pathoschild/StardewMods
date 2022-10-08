@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed items in Junimo Chests sometimes counted multiple times after 1.27.5.
 * Fixed deconstructor accepting items it normally wouldn't.
 
 ## 1.27.5
