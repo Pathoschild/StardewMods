@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed 'hide on key up' option closing lookup while the key is held.
+* Fixed weapon item description showing the game's auto-generated stat values.
 * Improved translations. Thanks to Becks723 (updated Chinese)!
 
 ## 1.37.5

@@ -20,6 +20,7 @@ using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
@@ -417,7 +418,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             try
             {
                 _ = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
-                return item.getDescription();
+                return item is MeleeWeapon weapon && !weapon.isScythe()
+                    ? weapon.Description
+                    : item.getDescription();
             }
             catch (KeyNotFoundException)
             {
