@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added melee weapon stats to item lookup.
 * Fixed 'hide on key up' option closing lookup while the key is held.
 * Fixed weapon item description showing the game's auto-generated stat values.
 * Improved translations. Thanks to Becks723 (updated Chinese)!
