@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.38.0
+Released 10 October 2022 for SMAPI 3.14.0 or later.
+
+* Added melee weapon stats to item lookup.
+* Fixed 'hide on key up' option closing lookup while the key is held.
+* Fixed weapon item description showing the game's auto-generated stat values.
+* Improved translations. Thanks to Becks723 (updated Chinese)!
+
 ## 1.37.5
 Released 29 August 2022 for SMAPI 3.14.0 or later.
 

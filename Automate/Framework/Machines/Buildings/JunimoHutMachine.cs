@@ -1,4 +1,5 @@
 using System.Linq;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
@@ -12,14 +13,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Fields
         *********/
-        /// <summary>Whether seeds should be ignored when selecting output.</summary>
-        private readonly bool IgnoreSeedOutput;
+        /// <summary>How to handle gems in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior GemBehavior;
 
-        /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
-        private readonly bool IgnoreFertilizerOutput;
+        /// <summary>How to handle fertilizer in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior FertilizerBehavior;
 
-        /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
-        public bool PullGemstonesFromJunimoHuts { get; set; }
+        /// <summary>How to handle seeds in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior SeedBehavior;
+
+        /// <summary>Whether the Junimo hut can automate input.</summary>
+        private readonly bool HasInput;
+
+        /// <summary>Whether any items are configured to be skipped when outputting.</summary>
+        private readonly bool HasIgnoredOutput;
 
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
@@ -31,15 +38,24 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
-        /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
-        /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
-        /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput, bool ignoreFertilizerOutput, bool pullGemstonesFromJunimoHuts)
+        /// <param name="gemBehavior">How to handle gems in the hut or connected chests.</param>
+        /// <param name="fertilizerBehavior">How to handle fertilizer in the hut or connected chests.</param>
+        /// <param name="seedBehavior">How to handle seeds in the hut or connected chests.</param>
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, JunimoHutBehavior gemBehavior, JunimoHutBehavior fertilizerBehavior, JunimoHutBehavior seedBehavior)
             : base(hut, location, BaseMachine.GetTileAreaFor(hut))
         {
-            this.IgnoreSeedOutput = ignoreSeedOutput;
-            this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
-            this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
+            this.GemBehavior = gemBehavior;
+            this.FertilizerBehavior = fertilizerBehavior;
+            this.SeedBehavior = seedBehavior;
+
+            this.HasInput =
+                gemBehavior is JunimoHutBehavior.MoveIntoHut
+                || fertilizerBehavior is JunimoHutBehavior.MoveIntoHut
+                || seedBehavior is JunimoHutBehavior.MoveIntoHut;
+            this.HasIgnoredOutput =
+                gemBehavior is not JunimoHutBehavior.MoveIntoChests
+                || fertilizerBehavior is not JunimoHutBehavior.MoveIntoChests
+                || seedBehavior is not JunimoHutBehavior.MoveIntoChests;
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -48,8 +64,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (this.Machine.isUnderConstruction())
                 return MachineState.Disabled;
 
-            return this.GetNextOutput() != null
-                ? MachineState.Done
+            if (this.GetNextOutput() != null)
+                return MachineState.Done;
+
+            return this.HasInput
+                ? MachineState.Empty
                 : MachineState.Processing;
         }
 
@@ -64,7 +83,41 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            return false; // no input
+            if (!this.HasInput)
+                return false;
+
+            // get next item
+            ITrackedStack? tracker = null;
+            foreach (ITrackedStack stack in input.GetItems())
+            {
+                if (stack.Sample is not SObject obj)
+                    continue;
+
+                switch (obj.Category)
+                {
+                    case SObject.SeedsCategory when this.SeedBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+
+                    case SObject.fertilizerCategory when this.FertilizerBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+
+                    case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+                }
+
+                if (tracker is not null)
+                    break;
+            }
+            if (tracker == null)
+                return false;
+
+            // place item in output chest
+            SObject item = (SObject)tracker.Take(1)!;
+            this.Output.addItem(item);
+            return true;
         }
 
 
@@ -84,15 +137,22 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             foreach (Item item in this.Output.items.Where(p => p != null))
             {
-                // ignore gems which change Junimo colors (see JunimoHut:getGemColor)
-                if (!this.PullGemstonesFromJunimoHuts && item.Category is SObject.GemCategory or SObject.mineralsCategory)
-                    continue;
+                if (this.HasIgnoredOutput)
+                {
+                    bool ignore = false;
 
-                // ignore items used by another mod
-                if (this.IgnoreSeedOutput && item.Category == SObject.SeedsCategory)
-                    continue;
-                if (this.IgnoreFertilizerOutput && item.Category == SObject.fertilizerCategory)
-                    continue;
+                    switch (item.Category)
+                    {
+                        case SObject.SeedsCategory when this.SeedBehavior is not JunimoHutBehavior.MoveIntoChests:
+                        case SObject.fertilizerCategory when this.FertilizerBehavior is not JunimoHutBehavior.MoveIntoChests:
+                        case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior is not JunimoHutBehavior.MoveIntoChests:
+                            ignore = true;
+                            break;
+                    }
+
+                    if (ignore)
+                        continue;
+                }
 
                 return item;
             }

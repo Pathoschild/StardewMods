@@ -6,17 +6,10 @@
     "config.title.main-options": "主要选项",
     "config.enabled.name": "启用",
     "config.enabled.desc": "是否启用自动化功能。如果禁用此选项，则不会自动运行任何机器，热键也不能使用",
-    "config.junimo-huts-output-gems.name": "祝尼魔小屋输出宝石",
-    "config.junimo-huts-output-gems.desc": "是否将宝石从祝尼魔小屋中拉出。 如果设置为true，你将无法通过在祝尼魔小屋中放置宝石来改变祝尼魔的颜色。",
     "config.automation-interval.name": "自动化间隔",
     "config.automation-interval.desc": "每个自动化进程之间的间隔数 (每1秒60，每2秒120，以此类推).",
     "config.toggle-overlay-key.name": "切换配置键位",
     "config.toggle-overlay-key.desc": "切换自动化配置的键位",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "模组兼容性",
-    "config.better-junimos.name": "Better Junimos（更好的祝尼魔）",
-    "config.better-junimos.desc": "启用与 Better Junimos 的兼容性。 如果安装该模组，祝尼魔小屋不会输出肥料或种子",
     "config.warn-for-missing-bridge-mod.name": "缺少连接模块警告",
     "config.warn-for-missing-bridge-mod.desc": "如果你安装了自定义机器模组但未安装其所需要另外安装的兼容性补丁，是否在启动时记录警告",
 
@@ -25,6 +18,23 @@
     "config.connector.desc": "{{itemName}}是否将机器与宝箱连接",
     "config.custom-connectors.name": "自定义连接",
     "config.custom-connectors.desc": "将相邻机器连接在一起的项目的确切英文名称，您可以使用逗号列出多个项目（注意逗号的输入法）", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "机器禁用",

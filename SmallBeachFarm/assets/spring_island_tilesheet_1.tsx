@@ -244,6 +244,7 @@
  </tile>
  <tile id="304">
   <properties>
+   <property name="Diggable" value="T"/>
    <property name="Type" value="Dirt"/>
   </properties>
  </tile>

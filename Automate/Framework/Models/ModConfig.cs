@@ -15,9 +15,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>Whether Automate is enabled.</summary>
         public bool Enabled { get; set; } = true;
 
-        /// <summary>Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.</summary>
-        public bool PullGemstonesFromJunimoHuts { get; set; } = false;
-
         /// <summary>The number of ticks between each automation process (60 = once per second).</summary>
         public int AutomationInterval { get; set; } = 60;
 
@@ -27,8 +24,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The in-game object names through which machines can connect.</summary>
         public HashSet<string> ConnectorNames { get; set; } = new() { "Workbench" };
 
-        /// <summary>Options affecting compatibility with other mods.</summary>
-        public ModCompatibilityConfig ModCompatibility { get; set; } = new();
+        /// <summary>How Junimo huts should automate gems.</summary>
+        /// <remarks>The <see cref="JunimoHutBehavior.AutoDetect"/> option is equivalent to <see cref="JunimoHutBehavior.Ignore"/>.</remarks>
+        public JunimoHutBehavior JunimoHutBehaviorForGems { get; set; } = JunimoHutBehavior.AutoDetect;
+
+        /// <summary>How Junimo huts should automate fertilizer items.</summary>
+        /// <remarks>The <see cref="JunimoHutBehavior.AutoDetect"/> option is equivalent to <see cref="JunimoHutBehavior.Ignore"/> (if Better Junimos is installed), else <see cref="JunimoHutBehavior.MoveIntoChests"/>.</remarks>
+        public JunimoHutBehavior JunimoHutBehaviorForFertilizer { get; set; } = JunimoHutBehavior.AutoDetect;
+
+        /// <summary>How Junimo huts should automate seed items.</summary>
+        /// <remarks>The <see cref="JunimoHutBehavior.AutoDetect"/> option is equivalent to <see cref="JunimoHutBehavior.Ignore"/> (if Better Junimos is installed), else <see cref="JunimoHutBehavior.MoveIntoChests"/>.</remarks>
+        public JunimoHutBehavior JunimoHutBehaviorForSeeds { get; set; } = JunimoHutBehavior.AutoDetect;
+
+        /// <summary>Whether to log a warning if the player installs a custom-machine mod that requires a separate compatibility patch which isn't installed.</summary>
+        public bool WarnForMissingBridgeMod { get; set; } = true;
 
         /// <summary>The configuration for specific machines by ID.</summary>
         public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new();
@@ -47,7 +56,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
             // normalize
             this.Controls ??= new();
             this.ConnectorNames = this.ConnectorNames.ToNonNullCaseInsensitive();
-            this.ModCompatibility ??= new();
             this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
 
             // remove null values

@@ -9,6 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.28.2
+Released 10 October 2022 for SMAPI 3.15.0 or later.
+
+* Improved performance and reduced memory usage when parsing tokenizable strings (thanks to atravita!).
+* Reduced memory usage for loaded content packs a bit.
+* Disabled the compatibility workaround for PyTK when running in SMAPI strict mode.
+
 ## 1.28.1
 Released 29 August 2022 for SMAPI 3.15.0 or later.
 

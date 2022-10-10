@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.0
+Released 10 October 2022 for SMAPI 3.14.0 or later.
+
+* Added option to transfer seeds & fertilizer into Junimo huts to automate replanting with [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (thanks to kzawora)!
+* Overhauled Junimo hut settings to be more flexible.
+* Fixed items in Junimo Chests sometimes counted multiple times after 1.27.5.
+* Fixed deconstructor accepting items it normally wouldn't.
+
 ## 1.27.5
 Released 29 August 2022 for SMAPI 3.14.0 or later.
 
@@ -293,7 +301,7 @@ Released 26 November 2019 for SMAPI 3.0.0 or later.
   * new machines (fish pond and wood chipper);
   * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
   * chance of double Loom output with higher quality input;
-  * gemstones are no longer pulled from Junimo huts by default (configurable).
+  * gems are no longer pulled from Junimo huts by default (configurable).
 * Fixed auto-grabbers not showing empty sprite when emptied automatically.
 
 ## 1.13.2

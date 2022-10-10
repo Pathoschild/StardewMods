@@ -6,17 +6,10 @@
     "config.title.main-options": "Ana Seçenekler",
     "config.enabled.name": "Etkin",
     "config.enabled.desc": "Otomasyon özelliklerinin aktifleştirilip aktifleştirilmeyeceği. Devre dışı bırakıldıysa hiçbir makine otomatik olarak çalışmaz.",
-    "config.junimo-huts-output-gems.name": "Junimo kulübelerinden değerli taş çıkar",
-    "config.junimo-huts-output-gems.desc": "Junimo kulübelerinden değerli taş çıkıp çıkmayacağı. Eğer etkinse, kulübelerine değerli taşlar yerleştirerek Junimo renklerini değiştiremezsiniz.",
     "config.automation-interval.name": "Otomasyon aralığı",
     "config.automation-interval.desc": "Her bir otomasyon süreci arasındaki tıklama sayısı (saniyede bir kez 60, iki saniyede bir 120, vb.).",
     "config.toggle-overlay-key.name": "Kaplama anahtarını aç/kapat",
     "config.toggle-overlay-key.desc": "Otomasyon kaplamasını değiştiren tuşlar.",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "Mod uyumluluğu",
-    "config.better-junimos.name": "Daha iyi Junimolar",
-    "config.better-junimos.desc": "Daha iyi Junimolar ile uyumluluğu etkinleştirir. Kuruluysa, Junimo kulübeleri gübre veya tohum vermez.",
     "config.warn-for-missing-bridge-mod.name": "Eksik köprü modu için uyar",
     "config.warn-for-missing-bridge-mod.desc": "Yüklenmemiş ayrı bir uyumluluk düzeltme eki gerektiren bir özel makine modu yüklediyseniz, başlangıçta bir uyarının günlüğe kaydedilip kaydedilmeyeceği.",
 
@@ -25,6 +18,23 @@
     "config.connector.desc": "{{itemName}}'in makineleri ve sandıkları birbirine bağlayıp bağlamadığı.",
     "config.custom-connectors.name": "Özel bağlayıcılar",
     "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan öğelerin tam İngilizce adları. Birden çok öğeyi virgülle listeleyebilirsiniz.",
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "Makine geçersiz kılmaları",

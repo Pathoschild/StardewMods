@@ -444,6 +444,30 @@
 
 
     /*********
+    ** Item > melee weapon lookups
+    *********/
+    // labels
+    // TODO
+    "item.melee-weapon.accuracy": "Accuracy",
+    "item.melee-weapon.critical-chance": "Critical chance",
+    "item.melee-weapon.critical-damage": "Critical damage",
+    "item.melee-weapon.damage": "Damage",
+    "item.melee-weapon.defense": "Defense",
+    "item.melee-weapon.knockback": "Knockback",
+    "item.melee-weapon.reach": "Reach",
+    "item.melee-weapon.speed": "Attack speed",
+
+    // values
+    // TODO
+    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
+    "item.melee-weapon.defense.label": "{{amount}} while equipped",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
+    "item.melee-weapon.reach.label": "{{amount}} pixels",
+    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+
+
+    /*********
     ** Item > movie lookups
     *********/
     // labels

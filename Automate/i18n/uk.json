@@ -6,17 +6,10 @@
     "config.title.main-options": "Основні налаштування",
     "config.enabled.name": "Увімкнено",
     "config.enabled.desc": "Чи треба вмикати можливості моду Automate. Якщо вимкнено, жодна з машин не буде автоматизована і не буде з'являтися накладання.",
-    "config.junimo-huts-output-gems.name": "Будиночки Джунімо виробляють коштовності",
-    "config.junimo-huts-output-gems.desc": "Збирання коштовностей з будиночків Джунімо. Якщо увімкнено, то ви не зможете змінити кольори Джунімо, поклавши коштовність в їхній будиночок.",
     "config.automation-interval.name": "Інтервал автоматизації",
     "config.automation-interval.desc": "Кількість тактів між кожним процесом автоматизації (60 разів на секунду, 120 кожні дві секунди тощо).",
     "config.toggle-overlay-key.name": "Клавіша перемикання накладання",
     "config.toggle-overlay-key.desc": "Клавіші перемикання накладання автоматизації.",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "Сумісність модів",
-    "config.better-junimos.name": "Better Junimos",
-    "config.better-junimos.desc": "Увімкнення сумісністі з Better Junimos. Якщо увімкнено, то будиночки Джунімо не видаватимуть добрива чи насіння.",
     "config.warn-for-missing-bridge-mod.name": "Попередженння про відсутність моду Bridge Mod",
     "config.warn-for-missing-bridge-mod.desc": "Реєстрування попередження під час запуску, якщо ви встановили спеціальний мод, котрий вимагає окремого моду, який не встановлено.",
 
@@ -25,6 +18,23 @@
     "config.connector.desc": "{{itemName}} з'єднуватиме машини та скрині разом.",
     "config.custom-connectors.name": "Користувацьке з'єднання",
     "config.custom-connectors.desc": "Точні англійські назви предметів, які з'єднують сусідні машини разом. Ви можете перерахувати кілька предметів комами.", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "Перевизначення машини",

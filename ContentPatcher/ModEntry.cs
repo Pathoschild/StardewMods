@@ -110,9 +110,12 @@ namespace ContentPatcher
             if (!this.Config.GroupEditsByMod)
                 this.Monitor.Log("Grouping edits by mod is disabled in config.json. This will reduce the usefulness of log info.");
 
-            // enable temporary PyTK legacy mode
+            // enable temporary PyTK legacy mode (unless running in SMAPI strict mode)
             IModInfo? pyTk = helper.ModRegistry.Get("Platonymous.Toolkit");
-            EditImagePatch.EnablePyTkLegacyMode = pyTk is not null && pyTk.Manifest.Version.IsOlderThan("1.24.0");
+            EditImagePatch.EnablePyTkLegacyMode =
+                pyTk is not null
+                && pyTk.Manifest.Version.IsOlderThan("1.24.0")
+                && typeof(Constants).GetProperty("ExecutionPath") != null; // not SMAPI strict mode (which drops PyTK workarounds)
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
