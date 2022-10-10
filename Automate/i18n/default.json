@@ -21,7 +21,7 @@
 
     // Junimo hut options
     "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gemstones",
+    "config.junimo-hut-gems.name": "Gems",
     "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
     "config.junimo-hut-fertilizer.name": "Fertilizer",
     "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",

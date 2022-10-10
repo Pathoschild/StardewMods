@@ -104,8 +104,8 @@ namespace Pathoschild.Stardew.Automate.Framework
                 menu,
                 name: I18n.Config_JunimoHutGems_Name,
                 tooltip: I18n.Config_JunimoHutGems_Desc,
-                get: config => config.JunimoHutBehaviorForGemStones,
-                set: (config, value) => config.JunimoHutBehaviorForGemStones = value
+                get: config => config.JunimoHutBehaviorForGems,
+                set: (config, value) => config.JunimoHutBehaviorForGems = value
             );
             this.AddJunimoHutBehaviorDropdown(
                 menu,

@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Fields
         *********/
-        /// <summary>How to handle gem stones in the hut or connected chests.</summary>
+        /// <summary>How to handle gems in the hut or connected chests.</summary>
         private readonly JunimoHutBehavior GemBehavior;
 
         /// <summary>How to handle fertilizer in the hut or connected chests.</summary>
@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
-        /// <param name="gemBehavior">How to handle gem stones in the hut or connected chests.</param>
+        /// <param name="gemBehavior">How to handle gems in the hut or connected chests.</param>
         /// <param name="fertilizerBehavior">How to handle fertilizer in the hut or connected chests.</param>
         /// <param name="seedBehavior">How to handle seeds in the hut or connected chests.</param>
         public JunimoHutMachine(JunimoHut hut, GameLocation location, JunimoHutBehavior gemBehavior, JunimoHutBehavior fertilizerBehavior, JunimoHutBehavior seedBehavior)

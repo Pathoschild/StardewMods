@@ -257,7 +257,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     {
                         ModConfig config = this.Config();
 
-                        JunimoHutBehavior gemBehavior = config.JunimoHutBehaviorForGemStones;
+                        JunimoHutBehavior gemBehavior = config.JunimoHutBehaviorForGems;
                         if (gemBehavior is JunimoHutBehavior.AutoDetect)
                             gemBehavior = JunimoHutBehavior.Ignore;
 
