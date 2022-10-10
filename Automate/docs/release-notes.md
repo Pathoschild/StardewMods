@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.28.0
+Released 10 October 2022 for SMAPI 3.14.0 or later.
+
 * Added option to transfer seeds & fertilizer into Junimo huts to automate replanting with [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (thanks to kzawora)!
 * Overhauled Junimo hut settings to be more flexible.
 * Fixed items in Junimo Chests sometimes counted multiple times after 1.27.5.
