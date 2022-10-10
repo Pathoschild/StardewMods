@@ -57,12 +57,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                     get: config => config.Enabled,
                     set: (config, value) => config.Enabled = value
                 )
-                .AddCheckbox(
-                    name: I18n.Config_JunimoHutsOutputGems_Name,
-                    tooltip: I18n.Config_JunimoHutsOutputGems_Desc,
-                    get: config => config.PullGemstonesFromJunimoHuts,
-                    set: (config, value) => config.PullGemstonesFromJunimoHuts = value
-                )
                 .AddNumberField(
                     name: I18n.Config_AutomationInterval_Name,
                     tooltip: I18n.Config_AutomationInterval_Desc,
@@ -76,34 +70,12 @@ namespace Pathoschild.Stardew.Automate.Framework
                     tooltip: I18n.Config_ToggleOverlayKey_Desc,
                     get: config => config.Controls.ToggleOverlay,
                     set: (config, value) => config.Controls.ToggleOverlay = value
-                );
-
-            // mod compatibility
-            menu
-                .AddSectionTitle(I18n.Config_Title_ModCompatibility)
-                .AddCheckbox(
-                    name: I18n.Config_BetterJunimos_Name,
-                    tooltip: I18n.Config_BetterJunimos_Desc,
-                    get: config => config.ModCompatibility.BetterJunimos,
-                    set: (config, value) => config.ModCompatibility.BetterJunimos = value
-                )
-                .AddCheckbox(
-                    name: I18n.Config_BetterJunimosTransferSeedsToJunimoHuts_Name,
-                    tooltip: I18n.Config_BetterJunimosTransferSeedsToJunimoHuts_Desc,
-                    get: config => config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts,
-                    set: (config, value) => config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts = value
-                )
-                .AddCheckbox(
-                    name: I18n.Config_BetterJunimosTransferFertilizersToJunimoHuts_Name,
-                    tooltip: I18n.Config_BetterJunimosTransferFertilizersToJunimoHuts_Desc,
-                    get: config => config.ModCompatibility.BetterJunimosTransferFertilizersToJunimoHuts,
-                    set: (config, value) => config.ModCompatibility.BetterJunimosTransferFertilizersToJunimoHuts = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_WarnForMissingBridgeMod_Name,
                     tooltip: I18n.Config_WarnForMissingBridgeMod_Desc,
-                    get: config => config.ModCompatibility.WarnForMissingBridgeMod,
-                    set: (config, value) => config.ModCompatibility.WarnForMissingBridgeMod = value
+                    get: config => config.WarnForMissingBridgeMod,
+                    set: (config, value) => config.WarnForMissingBridgeMod = value
                 );
 
             // connectors
@@ -126,6 +98,30 @@ namespace Pathoschild.Stardew.Automate.Framework
                 set: (config, value) => this.SetCustomConnectors(config, value.Split(',').Select(p => p.Trim()))
             );
 
+            // Junimo huts
+            menu.AddSectionTitle(I18n.Config_Title_JunimoHuts);
+            this.AddJunimoHutBehaviorDropdown(
+                menu,
+                name: I18n.Config_JunimoHutGems_Name,
+                tooltip: I18n.Config_JunimoHutGems_Desc,
+                get: config => config.JunimoHutBehaviorForGemStones,
+                set: (config, value) => config.JunimoHutBehaviorForGemStones = value
+            );
+            this.AddJunimoHutBehaviorDropdown(
+                menu,
+                name: I18n.Config_JunimoHutFertilizer_Name,
+                tooltip: I18n.Config_JunimoHutFertilizer_Desc,
+                get: config => config.JunimoHutBehaviorForFertilizer,
+                set: (config, value) => config.JunimoHutBehaviorForFertilizer = value
+            );
+            this.AddJunimoHutBehaviorDropdown(
+                menu,
+                name: I18n.Config_JunimoHutSeeds_Name,
+                tooltip: I18n.Config_JunimoHutSeeds_Desc,
+                get: config => config.JunimoHutBehaviorForSeeds,
+                set: (config, value) => config.JunimoHutBehaviorForSeeds = value
+            );
+
             // machine overrides
             menu.AddSectionTitle(I18n.Config_Title_MachineOverrides);
             foreach (var entry in this.Data.DefaultMachineOverrides)
@@ -144,6 +140,34 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Private methods
         *********/
+        /****
+        ** Junimo huts
+        ****/
+        /// <summary>Add a dropdown to configure Junimo hut behavior for an item type.</summary>
+        /// <param name="menu">The config menu to extend.</param>
+        /// <param name="name">The label text to show in the form.</param>
+        /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field.</param>
+        /// <param name="get">Get the current value from the mod config.</param>
+        /// <param name="set">Set a new value in the mod config.</param>
+        private void AddJunimoHutBehaviorDropdown(GenericModConfigMenuIntegration<ModConfig> menu, Func<string> name, Func<string> tooltip, Func<ModConfig, JunimoHutBehavior> get, Action<ModConfig, JunimoHutBehavior> set)
+        {
+            menu.AddDropdown(
+                name: name,
+                tooltip: tooltip,
+                get: config => get(config).ToString(),
+                set: (config, value) => set(config, Enum.Parse<JunimoHutBehavior>(value)),
+                allowedValues: Enum.GetNames<JunimoHutBehavior>(),
+                formatAllowedValue: value => value switch
+                {
+                    nameof(JunimoHutBehavior.AutoDetect) => I18n.Config_JunimoHuts_AutoDetect(),
+                    nameof(JunimoHutBehavior.Ignore) => I18n.Config_JunimoHuts_Ignore(),
+                    nameof(JunimoHutBehavior.MoveIntoChests) => I18n.Config_JunimoHuts_MoveIntoChests(),
+                    nameof(JunimoHutBehavior.MoveIntoHut) => I18n.Config_JunimoHuts_MoveIntoHuts(),
+                    _ => "???" // should never happen
+                }
+            );
+        }
+
         /****
         ** Connectors
         ****/

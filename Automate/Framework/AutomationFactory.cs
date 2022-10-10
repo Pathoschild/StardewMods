@@ -255,11 +255,21 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 case JunimoHut hut:
                     {
-                        var config = this.Config();
-                        bool betterJunimosCompat = config.ModCompatibility.BetterJunimos && this.IsBetterJunimosLoaded;
-                        bool allowSeedInput = betterJunimosCompat && config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts;
-                        bool allowFertilizerInput = betterJunimosCompat && config.ModCompatibility.BetterJunimosTransferSeedsToJunimoHuts;
-                        return new JunimoHutMachine(hut, location, allowSeedInput: allowSeedInput, allowFertilizerInput: allowFertilizerInput, ignoreSeedOutput: betterJunimosCompat, ignoreFertilizerOutput: betterJunimosCompat, pullGemstonesFromJunimoHuts: config.PullGemstonesFromJunimoHuts);
+                        ModConfig config = this.Config();
+
+                        JunimoHutBehavior gemBehavior = config.JunimoHutBehaviorForGemStones;
+                        if (gemBehavior is JunimoHutBehavior.AutoDetect)
+                            gemBehavior = JunimoHutBehavior.Ignore;
+
+                        JunimoHutBehavior fertilizerBehavior = config.JunimoHutBehaviorForFertilizer;
+                        if (fertilizerBehavior is JunimoHutBehavior.AutoDetect)
+                            fertilizerBehavior = this.IsBetterJunimosLoaded ? JunimoHutBehavior.Ignore : JunimoHutBehavior.MoveIntoChests;
+
+                        JunimoHutBehavior seedBehavior = config.JunimoHutBehaviorForFertilizer;
+                        if (seedBehavior is JunimoHutBehavior.AutoDetect)
+                            seedBehavior = this.IsBetterJunimosLoaded ? JunimoHutBehavior.Ignore : JunimoHutBehavior.MoveIntoChests;
+
+                        return new JunimoHutMachine(hut, location, gemBehavior, fertilizerBehavior, seedBehavior);
                     }
 
                 case Mill mill:

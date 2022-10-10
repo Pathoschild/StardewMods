@@ -1,7 +1,7 @@
 using System.Linq;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
@@ -13,20 +13,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Fields
         *********/
-        /// <summary>Whether seeds should be treated as Junimo hut inputs.<summary>
-        private readonly bool AllowSeedInput;
+        /// <summary>How to handle gem stones in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior GemBehavior;
 
-        /// <summary>Whether fertilizer should be treated as Junimo hut inputs.<summary>
-        private readonly bool AllowFertilizerInput;
+        /// <summary>How to handle fertilizer in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior FertilizerBehavior;
 
-        /// <summary>Whether seeds should be ignored when selecting output.</summary>
-        private readonly bool IgnoreSeedOutput;
+        /// <summary>How to handle seeds in the hut or connected chests.</summary>
+        private readonly JunimoHutBehavior SeedBehavior;
 
-        /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
-        private readonly bool IgnoreFertilizerOutput;
+        /// <summary>Whether the Junimo hut can automate input.</summary>
+        private readonly bool HasInput;
 
-        /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
-        public bool PullGemstonesFromJunimoHuts { get; set; }
+        /// <summary>Whether any items are configured to be skipped when outputting.</summary>
+        private readonly bool HasIgnoredOutput;
 
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
@@ -38,19 +38,24 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
-        /// <param name="allowSeedInput">Whether seeds are allowed as an input.</param>
-        /// <param name="allowFertilizerInput">Whether fertilizers are allowed as an input.</param>
-        /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
-        /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
-        /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool allowSeedInput, bool allowFertilizerInput, bool ignoreSeedOutput, bool ignoreFertilizerOutput, bool pullGemstonesFromJunimoHuts)
+        /// <param name="gemBehavior">How to handle gem stones in the hut or connected chests.</param>
+        /// <param name="fertilizerBehavior">How to handle fertilizer in the hut or connected chests.</param>
+        /// <param name="seedBehavior">How to handle seeds in the hut or connected chests.</param>
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, JunimoHutBehavior gemBehavior, JunimoHutBehavior fertilizerBehavior, JunimoHutBehavior seedBehavior)
             : base(hut, location, BaseMachine.GetTileAreaFor(hut))
         {
-            this.AllowSeedInput = allowSeedInput;
-            this.AllowFertilizerInput = allowFertilizerInput;
-            this.IgnoreSeedOutput = ignoreSeedOutput;
-            this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
-            this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
+            this.GemBehavior = gemBehavior;
+            this.FertilizerBehavior = fertilizerBehavior;
+            this.SeedBehavior = seedBehavior;
+
+            this.HasInput =
+                gemBehavior is JunimoHutBehavior.MoveIntoHut
+                || fertilizerBehavior is JunimoHutBehavior.MoveIntoHut
+                || seedBehavior is JunimoHutBehavior.MoveIntoHut;
+            this.HasIgnoredOutput =
+                gemBehavior is not JunimoHutBehavior.MoveIntoChests
+                || fertilizerBehavior is not JunimoHutBehavior.MoveIntoChests
+                || seedBehavior is not JunimoHutBehavior.MoveIntoChests;
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -58,11 +63,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             if (this.Machine.isUnderConstruction())
                 return MachineState.Disabled;
-            if (this.AllowSeedInput || this.AllowFertilizerInput)
-                return MachineState.Empty;
 
-            return this.GetNextOutput() != null
-                ? MachineState.Done
+            if (this.GetNextOutput() != null)
+                return MachineState.Done;
+
+            return this.HasInput
+                ? MachineState.Empty
                 : MachineState.Processing;
         }
 
@@ -77,11 +83,34 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (!this.AllowFertilizerInput && !this.AllowSeedInput)
+            if (!this.HasInput)
                 return false;
 
             // get next item
-            ITrackedStack? tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && ((this.AllowSeedInput && (obj.Category == SObject.SeedsCategory)) || (this.AllowFertilizerInput && (obj.Category == SObject.fertilizerCategory))));
+            ITrackedStack? tracker = null;
+            foreach (ITrackedStack stack in input.GetItems())
+            {
+                if (stack.Sample is not SObject obj)
+                    continue;
+
+                switch (obj.Category)
+                {
+                    case SObject.SeedsCategory when this.SeedBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+
+                    case SObject.fertilizerCategory when this.FertilizerBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+
+                    case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior == JunimoHutBehavior.MoveIntoHut:
+                        tracker = stack;
+                        break;
+                }
+
+                if (tracker is not null)
+                    break;
+            }
             if (tracker == null)
                 return false;
 
@@ -108,15 +137,22 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             foreach (Item item in this.Output.items.Where(p => p != null))
             {
-                // ignore gems which change Junimo colors (see JunimoHut:getGemColor)
-                if (!this.PullGemstonesFromJunimoHuts && item.Category is SObject.GemCategory or SObject.mineralsCategory)
-                    continue;
+                if (this.HasIgnoredOutput)
+                {
+                    bool ignore = false;
 
-                // ignore items used by another mod
-                if (this.IgnoreSeedOutput && item.Category == SObject.SeedsCategory)
-                    continue;
-                if (this.IgnoreFertilizerOutput && item.Category == SObject.fertilizerCategory)
-                    continue;
+                    switch (item.Category)
+                    {
+                        case SObject.SeedsCategory when this.SeedBehavior is not JunimoHutBehavior.MoveIntoChests:
+                        case SObject.fertilizerCategory when this.FertilizerBehavior is not JunimoHutBehavior.MoveIntoChests:
+                        case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior is not JunimoHutBehavior.MoveIntoChests:
+                            ignore = true;
+                            break;
+                    }
+
+                    if (ignore)
+                        continue;
+                }
 
                 return item;
             }
