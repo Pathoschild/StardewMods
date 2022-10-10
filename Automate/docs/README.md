@@ -362,6 +362,14 @@ Whether Automate features are enabled. If this is `false`, no machines will be a
   </td>
 </tr>
 <tr>
+  <td><code>AutomationInterval</code></td>
+  <td>
+
+The number of update ticks between each automation cycle (one second is ≈60 ticks). Default `60`.
+
+  </td>
+</tr>
+<tr>
   <td><code>Controls</code></td>
   <td>
 
@@ -370,23 +378,6 @@ The default value is `U` to toggle the automation overlay.
 
 You can separate bindings with commas (like `U, LeftShoulder` for either one), and set multi-key
 bindings with plus signs (like `LeftShift + U`).
-
-  </td>
-</tr>
-<tr>
-  <td><code>PullGemstonesFromJunimoHuts</code></td>
-  <td>
-
-Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by
-placing gemstones in their hut. Default `false`.
-
-  </td>
-</tr>
-<tr>
-  <td><code>AutomationInterval</code></td>
-  <td>
-
-The number of update ticks between each automation cycle (one second is ≈60 ticks). Default `60`.
 
   </td>
 </tr>
@@ -418,16 +409,27 @@ for more info.
   </td>
 </tr>
 <tr>
-  <td><code>ModCompatibility</code></td>
+  <td><code>JunimoHutBehaviorForGems</code><br /><code>JunimoHutBehaviorForFertilizer</code><br /><code>JunimoHutBehaviorForSeeds</code></td>
   <td>
 
-Enables compatibility with other mods. All values are enabled by default.
+How [Junimo huts](https://stardewvalleywiki.com/Junimo_Hut) should automate the given item types.
 
-field | result
+The possible values are:
+
+value | result
 ----- | ------
-`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertilizer and seeds.
-`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertilizer and seeds.
-`WarnForMissingBridgeMod` | Whether to log a warning if you install a custom-machine mod that requires a separate compatibility patch which isn't installed.
+`Ignore` | Ignore items of this type, so they're not transferred either way.
+`MoveIntoChests` | Move any items of this type from the Junimo Hut into connected chests.
+`MoveIntoHut` | Move any items of this type from connected chests into the Junimo Hut.
+`AutoDetect` | <p>Apply the default logic based on the installed mods.</p><p>For gems, this is equivalent to `Ignore` (so you can add gems manually to change the color of Junimos).</p><p>For fertilizer and seeds, this is equivalent to `Ignore` if [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed (so you can replant seeds/fertilizer), else `MoveIntoChests`.</p>
+  </td>
+</tr>
+<tr>
+  <td><code>WarnForMissingBridgeMod</code></td>
+  <td>
+
+Whether to log a warning if you install a custom-machine mod that requires a separate compatibility
+patch which isn't installed.
 
   </td>
 </tr>

@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added option to transfer seeds & fertilizer into Junimo huts to automate replanting with [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (thanks to kzawora)!
+* Overhauled Junimo hut settings to be more flexible.
 * Fixed items in Junimo Chests sometimes counted multiple times after 1.27.5.
 * Fixed deconstructor accepting items it normally wouldn't.
 
