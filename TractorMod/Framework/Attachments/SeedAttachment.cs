@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     && enricherObj.heldObject.Value is Chest enricher
                     && sprinkler.IsInSprinklerRangeBroadphase(tile)
                     && sprinkler.GetSprinklerTiles().Contains(tile)
-                    && enricher.items.FirstOrDefault() is { Category: SObject.fertilizerCategory } fertilizer
+                    && enricher.Items.FirstOrDefault() is { Category: SObject.fertilizerCategory } fertilizer
                 )
                 {
                     return (enricher, fertilizer);

@@ -188,12 +188,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             if (item.Stack <= 0)
             {
-                for (int i = 0; i < chest.items.Count; i++)
+                for (int i = 0; i < chest.Items.Count; i++)
                 {
-                    Item slot = chest.items[i];
+                    Item slot = chest.Items[i];
                     if (slot != null && object.ReferenceEquals(item, slot))
                     {
-                        chest.items[i] = null;
+                        chest.Items[i] = null;
                         break;
                     }
                 }

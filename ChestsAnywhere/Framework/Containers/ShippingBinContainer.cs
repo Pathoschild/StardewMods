@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netcode;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.Menus;
 using SFarmer = StardewValley.Farmer;
 
@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         private readonly Farm Farm;
 
         /// <summary>The underlying shipping bin.</summary>
-        private readonly NetCollection<Item?> ShippingBin;
+        private readonly IInventory ShippingBin;
 
         /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
         private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
@@ -173,7 +173,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 item.Stack = 1;
 
             // add to shipping bin
-            this.ShippingBin.Filter(p => p != null);
+            this.ClearNulls();
             foreach (Item? slot in this.Inventory)
             {
                 if (!slot!.canStackWith(item))
@@ -210,9 +210,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             if (Constants.TargetPlatform == GamePlatform.Android)
                 player.addItemToInventory(item);
             this.ShippingBin.Remove(item);
-            this.ShippingBin.Filter(p => p != null);
+            this.ClearNulls();
             if (item == this.Farm.lastItemShipped)
                 this.Farm.lastItemShipped = this.ShippingBin.LastOrDefault();
+        }
+
+        /// <summary>Remove empty slots from the shipping bin's inventory list.</summary>
+        private void ClearNulls()
+        {
+            for (int i = this.ShippingBin.Count - 1; i >= 0; i--)
+            {
+                if (this.ShippingBin[i] == null)
+                    this.ShippingBin.RemoveAt(i);
+            }
         }
     }
 }

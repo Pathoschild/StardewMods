@@ -129,13 +129,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         private void OnOutputTaken(Item item)
         {
             this.Output.clearNulls();
-            this.Output.items.Remove(item);
+            this.Output.Items.Remove(item);
         }
 
         /// <summary>Get the next output item.</summary>
         private Item? GetNextOutput()
         {
-            foreach (Item item in this.Output.items.Where(p => p != null))
+            foreach (Item item in this.Output.Items.Where(p => p != null))
             {
                 if (this.HasIgnoredOutput)
                 {
