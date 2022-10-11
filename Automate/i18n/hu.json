@@ -6,17 +6,10 @@
     "config.title.main-options": "Fő beállítások",
     "config.enabled.name": "Engedélyezve",
     "config.enabled.desc": "Az automatizálási funkciók engedélyezése. Ha ez ki van kapcsolva, akkor egyetlen gép sem lesz automatizálva, és az átfedés sem jelenik meg.",
-    "config.junimo-huts-output-gems.name": "Drágakövek begyűjtése",
-    "config.junimo-huts-output-gems.desc": "A Junimo kunyhók begyűjtik a drágakövek. Ha igaz, akkor nem tudod majd megváltoztatni a Junimo kunyhók színét azzal, hogy drágaköveket helyezel el rajtuk.",
     "config.automation-interval.name": "Automatizálási időköz",
     "config.automation-interval.desc": "Az egyes automatizálási folyamatok közötti időközök száma (60 másodpercenként egyszer, 120 másodpercenként kétszer stb).",
     "config.toggle-overlay-key.name": "Átfedés váltó gomb",
     "config.toggle-overlay-key.desc": "Az a billentyű, amely az automatizálási átfedést váltja át, hogy láthatóak legyenek az összekapcsolások.",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "Mod kompatibilitás",
-    "config.better-junimos.name": "Jobb Junimok",
-    "config.better-junimos.desc": "Better Junimos mod kompatibilitás engedélyezése. Ha telepítve van, a Junimo kunyhók nem fognak kiadni műtrágyát és vetőmagvat.",
     "config.warn-for-missing-bridge-mod.name": "Figyelmeztetés hiányzó mod miatt",
     "config.warn-for-missing-bridge-mod.desc": "Naplózzon-e figyelmeztetést indításkor, ha olyan egyedi gép modot telepítesz, melyhez külön kompatibilitási javítás szükséges, ami nincs telepítve.",
 
@@ -25,6 +18,23 @@
     "config.connector.desc": "A {{itemName}} összekapcsolja a gépeket és a ládákat.",
     "config.custom-connectors.name": "Egyedi csatlakozók",
     "config.custom-connectors.desc": "A szomszédos gépeket összekötő elemek pontos angol neve. Több elemet is felsorolhat vesszővel elválasztva.", // Megjegyzés: A csatlakozók neveinek angolnak kell lennie, még akkor is, ha más nyelvet használsz.
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "Gépi felülbírálások",

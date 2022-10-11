@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             this.Chest = chest;
             this.Location = location;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
-            this.InventoryReferenceId = chest.items;
+            this.InventoryReferenceId = this.GetInventory();
 
             if (migrateLegacyOptions)
                 this.MigrateLegacyOptions();

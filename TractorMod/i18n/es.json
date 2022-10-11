@@ -85,6 +85,9 @@
     "config.chop-trees-grown.name": "Cortar árboles (cultivados)",
     "config.chop-trees-grown.tooltip": "Si se desbrozan árboles no frutales completamente crecidos.",
 
+    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
+    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", //  TODO
+
     "config.chop-bushes.name": "Cortar arbustos",
     "config.chop-bushes.tooltip": "Si se cortan los arbustos que se pueden cortar.",
 

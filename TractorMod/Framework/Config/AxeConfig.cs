@@ -12,6 +12,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to clear fully-grown fruit trees.</summary>
         public bool CutGrownFruitTrees { get; set; }
 
+        /// <summary>Whether to clear regular tree stumps (not giant stumps, which are handled by <see cref="ClearDebris"/>).</summary>
+        public bool CutTreeStumps { get; set; } = true;
+
         /// <summary>Whether to clear non-fruit tree seeds.</summary>
         public bool ClearTreeSeeds { get; set; }
 

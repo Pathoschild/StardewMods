@@ -2,8 +2,8 @@
     /*********
     ** Tractor
     *********/
-    "buff.name": "Tractor Power",
-    "garage.name": "Tractor Garage",
+    "buff.name": "แรงขับของรถแทรกเตอร์",
+    "garage.name": "โรงรถรถแทรกเตอร์",
     "garage.description": "(โรงรถรถแทรกเตอร์) โรงรถสำหรับเก็บรถแทรกเตอร์ของคุณ รวมทั้งมีรถแทรกเตอร์ให้ด้วย!",
 
 
@@ -13,204 +13,195 @@
     /****
     ** Section titles
     ****/
-    // TODO
-    "config.main-options": "Main Options",
-    "config.controls": "Controls",
-    "config.axe": "Axe Features",
-    "config.hoe": "Hoe Features",
-    "config.pickaxe": "Pickaxe Features",
-    "config.scythe": "Scythe Features",
-    "config.melee-blunt": "Melee Blunt Weapons Features",
-    "config.melee-dagger": "Melee Dagger Features",
-    "config.melee-sword": "Melee Sword Features",
-    "config.other-tools": "Other Tools",
-    "config.custom-tools": "Custom Tools",
+    "config.main-options": "ตัวเลือกหลัก",
+    "config.controls": "การควบคุม",
+    "config.axe": "คุณสมบัติขวาน",
+    "config.hoe": "ลักษณะจอบ",
+    "config.pickaxe": "คุณสมบัติอีเต้อ",
+    "config.scythe": "คุณสมบัติเคียว",
+    "config.melee-blunt": "คุณสมบัติอาวุธทื่อๆในระยะประชิด",
+    "config.melee-dagger": "คุณสมบัติกริชระยะประชิด",
+    "config.melee-sword": "คุณสมบัติดาบระยะประชิด",
+    "config.other-tools": "เครื่องมืออื่นๆ",
+    "config.custom-tools": "กำหนดเองเครื่องมือ",
 
 
     /****
     ** Main options
     ****/
-    // TODO
-    "config.distance.name": "Distance",
-    "config.distance.tooltip": "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default {{defaultValue}}; a value of {{maxRecommendedValue}} covers most of the visible screen, and higher values may negatively impact game performance.",
+    "config.distance.name": "ระยะทาง",
+    "config.distance.tooltip": "จำนวนไทล์ในแต่ละทิศทางรอบๆรถแทรกเตอร์นั้นจะส่งผลกระทบ (นอกเหนือจากไทล์ด้านล่าง) ค่าเริ่มต้น {{defaultValue}}; ค่าของ {{maxRecommendedValue}} จะครอบคลุมหน้าจอที่มองเห็นได้เกือบทั้งหมด และค่าที่สูงขึ้นอาจส่งผลเสียต่อประสิทธิภาพของเกม",
 
-    "config.speed.name": "Tractor Speed",
-    "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
+    "config.speed.name": "ความเร็วของรถแทรกเตอร์",
+    "config.speed.tooltip": "ตัวปรับความเร็วเมื่อขี่รถแทรกเตอร์ ค่าเริ่มต้น {{defaultValue}}.",
 
-    "config.magnetic-radius.name": "Magnetic Radius",
-    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+    "config.magnetic-radius.name": "รัศมีแม่เหล็ก",
+    "config.magnetic-radius.tooltip": "ปริมาณการดูดไอเทม (ค่าที่สูงกว่าจะดึงดูดสิ่งของออกไป) ค่าเริ่มต้น {{defaultValue}}.",
 
-    "config.build-price.name": "Build Price",
-    "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
+    "config.build-price.name": "ราคาสร้าง",
+    "config.build-price.tooltip": "ราคาทองโรงรถรถแทรกเตอร์ ค่าเริ่มต้น {{defaultValue}}g.",
 
-    "config.can-summon-without-garage.name": "Can Summon Without Garage",
-    "config.can-summon-without-garage.tooltip": "Whether you can summon a temporary tractor without building a garage first.",
+    "config.can-summon-without-garage.name": "เรียกได้โดยไม่ต้องใช้โรงรถ",
+    "config.can-summon-without-garage.tooltip": "ไม่ว่าคุณจะเรียกรถแทรกเตอร์ชั่วคราวโดยไม่ต้องสร้างโรงรถก่อน",
 
-    "config.invincible-on-tractor.name": "Invincible on Tractor",
-    "config.invincible-on-tractor.tooltip": "Whether you should be immune to damage from any source when riding the tractor.",
+    "config.invincible-on-tractor.name": "อยู่ยงคงกระพันบนแทรคเตอร์",
+    "config.invincible-on-tractor.tooltip": "ไม่ว่าคุณควรมีภูมิคุ้มกันต่อความเสียหายจากแหล่งใด ๆ เมื่อขี่รถแทรกเตอร์",
 
-    "config.highlight-radius.name": "Highlight Radius (Debug)",
-    "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+    "config.highlight-radius.name": "รัศมีไฮไลท์ (ดีบัก)",
+    "config.highlight-radius.tooltip": "รวมถึงเน้นรัศมีของรถแทรกเตอร์เมื่อขี่หรือไม่ เพื่อช่วยให้เห็นภาพตัวเลือกระยะทาง",
 
 
     /****
     ** Keybind options
     ****/
-    // TODO
-    "config.summon-key.name": "Summon Tractor",
-    "config.summon-key.tooltip": "Warp an available tractor to your position. Default backspace.",
+    "config.summon-key.name": "เรียกรถแทรกเตอร์",
+    "config.summon-key.tooltip": "วาร์ปรถแทรกเตอร์ที่มีอยู่ไปยังตำแหน่งของคุณ แบ็คสเปซเริ่มต้น",
 
-    "config.dismiss-key.name": "Dismiss Tractor",
-    "config.dismiss-key.tooltip": "Return the tractor you're riding to its home.",
+    "config.dismiss-key.name": "เลิกใช้รถแทรกเตอร์",
+    "config.dismiss-key.tooltip": "คืนรถแทรกเตอร์ที่คุณกำลังขี่กลับบ้านไป",
 
-    "config.hold-to-activate-key.name": "Hold to Activate",
-    "config.hold-to-activate-key.tooltip": "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+    "config.hold-to-activate-key.name": "กดค้างไว้เพื่อเปิดใช้งาน",
+    "config.hold-to-activate-key.tooltip": "หากระบุไว้ รถแทรกเตอร์จะทำบางอย่างในขณะที่คุณกดปุ่มนี้ค้างไว้ หากไม่มีการระบุใดๆ รถแทรกเตอร์จะทำงานโดยอัตโนมัติในขณะที่คุณขี่",
 
 
     /****
     ** Trees & bushes
     ****/
-    // TODO
-    "config.chop-fruit-trees-seeds.name": "Chop Fruit Trees (Seeds)",
-    "config.chop-fruit-trees-seeds.tooltip": "Whether to clear fruit tree seeds.",
+    "config.chop-fruit-trees-seeds.name": "สับต้นผลไม้ (เมล็ด)",
+    "config.chop-fruit-trees-seeds.tooltip": "รวมถึงจะเป็นการขจัดเมล็ดต้นผลไม้ก็ตาม",
 
-    "config.chop-fruit-trees-saplings.name": "Chop Fruit Trees (Saplings)",
-    "config.chop-fruit-trees-saplings.tooltip": "Whether to clear fruit trees which aren't fully grown.",
+    "config.chop-fruit-trees-saplings.name": "สับต้นผลไม้ (ต้นกล้า)",
+    "config.chop-fruit-trees-saplings.tooltip": "รวมถึงจะเป็นการเคลียร์ต้นผลไม้ที่ยังไม่โตเต็มที่",
 
-    "config.chop-fruit-trees-grown.name": "Chop Fruit Trees (Grown)",
-    "config.chop-fruit-trees-grown.tooltip": "Whether to cut fully-grown fruit trees.",
+    "config.chop-fruit-trees-grown.name": "สับไม้ผล (โตแล้ว)",
+    "config.chop-fruit-trees-grown.tooltip": "รวมถึงตัดไม้ผลที่โตเต็มที่",
 
-    "config.chop-trees-seeds.name": "Chop Trees (Seeds)",
-    "config.chop-trees-seeds.tooltip": "Whether to clear non-fruit tree seeds.",
+    "config.chop-trees-seeds.name": "สับต้นไม้ (เมล็ด)",
+    "config.chop-trees-seeds.tooltip": "รวมถึงขจัดเมล็ดไม้ผล",
 
-    "config.chop-trees-saplings.name": "Chop Trees (Saplings)",
-    "config.chop-trees-saplings.tooltip": "Whether to clear non-fruit trees which aren't fully grown.",
+    "config.chop-trees-saplings.name": "สับต้นไม้ (ต้นกล้า)",
+    "config.chop-trees-saplings.tooltip": "รวมถึงเคลียร์ไม้ผลที่ยังไม่โตเต็มที่",
+    "config.chop-trees-grown.name": "สับต้นไม้ (โตแล้ว)",
+    "config.chop-trees-grown.tooltip": "รวมถึงเป็นการขจัดไม้ผลที่โตเต็มที่",
 
-    "config.chop-trees-grown.name": "Chop Trees (Grown)",
-    "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
+    "config.chop-trees-stumps.name": "สับต้นไม้ (ตอไม้)",
+    "config.chop-trees-stumps.tooltip": "รวมถึงเป็นการขจัดตอไม้ที่ไม่ใช่ผล (ไม่ส่งผลต่อตอไม้ยักษ์ ซึ่งนับเป็นเศษซาก)",
 
-    "config.chop-bushes.name": "Chop Bushes",
-    "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
+    "config.chop-bushes.name": "สับพุ่มไม้",
+    "config.chop-bushes.tooltip": "รวมถึงเป็นการตัดพุ่มไม้ที่สามารถสับได้",
 
-    "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
-    "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
+    "config.harvest-fruit-trees.name": "เก็บเกี่ยวไม้ผล",
+    "config.harvest-fruit-trees.tooltip": "รวมถึงเป็นการเก็บเกี่ยวไม้ผล",
 
 
     /****
     ** Crops/forage/grass
     ****/
-    // TODO
-    "config.clear-dead-crops.name": "Clear Dead Crops",
-    "config.clear-dead-crops.tooltip": "Whether to destroy dead crops.",
+    "config.clear-dead-crops.name": "จัดการพืชที่ตายแล้ว",
+    "config.clear-dead-crops.tooltip": "รวมถึงทำลายพืชผลที่ตายแล้ว",
 
-    "config.clear-live-crops.name": "Clear Live Crops",
-    "config.clear-live-crops.tooltip": "Whether to destroy live crops.",
+    "config.clear-live-crops.name": "จัดการพืชสด",
+    "config.clear-live-crops.tooltip": "รวมถึงเป็นการทำลายพืชผลสด",
 
-    "config.harvest-giant-crops.name": "Harvest Giant Crops",
-    "config.harvest-giant-crops.tooltip": "Whether to cut giant crops.",
+    "config.harvest-giant-crops.name": "เก็บเกี่ยวพืชผลยักษ์",
+    "config.harvest-giant-crops.tooltip": "รวมถึงเป็นการตัดพืชผลยักษ์",
 
-    "config.harvest-crops.name": "Harvest Crops",
-    "config.Harvest Crops.tooltip": "Whether to harvest crops.",
+    "config.harvest-crops.name": "เก็บเกี่ยวพืชผล",
+    "config.Harvest Crops.tooltip": "รวมถึงเป็นการเก็บเกี่ยวพืชผล",
 
-    "config.harvest-flowers.name": "Harvest Flowers",
-    "config.harvest-flowers.tooltip": "Whether to harvest flowers.",
+    "config.harvest-flowers.name": "เก็บเกี่ยวดอกไม้",
+    "config.harvest-flowers.tooltip": "รวมถึงเป็นการเก็บเกี่ยวดอกไม้",
 
-    "config.harvest-forage.name": "Harvest Forage",
-    "config.harvest-forage.tooltip": "Whether to harvest forage.",
+    "config.harvest-forage.name": "เก็บเกี่ยวอาหารสัตว์",
+    "config.harvest-forage.tooltip": "รวมถึงเป็นการเก็บเกี่ยวอาหารสัตว์",
 
-    "config.harvest-grass.name": "Harvest Grass",
-    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+    "config.harvest-grass.name": "เก็บเกี่ยวหญ้า",
+    "config.harvest-grass.tooltip": "รวมถึงตัดหญ้า หากคุณมีพื้นที่ไซโลว่าง สิ่งนี้จะช่วยให้คุณมีหญ้าแห้งได้ตามปกติ",
 
 
     /****
     ** Debris
     ****/
-    // TODO
-    "config.clear-debris.name": "Clear Debris",
-    "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
+    "config.clear-debris.name": "ขจัดเศษซาก",
+    "config.clear-debris.tooltip": "รวมถึงทำลายเศษซาก เช่น วัชพืช กิ่งไม้ ตอไม้ยักษ์ และท่อนซุงที่ร่วงหล่น",
 
-    "config.clear-weeds.name": "Clear Weeds",
-    "config.clear-weeds.tooltip": "Whether to destroy weeds.",
+    "config.clear-weeds.name": "ขจัดวัชพืช",
+    "config.clear-weeds.tooltip": "รวมถึงเป็นการทำลายวัชพืช",
 
 
     /****
     ** Dirt
     ****/
-    // TODO
-    "config.till-dirt.name": "Till Dirt",
-    "config.till-dirt.tooltip": "Whether to till empty dirt.",
+    "config.till-dirt.name": "กลบดิน",
+    "config.till-dirt.tooltip": "รวมถึงทำการกลบดินที่ว่าง",
 
-    "config.dig-artifact-spots.name": "Dig Artifact Spots",
-    "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+    "config.dig-artifact-spots.name": "ไถดิน",
+    "config.dig-artifact-spots.tooltip": "จะไถดินทุกอย่าง",
 
-    "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
-    "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
+    "config.clear-tilled-dirt.name": "ขจัดพื้นดิน",
+    "config.clear-tilled-dirt.tooltip": "รวมถึงขจัดดินที่ไถพรวน",
 
 
     /****
     ** Mining
     ****/
-    // TODO
-    "config.break-boulders-and-meteorites.name": "Break Boulders and Meteorites",
-    "config.break-boulders-and-meteorites.tooltip": "Whether to break boulders and meteorites.",
+    "config.break-boulders-and-meteorites.name": "ทำลายก้อนหินและอุกกาบาต",
+    "config.break-boulders-and-meteorites.tooltip": "รวมถึงทำลายก้อนหินและอุกกาบาต",
 
-    "config.harvest-mine-spawns.name": "Harvest Mine Spawns",
-    "config.harvest-mine-spawns.tooltip": "Whether to harvest spawned mine items like quartz and frozen tears.",
+    "config.harvest-mine-spawns.name": "เก็บเกี่ยวการวางไข่",
+    "config.harvest-mine-spawns.tooltip": "รวมถึงเก็บเกี่ยวสิ่งของที่กำเนิดมาจากแร่ควอทซ์และน้ำตาเยือกแข็งหรือไม่",
 
 
     /****
     ** Placed items
     ****/
-    // TODO
-    "config.break-flooring.name": "Break Flooring",
-    "config.break-flooring.tooltip": "Whether to break placed flooring.",
+    "config.break-flooring.name": "ทำลายพื้น",
+    "config.break-flooring.tooltip": "รวมถึงวางพื้นวาง.",
 
-    "config.break-objects.name": "Break Objects",
-    "config.break-objects.tooltip": "Whether to break placed objects.",
+    "config.break-objects.name": "ทำลายวัตถุ",
+    "config.break-objects.tooltip": "รวมถึงทำลายวัตถุที่วาง",
 
-    "config.break-mine-containers.name": "Break Mine Containers",
-    "config.break-mine-containers.tooltip": "Whether to break containers in the mine.",
+    "config.break-mine-containers.name": "ทำลายตู้คอนเทนเนอร์",
+    "config.break-mine-containers.tooltip": "รวมถึงเป็นการทุบตู้คอนเทนเนอร์ในเหมือง",
 
-    "config.harvest-machines.name": "Harvest Machines",
-    "config.harvest-machines.tooltip": "Whether to collect machine output.",
+    "config.harvest-machines.name": "เครื่องมือเก็บเกี่ยว",
+    "config.harvest-machines.tooltip": "รวมถึงรวบรวมผลผลิตเครื่องแปรรูป",
 
 
     /****
     ** Melee
     ****/
-    // TODO
-    "config.Attack-monsters.name": "Attack Monsters",
-    "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
+    "config.Attack-monsters.name": "โจมตีมอนเตอร์",
+    "config.Attack-monsters.tooltip": "รวมถึงโจมตีมอนสเตอร์ (สิ่งนี้มีกำลังมากเกินไปเนื่องจากความเร็วของเครื่องมือรถแทรกเตอร์)",
 
 
     /****
     ** Other
     ****/
-    // TODO
-    "config.milk-pail.name": "Enable Milk Pail",
-    "config.milk-pail.tooltip": "Whether to collect milk from farm animals using the milk pail.",
+    "config.milk-pail.name": "เปิดใช้งานที่ดูดนมวัว",
+    "config.milk-pail.tooltip": "รวมถึงเป็นการเก็บนมจากสัตว์เลี้ยงในฟาร์มโดยใช้ถังนม",
 
-    "config.shears.name": "Enable Shears",
-    "config.shears.tooltip": "Whether to collect wool from farm animals using the shears.",
+    "config.shears.name": "เปิดใช้งานกรรไกร",
+    "config.shears.tooltip": "รวมถึงเก็บขนจากสัตว์เลี้ยงในฟาร์มโดยใช้กรรไกร",
 
-    "config.watering-can.name": "Enable Watering Can",
-    "config.watering-can.tooltip": "Whether to water nearby tiles using the watering can. This doesn't consume water in the watering can.",
+    "config.watering-can.name": "เปิดใช้งานบัวรดน้ำ",
+    "config.watering-can.tooltip": "รวมถึงเป็นการรดน้ำกระเบื้องบริเวณใกล้เคียงโดยใช้บัวรดน้ำ สิ่งนี้ไม่กินน้ำในกระป๋องรดน้ำ",
 
-    "config.fertilizer.name": "Enable Fertilizer",
-    "config.fertilizer.tooltip": "Whether to apply fertilizer to crops and tilled dirt.",
+    "config.fertilizer.name": "เปิดใช้งานปุ๋ย",
+    "config.fertilizer.tooltip": "รวมถึงใส่ปุ๋ยกับพืชผลและดินที่ไถพรวน",
 
-    "config.grass-starters.name": "Enable Grass Starters",
-    "config.grass-starters.tooltip": "Whether to plant grass starters.",
+    "config.grass-starters.name": "เปิดใช้งาน Grass Starters",
+    "config.grass-starters.tooltip": "รวมถึงปลูกต้นหญ้า",
 
-    "config.seeds.name": "Enable Seeds",
-    "config.seeds.tooltip": "Whether to plant seeds.",
+    "config.seeds.name": "เปิดใช้งานเมล็ด",
+    "config.seeds.tooltip": "รวมถึงเป็นการเพาะเมล็ด",
 
-    "config.seed-bags.name": "Enable Seed Bags",
-    "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
+    "config.seed-bags.name": "เปิดใช้งานถุงเมล็ด",
+    "config.seed-bags.tooltip": "รวมถึงเพาะเมล็ดจากม็อดถุงเมล็ด",
 
-    "config.slingshot.name": "Enable Slingshot",
-    "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
+    "config.slingshot.name": "เปิดใช้งานหนังสติ๊ก",
+    "config.slingshot.tooltip": "จะยิงหนังสติ๊กไปทางเคอร์เซอร์หรือไม่ (สิ่งนี้มีกำลังมหาศาลและจะใช้กระสุนอย่างตะกละตะกลามเนื่องจากความเร็วของเครื่องมือรถแทรกเตอร์)",
 
-    "config.custom-tool-names.name": "Custom Tool Names",
-    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+    "config.custom-tool-names.name": "ชื่อเครื่องมือที่กำหนดเอง",
+    "config.custom-tool-names.tooltip": "รายการ/เครื่องมือที่กำหนดเองเพื่อเปิดใช้งานขณะขี่รถแทรกเตอร์ เครื่องมือจะถูกใช้ในแต่ละไทล์รอบ ๆ ในขณะที่รายการจะถูกวางลง หากคุณระบุสิ่งที่ได้รับการสนับสนุนแล้ว (เช่น ขวาน) การดำเนินการนี้จะแทนที่ข้อจำกัดทั้งหมดในการใช้งาน คุณต้องระบุชื่อภายในที่ถูกต้อง (ไม่ใช่ชื่อที่แสดงที่แปล) เช่น 'Axe' หรือ 'Mega Bomb' แยกค่าหลายค่าด้วยเครื่องหมายจุลภาค"
 }

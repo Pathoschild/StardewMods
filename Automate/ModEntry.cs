@@ -112,7 +112,7 @@ namespace Pathoschild.Stardew.Automate
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
-            if (this.Config.ModCompatibility.WarnForMissingBridgeMod)
+            if (this.Config.WarnForMissingBridgeMod)
                 this.ReportMissingBridgeMods(this.Data.SuggestedIntegrations);
         }
 

@@ -6,17 +6,10 @@
     "config.title.main-options": "Haupt-Optionen",
     "config.enabled.name": "Aktiviert",
     "config.enabled.desc": "Ob automatisierte Funktionen verwendet werden sollen. Wenn deaktiviert werden Maschinen nicht automatisiert und das Overlay erscheint nicht.",
-    "config.junimo-huts-output-gems.name": "Junimo-Hütten geben Edelsteine aus",
-    "config.junimo-huts-output-gems.desc": "Ob Edelsteine aus Junimo-Hütten gezogen werden können. Ist dies der Fall, können die Farben von Junimos nicht mehr verändert werden, indem man Edelsteine in ihre Hütte legt.",
     "config.automation-interval.name": "Automatisierungs-Intervall",
     "config.automation-interval.desc": "Die Anzahl der Ticks zwischen den einzelnen Automatisierungsprozessen (60: 1x pro Sekunde, 120: alle zwei Sekunden usw.).",
     "config.toggle-overlay-key.name": "Taste zum Umschalten des Overlays",
     "config.toggle-overlay-key.desc": "Die Tasten, mit denen das Automatisierungs-Overlay umgeschaltet wird.",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "Mod-Kompatibilität",
-    "config.better-junimos.name": "Better Junimos",
-    "config.better-junimos.desc": "Kompatibilität mit 'Better Junimos' aktivieren. Wenn installiert, geben Junimo-Hütten weder Dünger noch Saatgut aus.",
     "config.warn-for-missing-bridge-mod.name": "Warnung für fehlende Brücken-Mod",
     "config.warn-for-missing-bridge-mod.desc": "Ob eine Warnung beim Start protokolliert werden soll, wenn eine Custom Machine-Mod installiert ist, die einen separaten, nicht installierten Kompatibilitäts-Patch erfordert.",
 
@@ -25,6 +18,23 @@
     "config.connector.desc": "Ob {{itemName}} Maschinen und Truhen miteinander verbindet.",
     "config.custom-connectors.name": "Benutzerdefinierte Konnektoren",
     "config.custom-connectors.desc": "Die exakten englischen Bezeichnungen für Gegenstände, die benachbarte Maschinen miteinander verbinden. Mehrere Elemente können mit Kommas aufgeführt werden.", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "Überbrückung von Maschinen",

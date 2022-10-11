@@ -6,18 +6,11 @@
     "config.title.main-options": "Opciones principales",
     "config.enabled.name": "Enabled", // TODO
     "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
-    "config.junimo-huts-output-gems.name": "Cabañas de Junimos sacan gemas",
-    "config.junimo-huts-output-gems.desc": "Si se sacan gemas de las cabañas de Junimo. Si es cierto, no podrás cambiar los colores de Junimo colocando gemas en su cabaña.",
     "config.automation-interval.name": "Intervalo de automatización",
     "config.automation-interval.desc": "El número de ticks entre cada proceso de automatización (60 para una vez por segundo, 120 para cada dos segundos, etc.).",
     "config.toggle-overlay-key.name": "Tecla de activación de superposición",
     "config.toggle-overlay-key.desc": "Las teclas que activan la superposición de la automatización.",
-
-    // mod compatibility
-    "config.title.mod-compatibility": "Compatibilidad con los mods",
-    "config.better-junimos.name": "Better Junimos",
-    "config.better-junimos.desc": "Habilitar compatibilidad con Better Junimos. Si se instala, las cabañas de Junimo no producirán abono ni semillas.",
-    "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod",
+    "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod", // TODO
     "config.warn-for-missing-bridge-mod.desc": "Si se registra una advertencia al inicio si se ha instalado un mod de máquina personalizada que requiere un parche de compatibilidad separado que no está instalado.",
 
     // connectors
@@ -25,6 +18,23 @@
     "config.connector.desc": "Si {{itemName}} vincula máquinas y cofres.",
     "config.custom-connectors.name": "Conectores personalizados",
     "config.custom-connectors.desc": "Los nombres exactos en inglés de los elementos que conectan máquinas adyacentes entre sí. Puede enumerar varios elementos con comas.", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    // TODO
+    "config.title.junimo-huts": "Junimo hut behavior",
+    "config.junimo-hut-gems.name": "Gems",
+    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
+    "config.junimo-hut-fertilizer.name": "Fertilizer",
+    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.junimo-hut-seeds.name": "Seeds",
+    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+
+    // Junimo hut dropdown values
+    // TODO
+    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.ignore": "Ignore them",
+    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
+    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
     // machine overrides
     "config.title.machine-overrides": "Anulación de máquinas",

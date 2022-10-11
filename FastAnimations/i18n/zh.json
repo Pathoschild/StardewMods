@@ -36,10 +36,10 @@
     "config.shear.name": "剪毛",
     "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}x。",
 
-    "config.slingshot.name": "Use slingshot", // TODO
-    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
+    "config.slingshot.name": "弹弓",
+    "config.slingshot.tooltip": "拉弹弓的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 
-    "config.tool.name": "使用工具",
+    "config.tool.name": "工具",
     "config.tool.tooltip": "使用工具（除去武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 
     "config.weapon.name": "武器",
@@ -53,7 +53,7 @@
     "config.break-geodes.name": "敲晶球",
     "config.break-geodes.tooltip": "铁匠破开晶球的速度。默认{{defaultValue}}x。",
 
-    "config.casino-slots.name": "Casino slots赌场老虎机",
+    "config.casino-slots.name": "赌场老虎机",
     "config.casino-slots.tooltip": "赌场老虎机的转速。默认{{defaultValue}}x。",
 
     "config.bus.name": "公交车",

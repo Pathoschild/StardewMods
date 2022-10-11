@@ -77,13 +77,16 @@
     "config.chop-fruit-trees-grown.tooltip": "Рубка плодових дерев, що повністю виросли.",
 
     "config.chop-trees-seeds.name": "Рубати дерева (насіння)",
-    "config.chop-trees-seeds.tooltip": "Рубка неплодових дерев, що повністю виросли.",
+    "config.chop-trees-seeds.tooltip": "Рубка не плодових дерев, що повністю виросли.",
 
     "config.chop-trees-saplings.name": "Рубати дерева (саджанці)",
-    "config.chop-trees-saplings.tooltip": "Рубка неплодових дерев, які не повністю виросли.",
+    "config.chop-trees-saplings.tooltip": "Рубка не плодових дерев, які не повністю виросли.",
 
     "config.chop-trees-grown.name": "Рубати дерева (вирощені)",
-    "config.chop-trees-grown.tooltip": "Рубка неплодових дерев, що повністю виросли.",
+    "config.chop-trees-grown.tooltip": "Рубка не плодових дерев, що повністю виросли.",
+
+    "config.chop-trees-stumps.name": "Рубати дерева (Пні)",
+    "config.chop-trees-stumps.tooltip": "Чи потрібно рубати пні не плодових дерев. (Не стосується гігантських пнів, які вважаються сміттям).",
 
     "config.chop-bushes.name": "Рубати кущі",
     "config.chop-bushes.tooltip": "Рубка плодових кущів.",

@@ -85,6 +85,9 @@
     "config.chop-trees-grown.name": "清除树（成熟）",
     "config.chop-trees-grown.tooltip": "是否清除已长成的树。",
 
+    "config.chop-trees-stumps.name": "清除树桩",
+    "config.chop-trees-stumps.tooltip": "是否清除砍倒的树的树桩（不包括水果树）。",
+
     "config.chop-bushes.name": "清除灌木丛",
     "config.chop-bushes.tooltip": "是否清除能够砍掉的灌木丛。",
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -14,8 +13,35 @@ namespace ContentPatcher.Framework.Lexing
         /*********
         ** Fields
         *********/
-        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
+        /// <summary>The character which (as a pair) starts a token.</summary>
+        private const char StartTokenChar = '{';
+
+        /// <summary>The character which (as a pair) ends a token.</summary>
+        private const char EndTokenChar = '}';
+
+        /// <summary>The character which starts named input arguments within a token.</summary>
+        private const char NamedInputChar = '|';
+
+        /// <summary>The character which starts named positional arguments within a token.</summary>
+        private const char PositionalInputChar = ':';
+
+        /// <summary>The four characters to split by for lexical splitting. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments.</summary>
+        private static readonly char[] SplitPattern = new[] { Lexer.StartTokenChar, Lexer.EndTokenChar, Lexer.PositionalInputChar, Lexer.NamedInputChar };
+
+        /// <summary>An immutable lexical bit for an empty string.</summary>
+        private static readonly LexBit EmptyStringBit = new(LexBitType.Literal, string.Empty);
+
+        /// <summary>An immutable lexical bit for a pair of <see cref="StartTokenChar"/>.</summary>
+        private static readonly LexBit StartTokenBit = new(LexBitType.StartToken, "" + Lexer.StartTokenChar + Lexer.StartTokenChar);
+
+        /// <summary>An immutable lexical bit for a pair of <see cref="EndTokenChar"/>.</summary>
+        private static readonly LexBit EndTokenBit = new(LexBitType.EndToken, "" + Lexer.EndTokenChar + Lexer.EndTokenChar);
+
+        /// <summary>An immutable lexical bit for <see cref="NamedInputChar"/>.</summary>
+        private static readonly LexBit NamedInputSeparatorBit = new(LexBitType.NamedInputArgSeparator, "" + Lexer.NamedInputChar);
+
+        /// <summary>An immutable lexical bit for <see cref="PositionalInputChar"/>.</summary>
+        private static readonly LexBit PositionalInputSeparatorBit = new(LexBitType.PositionalInputArgSeparator, "" + Lexer.PositionalInputChar);
 
 
         /*********
@@ -35,29 +61,72 @@ namespace ContentPatcher.Framework.Lexing
             // special cases
             if (rawText is null)
                 yield break;
-            if (rawText is "true" or "false" || string.IsNullOrWhiteSpace(rawText))
+
+            // handle empty string (the rest of the function will avoid yielding empty strings)
+            if (rawText.Length == 0)
             {
-                yield return new LexBit(LexBitType.Literal, rawText);
+                yield return Lexer.EmptyStringBit;
                 yield break;
             }
 
             // parse
-            string[] parts = Lexer.LexicalSplitPattern.Split(rawText);
-            foreach (string part in parts)
+            int length = rawText.Length;
+            int maxIndex = length - 1;
+            int lastMatch = 0;
+            int start = 0;
+
+            while (lastMatch < length)
             {
-                if (part == string.Empty)
-                    continue; // split artifact
-
-                LexBitType type = part switch
+                int index = rawText.IndexOfAny(Lexer.SplitPattern, start);
+                if (index == -1)
                 {
-                    "{{" => LexBitType.StartToken,
-                    "}}" => LexBitType.EndToken,
-                    InternalConstants.PositionalInputArgSeparator => LexBitType.PositionalInputArgSeparator,
-                    InternalConstants.NamedInputArgSeparator => LexBitType.NamedInputArgSeparator,
-                    _ => LexBitType.Literal
-                };
+                    if (lastMatch < length)
+                        yield return new LexBit(LexBitType.Literal, rawText[lastMatch..]);
+                    yield break;
+                }
 
-                yield return new LexBit(type, part);
+                char match = rawText[index];
+                switch (match)
+                {
+                    case Lexer.StartTokenChar:
+                    case Lexer.EndTokenChar:
+                        if (index >= maxIndex || match != rawText[index + 1]) // not a pair
+                        {
+                            start = index + 1;
+                            break;
+                        }
+
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return match == Lexer.StartTokenChar
+                            ? Lexer.StartTokenBit
+                            : Lexer.EndTokenBit;
+
+                        start = index + 2;
+                        lastMatch = start;
+                        break;
+
+                    case Lexer.NamedInputChar:
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return Lexer.NamedInputSeparatorBit;
+
+                        start = index + 1;
+                        lastMatch = start;
+                        break;
+
+                    case Lexer.PositionalInputChar:
+                        if (lastMatch != index)
+                            yield return new LexBit(LexBitType.Literal, rawText[lastMatch..index]);
+                        yield return Lexer.PositionalInputSeparatorBit;
+
+                        start = index + 1;
+                        lastMatch = start;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Found invalid lexical token '{match}' while parsing string '{rawText}'. This is a bug in Content Patcher's lexer.");
+                }
             }
         }
 
@@ -206,7 +275,7 @@ namespace ContentPatcher.Framework.Lexing
                     }
                 }
             }
-            string rawInput = string.Join("", input.Select(p => p.Text));
+
             LinkedList<ILexToken> tokens;
             try
             {
@@ -214,6 +283,7 @@ namespace ContentPatcher.Framework.Lexing
             }
             catch (Exception ex)
             {
+                string rawInput = string.Join("", input.Select(p => p.Text));
                 throw new InvalidOperationException($"Error parsing '{rawInput}' as a tokenizable string", ex);
             }
 
@@ -280,7 +350,7 @@ namespace ContentPatcher.Framework.Lexing
             // start token
             if (!impliedBraces)
             {
-                LexBit startToken = GetNextAndAssert("start of token ('{{')");
+                LexBit startToken = GetNextAndAssert("start of token ('" + Lexer.StartTokenChar + Lexer.StartTokenChar + "')");
                 if (startToken.Type != LexBitType.StartToken)
                     throw new LexFormatException($"Unexpected {startToken.Type} at start of token.");
             }
@@ -310,7 +380,7 @@ namespace ContentPatcher.Framework.Lexing
             // end token
             if (!impliedBraces)
             {
-                LexBit endToken = GetNextAndAssert("end of token ('}}')");
+                LexBit endToken = GetNextAndAssert("end of token ('" + Lexer.EndTokenChar + Lexer.EndTokenChar + "')");
                 if (endToken.Type != LexBitType.EndToken)
                     throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }

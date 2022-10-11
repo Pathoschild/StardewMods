@@ -5,14 +5,16 @@
     <RootNamespace>Pathoschild.Stardew.Tests.Mods</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 
+    <EnableGameDebugging>false</EnableGameDebugging>
     <EnableModDeploy>False</EnableModDeploy>
     <EnableModZip>False</EnableModZip>
-    <CopyModReferencesToBuildOutput>True</CopyModReferencesToBuildOutput>
+    <BundleExtraAssemblies>All</BundleExtraAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="FluentAssertions" Version="6.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
   </ItemGroup>
 
   <ItemGroup>

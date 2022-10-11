@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 4.16.1
+Released 10 October 2022 for SMAPI 3.14.0 or later.
+
+* Improved translations. Thanks to Becks723 (updated Chinese), ChulkyBow (updated Ukrainian), MakinDay (updated Italian), and watchakorn-18k (updated Thai)!
+
+## 4.16.0
+Released 29 August 2022 for SMAPI 3.14.0 or later.
+
+* Added option to chop tree stumps with the axe (enabled by default) separately from chopping grown trees.
+
 ## 4.15.6
 Released 18 August 2022 for SMAPI 3.14.0 or later.
 

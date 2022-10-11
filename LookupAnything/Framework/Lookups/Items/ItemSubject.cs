@@ -20,6 +20,7 @@ using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
@@ -223,6 +224,44 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 }
             }
 
+            // weapon
+            if (item is MeleeWeapon weapon && !weapon.isScythe())
+            {
+                int accuracy = weapon.addedPrecision.Value;
+                float critChance = weapon.critChance.Value;
+                float critMultiplier = weapon.critMultiplier.Value;
+                int damageMin = weapon.minDamage.Value;
+                int damageMax = weapon.maxDamage.Value;
+                int defense = weapon.addedDefense.Value;
+                float knockback = weapon.knockback.Value;
+                int speed = weapon.speed.Value;
+                int reach = weapon.addedAreaOfEffect.Value;
+
+                int shownKnockback = (int)Math.Ceiling(Math.Abs(knockback - weapon.defaultKnockBackForThisType(weapon.type.Value)) * 10); // as shown in game UI
+                int shownSpeed = (speed - (weapon.type.Value == MeleeWeapon.club ? MeleeWeapon.baseClubSpeed : 0)) / 2; // as shown in game UI
+
+                string AddSign(float value) => (value > 0 ? "+" : "") + value;
+                yield return new GenericField(I18n.Item_MeleeWeapon_Damage(), damageMin != damageMax ? I18n.Generic_Range(damageMin, damageMax) : damageMin.ToString());
+                yield return new GenericField(I18n.Item_MeleeWeapon_CriticalChance(), I18n.Generic_Percent(critChance * 100f));
+                yield return new GenericField(I18n.Item_MeleeWeapon_CriticalDamage(), I18n.Item_MeleeWeapon_CriticalDamage_Label(critMultiplier));
+                yield return new GenericField(I18n.Item_MeleeWeapon_Defense(), defense == 0 ? "0" : I18n.Item_MeleeWeapon_Defense_Label(AddSign(weapon.addedDefense.Value)));
+
+                if (speed == 0)
+                    yield return new GenericField(I18n.Item_MeleeWeapon_Speed(), "0");
+                else
+                {
+                    string speedLabel = I18n.Item_MeleeWeapon_Speed_Summary(speed: AddSign(speed), milliseconds: AddSign(-speed * MeleeWeapon.millisecondsPerSpeedPoint));
+                    if (speed != shownSpeed)
+                        speedLabel = I18n.Item_MeleeWeapon_Speed_ShownVsActual(shownSpeed: AddSign(shownSpeed), actualSpeed: speedLabel, lineBreak: Environment.NewLine);
+
+                    yield return new GenericField(I18n.Item_MeleeWeapon_Speed(), speedLabel);
+                }
+
+                yield return new GenericField(I18n.Item_MeleeWeapon_Knockback(), (knockback > 1 ? I18n.Item_MeleeWeapon_Knockback_Label(amount: AddSign(shownKnockback), multiplier: knockback) : "0"));
+                yield return new GenericField(I18n.Item_MeleeWeapon_Reach(), reach > 0 ? I18n.Item_MeleeWeapon_Reach_Label(AddSign(reach)) : "0");
+                yield return new GenericField(I18n.Item_MeleeWeapon_Accuracy(), AddSign(accuracy));
+            }
+
             // recipes
             if (showInventoryFields)
             {
@@ -417,7 +456,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             try
             {
                 _ = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
-                return item.getDescription();
+                return item is MeleeWeapon weapon && !weapon.isScythe()
+                    ? weapon.Description
+                    : item.getDescription();
             }
             catch (KeyNotFoundException)
             {
@@ -855,7 +896,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private IEnumerable<BundleIngredientModel> GetIngredientsFromBundle(BundleModel bundle, SObject item)
         {
             return bundle.Ingredients
-                .Where(p => p.ItemID == item.ParentSheetIndex && p.Quality <= (ItemQuality)item.Quality); // get ingredients
+                .Where(required =>
+                {
+                    if (required.ItemID == -1)
+                        return false; // monetary bundle
+
+                    if (required.ItemID != (required.ItemID < 0 ? item.Category : item.ParentSheetIndex))
+                        return false;
+
+                    if ((ItemQuality)item.Quality < required.Quality)
+                        return false;
+
+                    return true;
+                });
         }
 
         /// <summary>Get whether an ingredient is still needed for a bundle.</summary>
