@@ -1,0 +1,43 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "ตัวเลือกหลัก",
+    "config.enabled.name": "เปิดใช้งาน",
+    "config.enabled.desc": "เปิดใช้งานฟีเจอร์อัตโนมัติหรือไม่ หากปิดใช้งาน จะไม่มีเครื่องจักรใดทำงานอัตโนมัติและการซ้อนทับจะไม่ปรากฏ",
+    "config.automation-interval.name": "ช่วงที่ทำงานอัตโนมัติ",
+    "config.automation-interval.desc": "จำนวนขีดระหว่างกระบวนการอัตโนมัติแต่ละขั้นตอน (60 ครั้งต่อวินาที 120 ครั้งทุกสองวินาที ฯลฯ)",
+    "config.toggle-overlay-key.name": "ปุ่มสลับการซ้อนทับ",
+    "config.toggle-overlay-key.desc": "ปุ่มที่สลับการซ้อนทับอัตโนมัติ",
+    "config.warn-for-missing-bridge-mod.name": "คำเตือนสำหรับ mod สะพานที่หายไป",
+    "config.warn-for-missing-bridge-mod.desc": "จะบันทึกคำเตือนเมื่อเริ่มต้นระบบหรือไม่ หากคุณติดตั้งม็อดเครื่องแบบกำหนดเองที่ต้องใช้โปรแกรมแก้ไขความเข้ากันได้แยกต่างหากซึ่งไม่ได้ติดตั้งไว้",
+
+    // connectors
+    "config.title.connectors": "เปิดใช้งานตัวเชื่อมต่อ",
+    "config.connector.desc": "ไม่ว่ายังไงก็ตาม {{itemName}} จะเชื่อมโยงกับเครื่องจักรและหีบเข้าด้วยกัน",
+    "config.custom-connectors.name": "ตัวเชื่อมต่อแบบกำหนดเอง",
+    "config.custom-connectors.desc": "ชื่อต้องเป็นภาษาอังกฤษไอเทมที่จะเชื่อมต่อกับเครื่องที่อยู่ติดกัน คุณสามารถแสดงไอเทมได้หลายรายการด้วยเครื่องหมายจุลภาค", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    "config.title.junimo-huts": "พฤติกรรมกระท่อมจูนิโม",
+    "config.junimo-hut-gems.name": "อัญมณี",
+    "config.junimo-hut-gems.desc": "สิ่งที่กระท่อม Junimo ควรจะทำกับอัญมณีไอเทม 'ตรวจหาอัตโนมัติ' จะละเว้นไว้",
+    "config.junimo-hut-fertilizer.name": "ปุ๋ย",
+    "config.junimo-hut-fertilizer.desc": "สิ่งที่กระท่อม Junimo ควรทำกับรายการปุ๋ย 'ตรวจจับอัตโนมัติ' จะไม่สนใจพวกเขาหากติดตั้ง Better Junimos ไว้ มิฉะนั้นจะย้ายของจากกระท่อมไปยังหีบที่เชื่อมต่อกันไว้",
+    "config.junimo-hut-seeds.name": "เมล็ด",
+    "config.junimo-hut-seeds.desc": "สิ่งที่กระท่อม Junimo ควรทำกับรายการปุ๋ย 'ตรวจจับอัตโนมัติ' จะไม่สนใจพวกเขาหากติดตั้ง Better Junimos ไว้ มิฉะนั้นจะย้ายของจากกระท่อมไปยังหีบที่เชื่อมต่อกันไว้",
+
+    // Junimo hut dropdown values
+    "config.junimo-huts.auto-detect": "ตรวจจับอัตโนมัติ",
+    "config.junimo-huts.ignore": "ละเลยพวกมัน",
+    "config.junimo-huts.move-into-chests": "ย้ายจากกระท่อม Junimo เข้าสู่หีบ",
+    "config.junimo-huts.move-into-huts": "ย้ายจากหีบสู่กระท่อม Junimo",
+
+    // machine overrides
+    "config.title.machine-overrides": "การแทนที่เครื่องจักร",
+    "config.override.ShippingBin-name": "ถังส่งของ",
+    "config.override.MiniShippingBin-name": "ถังขนส่งขนาดเล็ก",
+    "config.override.desc": "เปิดใช้งานเพื่อให้ {{machineName}} เป็นระบบอัตโนมัติ",
+    "config.custom-overrides-note": "สำหรับการแทนที่แบบกำหนดเองได้ โปรดดูที่ https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure สำหรับความช่วยเหลือในการแก้ไขไฟล์ config.json โดยตรง"
+}
