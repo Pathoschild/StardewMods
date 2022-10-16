@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed `Include` patches still trying to load when non-ready.
+
 ## 1.28.2
 Released 10 October 2022 for SMAPI 3.15.0 or later.
 
