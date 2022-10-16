@@ -707,7 +707,6 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    // TODO
     "config.title.main-options": "ตัวเลือกหลัก",
     "config.progression-mode.name": "โหมดความก้าวหน้า",
     "config.progression-mode.desc": "ซ่อนเนื้อหาบางส่วน (เช่น รสนิยมของขวัญและการแก้ปัญหาปริศนา) จนกว่าคุณจะค้นพบในเกมหรือไม่",
@@ -717,7 +716,6 @@
     "config.show-all-gift-tastes.desc": "จะแสดงรสนิยมของขวัญทั้งหมดสำหรับ NPC และการค้นหารายการหรือไม่ เมื่อปิดใช้งาน จะแสดงเฉพาะรสนิยมที่เกี่ยวข้องมากที่สุด (เช่น ของขวัญที่รักหรือชอบ)",
 
     // advanced options
-    // TODO
     "config.title.advanced-options": "ตัวเลือกขั้นสูง",
     "config.tile-lookups.name": "ค้นหาไทล์",
     "config.tile-lookups.desc": "จะรวมไทล์แผนที่เป็นเป้าหมายการค้นหาหรือไม่",
@@ -731,7 +729,6 @@
     "config.scroll-amount.desc": "จำนวนพิกเซลที่จะเลื่อนเนื้อหาในการเลื่อนขึ้น/ลงแต่ละครั้ง.",
 
     // controls section
-    // TODO
     "config.title.controls": "การควบคุม",
     "config.hide-on-key-up.name": "ซ่อนเมื่อปล่อย",
     "config.hide-on-key-up.desc": "จะซ่อน UI การค้นหาเมื่อคุณปล่อยปุ่มที่ใช้ในการค้นหาหรือไม่",

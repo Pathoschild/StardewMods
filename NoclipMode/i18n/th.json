@@ -9,7 +9,6 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
     "config.title.general-options": "ตัวเลือกทั่วไป",
     "config.enabled-message.name": "แสดงข้อความเปิดใช้งาน",
     "config.enabled-message.desc": "แสดงข้อความในเกมที่มุมหน้าจอเมื่อเปิดโหมด noclip หรือไม่",

@@ -50,7 +50,6 @@
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
     "config.title.general-options": "ตัวเลือกทั่วไป",
     "config.show-hover-tooltips.name": "แสดงตัวเด้งแนะนำ",
     "config.show-hover-tooltips.desc": "จะแสดงชื่อหีบในตัวแนะนำหรือไม่เมื่อคุณชี้ไปที่หีบ",
@@ -66,13 +65,11 @@
     "config.range.none": "ไม่มี (ไม่สามารถเข้าถึงหีบจากระยะไกลได้)",
 
     // general controls
-    // TODO
     "config.title.general-controls": "การควบคุมทั่วไป",
     "config.toggle-ui-key.name": "สลับ UI",
     "config.toggle-ui-key.desc": "ปุ่มที่ใช้แสดงหรือซ่อน UI หีบ",
 
     // controls when chest UI is open
-    // TODO
     "config.title.menu-controls": "ควบคุมเมื่อเปิด UI หีบ",
     "config.edit-chest.name": "แก้ไขหีบ",
     "config.edit-chest.desc": "ปุ่มที่ใช้สำหรับแก้ไขตัวเลือกสำหรับหีบปัจจุบัน",
@@ -92,7 +89,6 @@
     "config.hold-to-scroll-chests.desc": "ปุ่มที่เมื่อกดค้างไว้ จะเปิดใช้งานการเลื่อนทรวงอกแบบเลื่อนลงด้วยล้อเลื่อนของเมาส์",
 
     // disable in locations
-    // TODO
     "config.title.disable-in-locations": "ปิดการใช้งานในสถานที่",
     "config.disable-mines.name": "เหมืองและถ้ำกะโหลก",
     "config.disable-mines.desc": "ปิดใช้งานการเข้าถึงหีบสมบัติขณะอยู่ในเหมืองหรือถ้ำกะโหลก",
