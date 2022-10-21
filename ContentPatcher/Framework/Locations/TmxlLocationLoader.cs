@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -120,8 +119,16 @@ namespace ContentPatcher.Framework.Locations
             {
                 if (SaveGame.loaded.CustomData.TryGetValue("smapi/mod-data/platonymous.tmxloader/locations", out string? json) && !string.IsNullOrWhiteSpace(json))
                 {
+                    Dictionary<string, string> serializedLocations = new();
+
                     var saveData = JsonConvert.DeserializeObject<SaveData>(json);
-                    return saveData.Locations.ToDictionary(p => p.Name, p => p.Objects);
+                    if (saveData is not null)
+                    {
+                        foreach (SaveLocation location in saveData.Locations)
+                            serializedLocations[location.Name] = location.Objects; // if there are duplicates, TMXL overwrites the objects with the last instance
+                    }
+
+                    return serializedLocations;
                 }
             }
             catch (Exception ex)
