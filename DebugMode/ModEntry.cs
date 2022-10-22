@@ -274,24 +274,23 @@ namespace Pathoschild.Stardew.DebugMode
             // event
             if (Game1.CurrentEvent != null)
             {
-                Event @event = Game1.CurrentEvent;
-                int eventID = this.Helper.Reflection.GetField<int>(@event, "id").GetValue();
-                bool isFestival = @event.isFestival;
-                string festivalName = @event.FestivalName;
-                double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
+                Event curEvent = Game1.CurrentEvent;
+                string[] eventCommands = this.Helper.Reflection.GetField<string[]>(curEvent, "eventCommands").GetValue();
+                bool isFestival = curEvent.isFestival;
+                string festivalName = curEvent.FestivalName;
+                double progress = curEvent.CurrentCommand / (double)eventCommands.Length;
 
                 if (isFestival)
                     yield return $"{I18n.Label_FestivalName()}: {festivalName}";
-                else
-                {
-                    yield return $"{I18n.Label_EventId()}: {eventID}";
-                    if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
-                        yield return $"{I18n.Label_EventScript()}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
-                }
+
+                yield return $"{I18n.Label_EventId()}: {curEvent.id}";
+
+                if (!isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < eventCommands.Length)
+                    yield return $"{I18n.Label_EventScript()}: {curEvent.GetCurrentCommand()} ({(int)(progress * 100)}%)";
             }
 
             // music
-            if (Game1.currentSong?.Name != null && Game1.currentSong.IsPlaying)
+            if (Game1.currentSong is { Name: not null, IsPlaying: true })
                 yield return $"{I18n.Label_Song()}: {Game1.currentSong.Name}";
         }
 
