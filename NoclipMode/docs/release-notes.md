@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated integration with Generic Mod Config Menu.
 * Improved translations. Thanks to BrasileiroTop (updated Portuguese) and watchakorn-18k (updated Thai)!
 
 ## 1.3.4

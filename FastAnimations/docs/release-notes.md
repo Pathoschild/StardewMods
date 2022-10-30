@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated integration with Generic Mod Config Menu.
 * Improved translations. Thanks to watchakorn-18k (added Thai)!
 
 ## 1.11.2

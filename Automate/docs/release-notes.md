@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated integration with Generic Mod Config Menu.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian) and watchakorn-18k (added Thai)!
 
 ## 1.28.0

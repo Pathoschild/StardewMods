@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Updated integration with Generic Mod Config Menu.
 * Fixed `Include` patches still trying to load when non-ready.
 * Fixed error migrating locations from TMXL Map Toolkit when it has duplicate location data.
 

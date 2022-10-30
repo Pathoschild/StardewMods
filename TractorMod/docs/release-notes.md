@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated integration with Generic Mod Config Menu.
+
 ## 4.16.1
 Released 10 October 2022 for SMAPI 3.14.0 or later.
 
