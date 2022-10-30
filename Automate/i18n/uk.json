@@ -20,26 +20,24 @@
     "config.custom-connectors.desc": "Точні англійські назви предметів, які з'єднують сусідні машини разом. Ви можете перерахувати кілька предметів комами.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Поведінка хатинок джунімо",
+    "config.junimo-hut-gems.name": "Самоцвіти",
+    "config.junimo-hut-gems.desc": "Що робити хатинкам джунімо з предметами із самоцвітів. \"Автовизначення\" ігноруватиме їх.",
+    "config.junimo-hut-fertilizer.name": "Добриво",
+    "config.junimo-hut-fertilizer.desc": "Що робити хатинкам джунімо з предметами для добрив. \"Автовизначення\" ігноруватиме їх, якщо встановлено мод Better Junimos, в іншому випадку перемістить їх з хатинок до під'єднаних скринь.",
+    "config.junimo-hut-seeds.name": "Насіння",
+    "config.junimo-hut-seeds.desc": "Що робити хатинкам джунімо з предметами для насінь. \"Автовизначення\" ігноруватиме їх, якщо встановлено мод Better Junimos, в іншому випадку перемістить їх з хатинок до під'єднаних скринь.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Автовизначення",
+    "config.junimo-huts.ignore": "Ігнорувати їх",
+    "config.junimo-huts.move-into-chests": "Переміщувати з хатинок джунімо до скринь",
+    "config.junimo-huts.move-into-huts": "Переміщувати зі скринь до хатинок джунімо",
 
     // machine overrides
     "config.title.machine-overrides": "Перевизначення машини",
     "config.override.ShippingBin-name": "Ящик для продажу",
     "config.override.MiniShippingBin-name": "Маленький ящик для продажу",
     "config.override.desc": "Увімкнення автоматизації машини \"{{machineName}}\".",
-    "config.custom-overrides-note": "Про користувацькі з'єднання див. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#конфігурацію, щоб отримати допомогу щодо безпосереднього редагування файлу config.json."
+    "config.custom-overrides-note": "Про користувацькі з'єднання див. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure, щоб отримати допомогу щодо безпосереднього редагування файлу config.json."
 }

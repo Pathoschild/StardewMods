@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "ตัวเลือกทั่วไป",
+    "config.enable-game-debug.name": "เปิดใช้งานปุ่มลัดเกม",
+    "config.enable-game-debug.desc": "การแสดงข้อมูลดีบักจะยังสามารถเปิดใช้งานปุ่มลัดของดีบักเกมได้ เช่น กดปุ่ม 5 เพื่อวาร์ปไปที่ชายหาด",
+    "config.enable-dangerous-hotkeys.name": "อนุญาตปุ่มลัดอันตราย",
+    "config.enable-dangerous-hotkeys.desc": "เมื่อเปิดใช้งานปุ่มลัดดีบักของเกม ยังเป็นการเปิดใช้งานปุ่มลัดแบบทำลายล้างซึ่งสามารถสิ้นสุดวันปัจจุบันได้ทันที สุ่มผู้เล่นหรือของตกแต่งบ้านไร่หรือทำให้เกมพังได้",
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "การควบคุม",
+    "config.toggle-debug-key.name": "สลับข้อมูลดีบัก",
+    "config.toggle-debug-key.desc": "ปุ่มสลับข้อมูลดีบัก"
 }

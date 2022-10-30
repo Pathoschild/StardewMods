@@ -9,6 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.28.3
+Released 30 October 2022 for SMAPI 3.15.0 or later.
+
+* Updated integration with Generic Mod Config Menu.
+* Fixed `Include` patches still trying to load when non-ready.
+* Fixed error migrating locations from TMXL Map Toolkit when it has duplicate location data.
+
 ## 1.28.2
 Released 10 October 2022 for SMAPI 3.15.0 or later.
 
