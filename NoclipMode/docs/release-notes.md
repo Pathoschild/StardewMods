@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.3.5
+Released 30 October 2022 for SMAPI 3.14.0 or later.
+
 * Updated integration with Generic Mod Config Menu.
 * Improved translations. Thanks to BrasileiroTop (updated Portuguese) and watchakorn-18k (updated Thai)!
 

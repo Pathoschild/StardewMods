@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.3.4</Version>
+    <Version>1.3.5</Version>
     <RootNamespace>Pathoschild.Stardew.NoclipMode</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
