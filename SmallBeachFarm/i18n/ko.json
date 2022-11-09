@@ -5,6 +5,11 @@
     "farm.name": "작은 해변 농장",
     "farm.description": "강물과 바다 물고기를 모두 잡을 수 있는 비옥한 작은 해변.",
 
+    // TODO
+    "farm.fish-areas.river": "River",
+    "farm.fish-areas.estuary": "Estuary",
+    "farm.fish-areas.ocean": "Ocean",
+
 
     /*********
     ** Generic Mod Config Menu UI

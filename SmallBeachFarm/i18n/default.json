@@ -5,6 +5,10 @@
     "farm.name": "Small Beach Farm",
     "farm.description": "A small fertile pocket beach, where you can catch both river and ocean fish.",
 
+    "farm.fish-areas.river": "River",
+    "farm.fish-areas.estuary": "Estuary",
+    "farm.fish-areas.ocean": "Ocean",
+
 
     /*********
     ** Generic Mod Config Menu UI

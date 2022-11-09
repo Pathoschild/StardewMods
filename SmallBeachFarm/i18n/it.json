@@ -5,6 +5,11 @@
     "farm.name": "Small Beach Farm",
     "farm.description": "Una piccola e fertile spiaggia tascabile, dove si possono pescare sia pesci di fiume che di mare.",
 
+    // TODO
+    "farm.fish-areas.river": "River",
+    "farm.fish-areas.estuary": "Estuary",
+    "farm.fish-areas.ocean": "Ocean",
+
 
     /*********
     ** Generic Mod Config Menu UI

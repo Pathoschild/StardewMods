@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -13,8 +12,9 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.GameData;
-using StardewValley.Objects;
+using StardewValley.GameData.Locations;
 using xTile;
 using xTile.Dimensions;
 using xTile.Layers;
@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         ** Fields
         *********/
         /// <summary>The MD5 hash for the default data.json file.</summary>
-        private const string DataFileHash = "641585fd329fac69e377cb911cf70862";
+        private const string DataFileHash = "db6d8c6fb6cc1554c091430476513727";
 
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
@@ -73,16 +73,13 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // hook events
             helper.Events.Content.AssetRequested += this.OnAssetRequested;
-            helper.Events.GameLoop.DayEnding += this.DayEnding;
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
             // hook Harmony patch
             HarmonyPatcher.Apply(this,
                 new FarmPatcher(
-                    monitor: this.Monitor,
                     config: this.Config,
-                    isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
-                    getFishType: this.GetFishType
+                    isSmallBeachFarm: this.IsSmallBeachFarm
                 ),
                 new CharacterCustomizationPatcher(
                     config: this.Config,
@@ -100,6 +97,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         {
+            const string farmKey = "Pathoschild_SmallBeachFarm";
+
             // add farm type
             if (e.NameWithoutLocale.IsEquivalentTo("Data/AdditionalFarms"))
             {
@@ -109,8 +108,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                     data.Add(new()
                     {
                         ID = this.ModManifest.UniqueID,
-                        TooltipStringPath = "Strings/UI:Pathoschild_BeachFarm_Description",
-                        MapName = "Pathoschild_SmallBeachFarm"
+                        TooltipStringPath = $"Strings/UI:{farmKey}_Description",
+                        MapName = farmKey
                     });
                 });
             }
@@ -121,7 +120,25 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 e.Edit(editor =>
                 {
                     var data = editor.AsDictionary<string, string>().Data;
-                    data["Pathoschild_BeachFarm_Description"] = $"{I18n.Farm_Name()}_{I18n.Farm_Description()}";
+
+                    // key used by the title screen
+                    data[$"{farmKey}_Description"] = $"{I18n.Farm_Name()}_{I18n.Farm_Description()}";
+
+                    // custom keys used in data.json
+                    data[$"{farmKey}_Name"] = I18n.Farm_Name();
+                    data[$"{farmKey}_FishArea_River"] = I18n.Farm_FishAreas_River();
+                    data[$"{farmKey}_FishArea_Estuary"] = I18n.Farm_FishAreas_Estuary();
+                    data[$"{farmKey}_FishArea_Ocean"] = I18n.Farm_FishAreas_Ocean();
+                });
+            }
+
+            // add farm location data
+            else if (e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
+            {
+                e.Edit(editor =>
+                {
+                     var data = editor.AsDictionary<string, LocationData>().Data;
+                    data[$"Farm_{this.ModManifest.UniqueID}"] = this.Data.LocationData;
                 });
             }
 
@@ -135,9 +152,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         Map map = this.Helper.ModContent.Load<Map>("assets/farm.tmx");
                         IAssetDataForMap editor = this.Helper.ModContent.GetPatchHelper(map).AsMap();
                         TileSheet outdoorTilesheet = map.GetTileSheet("untitled tile sheet");
-                        Layer buildingsLayer = map.GetLayer("Buildings");
-                        Layer backLayer = map.GetLayer("Back");
-                        Layer behindBackLayer = map.GetLayer("Back-1");
+                        Layer buildingsLayer = map.RequireLayer("Buildings");
+                        Layer backLayer = map.RequireLayer("Back");
+                        Layer behindBackLayer = map.RequireLayer("Back-1");
 
                         // add islands
                         if (this.Config.EnableIslands)
@@ -257,23 +274,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             ).Register();
         }
 
-        /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void DayEnding(object? sender, DayEndingEventArgs e)
-        {
-            if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm? farm))
-                return;
-
-            // update ocean crab pots before the game does
-            GameLocation beach = Game1.getLocationFromName("Beach");
-            foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
-            {
-                if (this.GetFishType(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y) == FishType.Ocean)
-                    pot.DayUpdate(beach);
-            }
-        }
-
         /// <summary>Get the full path for a relative path.</summary>
         /// <param name="relative">The relative path.</param>
         private string GetFullPath(string relative)
@@ -283,46 +283,12 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         /// <param name="location">The location to check.</param>
-        /// <param name="farm">The farm instance.</param>
-        private bool IsSmallBeachFarm(GameLocation? location, [NotNullWhen(true)] out Farm? farm)
+        private bool IsSmallBeachFarm(GameLocation? location)
         {
-            if (Game1.whichModFarm?.ID == this.ModManifest.UniqueID && location is Farm { Name: "Farm" } farmInstance)
-            {
-                farm = farmInstance;
-                return true;
-            }
-
-            farm = null;
-            return false;
-        }
-
-        /// <summary>Get the fish that should be available from the given tile.</summary>
-        /// <param name="farm">The farm instance.</param>
-        /// <param name="x">The tile X position.</param>
-        /// <param name="y">The tile Y position.</param>
-        private FishType GetFishType(Farm farm, int x, int y)
-        {
-            // not water
-            if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
-                return FishType.Default;
-
-            // mixed fish area
-            if (this.Data.MixedFishAreas.Any(p => p.Contains(x, y)))
-            {
-                return Game1.random.Next(2) == 1
-                    ? FishType.Ocean
-                    : FishType.River;
-            }
-
-            // ocean or river
-            string? tilesheetId = farm.map
-                ?.GetLayer("Back")
-                ?.PickTile(new Location(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size)
-                ?.TileSheet
-                ?.Id;
-            return tilesheetId is "zbeach" or "zbeach_farm"
-                ? FishType.Ocean
-                : FishType.River;
+            return
+                Game1.whichModFarm?.ID == this.ModManifest.UniqueID
+                && location?.Name == "Farm"
+                && location is Farm;
         }
     }
 }
