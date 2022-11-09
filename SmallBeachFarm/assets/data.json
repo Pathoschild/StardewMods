@@ -1,13 +1,65 @@
 ﻿{
-    /**
-     * Tile areas in the farm map where both river and ocean fish can be caught.
-     */
-    "MixedFishAreas": [
-        {
-            "X": 11,
-            "Y": 23,
-            "Width": 9,
-            "Height": 7
-        }
-    ]
+    "LocationData": {
+        "DisplayName": "[LocalizedText Strings\\UI:Pathoschild_SmallBeachFarm_Name]",
+
+        "FishAreas": {
+            "River": {
+                "DisplayName": "[LocalizedText Strings\\UI:Pathoschild_SmallBeachFarm_FishArea_River]",
+                "Position": { "X": 0, "Y": 0, "Width": 255, "Height": 23 },
+                "CrabPotFishTypes": [ "freshwater" ]
+            },
+            "Estuary": {
+                "DisplayName": "[LocalizedText Strings\\UI:Pathoschild_SmallBeachFarm_FishArea_Estuary]",
+                "Position": { "X": 11, "Y": 23, "Width": 9, "Height": 7 },
+                "CrabPotFishTypes": [ "freshwater", "ocean" ]
+            },
+            "Ocean": {
+                "DisplayName": "[LocalizedText Strings\\UI:Pathoschild_SmallBeachFarm_FishArea_Ocean]",
+                "CrabPotFishTypes": [ "ocean" ]
+            }
+        },
+
+        "Fish": [
+            // river (30% forest, else town)
+            {
+                "Id": "River_Forest",
+                "ItemId": "LOCATION_FISH Forest BOBBER_X BOBBER_Y WATER_DEPTH",
+                "FishAreaId": "River",
+                "Chance": 0.3,
+                "Precedence": -2
+            },
+            {
+                "Id": "River_Town",
+                "ItemId": "LOCATION_FISH Town BOBBER_X BOBBER_Y WATER_DEPTH",
+                "FishAreaId": "River",
+                "Precedence": -1
+            },
+
+            // estuary (50% ocean, else 30% forest, else town)
+            {
+                "Id": "Estuary_Beach",
+                "ItemId": "LOCATION_FISH Beach BOBBER_X BOBBER_Y WATER_DEPTH",
+                "FishAreaId": "Estuary",
+                "Chance": 0.5,
+                "Precedence": -3
+            },
+            {
+                "Id": "Estuary_Forest",
+                "ItemId": "LOCATION_FISH Forest BOBBER_X BOBBER_Y WATER_DEPTH",
+                "Chance": 0.3,
+                "Precedence": -2
+            },
+            {
+                "Id": "Estuary_Town",
+                "ItemId": "LOCATION_FISH Town BOBBER_X BOBBER_Y WATER_DEPTH",
+                "Precedence": -1
+            },
+
+            // else ocean
+            {
+                "Id": "Default",
+                "ItemId": "LOCATION_FISH Beach BOBBER_X BOBBER_Y WATER_DEPTH"
+            }
+        ]
+    }
 }
