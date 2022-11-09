@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some random events happening less often on the small beach farm.
+
 ## 2.4.4
 Released 30 October 2022 for SMAPI 3.14.0 or later.
 
