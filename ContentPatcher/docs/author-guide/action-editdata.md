@@ -273,7 +273,7 @@ if it did. Content Patcher will find the entry based on a unique value in the da
 
 asset | field used as the key
 ----- | ---------------------
-_default_ | `ID` if it exists.
+_default_ | `Id` or `ID` if it exists.
 `Data/ConcessionTastes` | `Name`
 `Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
 `Data/MoviesReactions` | `NPCName`
