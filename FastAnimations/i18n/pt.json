@@ -1,0 +1,75 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Opções gerais",
+
+    "config.disable-eat-prompt.name": "Remover o diálogo de Comer/Beber",
+    "config.disable-eat-prompt.tooltip": "Se deve ignorar o diálogo de confirmação perguntando se você realmente quer Comer/Beber alguma coisa.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Velocidade de animação do jogador",
+
+    "config.eat-or-drink.name": "Comer/Beber",
+    "config.eat-or-drink.tooltip": "Quão rápido você come e bebe. Padrão {{defaultValue}}x.",
+
+    "config.fish.name": "Pesca",
+    "config.fish.tooltip": "Quão rápido você lança e recolhe ao pescar (Não afeta o mini-game). Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
+
+    "config.harvest.name": "Colheita",
+    "config.harvest.tooltip": "Quão rápido você colhe colheitas e fenos manualmente. Padrão {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Tocar flauta de cavalo",
+    "config.horse-flute.tooltip": "Quão rápido você toca a flauta do cavalo. Padrão {{defaultValue}}x.",
+
+    "config.milk.name": "Leite",
+    "config.milk.tooltip": "Quão rápido você usa o balde de leite. Padrão {{defaultValue}}x.",
+
+    "config.mount.name": "Montar/desmontar",
+    "config.mount.tooltip": "Quão rápido você monta/desmonta cavalos (Incluindo montarias customizadas como Tractor Mod). Padrão {{defaultValue}}x.",
+
+    "config.shear.name": "Tosquiar",
+    "config.shear.tooltip": "Quão rápido você usa as tesouras. Padrão {{defaultValue}}x.",
+
+    "config.slingshot.name": "Usar Estilingue",
+    "config.slingshot.tooltip": "Quão rápido você utiliza o estilingue. Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
+
+    "config.tool.name": "Usar Ferramenta",
+    "config.tool.tooltip": "Quão rápido você usa ferramentas (exceto armas e varas de pescar). Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
+
+    "config.weapon.name": "Usar Armas",
+    "config.weapon.tooltip": "Quão rápido você usa armas. Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Velocidade de animações globais",
+
+    "config.break-geodes.name": "Quebrar Geodos",
+    "config.break-geodes.tooltip": "Quão rápido o ferreiro quebra geodos para você. Padrão {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Caça-níquéis",
+    "config.casino-slots.tooltip": "Quão rápido os slots do cassino giram. Padrão {{defaultValue}}x.",
+
+    "config.bus.name": "Ônibus da Pam",
+    "config.bus.tooltip": "Quão rápido Pam dirige seu ônibus para o deserto. Padrão {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Queda de Árvores",
+    "config.tree-fall.tooltip": "Quão rápido as árvores caem depois que você as corta. Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Velocidade de animações da interface do usuário",
+
+    "config.title-menu.name": "Transições do menu inicial",
+    "config.title-menu.tooltip": "Quão rápido o menu inicial transita entre as telas. Padrão {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Carregar piscada do jogo",
+    "config.load-game-blink.tooltip": "Quão rápido o atraso do slot piscando acontece depois que você clica em um slot de carregamento. Padrão {{defaultValue}}x."
+}
