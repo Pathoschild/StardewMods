@@ -85,8 +85,8 @@
     "config.chop-trees-grown.name": "나무",
     "config.chop-trees-grown.tooltip": "도끼로 다 자란 나무를 제거 할 수 있습니다.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+    "config.chop-trees-stumps.name": "그루터기",
+    "config.chop-trees-stumps.tooltip": "과일 나무가 아닌 그루터기를 제거 할 수 있습니다.\n(잔해로 간주되는 거대한 그루터기는 영향을 미치지 않습니다.)",
 
     "config.chop-bushes.name": "덤불 제거",
     "config.chop-bushes.tooltip": "도끼로 자르기 가능한 덤불을 제거 할 수 있습니다.",
