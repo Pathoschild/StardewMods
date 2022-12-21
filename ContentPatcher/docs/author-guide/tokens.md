@@ -1621,7 +1621,7 @@ Each block in this section defines the value for a token using these fields:
 field   | purpose
 ------- | -------
 `Name`  | The name of the token to use for [tokens & condition](#introduction).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#introduction), including dynamic tokens defined before this entry.
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. This field supports [tokens](#introduction), including dynamic tokens defined before this entry.
 `When`  | _(optional)_ Only set the value if the given [conditions](#introduction) match. If not specified, always matches.
 
 Some usage notes:
@@ -1915,7 +1915,7 @@ like this:
 
 example                                  | meaning
 ---------------------------------------- | -------
-`{{HasFlag}}`<br />`{{HasFlag: curentPlayer}}` | Get flags for the current player.
+`{{HasFlag}}`<br />`{{HasFlag: currentPlayer}}` | Get flags for the current player.
 `{{HasFlag: hostPlayer}}`                | Get flags for the host player.
 `{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
 `{{HasFlag: anyPlayer}}`                 | Get flags which any one or more players have.
