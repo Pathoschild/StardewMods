@@ -117,7 +117,7 @@ namespace ContentPatcher.Framework.Patches.EditData
             if (!this.TryGetEntry(anchorKey, out _, out int anchorIndex))
                 return MoveResult.AnchorNotFound;
             if (entryIndex == anchorIndex)
-                return MoveResult.TargetNotFound;
+                return MoveResult.AnchorIsMain;
 
             // move to position
             int newIndex = afterAnchor

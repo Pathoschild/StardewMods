@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Updated `EditData` ID detection for the upcoming Stardew Valley 1.6.
+* Improved error-handling for `MoveEntries`.
 
 ## 1.28.3
 Released 30 October 2022 for SMAPI 3.15.0 or later.
