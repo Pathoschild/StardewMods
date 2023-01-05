@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -14,6 +15,8 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
 using StardewValley;
+
+using xTile;
 
 namespace ContentPatcher.Framework.Commands.Commands
 {
@@ -54,7 +57,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                       - A number/string dictionary: System.Collections.Generic.Dictionary`2[[System.Int32],[System.String]]
                       - Movie reactions: System.Collections.Generic.List<StardewValley.GameData.Movies.MovieReaction>
 
-                  You can also specify 'image' as the type for a Texture2D value.
+                  You can also specify 'image' as the type for a Texture2D value, or 'map' for a XTile.Map.
             ";
         }
 
@@ -106,8 +109,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                 return;
             }
 
-            // init export path
-            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", string.Join('_', assetName.Split(Path.GetInvalidFileNameChars())));
+            static string GetSanitizedName(string assetName) =>
+                string.Join('_', assetName.Split(Path.GetInvalidFileNameChars()));
+
+            string filepath = GetSanitizedName(assetName);
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", filepath);
             Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export
@@ -121,6 +127,74 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                 this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
             }
+            else if (asset is Map map)
+            {
+
+                // derived from code written by Tyler Gibbs here: https://github.com/tylergibbs2/StardewValleyMods/blob/bd81d1eac26faf153bb7577215f12c9d3a98b342/StardewRoguelike/DebugCommands.cs#L369
+                // which is licensed MIT
+
+                TMXTile.TMXFormat Format = new(Game1.tileSize / Game1.pixelZoom, Game1.tileSize / Game1.pixelZoom, Game1.pixelZoom, Game1.pixelZoom);
+                TMXTile.TMXMap tmxMap = Format.Store(map);
+
+                fullTargetPath += ".tmx";
+
+                foreach (TMXTile.TMXObjectgroup? objectGroup in tmxMap.Objectgroups)
+                {
+                    for (int i = 0; i < objectGroup.Objects.Count; i++)
+                    {
+                        var tmxObject = objectGroup.Objects[i];
+                        tmxObject.Properties = tmxObject.Properties.Skip(2).ToArray();
+                        if (tmxObject.Properties.Length == 0)
+                            objectGroup.Objects[i] = null;
+                    }
+                }
+
+                // export the matching tilesheets as well.
+                string contentPath = StardewModdingAPI.Constants.GamePath;
+                foreach (var tileset in tmxMap.Tilesets)
+                {
+                    string tilesheetLocation = tileset.Image.Source;
+
+                    // first set to the relative location
+                    // so if tilesheet export fails
+                    // people can just copy the relative tilesheet over.
+                    tileset.Image.Source = Path.GetFileName(tilesheetLocation);
+                    object? imageAsset;
+                    try
+                    {
+                        imageAsset = this.LoadAsset(tilesheetLocation, typeof(Texture2D));
+                    }
+                    catch (ContentLoadException ex)
+                    {
+                        this.Monitor.Log($"Failed while attempting to export tilesheets for map: Can't load asset '{tilesheetLocation}' with type '{typeof(Texture2D).FullName}': {ex.Message}", LogLevel.Error);
+                        continue;
+                    }
+
+                    if (imageAsset is not Texture2D tex)
+                    {
+                        this.Monitor.Log($"Attempted export failed for tilesheet {tilesheetLocation}.");
+                        continue;
+                    }
+
+                    tex = this.UnPremultiplyTransparency(tex);
+                    string relativeImageLocation = GetSanitizedName(Path.GetRelativePath(contentPath, tileset.Image.Source));
+                    string fullImagePath = Path.Combine(Path.GetDirectoryName(fullTargetPath)!, relativeImageLocation) + ".png";
+                    using (Stream stream = File.Create(fullImagePath))
+                        tex.SaveAsPng(stream, tex.Width, tex.Height);
+
+                    // set the tilesheet path to the sanitized name here.
+                    tileset.Image.Source = relativeImageLocation;
+
+                    this.Monitor.Log($"Exported asset '{tilesheetLocation}' to '{fullImagePath}'.", LogLevel.Info);
+                }
+
+
+                // export the map itself.
+                var parser = new TMXTile.TMXParser();
+                parser.Export(tmxMap, fullTargetPath, TMXTile.DataEncodingType.XML);
+
+                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
+            }
             else if (this.IsDataAsset(asset))
             {
                 fullTargetPath += ".json";
@@ -130,7 +204,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
             }
             else
-                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
+                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image, data, or map.", LogLevel.Error);
         }
 
 
@@ -148,6 +222,9 @@ namespace ContentPatcher.Framework.Commands.Commands
             // short alias
             if (string.Equals(name, "image", StringComparison.OrdinalIgnoreCase))
                 return new[] { typeof(Texture2D) };
+
+            if (string.Equals(name, "map", StringComparison.OrdinalIgnoreCase))
+                return new[] { typeof(Map) };
 
             // by assembly-qualified name
             {
