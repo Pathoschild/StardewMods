@@ -58,19 +58,19 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
             );
             harmony.Patch(
                 original: this.RequireMethod<Farm>("resetLocalState"),
-                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetLocalState))
+                postfix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetLocalState))
             );
             harmony.Patch(
                 original: this.RequireMethod<Farm>("resetSharedState"),
-                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetSharedState))
+                postfix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetSharedState))
             );
             harmony.Patch(
                 original: this.RequireMethod<GameLocation>(nameof(GameLocation.cleanupBeforePlayerExit)),
-                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_CleanupBeforePlayerExit))
+                postfix: this.GetHarmonyMethod(nameof(FarmPatcher.After_CleanupBeforePlayerExit))
             );
             harmony.Patch(
                 original: this.RequireMethod<GameLocation>(nameof(GameLocation.getRandomTile)),
-                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_GetRandomTile))
+                postfix: this.GetHarmonyMethod(nameof(FarmPatcher.After_GetRandomTile))
             );
         }
 

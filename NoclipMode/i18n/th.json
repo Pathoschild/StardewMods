@@ -9,14 +9,13 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enabled-message.name": "Show enabled message",
-    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
-    "config.disabled-message.name": "Show disabled message",
-    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+    "config.title.general-options": "ตัวเลือกทั่วไป",
+    "config.enabled-message.name": "แสดงข้อความเปิดใช้งาน",
+    "config.enabled-message.desc": "แสดงข้อความในเกมที่มุมหน้าจอเมื่อเปิดโหมด noclip หรือไม่",
+    "config.disabled-message.name": "แสดงข้อความปิดการใช้งาน",
+    "config.disabled-message.desc": "แสดงข้อความในเกมที่มุมหน้าจอเมื่อปิดโหมด noclip หรือไม่",
 
-    "config.title.controls": "Controls",
-    "config.toggle-key.name": "Toggle key",
-    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
+    "config.title.controls": "การควบคุม",
+    "config.toggle-key.name": "ปุ่มสลับ",
+    "config.toggle-key.desc": "ปุ่มสำหรับเปิดหรือปิดโหมด noclip ในเกม"
 }

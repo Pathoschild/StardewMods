@@ -430,14 +430,18 @@ namespace ContentPatcher.Framework.Patches
 
                 // move record
                 MoveResult result = MoveResult.Success;
+                object? anchorKey = null;
                 if (moveRecord.ToPosition is MoveEntryPosition.Top or MoveEntryPosition.Bottom)
+                {
+                    anchorKey = moveRecord.ToPosition; // should never be used, but provides a more useful error if it ever happens
                     result = editor.MoveEntry(key, moveRecord.ToPosition);
+                }
                 else if (moveRecord.AfterID.IsMeaningful() || moveRecord.BeforeID.IsMeaningful())
                 {
                     // get config
                     bool isAfter = moveRecord.AfterID.IsMeaningful();
                     string rawAnchorKey = (isAfter ? moveRecord.AfterID!.Value : moveRecord.BeforeID!.Value)!;
-                    object anchorKey = editor.ParseKey(rawAnchorKey);
+                    anchorKey = editor.ParseKey(rawAnchorKey);
 
                     // move entry
                     errorLabel += $" {(isAfter ? nameof(PatchMoveEntryConfig.AfterID) : nameof(PatchMoveEntryConfig.BeforeID))} \"{rawAnchorKey}\"";
@@ -450,19 +454,19 @@ namespace ContentPatcher.Framework.Patches
                     switch (result)
                     {
                         case MoveResult.TargetNotFound:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.");
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with ID '{key}' exists.", LogLevel.Warn);
                             break;
 
                         case MoveResult.AnchorNotFound:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.");
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with ID '{anchorKey}' exists.", LogLevel.Warn);
                             break;
 
                         case MoveResult.AnchorIsMain:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.");
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
                             break;
 
                         default:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: an unknown error occurred.");
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: an unknown error occurred.", LogLevel.Warn);
                             break;
                     }
                 }

@@ -1,0 +1,75 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "ตัวเลือกทั่วไป",
+
+    "config.disable-eat-prompt.name": "ปิดการใช้งานคำถามการกินหรือการดื่ม",
+    "config.disable-eat-prompt.tooltip": "จะข้ามข้อความยืนยันที่จะถามว่าคุณต้องการกินหรือดื่มหรือเปล่า",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "ความเร็วในการเคลื่อนไหวของผู้เล่น",
+
+    "config.eat-or-drink.name": "กิน/ดื่ม",
+    "config.eat-or-drink.tooltip": "การกินและการดื่มเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.fish.name": "ปลา",
+    "config.fish.tooltip": "ความเร็วในการเหวี่ยงและหมุนรอกเมื่อตกปลา (ไม่ส่งผลต่อมินิเกม) ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{defaultValue}}x",
+
+    "config.harvest.name": "เก็บเกี่ยว",
+    "config.harvest.tooltip": "ต้องการเก็บเกี่ยวพืชผลและอาหารด้วยมือเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.horse-flute.name": "เล่นขลุ่ยม้า",
+    "config.horse-flute.tooltip": "ต้องการเล่นขลุ่ยม้าให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.milk.name": "นม",
+    "config.milk.tooltip": "ต้องการใช้ถังนมให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.mount.name": "ขึ้น/ลงจากหลังม้า",
+    "config.mount.tooltip": "ต้องการขึ้นหรือลงจากม้าให้มันเร็วแค่ไหน (รวมถึงการขึ้นหรือการขี่แบบกำหนดเองเช่น ม็อดรถแทรกเตอร์) ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.shear.name": "เครื่องมือที่ตัด",
+    "config.shear.tooltip": "ต้องการใช้เครื่องที่ตัดให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.slingshot.name": "ใช้หนังสติ๊ก",
+    "config.slingshot.tooltip": "ต้องการใช้ความเร็วในการดึงหนังสติ๊กแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{suggestedValue}}x.",
+
+    "config.tool.name": "เครื่องมือที่แกว่ง",
+    "config.tool.tooltip": "ต้องการใช้เครื่องมือที่แกว่งให้มันเร็วแค่ไหน (ยกเว้นอาวุธและคันเบ็ด) ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{defaultValue}}x",
+
+    "config.weapon.name": "อาวุธที่แกว่ง",
+    "config.weapon.tooltip": "ต้องการใช้อาวุธที่แกว่งให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{defaultValue}}x",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "ความเร็วของแอนิเมชั่น",
+
+    "config.break-geodes.name": "ทำลาย geodes",
+    "config.break-geodes.tooltip": "ต้องการให้ช่างตีเหล็กทำลาย geodes ให้คุณเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.casino-slots.name": "สล็อตคาสิโน",
+    "config.casino-slots.tooltip": "ต้องการให้สล็อตคาสิโนหมุนเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.bus.name": "รถบัสของแพม",
+    "config.bus.tooltip": "ต้องการให้แพมขับรถบัสไปและกลับจากทะเลทรายได้เร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.tree-fall.name": "ต้นไม้ล้มลงพื้น",
+    "config.tree-fall.tooltip": "ต้องต้นไม้ล้มลงถึงพื้นเร็วแค่ไหนหลังจากที่คุณโค่นมันแล้ว ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{suggestedValue}}x",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "ความเร็วของภาพเคลื่อนไหว UI",
+
+    "config.title-menu.name": "การเปลี่ยนเมนูชื่อเรื่อง",
+    "config.title-menu.tooltip": "ความเร็วในการเปลี่ยนเมนูชื่อเรื่องระหว่างหน้าจอ ค่าเริ่มต้นคือ {{defaultValue}}x",
+
+    "config.load-game-blink.name": "กะพริบโหลดเกม",
+    "config.load-game-blink.tooltip": "ความหน่วงของช่องกะพริบเกิดขึ้นเร็วแค่ไหนหลังจากที่คุณคลิกช่องบันทึกโหลด ค่าเริ่มต้นคือ {{defaultValue}}x"
+}

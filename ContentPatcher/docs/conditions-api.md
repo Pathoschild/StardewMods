@@ -42,7 +42,7 @@ To access the API:
    `Private="False"`, so the DLL isn't added to your mod folder:
    ```xml
    <ItemGroup>
-     <Reference Include="ContentPatcher" HintPath="$(ModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
+     <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
    </ItemGroup>
    ```
 3. Somewhere in your mod code (e.g. in the [`GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)),
