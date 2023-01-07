@@ -29,7 +29,6 @@
     /****
     ** Main options
     ****/
-    // TODO
     "config.distance.name": "Distance",
     "config.distance.tooltip": "Le nombre de tuiles dans chaque direction autour du tracteur à affecter (en plus de la tuile située en dessous). Valeur par défaut {{defaultValue}}; une valeur de {{maxRecommendedValue}} couvre la majeure partie de l'écran visible, et des valeurs plus élevées peuvent avoir un impact négatif sur les performances du jeu.",
 
@@ -128,7 +127,7 @@
     "config.clear-debris.tooltip": "Que ce soit pour détruire les débris comme les mauvaises herbes, les brindilles, les souches géantes et les troncs d'arbres tombés.",
 
     "config.clear-weeds.name": "Éliminer les mauvaises herbes",
-    "config.clear-weeds.tooltip": "S'il faut détruire les mauvaises herbes",
+    "config.clear-weeds.tooltip": "S'il faut détruire les mauvaises herbes.",
 
 
     /****

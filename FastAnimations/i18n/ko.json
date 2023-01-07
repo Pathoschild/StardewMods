@@ -36,8 +36,8 @@
     "config.shear.name": "가위",
     "config.shear.tooltip": "가위를 사용하는 속도. 기본 값 {{defaultValue}}.",
 
-    "config.slingshot.name": "새총 사용"
-    "config.slingshot.tooltip": "새총을 사용할 때 그리는 속도입니다. 기본 값 {{defaultValue}}x, 권장 {{suggestedValue}}x."
+    "config.slingshot.name": "새총 사용",
+    "config.slingshot.tooltip": "새총을 사용할 때 그리는 속도입니다. 기본 값 {{defaultValue}}x, 권장 {{suggestedValue}}x.",
 
     "config.tool.name": "도구 스윙",
     "config.tool.tooltip": "도구를 휘두르는 속도(무기 및 낚싯대 제외). 기본 값 {{defaultValue}}, 권장 {{suggestedValue}}.",

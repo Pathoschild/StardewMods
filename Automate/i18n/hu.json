@@ -20,7 +20,6 @@
     "config.custom-connectors.desc": "A szomszédos gépeket összekötő elemek pontos angol neve. Több elemet is felsorolhat vesszővel elválasztva.", // Megjegyzés: A csatlakozók neveinek angolnak kell lennie, még akkor is, ha más nyelvet használsz.
 
     // Junimo hut options
-    // TODO
     "config.title.junimo-huts": "Junimo kunyhó viselkedés",
     "config.junimo-hut-gems.name": "Drágakövek",
     "config.junimo-hut-gems.desc": "Mit tegyenek a Junimok a drágakövekkel. Az 'Auto-detect' ignorálni fogja.",
@@ -30,8 +29,7 @@
     "config.junimo-hut-seeds.desc": "Mit tegyenek a Junimok a magvakkal. Az 'Auto-detect' ignorálni fogja, ha a Better Junimos mod instalálva van, máskülönben átviszi őket a kunyhótól a csatlakoztatott ládákba.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
+    "config.junimo-huts.auto-detect": "Auto-detect", // TODO
     "config.junimo-huts.ignore": "Ignorálja őket",
     "config.junimo-huts.move-into-chests": "Mozgassa a Junimo kunyhókból a ládákba",
     "config.junimo-huts.move-into-huts": "Mozgossa a ládákból a Junimo kunyhókba",
@@ -41,5 +39,5 @@
     "config.override.ShippingBin-name": "Szállítmány",
     "config.override.MiniShippingBin-name": "Mini szállítmány",
     "config.override.desc": "A(z) {{machineName}} automatizálásának engedélyezése.",
-    "config.custom-overrides-note": "Az egyéni felülbíráláshoz látogasd meg a https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure oldalt a 'Config.json' fájl közvetlen szerkesztéséhez."
+    "config.custom-overrides-note": "Az egyéni felülbíráláshoz látogasd meg a https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure oldalt a 'config.json' fájl közvetlen szerkesztéséhez."
 }

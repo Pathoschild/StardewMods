@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved split-screen support.
+* Improved translations. Thanks to barnibasha (updated Hungarian) and wally232 (updated Korean)!
 
 ## 1.28.1
 Released 30 October 2022 for SMAPI 3.14.0 or later.
