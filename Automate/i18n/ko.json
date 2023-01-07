@@ -4,8 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "메인 옵션",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.enabled.name": "활성화",
+    "config.enabled.desc": "자동화 기능을 활성화할지 여부. 비활성화하면 기계가 자동화되지 않고 오버레이가 나타나지 않습니다.",
     "config.automation-interval.name": "자동화 간격",
     "config.automation-interval.desc": "각 자동화 공정 사이의 간격 수.(초당 60개, 2초당 120개 등)",
     "config.toggle-overlay-key.name": "오버레이 키 전환 ",
@@ -20,21 +20,19 @@
     "config.custom-connectors.desc": "인접한 기계를 서로 연결하는 항목의 정확한 영어 이름 입력.\n여러 항목을 쉼표로 나열할 수 있습니다.", // note: 다른 언어로 재생되는 경우에도 영어여야 합니다.
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "주니모 오두막 동작",
+    "config.junimo-hut-gems.name": "보석",
+    "config.junimo-hut-gems.desc": "주니모 오두막이 보석 아이템으로 해야 할 일. '자동 감지'는 보석 아이템을 무시합니다.",
+    "config.junimo-hut-fertilizer.name": "비료",
+    "config.junimo-hut-fertilizer.desc": "주니모 오두막이 비료 아이템으로 해야 할 일. '자동 감지'는 Better Junimos가 설치되어 있으면 무시하고 오두막에서 연결된 상자로 옮깁니다.",
+    "config.junimo-hut-seeds.name": "씨앗",
+    "config.junimo-hut-seeds.desc": "주니모 오두막이 씨앗 아이템으로 해야 할 일. '자동 감지'는 Better Junimos가 설치된 경우 이를 무시하고 그렇지 않으면 오두막에서 연결된 상자로 옮깁니다.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "자동 감지",
+    "config.junimo-huts.ignore": "무시",
+    "config.junimo-huts.move-into-chests": "주니모 오두막에서 상자로 이동",
+    "config.junimo-huts.move-into-huts": "상자에서 주니모 오두막으로 이동",
 
     // machine overrides
     "config.title.machine-overrides": "기계 재설정",
