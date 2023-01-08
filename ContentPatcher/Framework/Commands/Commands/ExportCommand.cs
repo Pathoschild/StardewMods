@@ -159,10 +159,10 @@ namespace ContentPatcher.Framework.Commands.Commands
                     // so if tilesheet export fails
                     // people can just copy the relative tilesheet over.
                     tileset.Image.Source = Path.GetFileName(tilesheetLocation);
-                    object? imageAsset;
+                    Texture2D? imageAsset;
                     try
                     {
-                        imageAsset = this.LoadAsset(tilesheetLocation, typeof(Texture2D));
+                        imageAsset = this.LoadAssetImpl<Texture2D>(tilesheetLocation);
                     }
                     catch (ContentLoadException ex)
                     {
@@ -177,7 +177,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                     }
 
                     tex = this.UnPremultiplyTransparency(tex);
-                    string relativeImageLocation = GetSanitizedName(Path.GetRelativePath(contentPath, tileset.Image.Source));
+                    string relativeImageLocation = GetSanitizedName(Path.GetRelativePath(contentPath, tilesheetLocation));
                     string fullImagePath = Path.Combine(Path.GetDirectoryName(fullTargetPath)!, relativeImageLocation) + ".png";
                     using (Stream stream = File.Create(fullImagePath))
                         tex.SaveAsPng(stream, tex.Width, tex.Height);
