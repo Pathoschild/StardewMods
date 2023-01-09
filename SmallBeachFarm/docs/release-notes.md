@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 2.4.5
+Released 09 January 2023 for SMAPI 3.14.0 or later.
+
 * Fixed some random events happening less often on the small beach farm.
 * Improved translations. Thanks to wally232 (updated Korean)!
 

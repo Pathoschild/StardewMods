@@ -124,7 +124,7 @@ consequences.
 </table>
 
 ## Compatibility
-Debug Mode is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
+Debug Mode is compatible with Stardew Valley 1.5.6+ on Linux/Mac/Windows, both single-player and
 multiplayer. Commands may have different effects in multiplayer; see multiplayer notes for each
 command.
 
