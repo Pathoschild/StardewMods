@@ -382,7 +382,7 @@
     "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
-    "item.needed-for.quests": "current quests ({{quests}})", // TODO
+    "item.needed-for.quests": "현재 퀘스트 ({{quests}})",
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
@@ -448,24 +448,22 @@
     ** Item > melee weapon lookups
     *********/
     // labels
-    // TODO
-    "item.melee-weapon.accuracy": "Accuracy",
-    "item.melee-weapon.critical-chance": "Critical chance",
-    "item.melee-weapon.critical-damage": "Critical damage",
-    "item.melee-weapon.damage": "Damage",
-    "item.melee-weapon.defense": "Defense",
-    "item.melee-weapon.knockback": "Knockback",
-    "item.melee-weapon.reach": "Reach",
-    "item.melee-weapon.speed": "Attack speed",
+    "item.melee-weapon.accuracy": "정확도",
+    "item.melee-weapon.critical-chance": "치명타 확률",
+    "item.melee-weapon.critical-damage": "치명타 피해",
+    "item.melee-weapon.damage": "데미지",
+    "item.melee-weapon.defense": "방어",
+    "item.melee-weapon.knockback": "넉백",
+    "item.melee-weapon.reach": "범위",
+    "item.melee-weapon.speed": "공격 속도",
 
     // values
-    // TODO
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
-    "item.melee-weapon.defense.label": "{{amount}} while equipped",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
-    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+    "item.melee-weapon.critical-damage.label": "일반 데미지의 {{multiplier}}배(플레이어 보너스 적용 전)",
+    "item.melee-weapon.defense.label": "{{amount}} 장착중",
+    "item.melee-weapon.knockback.label": "{{amount}} (일반 거리의 {{multiplier}}배)",
+    "item.melee-weapon.reach.label": "{{amount}} 픽셀",
+    "item.melee-weapon.speed.shown-vs-actual": "표시: {{shownSpeed}}{{lineBreak}}실제: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} (스윙 프레임당{{milliseconds}} 밀리초, 플레이어 속도 보너스 적용 전)",
 
 
     /*********
@@ -477,7 +475,7 @@
     "item.movie-ticket.loves-movie": "사랑하는 영화",
     "item.movie-ticket.likes-movie": "좋아하는 영화",
     "item.movie-ticket.dislikes-movie": "싫어하는 영화",
-    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
+    "item.movie-ticket.rejects-movie": "영화 보기 거부",
 
     // values
     "item.movie-snack-preference.love": "{{name}} 사랑함",

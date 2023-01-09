@@ -255,7 +255,7 @@ Enable tile lookups to see information about map tiles:
 > ![](screenshots/map-tile.png)
 
 ## Compatibility
-Lookup Anything is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
+Lookup Anything is compatible with Stardew Valley 1.5.6+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
 
 ## Extensibility for modders

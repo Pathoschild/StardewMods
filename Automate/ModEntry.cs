@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
@@ -39,13 +40,19 @@ namespace Pathoschild.Stardew.Automate
         private bool EnableAutomation => this.Config.Enabled && Context.IsMainPlayer;
 
         /// <summary>Whether to track machine changes for the current save.</summary>
-        private bool EnableAutomationChangeTracking => this.Config.Enabled && (Context.IsMainPlayer || this.CurrentOverlay is not null);
+        private bool EnableAutomationChangeTracking =>
+            this.Config.Enabled
+            && !this.IsSecondaryScreen // in split-screen mode, the change will be tracked by the main player
+            && (Context.IsMainPlayer || this.CurrentOverlay.Value is not null);
+
+        /// <summary>Whether this is a secondary screen in split-screen mode.</summary>
+        private bool IsSecondaryScreen => Context.IsSplitScreen && !Context.IsMainPlayer;
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
 
         /// <summary>The current overlay being displayed, if any.</summary>
-        private OverlayMenu? CurrentOverlay;
+        private readonly PerScreen<OverlayMenu?> CurrentOverlay = new();
 
 
         /*********
@@ -175,9 +182,14 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnDayStarted(object? sender, DayStartedEventArgs e)
         {
-            // reset
-            this.MachineManager.Reset();
-            this.AutomateCountdown = 0;
+            // reset machine state
+            if (!this.IsSecondaryScreen) // in split-screen mode, machine state is managed by the main screen
+            {
+                this.MachineManager.Reset();
+                this.AutomateCountdown = 0;
+            }
+
+            // reset overlay
             this.DisableOverlay();
         }
 
@@ -312,7 +324,7 @@ namespace Pathoschild.Stardew.Automate
                 // toggle overlay
                 if (Context.IsPlayerFree && this.Keys.ToggleOverlay.JustPressed())
                 {
-                    if (this.CurrentOverlay != null)
+                    if (this.CurrentOverlay.Value != null)
                         this.DisableOverlay();
                     else
                         this.EnableOverlay();
@@ -391,7 +403,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="version">The installed version, if any.</param>
         private bool HostHasAutomate([NotNullWhen(true)] out ISemanticVersion? version)
         {
-            if (Context.IsMainPlayer)
+            if (Context.IsMainPlayer || Context.IsSplitScreen)
             {
                 version = this.ModManifest.Version;
                 return true;
@@ -416,8 +428,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Disable the overlay, if shown.</summary>
         private void DisableOverlay()
         {
-            this.CurrentOverlay?.Dispose();
-            this.CurrentOverlay = null;
+            this.CurrentOverlay.Value?.Dispose();
+            this.CurrentOverlay.Value = null;
         }
 
         /// <summary>Enable the overlay.</summary>
@@ -429,7 +441,7 @@ namespace Pathoschild.Stardew.Automate
                 this.MachineManager.ReloadQueuedLocations();
             }
 
-            this.CurrentOverlay ??= new OverlayMenu(
+            this.CurrentOverlay.Value ??= new OverlayMenu(
                 events: this.Helper.Events,
                 inputHelper: this.Helper.Input,
                 reflection: this.Helper.Reflection,
@@ -442,7 +454,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Reset the overlay if it's being shown.</summary>
         private void ResetOverlayIfShown()
         {
-            if (this.CurrentOverlay != null)
+            if (this.CurrentOverlay.Value != null)
             {
                 this.DisableOverlay();
                 this.EnableOverlay();

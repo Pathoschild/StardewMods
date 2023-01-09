@@ -519,7 +519,7 @@ For example, here's how you'd edit the tractor sprite using [Content Patcher](ht
 ```
 
 ## Compatibility
-Tractor Mod is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
+Tractor Mod is compatible with Stardew Valley 1.5.6+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 In multiplayer mode it must be installed by the host player, plus any farmhands who

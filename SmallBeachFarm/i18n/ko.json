@@ -12,40 +12,39 @@
     /****
     ** Farm options
     ****/
-    "config.farm-options-section": "Other farm options", // TODO
+    "config.farm-options-section": "기타 농장 옵션",
 
     "config.beach-sounds.name": "해변 소리 재생",
     "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "기본적으로 몬스터 생성",
+    "config.spawn-monsters.tooltip": "새 농장을 만들 때 '밤에 몬스터 출현' 옵션의 기본값입니다. 새 농장을 만들 때 여전히 옵션을 변경할 수 있습니다. 이것은 기존 세이브 파일에는 영향을 미치지 않습니다.",
 
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "농장 레이아웃",
 
     "config.campfire.name": "캠프파이어 추가",
     "config.campfire.tooltip": "농가 앞에 기능성 캠프파이어를 추가하세요.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "낚시 부두 추가",
+    "config.pier.tooltip": "낚시를 할 수 있는 부두를 추가하세요.",
 
     "config.islands.name": "섬 추가",
     "config.islands.tooltip": "육지 면적이 넓은 바다 섬을 추가하세요.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "배송 상자 경로 추가",
+    "config.shipping-bin-path.tooltip": "기본 배송 상자 위치 앞에 돌 경로 타일을 배치합니다.",
 
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "농장 위치",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "낚시 부두 X",
+    "config.pier-x.tooltip": "활성화된 경우 낚시 부두를 추가해야 하는 타일 위치입니다. X와 Y를 모두 0으로 설정하면 자동으로 배치됩니다.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "낚시 부두 Y",
+    "config.pier-y.tooltip": "활성화된 경우 낚시 부두를 추가해야 하는 타일 위치입니다. X와 Y를 모두 0으로 설정하면 자동으로 배치됩니다."
 }

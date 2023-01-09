@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.2
+Released 09 January 2023 for SMAPI 3.14.0 or later.
+
+* Improved split-screen support.
+* Improved translations. Thanks to barnibasha (updated Hungarian) and wally232 (updated Korean)!
+
 ## 1.28.1
 Released 30 October 2022 for SMAPI 3.14.0 or later.
 

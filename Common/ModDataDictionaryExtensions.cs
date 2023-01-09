@@ -19,9 +19,19 @@ namespace Pathoschild.Stardew.Common
         [return: NotNullIfNotNull("defaultValue")]
         public static T? ReadField<T>(this ModDataDictionary data, string key, Func<string, T> parse, T? defaultValue = default)
         {
-            return data.TryGetValue(key, out string rawValue)
-                ? parse(rawValue)
-                : defaultValue;
+            if (data.TryGetValue(key, out string rawValue))
+            {
+                try
+                {
+                    return parse(rawValue);
+                }
+                catch
+                {
+                    // if the format is invalid, fallback to the default value
+                }
+            }
+
+            return defaultValue;
         }
 
         /// <summary>Read a field from the mod data dictionary.</summary>

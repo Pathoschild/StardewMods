@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Chests Anywhere",
     "Author": "Pathoschild",
-    "Version": "1.22.4",
+    "Version": "1.22.5",
     "MinimumApiVersion": "3.14.0",
     "Description": "Access your chests from anywhere and organize them your way.",
     "UniqueID": "Pathoschild.ChestsAnywhere",

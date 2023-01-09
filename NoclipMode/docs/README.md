@@ -73,7 +73,7 @@ back on.
 </table>
 
 ## Compatibility
-Noclip Mode is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
+Noclip Mode is compatible with Stardew Valley 1.5.6+ on Linux/Mac/Windows, both single-player and
 multiplayer (even if other players don't have it). No known mod incompatibilities.
 
 ## See also

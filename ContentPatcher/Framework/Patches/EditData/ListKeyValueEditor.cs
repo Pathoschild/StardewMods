@@ -117,7 +117,7 @@ namespace ContentPatcher.Framework.Patches.EditData
             if (!this.TryGetEntry(anchorKey, out _, out int anchorIndex))
                 return MoveResult.AnchorNotFound;
             if (entryIndex == anchorIndex)
-                return MoveResult.TargetNotFound;
+                return MoveResult.AnchorIsMain;
 
             // move to position
             int newIndex = afterAnchor
@@ -200,14 +200,14 @@ namespace ContentPatcher.Framework.Patches.EditData
 
             // ID property
             {
-                PropertyInfo? property = typeof(TValue).GetProperty("ID");
+                PropertyInfo? property = typeof(TValue).GetProperty("Id") ?? typeof(TValue).GetProperty("ID");
                 if (property?.GetMethod != null)
                     return entry => property.GetValue(entry)?.ToString();
             }
 
             // ID field
             {
-                FieldInfo? field = typeof(TValue).GetField("ID");
+                FieldInfo? field = typeof(TValue).GetField("Id") ?? typeof(TValue).GetField("ID");
                 if (field != null)
                     return entry => field.GetValue(entry)?.ToString();
             }

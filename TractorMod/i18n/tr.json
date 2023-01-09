@@ -85,8 +85,8 @@
     "config.chop-trees-grown.name": "Meyve Ağaçlarını (Büyümüş) Kes",
     "config.chop-trees-grown.tooltip": "Tamamen büyümüş meyve olmayan ağaçların temizlenip temizlenmeyeceği.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+    "config.chop-trees-stumps.name": "Ağaçları (Kökleri) Kes",
+    "config.chop-trees-stumps.tooltip": "Ağaç köklerinin kesilip kesilmeyeceği. (Dev ağaç kökleri kalıntı olarak sınıflandırıldığı için bunları etkilemez.)",
 
     "config.chop-bushes.name": "Çalıları Kes",
     "config.chop-bushes.tooltip": "Kesilebilen çalıların kesilip kesilmeyeceği.",
