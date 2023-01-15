@@ -142,9 +142,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                 {
                     for (int i = 0; i < objectGroup.Objects.Count; i++)
                     {
-                        var tmxObject = objectGroup.Objects[i];
-                        tmxObject.Properties = tmxObject.Properties.Skip(2).ToArray();
-                        if (tmxObject.Properties.Length == 0)
+                        // remove blank tiledata.
+                        if (objectGroup.Objects[i].Properties.Length == 0)
                             objectGroup.Objects[i] = null;
                     }
                 }
