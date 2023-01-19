@@ -313,8 +313,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 if (input == null)
                     return null;
 
+                string displayName;
+                switch (input.Category)
+                {
+                    case SObject.EggCategory:
+                        displayName = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.572"); // Egg (Any)
+                        break;
+
+                    case SObject.MilkCategory:
+                        displayName = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.573"); // Milk (Any)
+                        break;
+
+                    default:
+                        displayName = input.getCategoryName();
+                        break;
+                }
+                
                 return this.CreateItemEntry(
-                    name: input.getCategoryName(),
+                    name: displayName,
                     minCount: ingredient.Count,
                     maxCount: ingredient.Count
                 );

@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed ingredient names in recipes that need any egg or any milk.
+
 ## 1.38.2
 Released 09 January 2023 for SMAPI 3.14.0 or later.
 
