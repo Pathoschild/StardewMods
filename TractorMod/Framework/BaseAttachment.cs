@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 who: player
             );
             if (attacked)
-                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe");
+                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe", tile);
             return attacked;
         }
 
