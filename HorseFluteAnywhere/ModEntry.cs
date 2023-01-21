@@ -199,12 +199,12 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                         });
                     }
 
-                    location.playSoundAt("wand", horse.Tile);
+                    location.playSound("wand", horse.Tile);
 
                     location = Game1.player.currentLocation;
                     tile = Game1.player.Tile;
 
-                    location.playSoundAt("wand", tile);
+                    location.playSound("wand", tile);
 
                     for (int i = 0; i < 8; i++)
                     {
