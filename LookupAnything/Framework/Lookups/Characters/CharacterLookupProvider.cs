@@ -47,13 +47,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
-                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
+                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.Tile, this.Reflection, () => this.BuildSubject(gourmand));
             }
 
             // NPCs
             foreach (NPC npc in Game1.CurrentEvent?.actors ?? (IEnumerable<NPC>)location.characters)
             {
-                Vector2 entityTile = npc.getTileLocation();
+                Vector2 entityTile = npc.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, this.Reflection, () => this.BuildSubject(npc));
             }
@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // animals
             foreach (FarmAnimal animal in location.Animals.Values)
             {
-                Vector2 entityTile = animal.getTileLocation();
+                Vector2 entityTile = animal.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
             }
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // players
             foreach (Farmer farmer in location.farmers)
             {
-                Vector2 entityTile = farmer.getTileLocation();
+                Vector2 entityTile = farmer.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     yield return new FarmerTarget(this.GameHelper, farmer, () => this.BuildSubject(farmer));
             }

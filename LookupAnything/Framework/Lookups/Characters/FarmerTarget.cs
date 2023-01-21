@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
         public FarmerTarget(GameHelper gameHelper, Farmer value, Func<ISubject> getSubject)
-            : base(gameHelper, SubjectType.Farmer, value, value.getTileLocation(), getSubject) { }
+            : base(gameHelper, SubjectType.Farmer, value, value.Tile, getSubject) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

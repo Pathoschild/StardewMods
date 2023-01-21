@@ -186,7 +186,9 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="facingDirection">The direction the player should be facing after they're moved.</param>
         private void MovePlayerFrom(Farmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
         {
-            if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
+            Point playerTile = player.TilePoint;
+
+            if (playerTile.X == (int)fromTile.X && playerTile.Y == (int)fromTile.Y)
             {
                 player.Position = new Vector2(toTile.X * Game1.tileSize, toTile.Y * Game1.tileSize);
                 player.FacingDirection = (int)facingDirection;

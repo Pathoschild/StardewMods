@@ -188,38 +188,38 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
                     Multiplayer multiplayer = this.Helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
                     GameLocation location = horse.currentLocation;
-                    Vector2 tileLocation = horse.getTileLocation();
+                    Vector2 tile = horse.Tile;
 
                     for (int i = 0; i < 8; i++)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile.X + Utility.RandomFloat(-1, 1), tile.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
                         });
                     }
 
-                    location.playSoundAt("wand", horse.getTileLocation());
+                    location.playSoundAt("wand", horse.Tile);
 
                     location = Game1.player.currentLocation;
-                    tileLocation = Game1.player.getTileLocation();
+                    tile = Game1.player.Tile;
 
-                    location.playSoundAt("wand", tileLocation);
+                    location.playSoundAt("wand", tile);
 
                     for (int i = 0; i < 8; i++)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile.X + Utility.RandomFloat(-1, 1), tile.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
                         });
                     }
 
-                    Game1.warpCharacter(horse, Game1.player.currentLocation, tileLocation);
+                    Game1.warpCharacter(horse, Game1.player.currentLocation, tile);
                     int j = 0;
-                    for (int x = (int)tileLocation.X + 3; x >= (int)tileLocation.X - 3; x--)
+                    for (int x = (int)tile.X + 3; x >= (int)tile.X - 3; x--)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tileLocation.Y) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tile.Y) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             delayBeforeAnimationStart = j * 25,
