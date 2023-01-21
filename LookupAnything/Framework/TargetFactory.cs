@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="player">The player to check.</param>
         private Vector2 GetFacingTile(Farmer player)
         {
-            Vector2 tile = player.getTileLocation();
+            Vector2 tile = player.Tile;
             FacingDirection direction = (FacingDirection)player.FacingDirection;
             return direction switch
             {

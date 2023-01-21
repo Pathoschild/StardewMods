@@ -185,7 +185,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             bool enabled = this.IsEnabled();
 
-            foreach (Vector2 tile in this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance))
+            foreach (Vector2 tile in this.GetTileGrid(Game1.player.Tile, this.Config.Distance))
             {
                 // get tile area in screen pixels
                 Rectangle area = new((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
@@ -310,7 +310,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // get tile grid to affect
             // This must be done outside the temporary interaction block below, since that dismounts
             // the player which changes their position from what the player may expect.
-            Vector2 origin = Game1.player.getTileLocation();
+            Vector2 origin = Game1.player.Tile;
             Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
 
             // apply tools

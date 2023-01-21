@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 if (horse != null)
                 {
                     yield return new LinkField(I18n.Building_Horse(), horse.Name, () => this.Codex.GetByEntity(horse, horse.currentLocation)!);
-                    yield return new GenericField(I18n.Building_HorseLocation(), I18n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
+                    yield return new GenericField(I18n.Building_HorseLocation(), I18n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.TilePoint.X, y: horse.TilePoint.Y));
                 }
             }
 
