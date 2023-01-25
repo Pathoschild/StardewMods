@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* `patch export` now supports custom data types.
+
 ## 1.28.4
 Released 09 January 2023 for SMAPI 3.15.0 or later.
 
