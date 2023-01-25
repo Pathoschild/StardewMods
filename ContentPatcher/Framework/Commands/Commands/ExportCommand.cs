@@ -12,6 +12,7 @@ using Pathoschild.Stardew.Common.Commands;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
+using StardewModdingAPI.Toolkit.Serialization;
 using StardewValley;
 using xTile;
 
@@ -26,6 +27,8 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>The content helper with which to manage loaded assets.</summary>
         private readonly IGameContentHelper ContentHelper;
 
+        /// <summary>The settings to use when writing data to a JSON file.</summary>
+        private readonly Lazy<JsonSerializerSettings> JsonSettings = new Lazy<JsonSerializerSettings>(JsonHelper.CreateDefaultSettings);
 
 
         /*********
@@ -182,7 +185,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <param name="path">The absolute path to which to write the asset.</param>
         private void ExportData(object data, string path)
         {
-            File.WriteAllText(path, JsonConvert.SerializeObject(data, Formatting.Indented));
+            File.WriteAllText(path, JsonConvert.SerializeObject(data, this.JsonSettings.Value));
         }
 
         /// <summary>Get the types matching a name, if any.</summary>
