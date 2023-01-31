@@ -132,6 +132,33 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 this.exitThisMenu();
         }
 
+        /// <summary>The method called when the player presses a controller button.</summary>
+        /// <param name="button">The controller button pressed.</param>
+        public override void receiveGamePadButton(Buttons button)
+        {
+            switch (button)
+            {
+                // exit
+                case Buttons.B:
+                    this.exitThisMenu();
+                    break;
+
+                // scroll up
+                case Buttons.RightThumbstickUp:
+                    this.ScrollUp();
+                    break;
+
+                // scroll down
+                case Buttons.RightThumbstickDown:
+                    this.ScrollDown();
+                    break;
+
+                default:
+                    base.receiveGamePadButton(button);
+                    break;
+            }
+        }
+
         /// <summary>The method invoked when the player scrolls the mouse wheel on the lookup UI.</summary>
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
