@@ -535,6 +535,7 @@
     "npc.friendship.need-points": "next in {{count}} pts",
     "npc.undiscovered-gift-taste": "{{count}} unrevealed items",
     "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items",
+    "npc.unowned-gift-taste-appended": " and {{count}} unowned items",
 
 
     /*********
@@ -725,6 +726,8 @@
     "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
     "config.scroll-amount.name": "Scroll amount",
     "config.scroll-amount.desc": "The number of pixels to shift content on each up/down scroll.",
+    "config.show-unowned-gifts.name": "Show Unowned Gifts",
+    "config.show-unowned-gifts.desc": "Whether to show gifts that the player doesn't own or have in their inventory",
 
     // controls section
     "config.title.controls": "Controls",

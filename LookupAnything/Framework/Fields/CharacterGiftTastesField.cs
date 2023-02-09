@@ -21,8 +21,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
         /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
         /// <param name="ownedItemsCache">A lookup cache for owned items, as created by <see cref="GetOwnedItemsCache"/>.</param>
-        public CharacterGiftTastesField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed, IDictionary<string, bool> ownedItemsCache)
-            : base(label, CharacterGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed, highlightUnrevealed, ownedItemsCache)) { }
+        public CharacterGiftTastesField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed, bool showUnowned, IDictionary<string, bool> ownedItemsCache)
+            : base(label, CharacterGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed, highlightUnrevealed, showUnowned, ownedItemsCache)) { }
 
         /// <summary>Get a lookup cache for owned items.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
         /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
         /// <param name="ownedItemsCache">A lookup cache for owned items, as created by <see cref="GetOwnedItemsCache"/>.</param>
-        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed, IDictionary<string, bool> ownedItemsCache)
+        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed, bool showUnowned, IDictionary<string, bool> ownedItemsCache)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
@@ -76,6 +76,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             int unrevealed = onlyRevealed
                 ? giftTastes[showTaste].Count(p => !p.IsRevealed)
                 : 0;
+            int unowned = showUnowned
+                ? 0
+                : items.Count(i => !i.IsInventory && !i.IsOwned);
 
             // generate text
             if (items.Any())
@@ -92,9 +95,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         yield return new FormattedText(text, Color.Green, bold);
                     else if (entry.IsOwned)
                         yield return new FormattedText(text, Color.Black, bold);
-                    else
+                    else if (showUnowned)
                         yield return new FormattedText(text, Color.Gray, bold);
                 }
+
+                if (unowned > 0)
+                    yield return new FormattedText(I18n.Npc_UnownedGiftTasteAppended(count: unowned), Color.Gray);
 
                 if (unrevealed > 0)
                     yield return new FormattedText(I18n.Npc_UndiscoveredGiftTasteAppended(count: unrevealed), Color.Gray);

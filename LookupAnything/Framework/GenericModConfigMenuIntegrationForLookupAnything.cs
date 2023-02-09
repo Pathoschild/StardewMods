@@ -89,6 +89,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     get: config => config.EnableTargetRedirection,
                     set: (config, value) => config.EnableTargetRedirection = value
                 )
+                .AddCheckbox(
+                    name: I18n.Config_ShowUnownedGifts_Name,
+                    tooltip: I18n.Config_ShowUnownedGifts_Desc,
+                    get: config => config.ShowUnownedGifts,
+                    set: (config, value) => config.ShowUnownedGifts = value
+                )
                 .AddNumberField(
                     name: I18n.Config_ScrollAmount_Name,
                     tooltip: I18n.Config_ScrollAmount_Desc,
