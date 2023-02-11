@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             this.GetCropSubject = getCropSubject;
 
             this.SeedForCrop = item.QualifiedItemId != "(O)433" || this.FromCrop == null // ignore unplanted coffee beans (to avoid "see also: coffee beans" loop)
-                ? this.TryGetCropForSeed(item)
+                ? this.TryGetCropForSeed(item, location)
                 : null;
 
             this.Initialize(this.Target.DisplayName, this.GetDescription(this.Target), this.GetTypeValue(this.Target));
@@ -459,14 +459,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
         /// <summary>Get the crop which grows from the given seed, if applicable.</summary>
         /// <param name="seed">The potential seed item to check.</param>
-        private Crop? TryGetCropForSeed(Item seed)
+        /// <param name="location">The location containing the crop, if applicable.</param>
+        private Crop? TryGetCropForSeed(Item seed, GameLocation? location)
         {
             if (seed is not SObject obj || obj.bigCraftable.Value)
                 return null;
 
             try
             {
-                Crop crop = new(seed.ItemId, 0, 0);
+                Crop crop = new(seed.ItemId, 0, 0, location ?? Game1.getFarm());
                 return CommonHelper.IsItemId(crop.netSeedIndex.Value)
                     ? crop
                     : null;
@@ -516,8 +517,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 if (!crop.forageCrop.Value)
                 {
                     summary.Add(data.HasMultipleHarvests
-                        ? I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
-                        : I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
+                        ? I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
+                        : I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
                     );
                 }
 
@@ -525,10 +526,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 summary.Add(I18n.Crop_Summary_Seasons(seasons: string.Join(", ", I18n.GetSeasonNames(data.Seasons))));
 
                 // drops
-                if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops.Value > 0)
-                    summary.Add(I18n.Crop_Summary_DropsXToY(min: crop.minHarvest.Value, max: crop.maxHarvest.Value, percent: (int)Math.Round(crop.chanceForExtraCrops.Value * 100, 2)));
-                else if (crop.minHarvest.Value > 1)
-                    summary.Add(I18n.Crop_Summary_DropsX(count: crop.minHarvest.Value));
+                if (data.CropData is not null)
+                {
+                    int minStack = data.CropData.HarvestMinStack;
+                    int maxStack = data.CropData.HarvestMaxStack;
+                    double extraHarvestChance = data.CropData.ExtraHarvestChance;
+
+                    // TODO 1.6: update for new combinations (e.g. min/max without extra chance) and extra per farming level
+                    if (minStack != maxStack)
+                        summary.Add(I18n.Crop_Summary_DropsXToY(min: minStack, max: maxStack, percent: (int) Math.Round(extraHarvestChance * 100, 2)));
+                    else if (minStack > 1)
+                        summary.Add(I18n.Crop_Summary_DropsX(count: minStack));
+                }
+                else
+                    summary.Add(I18n.Crop_Summary_DropsX(count: 1));
+
 
                 // crop sale price
                 Item drop = data.GetSampleDrop();

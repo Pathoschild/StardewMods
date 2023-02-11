@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common.Enums;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.Crops;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -207,7 +208,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 // scythe or pick crops
                 if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
                 {
-                    bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
+                    bool isScytheCrop = dirt.crop.GetHarvestMethod() == HarvestMethod.Scythe;
 
                     dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
                     if (!isScytheCrop && location is IslandLocation && Game1.random.NextDouble() < 0.05)
