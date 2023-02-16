@@ -110,7 +110,10 @@ namespace ContentPatcher.Framework.Conditions
                     tokensUsed ??= new();
                     tokensUsed.Add(token.Name);
 
-                    isMutable = isMutable || token.IsMutable;
+                    if (!token.RequiresInput || !token.IsDeterministicForInput)
+                    {
+                        isMutable = isMutable || token.IsMutable;
+                    }
                 }
                 else
                 {

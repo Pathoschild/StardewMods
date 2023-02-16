@@ -42,6 +42,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public bool IsMutable { get; protected set; } = true;
 
         /// <inheritdoc />
+        public bool IsDeterministicForInput { get; protected set; } = false;
+
+        /// <inheritdoc />
         public bool IsReady => this.State.IsReady;
 
         /// <inheritdoc />

@@ -19,6 +19,8 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether this token is only valid with input arguments.</summary>
         bool RequiresInput { get; }
 
+        bool IsDeterministicForInput { get; }
+
         /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
         bool BypassesContextValidation { get; }
 

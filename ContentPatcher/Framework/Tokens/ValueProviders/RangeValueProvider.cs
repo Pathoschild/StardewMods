@@ -23,6 +23,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Range, mayReturnMultipleValuesForRoot: true)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: true, maxPositionalArgs: 2);
+            this.IsDeterministicForInput = true;
             this.MarkReady(true);
         }
 
@@ -37,6 +38,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
+
+            this.IsMutable = input.IsMutable;
 
             if (input.IsReady)
             {
