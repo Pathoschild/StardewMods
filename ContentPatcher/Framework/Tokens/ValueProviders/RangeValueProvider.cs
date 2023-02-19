@@ -39,8 +39,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!base.TryValidateInput(input, out error))
                 return false;
 
-            this.IsMutable = input.IsMutable;
-
             if (input.IsReady)
             {
                 return
