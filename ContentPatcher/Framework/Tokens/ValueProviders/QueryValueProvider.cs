@@ -37,6 +37,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.BypassesContextValidation = true;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.IsDeterministicForInput = true;
             this.MarkReady(true);
         }
 

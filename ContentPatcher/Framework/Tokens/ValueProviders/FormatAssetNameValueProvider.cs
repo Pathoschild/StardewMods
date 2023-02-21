@@ -17,6 +17,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
             this.ValidNamedArguments = InvariantSets.FromValue("separator");
+            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

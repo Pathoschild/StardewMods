@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.AllowAnyNamedArguments = true;
+            
+            // This is deterministic 99% of the time, but if language is changed, this would need to be invalidated
+            this.IsDeterministicForInput = false;
             this.MarkReady(true);
         }
 

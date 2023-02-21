@@ -27,6 +27,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.RelativePathExists = relativePathExists;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            // This is deterministic for end users, but may not be for developers expecting patch reload, or other mechanisms for the filesystem to be refreshed
+            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

@@ -35,6 +35,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Round, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

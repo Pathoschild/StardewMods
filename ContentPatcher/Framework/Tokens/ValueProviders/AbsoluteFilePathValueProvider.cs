@@ -33,6 +33,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             bool changed = !this.IsReady;
             this.MarkReady(true);
+            this.IsDeterministicForInput = true;
             return changed;
         }
 

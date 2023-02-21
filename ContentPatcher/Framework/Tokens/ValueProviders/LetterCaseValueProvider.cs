@@ -28,6 +28,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             this.Type = type;
             this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />
