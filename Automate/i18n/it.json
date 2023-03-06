@@ -20,21 +20,19 @@
     "config.custom-connectors.desc": "I nomi inglesi esatti degli elementi che collegano tra loro macchinari adiacenti. È possibile elencare più elementi con le virgole.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Comportamento capanno Junimo",
+    "config.junimo-hut-gems.name": "Gemme",
+    "config.junimo-hut-gems.desc": "Cosa dovrebbero fare le Capanne Junimo con le gemme. 'Individua automaticamente' le ignorerà.",
+    "config.junimo-hut-fertilizer.name": "Fertilizzante",
+    "config.junimo-hut-fertilizer.desc": "Cosa dovrebbero fare le Capanne Junimo con i fertilizzanti. 'Individua automaticamente' li ignorerà se è stato installato Better Junimos, altrimenti li sposterà dal capanno alle casse collegate.",
+    "config.junimo-hut-seeds.name": "Semi",
+    "config.junimo-hut-seeds.desc": "Cosa dovrebbero fare le Capanne Junimo con i Semi. 'Individua automaticamente' li ignorerà se è stato installato Better Junimos, altrimenti li sposterà dal capanno alle casse collegate.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Individua automaticamente",
+    "config.junimo-huts.ignore": "Ignora",
+    "config.junimo-huts.move-into-chests": "Sposta dai capanni Junimo alle casse",
+    "config.junimo-huts.move-into-huts": "Sposta dalle casse ai capanni Junimo",
 
     // machine overrides
     "config.title.machine-overrides": "Sovrascrittura macchinari",
