@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            return this.Location.GetSeasonForLocation() == "winter"
+            return this.Location.GetSeason() == Season.Winter
                 ? MachineState.Disabled
                 : base.GetState();
         }

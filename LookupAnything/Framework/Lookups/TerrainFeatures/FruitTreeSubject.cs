@@ -212,17 +212,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="tree">The fruit tree.</param>
         /// <param name="season">The season to check.</param>
         /// <remarks>Derived from <see cref="FruitTree.IsInSeasonHere"/> and <see cref="FruitTree.seasonUpdate"/>.</remarks>
-        private bool IsInSeason(FruitTree tree, string season)
+        private bool IsInSeason(FruitTree tree, Season season)
         {
             if (tree.currentLocation.SeedsIgnoreSeasonsHere())
                 return true;
 
-            List<string>? growSeasons = tree.GetData()?.Seasons;
+            List<Season>? growSeasons = tree.GetData()?.Seasons;
             if (growSeasons != null)
             {
-                foreach (string growSeason in growSeasons)
+                foreach (Season growSeason in growSeasons)
                 {
-                    if (string.Equals(growSeason, season, StringComparison.OrdinalIgnoreCase))
+                    if (season == growSeason)
                         return true;
                 }
             }

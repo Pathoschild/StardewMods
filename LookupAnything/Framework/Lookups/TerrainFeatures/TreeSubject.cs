@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (!isFullyGrown)
             {
                 string label = I18n.Tree_NextGrowth();
-                if (!data.GrowsInWinter && location.GetSeasonForLocation() == "winter" && !location.SeedsIgnoreSeasonsHere() && !isFertilized)
+                if (!data.GrowsInWinter && location.GetSeason() == Season.Winter && !location.SeedsIgnoreSeasonsHere() && !isFertilized)
                     yield return new GenericField(label, I18n.Tree_NextGrowth_Winter());
                 else if (stage == WildTreeGrowthStage.Tree - 1 && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());

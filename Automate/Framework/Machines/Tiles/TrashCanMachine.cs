@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
                     3 => "171", // broken CD
                     4 => "172", // soggy newspaper
                     5 => "216", // bread
-                    6 => Utility.getRandomItemFromSeason(Game1.currentSeason, tileLocation.X * 653 + tileLocation.Y * 777, false), // seasonal item
+                    6 => Utility.getRandomItemFromSeason(Game1.season, tileLocation.X * 653 + tileLocation.Y * 777, false), // seasonal item
                     7 => "403", // field snack
                     8 => $"{309 + random.Next(3)}", // acorn, maple seed, or pine cone
                     9 => "153", // green algae
