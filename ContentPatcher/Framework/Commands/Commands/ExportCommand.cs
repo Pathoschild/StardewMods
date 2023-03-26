@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -15,7 +14,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
 using StardewValley;
-
+using TMXTile;
 using xTile;
 
 namespace ContentPatcher.Framework.Commands.Commands
@@ -57,7 +56,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                       - A number/string dictionary: System.Collections.Generic.Dictionary`2[[System.Int32],[System.String]]
                       - Movie reactions: System.Collections.Generic.List<StardewValley.GameData.Movies.MovieReaction>
 
-                  You can also specify 'image' as the type for a Texture2D value, or 'map' for a XTile.Map.
+                  You can also specify 'image' as the type for a Texture2D value, or 'map' for a xTile.Map.
             ";
         }
 
@@ -109,11 +108,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                 return;
             }
 
-            static string GetSanitizedName(string assetName) =>
-                string.Join('_', assetName.Split(Path.GetInvalidFileNameChars()));
-
-            string filepath = GetSanitizedName(assetName);
-            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", filepath);
+            // init export path
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", this.GetSanitizedFileName(assetName));
             Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export
@@ -127,70 +123,66 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                 this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
             }
-            else if (asset is Map map)
+            else if (asset is Map rawMap)
             {
-
-                // derived from code written by Tyler Gibbs here: https://github.com/tylergibbs2/StardewValleyMods/blob/bd81d1eac26faf153bb7577215f12c9d3a98b342/StardewRoguelike/DebugCommands.cs#L369
-                // which is licensed MIT
-
-                TMXTile.TMXFormat Format = new(Game1.tileSize / Game1.pixelZoom, Game1.tileSize / Game1.pixelZoom, Game1.pixelZoom, Game1.pixelZoom);
-                TMXTile.TMXMap tmxMap = Format.Store(map);
-
                 fullTargetPath += ".tmx";
 
-                foreach (TMXTile.TMXObjectgroup? objectGroup in tmxMap.Objectgroups)
+                // derived from code written by Tyler Gibbs, licensed MIT
+                // https://github.com/tylergibbs2/StardewValleyMods/blob/bd81d1e/StardewRoguelike/DebugCommands.cs#L369
+                TMXFormat format = new(Game1.tileSize / Game1.pixelZoom, Game1.tileSize / Game1.pixelZoom, Game1.pixelZoom, Game1.pixelZoom);
+                TMXMap map = format.Store(rawMap);
+                foreach (TMXObjectgroup objectGroup in map.Objectgroups)
                 {
                     for (int i = 0; i < objectGroup.Objects.Count; i++)
                     {
-                        // remove blank tiledata.
+                        // remove blank tile data
                         if (objectGroup.Objects[i].Properties.Length == 0)
                             objectGroup.Objects[i] = null;
                     }
                 }
 
-                // export the matching tilesheets as well.
-                string contentPath = StardewModdingAPI.Constants.GamePath;
-                foreach (var tileset in tmxMap.Tilesets)
+                // export matching tilesheets
+                foreach (TMXTileset tilesheet in map.Tilesets)
                 {
-                    string tilesheetLocation = tileset.Image.Source;
+                    string tilesheetLocation = tilesheet.Image.Source;
 
                     // first set to the relative location
                     // so if tilesheet export fails
                     // people can just copy the relative tilesheet over.
-                    tileset.Image.Source = Path.GetFileName(tilesheetLocation);
+                    tilesheet.Image.Source = Path.GetFileName(tilesheetLocation);
                     Texture2D? imageAsset;
-                    try
                     {
-                        imageAsset = this.LoadAssetImpl<Texture2D>(tilesheetLocation);
-                    }
-                    catch (ContentLoadException ex)
-                    {
-                        this.Monitor.Log($"Failed while attempting to export tilesheets for map: Can't load asset '{tilesheetLocation}' with type '{typeof(Texture2D).FullName}': {ex.Message}", LogLevel.Error);
-                        continue;
+                        string error = null;
+                        try
+                        {
+                            imageAsset = this.LoadAssetImpl<Texture2D>(tilesheetLocation);
+                        }
+                        catch (ContentLoadException ex)
+                        {
+                            imageAsset = null;
+                            error = ex.Message;
+                        }
+                        if (imageAsset is null)
+                        {
+                            this.Monitor.Log($"Failed while attempting to export tilesheets for map: Can't load asset '{tilesheetLocation}' with type '{typeof(Texture2D).FullName}'{(error != null ? $": {error}" : ".")}", LogLevel.Error);
+                            continue;
+                        }
                     }
 
-                    if (imageAsset is not Texture2D tex)
-                    {
-                        this.Monitor.Log($"Attempted export failed for tilesheet {tilesheetLocation}.");
-                        continue;
-                    }
-
-                    tex = this.UnPremultiplyTransparency(tex);
-                    string relativeImageLocation = GetSanitizedName(Path.GetRelativePath(contentPath, tilesheetLocation));
+                    imageAsset = this.UnPremultiplyTransparency(imageAsset);
+                    string relativeImageLocation = this.GetSanitizedFileName(Path.GetRelativePath(StardewModdingAPI.Constants.GamePath, tilesheetLocation));
                     string fullImagePath = Path.Combine(Path.GetDirectoryName(fullTargetPath)!, relativeImageLocation) + ".png";
                     using (Stream stream = File.Create(fullImagePath))
-                        tex.SaveAsPng(stream, tex.Width, tex.Height);
+                        imageAsset.SaveAsPng(stream, imageAsset.Width, imageAsset.Height);
 
-                    // set the tilesheet path to the sanitized name here.
-                    tileset.Image.Source = relativeImageLocation;
-
+                    // set tilesheet path to sanitized name so map can be loaded in the map folder
+                    tilesheet.Image.Source = relativeImageLocation;
                     this.Monitor.Log($"Exported asset '{tilesheetLocation}' to '{fullImagePath}'.", LogLevel.Info);
                 }
 
-
-                // export the map itself.
-                var parser = new TMXTile.TMXParser();
-                parser.Export(tmxMap, fullTargetPath, TMXTile.DataEncodingType.XML);
+                // export the map itself
+                var parser = new TMXParser();
+                parser.Export(map, fullTargetPath);
 
                 this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
             }
@@ -210,6 +202,13 @@ namespace ContentPatcher.Framework.Commands.Commands
         /*********
         ** Private methods
         *********/
+        /// <summary>Convert a full asset name like <c>Data/Buildings</c> into a filename-safe value like <c>Data_Buildings</c>.</summary>
+        /// <param name="assetName">The raw asset name.</param>
+        private string GetSanitizedFileName(string assetName)
+        {
+            return string.Join('_', assetName.Split(Path.GetInvalidFileNameChars()));
+        }
+
         /// <summary>Get the types matching a name, if any.</summary>
         /// <param name="name">The type name.</param>
         private Type[] TryGetTypes(string? name)
