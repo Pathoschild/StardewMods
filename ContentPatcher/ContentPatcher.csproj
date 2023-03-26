@@ -8,6 +8,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" />
     <Reference Include="SMAPI.Toolkit" HintPath="$(GamePath)\smapi-internal\SMAPI.Toolkit.dll" />
+    <Reference Include="TMXTile" HintPath="$(GamePath)\smapi-internal\TMXTile.dll" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
