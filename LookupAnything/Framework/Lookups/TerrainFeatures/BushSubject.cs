@@ -153,7 +153,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="bush">The bush to check.</param>
         private SDate GetDatePlanted(Bush bush)
         {
-            SDate date = new(1, "spring", 1);
+            SDate date = new(1, Season.Spring, 1);
             if (this.IsTeaBush(bush) && bush.datePlanted.Value > 0) // Caroline's sun room bush has datePlanted = -999
                 date = date.AddDays(bush.datePlanted.Value);
             return date;
@@ -188,18 +188,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 if (minDate < tomorrow)
                     minDate = tomorrow;
 
-                if (minDate.Season == "winter" && !bush.IsSheltered())
-                    return new(22, "spring", minDate.Year + 1);
+                if (minDate.Season == Season.Winter && !bush.IsSheltered())
+                    return new(22, Season.Spring, minDate.Year + 1);
                 if (minDate.Day < 22)
                     return new(22, minDate.Season);
                 return minDate;
             }
 
             // wild bushes produce salmonberries in spring 15-18, and blackberries in fall 8-11
-            SDate springStart = new(15, "spring");
-            SDate springEnd = new(18, "spring");
-            SDate fallStart = new(8, "fall");
-            SDate fallEnd = new(11, "fall");
+            SDate springStart = new(15, Season.Spring);
+            SDate springEnd = new(18, Season.Spring);
+            SDate fallStart = new(8, Season.Fall);
+            SDate fallEnd = new(11, Season.Fall);
 
             if (tomorrow < springStart)
                 return springStart;

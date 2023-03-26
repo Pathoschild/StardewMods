@@ -72,22 +72,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a translated season name from the game.</summary>
         /// <param name="season">The English season name.</param>
-        public static string GetSeasonName(string season)
+        public static string GetSeasonName(Season season)
         {
-            if (string.IsNullOrWhiteSpace(season))
-                return season;
-
-            int id = Utility.getSeasonNumber(season);
-            return id != -1
-                ? Utility.getSeasonNameFromNumber(id)
-                : season;
+            return Utility.getSeasonNameFromNumber((int)season);
         }
 
         /// <summary>Get translated season names from the game.</summary>
         /// <param name="seasons">The English season names.</param>
-        public static IEnumerable<string> GetSeasonNames(IEnumerable<string> seasons)
+        public static IEnumerable<string> GetSeasonNames(IEnumerable<Season> seasons)
         {
-            foreach (string season in seasons)
+            foreach (Season season in seasons)
                 yield return I18n.GetSeasonName(season);
         }
 

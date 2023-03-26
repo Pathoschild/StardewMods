@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             : base(tree, location, BaseMachine.GetTileAreaFor(tile))
         {
             this.ItemDrops = new Cached<Stack<string>>(
-                getCacheKey: () => $"{Game1.currentSeason},{Game1.dayOfMonth},{tree.hasSeed.Value}",
+                getCacheKey: () => $"{Game1.season},{Game1.dayOfMonth},{tree.hasSeed.Value}",
                 fetchNew: () => new Stack<string>()
             );
         }
@@ -142,7 +142,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             WildTreeData? data = tree.GetData();
 
             string? seed = data?.SeedItemId;
-            if (Game1.GetSeasonForLocation(location) == "fall" && seed == "309"/*acorn*/ && Game1.dayOfMonth >= 14)
+            if (Game1.GetSeasonForLocation(location) == Season.Fall && seed == "309"/*acorn*/ && Game1.dayOfMonth >= 14)
                 seed = "408";/*hazelnut*/
 
             return seed;

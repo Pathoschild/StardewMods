@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             }
 
             // grown tree
-            return new Rectangle(this.SourceRect.X + ((12 + (tree.IgnoresSeasonsHere() ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
+            return new Rectangle(this.SourceRect.X + ((12 + (tree.IgnoresSeasonsHere() ? 1 : Game1.seasonIndex) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>

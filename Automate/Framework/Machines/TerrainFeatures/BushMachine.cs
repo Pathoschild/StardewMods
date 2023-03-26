@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
                 return new TrackedItem(ItemRegistry.Create("(O)815"), onReduced: this.OnOutputReduced);
 
             // berry bush
-            string itemId = Game1.currentSeason == "fall" ? "(O)410"/*blackberry*/ : "(O)296"/*salmonberry*/;
+            string itemId = Game1.GetSeasonForLocation(this.Machine.Location) == Season.Fall ? "(O)410"/*blackberry*/ : "(O)296"/*salmonberry*/;
             int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
             int count = 1 + Game1.player.ForagingLevel / 4;
             return new TrackedItem(ItemRegistry.Create(itemId, count, quality), onReduced: this.OnOutputReduced);
