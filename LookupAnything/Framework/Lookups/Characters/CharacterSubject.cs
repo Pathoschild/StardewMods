@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Whether to look up the original entity when the game spawns a temporary copy.</summary>
         private readonly bool EnableTargetRedirection;
 
-        /// <summary>Whether to show unowned gift tastes. </summary>
+        /// <summary>Whether to show gift tastes that the player doesn't own somewhere in the world.</summary>
         private readonly bool ShowUnownedGifts;
 
         /// <summary>Whether the NPC is Gourmand in the Fern Islands farm cave.</summary>
@@ -78,8 +78,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="showAllGiftTastes">Whether to show all NPC gift tastes.</param>
         /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
+        /// <param name="showUnownedGifts">Whether to show gift tastes that the player doesn't own somewhere in the world.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, bool enableTargetRedirection, bool showUnowned)
+        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
             : base(gameHelper)
         {
             this.Codex = codex;
@@ -88,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
             this.ShowAllGiftTastes = showAllGiftTastes;
             this.EnableTargetRedirection = enableTargetRedirection;
-            this.ShowUnownedGifts = showUnowned;
+            this.ShowUnownedGifts = showUnownedGifts;
 
             // initialize
             this.Target = npc;
@@ -402,7 +403,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="taste">The gift taste to display.</param>
         private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, IDictionary<string, bool> ownedItemsCache, GiftTaste taste)
         {
-            return new CharacterGiftTastesField(label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes, showUnowned: this.ShowUnownedGifts, ownedItemsCache);
+            return new CharacterGiftTastesField(label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes, onlyOwned: !this.ShowUnownedGifts, ownedItemsCache);
         }
 
         /*****

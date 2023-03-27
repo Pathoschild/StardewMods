@@ -536,7 +536,7 @@
     "npc.friendship.need-bouquet": "potrzeba bukietu na następne",
     "npc.friendship.need-points": "następne za {{count}} pkt",
     "npc.undiscovered-gift-taste": "{{count}} nieodkrytych przedmiotów",
-    "npc.undiscovered-gift-taste-appended": ", oraz {{count}} nieodkrytych przedmiotów",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -714,6 +714,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Czy wyróżniać przedmioty w upodobaniach prezentowych, które nie zostały odkryte w profilu NPC. Gdy ta opcja jest włączona, nieodkryte upodobania prezentowe będą pogrubione, a w podglądach pojawią się również nielubiane/znienawidzone prezenty.",
     "config.show-all-gift-tastes.name": "Pokaż wszystkie upodobania",
     "config.show-all-gift-tastes.desc": "Czy pokazywać wszystkie upodobania prezentowe dla podglądów NPC i przedmiotów. Gdy ta opcja jest wyłączona, pokazywane są tylko najistotniejsze upodobania (np. ukochane lub lubiane prezenty).",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Opcje zaawansowane",

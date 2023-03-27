@@ -286,7 +286,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
                 showAllGiftTastes: config.ShowAllGiftTastes,
                 enableTargetRedirection: config.EnableTargetRedirection,
-                showUnowned: config.ShowUnownedGifts
+                showUnownedGifts: config.ShowUnownedGifts
             );
         }
 

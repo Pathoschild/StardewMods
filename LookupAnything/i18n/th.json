@@ -536,7 +536,7 @@
     "npc.friendship.need-bouquet": "ต้องให้ช่อดอกไม้เพื่อเลื่อนขั้น",
     "npc.friendship.need-points": "เลื่อนขั้นใน {{count}} แต้ม",
     "npc.undiscovered-gift-taste": "{{count}} ชิ้นที่ยังไม่เปิดเผย",
-    "npc.undiscovered-gift-taste-appended": ", และ {{count}} ชิ้นที่ยังไม่เปิดเผย",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -714,6 +714,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "จะเน้นรสนิยมของขวัญของไอเท็มที่ยังไม่ได้เปิดเผยในโปรไฟล์ NPC หรือไม่ เมื่อเปิดใช้งาน รสนิยมของขวัญที่ยังไม่ได้เปิดเผยจะเป็นตัวหนา และการค้นหาจะแสดงของขวัญที่ไม่ชอบ/เกลียด",
     "config.show-all-gift-tastes.name": "แสดงรสนิยมของขวัญทั้งหมด",
     "config.show-all-gift-tastes.desc": "จะแสดงรสนิยมของขวัญทั้งหมดสำหรับ NPC และการค้นหารายการหรือไม่ เมื่อปิดใช้งาน จะแสดงเฉพาะรสนิยมที่เกี่ยวข้องมากที่สุด (เช่น ของขวัญที่รักหรือชอบ)",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "ตัวเลือกขั้นสูง",

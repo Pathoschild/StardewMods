@@ -534,7 +534,7 @@
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
     "npc.undiscovered-gift-taste": "{{count}} 미공개 품목",
-    "npc.undiscovered-gift-taste-appended": ", 그리고 {{count}} 미공개 품목",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -712,6 +712,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "NPC 프로필에 표시되지 않은 항목 선물 취향을 강조 표시할지 여부. 활성화하면 공개되지 않은 선물 취향이 굵게 표시되고 조회 시 싫어하거나/증오하는 선물도 표시됩니다.",
     "config.show-all-gift-tastes.name": "모든 선물 취향 표시",
     "config.show-all-gift-tastes.desc": "NPC 및 아이템 조회에 대한 모든 선물 취향을 표시할지 여부. 비활성화되면 가장 관련성이 높은 취향(예: 사랑하거나 좋아하는 선물)만 표시됩니다.",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "고급 옵션",

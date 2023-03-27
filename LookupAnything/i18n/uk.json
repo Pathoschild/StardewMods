@@ -534,7 +534,7 @@
     "npc.friendship.need-bouquet": "Потрібен букет для наступн.",
     "npc.friendship.need-points": "Наступн. за {{count}}",
     "npc.undiscovered-gift-taste": "{{count}} незвіданих предметів",
-    "npc.undiscovered-gift-taste-appended": " та {{count}} незвіданих предметів",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -712,6 +712,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними, а пошук також показуватиме подарунки, які не сподобалися/є жахливими.",
     "config.show-all-gift-tastes.name": "Показувати усі улюблені подарунки",
     "config.show-all-gift-tastes.desc": "Показ усіх улюблених подарунків для НП та пошуку предметів; якщо вимкнено, відображаються лише найбільш релевантні подарунки (наприклад, улюблені або ті, що сподобалися).",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Розширені опції",
