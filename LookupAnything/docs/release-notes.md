@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added option to hide gift tastes you don't own in NPC lookups (thanks to SinZ163!).
 * Fixed ingredient names in recipes that need any egg or any milk.
 * Improved controller support in the search menu.
 * Improved translations. Thanks to MakinDay (updated Italian)!
