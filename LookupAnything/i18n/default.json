@@ -534,7 +534,7 @@
     "npc.friendship.need-bouquet": "need bouquet for next",
     "npc.friendship.need-points": "next in {{count}} pts",
     "npc.undiscovered-gift-taste": "{{count}} unrevealed items",
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items",
+    "npc.unowned-gift-taste": "{{count}} unowned items",
 
 
     /*********
@@ -712,6 +712,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
     "config.show-all-gift-tastes.name": "Show all gift tastes",
     "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
 
     // advanced options
     "config.title.advanced-options": "Advanced options",
