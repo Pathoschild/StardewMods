@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* You can now edit more complex mod data models using `EditData`.
 * Improved `patch export` command:
    * Added support for custom data types.
    * Added support for maps (thanks to atravita!).

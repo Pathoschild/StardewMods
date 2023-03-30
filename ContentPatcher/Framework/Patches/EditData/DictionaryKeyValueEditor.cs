@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Patches.EditData
 {
@@ -65,11 +64,11 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken value)
+        public override void SetEntry(object key, object value)
         {
             TKey parsedKey = (TKey)key;
 
-            this.Data[parsedKey] = value.ToObject<TValue>()!;
+            this.Data[parsedKey] = (TValue)value;
         }
     }
 }

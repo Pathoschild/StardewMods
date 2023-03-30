@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
 using StardewValley.GameData;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -70,12 +69,12 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken value)
+        public override void SetEntry(object key, object value)
         {
             if (this.TryGetEntry(key, out _, out int index))
-                this.Data[index] = value.ToObject<TValue>()!;
+                this.Data[index] = (TValue)value;
             else
-                this.Data.Add(value.ToObject<TValue>()!);
+                this.Data.Add((TValue)value);
         }
 
         /// <inheritdoc />

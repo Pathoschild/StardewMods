@@ -38,7 +38,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         public abstract void RemoveEntry(object key);
 
         /// <inheritdoc />
-        public abstract void SetEntry(object key, JToken value);
+        public abstract void SetEntry(object key, object value);
 
         /// <inheritdoc />
         public virtual MoveResult MoveEntry(object key, MoveEntryPosition toPosition)
