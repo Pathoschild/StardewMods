@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewModdingAPI.Internal;
 using PathHelper = System.IO.Path;
 
 namespace ContentPatcher.Framework.Patches
@@ -135,8 +136,17 @@ namespace ContentPatcher.Framework.Patches
                 return;
             }
 
-            // extend tilesheet if needed
-            this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
+            // extend image if needed
+            try
+            {
+                this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
+            }
+            catch (InvalidCastException ex) when (ex.Message.Contains("SpritesInDetail.ReplacedTexture"))
+            {
+                this.Monitor.Log($"Failed applying image patch {this.Path}: image has been edited by Sprites In Detail, so it can no longer be resized by content packs.", LogLevel.Error);
+                this.Monitor.Log(ex.GetLogSummary());
+                return;
+            }
 
             // apply source image
             if (rawSource is not null)

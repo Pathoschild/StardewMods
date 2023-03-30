@@ -10,9 +10,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* `patch export` now supports custom data types.
-* `patch export` now supports maps (thanks to atravita!).
-* `patch export` now writes enum values as their constant name instead of their numeric value.
+* Improved `patch export` command:
+   * Added support for custom data types.
+   * Added support for maps (thanks to atravita!).
+   * Enum fields are now exported as their constant name instead of their numeric value.
+* Added friendly error if an image can't be resized due to changes by Sprites in Detail.
 
 ## 1.28.4
 Released 09 January 2023 for SMAPI 3.15.0 or later.
