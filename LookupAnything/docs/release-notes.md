@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.39.0
+Released 30 March 2023 for SMAPI 3.14.0 or later.
+
+* Added option to hide gift tastes for items you don't own in NPC lookups (thanks to SinZ163!).
+* Fixed ingredient names in recipes that need any egg or any milk.
+* Improved controller support in the search menu.
+* Improved translations. Thanks to MakinDay (updated Italian)!
+
 ## 1.38.2
 Released 09 January 2023 for SMAPI 3.14.0 or later.
 

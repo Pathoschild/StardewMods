@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
 using Sickhead.Engine.Util;
 
 namespace ContentPatcher.Framework.Patches.EditData
@@ -80,13 +79,13 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken? value)
+        public override void SetEntry(object key, object? value)
         {
             string name = (string)key;
 
-            MemberInfo? member = this.GetMember(name);
-            if (member != null)
-                member.SetValue(this.Data, value?.ToObject(member.GetDataType()));
+            this
+                .GetMember(name)
+                ?.SetValue(this.Data, value);
         }
 
 

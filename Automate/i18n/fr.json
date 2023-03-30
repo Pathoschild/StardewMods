@@ -1,0 +1,43 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Options principales",
+    "config.enabled.name": "Activé",
+    "config.enabled.desc": "Permet d'activer les fonctions d'automatisation. Si cette option est désactivée, aucune machine ne sera automatisée et la superposition n'apparaîtra pas.",
+    "config.automation-interval.name": "Intervalle d'automatisation",
+    "config.automation-interval.desc": "Le nombre de ticks entre chaque processus d'automatisation (60 pour une fois par seconde, 120 pour toutes les deux secondes, etc.)",
+    "config.toggle-overlay-key.name": "Touche de basculement de la superposition",
+    "config.toggle-overlay-key.desc": "Les touches qui permettent de faire basculer la superposition de l'automatisation.",
+    "config.warn-for-missing-bridge-mod.name": "Avertissement pour un pont manquant",
+    "config.warn-for-missing-bridge-mod.desc": "L'enregistrement d'un avertissement au démarrage si vous avez installé un mod de machine personnalisée qui nécessite un correctif de compatibilité distinct qui n'est pas installé.",
+
+    // connectors
+    "config.title.connectors": "Connecteurs activés",
+    "config.connector.desc": "Si {{itemName}} relie les machines et les coffres entre eux.",
+    "config.custom-connectors.name": "Connecteurs personnalisés",
+    "config.custom-connectors.desc": "Les noms anglais exacts des éléments qui relient les machines adjacentes entre elles. Vous pouvez énumérer plusieurs éléments avec des virgules.", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    "config.title.junimo-huts": "Comportement de la hutte Junimo",
+    "config.junimo-hut-gems.name": "Pierres précieuses",
+    "config.junimo-hut-gems.desc": "Ce que les huttes Junimo devraient faire avec les objets en pierre précieuse. L'autodétection les ignorera.",
+    "config.junimo-hut-fertilizer.name": "Engrais",
+    "config.junimo-hut-fertilizer.desc": "Ce que les huttes Junimo devraient faire avec les engrais. L'option 'Autodétection' les ignorera si 'Better Juminos' est installé, sinon il faudra les déplacer de la cabane vers des coffres connectés.",
+    "config.junimo-hut-seeds.name": "Graines",
+    "config.junimo-hut-seeds.desc": "Ce que les huttes Junimo devraient faire avec les items de semences. L'option 'Autodétection' les ignorera si 'Better Juminos' est installé, sinon les déplacer de la cabane vers des coffres connectés.",
+
+    // Junimo hut dropdown values
+    "config.junimo-huts.auto-detect": "Détection automatique",
+    "config.junimo-huts.ignore": "Les ignorer",
+    "config.junimo-huts.move-into-chests": "Déplacement des huttes Junimo vers les coffres",
+    "config.junimo-huts.move-into-huts": "Déplacement des coffres vers les huttes Junimo",
+
+    // machine overrides
+    "config.title.machine-overrides": "Remplacement de la machine",
+    "config.override.ShippingBin-name": "Bac d'expédition",
+    "config.override.MiniShippingBin-name": "Mini-bac d'expédition",
+    "config.override.desc": "Si vous souhaitez activer l'automatisation de {{machineName}}.",
+    "config.custom-overrides-note": "Pour les remplacements personnalisés, consultez https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure pour obtenir de l'aide afin de modifier directement le fichier config.json."
+}

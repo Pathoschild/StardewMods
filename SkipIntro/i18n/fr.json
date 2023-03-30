@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Passer à",
+    "config.skip-to.tooltip": "A quel écran passer ? Ecran titre par défaut.",
+    "config.skip-to.values.title-menu": "Ecran titre",
+    "config.skip-to.values.load-menu": "Menu de chargement",
+    "config.skip-to.values.join-coop": "Rejoindre co-op",
+    "config.skip-to.values.host-coop": "Héberger co-op"
+}

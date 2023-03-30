@@ -536,7 +536,7 @@
     "npc.friendship.need-bouquet": "ilerlemek için buket gerekli",
     "npc.friendship.need-points": "{{count}} puana gelişir",
     "npc.undiscovered-gift-taste": "{{count}} gizli nesneler",
-    "npc.undiscovered-gift-taste-appended": ", ve {{count}} gizli nesneler",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -714,6 +714,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak ve aramalarda ayrıca beğenilmeyen/nefret edilen hediyeler de gösterilecek.",
     "config.show-all-gift-tastes.name": "Bütün hediye zevklerini göster",
     "config.show-all-gift-tastes.desc": "NPC ve item aramaları için tüm hediye zevklerinin gösterilip gösterilmeyeceği; devre dışı bırakıldığında, yalnızca en alakalı lezzetler (örneğin sevilen veya sevilen hediyeler) gösterilir.",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Gelişmiş Seçenekler",

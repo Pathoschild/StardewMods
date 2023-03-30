@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to show all NPC gift tastes.</summary>
         public bool ShowAllGiftTastes { get; set; }
 
+        /// <summary>Whether to show gift tastes that the player doesn't own somewhere in the world.</summary>
+        public bool ShowUnownedGifts { get; set; } = true;
+
         /// <summary>Whether to close the lookup UI when the lookup key is released.</summary>
         public bool HideOnKeyUp { get; set; }
 

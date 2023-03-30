@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Exiger la flûte du cheval",
+    "config.require-flute.description": "Indique si vous avez besoin de l'objet flûte de cheval dans votre inventaire pour invoquer un cheval. Par défaut : faux.",
+
+    "config.summon-horse-button.name": "Bouton d'invocation du cheval",
+    "config.summon-horse-button.description": "La touche à utiliser pour jouer de la flûte et convoquer un cheval. Valeur par défaut {{defaultValue}}."
+}

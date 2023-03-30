@@ -1,6 +1,6 @@
 ﻿{
     /*********
-    ** Tractor
+    ** Tractor (Traktor)
     *********/
     "buff.name": "Traktor erő",
     "garage.name": "Traktor garázs",
@@ -8,10 +8,10 @@
 
 
     /*********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (Általános Mod Konfigurációs menü UI)
     *********/
     /****
-    ** Section titles
+    ** Section titles (Szakaszok címei)
     ****/
     "config.main-options": "Fő beállítások",
     "config.controls": "Vezérlők",
@@ -27,7 +27,7 @@
 
 
     /****
-    ** Main options
+    ** Main options (Főbb opciók)
     ****/
     "config.distance.name": "Távolság",
     "config.distance.tooltip": "A traktor körül minden irányban a befolyásolandó csempék száma (az alatta lévő csempén kívül). Alapértelmezett {{defaultValue}}; a legnagyobb {{maxRecommendedValue}}, mely a látható képernyő nagy részét lefedi. A magas érték negatívan befolyásolhatja a játék teljesítményét.",
@@ -52,7 +52,7 @@
 
 
     /****
-    ** Keybind options
+    ** Keybind options (Billentyűkhöz kötési opciók)
     ****/
     "config.summon-key.name": "Traktor megidézése",
     "config.summon-key.tooltip": "Egy rendelkezésre álló traktort a pozíciódhoz rak. Alapértelmezett: Backspace.",
@@ -65,7 +65,7 @@
 
 
     /****
-    ** Trees & bushes
+    ** Trees & bushes (Fák és bokrok)
     ****/
     "config.chop-fruit-trees-seeds.name": "Gyümölcsfák kivágása (Magvak)",
     "config.chop-fruit-trees-seeds.tooltip": "A gyümölcsfa magvak eltávolítása.",
@@ -85,8 +85,8 @@
     "config.chop-trees-grown.name": "Fák kivágása (Kifejlett)",
     "config.chop-trees-grown.tooltip": "A teljesen kifejlett nem gyümölcsfák kivágása.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+    "config.chop-trees-stumps.name": "Fák kivágása (Fatönkök)",
+    "config.chop-trees-stumps.tooltip": "A nem gyümölcsfák fatönkjeinek az eltávolítása. (Ez nem vonatkozik a nagy fatuskókra, melyek törmeléknek számít.)",
 
     "config.chop-bushes.name": "Bokrok kivágása",
     "config.chop-bushes.tooltip": "A kivágható bokrok kivágása.",
@@ -96,7 +96,7 @@
 
 
     /****
-    ** Crops/forage/grass
+    ** Crops/forage/grass (Növények/erdő/fű)
     ****/
     "config.clear-dead-crops.name": "Halott termések eltávolítása",
     "config.clear-dead-crops.tooltip": "Az elpusztult termések eltávolítása.",
@@ -121,7 +121,7 @@
 
 
     /****
-    ** Debris
+    ** Debris (Törmelék)
     ****/
     "config.clear-debris.name": "Törmelékek tisztítása",
     "config.clear-debris.tooltip": "A törmelékek, pl.: gyomok, gallyak, óriási tuskók és kidőlt fatörzsek elpusztítása.",
@@ -131,7 +131,7 @@
 
 
     /****
-    ** Dirt
+    ** Dirt (Föld)
     ****/
     "config.till-dirt.name": "Föld művelés",
     "config.till-dirt.tooltip": "Az üres föld megművelése.",
@@ -144,7 +144,7 @@
 
 
     /****
-    ** Mining
+    ** Mining (Bányászás)
     ****/
     "config.break-boulders-and-meteorites.name": "Sziklák és meteoritok törése",
     "config.break-boulders-and-meteorites.tooltip": "A sziklák és a meteoritok feltörése.",
@@ -154,7 +154,7 @@
 
 
     /****
-    ** Placed items
+    ** Placed items (Elhelyezett elemek)
     ****/
     "config.break-flooring.name": "Padló eltávolítása",
     "config.break-flooring.tooltip": "A lerakott padlóburkolat eltávolítása.",
@@ -170,14 +170,14 @@
 
 
     /****
-    ** Melee
+    ** Melee (Közelharc)
     ****/
     "config.Attack-monsters.name": "Szörnyek támadása",
     "config.Attack-monsters.tooltip": "A szörnyek megtámadása. (Ez a traktor szerszám sebessége miatt jelentősen túlterhelt.)",
 
 
     /****
-    ** Other
+    ** Other (Egyéb)
     ****/
     "config.milk-pail.name": "Tejesvödör engedélyezése",
     "config.milk-pail.tooltip": "A tej begyűjtése a haszonállatoktól a tejesvödör segítségével.",

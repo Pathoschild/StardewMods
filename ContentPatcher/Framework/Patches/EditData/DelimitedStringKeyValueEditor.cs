@@ -61,7 +61,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken? value)
+        public override void SetEntry(object key, object? value)
         {
             // get index
             int index = (int)key;
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework.Patches.EditData
             }
 
             // apply change
-            fields[index] = value?.Value<string>() ?? string.Empty;
+            fields[index] = ((string?)value) ?? string.Empty;
             this.EntryEditor.SetEntry(this.EntryKey, string.Join(this.FieldDelimiter, fields));
         }
 

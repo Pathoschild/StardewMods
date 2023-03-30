@@ -1,0 +1,50 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Petite ferme de plage",
+    "farm.description": "Une petite plage de poche fertile, où vous pouvez attraper des poissons de rivière et d'océan.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Options de la ferme",
+
+    "config.beach-sounds.name": "Jouez les sons de la plage",
+    "config.beach-sounds.tooltip": "Jouez la musique de fond de la plage (c'est-à-dire le bruit des vagues) sur la ferme de la plage.",
+
+    "config.spawn-monsters.name": "Apparition des monstres par défaut",
+    "config.spawn-monsters.tooltip": "La valeur par défaut de l'option 'apparition des monstres la nuit' lors de la création d'une nouvelle sauvegarde. Vous pouvez toujours modifier cette option lors de la création d'une nouvelle sauvegarde. Ceci n'a aucun effet sur les sauvegardes existantes.",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Aménagement de la ferme",
+
+    "config.campfire.name": "Ajouter un feu de camp",
+    "config.campfire.tooltip": "Ajoutez un feu de camp fonctionnel devant la ferme.",
+
+    "config.pier.name": "Ajouter un quai de pêche",
+    "config.pier.tooltip": "Ajoute un quai où vous pourrez pêcher.",
+
+    "config.islands.name": "Ajouter des îles",
+    "config.islands.tooltip": "Ajoutez des îles océaniques avec une zone terrestre supplémentaire.",
+
+    "config.shipping-bin-path.name": "Ajout d'un chemin pour le bac d'expédition",
+    "config.shipping-bin-path.tooltip": "Placez les dalles de chemin en pierre devant l'emplacement par défaut du bac d'expédition.",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "Postes dans les exploitations agricoles",
+
+    "config.pier-x.name": "Quai de pêche X",
+    "config.pier-x.tooltip": "La position de la tuile où le quai de pêche doit être ajouté, si elle est activée. Mettez X et Y à zéro pour la positionner automatiquement.",
+
+    "config.pier-y.name": "Quai de pêche Y",
+    "config.pier-y.tooltip": "La position de la tuile où le quai de pêche doit être ajouté, si elle est activée. Mettez X et Y à zéro pour la positionner automatiquement."
+}

@@ -535,7 +535,7 @@
     "npc.friendship.need-bouquet": "Necesitas un ramo de flores para lo siguiente",
     "npc.friendship.need-points": "siguiente en {{count}} puntos",
     "npc.undiscovered-gift-taste": "{{count}} items sin revelar",
-    "npc.undiscovered-gift-taste-appended": ", y {{count}} items sin revelar",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -714,6 +714,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Si se desea resaltar los gustos de los regalos que no han sido revelados en el perfil del NPC. Cuando se activa, los gustos de los regalos no revelados estarán en negrita y las búsquedas también mostrarán los regalos que no gustan/odian.",
     "config.show-all-gift-tastes.name": "Mostrar todos los gustos de los regalos",
     "config.show-all-gift-tastes.desc": "Mostrar o no todos los gustos de los regalos en las búsquedas de PNJs y objetos; cuando se desactiva, sólo se muestran los gustos más relevantes (por ejemplo, los regalos amados o gustados).",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Opciones avanzadas",

@@ -8,12 +8,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Commands;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
+using StardewModdingAPI.Toolkit.Serialization;
 using StardewValley;
+using TMXTile;
+using xTile;
 
 namespace ContentPatcher.Framework.Commands.Commands
 {
@@ -26,6 +28,8 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>The content helper with which to manage loaded assets.</summary>
         private readonly IGameContentHelper ContentHelper;
 
+        /// <summary>The settings to use when writing data to a JSON file.</summary>
+        private readonly Lazy<JsonSerializerSettings> JsonSettings = new Lazy<JsonSerializerSettings>(JsonHelper.CreateDefaultSettings);
 
 
         /*********
@@ -54,7 +58,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                       - A number/string dictionary: System.Collections.Generic.Dictionary`2[[System.Int32],[System.String]]
                       - Movie reactions: System.Collections.Generic.List<StardewValley.GameData.Movies.MovieReaction>
 
-                  You can also specify 'image' as the type for a Texture2D value.
+                  You can also specify 'image' as the type for a Texture2D value, or 'map' for a xTile.Map.
             ";
         }
 
@@ -107,36 +111,154 @@ namespace ContentPatcher.Framework.Commands.Commands
             }
 
             // init export path
-            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", string.Join('_', assetName.Split(Path.GetInvalidFileNameChars())));
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.GamePath, "patch export", this.GetSanitizedFileName(assetName));
             Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export
-            if (asset is Texture2D texture)
-            {
-                fullTargetPath += ".png";
-
-                texture = this.UnPremultiplyTransparency(texture);
-                using (Stream stream = File.Create(fullTargetPath))
-                    texture.SaveAsPng(stream, texture.Width, texture.Height);
-
+            if (this.TryExportRaw(asset, ref fullTargetPath, out string? error))
                 this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
-            }
-            else if (this.IsDataAsset(asset))
-            {
-                fullTargetPath += ".json";
-
-                File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(asset, Formatting.Indented));
-
-                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
-            }
             else
-                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
+                this.Monitor.Log($"Failed exporting '{assetName}': {error}.", LogLevel.Error);
         }
 
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Try to export an arbitrary asset to disk.</summary>
+        /// <param name="asset">The asset data to export.</param>
+        /// <param name="path">The absolute path to which to write the asset, without the file extension. The file extension will be added if it's exported correctly.</param>
+        /// <param name="error">An error phrase indicating why the asset couldn't be exported, if applicable.</param>
+        private bool TryExportRaw(object? asset, ref string path, [NotNullWhen(false)] out string? error)
+        {
+            error = null;
+
+            switch (asset)
+            {
+                case null:
+                    error = "the asset could not be loaded";
+                    return false;
+
+                case Map map:
+                    path += ".tmx";
+                    this.ExportMap(map, path);
+                    return true;
+
+                case Texture2D texture:
+                    path += ".png";
+                    this.ExportTexture(texture, path);
+                    return true;
+
+                case IRawTextureData textureData:
+                    path += ".png";
+                    this.ExportRawTexture(textureData, path);
+                    return true;
+
+                default:
+                    path += ".json";
+                    this.ExportData(asset, path);
+                    return true;
+            }
+        }
+
+        /// <summary>Export a map asset to disk.</summary>
+        /// <param name="rawMap">The asset to export.</param>
+        /// <param name="path">The absolute path to which to write the asset.</param>
+        private void ExportMap(Map rawMap, string path)
+        {
+            // derived from code written by Tyler Gibbs, licensed MIT
+            // https://github.com/tylergibbs2/StardewValleyMods/blob/bd81d1e/StardewRoguelike/DebugCommands.cs#L369
+            TMXFormat format = new(Game1.tileSize / Game1.pixelZoom, Game1.tileSize / Game1.pixelZoom, Game1.pixelZoom, Game1.pixelZoom);
+            TMXMap map = format.Store(rawMap);
+            foreach (TMXObjectgroup objectGroup in map.Objectgroups)
+            {
+                for (int i = 0; i < objectGroup.Objects.Count; i++)
+                {
+                    // remove blank tile data
+                    if (objectGroup.Objects[i].Properties.Length == 0)
+                        objectGroup.Objects[i] = null;
+                }
+            }
+
+            // export matching tilesheets
+            string exportFolder = Path.GetDirectoryName(path)!;
+            foreach (TMXTileset tilesheet in map.Tilesets)
+            {
+                string tilesheetLocation = tilesheet.Image.Source;
+
+                // first set to the relative location
+                // so if tilesheet export fails
+                // people can just copy the relative tilesheet over.
+                tilesheet.Image.Source = Path.GetFileName(tilesheetLocation);
+                Texture2D? imageAsset;
+                {
+                    string error = null;
+                    try
+                    {
+                        imageAsset = this.LoadAssetImpl<Texture2D>(tilesheetLocation);
+                    }
+                    catch (ContentLoadException ex)
+                    {
+                        imageAsset = null;
+                        error = ex.Message;
+                    }
+                    if (imageAsset is null)
+                    {
+                        this.Monitor.Log($"Failed while attempting to export tilesheets for map: Can't load asset '{tilesheetLocation}' with type '{typeof(Texture2D).FullName}'{(error != null ? $": {error}" : ".")}", LogLevel.Error);
+                        continue;
+                    }
+                }
+
+                imageAsset = this.UnPremultiplyTransparency(imageAsset);
+                string imageFilename = this.GetSanitizedFileName(Path.GetRelativePath(StardewModdingAPI.Constants.GamePath, tilesheetLocation));
+                string imagePath = Path.Combine(exportFolder, imageFilename) + ".png";
+                this.ExportTexture(imageAsset, imagePath);
+
+                // set tilesheet path to sanitized name so map can be loaded in the map folder
+                tilesheet.Image.Source = imageFilename;
+                this.Monitor.Log($"Exported asset '{tilesheetLocation}' to '{imagePath}'.", LogLevel.Info);
+            }
+
+            // export the map itself
+            var parser = new TMXParser();
+            parser.Export(map, path);
+        }
+
+        /// <summary>Export a texture asset to disk.</summary>
+        /// <param name="image">The asset to export.</param>
+        /// <param name="path">The absolute path to which to write the asset.</param>
+        private void ExportRawTexture(IRawTextureData image, string path)
+        {
+            using Texture2D exported = new Texture2D(Game1.graphics.GraphicsDevice, image.Width, image.Height);
+            exported.SetData(image.Data);
+            this.ExportTexture(exported, path);
+        }
+
+        /// <summary>Export a raw texture asset to disk.</summary>
+        /// <param name="image">The asset to export.</param>
+        /// <param name="path">The absolute path to which to write the asset.</param>
+        private void ExportTexture(Texture2D image, string path)
+        {
+            using Texture2D exported = this.UnPremultiplyTransparency(image);
+            using Stream stream = File.Create(path);
+            exported.SaveAsPng(stream, exported.Width, exported.Height);
+        }
+
+        /// <summary>Export a data asset to disk.</summary>
+        /// <param name="data">The asset to export.</param>
+        /// <param name="path">The absolute path to which to write the asset.</param>
+        private void ExportData(object data, string path)
+        {
+            File.WriteAllText(path, JsonConvert.SerializeObject(data, this.JsonSettings.Value));
+        }
+
+        /// <summary>Convert a full asset name like <c>Data/Buildings</c> into a filename-safe value like <c>Data_Buildings</c>.</summary>
+        /// <param name="assetName">The raw asset name.</param>
+        private string GetSanitizedFileName(string assetName)
+        {
+            return string.Join('_', assetName.Split(Path.GetInvalidFileNameChars()));
+        }
+
         /// <summary>Get the types matching a name, if any.</summary>
         /// <param name="name">The type name.</param>
         private Type[] TryGetTypes(string? name)
@@ -148,6 +270,8 @@ namespace ContentPatcher.Framework.Commands.Commands
             // short alias
             if (string.Equals(name, "image", StringComparison.OrdinalIgnoreCase))
                 return new[] { typeof(Texture2D) };
+            if (string.Equals(name, "map", StringComparison.OrdinalIgnoreCase))
+                return new[] { typeof(Map) };
 
             // by assembly-qualified name
             {
@@ -213,19 +337,6 @@ namespace ContentPatcher.Framework.Commands.Commands
             Texture2D result = new Texture2D(texture.GraphicsDevice ?? Game1.graphics.GraphicsDevice, texture.Width, texture.Height);
             result.SetData(data);
             return result;
-        }
-
-        /// <summary>Get whether an asset can be saved to JSON.</summary>
-        /// <param name="asset">The asset to check.</param>
-        private bool IsDataAsset(object? asset)
-        {
-            if (asset is null)
-                return false;
-
-            Type type = asset.GetType();
-            type = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
-
-            return type == typeof(Dictionary<,>) || type == typeof(List<>) || type == typeof(JArray);
         }
 
         /// <summary>Load an asset from a content manager using the given type.</summary>

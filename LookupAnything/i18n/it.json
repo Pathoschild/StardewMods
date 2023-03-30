@@ -447,24 +447,22 @@
     ** Item > melee weapon lookups
     *********/
     // labels
-    // TODO
-    "item.melee-weapon.accuracy": "Accuracy",
-    "item.melee-weapon.critical-chance": "Critical chance",
-    "item.melee-weapon.critical-damage": "Critical damage",
-    "item.melee-weapon.damage": "Damage",
-    "item.melee-weapon.defense": "Defense",
-    "item.melee-weapon.knockback": "Knockback",
-    "item.melee-weapon.reach": "Reach",
-    "item.melee-weapon.speed": "Attack speed",
+    "item.melee-weapon.accuracy": "Precisione",
+    "item.melee-weapon.critical-chance": "Probabilità di critico",
+    "item.melee-weapon.critical-damage": "Danno critico",
+    "item.melee-weapon.damage": "Danno",
+    "item.melee-weapon.defense": "Difesa",
+    "item.melee-weapon.knockback": "Contraccolpo",
+    "item.melee-weapon.reach": "Portata",
+    "item.melee-weapon.speed": "Velocità d'attacco",
 
     // values
-    // TODO
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
-    "item.melee-weapon.defense.label": "{{amount}} while equipped",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
-    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+    "item.melee-weapon.critical-damage.label": "{{multiplier}} volte il danno normale (esclusi i bonus del giocatore)",
+    "item.melee-weapon.defense.label": "{{amount}} mentre è equipaggiato/a",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} volte la distanza normale)",
+    "item.melee-weapon.reach.label": "{{amount}} pixel",
+    "item.melee-weapon.speed.shown-vs-actual": "mostrata: {{shownSpeed}}{{lineBreak}}effettiva: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} millisecondi per ogni frame d'attacco, esclusi i bonus di velocità del giocatore)",
 
 
     /*********
@@ -535,7 +533,7 @@
     "npc.friendship.need-bouquet": "ha bisogno di un bouquet per avanzare",
     "npc.friendship.need-points": "prossimo fra {{count}} pti",
     "npc.undiscovered-gift-taste": "{{count}} oggetti non rivelati",
-    "npc.undiscovered-gift-taste-appended": ", e {{count}} oggetti non rivelati",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -713,6 +711,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Scegli se evidenziare i gusti dei regali degli oggetti che non sono stati rivelati nel profilo del PNG. Se abilitato, i gusti dei regali non rivelati saranno in grassetto e le ricerche mostreranno anche i regali non graditi/odiati.",
     "config.show-all-gift-tastes.name": "Mostra tutti i gusti dei regali",
     "config.show-all-gift-tastes.desc": "Scegli se si desidera mostrare tutti i gusti dei regali per la ricerca di PNG e oggetti; quando è disattivato, vengono mostrati solo i gusti più rilevanti (ad esempio, i regali amati o graditi).",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Opzioni avanzate",

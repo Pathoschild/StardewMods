@@ -1,0 +1,75 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Options générales",
+
+    "config.disable-eat-prompt.name": "Désactiver l'invitation à manger/ boire",
+    "config.disable-eat-prompt.tooltip": "S'il faut ignorer l'invite de confirmation demandant si vous voulez vraiment manger/boire quelque chose.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Vitesse d'animation du joueur",
+
+    "config.eat-or-drink.name": "Manger/boire",
+    "config.eat-or-drink.tooltip": "La vitesse à laquelle vous mangez et buvez. Valeur par défaut {{defaultValue}}x.",
+
+    "config.fish.name": "Poisson",
+    "config.fish.tooltip": "La vitesse à laquelle vous lancez et rembobinez lorsque vous pêchez (n'affecte pas le mini-jeu). Valeur par défaut {{defaultValue}}x, valeur suggérée {{suggestedValue}}x.",
+
+    "config.harvest.name": "Récolte",
+    "config.harvest.tooltip": "La vitesse à laquelle vous récoltez les cultures et le fourrage à la main. Valeur par défaut {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Jouer la flûte du cheval",
+    "config.horse-flute.tooltip": "La vitesse à laquelle vous jouez de la flûte du cheval. Valeur par défaut {{defaultValue}}x.",
+
+    "config.milk.name": "Lait",
+    "config.milk.tooltip": "La vitesse à laquelle vous utilisez le seau à lait. Valeur par défaut {{defaultValue}}x.",
+
+    "config.mount.name": "Monter/déscendre",
+    "config.mount.tooltip": "La vitesse à laquelle vous montez/désencdez des chevaux (y compris les montures personnalisées comme le Tractor Mod). Valeur par défaut {{defaultValue}}x.",
+
+    "config.shear.name": "Ciseaux",
+    "config.shear.tooltip": "La vitesse à laquelle vous utilisez les ciseaux. Valeur par défaut {{defaultValue}}x.",
+
+    "config.slingshot.name": "Utiliser la fronde",
+    "config.slingshot.tooltip": "La vitesse à laquelle vous tirez lorsque vous utilisez des lance-pierres. Valeur par défaut {{defaultValue}}x, valeur suggérée {{suggestedValue}}x.",
+
+    "config.tool.name": "Utilisation des outils",
+    "config.tool.tooltip": "La vitesse à laquelle vous balancez vos outils (sauf les armes et la canne à pêche). Valeur par défaut {{defaultValue}}x, valeur suggérée {{suggestedValue}}x.",
+
+    "config.weapon.name": "Utilisation des armes",
+    "config.weapon.tooltip": "La vitesse à laquelle vous balancez vos armes. Valeur par défaut {{defaultValue}}x, valeur suggérée {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Vitesses d'animation dans le monde",
+
+    "config.break-geodes.name": "Casser des géodes",
+    "config.break-geodes.tooltip": "La vitesse à laquelle le forgeron casse les géodes pour vous. Valeur par défaut {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Machines à sous du casino",
+    "config.casino-slots.tooltip": "A quelle vitesse les machines à sous du casino tournent. Valeur par défaut {{defaultValue}}x.",
+
+    "config.bus.name": "Le bus de Pam",
+    "config.bus.tooltip": "A quelle vitesse Pam conduit son bus pour aller et revenir du désert. Valeur par défaut {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Chute d'arbre",
+    "config.tree-fall.tooltip": "Vitesse à laquelle les arbres tombent après avoir été abattus. Valeur par défaut {{defaultValue}}x, valeur suggérée {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Vitesse d'animation de l'interface utilisateur",
+
+    "config.title-menu.name": "Transitions du menu titre",
+    "config.title-menu.tooltip": "Vitesse de transition du menu titre entre les écrans. Valeur par défaut {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Clignotement du chargement du jeu",
+    "config.load-game-blink.tooltip": "Vitesse à laquelle le délai de clignotement des emplacements se produit après que vous ayez cliqué sur un emplacement de chargement-sauvegarde. Valeur par défaut {{defaultValue}}x."
+}

@@ -35,7 +35,7 @@
     "crop-harvest.name": "Culture : Récoltes",
     "crop-harvest.ready": "Prête",
     "crop-harvest.not-ready": "Pas prête",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "Pas assez de temps (ou mort)",
 
     // crops: watered
     "crop-water.name": "Culture : Arrosage",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "Engrais",
     "crop-fertilizer.retaining-soil": "Sol de rétention",
     "crop-fertilizer.speed-gro": "Croissance rapide",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "Types d'engrais multiples",
 
     // machine processing
     "machines.name": "Traitement des Machines",

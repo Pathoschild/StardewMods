@@ -305,9 +305,11 @@ namespace ContentPatcher.Framework.Patches
             {
                 i++;
 
-                // get entry info
+                // get info
                 object key = editor.ParseKey(record.Key.Value!);
-                Type? valueType = editor.GetEntryType(key);
+                Type? targetType = editor.GetEntryType(key);
+                JToken? fromValue = record.Value?.Value;
+                JTokenType fromType = fromValue?.Type ?? JTokenType.Null;
 
                 // validate
                 if (!editor.CanAddEntries && !editor.HasEntry(key))
@@ -316,28 +318,44 @@ namespace ContentPatcher.Framework.Patches
                         this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model, must be one of: {string.Join(", ", modelEditor.FieldNames)}.");
                     else
                         this.WarnForRecord(i, $"this asset doesn't allow adding new entries, and the entry '{record.Key.Value}' isn't defined in the model.");
+                    continue;
+                }
+                if (targetType is null)
+                {
+                    // This shouldn't happen in practice per the remarks on IKeyValueEditor.GetEntryType.
+                    // If you're here because it did happen, sorry!
+                    this.WarnForRecord(i, $"this asset doesn't have a type for entry '{record.Key.Value}', so new entries can't be added.");
+                    continue;
                 }
 
-                // apply string
-                else if (valueType == typeof(string))
+                // remove entry if null
+                if (fromValue is null)
                 {
-                    if (record.Value?.Value == null)
-                        editor.RemoveEntry(key);
-                    else if (record.Value.Value is JValue field)
-                        editor.SetEntry(key, field);
-                    else
-                        this.WarnForRecord(i, $"this asset has string values (but {record.Value.Value.Type} values were provided).");
+                    editor.RemoveEntry(key);
+                    continue;
                 }
 
-                // apply object
-                else
+                // convert value to expected type
+                object fromObj;
+                try
                 {
-                    if (record.Value?.Value == null)
-                        editor.RemoveEntry(key);
-                    else if (record.Value.Value is JObject field)
-                        editor.SetEntry(key, field);
-                    else
-                        this.WarnForRecord(i, $"this asset has {valueType} values (but {record.Value.Value.Type} values were provided).");
+                    fromObj = fromValue.ToObject(targetType)!;
+                }
+                catch (Exception ex)
+                {
+                    this.WarnForRecord(i, $"failed converting {fromType} value to the expected type '{targetType.FullName}'.");
+                    continue;
+                }
+
+                // set value
+                try
+                {
+                    editor.SetEntry(key, fromObj);
+                }
+                catch (Exception ex)
+                {
+                    this.WarnForRecord(i, $"failed setting {fromType} value: {ex.Message}");
+                    continue;
                 }
             }
         }

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Patches.EditData
 {
@@ -33,6 +32,7 @@ namespace ContentPatcher.Framework.Patches.EditData
 
         /// <summary>Get the expected type for an entry.</summary>
         /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
+        /// <remarks>This should only return null if <see cref="CanAddEntries"/> and <see cref="HasEntry"/> both return false.</remarks>
         Type? GetEntryType(object key);
 
         /// <summary>Remove an entry.</summary>
@@ -41,8 +41,8 @@ namespace ContentPatcher.Framework.Patches.EditData
 
         /// <summary>Replace the value of an entry.</summary>
         /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
-        /// <param name="value">The new value.</param>
-        void SetEntry(object key, JToken value);
+        /// <param name="value">The new value to set, already converted to the type returned by <see cref="GetEntryType"/>.</param>
+        void SetEntry(object key, object value);
 
         /// <summary>Move an entry within the data.</summary>
         /// <param name="key">The key of the entry to move.</param>

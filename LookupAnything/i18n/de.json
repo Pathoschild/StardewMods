@@ -536,7 +536,7 @@
     "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
     "npc.friendship.need-points": "nächstes in {{count}} Punkten",
     "npc.undiscovered-gift-taste": "{{count}} unaufgedeckte Gegenstände",
-    "npc.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Gegenstände",
+    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
 
 
     /*********
@@ -713,6 +713,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Hervorhebung von Gegenstandsgeschenken, die im NSC-Profil noch nicht offenbart wurden. Wenn diese Option aktiviert ist, werden nicht enthüllte Geschenkvorlieben fett dargestellt und es werden auch ungeliebte/gehasste Geschenke angezeigt.",
     "config.show-all-gift-tastes.name": "Zeige alle Geschenk Vorlieben",
     "config.show-all-gift-tastes.desc": "Ob alle Geschenkvorlieben bei der Suche nach NSCs und Gegenständen angezeigt werden sollen; wenn deaktiviert, werden nur die relevantesten Vorlieben (z.B. geliebte oder beliebte Geschenke) angezeigt.",
+    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Erweiterte Optionen",

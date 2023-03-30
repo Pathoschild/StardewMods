@@ -44,7 +44,7 @@ field     | purpose
 This changes the in-game sprite for one item:
 ```js
 {
-   "Format": "1.28.0",
+   "Format": "1.29.0",
    "Changes": [
       {
          "Action": "EditImage",
