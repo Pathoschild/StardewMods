@@ -98,8 +98,18 @@ disliked/hated gifts.
   <td><code>ShowAllGiftTastes</code></td>
   <td>
 
-Default `false`. Whether to show all gift tastes for NPC and item lookups; when disabled, only the
-most relevant tastes (e.g. loved or liked gifts) are shown.
+Default `false`. Whether to show all gift taste levels for NPC and item lookups; when disabled,
+only the most relevant tastes (e.g. loved or liked gifts) are shown.
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>ShowUnownedGifts</code></td>
+  <td>
+
+Default `true`. Whether to show gift tastes in an NPC lookup for items that you don't own somewhere
+in the world.
 
   </td>
 </tr>

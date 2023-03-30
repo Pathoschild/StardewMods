@@ -9,13 +9,16 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* You can now edit more complex mod data models using `EditData`.
+## 1.29.0
+Released 30 March 2023 for SMAPI 3.18.1 or later. See the [release highlights](https://www.patreon.com/posts/80797967).
+
+* You can now edit more complex mod data models using `EditData`. This fixes many cases where you'd encounter an error like "_this asset has X values (but Y values were provided)_".
 * Improved `patch export` command:
    * Added support for custom data types.
    * Added support for maps (thanks to atravita!).
    * Enum fields are now exported as their constant name instead of their numeric value.
 * Added friendly error if an image can't be resized due to changes by Sprites in Detail.
+* Raised min SMAPI version to 3.18.1 to prepare for the upcoming Stardew Valley 1.6.
 
 ## 1.28.4
 Released 09 January 2023 for SMAPI 3.15.0 or later.
