@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -9,7 +8,7 @@ namespace ContentPatcher.Framework.Migrations
 {
     /// <summary>Migrates patches to format version 1.28.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
-    internal class Migration_1_28: BaseMigration
+    internal class Migration_1_28 : BaseMigration
     {
         /*********
         ** Public methods
