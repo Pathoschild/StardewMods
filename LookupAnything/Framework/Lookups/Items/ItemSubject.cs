@@ -342,7 +342,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     const GiftTaste rejectKey = (GiftTaste)(-1);
                     IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes()
                         .GroupBy(entry => entry.Value ?? rejectKey)
-                        .ToDictionary(group => group.Key, group => group.Select(p => p.Key.Name).OrderBy(p => p).ToArray());
+                        .ToDictionary(group => group.Key, group => group.Select(p => p.Key.displayName).OrderBy(p => p).ToArray());
 
                     yield return new MovieTastesField(I18n.Item_MovieTicket_LovesMovie(), tastes, GiftTaste.Love);
                     yield return new MovieTastesField(I18n.Item_MovieTicket_LikesMovie(), tastes, GiftTaste.Like);

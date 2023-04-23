@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed untranslated NPC names in some lookups.
+
 ## 1.39.0
 Released 30 March 2023 for SMAPI 3.14.0 or later.
 
