@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // default to valley
-                ILexToken[] valleyArg = new ILexToken[] { new LexTokenLiteral(LocationContext.Default.Name) };
+                ILexToken[] valleyArg = new ILexToken[] { new LexTokenLiteral(LocationContexts.DefaultId) };
                 ILexToken[]? inputParts = token.InputArgs?.Parts;
                 lexToken = new LexTokenToken(
                     name: token.Name,
