@@ -104,20 +104,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     {
                         if (slot.containsPoint(cursorX, cursorY))
                         {
-                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[slot.myID];
+                            SocialPage.SocialEntry entry = socialPage.SocialEntries[slot.myID];
 
-                            // player slot
-                            if (socialID is long playerID)
+                            switch (entry.Character)
                             {
-                                Farmer player = Game1.getFarmerMaybeOffline(playerID);
-                                return this.BuildSubject(player);
-                            }
+                                case Farmer player:
+                                    return this.BuildSubject(player);
 
-                            // NPC slot
-                            if (socialID is string villagerName)
-                            {
-                                NPC? npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
-                                if (npc != null)
+                                case NPC npc:
                                     return this.BuildSubject(npc);
                             }
                         }
@@ -146,8 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         NPC? target = this.GameHelper
                             .GetAllCharacters()
                             .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
-                            .OrderByDescending(p => p.CanSocialize) // SVE duplicates the Marlon NPC, but only one of them is marked social
-                            .FirstOrDefault();
+                            .MaxBy(p => p.CanSocialize); // SVE duplicates the Marlon NPC, but only one of them is marked social
                         if (target != null)
                             return this.BuildSubject(target);
                     }
