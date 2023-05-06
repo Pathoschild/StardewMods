@@ -265,8 +265,9 @@ namespace ContentPatcher.Framework
                 {
                     HashSet<string> contexts = new()
                     {
-                        LocationContext.Default.Name,
-                        LocationContext.Island.Name
+                        LocationContexts.DefaultId,
+                        LocationContexts.DesertId,
+                        LocationContexts.IslandId
                     };
 
                     foreach (GameLocation location in this.GetLocations())
@@ -611,20 +612,20 @@ namespace ContentPatcher.Framework
         {
             // save is fully loaded, get context from location
             if (Context.IsWorldReady)
-                return location?.GetLocationContext()?.Name ?? LocationContext.Island.Name;
+                return location?.GetLocationContextId() ?? LocationContexts.DefaultId;
 
             // save is partly loaded, get from location if available.
-            // Note: avoid calling GetLocationContext() which may trigger a map load before the
+            // Note: avoid calling GetLocationContextId() which may trigger a map load before the
             // game is fully initialized.
-            if (this.IsSaveBasicInfoLoaded && location?.locationContext != null)
-                return location.locationContext.Name;
+            if (this.IsSaveBasicInfoLoaded && location?.locationContextId != null)
+                return location.locationContextId;
 
             // Else fake it based on the assumption that the player is sleeping in a vanilla
             // location. If the player sleeps in a custom context, the token will only be incorrect
             // for a short period early in the load process.
             return location is IslandLocation or IslandFarmHouse
-                ? LocationContext.Island.Name
-                : LocationContext.Default.Name;
+                ? LocationContexts.IslandId
+                : LocationContexts.DefaultId;
         }
 
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>
