@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Improved error when an `EditData` patch can't convert the data to the asset type.
+
 ## 1.29.1
 Released 31 March 2023 for SMAPI 3.18.1 or later.
 
