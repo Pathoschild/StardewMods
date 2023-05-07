@@ -592,7 +592,7 @@ namespace ContentPatcher.Framework
 
                                 if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString? key))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
-                                if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
+                                if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                                 mapProperties.Add(new EditMapPatchProperty(key, value));
@@ -636,7 +636,7 @@ namespace ContentPatcher.Framework
                                         p++;
                                         if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString? key))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
-                                        if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
+                                        if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
 
                                         tileProperties[key] = value;
