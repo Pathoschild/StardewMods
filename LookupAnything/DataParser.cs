@@ -13,6 +13,8 @@ using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FishPonds;
+using StardewValley.GameData.Locations;
+using StardewValley.ItemTypeDefinitions;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
@@ -146,33 +148,40 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // parse location data
             var locations = new List<FishSpawnLocationData>();
-            foreach ((string locationName, string value) in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
+            var locationsData = Game1.content.Load<Dictionary<string, LocationData>>("Data\\Locations");
+            foreach ((string locationName, LocationData value) in locationsData)
             {
                 if (metadata.IgnoreFishingLocations.Contains(locationName))
                     continue; // ignore event data
 
                 List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
 
-                // get locations
-                string[] locationFields = value.Split('/');
-                for (int s = 4; s <= 7; s++)
+                foreach (var fish in value.Fish)
                 {
-                    string[] seasonFields = locationFields[s].Split(' ');
-                    string season = s switch
-                    {
-                        4 => "spring",
-                        5 => "summer",
-                        6 => "fall",
-                        7 => "winter",
-                        _ => throw new NotSupportedException() // should never happen
-                    };
+                    var fishItem = ItemRegistry.GetData(fish.ItemId);
+                    if (fishItem == null || fishItem.ObjectType != "Fish") { continue; }
+                    if (fishItem.ItemId != fishID) continue;
 
-                    for (int i = 0, last = seasonFields.Length + 1; i + 1 < last; i += 2)
+                    if (fish.Season.HasValue)
                     {
-                        if (!CommonHelper.IsItemId(seasonFields[i]) || seasonFields[i] != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
-                            continue;
-
-                        curLocations.Add(new FishSpawnLocationData(locationName, areaID, new[] { season }));
+                        curLocations.Add(new FishSpawnLocationData(locationName, fish.FishAreaId, new[] { fish.Season.Value.ToString() }));
+                    }
+                    else if (fish.Condition != null)
+                    {
+                        var conditionData = GameStateQuery.Parse(fish.Condition);
+                        var seasonalConditions = conditionData.Where(condition => GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]));
+                        foreach (var condition in seasonalConditions)
+                        {
+                            var seasons = new List<string>();
+                            foreach (string season in new string[] { "spring", "summer", "fall", "winter"})
+                            {
+                                if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    seasons.Add(season);
+                                }
+                            }
+                            curLocations.Add(new FishSpawnLocationData(locationName, fish.FishAreaId, seasons.ToArray()));
+                        }
                     }
                 }
 
@@ -444,18 +453,22 @@ namespace Pathoschild.Stardew.LookupAnything
                 {
                     switch (outputID)
                     {
+                        case "(O)342":
                         case "342":
                             obj.preserve.Value = SObject.PreserveType.Pickle;
                             obj.preservedParentSheetIndex.Value = inputID;
                             break;
+                        case "(O)344":
                         case "344":
                             obj.preserve.Value = SObject.PreserveType.Jelly;
                             obj.preservedParentSheetIndex.Value = inputID;
                             break;
+                        case "(O)348":
                         case "348":
                             obj.preserve.Value = SObject.PreserveType.Wine;
                             obj.preservedParentSheetIndex.Value = inputID;
                             break;
+                        case "(O)350":
                         case "350":
                             obj.preserve.Value = SObject.PreserveType.Juice;
                             obj.preservedParentSheetIndex.Value = inputID;

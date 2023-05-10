@@ -575,7 +575,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (this.GameHelper.MultiFertilizer.IsLoaded)
                 return this.GameHelper.MultiFertilizer.GetAppliedFertilizers(dirt);
 
-            if (CommonHelper.IsItemId(dirt.fertilizer.Value))
+            if (ItemRegistry.QualifyItemId(dirt.fertilizer.Value) != null)
                 return new[] { dirt.fertilizer.Value };
 
             return Enumerable.Empty<string>();
