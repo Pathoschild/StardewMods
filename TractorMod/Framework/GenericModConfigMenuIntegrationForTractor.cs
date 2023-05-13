@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     tooltip: () => I18n.Config_Distance_Tooltip(defaultValue: defaultConfig.Distance, maxRecommendedValue: 15),
                     get: config => config.Distance,
                     set: (config, value) => config.Distance = value,
-                    min: 1,
+                    min: 0,
                     max: 16
                 )
                 .AddNumberField(

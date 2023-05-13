@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now set the distance to zero in Generic Mod Config Menu (i.e. only under the tractor).
 * Improved translations. Thanks to kellykiller0816 (updated German)!
 
 ## 4.16.4
