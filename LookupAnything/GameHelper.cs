@@ -199,7 +199,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<NPC> GetAllCharacters()
         {
             return Utility
-                .getAllCharacters(new List<NPC>())
+                .getAllCharacters()
                 .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
         }
 
