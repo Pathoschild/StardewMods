@@ -60,12 +60,11 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         ** Patches
         ****/
         /// <summary>A method called via Harmony after <see cref="Utility.GetHorseWarpRestrictionsForFarmer"/>.</summary>
-        /// <param name="values">The values returned by the method.</param>
+        /// <param name="__result">The return value to use for the method.</param>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "deliberately get original instructions if method fails")]
-        public static IEnumerable<int> After_GetHorseWarpRestrictionsForFarmer(IEnumerable<int> values)
+        public static void After_GetHorseWarpRestrictionsForFarmer(ref Utility.HorseWarpRestrictions __result)
         {
-            return values
-                .Where(restriction => restriction != 2); // 2: not outdoors
+            __result &= ~Utility.HorseWarpRestrictions.Indoors;
         }
 
         /// <summary>A method called via Harmony after <see cref="Utility.findHorse"/>.</summary>
