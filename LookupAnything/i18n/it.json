@@ -533,7 +533,7 @@
     "npc.friendship.need-bouquet": "ha bisogno di un bouquet per avanzare",
     "npc.friendship.need-points": "prossimo fra {{count}} pti",
     "npc.undiscovered-gift-taste": "{{count}} oggetti non rivelati",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} oggetti non posseduti",
 
 
     /*********
@@ -711,8 +711,8 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Scegli se evidenziare i gusti dei regali degli oggetti che non sono stati rivelati nel profilo del PNG. Se abilitato, i gusti dei regali non rivelati saranno in grassetto e le ricerche mostreranno anche i regali non graditi/odiati.",
     "config.show-all-gift-tastes.name": "Mostra tutti i gusti dei regali",
     "config.show-all-gift-tastes.desc": "Scegli se si desidera mostrare tutti i gusti dei regali per la ricerca di PNG e oggetti; quando è disattivato, vengono mostrati solo i gusti più rilevanti (ad esempio, i regali amati o graditi).",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.show-unowned-gifts.name": "Mostra i gusti dei regali non posseduti",
+    "config.show-unowned-gifts.desc": "Mostra i gusti dei regali per gli oggetti che il giocatore non possiede da qualche parte nel mondo.",
 
     // advanced options
     "config.title.advanced-options": "Opzioni avanzate",
