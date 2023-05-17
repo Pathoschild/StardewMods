@@ -3,7 +3,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -38,7 +37,7 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 // 1.19 adds PatchMode for maps
                 if (patch.PatchMode != null && this.HasAction(patch, PatchType.EditMap))

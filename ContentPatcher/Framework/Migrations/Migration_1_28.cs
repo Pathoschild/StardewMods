@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.28 adds the RemoveDelimited text operation
-            foreach (PatchConfig? patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes)
             {
                 if (this.HasAction(patch, PatchType.EditData))
                 {

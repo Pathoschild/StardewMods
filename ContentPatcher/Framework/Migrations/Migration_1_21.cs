@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -45,7 +44,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // validate patch changes
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 // 1.21 adds AddWarps
                 if (patch.AddWarps.Any())

@@ -192,7 +192,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 tilesheet.Image.Source = Path.GetFileName(tilesheetLocation);
                 Texture2D? imageAsset;
                 {
-                    string error = null;
+                    string? error = null;
                     try
                     {
                         imageAsset = this.LoadAssetImpl<Texture2D>(tilesheetLocation);

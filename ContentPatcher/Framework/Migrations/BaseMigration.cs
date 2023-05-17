@@ -113,18 +113,15 @@ namespace ContentPatcher.Framework.Migrations
 
         /// <summary>Get the action type for a patch.</summary>
         /// <param name="patch">The patch to parse.</param>
-        protected PatchType? GetAction(PatchConfig? patch)
+        protected PatchType? GetAction(PatchConfig patch)
         {
-            if (patch is null)
-                return null;
-
             return this.GetEnum<PatchType>(patch.Action);
         }
 
         /// <summary>Get whether the patch is of the given type.</summary>
         /// <param name="patch">The patch to check.</param>
         /// <param name="type">The expected patch type.</param>
-        protected bool HasAction([NotNullWhen(true)] PatchConfig? patch, PatchType type)
+        protected bool HasAction(PatchConfig patch, PatchType type)
         {
             return this.GetAction(patch) == type;
         }

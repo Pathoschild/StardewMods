@@ -51,14 +51,14 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.7 adds tokens in dynamic token values
-            if (content.DynamicTokens.Any(p => p?.Value?.Contains("{{") == true))
+            if (content.DynamicTokens.Any(p => p.Value?.Contains("{{") == true))
             {
                 error = this.GetNounPhraseError("using tokens in dynamic token values");
                 return false;
             }
 
             // 1.7 adds tokens in field keys and condition values
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 if (patch.Fields.Keys.Any(key => key.Contains("{{")))
                 {

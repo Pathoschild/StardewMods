@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <returns>Returns the patches that were loaded.</returns>
-        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
         {
             bool verbose = this.Monitor.IsVerbose;
 
@@ -84,7 +84,7 @@ namespace ContentPatcher.Framework
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);
 
             // preprocess patches
-            PatchConfig[] patches = this.SplitPatches(rawPatches.WhereNotNull()).ToArray();
+            PatchConfig[] patches = this.SplitPatches(rawPatches).ToArray();
             this.UniquelyNamePatches(patches);
 
             // load patches

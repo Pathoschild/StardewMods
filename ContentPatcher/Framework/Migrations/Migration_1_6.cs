@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -31,7 +30,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // before 1.6, the 'sun' weather included 'wind'
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 if (patch.When.TryGetValue(nameof(ConditionType.Weather), out string? value) && value?.Contains("Sun") == true)
                     patch.When[nameof(ConditionType.Weather)] = $"{value}, Wind";

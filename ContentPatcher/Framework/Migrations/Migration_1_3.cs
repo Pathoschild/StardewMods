@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.ConfigModels;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -31,7 +30,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 // 1.3 adds tokens in FromFile
                 if (patch.FromFile != null && patch.FromFile.Contains("{{"))

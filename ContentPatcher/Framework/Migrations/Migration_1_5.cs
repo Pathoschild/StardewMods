@@ -45,10 +45,10 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig? patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes)
             {
                 // 1.5 adds multiple Target values
-                if (patch?.Target?.Contains(",") == true)
+                if (patch.Target?.Contains(",") == true)
                 {
                     error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
                     return false;

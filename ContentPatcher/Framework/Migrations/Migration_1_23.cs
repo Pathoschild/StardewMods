@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.23 adds support for 'Fields' text operations
-            foreach (PatchConfig? patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes)
             {
                 if (this.HasAction(patch, PatchType.EditData))
                 {

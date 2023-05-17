@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            foreach (PatchConfig? patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes)
             {
                 // 1.16 adds Include
                 if (this.HasAction(patch, PatchType.Include))

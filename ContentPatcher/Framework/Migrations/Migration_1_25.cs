@@ -6,7 +6,6 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -67,7 +66,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // 1.25 adds TargetField
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in content.Changes)
             {
                 if (patch.TargetField.Any())
                 {
