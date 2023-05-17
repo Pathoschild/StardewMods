@@ -27,12 +27,12 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrate(ref patches, out error))
                 return false;
 
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in patches)
             {
                 // 1.8 adds EditMap
                 if (this.HasAction(patch, PatchType.EditMap))

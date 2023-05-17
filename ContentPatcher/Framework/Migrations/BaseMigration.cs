@@ -30,7 +30,14 @@ namespace ContentPatcher.Framework.Migrations
         ** Public methods
         *********/
         /// <inheritdoc />
-        public virtual bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public virtual bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
+        {
+            error = null;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public virtual bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
         {
             error = null;
             return true;

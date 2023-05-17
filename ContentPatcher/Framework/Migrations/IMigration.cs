@@ -24,7 +24,14 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="content">The content pack data to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed.</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error);
+        /// <remarks>This only runs for the main <c>content.json</c>; most migrations should use <see cref="TryMigrate(ref PatchConfig[],out string?)"/> instead, which also runs for <c>Include</c> patches.</remarks>
+        bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error);
+
+        /// <summary>Migrate a list of patches.</summary>
+        /// <param name="patches">The patch data to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed.</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error);
 
         /// <summary>Migrate a lexical token.</summary>
         /// <param name="lexToken">The lexical token to migrate.</param>

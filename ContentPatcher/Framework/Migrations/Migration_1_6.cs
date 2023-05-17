@@ -24,13 +24,13 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrate(ref patches, out error))
                 return false;
 
             // before 1.6, the 'sun' weather included 'wind'
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in patches)
             {
                 if (patch.When.TryGetValue(nameof(ConditionType.Weather), out string? value) && value?.Contains("Sun") == true)
                     patch.When[nameof(ConditionType.Weather)] = $"{value}, Wind";

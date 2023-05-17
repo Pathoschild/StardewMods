@@ -12,7 +12,6 @@ using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -85,7 +84,17 @@ namespace ContentPatcher.Framework
 
             // preprocess patches
             PatchConfig[] patches = this.SplitPatches(rawPatches).ToArray();
+            if (!patches.Any())
+                return Array.Empty<IPatch>();
             this.UniquelyNamePatches(patches);
+
+            // apply patch-list migrations
+            // lower-level migrations are applied in LoadPatch below
+            if (!contentPack.Migrator.TryMigrate(ref patches, out string? error))
+            {
+                this.Monitor.Log($"Ignored {path}: {error}", LogLevel.Warn);
+                return Array.Empty<IPatch>();
+            }
 
             // load patches
             int index = -1;

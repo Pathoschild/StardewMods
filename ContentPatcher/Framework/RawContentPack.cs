@@ -97,8 +97,18 @@ namespace ContentPatcher.Framework
 
             // apply migrations
             IMigration migrator = new AggregateMigration(content.Format, this.GetMigrations(content));
-            if (!migrator.TryMigrate(content, out error))
+            if (!migrator.TryMigrateMainContent(content, out error))
                 return false;
+            if (content.Changes.Any())
+            {
+                PatchConfig[] changes = content.Changes;
+                if (!migrator.TryMigrate(ref changes, out error))
+                    return false;
+
+#pragma warning disable CS0618 // method is only meant to be used here
+                content.SetChanges(changes);
+#pragma warning restore CS0618
+            }
 
             // load content
             this.ContentImpl = content;

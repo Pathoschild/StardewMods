@@ -17,9 +17,9 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 3, 0)) { }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrateMainContent(content, out error))
                 return false;
 
             // 1.3 adds config.json
@@ -29,8 +29,17 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
             }
 
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
+        {
+            if (!base.TryMigrate(ref patches, out error))
+                return false;
+
             // check patch format
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in patches)
             {
                 // 1.3 adds tokens in FromFile
                 if (patch.FromFile != null && patch.FromFile.Contains("{{"))
