@@ -50,7 +50,6 @@
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
     "config.title.general-options": "Opções gerais",
     "config.show-hover-tooltips.name": "Mostrar dicas de ferramentas",
     "config.show-hover-tooltips.desc": "Mostrar o nome do baú em uma dica de ferramenta ao apontar para um baú.",
@@ -66,13 +65,11 @@
     "config.range.none": "Nenhum (não é possível acessar os baús remotamente)",
 
     // general controls
-    // TODO
     "config.title.general-controls": "Controles gerais",
     "config.toggle-ui-key.name": "Alternar interface",
     "config.toggle-ui-key.desc": "As teclas que mostram ou ocultam a interface do baú.",
 
     // controls when chest UI is open
-    // TODO
     "config.title.menu-controls": "Controles com interface do baú aberta",
     "config.edit-chest.name": "Editar baú",
     "config.edit-chest.desc": "As teclas usadas para editar as opções do baú atual.",
@@ -92,7 +89,6 @@
     "config.hold-to-scroll-chests.desc": "As teclas que, quando pressionadas, permitem rolar o menu de baús usando a roda de rolagem do mouse.",
 
     // disable in locations
-    // TODO
     "config.title.disable-in-locations": "Desativar em locais específicos",
     "config.disable-mines.name": "Mina e Caverna da Caveira",
     "config.disable-mines.desc": "Se deve desabilitar o acesso aos baús enquanto estiver nas Minas ou na Caverna da Caveira.",
