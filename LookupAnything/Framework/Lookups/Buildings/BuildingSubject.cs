@@ -175,27 +175,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                         break;
 
                     // mill
-                    case not null when building.buildingType.Value == "Mill":
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), building.GetBuildingChest("Input")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), building.GetBuildingChest("Output")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
-                        break;
-
-                    // silo
-                    case not null when building.buildingType.Value == "Silo":
+                    default:
+                        if (building.buildingType.Value == "Mill")
                         {
-                            // hay summary
-                            Farm farm = Game1.getFarm();
-                            int siloCount = Utility.numSilos();
-                            int hayCount = farm.piecesOfHay.Value;
-                            int maxHay = Math.Max(farm.piecesOfHay.Value, farm.GetHayCapacity());
-                            yield return new GenericField(
-                                I18n.Building_StoredHay(),
-                                siloCount == 1
-                                    ? I18n.Building_StoredHay_SummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
-                                    : I18n.Building_StoredHay_SummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
-                            );
+                            yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), building.GetBuildingChest("Input")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
+                            yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), building.GetBuildingChest("Output")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
                         }
                         break;
+                }
+
+                // hay storage
+                if (building.hayCapacity.Value > 0)
+                {
+                    // hay summary
+                    Farm farm = Game1.getFarm();
+                    int hayCount = farm.piecesOfHay.Value;
+                    int maxHay = Math.Max(farm.piecesOfHay.Value, farm.GetHayCapacity());
+                    yield return new GenericField(
+                        I18n.Building_StoredHay(),
+                        I18n.Building_StoredHay_Summary(hayCount: hayCount, maxHayInLocation: maxHay, maxHayInBuilding: building.hayCapacity.Value)
+                    );
                 }
             }
         }

@@ -192,8 +192,7 @@
     "building.output-processing": "処理中",
     "building.output-ready": "準備完了",
     "building.slimes.summary": "最大{{max}}匹中{{count}}のスライムがいる",
-    "building.stored-hay.summary-one-silo": "{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{siloCount}}基のサイロに{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "4匹まで動物が入り、牛が飼える",
     "building.upgrades.barn.1": "8匹まで動物が入り、動物の妊娠とヤギの飼育ができる",
     "building.upgrades.barn.2": "12匹まで動物が入り、 自動給餌と、豚や羊の飼育ができる",

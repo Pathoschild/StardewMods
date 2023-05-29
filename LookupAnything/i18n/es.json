@@ -181,8 +181,7 @@
     "building.output-processing": "Procesando producto", // translator note: changed 'output' to 'product' as we don't have a word with the same meaning
     "building.output-ready": "Producto listo",
     "building.slimes.summary": "{{count}} de {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} heno (capacidad máxima: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} heno en {{siloCount}} silos (capacidad máxima: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "hasta 4 animales, añade vacas",
     "building.upgrades.barn.1": "hasta 8 animales, añade cabras y permite embarazos",
     "building.upgrades.barn.2": "hasta 12 animales, añade cerdos, ovejas y automatiza los comederos",

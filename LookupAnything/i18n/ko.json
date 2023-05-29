@@ -194,8 +194,7 @@
     "building.output-processing": "처리중",
     "building.output-ready": "생산물 준비 완료",
     "building.slimes.summary": "최대 {{max}}마리까지의 슬라임 중 {{count}}마리 수용 중.",
-    "building.stored-hay.summary-one-silo": "건초 {{hayCount}}개 (최대 건초 수용한도: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}}개의 건초가 {{siloCount}}채의 사일로에 저장됨 (최대 수용량: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "최대 4마리의 동물 수용 가능, 소를 추가",
     "building.upgrades.barn.1": "최대 8마리의 동물 수용 가능, 임신이 가능해지며, 염소를 추가",
     "building.upgrades.barn.2": "최대 12마리의 동물 수용 가능, 먹이통 자동화가 가능해지며, 돼지와 양을 추가",

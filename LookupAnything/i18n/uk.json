@@ -182,8 +182,7 @@
     "building.output-processing": "У черзі",
     "building.output-ready": "Готово",
     "building.slimes.summary": "{{count}} з {{max}} слаймів",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} од. сіна (максимум: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} сіна у {{siloCount}} силосних вежах (максимум: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "До 4-ох тварин, розблоковує : корови",
     "building.upgrades.barn.1": "До 8-ох тварин, розблоковує : кози та вагітність тварин",
     "building.upgrades.barn.2": "До 12-ох тварин, розблоковує : автоматичне подавання корму, свині та вівці",

@@ -182,8 +182,7 @@
     "building.output-processing": "Processamento de saída",
     "building.output-ready": "Processamento pronto",
     "building.slimes.summary": "{{count}} de no máximo {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} feno(s) (capacidade máxima: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} feno em {{siloCount}} silos (capacidade máxima: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "até 4 animais, adiciona vacas",
     "building.upgrades.barn.1": "até 8 animais, adiciona gravidez e bodes",
     "building.upgrades.barn.2": "até 12 animais, adiciona auto alimentação, porcos e ovelhas",
