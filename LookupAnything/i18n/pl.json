@@ -182,8 +182,7 @@
     "building.output-processing": "Wytwarzanie w trakcie",
     "building.output-ready": "Wytwarzanie ukończone",
     "building.slimes.summary": "{{count}} na maks. {{max}} szlamów",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} siana (maks. pojemność: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} siana w {{siloCount}} silosach (maks. pojemność: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "do 4 zwierząt; dodaje krowy",
     "building.upgrades.barn.1": "do 8 zwierząt; dodaje rozmnażanie i kozy",
     "building.upgrades.barn.2": "do 12 zwierząt; dodaje autokarmienie, świnie i owce",

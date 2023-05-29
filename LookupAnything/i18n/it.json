@@ -181,8 +181,7 @@
     "building.output-processing": "Produzione in corso",
     "building.output-ready": "Produzione pronta",
     "building.slimes.summary": "{{count}} di un massimo di {{max}} melme",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} fieno (capacità massima: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} fieno in {{siloCount}} silo (capacità massima: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "fino a 4 animali, aggiunge le mucche",
     "building.upgrades.barn.1": "fino a 8 animali, aggiunge la maternità e le capre",
     "building.upgrades.barn.2": "fino a 12 animali, aggiunge l'auto-nutrimento, i maiali, e le pecore",

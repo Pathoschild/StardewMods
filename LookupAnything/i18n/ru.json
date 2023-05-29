@@ -182,8 +182,7 @@
     "building.output-processing": "В очереди",
     "building.output-ready": "Готово",
     "building.slimes.summary": "{{count}} из {{max}} слизней",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} сена (максимум: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} сена в {{siloCount}} силосных башнях (максимум: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "до 4-ёх животных, разблокируется: коровы.",
     "building.upgrades.barn.1": "до 8-ми животных; разблокируются: козлы и беременность животных.",
     "building.upgrades.barn.2": "до 12-ти животных; разблокируются: система подачи корма, свиньи и овцы.",

@@ -182,8 +182,7 @@
     "building.output-processing": "กำลังทำผลผลิต",
     "building.output-ready": "ผลผลิตพร้อมใช้งาน",
     "building.slimes.summary": "{{count}} ตัว จากจำนวนสูงสุด {{max}} ตัว",
-    "building.stored-hay.summary-one-silo": "มี {{hayCount}} ฟาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
-    "building.stored-hay.summary-multiple-silos": "มี {{hayCount}} ฟางใน {{siloCount}} ยุ้งฉาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "มีสัตว์เลี้ยงสูงสุด 4 ตัว, สามารถเลี้ยงวัวได้",
     "building.upgrades.barn.1": "มีสัตว์เลี้ยงสูงสุด 8 ตัว, สัตว์เลี้ยงสามารถสืบพันธุ์ได้ และสามารถเลี้ยงแพะได้",
     "building.upgrades.barn.2": "มีสัตว์เลี้ยงสูงสุด 12 ตัว, ให้อาหารอัตโนมัติ, สามารถเลี้ยงหมูและแกะได้",

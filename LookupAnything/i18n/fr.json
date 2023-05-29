@@ -193,8 +193,7 @@
     "building.output-processing": "Production en cours",
     "building.output-ready": "Production prête",
     "building.slimes.summary": "{{count}} sur {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} foin (capacité: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} foin dans {{siloCount}} silos (capacité: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "jusqu'à 4 animaux, permet les vaches",
     "building.upgrades.barn.1": "jusqu'à 8 animaux, permet les grossesses et les chèvres",
     "building.upgrades.barn.2": "jusqu'à 12 animaux, ajoute le nourrissage automatique, permet les cochons et les moutons",

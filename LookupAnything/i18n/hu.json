@@ -182,8 +182,7 @@
     "building.output-processing": "Termék feldolgozás alatt",
     "building.output-ready": "Termék kész",
     "building.slimes.summary": "{{count}} / {{max}} ragacs",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} széna (maximum kapacitás: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} / {{siloCount}} széna a silókban (maximum kapacitás: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "maximum 4 állat fér el, elérhetőek lesznek a tehenek",
     "building.upgrades.barn.1": "maximum 8 állat fér el, elérhetőek lesznek a kecskék és a vemhesség",
     "building.upgrades.barn.2": "maximum 12 állat fér el, elérhetőek lesznek a disznók, juhok és az automatikus etetőrendszer",

@@ -182,8 +182,7 @@
     "building.output-processing": "Ürün işleniyor",
     "building.output-ready": "Ürün hazır",
     "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} saman (kapasite: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{siloCount}} siloda {{hayCount}} saman var (kapasite: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "4 hayvana kadar, inekler eklenebilir",
     "building.upgrades.barn.1": "8 hayvana kadar, hamilelik ve keçiler eklenebilir",
     "building.upgrades.barn.2": "12 hayvana kadar, oto yemleme, domuzlar, ve koyunlar eklenebilir",
