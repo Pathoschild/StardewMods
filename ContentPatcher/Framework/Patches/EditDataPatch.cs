@@ -194,6 +194,22 @@ namespace ContentPatcher.Framework.Patches
                     object key = parentEditor.ParseKey(fieldName.Value!);
                     object? data = parentEditor.GetEntry(key);
 
+                    if (data is null)
+                    {
+                        // if we're targeting a null list or dictionary, create it
+                        Type? type = parentEditor.GetEntryType(key);
+                        if (type?.IsGenericType is true)
+                        {
+                            Type genericType = type.GetGenericTypeDefinition();
+                            if (genericType == typeof(List<>) || genericType == typeof(Dictionary<,>))
+                            {
+                                object newData = Activator.CreateInstance(type!)!;
+                                parentEditor.SetEntry(key, newData);
+                                data = parentEditor.GetEntry(key);
+                            }
+                        }
+                    }
+
                     if (!this.EditorFactory.TryGetEditorFor(data, out editor))
                     {
                         this.WarnForPatch(this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key)));

@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Using `TargetField` to add an entry to a null list/dictionary field now auto-creates the field.
 * Improved errors when an `EditData` patch can't convert the data to the asset type or a target field doesn't exist.
 * Fixed setting map/tile properties to null no longer removing them.
 
