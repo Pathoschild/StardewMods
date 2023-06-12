@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Improved error when an `EditData` patch can't convert the data to the asset type.
+* Improved errors when an `EditData` patch can't convert the data to the asset type or a target field doesn't exist.
 * Fixed setting map/tile properties to null no longer removing them.
 
 ## Upcoming release

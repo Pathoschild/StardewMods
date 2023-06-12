@@ -610,12 +610,15 @@ namespace ContentPatcher.Framework.Patches
 
 
         /// <summary>If an editor can't be constructed for a given data structure, get a human-readable error indicating why.</summary>
-        /// <param name="nounPhrase">A noun phase </param>
+        /// <param name="nounPhrase">A noun phase which describes the field being accessed.</param>
         /// <param name="data">The data for which an editor couldn't be constructed.</param>
         /// <param name="entryExists">Whether the entry exists in the asset.</param>
         private string GetEditorNotCompatibleError(string nounPhrase, object? data, bool entryExists)
         {
-            if (!entryExists || data is null)
+            if (!entryExists)
+                return $"{nounPhrase} doesn't match an existing target";
+
+            if (data is null)
                 return $"{nounPhrase} is null and can't be targeted for edits";
 
             Type type = data.GetType();
