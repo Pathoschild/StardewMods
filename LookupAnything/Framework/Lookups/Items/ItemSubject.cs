@@ -61,8 +61,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         private readonly bool HighlightUnrevealedGiftTastes;
 
-        /// <summary>Whether to show all NPC gift tastes.</summary>
-        private readonly bool ShowAllGiftTastes;
+        /// <summary>Which gift taste levels to show.</summary>
+        private readonly ModGiftTasteConfig ShowGiftTastes;
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
-        /// <param name="showAllGiftTastes">Whether to show all NPC gift tastes.</param>
+        /// <param name="showGiftTastes">Which gift taste levels to show.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
@@ -87,13 +87,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
         /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
+        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
             : base(gameHelper)
         {
             this.Codex = codex;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
-            this.ShowAllGiftTastes = showAllGiftTastes;
+            this.ShowGiftTastes = showGiftTastes;
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop ?? fromDirt?.crop;
@@ -213,14 +213,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 if (!isMovieTicket)
                 {
                     IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item);
-                    yield return new ItemGiftTastesField(I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    yield return new ItemGiftTastesField(I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes || this.ShowAllGiftTastes)
-                    {
+                    if (this.ShowGiftTastes.Loved)
+                        yield return new ItemGiftTastesField(I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    if (this.ShowGiftTastes.Liked)
+                        yield return new ItemGiftTastesField(I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    if (this.ShowGiftTastes.Neutral)
                         yield return new ItemGiftTastesField(I18n.Item_NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    if (this.ShowGiftTastes.Disliked)
                         yield return new ItemGiftTastesField(I18n.Item_DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    if (this.ShowGiftTastes.Hated)
                         yield return new ItemGiftTastesField(I18n.Item_HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    }
                 }
             }
 

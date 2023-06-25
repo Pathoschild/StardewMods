@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added options for which gift tastes to show, like 'show neutral gifts'. These replace the 'show all gift tastes' option.
+* Enabling the 'progression mode' or 'show unrevealed gift tastes' option no longer overrides the 'show [all] gift tastes' option.
 * Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Fixed untranslated NPC names in some lookups.
 * Improved translations. Thanks to BenG-07 (updated German!) and MakinDay (updated Italian!).

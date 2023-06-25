@@ -710,12 +710,28 @@
     "config.title.main-options": "Ana seçenekler",
     "config.progression-mode.name": "İlerleme modu",
     "config.progression-mode.desc": "Oyunda keşfedene kadar bazı içeriklerin (örn. hediye zevkleri ve bulmaca çözümleri) gizlenip gizlenmeyeceği.",
+    "config.force-full-screen.name": "Tam ekranı zorla",
+    "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Açıklanmayan hediye zevklerini vurgulayın",
-    "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak ve aramalarda ayrıca beğenilmeyen/nefret edilen hediyeler de gösterilecek.",
-    "config.show-all-gift-tastes.name": "Bütün hediye zevklerini göster",
-    "config.show-all-gift-tastes.desc": "NPC ve item aramaları için tüm hediye zevklerinin gösterilip gösterilmeyeceği; devre dışı bırakıldığında, yalnızca en alakalı lezzetler (örneğin sevilen veya sevilen hediyeler) gösterilir.",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak.",
 
     // advanced options
     "config.title.advanced-options": "Gelişmiş Seçenekler",
@@ -723,8 +739,6 @@
     "config.tile-lookups.desc": "Harita karolarının arama hedefleri olarak dahil edilip edilmeyeceği.",
     "config.data-mining-fields.name": "Veri madenciliği alanlarını göster",
     "config.data-mining-fields.desc": "Veri madencileri için yararlı olan ham verilerin gösterilip gösterilmeyeceği (arama sonuçlarının altında ayrı alanlar olarak). Bu, çoğu oyuncu için tasarlanmayan gelişmiş bir özelliktir.",
-    "config.force-full-screen.name": "Tam ekranı zorla",
-    "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
     "config.target-redirection.name": "Hedef yönlendirme",
     "config.target-redirection.desc": "Bazı durumlarda oyun, bir başkasını temsil etmek için geçici bir varlık yaratır. Örneğin, madendeki Abigail aslında 'AbigailMine' adında geçici bir NPC'dir, bu yüzden ona orada bakmak Abigail'in gerçek bilgilerini göstermez. Bu seçenek etkinleştirildiğinde, Lookup Anything, bunun yerine orijinal Abigail'i arayacaktır.",
     "config.scroll-amount.name": "Kaydırma miktarı",

@@ -710,12 +710,28 @@
     "config.title.main-options": "Opcje główne",
     "config.progression-mode.name": "Tryb progresji",
     "config.progression-mode.desc": "Czy ukryć niektóre treści (np. upodobania prezentowe i rozwiązania zagadek), dopóki nie odkryjesz ich w grze.",
+    "config.force-full-screen.name": "Wymuś pełny ekran",
+    "config.force-full-screen.desc": "Czy interfejs podglądu powinien być zawsze pełnoekranowy, a nie wyśrodkowany w oknie. Jest to przydatne głównie podczas przeglądania pól data miningu.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Wyróżnij nieodkryte upodobania",
-    "config.highlight-unrevealed-gift-tastes.desc": "Czy wyróżniać przedmioty w upodobaniach prezentowych, które nie zostały odkryte w profilu NPC. Gdy ta opcja jest włączona, nieodkryte upodobania prezentowe będą pogrubione, a w podglądach pojawią się również nielubiane/znienawidzone prezenty.",
-    "config.show-all-gift-tastes.name": "Pokaż wszystkie upodobania",
-    "config.show-all-gift-tastes.desc": "Czy pokazywać wszystkie upodobania prezentowe dla podglądów NPC i przedmiotów. Gdy ta opcja jest wyłączona, pokazywane są tylko najistotniejsze upodobania (np. ukochane lub lubiane prezenty).",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Czy wyróżniać przedmioty w upodobaniach prezentowych, które nie zostały odkryte w profilu NPC. Gdy ta opcja jest włączona, nieodkryte upodobania prezentowe będą pogrubione.",
 
     // advanced options
     "config.title.advanced-options": "Opcje zaawansowane",
@@ -723,8 +739,6 @@
     "config.tile-lookups.desc": "Czy uwzględnić kafelki mapy jako możliwe cele podglądu.",
     "config.data-mining-fields.name": "Pokaż pola data miningu",
     "config.data-mining-fields.desc": "Czy pokazywać surowe dane przydatne dla data minerów (jako oddzielne pola na dole wyników podglądu). Jest to zaawansowana funkcja, która nie jest przeznaczona dla większości graczy.",
-    "config.force-full-screen.name": "Wymuś pełny ekran",
-    "config.force-full-screen.desc": "Czy interfejs podglądu powinien być zawsze pełnoekranowy, a nie wyśrodkowany w oknie. Jest to przydatne głównie podczas przeglądania pól data miningu.",
     "config.target-redirection.name": "Przekieruj docelowo",
     "config.target-redirection.desc": "W niektórych przypadkach gra tworzy tymczasową postać, która reprezentuje inną. Na przykład, Abigail w kopalni jest w rzeczywistości tymczasowym NPC o nazwie 'AbigailMine', więc jej podgląd tam nie pokaże prawdziwych informacji o Abigail. Gdy ta opcja jest włączona, Lookup Anything wyszuka zamiast tego oryginalną Abigail.",
     "config.scroll-amount.name": "Szybkość przewijania",

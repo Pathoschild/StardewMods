@@ -710,12 +710,28 @@
     "config.title.main-options": "ตัวเลือกหลัก",
     "config.progression-mode.name": "โหมดความก้าวหน้า",
     "config.progression-mode.desc": "ซ่อนเนื้อหาบางส่วน (เช่น รสนิยมของขวัญและการแก้ปัญหาปริศนา) จนกว่าคุณจะค้นพบในเกมหรือไม่",
+    "config.force-full-screen.name": "บังคับเต็มหน้าจอ",
+    "config.force-full-screen.desc": "เมนูควรเป็นแบบเต็มหน้าจอเสมอ แทนที่จะอยู่กึ่งกลางหน้าต่าง สิ่งนี้มีประโยชน์อย่างยิ่งเมื่อดูฟิลด์การขุดข้อมูล",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "เหตุการณ์ที่สำคัญรสนิยมของขวัญที่ยังไม่ได้เปิดเผย",
-    "config.highlight-unrevealed-gift-tastes.desc": "จะเน้นรสนิยมของขวัญของไอเท็มที่ยังไม่ได้เปิดเผยในโปรไฟล์ NPC หรือไม่ เมื่อเปิดใช้งาน รสนิยมของขวัญที่ยังไม่ได้เปิดเผยจะเป็นตัวหนา และการค้นหาจะแสดงของขวัญที่ไม่ชอบ/เกลียด",
-    "config.show-all-gift-tastes.name": "แสดงรสนิยมของขวัญทั้งหมด",
-    "config.show-all-gift-tastes.desc": "จะแสดงรสนิยมของขวัญทั้งหมดสำหรับ NPC และการค้นหารายการหรือไม่ เมื่อปิดใช้งาน จะแสดงเฉพาะรสนิยมที่เกี่ยวข้องมากที่สุด (เช่น ของขวัญที่รักหรือชอบ)",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "จะเน้นรสนิยมของขวัญของไอเท็มที่ยังไม่ได้เปิดเผยในโปรไฟล์ NPC หรือไม่ เมื่อเปิดใช้งาน รสนิยมของขวัญที่ยังไม่ได้เปิดเผยจะเป็นตัวหนา",
 
     // advanced options
     "config.title.advanced-options": "ตัวเลือกขั้นสูง",
@@ -723,8 +739,6 @@
     "config.tile-lookups.desc": "จะรวมไทล์แผนที่เป็นเป้าหมายการค้นหาหรือไม่",
     "config.data-mining-fields.name": "แสดงเขตข้อมูลการทำเหมืองข้อมูล",
     "config.data-mining-fields.desc": "จะแสดงข้อมูลดิบที่เป็นประโยชน์สำหรับผู้ขุดข้อมูลหรือไม่ (เป็นฟิลด์แยกต่างหากที่ด้านล่างของผลลัพธ์การค้นหา) นี่เป็นคุณสมบัติขั้นสูงที่ไม่ได้มีไว้สำหรับผู้เล่นส่วนใหญ่",
-    "config.force-full-screen.name": "บังคับเต็มหน้าจอ",
-    "config.force-full-screen.desc": "เมนูควรเป็นแบบเต็มหน้าจอเสมอ แทนที่จะอยู่กึ่งกลางหน้าต่าง สิ่งนี้มีประโยชน์อย่างยิ่งเมื่อดูฟิลด์การขุดข้อมูล",
     "config.target-redirection.name": "เป้าหมายการเปลี่ยนเส้นทาง",
     "config.target-redirection.desc": "ในบางกรณี เกมจะสร้างเอนทิตีชั่วคราวเพื่อเป็นตัวแทนของอีกตัวหนึ่ง ตัวอย่างเช่น Abigail ในเหมืองเป็น NPC ชั่วคราวที่ชื่อ 'AbigailMine' ดังนั้นการมองหาเธอที่นั่นจะไม่ใช่การแสดงข้อมูลที่แท้จริงของ Abigail เมื่อเปิดใช้งานตัวเลือกนี้ Lookup Anything จะค้นหา Abigail เดิมแทน",
     "config.scroll-amount.name": "เลื่อนจำนวน",

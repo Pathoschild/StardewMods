@@ -45,8 +45,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         private readonly bool HighlightUnrevealedGiftTastes;
 
-        /// <summary>Whether to show all NPC gift tastes.</summary>
-        private readonly bool ShowAllGiftTastes;
+        /// <summary>Which gift taste levels to show.</summary>
+        private readonly ModGiftTasteConfig ShowGiftTastes;
 
         /// <summary>Whether to look up the original entity when the game spawns a temporary copy.</summary>
         private readonly bool EnableTargetRedirection;
@@ -76,18 +76,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
-        /// <param name="showAllGiftTastes">Whether to show all NPC gift tastes.</param>
+        /// <param name="showGiftTastes">Which gift taste levels to show.</param>
         /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
         /// <param name="showUnownedGifts">Whether to show gift tastes that the player doesn't own somewhere in the world.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
+        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
             : base(gameHelper)
         {
             this.Codex = codex;
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
-            this.ShowAllGiftTastes = showAllGiftTastes;
+            this.ShowGiftTastes = showGiftTastes;
             this.EnableTargetRedirection = enableTargetRedirection;
             this.ShowUnownedGifts = showUnownedGifts;
 
@@ -384,14 +384,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc);
                     IDictionary<string, bool> ownedItems = CharacterGiftTastesField.GetOwnedItemsCache(this.GameHelper);
 
-                    yield return this.GetGiftTasteField(I18n.Npc_LovesGifts(), giftTastes, ownedItems, GiftTaste.Love);
-                    yield return this.GetGiftTasteField(I18n.Npc_LikesGifts(), giftTastes, ownedItems, GiftTaste.Like);
-                    yield return this.GetGiftTasteField(I18n.Npc_NeutralGifts(), giftTastes, ownedItems, GiftTaste.Neutral);
-                    if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes || this.ShowAllGiftTastes)
-                    {
+                    if (this.ShowGiftTastes.Loved)
+                        yield return this.GetGiftTasteField(I18n.Npc_LovesGifts(), giftTastes, ownedItems, GiftTaste.Love);
+                    if (this.ShowGiftTastes.Liked)
+                        yield return this.GetGiftTasteField(I18n.Npc_LikesGifts(), giftTastes, ownedItems, GiftTaste.Like);
+                    if (this.ShowGiftTastes.Neutral)
+                        yield return this.GetGiftTasteField(I18n.Npc_NeutralGifts(), giftTastes, ownedItems, GiftTaste.Neutral);
+                    if (this.ShowGiftTastes.Disliked)
                         yield return this.GetGiftTasteField(I18n.Npc_DislikesGifts(), giftTastes, ownedItems, GiftTaste.Dislike);
+                    if (this.ShowGiftTastes.Hated)
                         yield return this.GetGiftTasteField(I18n.Npc_HatesGifts(), giftTastes, ownedItems, GiftTaste.Hate);
-                    }
                 }
             }
         }

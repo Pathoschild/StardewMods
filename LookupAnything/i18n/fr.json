@@ -707,12 +707,28 @@
     "config.title.main-options": "Options principales",
     "config.progression-mode.name": "Mode de progression",
     "config.progression-mode.desc": "Possibilité de cacher certains contenus (par exemple, les goûts des cadeaux et les solutions des énigmes) jusqu'à ce que vous les découvriez dans le jeu.",
+    "config.force-full-screen.name": "Forcer le plein écran",
+    "config.force-full-screen.desc": "Si le menu doit toujours être en plein écran, au lieu d'être centré dans la fenêtre. Ceci est principalement utile lors de l'affichage des champs d'exploration de données.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Mettre en évidence les goûts des cadeaux non révélés",
-    "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras et les recherches montreront également les cadeaux pas aimé ou détesté.",
-    "config.show-all-gift-tastes.name": "Afficher tous les goûts en matière de cadeaux",
-    "config.show-all-gift-tastes.desc": "Afficher ou non tous les goûts en matière de cadeaux pour les recherches de PNJ et d'objets ; si cette option est désactivée, seuls les goûts les plus pertinents (par exemple, les cadeaux aimés ou appréciés) sont affichés.",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras.",
 
     // advanced options
     "config.title.advanced-options": "Options avancées",
@@ -720,8 +736,6 @@
     "config.tile-lookups.desc": "Si l'on veut inclure les tuiles de la carte comme cibles de recherche.",
     "config.data-mining-fields.name": "Afficher les champs d'exploration de données",
     "config.data-mining-fields.desc": "Afficher ou non les données brutes utiles aux chercheurs de données (sous forme de champs séparés au bas des résultats de la recherche). Il s'agit d'une fonctionnalité avancée qui n'est pas destinée à la plupart des joueurs.",
-    "config.force-full-screen.name": "Forcer le plein écran",
-    "config.force-full-screen.desc": "Si le menu doit toujours être en plein écran, au lieu d'être centré dans la fenêtre. Ceci est principalement utile lors de l'affichage des champs d'exploration de données.",
     "config.target-redirection.name": "Redirection de la cible",
     "config.target-redirection.desc": "Dans certains cas, le jeu crée une entité temporaire pour en représenter une autre. Par exemple, Abigail dans les mines est en fait un PNJ temporaire avec le nom 'AbigailMine', donc la rechercher là-bas ne montrera pas les vraies informations d'Abigail. Si cette option est activée, Lookup Anything recherchera la vraie Abigail à la place.",
     "config.scroll-amount.name": "Quantité de défilement",
