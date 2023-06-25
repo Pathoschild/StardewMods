@@ -19,13 +19,13 @@
     "config.eat-or-drink.tooltip": "Wie schnell Sie essen und trinken. Standardwert {{defaultValue}}x.",
 
     "config.fish.name": "Fischen",
-    "config.fish.tooltip": "Wie schnell Sie beim Angeln werfen und spulen (hat keinen Einfluss auf das Minispiel). Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.fish.tooltip": "Wie schnell Sie beim Angeln werfen und spulen (hat keinen Einfluss auf das Minispiel). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     "config.harvest.name": "Ernten",
     "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
 
-    "config.horse-flute.name": "Play Horse Flute", // TODO
-    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
+    "config.horse-flute.name": "Pferde-Flöte spielen",
+    "config.horse-flute.tooltip": "Wie schnell Sie die Pferde-Flöte spielen. Standardwert {{defaultValue}}x.",
 
     "config.milk.name": "Melken",
     "config.milk.tooltip": "Wie schnell Sie den Milcheimer verwenden. Standardwert {{defaultValue}}x.",
@@ -36,14 +36,14 @@
     "config.shear.name": "Scheren",
     "config.shear.tooltip": "Wie schnell Sie die Schere verwenden. Standardwert {{defaultValue}}x.",
 
-    "config.slingshot.name": "Use slingshot", // TODO
-    "config.slingshot.tooltip": "How fast you draw when using slingshots. Default {{defaultValue}}x, suggested {{suggestedValue}}x.", // TODO
+    "config.slingshot.name": "Schleuder verwenden",
+    "config.slingshot.tooltip": "Wie schnell Sie die Schleuder aufziehen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     "config.tool.name": "Werkzeug schwingen",
-    "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     "config.weapon.name": "Waffen schwingen",
-    "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     /****
     ** 'World Animation Speeds' section
@@ -60,7 +60,7 @@
     "config.bus.tooltip": "Wie schnell Pam ihren Bus in die und aus der Wüste fährt. Standardwert {{defaultValue}}x.",
 
     "config.tree-fall.name": "Baum fällt",
-    "config.tree-fall.tooltip": "Wie schnell Bäume fallen, nachdem Sie sie gefällt haben. Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.tree-fall.tooltip": "Wie schnell Bäume fallen, nachdem Sie sie gefällt haben. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     /****
     ** 'UI Animation Speeds' section

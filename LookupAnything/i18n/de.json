@@ -448,24 +448,22 @@
     ** Item > melee weapon lookups
     *********/
     // labels
-    // TODO
-    "item.melee-weapon.accuracy": "Accuracy",
-    "item.melee-weapon.critical-chance": "Critical chance",
-    "item.melee-weapon.critical-damage": "Critical damage",
-    "item.melee-weapon.damage": "Damage",
-    "item.melee-weapon.defense": "Defense",
-    "item.melee-weapon.knockback": "Knockback",
-    "item.melee-weapon.reach": "Reach",
-    "item.melee-weapon.speed": "Attack speed",
+    "item.melee-weapon.accuracy": "Genauigkeit",
+    "item.melee-weapon.critical-chance": "Kritische Trefferchance",
+    "item.melee-weapon.critical-damage": "Kritischer Schaden",
+    "item.melee-weapon.damage": "Schaden",
+    "item.melee-weapon.defense": "Verteidigung",
+    "item.melee-weapon.knockback": "Rückstoß",
+    "item.melee-weapon.reach": "Reichweite",
+    "item.melee-weapon.speed": "Angriffsgeschwindigkeit",
 
     // values
-    // TODO
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
-    "item.melee-weapon.defense.label": "{{amount}} while equipped",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
-    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+    "item.melee-weapon.critical-damage.label": "{{multiplier}}-facher normaler Schaden (vor Spielerboni)",
+    "item.melee-weapon.defense.label": "{{amount}} beim Tragen",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}}-fache normale Distanz)",
+    "item.melee-weapon.reach.label": "{{amount}} Pixel",
+    "item.melee-weapon.speed.shown-vs-actual": "angezeigt: {{shownSpeed}}{{lineBreak}}tatsächlich: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} Millisekunden pro Schwingphase, vor Spielergeschwindigkeitsboni)",
 
 
     /*********
@@ -536,7 +534,7 @@
     "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
     "npc.friendship.need-points": "nächstes in {{count}} Punkten",
     "npc.undiscovered-gift-taste": "{{count}} unaufgedeckte Gegenstände",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
 
 
     /*********
@@ -711,10 +709,10 @@
     "config.progression-mode.desc": "Ob bestimmte Inhalte (z. B. Geschenkvorlieben und Rätsellösungen) versteckt werden sollen, bis man sie im Spiel entdeckt hat.",
     "config.highlight-unrevealed-gift-tastes.name": "Hebe unentdeckte Geschenkvorlieben hervor",
     "config.highlight-unrevealed-gift-tastes.desc": "Hervorhebung von Gegenstandsgeschenken, die im NSC-Profil noch nicht offenbart wurden. Wenn diese Option aktiviert ist, werden nicht enthüllte Geschenkvorlieben fett dargestellt und es werden auch ungeliebte/gehasste Geschenke angezeigt.",
-    "config.show-all-gift-tastes.name": "Zeige alle Geschenk Vorlieben",
+    "config.show-all-gift-tastes.name": "Zeige alle Geschenkvorlieben",
     "config.show-all-gift-tastes.desc": "Ob alle Geschenkvorlieben bei der Suche nach NSCs und Gegenständen angezeigt werden sollen; wenn deaktiviert, werden nur die relevantesten Vorlieben (z.B. geliebte oder beliebte Geschenke) angezeigt.",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.show-unowned-gifts.name": "Nicht besessene Geschenkvorlieben anzeigen",
+    "config.show-unowned-gifts.desc": "Ob die Geschenkvorlieben für Gegenstände angezeigt werden sollen, die der Spieler nirgendwo in der Welt besitzt.",
 
     // advanced options
     "config.title.advanced-options": "Erweiterte Optionen",
