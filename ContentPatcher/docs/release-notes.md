@@ -14,8 +14,6 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Improved errors when an `EditData` patch can't convert the data to the asset type or a target field doesn't exist.
 * Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Fixed setting map/tile properties to null no longer removing them.
-
-## Upcoming release
 * Fixed some migrations not applied to files loaded via `Action: Include`.
 
 ## 1.29.1

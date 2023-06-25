@@ -498,6 +498,31 @@ namespace Pathoschild.Stardew.Common
         /****
         ** File handling
         ****/
+        /// <summary>Remove one or more obsolete files from the mod folder, if they exist.</summary>
+        /// <param name="mod">The mod for which to delete files.</param>
+        /// <param name="relativePaths">The relative file path within the mod's folder.</param>
+        public static void RemoveObsoleteFiles(IMod mod, params string[] relativePaths)
+        {
+            string basePath = mod.Helper.DirectoryPath;
+
+            foreach (string relativePath in relativePaths)
+            {
+                string fullPath = Path.Combine(basePath, relativePath);
+                if (File.Exists(fullPath))
+                {
+                    try
+                    {
+                        File.Delete(fullPath);
+                        mod.Monitor.Log($"Removed obsolete file '{relativePath}'.");
+                    }
+                    catch (Exception ex)
+                    {
+                        mod.Monitor.Log($"Failed deleting obsolete file '{relativePath}':\n{ex}");
+                    }
+                }
+            }
+        }
+
         /// <summary>Get the MD5 hash for a file.</summary>
         /// <param name="absolutePath">The absolute file path.</param>
         public static string GetFileHash(string absolutePath)

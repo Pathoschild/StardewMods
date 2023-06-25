@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.NoclipMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -29,6 +30,8 @@ namespace Pathoschild.Stardew.NoclipMode
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "NoclipMode.pdb"); // removed in 1.3.8
+
             // init
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();

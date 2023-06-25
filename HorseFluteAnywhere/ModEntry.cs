@@ -43,6 +43,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
+            CommonHelper.RemoveObsoleteFiles(this, "HorseFluteAnywhere.pdb"); // removed in 1.1.19
 
             // load config
             this.UpdateConfig();

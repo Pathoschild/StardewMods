@@ -12,6 +12,7 @@ using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Validators;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -101,6 +102,8 @@ namespace ContentPatcher
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "ContentPatcher.pdb"); // removed in 1.29.2
+
             this.Config = helper.ReadConfig<ModConfig>();
 
             this.ScreenManager = new(this.CreateScreenManager);

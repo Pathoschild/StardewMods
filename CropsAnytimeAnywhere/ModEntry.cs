@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Patches;
@@ -24,6 +25,8 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "CropsAnytimeAnywhere.pdb"); // removed in 1.4.7
+
             // read config
             this.Config = new LocationConfigManager(
                 helper.ReadConfig<ModConfig>()

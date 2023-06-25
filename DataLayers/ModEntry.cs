@@ -49,6 +49,8 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "DataLayers.pdb"); // removed in 1.15.8
+
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
 

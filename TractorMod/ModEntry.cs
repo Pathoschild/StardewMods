@@ -86,6 +86,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "TractorMod.pdb"); // removed in 4.16.5
+
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
 

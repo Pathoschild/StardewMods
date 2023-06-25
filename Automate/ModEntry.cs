@@ -63,6 +63,7 @@ namespace Pathoschild.Stardew.Automate
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
+            CommonHelper.RemoveObsoleteFiles(this, "Automate.pdb"); // removed in 1.28.4
 
             // read data file
             const string dataPath = "assets/data.json";
