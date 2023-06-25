@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -32,9 +31,9 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 21, 0)) { }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrateMainContent(content, out error))
                 return false;
 
             // 1.21 adds CustomLocations
@@ -44,8 +43,17 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
             }
 
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
+        {
+            if (!base.TryMigrate(ref patches, out error))
+                return false;
+
             // validate patch changes
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in patches)
             {
                 // 1.21 adds AddWarps
                 if (patch.AddWarps.Any())

@@ -533,7 +533,7 @@
     "npc.friendship.need-bouquet": "ha bisogno di un bouquet per avanzare",
     "npc.friendship.need-points": "prossimo fra {{count}} pti",
     "npc.undiscovered-gift-taste": "{{count}} oggetti non rivelati",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} oggetti non posseduti",
 
 
     /*********
@@ -707,12 +707,28 @@
     "config.title.main-options": "Opzioni principali",
     "config.progression-mode.name": "Modalità progressione",
     "config.progression-mode.desc": "Scegli se nascondere alcuni contenuti (ad esempio, i gusti dei regali e le soluzioni degli enigmi) finché non li si scopre nel gioco.",
+    "config.force-full-screen.name": "Forza schermo intero",
+    "config.force-full-screen.desc": "Scegli se il menu deve essere sempre a tutto schermo, invece che centrato nella finestra. Questa opzione è utile soprattutto quando si visualizzano i campi di data mining.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Mostra i gusti dei regali non posseduti",
+    "config.show-unowned-gifts.desc": "Mostra i gusti dei regali per gli oggetti che il giocatore non possiede da qualche parte nel mondo.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Evidenzia i gusti dei regali non rivelati",
-    "config.highlight-unrevealed-gift-tastes.desc": "Scegli se evidenziare i gusti dei regali degli oggetti che non sono stati rivelati nel profilo del PNG. Se abilitato, i gusti dei regali non rivelati saranno in grassetto e le ricerche mostreranno anche i regali non graditi/odiati.",
-    "config.show-all-gift-tastes.name": "Mostra tutti i gusti dei regali",
-    "config.show-all-gift-tastes.desc": "Scegli se si desidera mostrare tutti i gusti dei regali per la ricerca di PNG e oggetti; quando è disattivato, vengono mostrati solo i gusti più rilevanti (ad esempio, i regali amati o graditi).",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Scegli se evidenziare i gusti dei regali degli oggetti che non sono stati rivelati nel profilo del PNG. Se abilitato, i gusti dei regali non rivelati saranno in grassetto.",
 
     // advanced options
     "config.title.advanced-options": "Opzioni avanzate",
@@ -720,8 +736,6 @@
     "config.tile-lookups.desc": "Se includere o meno le piastrelle della mappa come target di ricerca.",
     "config.data-mining-fields.name": "Mostra i campi di data mining",
     "config.data-mining-fields.desc": "Scegli se mostrare i dati grezzi utili per i data miner (come campi separati in fondo ai risultati delle ricerche). Si tratta di una funzione avanzata non destinata alla maggior parte dei giocatori.",
-    "config.force-full-screen.name": "Forza schermo intero",
-    "config.force-full-screen.desc": "Scegli se il menu deve essere sempre a tutto schermo, invece che centrato nella finestra. Questa opzione è utile soprattutto quando si visualizzano i campi di data mining.",
     "config.target-redirection.name": "Reindirizzamento del target",
     "config.target-redirection.desc": "In alcuni casi il gioco genera un'entità temporanea per rappresentarne un'altra. Ad esempio, Abigail nelle miniere è in realtà un PNG temporaneo con il nome di 'AbigailMine', quindi cercarla lì non mostrerà le informazioni reali di Abigail. Con questa opzione attivata, Lookup Anything cercherà invece l'Abigail originale.",
     "config.scroll-amount.name": "Quantità di scorrimento",

@@ -194,6 +194,22 @@ namespace ContentPatcher.Framework.Patches
                     object key = parentEditor.ParseKey(fieldName.Value!);
                     object? data = parentEditor.GetEntry(key);
 
+                    if (data is null)
+                    {
+                        // if we're targeting a null list or dictionary, create it
+                        Type? type = parentEditor.GetEntryType(key);
+                        if (type?.IsGenericType is true)
+                        {
+                            Type genericType = type.GetGenericTypeDefinition();
+                            if (genericType == typeof(List<>) || genericType == typeof(Dictionary<,>))
+                            {
+                                object newData = Activator.CreateInstance(type!)!;
+                                parentEditor.SetEntry(key, newData);
+                                data = parentEditor.GetEntry(key);
+                            }
+                        }
+                    }
+
                     if (!this.EditorFactory.TryGetEditorFor(data, out editor))
                     {
                         this.WarnForPatch(this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key)));
@@ -343,7 +359,7 @@ namespace ContentPatcher.Framework.Patches
                 }
                 catch (Exception ex)
                 {
-                    this.WarnForRecord(i, $"failed converting {fromType} value to the expected type '{targetType.FullName}'.");
+                    this.WarnForRecord(i, $"failed converting {(fromType == JTokenType.Object ? "entry" : $"{fromType} value")} to the expected type '{targetType.FullName}': {ex.Message}.");
                     continue;
                 }
 
@@ -354,7 +370,7 @@ namespace ContentPatcher.Framework.Patches
                 }
                 catch (Exception ex)
                 {
-                    this.WarnForRecord(i, $"failed setting {fromType} value: {ex.Message}");
+                    this.WarnForRecord(i, $"failed setting '{key}' entry: {ex.Message}");
                     continue;
                 }
             }
@@ -610,12 +626,15 @@ namespace ContentPatcher.Framework.Patches
 
 
         /// <summary>If an editor can't be constructed for a given data structure, get a human-readable error indicating why.</summary>
-        /// <param name="nounPhrase">A noun phase </param>
+        /// <param name="nounPhrase">A noun phase which describes the field being accessed.</param>
         /// <param name="data">The data for which an editor couldn't be constructed.</param>
         /// <param name="entryExists">Whether the entry exists in the asset.</param>
         private string GetEditorNotCompatibleError(string nounPhrase, object? data, bool entryExists)
         {
-            if (!entryExists || data is null)
+            if (!entryExists)
+                return $"{nounPhrase} doesn't match an existing target";
+
+            if (data is null)
                 return $"{nounPhrase} is null and can't be targeted for edits";
 
             Type type = data.GetType();

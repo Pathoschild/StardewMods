@@ -88,18 +88,16 @@ discovered it in-game.
   <td>
 
 Default `false`. Whether to highlight item gift tastes which haven't been revealed in the NPC
-profile. When enabled, unrevealed gift tastes will be bold and lookups will also show
-disliked/hated gifts.
+profile. When enabled, unrevealed gift tastes will be bold.
 
   </td>
 </tr>
 
 <tr>
-  <td><code>ShowAllGiftTastes</code></td>
+  <td><code>ShowGiftTastes</code></td>
   <td>
 
-Default `false`. Whether to show all gift taste levels for NPC and item lookups; when disabled,
-only the most relevant tastes (e.g. loved or liked gifts) are shown.
+Default loved and liked. Which gift taste levels to show in NPC and item lookups.
 
   </td>
 </tr>

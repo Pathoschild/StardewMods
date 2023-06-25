@@ -18,8 +18,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         public bool HighlightUnrevealedGiftTastes { get; set; }
 
-        /// <summary>Whether to show all NPC gift tastes.</summary>
-        public bool ShowAllGiftTastes { get; set; }
+        /// <summary>Which gift taste levels to show in NPC and item lookups.</summary>
+        public ModGiftTasteConfig ShowGiftTastes { get; set; } = new();
 
         /// <summary>Whether to show gift tastes that the player doesn't own somewhere in the world.</summary>
         public bool ShowUnownedGifts { get; set; } = true;

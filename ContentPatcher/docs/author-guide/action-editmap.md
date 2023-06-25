@@ -127,12 +127,14 @@ tile width and height of the area. Its fields may contain tokens.
 </td>
 <td>
 
-_(Optional)_ The part of the target map to replace. Defaults to the top-left corner of the map with
-the same size as `FromArea`.
+_(Optional)_ The part of the target map to replace. Defaults to the same size as `FromArea`,
+positioned at the top-left corner of the map.
 
 This is specified as an object with the X and Y tile coordinates of the top-left corner, and the
-tile width and height of the area. If you specify an area past the bottom or right edges of the map,
-the map will be resized automatically to fit. Its fields may contain tokens.
+tile width and height of the area. Its fields may contain tokens.
+
+If you specify an area past the bottom or right edges of the map, the map will be resized
+automatically to fit.
 
 </td>
 </tr>

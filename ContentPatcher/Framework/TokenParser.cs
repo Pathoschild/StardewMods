@@ -95,36 +95,61 @@ namespace ContentPatcher.Framework
                 : InputArguments.Empty;
         }
 
+        /// <summary>Parse a string which can contain tokens or be null, and validate that it's valid.</summary>
+        /// <param name="rawValue">The raw string which may contain tokens.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        /// <remarks><see cref="TryParseString"/> and <see cref="TryParseNullableString"/> are identical except in their handling of a null value; the former will return an empty tokenized string while the latter will return null.</remarks>
+        public bool TryParseNullableString(string? rawValue, IInvariantSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, out IManagedTokenString? parsed)
+        {
+            if (rawValue is null)
+            {
+                error = null;
+                parsed = null;
+                return true;
+            }
+
+            return this.TryParseString(rawValue, assumeModIds, path, out error, out parsed);
+        }
+
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
+        /// <inheritdoc cref="TryParseNullableString" path="/remarks" />
         public bool TryParseString(string? rawValue, IInvariantSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out IManagedTokenString? parsed)
         {
-            // parse lexical bits
-            ILexToken[] bits = this.Lexer.ParseBits(rawValue, impliedBraces: false).ToArray();
-            for (int i = 0; i < bits.Length; i++)
+            if (!string.IsNullOrEmpty(rawValue))
             {
-                if (!this.Migrator.TryMigrate(ref bits[i], out error))
+                // parse lexical bits
+                ILexToken[] bits = this.Lexer.ParseBits(rawValue, impliedBraces: false).ToArray();
+                for (int i = 0; i < bits.Length; i++)
                 {
-                    parsed = null;
+                    if (!this.Migrator.TryMigrate(ref bits[i], out error))
+                    {
+                        parsed = null;
+                        return false;
+                    }
+                }
+
+                // get token string
+                parsed = this.CreateTokenString(bits, this.Context, path);
+                if (!this.Migrator.TryMigrate(parsed, out error))
                     return false;
+
+                // validate tokens
+                foreach (LexTokenToken lexToken in parsed.GetTokenPlaceholders(recursive: false))
+                {
+                    if (!this.TryValidateToken(lexToken, assumeModIds, out error))
+                        return false;
                 }
             }
-
-            // get token string
-            parsed = this.CreateTokenString(bits, this.Context, path);
-            if (!this.Migrator.TryMigrate(parsed, out error))
-                return false;
-
-            // validate tokens
-            foreach (LexTokenToken lexToken in parsed.GetTokenPlaceholders(recursive: false))
-            {
-                if (!this.TryValidateToken(lexToken, assumeModIds, out error))
-                    return false;
-            }
+            else
+                parsed = new LiteralString(string.Empty, path);
 
             // looks OK
             error = null;

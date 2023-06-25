@@ -33,6 +33,7 @@ namespace Pathoschild.Stardew.SkipIntro
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
+            CommonHelper.RemoveObsoleteFiles(this, "SkipIntro.pdb"); // removed in 1.9.13
 
             this.Config = this.LoadConfig();
 

@@ -16,9 +16,9 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 26, 0)) { }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrateMainContent(content, out error))
                 return false;
 
             // 1.26 adds config sections

@@ -708,12 +708,28 @@
     "config.title.main-options": "Основні налаштування",
     "config.progression-mode.name": "Режим прогресу",
     "config.progression-mode.desc": "Приховувавання деякого вмісту (Наприклад, улюблені подарунки і рішення головоломок), доки ви не знайдете їх в грі.",
+    "config.force-full-screen.name": "Примусово на весь екран",
+    "config.force-full-screen.desc": "Меню завжди буде повноекранним, а не центрованим у вікні. Це в основному корисно під час перегляду даних.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Підкреслити незвідані улюблені подарунків",
-    "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними, а пошук також показуватиме подарунки, які не сподобалися/є жахливими.",
-    "config.show-all-gift-tastes.name": "Показувати усі улюблені подарунки",
-    "config.show-all-gift-tastes.desc": "Показ усіх улюблених подарунків для НП та пошуку предметів; якщо вимкнено, відображаються лише найбільш релевантні подарунки (наприклад, улюблені або ті, що сподобалися).",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними.",
 
     // advanced options
     "config.title.advanced-options": "Розширені опції",
@@ -721,8 +737,6 @@
     "config.tile-lookups.desc": "Включення фрагменту світу як ціль пошуку.",
     "config.data-mining-fields.name": "Показати поле аналізу даних",
     "config.data-mining-fields.desc": "Показ необроблених данних, корисних для шукачів даних (Як окремі поля внизу результатів пошуку). Це розширена функція, яка не призначена для більшості гравців.",
-    "config.force-full-screen.name": "Примусово на весь екран",
-    "config.force-full-screen.desc": "Меню завжди буде повноекранним, а не центрованим у вікні. Це в основному корисно під час перегляду даних.",
     "config.target-redirection.name": "Цільове переспрямування",
     "config.target-redirection.desc": "У деяких випадках гра породжує тимчасову сутність, яка представляє іншу. Наприклад, Абігейл в шахтах насправді є тимчасовим НП на ім'я \"AbigailMine\", тому пошук її не покаже справжню інформацію про Абігейл. Якщо цей параметр увімкнено, Lookup Anything шукатиме оригінальну Абігейл.",
     "config.scroll-amount.name": "Число прокрутки",

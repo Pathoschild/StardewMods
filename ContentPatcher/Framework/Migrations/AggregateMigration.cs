@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             // validate format version
             if (!this.ValidVersions.Contains(new SemanticVersion(content.Format!.MajorVersion, content.Format.MinorVersion, 0).ToString()))
@@ -62,7 +63,22 @@ namespace ContentPatcher.Framework.Migrations
             // apply migrations
             foreach (IMigration migration in this.Migrations)
             {
-                if (!migration.TryMigrate(content, out error))
+                if (!migration.TryMigrateMainContent(content, out error))
+                    return false;
+            }
+
+            // no issues found
+            error = null;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
+        {
+            // apply migrations
+            foreach (IMigration migration in this.Migrations)
+            {
+                if (!migration.TryMigrate(ref patches, out error))
                     return false;
             }
 

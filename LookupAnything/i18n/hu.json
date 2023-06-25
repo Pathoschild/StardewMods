@@ -719,12 +719,28 @@
     "config.title.main-options": "Main options",
     "config.progression-mode.name": "Progression mode",
     "config.progression-mode.desc": "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.",
+    "config.force-full-screen.name": "Force full screen",
+    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Highlight unrevealed gift tastes",
-    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
-    "config.show-all-gift-tastes.name": "Show all gift tastes",
-    "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold.",
 
     // advanced options
     // TODO
@@ -733,8 +749,6 @@
     "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
     "config.data-mining-fields.name": "Show data mining fields",
     "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
-    "config.force-full-screen.name": "Force full screen",
-    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
     "config.target-redirection.name": "Target redirection",
     "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
     "config.scroll-amount.name": "Scroll amount",

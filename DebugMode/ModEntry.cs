@@ -63,6 +63,8 @@ namespace Pathoschild.Stardew.DebugMode
         /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "DebugMode.pdb"); // removed in 1.13.9
+
             // init
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
 using StardewModdingAPI;
@@ -30,6 +31,7 @@ namespace Pathoschild.Stardew.FastAnimations
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
+            CommonHelper.RemoveObsoleteFiles(this, "FastAnimations.pdb"); // removed in 1.11.6
 
             this.Config = helper.ReadConfig<ModConfig>();
             this.UpdateConfig();

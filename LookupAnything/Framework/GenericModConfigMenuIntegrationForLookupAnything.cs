@@ -32,8 +32,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
-            var defaultConfig = new ModConfig();
-
             // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)
@@ -52,16 +50,43 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     set: (config, value) => config.ProgressionMode = value
                 )
                 .AddCheckbox(
-                    name: I18n.Config_HighlightUnrevealedGiftTastes_Name,
-                    tooltip: I18n.Config_HighlightUnrevealedGiftTastes_Desc,
-                    get: config => config.HighlightUnrevealedGiftTastes,
-                    set: (config, value) => config.HighlightUnrevealedGiftTastes = value
+                    name: I18n.Config_ForceFullScreen_Name,
+                    tooltip: I18n.Config_ForceFullScreen_Desc,
+                    get: config => config.ForceFullScreen,
+                    set: (config, value) => config.ForceFullScreen = value
+                )
+
+                // gift tastes
+                .AddSectionTitle(I18n.Config_Title_GiftTastes)
+                .AddCheckbox(
+                    name: I18n.Config_ShowGiftTastes_Loved_Name,
+                    tooltip: I18n.Config_ShowGiftTastes_Loved_Desc,
+                    get: config => config.ShowGiftTastes.Loved,
+                    set: (config, value) => config.ShowGiftTastes.Loved = value
                 )
                 .AddCheckbox(
-                    name: I18n.Config_ShowAllGiftTastes_Name,
-                    tooltip: I18n.Config_ShowAllGiftTastes_Desc,
-                    get: config => config.ShowAllGiftTastes,
-                    set: (config, value) => config.ShowAllGiftTastes = value
+                    name: I18n.Config_ShowGiftTastes_Liked_Name,
+                    tooltip: I18n.Config_ShowGiftTastes_Liked_Desc,
+                    get: config => config.ShowGiftTastes.Liked,
+                    set: (config, value) => config.ShowGiftTastes.Liked = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_ShowGiftTastes_Neutral_Name,
+                    tooltip: I18n.Config_ShowGiftTastes_Neutral_Desc,
+                    get: config => config.ShowGiftTastes.Neutral,
+                    set: (config, value) => config.ShowGiftTastes.Neutral = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_ShowGiftTastes_Disliked_Name,
+                    tooltip: I18n.Config_ShowGiftTastes_Disliked_Desc,
+                    get: config => config.ShowGiftTastes.Disliked,
+                    set: (config, value) => config.ShowGiftTastes.Disliked = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_ShowGiftTastes_Hated_Name,
+                    tooltip: I18n.Config_ShowGiftTastes_Hated_Desc,
+                    get: config => config.ShowGiftTastes.Hated,
+                    set: (config, value) => config.ShowGiftTastes.Hated = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_ShowUnownedGifts_Name,
@@ -69,7 +94,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     get: config => config.ShowUnownedGifts,
                     set: (config, value) => config.ShowUnownedGifts = value
                 )
+                .AddCheckbox(
+                    name: I18n.Config_HighlightUnrevealedGiftTastes_Name,
+                    tooltip: I18n.Config_HighlightUnrevealedGiftTastes_Desc,
+                    get: config => config.HighlightUnrevealedGiftTastes,
+                    set: (config, value) => config.HighlightUnrevealedGiftTastes = value
+                )
 
+
+                // advanced options
                 .AddSectionTitle(I18n.Config_Title_AdvancedOptions)
                 .AddCheckbox(
                     name: I18n.Config_TileLookups_Name,
@@ -82,12 +115,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     tooltip: I18n.Config_DataMiningFields_Desc,
                     get: config => config.ShowDataMiningFields,
                     set: (config, value) => config.ShowDataMiningFields = value
-                )
-                .AddCheckbox(
-                    name: I18n.Config_ForceFullScreen_Name,
-                    tooltip: I18n.Config_ForceFullScreen_Desc,
-                    get: config => config.ForceFullScreen,
-                    set: (config, value) => config.ForceFullScreen = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_TargetRedirection_Name,

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.28.3</Version>
+    <Version>1.28.4</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 

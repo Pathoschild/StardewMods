@@ -135,7 +135,7 @@ namespace ContentPatcher.Framework.Migrations
             MutableInvariantSet? names = null;
 
             // dynamic tokens
-            foreach (string? name in content.DynamicTokens.Select(p => p?.Name))
+            foreach (string? name in content.DynamicTokens.Select(p => p.Name))
             {
                 if (!string.IsNullOrWhiteSpace(name))
                 {

@@ -708,12 +708,28 @@
     "config.title.main-options": "메인 옵션",
     "config.progression-mode.name": "진행 모드",
     "config.progression-mode.desc": "게임 내에서 발견할 때까지 일부 콘텐츠(예: 선물 취향 및 퍼즐 솔루션)를 숨길지 여부.",
+    "config.force-full-screen.name": "전체 화면 강제 표시",
+    "config.force-full-screen.desc": "메뉴가 창 중앙이 아닌 항상 전체 화면이어야 하는지 여부. 이 기능은 주로 데이터 마이닝 필드를 볼 때 유용합니다.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "미공개 선물 취향 강조",
-    "config.highlight-unrevealed-gift-tastes.desc": "NPC 프로필에 표시되지 않은 항목 선물 취향을 강조 표시할지 여부. 활성화하면 공개되지 않은 선물 취향이 굵게 표시되고 조회 시 싫어하거나/증오하는 선물도 표시됩니다.",
-    "config.show-all-gift-tastes.name": "모든 선물 취향 표시",
-    "config.show-all-gift-tastes.desc": "NPC 및 아이템 조회에 대한 모든 선물 취향을 표시할지 여부. 비활성화되면 가장 관련성이 높은 취향(예: 사랑하거나 좋아하는 선물)만 표시됩니다.",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "NPC 프로필에 표시되지 않은 항목 선물 취향을 강조 표시할지 여부. 활성화하면 공개되지 않은 선물 취향이 굵게 표시됩니다.",
 
     // advanced options
     "config.title.advanced-options": "고급 옵션",
@@ -721,8 +737,6 @@
     "config.tile-lookups.desc": "지도 타일을 조회 대상으로 포함할지 여부",
     "config.data-mining-fields.name": "데이터 마이닝 필드 표시",
     "config.data-mining-fields.desc": "데이터 마이너에 유용한 원시 데이터를 표시할지 여부(검색 결과 하단에 별도의 필드로 표시). 이것은 대부분의 플레이어를 위한 것이 아닌 고급 기능입니다.",
-    "config.force-full-screen.name": "전체 화면 강제 표시",
-    "config.force-full-screen.desc": "메뉴가 창 중앙이 아닌 항상 전체 화면이어야 하는지 여부. 이 기능은 주로 데이터 마이닝 필드를 볼 때 유용합니다.",
     "config.target-redirection.name": "대상 전환",
     "config.target-redirection.desc": "어떤 경우에는 게임이 다른 개체를 나타내는 임시 개체를 생성합니다. 예를 들어 광산에 있는 아비게일은 실제로 '광산 아비게일'이라는 이름의 임시 NPC이기 때문에 그녀를 찾아보면 아비게일의 실제 정보가 표시되지 않습니다. 이 옵션을 활성화하면 Lookup Anything 모드에서 원래 아비게일을 대신 조회합니다.",
     "config.scroll-amount.name": "스크롤 간격",

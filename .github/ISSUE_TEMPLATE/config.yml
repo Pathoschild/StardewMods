@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: How to use mods
+    url: https://stardewvalleywiki.com/Modding:Player_Guide/Getting_Started
+    about: See an introduction to using mods and common questions.
+  - name: Mod troubleshooting guide for players
+    url: https://smapi.io/troubleshoot
+    about: See if your question is already answered first!
+  - name: Nexus mod pages
+    url: https://www.nexusmods.com/stardewvalley/users/1552317?tab=user+files
+    about: Please ask for help on the Nexus mod pages. GitHub issues aren't used for support.

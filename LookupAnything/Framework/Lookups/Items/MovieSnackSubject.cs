@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (date != null)
             {
                 string taste = MovieTheater.GetConcessionTasteForCharacter(date, item);
-                yield return new GenericField(I18n.Item_MovieSnackPreference(), I18n.ForMovieTasteLabel(taste, date.Name));
+                yield return new GenericField(I18n.Item_MovieSnackPreference(), I18n.ForMovieTasteLabel(taste, date.displayName));
             }
         }
 

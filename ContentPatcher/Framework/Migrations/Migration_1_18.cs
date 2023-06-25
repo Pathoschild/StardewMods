@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -25,12 +24,12 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrate(ref patches, out error))
                 return false;
 
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in patches)
             {
                 // 1.18 adds 'TextOperations' field
                 if (patch.TextOperations.Any())

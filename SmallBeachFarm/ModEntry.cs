@@ -53,6 +53,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
+            CommonHelper.RemoveObsoleteFiles(this, "SmallBeachFarm.pdb"); // removed in 2.4.7
 
             // read config
             this.Config = this.Helper.ReadConfig<ModConfig>();

@@ -710,12 +710,28 @@
     "config.title.main-options": "Opciones principales",
     "config.progression-mode.name": "Modo de progresión",
     "config.progression-mode.desc": "Si se ocultan algunos contenidos (por ejemplo, los gustos de los regalos y las soluciones de los rompecabezas) hasta que los descubras en el juego.",
+    "config.force-full-screen.name": "Forzar pantalla completa",
+    "config.force-full-screen.desc": "Si el menú debe estar siempre a pantalla completa, en lugar de centrado en la ventana. Esto es útil principalmente cuando se visualizan campos de minería de datos.",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "Destacar los gustos de los regalos no revelados",
-    "config.highlight-unrevealed-gift-tastes.desc": "Si se desea resaltar los gustos de los regalos que no han sido revelados en el perfil del NPC. Cuando se activa, los gustos de los regalos no revelados estarán en negrita y las búsquedas también mostrarán los regalos que no gustan/odian.",
-    "config.show-all-gift-tastes.name": "Mostrar todos los gustos de los regalos",
-    "config.show-all-gift-tastes.desc": "Mostrar o no todos los gustos de los regalos en las búsquedas de PNJs y objetos; cuando se desactiva, sólo se muestran los gustos más relevantes (por ejemplo, los regalos amados o gustados).",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "Si se desea resaltar los gustos de los regalos que no han sido revelados en el perfil del NPC. Cuando se activa, los gustos de los regalos no revelados estarán en negrita.",
 
     // advanced options
     "config.title.advanced-options": "Opciones avanzadas",
@@ -723,8 +739,6 @@
     "config.tile-lookups.desc": "Si se incluyen las baldosas del mapa como objetivos de búsqueda.",
     "config.data-mining-fields.name": "Mostrar campos de minería de datos",
     "config.data-mining-fields.desc": "Si se muestran los datos sin procesar útiles para los mineros de datos (como campos separados en la parte inferior de los resultados de la búsqueda). Esta es una función avanzada que no está pensada para la mayoría de los jugadores.",
-    "config.force-full-screen.name": "Forzar pantalla completa",
-    "config.force-full-screen.desc": "Si el menú debe estar siempre a pantalla completa, en lugar de centrado en la ventana. Esto es útil principalmente cuando se visualizan campos de minería de datos.",
     "config.target-redirection.name": "Redirección de objetivos",
     "config.target-redirection.desc": "En algunos casos el juego genera una entidad temporal para representar a otra. Por ejemplo, Abigail en las minas es en realidad un NPC temporal con el nombre 'AbigailMine', por lo que buscarla allí no mostrará la información real de Abigail. Con esta opción activada, Lookup Anything buscará la Abigail original en su lugar.",
     "config.scroll-amount.name": "Cantidad de desplazamiento",

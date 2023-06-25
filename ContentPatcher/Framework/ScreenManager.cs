@@ -236,11 +236,8 @@ namespace ContentPatcher.Framework
 
                         // load dynamic tokens
                         IDictionary<string, int> dynamicTokenCountByName = new InvariantDictionary<int>();
-                        foreach (DynamicTokenConfig? entry in content.DynamicTokens)
+                        foreach (DynamicTokenConfig entry in content.DynamicTokens)
                         {
-                            if (entry is null)
-                                continue;
-
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
 
                             // get path

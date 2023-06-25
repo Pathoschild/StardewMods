@@ -3,7 +3,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -45,20 +44,29 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
+        public override bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
-            if (!base.TryMigrate(content, out error))
+            if (!base.TryMigrateMainContent(content, out error))
                 return false;
 
             // 1.7 adds tokens in dynamic token values
-            if (content.DynamicTokens.Any(p => p?.Value?.Contains("{{") == true))
+            if (content.DynamicTokens.Any(p => p.Value?.Contains("{{") == true))
             {
                 error = this.GetNounPhraseError("using tokens in dynamic token values");
                 return false;
             }
 
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)
+        {
+            if (!base.TryMigrate(ref patches, out error))
+                return false;
+
             // 1.7 adds tokens in field keys and condition values
-            foreach (PatchConfig patch in content.Changes.WhereNotNull())
+            foreach (PatchConfig patch in patches)
             {
                 if (patch.Fields.Keys.Any(key => key.Contains("{{")))
                 {

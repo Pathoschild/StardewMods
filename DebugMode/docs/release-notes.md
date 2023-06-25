@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.13.9
+Released 25 June 2023 for SMAPI 3.14.0 or later.
+
+* Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
+
 ## 1.13.8
 Released 30 March 2023 for SMAPI 3.14.0 or later.
 

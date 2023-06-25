@@ -711,12 +711,28 @@
     "config.title.main-options": "常规",
     "config.progression-mode.name": "进度模式",
     "config.progression-mode.desc": "根据游戏进度显示信息（比如npc对礼物的好感度）。",
+    "config.force-full-screen.name": "强制全屏",
+    "config.force-full-screen.desc": "强制菜单为全屏。",
+
+    // gift tastes
+    // TODO
+    "config.title.gift-tastes": "Gift tastes",
+    "config.show-gift-tastes.loved.name": "Show loved gifts",
+    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
+    "config.show-gift-tastes.liked.name": "Show liked gifts",
+    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
+    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
+    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
+    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
+    "config.show-gift-tastes.hated.name": "Show hated gifts",
+    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+
+    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+
     "config.highlight-unrevealed-gift-tastes.name": "加粗未揭露的礼物好感度",
-    "config.highlight-unrevealed-gift-tastes.desc": "对未揭露的npc礼物好感度，加粗显示；同时显示不喜欢、厌恶的礼物。",
-    "config.show-all-gift-tastes.name": "显示所有礼物好感度",
-    "config.show-all-gift-tastes.desc": "开启后，显示npc所有的礼物好感度；关闭后，只显示重要的（最爱、喜欢）。",
-    "config.show-unowned-gifts.name": "Show unowned gift tastes", // TODO
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.", // TODO
+    "config.highlight-unrevealed-gift-tastes.desc": "对未揭露的npc礼物好感度，加粗显示。",
 
     // advanced options
     "config.title.advanced-options": "高级",
@@ -724,8 +740,6 @@
     "config.tile-lookups.desc": "显示地图网格的信息。",
     "config.data-mining-fields.name": "显示数据字段",
     "config.data-mining-fields.desc": "显示目标在源码中的数据。此选项不是为玩家准备的。",
-    "config.force-full-screen.name": "强制全屏",
-    "config.force-full-screen.desc": "强制菜单为全屏。",
     "config.target-redirection.name": "目标重定向",
     "config.target-redirection.desc": "游戏在某些情况下会生成一个暂时的替身来指代某个目标。比如，矿井中的阿比盖尔实际上只是一个暂时的npc，导致查询时并不会显示阿比盖尔的信息。开启该选项后，才能显示阿比盖尔的真正信息。",
     "config.scroll-amount.name": "滚动值",

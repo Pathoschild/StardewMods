@@ -49,6 +49,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
+            CommonHelper.RemoveObsoleteFiles(this, "ChestsAnywhere.pdb"); // removed in 1.22.7
+
             // initialize
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();

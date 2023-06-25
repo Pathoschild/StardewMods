@@ -12,40 +12,39 @@
     /****
     ** Farm options
     ****/
-    "config.farm-options-section": "Other farm options", // TODO
+    "config.farm-options-section": "Andere Farmoptionen",
 
     "config.beach-sounds.name": "Strandgeräusche abspielen",
     "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "Monster standardmäßig enstehen lassen",
+    "config.spawn-monsters.tooltip": "Der Standardwert für die Option 'Monster in der Nacht enstehen lassen', wenn ein neuer Spielstand erstellt wird. Du kannst die Option immer noch beim Erstellen eines neuen Spielstands ändern. Dies hat keine Auswirkungen auf bestehende Spielstände.",
 
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "Farm-Layout",
 
     "config.campfire.name": "Lagerfeuer hinzufügen",
     "config.campfire.tooltip": "Füge ein funktionierendes Lagerfeuer vor dem Farmhaus hinzu.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "Angelsteg hinzufügen",
+    "config.pier.tooltip": "Füge einen Steg hinzu, an dem du angeln kannst.",
 
     "config.islands.name": "Inseln hinzufügen",
     "config.islands.tooltip": "Füge Meeresinseln mit zusätzlicher Landfläche hinzu.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "Versandbehälter-Pfad hinzufügen",
+    "config.shipping-bin-path.tooltip": "Lege einen Steinpfad vor die Standardposition des Versandbehälters.",
 
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "Farm-Positionen",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "Angelsteg X",
+    "config.pier-x.tooltip": "Die Feldposition, an der der Angelsteg hinzugefügt werden soll, sofern aktiviert. Setze sowohl X als auch Y auf Null, um ihn automatisch zu positionieren.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "Angelsteg Y",
+    "config.pier-y.tooltip": "Die Feldposition, an der der Angelsteg hinzugefügt werden soll, sofern aktiviert. Setze sowohl X als auch Y auf Null, um ihn automatisch zu positionieren."
 }

@@ -12,7 +12,6 @@ using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -70,7 +69,7 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <returns>Returns the patches that were loaded.</returns>
-        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, Patch? parentPatch)
         {
             bool verbose = this.Monitor.IsVerbose;
 
@@ -84,8 +83,18 @@ namespace ContentPatcher.Framework
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);
 
             // preprocess patches
-            PatchConfig[] patches = this.SplitPatches(rawPatches.WhereNotNull()).ToArray();
+            PatchConfig[] patches = this.SplitPatches(rawPatches).ToArray();
+            if (!patches.Any())
+                return Array.Empty<IPatch>();
             this.UniquelyNamePatches(patches);
+
+            // apply patch-list migrations
+            // lower-level migrations are applied in LoadPatch below
+            if (!contentPack.Migrator.TryMigrate(ref patches, out string? error))
+            {
+                this.Monitor.Log($"Ignored {path}: {error}", LogLevel.Warn);
+                return Array.Empty<IPatch>();
+            }
 
             // load patches
             int index = -1;
@@ -592,7 +601,7 @@ namespace ContentPatcher.Framework
 
                                 if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString? key))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
-                                if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
+                                if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                                 mapProperties.Add(new EditMapPatchProperty(key, value));
@@ -636,7 +645,7 @@ namespace ContentPatcher.Framework
                                         p++;
                                         if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString? key))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
-                                        if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
+                                        if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
 
                                         tileProperties[key] = value;

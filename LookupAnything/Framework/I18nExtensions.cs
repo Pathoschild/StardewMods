@@ -132,7 +132,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case NetColor net:
                     return I18n.Stringify(net.Value);
                 case NetDancePartner net:
-                    return I18n.Stringify(net.Value?.Name);
+                    return I18n.Stringify(net.Value?.displayName);
                 case NetDouble net:
                     return I18n.Stringify(net.Value);
                 case NetFloat net:
