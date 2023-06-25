@@ -1,9 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added options for which gift tastes to show, like 'show neutral gifts'. These replace the 'show all gift tastes' option.
-* Enabling the 'progression mode' or 'show unrevealed gift tastes' option no longer overrides the 'show [all] gift tastes' option.
+## 1.40.0
+Released 25 June 2023 for SMAPI 3.14.0 or later.
+
+* Added specific options for which gift tastes to show, like 'show neutral gifts'. These replace the 'show all gift tastes' option.
+* The 'progression mode' and 'show unrevealed gift tastes' options no longer override which gift taste levels are shown.
 * Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Fixed untranslated NPC names in some lookups.
 * Improved translations. Thanks to BenG-07 (updated German!) and MakinDay (updated Italian!).

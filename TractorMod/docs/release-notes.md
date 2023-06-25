@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.16.5
+Released 25 June 2023 for SMAPI 3.14.0 or later.
+
 * You can now set the distance to zero in Generic Mod Config Menu (i.e. only under the tractor).
 * Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Improved translations. Thanks to kellykiller0816 (updated German)!
