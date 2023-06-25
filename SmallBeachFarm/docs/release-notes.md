@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Improved translations. Thanks to BenG-07 (updated German!).
 
 ## 2.4.6

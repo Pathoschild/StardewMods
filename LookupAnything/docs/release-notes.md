@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Embedded `.pdb` data into the DLL, which fixes error line numbers in Linux/macOS logs.
 * Fixed untranslated NPC names in some lookups.
 * Improved translations. Thanks to BenG-07 (updated German!) and MakinDay (updated Italian!).
 
