@@ -71,6 +71,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Parse the underlying <c>content.json</c> file and set the <see cref="Content"/> and <see cref="Migrator"/> fields.</summary>
         /// <param name="error">The error indicating why the content could not be reloaded, if applicable.</param>
+        /// <remarks>This only applies <see cref="IMigration.TryMigrateMainContent"/>; other migrations should be applied when loading the patches.</remarks>
         public bool TryReloadContent([NotNullWhen(false)] out string? error)
         {
             const string filename = "content.json";
@@ -95,24 +96,16 @@ namespace ContentPatcher.Framework
                 return false;
             }
 
-            // apply migrations
+            // apply high-level migrations
+            // patch-level migrations are applied by PatchLoader
             IMigration migrator = new AggregateMigration(content.Format, this.GetMigrations(content));
             if (!migrator.TryMigrateMainContent(content, out error))
                 return false;
-            if (content.Changes.Any())
-            {
-                PatchConfig[] changes = content.Changes;
-                if (!migrator.TryMigrate(ref changes, out error))
-                    return false;
-
-#pragma warning disable CS0618 // method is only meant to be used here
-                content.SetChanges(changes);
-#pragma warning restore CS0618
-            }
 
             // load content
             this.ContentImpl = content;
             this.MigratorImpl = migrator;
+            error = null;
             return true;
         }
     }

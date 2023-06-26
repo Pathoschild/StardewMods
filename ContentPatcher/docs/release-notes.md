@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed error migrating some older content packs after 1.29.2.
+
 ## 1.29.2
 Released 25 June 2023 for SMAPI 3.18.1 or later.
 
