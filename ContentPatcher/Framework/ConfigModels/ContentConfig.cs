@@ -50,13 +50,5 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Changes = changes?.WhereNotNull().ToArray() ?? Array.Empty<PatchConfig>();
             this.ConfigSchema = configSchema ?? new InvariantDictionary<ConfigSchemaFieldConfig?>();
         }
-
-        /// <summary>Replace the list of patches in this content pack.</summary>
-        /// <param name="changes">The changes to apply instead.</param>
-        [Obsolete("This is only intended to support specific cases in the low-level migration code. This shouldn't be used by most code.")]
-        public void SetChanges(PatchConfig[] changes)
-        {
-            this.Changes = changes;
-        }
     }
 }
