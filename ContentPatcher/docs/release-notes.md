@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed `IsJojaMartComplete` token not working consistently.
+
 ## 1.29.3
 Released 26 June 2023 for SMAPI 3.18.1 or later.
 
