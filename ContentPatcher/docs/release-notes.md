@@ -62,6 +62,12 @@ Released 27 August 2023 for SMAPI 3.18.1 or later.
 * Fixed `IsJojaMartComplete` token not working consistently.
 * Fixed `Render` token incorrectly including named arguments.
 
+**Update notes for mod authors:**  
+* Added backwards compatibility for older content packs editing `Data/NPCDispositions` and `Data/Locations` in a best effort capacity.
+  Mod authors are advised to migrate to the 1.6 native formats regardless, particularly if wanting to access newer 1.6 capabilities in these assets.
+  * For `Data/NPCDispositions` Tokens in the NPC Default Location are not backwards compatible and will not load.
+  * For `Data/Locations` Fish Area Id restrictions are not mapped to the new data model, so fish entries running in this backwards compatible mode will be caught everywhere in the given location.
+
 ## 1.29.3
 Released 26 June 2023 for SMAPI 3.18.1 or later.
 
