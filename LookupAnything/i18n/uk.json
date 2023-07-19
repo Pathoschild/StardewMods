@@ -719,7 +719,7 @@
     "config.show-gift-tastes.liked.desc": "Чи показувати вподобані подарунки в дос'є НІПів та предметів.",
     "config.show-gift-tastes.neutral.name": "Показувати звичайні подарунки",
     "config.show-gift-tastes.neutral.desc": "Чи показувати звичайні подарунки в дос'є НІПів та предметів.",
-    "config.show-gift-tastes.disliked.name": "Показувати невподобані подарунки",
+    "config.show-gift-tastes.disliked.name": "Показувати невподобані\nподарунки",
     "config.show-gift-tastes.disliked.desc": "Чи показувати невподобані подарунки в дос'є НІПів та предметів.",
     "config.show-gift-tastes.hated.name": "Показувати жахливі подарунки",
     "config.show-gift-tastes.hated.desc": "Чи показувати жахливі подарунки в дос'є НІПів та предметів.",
@@ -727,7 +727,7 @@
     "config.show-unowned-gifts.name": "Показувати незвідані вподобання",
     "config.show-unowned-gifts.desc": "Чи показувати незвідані вподобання предметів, якими гравець не володіє десь у світі.",
 
-    "config.highlight-unrevealed-gift-tastes.name": "Підкреслити незвідані улюблені подарунків",
+    "config.highlight-unrevealed-gift-tastes.name": "Підкреслити незвідані улюблені\nподарунки",
     "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними.",
 
     // advanced options
