@@ -311,6 +311,14 @@ namespace ContentPatcher.Framework
         /// <param name="parsed">The parsed value if needed, or <c>null</c> if the string does not contain any tokens.</param>
         private bool TryInjectJsonProxyField(string? str, IInvariantSet assumeModIds, Action<string> setValue, LogPathBuilder path, [NotNullWhen(false)] out string? error, out TokenizableProxy? parsed)
         {
+            // empty values can't contain tokens
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                parsed = null;
+                error = null;
+                return true;
+            }
+
             // parse string
             if (!this.TryParseString(str, assumeModIds, path, out error, out IManagedTokenString? tokenStr))
             {
