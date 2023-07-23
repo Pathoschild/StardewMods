@@ -98,15 +98,45 @@ namespace ContentPatcher.Framework.Commands.Commands
             if (type is null)
                 return;
 
-            // load asset
-            object? asset;
-            try
+            List<Type>? heuristicTypes;
+            if (type == typeof(object))
             {
-                asset = this.LoadAsset(assetName, type);
+                heuristicTypes = this.GetProbableTypes(assetName) ?? new();
+                heuristicTypes.Add(typeof(object));
             }
-            catch (ContentLoadException ex)
+            else
             {
-                this.Monitor.Log($"Can't load asset '{assetName}' with type '{type.FullName}': {ex.Message}", LogLevel.Error);
+                heuristicTypes = new() { type };
+            }
+
+            // load asset
+            object? asset = null;
+            Dictionary<Type, Exception>? exceptions = null;
+            foreach (var t in heuristicTypes)
+            {
+                try
+                {
+                    asset = this.LoadAsset(assetName, t);
+                    break;
+                }
+                // Because LoadAsset uses reflection, need to look at the InnerException for the "real" exception here.
+                catch (Exception ex) when (ex.InnerException is ContentLoadException or InvalidCastException)
+                {
+                    exceptions ??= new();
+                    exceptions.Add(t, ex.InnerException);
+                }
+            }
+
+            if (asset is null)
+            {
+                this.Monitor.Log($"Could not load asset '{assetName}' using the following types: {string.Join(", ", heuristicTypes)}. See log for details.", LogLevel.Error);
+                if (exceptions is not null)
+                {
+                    foreach (var (t, ex) in exceptions)
+                    {
+                        this.Monitor.Log($"Attempt using type '{t.FullName}' produced: {ex}");
+                    }
+                }
                 return;
             }
 
@@ -311,6 +341,40 @@ namespace ContentPatcher.Framework.Commands.Commands
                 return matches.OrderBy(p => p.FullName, HumanSortComparer.DefaultIgnoreCase).ToArray();
 
             }
+        }
+
+        /// <summary>
+        /// Tries to get the probable type of an asset.
+        /// </summary>
+        /// <param name="asset">The asset's path.</param>
+        private List<Type>? GetProbableTypes(string? asset)
+        {
+            IAssetName assetName = this.ContentHelper.ParseAssetName(asset);
+
+            if (assetName.IsDirectlyUnderPath("Maps"))
+            {
+                return new() { typeof(xTile.Map), typeof(Texture2D) };
+            }
+
+            if (assetName.IsDirectlyUnderPath("Animals")
+                || assetName.IsDirectlyUnderPath("Buildings")
+                || assetName.IsDirectlyUnderPath("Characters")
+                || assetName.IsDirectlyUnderPath("Portraits")
+                || assetName.IsDirectlyUnderPath("Minigames")
+                || assetName.IsDirectlyUnderPath("TerrainFeatures")
+                || assetName.IsDirectlyUnderPath("TileSheets"))
+            {
+                return new() { typeof(Texture2D) };
+            }
+
+            if (assetName.IsDirectlyUnderPath("Characters/Dialogue")
+                || assetName.IsDirectlyUnderPath("Characters/schedules")
+                || assetName.IsDirectlyUnderPath("Data/Events")
+                || assetName.IsDirectlyUnderPath("Data/festivals"))
+            {
+                return new() { typeof(Dictionary<string, string>) };
+            }
+            return null;
         }
 
         /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>
