@@ -48,5 +48,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Whether the player should be invincible while they're on the tractor.</summary>
         public bool InvincibleOnTractor { get; set; } = true;
+
+        /// <summary>Whether energy should be drained as fuel while the tractor is in use.</summary>
+        public bool FuelEnabled { get; set; } = true;
+
+        /// <summary>The amount of energy that will be drained as fuel while the tractor is in use.</summary>
+        public float FuelAmount { get; set; } = 1.0F;
     }
 }

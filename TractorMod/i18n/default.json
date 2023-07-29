@@ -23,6 +23,7 @@
     "config.melee-dagger": "Melee Dagger Features",
     "config.melee-sword": "Melee Sword Features",
     "config.other-tools": "Other Tools",
+    "config.fuel": "Fuel",
     "config.custom-tools": "Custom Tools",
 
 
@@ -175,6 +176,14 @@
     "config.Attack-monsters.name": "Attack Monsters",
     "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
 
+    /****
+    ** Fuel options
+    ****/
+    "config.fuel-enabled.name": "Enable energy drain",
+    "config.fuel-enabled.tooltip": "Whether to drain a set amount of energy per second of use",
+
+    "config.fuel-value.name": "Drainage amount",
+    "config.fuel-value.tooltip": "The amount of energy that gets drained while using the tractor. Default {{defaultValue}}.",
 
     /****
     ** Other

@@ -23,6 +23,7 @@
     "config.melee-dagger": "Nahkampfdolch Eigenschaften",
     "config.melee-sword": "Nahkampfschwert Eigenschaften",
     "config.other-tools": "Andere Tools",
+    "config.fuel": "Treibstoff",
     "config.custom-tools": "Benutzerdefinierte Tools",
 
 
@@ -175,6 +176,14 @@
     "config.Attack-monsters.name": "Monster angreifen",
     "config.Attack-monsters.tooltip": "Ob man Monster angreift. (Dies ist aufgrund der Geschwindigkeit des Traktorwerkzeugs extrem overpowered).",
 
+    /****
+    ** Fuel options
+    ****/
+    "config.fuel-enabled.name": "Aktiviere Energieverlust",
+    "config.fuel-enabled.tooltip": "Ob eine bestimmte Menge Energie pro Sekunde abgezogen werden soll.",
+
+    "config.fuel-value.name": "Energieverlust",
+    "config.fuel-value.tooltip": "Die Menge an Energie die während der Nutzung des Traktors abgezogen wird. Standard {{defaultValue}}.",
 
     /****
     ** Other

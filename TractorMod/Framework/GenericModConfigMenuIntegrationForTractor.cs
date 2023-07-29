@@ -436,6 +436,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.Slingshot.Enable = value
                 )
 
+                .AddSectionTitle(I18n.Config_Fuel)
+                .AddCheckbox(
+                    name: I18n.Config_FuelEnabled_Name,
+                    tooltip: I18n.Config_FuelEnabled_Tooltip,
+                    get: config => config.FuelEnabled,
+                    set: (config, value) => config.FuelEnabled = value
+                )
+                .AddNumberField(
+                    name: I18n.Config_FuelValue_Name,
+                    tooltip: () => I18n.Config_FuelValue_Tooltip(defaultConfig.FuelAmount),
+                    get: config => config.FuelAmount,
+                    set: (config, value) => config.FuelAmount = value,
+                    min: 0,
+                    max: 20
+                )
+
                 // custom tools
                 .AddSectionTitle(I18n.Config_CustomTools)
                 .AddTextbox(

@@ -62,6 +62,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The rider health to maintain if they're invincible.</summary>
         private int RiderHealth;
 
+        /// <summary>The number of ticks between each tractor fuel check.</summary>
+        private readonly int TicksPerFuelCheck = 60; // roughly one time per second
+
+        /// <summary>The number of ticks since the tractor last checked for fuel drain.</summary>
+        private int SkippedFuelTicks;
 
         /*********
         ** Accessors
@@ -169,6 +174,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     if (enabled)
                         this.UpdateAttachmentEffects();
                 }
+
+                // apply fuel drain
+                if (this.FuelCooldown())
+                {
+                    if (this.Config.FuelEnabled)
+                    {
+                        Game1.player.Stamina = Game1.player.Stamina - this.Config.FuelAmount;
+                    }
+                }
             }
         }
 
@@ -258,6 +272,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return false;
 
             this.SkippedActionTicks = 0;
+            return true;
+        }
+
+        /// <summary>Update the fuel cooldown.</summary>
+        /// <returns>Returns whether the cooldown has ended.</returns>
+        private bool FuelCooldown()
+        {
+            this.SkippedFuelTicks++;
+
+            if (this.SkippedFuelTicks % this.TicksPerFuelCheck != 0)
+                return false;
+
+            this.SkippedFuelTicks = 0;
             return true;
         }
 
