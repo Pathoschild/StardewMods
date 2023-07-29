@@ -1,4 +1,5 @@
 using StardewValley;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.Automate.Framework.Storage
 {

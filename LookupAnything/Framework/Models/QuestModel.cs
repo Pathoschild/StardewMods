@@ -3,6 +3,8 @@ using System.Linq;
 using Netcode;
 using StardewValley;
 using StardewValley.Quests;
+using StardewValley.SpecialOrders;
+using StardewValley.SpecialOrders.Objectives;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models

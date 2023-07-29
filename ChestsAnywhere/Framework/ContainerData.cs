@@ -4,7 +4,7 @@ using System.Globalization;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.Common;
-using StardewValley;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {

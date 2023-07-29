@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StardewValley;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.Automate
 {
