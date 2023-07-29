@@ -22,11 +22,11 @@
     // Junimo hut options
     "config.title.junimo-huts": "祝尼魔屋行为",
     "config.junimo-hut-gems.name": "宝石类",
-    "config.junimo-hut-gems.desc": "祝尼魔屋应该如何处理宝石类物品。设置为'Auto-detect'将会忽略对宝石类物品的处理。",
+    "config.junimo-hut-gems.desc": "祝尼魔屋应该如何处理宝石类物品。设置为'自动检测'将会忽略对宝石类物品的处理。",
     "config.junimo-hut-fertilizer.name": "肥料",
-    "config.junimo-hut-fertilizer.desc": "祝尼魔屋应该如何处理肥料物品。如果设置为'Auto-detect'并且安装了'Better Junimos'mod将会忽略对肥料物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
+    "config.junimo-hut-fertilizer.desc": "祝尼魔屋应该如何处理肥料物品。如果设置为'自动检测'并且安装了'Better Junimos'mod将会忽略对肥料物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
     "config.junimo-hut-seeds.name": "种子",
-    "config.junimo-hut-seeds.desc": "祝尼魔屋应该如何处理种子物品。 如果设置为'Auto-detect'并且安装了'Better Junimos'mod将会忽略对种子物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
+    "config.junimo-hut-seeds.desc": "祝尼魔屋应该如何处理种子物品。 如果设置为'自动检测'并且安装了'Better Junimos'mod将会忽略对种子物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
 
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "自动检测",
