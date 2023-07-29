@@ -12,6 +12,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.GameData.WildTrees;
+using StardewValley.Mods;
 using StardewValley.Network;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework

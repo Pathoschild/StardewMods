@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using StardewValley;
+using StardewValley.Mods;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 

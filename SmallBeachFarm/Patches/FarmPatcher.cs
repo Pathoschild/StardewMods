@@ -7,6 +7,7 @@ using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.SmallBeachFarm.Patches
@@ -133,7 +134,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 
             // change background track
             if (FarmPatcher.ShouldUseBeachMusic())
-                Game1.changeMusicTrack("ocean", music_context: Game1.MusicContext.SubLocation);
+                Game1.changeMusicTrack("ocean", music_context: MusicContext.SubLocation);
         }
 
         /// <summary>A method called via Harmony after <see cref="Farm.resetSharedState"/>.</summary>
@@ -171,7 +172,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 
             // change background track
             if (FarmPatcher.ShouldUseBeachMusic())
-                Game1.changeMusicTrack("none", music_context: Game1.MusicContext.SubLocation);
+                Game1.changeMusicTrack("none", music_context: MusicContext.SubLocation);
         }
 
         /// <summary>A method called via Harmony after <see cref="GameLocation.getRandomTile"/>.</summary>
