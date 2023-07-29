@@ -312,6 +312,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     }
                 }
             });
+
+            // deplete stamina if enabled
+            // currently depletes 1 stamina for testing
+            player.Stamina = player.Stamina - 1;
         }
 
         /// <summary>Get the attachments which are ready and can be applied to the given tile, after applying cooldown.</summary>
