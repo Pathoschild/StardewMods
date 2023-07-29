@@ -62,6 +62,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The rider health to maintain if they're invincible.</summary>
         private int RiderHealth;
 
+        /// <summary>The number of ticks between each tractor fuel check.</summary>
+        private readonly int TicksPerFuelCheck = 60; // roughly one time per second
+
+        /// <summary>The number of ticks since the tractor last checked for fuel drain.</summary>
+        private int SkippedFuelTicks;
 
         /*********
         ** Accessors
@@ -169,6 +174,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     if (enabled)
                         this.UpdateAttachmentEffects();
                 }
+
+                // apply fuel drain
+                if (this.FuelCooldown())
+                {
+                    if (this.Config.FuelEnabled)
+                    {
+                        Game1.player.Stamina = Game1.player.Stamina - this.Config.FuelAmount;
+                    }
+                }
             }
         }
 
@@ -261,6 +275,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return true;
         }
 
+        /// <summary>Update the fuel cooldown.</summary>
+        /// <returns>Returns whether the cooldown has ended.</returns>
+        private bool FuelCooldown()
+        {
+            this.SkippedFuelTicks++;
+
+            if (this.SkippedFuelTicks % this.TicksPerFuelCheck != 0)
+                return false;
+
+            this.SkippedFuelTicks = 0;
+            return true;
+        }
+
         /// <summary>Notify attachments that effects have been enabled for a location.</summary>
         /// <param name="location">The current tractor location.</param>
         private void OnActivated(GameLocation location)
@@ -312,10 +339,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     }
                 }
             });
-
-            // deplete stamina if enabled
-            // currently depletes 1 stamina for testing
-            player.Stamina = player.Stamina - 1;
         }
 
         /// <summary>Get the attachments which are ready and can be applied to the given tile, after applying cooldown.</summary>
