@@ -449,24 +449,22 @@
     ** Item > melee weapon lookups
     *********/
     // labels
-    // TODO
-    "item.melee-weapon.accuracy": "Accuracy",
-    "item.melee-weapon.critical-chance": "Critical chance",
-    "item.melee-weapon.critical-damage": "Critical damage",
-    "item.melee-weapon.damage": "Damage",
-    "item.melee-weapon.defense": "Defense",
-    "item.melee-weapon.knockback": "Knockback",
-    "item.melee-weapon.reach": "Reach",
-    "item.melee-weapon.speed": "Attack speed",
+    "item.melee-weapon.accuracy": "精准度",
+    "item.melee-weapon.critical-chance": "暴击率",
+    "item.melee-weapon.critical-damage": "暴击力量",
+    "item.melee-weapon.damage": "伤害",
+    "item.melee-weapon.defense": "防御",
+    "item.melee-weapon.knockback": "击退",
+    "item.melee-weapon.reach": "范围",
+    "item.melee-weapon.speed": "攻击速度",
 
     // values
-    // TODO
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
-    "item.melee-weapon.defense.label": "{{amount}} while equipped",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
-    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+    "item.melee-weapon.critical-damage.label": "{{multiplier}}倍伤害 (在获得加成前)",
+    "item.melee-weapon.defense.label": "当装备后{{amount}}",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} 倍正常距离)",
+    "item.melee-weapon.reach.label": "{{amount}} 像素",
+    "item.melee-weapon.speed.shown-vs-actual": "当前显示: {{shownSpeed}}{{lineBreak}} 实际: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} (在没有获得攻速加成时每次挥舞间隔{{milliseconds}}毫秒)",
 
 
     /*********
@@ -537,7 +535,7 @@
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
     "npc.undiscovered-gift-taste": "{{count}} 个没揭露的品目",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} 未知物品",
 
 
     /*********
@@ -715,21 +713,20 @@
     "config.force-full-screen.desc": "强制菜单为全屏。",
 
     // gift tastes
-    // TODO
-    "config.title.gift-tastes": "Gift tastes",
-    "config.show-gift-tastes.loved.name": "Show loved gifts",
-    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
-    "config.show-gift-tastes.liked.name": "Show liked gifts",
-    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
-    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
-    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
-    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.hated.name": "Show hated gifts",
-    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+    "config.title.gift-tastes": "礼物喜好",
+    "config.show-gift-tastes.loved.name": "显示最爱的礼物",
+    "config.show-gift-tastes.loved.desc": "是否在NPC和物品查找中显示最爱的礼物",
+    "config.show-gift-tastes.liked.name": "显示喜欢的礼物",
+    "config.show-gift-tastes.liked.desc": "是否在NPC和物品查找中显示喜欢的礼物",
+    "config.show-gift-tastes.neutral.name": "显示普通的礼物",
+    "config.show-gift-tastes.neutral.desc": "是否在NPC和物品查找中显示普通礼物",
+    "config.show-gift-tastes.disliked.name": "显示不喜欢的礼物",
+    "config.show-gift-tastes.disliked.desc": "是否在NPC和物品查找中显示不喜欢的礼物",
+    "config.show-gift-tastes.hated.name": "显示厌恶的礼物",
+    "config.show-gift-tastes.hated.desc": "是否在NPC和物品查找中显示厌恶的礼物",
 
-    "config.show-unowned-gifts.name": "Show unowned gift tastes",
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+    "config.show-unowned-gifts.name": "显示未知的礼物喜好",
+    "config.show-unowned-gifts.desc": "是否将物品显示在喜好里即使玩家还没有获取过该物品",
 
     "config.highlight-unrevealed-gift-tastes.name": "加粗未揭露的礼物好感度",
     "config.highlight-unrevealed-gift-tastes.desc": "对未揭露的npc礼物好感度，加粗显示。",
