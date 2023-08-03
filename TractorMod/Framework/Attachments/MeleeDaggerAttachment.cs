@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
 
             // harvest grass
-            if (this.Config.HarvestGrass && this.TryHarvestGrass(tileFeature as Grass, location, tile))
+            if (this.Config.HarvestGrass && this.TryHarvestGrass(tileFeature as Grass, location, tile, player, tool))
                 return true;
 
             // attack monsters
