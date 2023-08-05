@@ -29,7 +29,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return InvariantSets.FromValue(input.TokenString?.Value ?? string.Empty);
+            string value = input.HasPositionalArgs
+                ? string.Join(", ", input.PositionalArgs)
+                : string.Empty;
+
+            return InvariantSets.FromValue(value);
         }
     }
 }
