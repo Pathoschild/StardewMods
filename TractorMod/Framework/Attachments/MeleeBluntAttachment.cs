@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             tool = tool.AssertNotNull();
 
             // break mine containers
-            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
+            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool))
                 return true;
 
             // attack monsters

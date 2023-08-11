@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // break mine containers
-            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
+            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool))
                 return true;
 
             // clear weeds

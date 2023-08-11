@@ -67,12 +67,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // sow seeds
-            bool sowed = dirt.plant(item.ItemId, (int)tile.X, (int)tile.Y, player, false, location);
+            bool sowed = dirt.plant(item.ItemId, player, false);
             if (sowed)
             {
                 this.ConsumeItem(player, item);
 
-                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ItemId, (int)tile.X, (int)tile.Y, player, true, location))
+                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ItemId, player, true))
                     this.ConsumeItem(enricher, fertilizer);
             }
             return sowed;

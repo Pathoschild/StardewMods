@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <remarks>Reverse-engineered from <see cref="Tree.draw"/>.</remarks>
         public override Rectangle GetWorldArea()
         {
-            return this.GetSpriteArea(this.Value.getBoundingBox(this.Tile), this.GetSpritesheetArea());
+            return this.GetSpriteArea(this.Value.getBoundingBox(), this.GetSpritesheetArea());
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

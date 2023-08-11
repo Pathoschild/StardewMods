@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // cut bushes in large terrain features
             if (this.Config.CutBushes)
             {
-                foreach (Bush bush in location.largeTerrainFeatures.OfType<Bush>().Where(p => p.tilePosition.Value == tile))
+                foreach (Bush bush in location.largeTerrainFeatures.OfType<Bush>().Where(p => p.Tile == tile))
                 {
                     if (this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location))
                         return true;

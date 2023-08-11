@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             // terrain features
             foreach ((Vector2 originTile, TerrainFeature feature) in location.terrainFeatures.Pairs)
             {
-                if (!this.TryGetData("terrain feature", location, originTile, () => this.GetTilesIn(this.AbsoluteToTileArea(feature.getBoundingBox(originTile))), out Vector2[]? tiles))
+                if (!this.TryGetData("terrain feature", location, originTile, () => this.GetTilesIn(this.AbsoluteToTileArea(feature.getBoundingBox())), out Vector2[]? tiles))
                     continue;
 
                 foreach (Vector2 tile in tiles)
