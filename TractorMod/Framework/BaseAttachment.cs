@@ -222,7 +222,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // normal resource clumps
             foreach (ResourceClump cur in location.resourceClumps)
             {
-                if (cur.getBoundingBox(cur.tile.Value).Intersects(tileArea))
+                if (cur.getBoundingBox().Intersects(tileArea))
                 {
                     clump = cur;
                     applyTool = tool => this.UseToolOnTile(tool, tile, player, location);
@@ -235,13 +235,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             {
                 foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
                 {
-                    if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
+                    if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox().Intersects(tileArea))
                     {
                         clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool =>
                         {
                             this.Reflection.GetField<Farmer>(tool, "lastUser").SetValue(player);
-                            return feature.performToolAction(tool, 0, tile, location);
+                            return feature.performToolAction(tool, 0, tile);
                         };
                         return true;
                     }
@@ -311,15 +311,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tile">The tile position</param>
         /// <param name="tileObj">The object on the tile.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
-        /// <param name="location">The current location.</param>
-        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Tool tool, GameLocation location)
+        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Tool tool)
         {
             if (tileObj is BreakableContainer)
-                return tileObj.performToolAction(tool, location);
+                return tileObj.performToolAction(tool);
 
-            if (tileObj?.TypeDefinitionId == ItemRegistry.type_object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool, location))
+            if (tileObj?.TypeDefinitionId == ItemRegistry.type_object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool))
             {
-                tileObj.performRemoveAction(tile, location);
+                tileObj.performRemoveAction();
                 Game1.currentLocation.Objects.Remove(tile);
                 return true;
             }
@@ -354,7 +353,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (grass == null || !location.terrainFeatures.Remove(tile))
                 return false;
 
-            grass.TryDropItemsOnCut(player, tool);
+            grass.TryDropItemsOnCut(tool);
             return true;
         }
 

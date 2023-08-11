@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // harvest ginger
             if (this.Config.HarvestGinger && tileFeature is HoeDirt dirt && dirt.crop?.whichForageCrop.Value == Crop.forageCrop_ginger.ToString() && dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
             {
-                dirt.destroyCrop(tile, showAnimation: false, location);
+                dirt.destroyCrop(showAnimation: false);
                 return true;
             }
 

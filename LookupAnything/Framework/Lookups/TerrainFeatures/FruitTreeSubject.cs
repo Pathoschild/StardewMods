@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
                 yield return new GenericField(I18n.FruitTree_NextFruit(), I18n.FruitTree_NextFruit_TooYoung());
                 yield return new GenericField(I18n.FruitTree_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
-                if (FruitTree.IsGrowthBlocked(this.Tile, tree.currentLocation))
+                if (FruitTree.IsGrowthBlocked(this.Tile, tree.Location))
                     yield return new GenericField(I18n.FruitTree_Complaints(), I18n.FruitTree_Complaints_AdjacentObjects());
             }
             else
@@ -214,7 +214,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <remarks>Derived from <see cref="FruitTree.IsInSeasonHere"/> and <see cref="FruitTree.seasonUpdate"/>.</remarks>
         private bool IsInSeason(FruitTree tree, Season season)
         {
-            if (tree.currentLocation.SeedsIgnoreSeasonsHere())
+            if (tree.Location.SeedsIgnoreSeasonsHere())
                 return true;
 
             List<Season>? growSeasons = tree.GetData()?.Seasons;

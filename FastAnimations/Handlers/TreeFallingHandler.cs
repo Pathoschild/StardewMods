@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 
             int skips = this.GetSkipsThisTick();
             foreach ((Vector2 tile, TerrainFeature tree) in this.GetFallingTrees())
-                this.ApplySkips(skips, () => tree.tickUpdate(gameTime, tile, Game1.currentLocation));
+                this.ApplySkips(skips, () => tree.tickUpdate(gameTime));
         }
 
 

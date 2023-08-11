@@ -375,7 +375,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 showGiftTastes: config.ShowGiftTastes,
                 item: this.GameHelper.GetObjectById(indexOfHarvest),
                 context: context,
-                location: dirt?.currentLocation,
+                location: dirt?.Location,
                 knownQuality: false,
                 getCropSubject: this.BuildSubject,
                 fromDirt: dirt

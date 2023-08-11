@@ -105,7 +105,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
             if (this.Config.HarvestForage)
             {
-                Bush? bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) as Bush;
+                Bush? bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox().Intersects(tileArea)) as Bush;
                 if (this.TryHarvestBush(bush, location))
                     return true;
             }
@@ -178,7 +178,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 bool isBerryBush = !isTeaBush && bush.size.Value == Bush.mediumBush && !bush.townBush.Value;
                 if ((isTeaBush && this.Config.HarvestCrops) || (isBerryBush && this.Config.HarvestForage))
                 {
-                    bush.performUseAction(bush.tilePosition.Value, location);
+                    bush.performUseAction(bush.Tile);
                     return true;
                 }
             }
@@ -210,7 +210,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 {
                     bool isScytheCrop = dirt.crop.GetHarvestMethod() == HarvestMethod.Scythe;
 
-                    dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
+                    dirt.destroyCrop(showAnimation: isScytheCrop);
                     if (!isScytheCrop && location is IslandLocation && Game1.random.NextDouble() < 0.05)
                         Game1.player.team.RequestLimitedNutDrops("IslandFarming", location, (int)tile.X * 64, (int)tile.Y * 64, 5);
 
@@ -220,7 +220,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 // hoe crops (e.g. ginger)
                 if (dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
                 {
-                    dirt.destroyCrop(tile, showAnimation: false, location);
+                    dirt.destroyCrop(showAnimation: false);
                     return true;
                 }
             }
@@ -254,7 +254,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 case FruitTree tree:
                     if (this.Config.HarvestFruitTrees && tree.fruit.Count > 0)
                     {
-                        tree.performUseAction(tile, location);
+                        tree.performUseAction(tile);
                         return true;
                     }
                     break;
@@ -266,7 +266,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                             ? this.Config.HarvestFruitTrees
                             : this.Config.HarvestTreeSeeds;
 
-                        if (shouldHarvest && tree.performUseAction(tile, location))
+                        if (shouldHarvest && tree.performUseAction(tile))
                             return true;
                     }
                     break;
@@ -287,7 +287,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.ClearWeeds && weeds?.IsWeeds() == true)
             {
                 this.UseToolOnTile(tool, tile, player, location); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
-                weeds.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed
+                weeds.performToolAction(tool); // triggers weed drops, but doesn't remove weed
                 location.removeObject(tile, false);
                 return true;
             }

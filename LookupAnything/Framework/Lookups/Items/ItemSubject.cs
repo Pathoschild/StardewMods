@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 if (potBush != null)
                 {
-                    ISubject? subject = this.Codex.GetByEntity(potBush, this.Location ?? potBush.currentLocation);
+                    ISubject? subject = this.Codex.GetByEntity(potBush, this.Location ?? potBush.Location);
                     if (subject != null)
                         yield return new LinkField(I18n.Item_Contents(), subject.Name, () => subject);
                 }

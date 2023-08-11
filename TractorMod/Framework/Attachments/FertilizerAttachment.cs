@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 // tree fertilizer
                 case "(O)805":
-                    if (tileFeature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize(location))
+                    if (tileFeature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize())
                     {
                         this.ConsumeItem(player, item);
                         return true;
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         return false;
 
                     // apply fertilizer
-                    bool fertilized = dirt.plant(item.ItemId, (int)tile.X, (int)tile.Y, player, isFertilizer: true, location);
+                    bool fertilized = dirt.plant(item.ItemId, player, isFertilizer: true);
                     if (fertilized)
                         this.ConsumeItem(player, item);
                     return fertilized;

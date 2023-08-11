@@ -103,7 +103,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 return true;
 
             // objects & large terrain features
-            if (location.objects.ContainsKey(tile) || location.largeTerrainFeatures.Any(p => p.tilePosition.Value == tile))
+            if (location.objects.ContainsKey(tile) || location.largeTerrainFeatures.Any(p => p.Tile == tile))
                 return true;
 
             // non-dirt terrain features

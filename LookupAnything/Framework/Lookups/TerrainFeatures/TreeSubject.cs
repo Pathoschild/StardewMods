@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         {
             Tree tree = this.Target;
             WildTreeData data = tree.GetData();
-            GameLocation location = tree.currentLocation;
+            GameLocation location = tree.Location;
             bool isFertilized = tree.fertilized.Value;
 
             // get growth stage

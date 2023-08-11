@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             // large terrain features
             foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
             {
-                Vector2 entityTile = feature.tilePosition.Value;
+                Vector2 entityTile = feature.Tile;
                 if (!this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     continue;
 
