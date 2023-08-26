@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Handles access to the Better Sprinklers mod.</summary>
         public BetterSprinklersIntegration BetterSprinklers { get; }
 
+        /// <summary>Handles access to the Better SprinklersPlus mod.</summary>
+        public BetterSprinklersPlusIntegration BetterSprinklersPlus { get; }
+
         /// <summary>Handles access to the Line Sprinklers mod.</summary>
         public LineSprinklersIntegration LineSprinklers { get; }
 
@@ -49,6 +52,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.Automate = new AutomateIntegration(modRegistry, monitor);
             this.BetterJunimos = new BetterJunimosIntegration(modRegistry, monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
+            this.BetterSprinklersPlus = new BetterSprinklersPlusIntegration(modRegistry, monitor);
             this.LineSprinklers = new LineSprinklersIntegration(modRegistry, monitor);
             this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
             this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
