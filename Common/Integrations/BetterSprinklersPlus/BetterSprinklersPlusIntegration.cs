@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
+namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklersPlus
 {
     /// <summary>Handles the logic for integrating with the Better Sprinklers Plus mod.</summary>
     internal class BetterSprinklersPlusIntegration : BaseIntegration<IBetterSprinklersPlusApi>
@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public BetterSprinklersPlusIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Better Sprinklers Plus", "com.CodesThings.BetterSprinklersPlus", "2.3.1-unofficial.6-pathoschild", modRegistry, monitor)
+            : base("Better Sprinklers Plus", "com.CodesThings.BetterSprinklersPlus", "2.6.0", modRegistry, monitor)
         {
             if (base.IsLoaded)
                 this.MaxRadius = this.ModApi.GetMaxGridSize();

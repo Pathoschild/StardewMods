@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             if (mods.BetterSprinklers.IsLoaded)
                 this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
             if (mods.BetterSprinklersPlus.IsLoaded)
-                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklersPlus.MaxRadius);
             if (mods.LineSprinklers.IsLoaded)
                 this.SearchRadius = Math.Max(this.SearchRadius, mods.LineSprinklers.MaxRadius);
         }
