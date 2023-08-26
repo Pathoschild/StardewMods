@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed item lookups marking some fish as always out-of-season.
 * Improved translations. Thanks to DanielleTlumach (updated Ukrainian), MakinDay (updated Italian), and MyEclipseyang (updated Chinese)!
 
 ## 1.40.0
