@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* The `patch export` command is now better at guessing the export type for assets that aren't loaded yet (thanks to atravita!).
 * Fixed `EditData` replacing fields explicitly set to null with empty strings.
 * Fixed `IsJojaMartComplete` token not working consistently.
 * Fixed `Render` token incorrectly including named arguments.

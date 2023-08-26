@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for Better Sprinklers Plus' custom sprinkler range (thanks to jamescodesthings!).
+
 ## 1.15.8
 Released 25 June 2023 for SMAPI 3.14.0 or later.
 
