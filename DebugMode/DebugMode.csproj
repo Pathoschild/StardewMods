@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.13.9</Version>
+    <Version>1.13.10</Version>
     <RootNamespace>Pathoschild.Stardew.DebugMode</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
