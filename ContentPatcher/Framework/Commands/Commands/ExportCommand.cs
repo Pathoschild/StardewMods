@@ -76,37 +76,63 @@ namespace ContentPatcher.Framework.Commands.Commands
             string assetName = args[0];
             string? typeName = args.Length > 1 ? args[1] : null;
 
-            // load type
-            Type? type = null;
+            // get default type
+            List<Type> possibleTypes = new(this.TryGetTypes(typeName));
+            switch (possibleTypes.Count)
             {
-                Type[] possibleTypes = this.TryGetTypes(typeName);
-                switch (possibleTypes.Length)
-                {
-                    case 0:
-                        this.Monitor.Log($"Couldn't find type '{typeName}'. Type `patch help export` for usage.", LogLevel.Error);
-                        break;
+                case 0:
+                    this.Monitor.Log($"Couldn't find type '{typeName}'. Type `patch help export` for usage.", LogLevel.Error);
+                    return;
 
-                    case 1:
-                        type = possibleTypes[0];
-                        break;
+                case 1:
+                    break;
 
-                    default:
-                        this.Monitor.Log($"Found multiple types matching '{typeName}'. Please enter one of these exact values:\n    - \"{string.Join("\n    - \"", possibleTypes.Select(possibleType => possibleType.AssemblyQualifiedName))}\"", LogLevel.Error);
-                        break;
-                }
+                default:
+                    this.Monitor.Log($"Found multiple types matching '{typeName}'. Please enter one of these exact values:\n    - \"{string.Join("\n    - \"", possibleTypes.Select(possibleType => possibleType.AssemblyQualifiedName))}\"", LogLevel.Error);
+                    return;
             }
-            if (type is null)
-                return;
+
+            // if needed, pick likely types based on the asset name
+            if (possibleTypes[0] == typeof(object))
+            {
+                var likelyTypes = this.GetLikelyTypes(assetName);
+                if (likelyTypes != null)
+                    possibleTypes.InsertRange(0, likelyTypes);
+            }
 
             // load asset
-            object? asset;
+            object? asset = null;
+            Dictionary<Type, Exception>? exceptions = null;
             try
             {
-                asset = this.LoadAsset(assetName, type);
+                foreach (Type type in possibleTypes)
+                {
+                    try
+                    {
+                        asset = this.LoadAsset(assetName, type);
+                        if (asset != null)
+                            break;
+                    }
+                    catch (Exception ex) when (ex.InnerException is ContentLoadException or InvalidCastException) // use inner exception since LoadAsset uses reflection
+                    {
+                        exceptions ??= new();
+                        exceptions.Add(type, ex.InnerException);
+                    }
+                }
             }
-            catch (ContentLoadException ex)
+            catch (Exception ex)
             {
-                this.Monitor.Log($"Can't load asset '{assetName}' with type '{type.FullName}': {ex.Message}", LogLevel.Error);
+                this.Monitor.Log($"Can't load asset '{assetName}': {ex.Message}", LogLevel.Error);
+            }
+
+            if (asset is null)
+            {
+                this.Monitor.Log($"Couldn't load asset '{assetName}' using a likely type (tried: {string.Join(", ", possibleTypes.Select(p => p.FullName))}). Try either specifying the type, or waiting until the game loads it before exporting it. See the SMAPI log for details.", LogLevel.Error);
+                if (exceptions is not null)
+                {
+                    foreach ((Type type, Exception ex) in exceptions)
+                        this.Monitor.Log($"Failed to load using type '{type.FullName}': {ex}");
+                }
                 return;
             }
 
@@ -311,6 +337,37 @@ namespace ContentPatcher.Framework.Commands.Commands
                 return matches.OrderBy(p => p.FullName, HumanSortComparer.DefaultIgnoreCase).ToArray();
 
             }
+        }
+
+        /// <summary>Try to get likely export types for an asset name.</summary>
+        /// <param name="asset">The asset name.</param>
+        private List<Type>? GetLikelyTypes(string asset)
+        {
+            IAssetName assetName = this.ContentHelper.ParseAssetName(asset);
+
+            if (assetName.IsDirectlyUnderPath("Maps"))
+                return new() { typeof(Map), typeof(Texture2D) };
+
+            if (
+                assetName.IsDirectlyUnderPath("Animals")
+                || assetName.IsDirectlyUnderPath("Buildings")
+                || assetName.IsDirectlyUnderPath("Characters")
+                || assetName.IsDirectlyUnderPath("Portraits")
+                || assetName.IsDirectlyUnderPath("Minigames")
+                || assetName.IsDirectlyUnderPath("TerrainFeatures")
+                || assetName.IsDirectlyUnderPath("TileSheets")
+            )
+                return new() { typeof(Texture2D) };
+
+            if (
+                assetName.IsDirectlyUnderPath("Characters/Dialogue")
+                || assetName.IsDirectlyUnderPath("Characters/schedules")
+                || assetName.IsDirectlyUnderPath("Data/Events")
+                || assetName.IsDirectlyUnderPath("Data/festivals")
+            )
+                return new() { typeof(Dictionary<string, string>) };
+
+            return null;
         }
 
         /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>

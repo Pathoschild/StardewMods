@@ -19,13 +19,13 @@
     *********/
     // general options
     "config.title.general-options": "Основні налаштування",
-    "config.enable-game-debug.name": "Увімкнути гарячі клавіші налагодження гри",
+    "config.enable-game-debug.name": "Увімкнути гарячі клавіші\nналагодження гри",
     "config.enable-game-debug.desc": "Відображення інформації про налагодження також вмикає гарячі клавіші налагодження в грі, як-от натискання 5, щоб перейти до пляжу.",
-    "config.enable-dangerous-hotkeys.name": "Дозволити небезпечні гарячі клавіші",
+    "config.enable-dangerous-hotkeys.name": "Дозволити небезпечні гарячі\nклавіші",
     "config.enable-dangerous-hotkeys.desc": "Якщо ввімкнено гарячі клавіші налагодження гри, увімкніть також небезпечні гарячі клавіші, які можуть негайно завершити поточний день, рандомізувати декорації гравця чи ферми або завершити гру.",
 
     // controls
     "config.title.controls": "Елементи керування",
-    "config.toggle-debug-key.name": "Увімкнути інформацію про налагодження",
+    "config.toggle-debug-key.name": "Увімкнути інформацію про\nналагодження",
     "config.toggle-debug-key.desc": "Клавіші, які перемикають інформацію про налагодження."
 }

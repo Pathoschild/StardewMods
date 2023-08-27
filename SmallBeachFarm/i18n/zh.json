@@ -1,0 +1,50 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "小型海滩农场",
+    "farm.description": "一片肥沃的小型海滩，你可以在这里抓到河里和海里的鱼。",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "农场选项",
+
+    "config.beach-sounds.name": "播放海滩声音",
+    "config.beach-sounds.tooltip": "在海滩农场播放海滩的背景音（比如：海浪声）。",
+
+    "config.spawn-monsters.name": "默认生成怪物",
+    "config.spawn-monsters.tooltip": "创建新存档时“夜间生成怪物”选项的默认值。你仍可以在创建新存档时更改此选项。这对于已有的存档没有影响。",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "农场布局",
+
+    "config.campfire.name": "添加篝火",
+    "config.campfire.tooltip": "在农舍前增加一堆有功能的篝火。",
+
+    "config.pier.name": "添加钓鱼码头",
+    "config.pier.tooltip": "添加一个可以钓鱼的码头。",
+
+    "config.islands.name": "添加岛屿",
+    "config.islands.tooltip": "添加有额外陆地区域的岛屿。",
+
+    "config.shipping-bin-path.name": "添加出货箱小径",
+    "config.shipping-bin-path.tooltip": "将石头小径瓷砖铺在默认的出货箱前。",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "农场位置",
+
+    "config.pier-x.name": "钓鱼码头 X",
+    "config.pier-x.tooltip": "钓鱼码头的瓦片位置（如果已启用）。将 X 和 Y 都设置为零来自动定位它。",
+
+    "config.pier-y.name": "钓鱼码头 Y",
+    "config.pier-y.tooltip": "钓鱼码头的瓦片位置（如果已启用）。将 X 和 Y 都设置为零来自动定位它。"
+}

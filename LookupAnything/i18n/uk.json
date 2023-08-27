@@ -534,7 +534,7 @@
     "npc.friendship.need-bouquet": "Потрібен букет для наступн.",
     "npc.friendship.need-points": "Наступн. за {{count}}",
     "npc.undiscovered-gift-taste": "{{count}} незвіданих предметів",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} предметів, якими ви ніколи не володіли",
 
 
     /*********
@@ -712,23 +712,22 @@
     "config.force-full-screen.desc": "Меню завжди буде повноекранним, а не центрованим у вікні. Це в основному корисно під час перегляду даних.",
 
     // gift tastes
-    // TODO
-    "config.title.gift-tastes": "Gift tastes",
-    "config.show-gift-tastes.loved.name": "Show loved gifts",
-    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
-    "config.show-gift-tastes.liked.name": "Show liked gifts",
-    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
-    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
-    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
-    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.hated.name": "Show hated gifts",
-    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+    "config.title.gift-tastes": "Вподобання",
+    "config.show-gift-tastes.loved.name": "Показувати улюблені подарунки",
+    "config.show-gift-tastes.loved.desc": "Чи показувати улюблені подарунки в дос'є НІПів та предметів.",
+    "config.show-gift-tastes.liked.name": "Показувати вподобані подарунки",
+    "config.show-gift-tastes.liked.desc": "Чи показувати вподобані подарунки в дос'є НІПів та предметів.",
+    "config.show-gift-tastes.neutral.name": "Показувати звичайні подарунки",
+    "config.show-gift-tastes.neutral.desc": "Чи показувати звичайні подарунки в дос'є НІПів та предметів.",
+    "config.show-gift-tastes.disliked.name": "Показувати невподобані\nподарунки",
+    "config.show-gift-tastes.disliked.desc": "Чи показувати невподобані подарунки в дос'є НІПів та предметів.",
+    "config.show-gift-tastes.hated.name": "Показувати жахливі подарунки",
+    "config.show-gift-tastes.hated.desc": "Чи показувати жахливі подарунки в дос'є НІПів та предметів.",
 
-    "config.show-unowned-gifts.name": "Show unowned gift tastes",
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+    "config.show-unowned-gifts.name": "Показувати незвідані вподобання",
+    "config.show-unowned-gifts.desc": "Чи показувати незвідані вподобання предметів, якими гравець не володіє десь у світі.",
 
-    "config.highlight-unrevealed-gift-tastes.name": "Підкреслити незвідані улюблені подарунків",
+    "config.highlight-unrevealed-gift-tastes.name": "Підкреслити незвідані улюблені\nподарунки",
     "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними.",
 
     // advanced options
@@ -738,7 +737,7 @@
     "config.data-mining-fields.name": "Показати поле аналізу даних",
     "config.data-mining-fields.desc": "Показ необроблених данних, корисних для шукачів даних (Як окремі поля внизу результатів пошуку). Це розширена функція, яка не призначена для більшості гравців.",
     "config.target-redirection.name": "Цільове переспрямування",
-    "config.target-redirection.desc": "У деяких випадках гра породжує тимчасову сутність, яка представляє іншу. Наприклад, Абігейл в шахтах насправді є тимчасовим НП на ім'я \"AbigailMine\", тому пошук її не покаже справжню інформацію про Абігейл. Якщо цей параметр увімкнено, Lookup Anything шукатиме оригінальну Абігейл.",
+    "config.target-redirection.desc": "У деяких випадках гра породжує тимчасову сутність, яка представляє іншу. Наприклад, Абіґейл в шахтах насправді є тимчасовим НП на ім'я \"AbigailMine\", тому пошук її не покаже справжню інформацію про Абіґейл. Якщо цей параметр увімкнено, Lookup Anything шукатиме оригінальну Абіґейл.",
     "config.scroll-amount.name": "Число прокрутки",
     "config.scroll-amount.desc": "Кількість пікселів для зміщення вмісту під час кожного прокручування вгору/вниз.",
 

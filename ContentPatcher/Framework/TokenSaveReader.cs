@@ -559,8 +559,12 @@ namespace ContentPatcher.Framework
             Farmer? host = this.GetPlayer(PlayerType.HostPlayer);
 
             return
-                this.GetIsCommunityCenterComplete()
-                && host?.mailReceived.Any(flag => flag is "jojaVault" or "jojaPantry" or "jojaBoilerRoom" or "jojaCraftsRoom" or "jojaFishTank" or "JojaMember") == true;
+                host?.mailReceived.Any(flag => flag is "jojaVault" or "jojaPantry" or "jojaBoilerRoom" or "jojaCraftsRoom" or "jojaFishTank" or "JojaMember") is true
+                && host.mailReceived.Contains("ccVault")
+                && host.mailReceived.Contains("ccPantry")
+                && host.mailReceived.Contains("ccBoilerRoom")
+                && host.mailReceived.Contains("ccCraftsRoom")
+                && host.mailReceived.Contains("ccFishTank");
         }
 
 

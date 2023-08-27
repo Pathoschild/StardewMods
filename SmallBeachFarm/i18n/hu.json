@@ -1,0 +1,50 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Kicsiny Tengerparti Farm",
+    "farm.description": "Egy apró, termékeny tengerpart, ahol folyami és tengeri halakat is el tudsz kapni.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Farm beállítások",
+
+    "config.beach-sounds.name": "Tengerparti hangok lejátszása",
+    "config.beach-sounds.tooltip": "Tengerpart háttérzenéjének (pl.: hullámok hangja) lejátszása a farmon.",
+
+    "config.spawn-monsters.name": "Szörnyek éledése alapból",
+    "config.spawn-monsters.tooltip": "Az alap értéke a 'szörnyek éledése este'-nek, amikor új mentést hozol létre. Ezt akkor is megváltoztathatod, amikor hozod létre az új mentést. Ennek nincsen semmi kihatása meglévő mentésekre.",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Farm alaprajza",
+
+    "config.campfire.name": "Tábortűz hozzáadása",
+    "config.campfire.tooltip": "Funkcionális tábortűz hozzáadása a ház elé.",
+
+    "config.pier.name": "Horgász móló hozzáadása",
+    "config.pier.tooltip": "Móló hozzáadása, amiről halászni tudsz.",
+
+    "config.islands.name": "Szigetek hozzáadása",
+    "config.islands.tooltip": "Óceáni szigetek hozzáadása extra földterületekkel.",
+
+    "config.shipping-bin-path.name": "Szállítós ládához út hozzáadása",
+    "config.shipping-bin-path.tooltip": "Lerak kőút csempéket az alap szállítós láda elé.",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "Farm pozíciók",
+
+    "config.pier-x.name": "Horgász móló X",
+    "config.pier-x.tooltip": "Az a csempe pozíció ahol a horgász móló el lesz helyezve, ha be van kapcsolva. Állítsd X-et és Y-ot is nullára automatikus elhelyezésért.",
+
+    "config.pier-y.name": "Horgász móló Y",
+    "config.pier-y.tooltip": "Az a csempe pozíció ahol a horgász móló el lesz helyezve, ha be van kapcsolva. Állítsd X-et és Y-ot is nullára automatikus elhelyezésért."
+}

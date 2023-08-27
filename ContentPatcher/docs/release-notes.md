@@ -9,6 +9,14 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.29.4
+Released 27 August 2023 for SMAPI 3.18.1 or later.
+
+* The `patch export` command is now better at guessing the export type for assets that aren't loaded yet (thanks to atravita!).
+* Fixed `EditData` replacing fields explicitly set to null with empty strings.
+* Fixed `IsJojaMartComplete` token not working consistently.
+* Fixed `Render` token incorrectly including named arguments.
+
 ## 1.29.3
 Released 26 June 2023 for SMAPI 3.18.1 or later.
 

@@ -1,0 +1,75 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Általános Beállítások",
+
+    "config.disable-eat-prompt.name": "Evés/ivás kérdés kikapcsolása",
+    "config.disable-eat-prompt.tooltip": "átugorja-e a megerősítő kérdését, amikor enni/inni akarsz valamit.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Játékos Animációinak Sebessége",
+
+    "config.eat-or-drink.name": "Evés/ivás",
+    "config.eat-or-drink.tooltip": "Milyen gyorsan eszel/iszol. Alapból {{defaultValue}}x.",
+
+    "config.fish.name": "Horgászás",
+    "config.fish.tooltip": "Milyen gyorsan dobod ki és húzod vissza a horgászbotot (a minigame-t nem befolyásolja). Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
+
+    "config.harvest.name": "Aratás",
+    "config.harvest.tooltip": "Milyen gyorsan aratod a növényeket és takarmányozol kézzel. Alapból {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Lófuvola sebessége",
+    "config.horse-flute.tooltip": "Milyen gyorsan játszol a lófuvolán. Alapból {{defaultValue}}x.",
+
+    "config.milk.name": "Fejés",
+    "config.milk.tooltip": "Milyen gyorsan használod a tejesvödröt. Alapból {{defaultValue}}x.",
+
+    "config.mount.name": "Felszállás/leszállás",
+    "config.mount.tooltip": "Milyen gyorsan szállsz fel lóra és le lóról (beleértve az egyedi meglovagolható eszközöket, pl.: Tractor Mod). Alapból {{defaultValue}}x.",
+
+    "config.shear.name": "Olló",
+    "config.shear.tooltip": "Milyen gyorsan használod az ollót. Alapból {{defaultValue}}x.",
+
+    "config.slingshot.name": "Csúzli",
+    "config.slingshot.tooltip": "Milyen gyorsán húzod fel a csúzlit. Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
+
+    "config.tool.name": "Eszközök lengetése",
+    "config.tool.tooltip": "Milyen gyorsan lengeted eszközeid (kivéve fegyverek és horgászbot). Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
+
+    "config.weapon.name": "Fegyverek lengetése",
+    "config.weapon.tooltip": "Milyen gyorsan lengeted fegyvereid. Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Világ Animációinak Sebessége",
+
+    "config.break-geodes.name": "Geódák törése",
+    "config.break-geodes.tooltip": "Milyen gyorsan töri össze a kovács a geódákat neked. Alapból {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Félkarú rabló",
+    "config.casino-slots.tooltip": "Milyen gyorsan forognak a félkarú rabló paneljai. Alapból {{defaultValue}}x.",
+
+    "config.bus.name": "Pam busza",
+    "config.bus.tooltip": "Milyen gyorsan vezeti Pam a buszt a sivatagba és a sivatagból. Alapból {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Fa dőlése",
+    "config.tree-fall.tooltip": "Milyen gyorsan dőlnek el a fák, miután kivágtad azokat. Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Felhasználói Felület Animációinak Sebessége",
+
+    "config.title-menu.name": "Főmenü átmenetei",
+    "config.title-menu.tooltip": "Milyen gyorsan vált a főmenü képernyők között. Alapból {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Játék betöltése",
+    "config.load-game-blink.tooltip": "Milyen gyorsan villant a játék, miután rányomtál, hogy töltsön be egy mentést. Alapból {{defaultValue}}x."
+}

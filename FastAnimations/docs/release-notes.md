@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.11.7
+Released 27 August 2023 for SMAPI 3.14.0 or later.
+
+* Improved translations. Thanks to Somalol (added Hungarian)!
+
 ## 1.11.6
 Released 25 June 2023 for SMAPI 3.14.0 or later.
 

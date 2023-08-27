@@ -465,7 +465,7 @@ Enter `automate summary` directly in the SMAPI console to view a summary of your
 > ![](screenshots/console-command.png)
 
 #### `automate reset`
-Enter `automate summary` directly in the SMAPI console to reset all cached data and rescan the
+Enter `automate reset` directly in the SMAPI console to reset all cached data and rescan the
 world for machines. Automate normally detects changes automatically, so this isn't usually needed.
 
 ## FAQs

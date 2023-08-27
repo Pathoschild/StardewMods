@@ -10,9 +10,9 @@
     ** Generic Mod Config Menu UI
     *********/
     "config.title.general-options": "Загальні налаштування",
-    "config.enabled-message.name": "Показувати повідомлення ввімкнення",
+    "config.enabled-message.name": "Показувати повідомлення\nввімкнення",
     "config.enabled-message.desc": "Чи показувати повідомлення в грі в кутку екрана, коли ввімкнено режим всюдихіддя.",
-    "config.disabled-message.name": "Показати повідомлення вименення",
+    "config.disabled-message.name": "Показувати повідомлення\nвимкнення",
     "config.disabled-message.desc": "Чи показувати повідомлення в грі в кутку екрана, коли режим всюдихіддя вимкнено.",
 
     "config.title.controls": "Керування",

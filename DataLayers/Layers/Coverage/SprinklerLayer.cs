@@ -53,6 +53,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             this.SearchRadius = 10;
             if (mods.BetterSprinklers.IsLoaded)
                 this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
+            if (mods.BetterSprinklersPlus.IsLoaded)
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklersPlus.MaxRadius);
             if (mods.LineSprinklers.IsLoaded)
                 this.SearchRadius = Math.Max(this.SearchRadius, mods.LineSprinklers.MaxRadius);
         }
@@ -147,6 +149,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             if (this.Mods.BetterSprinklers.IsLoaded)
             {
                 foreach ((int id, Vector2[] range) in this.Mods.BetterSprinklers.GetSprinklerTiles())
+                    tilesBySprinklerID[id] = range;
+            }
+
+            // Better Sprinklers Plus
+            if (this.Mods.BetterSprinklersPlus.IsLoaded)
+            {
+                foreach ((int id, Vector2[] range) in this.Mods.BetterSprinklersPlus.GetSprinklerTiles())
                     tilesBySprinklerID[id] = range;
             }
 

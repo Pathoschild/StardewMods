@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.5
+Released 27 August 2023 for SMAPI 3.14.0 or later.
+
+* Improved translations. Thanks to MyEclipseyang (updated Chinese)!
+
 ## 1.28.4
 Released 25 June 2023 for SMAPI 3.14.0 or later.
 

@@ -75,7 +75,7 @@ Now that you have access to the API, you can parse conditions.
 
    ```c#
    var conditions = api.ParseConditions(
-      manifest: this.Helper.Manifest,
+      manifest: this.ModManifest,
       raw: rawConditions,
       formatVersion: new SemanticVersion("1.20.0")
    );
@@ -87,7 +87,7 @@ Now that you have access to the API, you can parse conditions.
    conditions dictionary.
    ```c#
    var conditions = api.ParseConditions(
-      manifest: this.Helper.Manifest,
+      manifest: this.ModManifest,
       raw: rawConditions,
       formatVersion: new SemanticVersion("1.20.0"),
       assumeModIds: new[] { "spacechase0.JsonAssets" }

@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Lófuvola igénye",
+    "config.require-flute.description": "Vajon a lófuvolának benne kell-e lennie az eszköztáradban, hogy leidézd a lovat. Alapból ez hamis.",
+
+    "config.summon-horse-button.name": "Lóidézés gombja",
+    "config.summon-horse-button.description": "A gomb, amit megnyomsz, hogy játsz a fuvolán és leidézd a lovat. Alapból {{defaultValue}}."
+}
