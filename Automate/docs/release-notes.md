@@ -5,6 +5,10 @@
 * Updated for Stardew Valley 1.6.
 * Added support for custom floors/paths as connectors.
 
+**Known issues:**
+* Custom machine rules in `Data/Machines` aren't supported yet.
+* Fairy dust in chests isn't applied to connected machines yet.
+
 ## 1.28.7
 Released 01 December 2023 for SMAPI 3.14.0 or later.
 

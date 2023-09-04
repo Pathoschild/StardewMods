@@ -28,12 +28,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 if (trackedStack.Sample is not SObject)
                     continue;
 
-                SObject? output = this.Machine.GetDeconstructorOutput(trackedStack.Sample.getOne());
+                Item? output = SObject.OutputDeconstructor(this.Machine, trackedStack.Sample.getOne(), false, null, out int? overrideMinutesUntilReady);
                 if (output != null)
                 {
                     trackedStack.Reduce(1);
-                    this.Machine.heldObject.Value = output;
-                    this.Machine.MinutesUntilReady = 60;
+                    this.Machine.heldObject.Value = (SObject)output;
+                    this.Machine.MinutesUntilReady = overrideMinutesUntilReady ?? 60;
                     return true;
                 }
             }
