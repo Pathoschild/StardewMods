@@ -291,8 +291,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (location is Town town)
             {
                 string action = town.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
-                if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
-                    return new TrashCanMachine(town, tile, trashCanIndex, this.Reflection);
+                if (action != null)
+                {
+                    string[] fields = ArgUtility.SplitBySpace(action);
+                    if (string.Equals(fields[0], "Garbage", StringComparison.OrdinalIgnoreCase) && ArgUtility.HasIndex(fields, 1))
+                        return new TrashCanMachine(town, tile, fields[1]);
+                }
             }
 
             // fridge

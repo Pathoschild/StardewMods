@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -49,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             foreach (ITrackedStack consumable in input.GetItems().Where(match => match.Type == ItemRegistry.type_object && match.Sample.Quality < SObject.bestQuality))
             {
-                float agingRate = cask.GetAgingMultiplierForItem(consumable.Sample);
+                float agingRate = this.GetAgingMultiplierForItem(consumable.Sample);
                 if (agingRate <= 0)
                     continue;
 
@@ -80,6 +81,23 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             cask.MinutesUntilReady = 0;
             cask.agingRate.Value = 0;
             cask.daysToMature.Value = 0;
+        }
+
+        /// <summary>Get the aging rate multiplier for an item.</summary>
+        /// <param name="item">The item instance.</param>
+        [Obsolete("This is copied from Stardew Valley 1.5.6 for the initial 1.6 compatibility update. This should be replaced with a <c>Data/Machines</c>-based machine.")]
+        private float GetAgingMultiplierForItem(Item? item)
+        {
+            return item?.QualifiedItemId switch
+            {
+                "(O)426" => 4, // goat cheese
+                "(O)424" => 4, // cheese
+                "(O)348" => 1, // wine
+                "(O)459" => 2, // mead
+                "(O)303" => 1.66f, // pale ale
+                "(O)346" => 2, // beer
+                _ => 0
+            };
         }
     }
 }

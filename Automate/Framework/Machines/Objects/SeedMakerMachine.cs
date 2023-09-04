@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.GameData.Crops;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -79,21 +80,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Update the cached item => seed ID lookup.</summary>
-        /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> and <see cref="Crop.InferSeedIndex"/>.</remarks>
+        /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> .</remarks>
         private void UpdateSeedLookup()
         {
             if (Game1.ticks > SeedMakerMachine.LastCacheTick)
             {
                 var cache = SeedMakerMachine.SeedLookup;
-                var crops = Game1.content.Load<Dictionary<string, string>>("Data\\Crops");
+                var crops = Game1.cropData;
                 if (crops.Count != SeedMakerMachine.LastCropsCount)
                 {
                     cache.Clear();
 
-                    foreach (KeyValuePair<string, string> entry in crops)
+                    foreach ((string seedId, CropData data) in crops)
                     {
-                        string seedId = entry.Key;
-                        string produceId = entry.Value.Split('/')[3];
+                        string produceId = data.HarvestItemId;
                         if (!cache.ContainsKey(produceId)) // use first crop found per game logic
                             cache[produceId] = seedId;
                     }

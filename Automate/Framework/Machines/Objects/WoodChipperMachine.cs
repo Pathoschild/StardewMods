@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
@@ -33,10 +33,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 new Recipe(
                     input: "(O)709",
                     inputCount: 1,
-                    output: input =>
+                    output: _ =>
                     {
-                        KeyValuePair<string, int> result = this.Machine.GetResultItem(input as SObject);
-                        return new SObject(result.Key, result.Value);
+                        // 2% chance of maple syrup, oak resin, or pine tar
+                        if (Game1.random.NextBool(0.02))
+                        {
+                            string itemId = Game1.random.Choose("(O)724", "(O)725", "(O)726");
+                            return ItemRegistry.Create(itemId);
+                        }
+
+                        // else wood
+                        int count = Game1.random.NextBool(0.1)
+                            ? Game1.random.Next(15, 21)
+                            : Game1.random.Next(5, 11);
+                        return ItemRegistry.Create("(O)388", count);
                     },
                     minutes: 180
                 ),
@@ -45,11 +55,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 new Recipe(
                     input: "(O)169",
                     inputCount: 1,
-                    output: input =>
-                    {
-                        KeyValuePair<string, int> result = this.Machine.GetResultItem(input as SObject);
-                        return new SObject(result.Key, result.Value);
-                    },
+                    output: _ => ItemRegistry.Create("(O)388", Game1.random.Next(5, 11)),
                     minutes: 180
                 )
             };
