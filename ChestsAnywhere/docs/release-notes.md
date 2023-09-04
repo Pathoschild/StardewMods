@@ -3,6 +3,11 @@
 # Release notes
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
+* Removed migration for pre-1.20 chest options.  
+  _If you edited a chest's name or options before Chests Anywhere 1.20.0 (December 2020) and haven't loaded the save since then, it will no longer be migrated to the new format. You'll need to re-edit it to set the options you want. This is needed because the migration conflicted with newer Stardew Valley 1.6 features._
+
+## 1.20.0
+Released 21 December 2020 for SMAPI 3.8.0 or later.
 
 ## 1.22.10
 Released 01 December 2023 for SMAPI 3.14.0 or later.

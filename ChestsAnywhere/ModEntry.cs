@@ -116,10 +116,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // show multiplayer limitations warning
             if (!Context.IsMainPlayer)
                 this.Monitor.Log("Multiplayer limitations: you can only access chests in synced locations since you're not the main player. This is due to limitations in the game's sync logic.", LogLevel.Info);
-
-            // migrate legacy chest data
-            if (Context.IsMainPlayer)
-                Migrator.MigrateLegacyData(this.ChestFactory, this.Helper.Data);
         }
 
         /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
