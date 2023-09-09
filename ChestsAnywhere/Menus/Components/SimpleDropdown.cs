@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
                 dropDownOptions = optionKeys,
                 dropDownDisplayOptions = optionLabels
             };
-            this.IsExpandedField = reflection.GetField<bool>(this.Dropdown, "clicked");
+            this.IsExpandedField = reflection.GetField<bool>(this.Dropdown, Constants.TargetPlatform == GamePlatform.Android ? "dropDownOpen" : "clicked");
 
             // select element
             this.TrySelect(selected);
