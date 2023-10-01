@@ -469,7 +469,9 @@ namespace Pathoschild.Stardew.Automate
         private bool ReloadIfNeeded<TEntity>(GameLocation location, IEnumerable<DiffEntry<TEntity>> entities)
             where TEntity : notnull
         {
+            string locationKey = this.MachineManager.Factory.GetLocationKey(location);
             MachineDataForLocation? data = this.MachineManager.GetMachineDataFor(location);
+            JunimoMachineGroup junimoData = this.MachineManager.JunimoMachineGroup;
 
             bool shouldReload = false;
             foreach ((Rectangle tileArea, TEntity entity, bool isAdded) in entities)
@@ -494,16 +496,16 @@ namespace Pathoschild.Stardew.Automate
                 // reload if potentially connected to a chest
                 if (isAdded)
                 {
-                    shouldReload = automateable is IContainer
-                        ? data.ContainsOrAdjacent(tileArea)
-                        : data.IsConnectedToChest(tileArea);
+                    shouldReload =
+                        junimoData.ContainsOrAdjacent(locationKey, tileArea)
+                        || (automateable is IContainer ? data.ContainsOrAdjacent(tileArea) : data.IsConnectedToChest(tileArea));
 
                     if (shouldReload)
                         break;
                 }
 
                 // reload if removed from a valid machine group
-                if (data.IntersectsAutomatedGroup(tileArea))
+                if (data.IntersectsAutomatedGroup(tileArea) || junimoData.IntersectsAutomatedGroup(locationKey, tileArea))
                 {
                     shouldReload = true;
                     break;
