@@ -34,6 +34,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <inheritdoc />
         public bool IsMutable => this.Provider.IsMutable();
 
+        /// <inheritdoc />
         public bool IsDeterministicForInput => this.Provider.IsDeterministicForInput();
 
         /// <inheritdoc />

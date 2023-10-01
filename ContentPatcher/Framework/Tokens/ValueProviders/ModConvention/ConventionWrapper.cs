@@ -22,6 +22,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <summary>Get whether the values may change depending on the context.</summary>
         private ConventionDelegates.IsMutable? IsMutableImpl;
 
+        /// <summary>The implementation for <see cref="IsDeterministicForInput"/>, if any.</summary>
         private ConventionDelegates.IsDeterministicForInput? IsDeterministicForInputImpl;
 
         /// <summary>The implementation for <see cref="AllowsInput"/>, if any.</summary>
@@ -156,7 +157,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
             return this.IsMutableImpl?.Invoke() ?? true;
         }
 
-        /// <summary>Get whether the token is immutable if the inputs are also immutable</summary>
+        /// <inheritdoc cref="ConventionDelegates.IsDeterministicForInput"/>
         public bool IsDeterministicForInput()
         {
             return this.IsDeterministicForInputImpl?.Invoke() ?? false;
