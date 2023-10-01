@@ -110,8 +110,11 @@ namespace ContentPatcher.Framework.Conditions
                     tokensUsed ??= new();
                     tokensUsed.Add(token.Name);
 
-                    if (!token.RequiresInput || !token.IsDeterministicForInput)
+                    if (!token.IsDeterministicForInput)
                     {
+                        // If every token is deterministic, then the resulting string must be immutable. If this token
+                        // is deterministic but it receives non-deterministic input, the string will be marked mutable
+                        // when we recursively check those tokens.
                         isMutable = isMutable || token.IsMutable;
                     }
                 }
