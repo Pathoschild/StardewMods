@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <summary>Get all spawnable items.</summary>
         /// <param name="itemTypes">The item types to fetch (or null for any type).</param>
         /// <param name="includeVariants">Whether to include flavored variants like "Sunflower Honey".</param>
-        [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "TryCreate invokes the lambda immediately.")]
+        [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = $"{nameof(ItemRepository.TryCreate)} invokes the lambda immediately.")]
         public IEnumerable<SearchableItem> GetAll(ItemType[]? itemTypes = null, bool includeVariants = true)
         {
             //
@@ -104,12 +104,18 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                 // weapons
                 if (ShouldGet(ItemType.Weapon))
                 {
-                    foreach (int id in this.TryLoad<int, string>("Data\\weapons").Keys)
+                    Dictionary<int, string> weaponsData = this.TryLoad<int, string>("Data\\weapons");
+                    foreach (KeyValuePair<int, string> pair in weaponsData)
                     {
-                        yield return this.TryCreate(ItemType.Weapon, id, p => p.ID is >= 32 and <= 34
-                            ? new Slingshot(p.ID)
-                            : new MeleeWeapon(p.ID)
-                        );
+                        string rawFields = pair.Value;
+                        yield return this.TryCreate(ItemType.Weapon, pair.Key, p =>
+                        {
+                            string[] fields = rawFields.Split('/');
+                            bool isSlingshot = fields.Length > 8 && fields[8] == "4";
+                            return isSlingshot
+                                ? new Slingshot(p.ID)
+                                : new MeleeWeapon(p.ID);
+                        });
                     }
                 }
 
@@ -165,21 +171,31 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                         else if (ShouldGet(ItemType.Object))
                         {
                             // spawn main item
-                            SObject? item = null;
-                            yield return this.TryCreate(ItemType.Object, id, p =>
+                            SearchableItem? mainItem = this.TryCreate(ItemType.Object, id, p =>
                             {
-                                return item = (p.ID == 812 // roe
-                                    ? new ColoredObject(p.ID, 1, Color.White)
-                                    : new SObject(p.ID, 1)
-                                );
+                                // roe
+                                if (p.ID == 812)
+                                    return new ColoredObject(p.ID, 1, Color.White);
+
+                                // Wild Honey
+                                if (p.ID == 340)
+                                {
+                                    return new SObject(Vector2.Zero, 340, "Wild Honey", false, true, false, false)
+                                    {
+                                        Name = "Wild Honey",
+                                        preservedParentSheetIndex = { -1 }
+                                    };
+                                }
+
+                                // else plain item
+                                return new SObject(p.ID, 1);
                             });
-                            if (item == null)
-                                continue;
+                            yield return mainItem;
 
                             // flavored items
-                            if (includeVariants)
+                            if (includeVariants && mainItem?.Item != null)
                             {
-                                foreach (SearchableItem? variant in this.GetFlavoredObjectVariants(item))
+                                foreach (SearchableItem? variant in this.GetFlavoredObjectVariants((SObject)mainItem.Item))
                                     yield return variant;
                             }
                         }
@@ -349,6 +365,18 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                         }
                     }
                     break;
+            }
+
+            // ginger => pickled ginger
+            if (id == 829 && item.Category != SObject.VegetableCategory)
+            {
+                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + id, _ => new SObject(342, 1)
+                {
+                    Name = $"Pickled {item.Name}",
+                    Price = 50 + item.Price * 2,
+                    preserve = { SObject.PreserveType.Pickle },
+                    preservedParentSheetIndex = { id }
+                });
             }
         }
 

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed item search not matching Pickled Ginger and Wild Honey.
 * Improved translations. Thanks to CoolRabbit123 (updated German) and Moredistant (updated Chinese)!
 
 ## 1.40.1
