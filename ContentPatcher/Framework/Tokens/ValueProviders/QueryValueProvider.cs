@@ -33,11 +33,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public QueryValueProvider()
-            : base(ConditionType.Query, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.Query, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.BypassesContextValidation = true;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.IsDeterministicForInput = true;
             this.MarkReady(true);
         }
 

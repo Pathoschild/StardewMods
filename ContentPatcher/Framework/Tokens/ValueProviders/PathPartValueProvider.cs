@@ -16,10 +16,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public PathPartValueProvider()
-            : base(ConditionType.PathPart, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.PathPart, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 2);
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

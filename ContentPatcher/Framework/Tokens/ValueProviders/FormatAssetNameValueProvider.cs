@@ -13,11 +13,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public FormatAssetNameValueProvider()
-            : base(ConditionType.FormatAssetName, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.FormatAssetName, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
             this.ValidNamedArguments = InvariantSets.FromValue("separator");
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

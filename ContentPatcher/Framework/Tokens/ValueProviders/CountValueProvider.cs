@@ -11,10 +11,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public CountValueProvider()
-            : base(ConditionType.Count, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.Count, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

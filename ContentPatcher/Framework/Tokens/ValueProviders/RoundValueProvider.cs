@@ -32,10 +32,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RoundValueProvider()
-            : base(ConditionType.Round, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.Round, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

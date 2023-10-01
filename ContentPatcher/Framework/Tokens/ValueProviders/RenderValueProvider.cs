@@ -11,10 +11,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RenderValueProvider()
-            : base(ConditionType.Render, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.Render, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

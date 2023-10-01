@@ -12,10 +12,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public HasValueValueProvider()
-            : base(ConditionType.HasValue, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.HasValue, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.IsDeterministicForInput = true;
         }
 
         /// <inheritdoc />

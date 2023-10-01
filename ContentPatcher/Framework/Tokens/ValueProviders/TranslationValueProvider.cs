@@ -25,16 +25,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="translationHelper">Gets translations from the content pack's translation folder.</param>
         public TranslationValueProvider(ITranslationHelper translationHelper)
-            : base(ConditionType.I18n, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.I18n, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true) // This is deterministic 99% of the time, but if language is changed, this would need to be invalidated
         {
             this.TranslationHelper = translationHelper;
             this.LastLocale = translationHelper.LocaleEnum;
 
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.AllowAnyNamedArguments = true;
-            
-            // This is deterministic 99% of the time, but if language is changed, this would need to be invalidated
-            this.IsDeterministicForInput = false;
             this.MarkReady(true);
         }
 

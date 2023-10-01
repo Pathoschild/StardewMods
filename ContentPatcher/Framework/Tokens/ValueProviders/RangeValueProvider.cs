@@ -20,10 +20,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RangeValueProvider()
-            : base(ConditionType.Range, mayReturnMultipleValuesForRoot: true)
+            : base(ConditionType.Range, mayReturnMultipleValuesForRoot: true, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: true, maxPositionalArgs: 2);
-            this.IsDeterministicForInput = true;
             this.MarkReady(true);
         }
 
