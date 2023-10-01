@@ -268,6 +268,13 @@ namespace ContentPatcher.Framework.Patches
             if (setTilesheet != null || setIndex != null || setProperties.Any())
             {
                 var tile = new StaticTile(layer, setTilesheet ?? original!.TileSheet, original?.BlendMode ?? BlendMode.Alpha, setIndex ?? original!.TileIndex);
+
+                if (original?.Properties.Count > 0)
+                {
+                    foreach ((string key, string value) in original.Properties)
+                        tile.Properties[key] = value;
+                }
+
                 foreach ((string key, string? value) in setProperties)
                 {
                     if (value == null)
