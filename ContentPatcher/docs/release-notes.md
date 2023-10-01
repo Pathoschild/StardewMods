@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed error setting a property name to a token value when that token isn't ready. The patch will now be correctly marked non-ready instead.
+
 ## 1.29.4
 Released 27 August 2023 for SMAPI 3.18.1 or later.
 
