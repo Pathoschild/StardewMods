@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the value provider requires positional input arguments, and does not provide values without it (see <see cref="AllowsPositionalInput"/>).</summary>
         bool RequiresPositionalInput { get; }
 
+        /// <summary>Whether the value provider always contains the same values in every context given the same input arguments (i.e. it's immutable if its input arguments are).</summary>
+        bool IsDeterministicForInput { get; }
+
         /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
         bool BypassesContextValidation { get; }
 

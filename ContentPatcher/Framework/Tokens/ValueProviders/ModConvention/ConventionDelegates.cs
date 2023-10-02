@@ -14,6 +14,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <remarks>Default true.</remarks>
         internal delegate bool IsMutable();
 
+        /// <inheritdoc cref="IValueProvider.IsDeterministicForInput"/>
+        /// <remarks>Default false.</remarks>
+        internal delegate bool IsDeterministicForInput();
+
         /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
         /// <remarks>Default false.</remarks>
         internal delegate bool AllowsInput();

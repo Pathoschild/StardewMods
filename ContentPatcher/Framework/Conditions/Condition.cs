@@ -102,7 +102,9 @@ namespace ContentPatcher.Framework.Conditions
             // update values
             if (this.IsReady && token != null)
             {
-                this.CurrentValues = this.Values.SplitValuesUnique(token.NormalizeValue);
+                if (this.Values.IsMutable)
+                    this.CurrentValues = this.Values.SplitValuesUnique(token.NormalizeValue);
+
                 this.IsMatch = token
                     .GetValues(this.Input)
                     .Any(value => this.CurrentValues.Contains(value));

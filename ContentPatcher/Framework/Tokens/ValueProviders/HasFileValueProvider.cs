@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="relativePathExists">Get whether a relative file path exists in the content pack.</param>
         public HasFileValueProvider(Func<string, bool> relativePathExists)
-            : base(ConditionType.HasFile, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.HasFile, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true) // limitation: isDeterministicForInput doesn't account for content pack authors using `patch reload` after adding/deleting files
         {
             this.RelativePathExists = relativePathExists;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
