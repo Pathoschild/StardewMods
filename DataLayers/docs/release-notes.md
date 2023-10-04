@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Improved compatibility with recent game updates on Android.
 * Improved translations. Thanks to Moredistant (updated Chinese)!
 
 ## 1.15.9

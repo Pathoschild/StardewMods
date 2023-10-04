@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Improved compatibility with recent game updates on Android.
 * Fixed Junimo Chest groups not always updated when a machine is placed or removed.
 
 ## 1.28.5
