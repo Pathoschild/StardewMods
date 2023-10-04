@@ -9,11 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Optimized to avoid unneeded token updates in more cases (thanks to SinZ!). This can significantly improve performance in some cases (particularly when using the `Range` token).
-* Fixed debug overlay on Android.
+## 1.30.0
+Released 03 October 2023 for SMAPI 3.18.1 or later.  See the [release highlights](https://www.patreon.com/posts/90281255).
+
+* Optimized deterministic token input (thanks to SinZ!). This significantly improves performance for content packs which use `Range` for time checks or other large ranges.
 * Fixed `EditMap`'s `MapTiles` removing current tile properties on the tiles being edited.
 * Fixed error setting a property name to a token value when that token isn't ready. The patch will now be correctly marked non-ready instead.
+* Fixed debug overlay on Android.
 
 ## 1.29.4
 Released 27 August 2023 for SMAPI 3.18.1 or later.

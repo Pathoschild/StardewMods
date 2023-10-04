@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 2.4.9
+Released 03 October 2023 for SMAPI 3.14.0 or later.
+
 * Fixed hats sometimes drawn over top of cave entrance.
 
 ## 2.4.8
