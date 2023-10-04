@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -101,6 +102,44 @@ namespace Pathoschild.Stardew.Automate.Framework
             return this.Tiles.TryGetValue(locationKey, out IReadOnlySet<Vector2>? tiles)
                 ? tiles
                 : ImmutableHashSet<Vector2>.Empty;
+        }
+
+        /// <summary>Get whether the tile area intersects this machine group.</summary>
+        /// <param name="locationKey">The location key as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        /// <param name="tileArea">The tile area to check.</param>
+        /// <remarks>This is the Junimo Chest equivalent of <see cref="MachineDataForLocation.IntersectsAutomatedGroup"/>.</remarks>
+        public bool IntersectsAutomatedGroup(string locationKey, Rectangle tileArea)
+        {
+            IReadOnlySet<Vector2> tiles = this.GetTiles(locationKey);
+            if (tiles.Count == 0)
+                return false;
+
+            foreach (Vector2 tile in tileArea.GetTiles())
+            {
+                if (tiles.Contains(tile))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>Get whether a tile area contains or is adjacent to a tracked automateable.</summary>
+        /// <param name="locationKey">The location key as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        /// <param name="tileArea">The tile area to check.</param>
+        /// <remarks>This is the Junimo Chest equivalent of <see cref="MachineDataForLocation.ContainsOrAdjacent"/>.</remarks>
+        public bool ContainsOrAdjacent(string locationKey, Rectangle tileArea)
+        {
+            IReadOnlySet<Vector2> tiles = this.GetTiles(locationKey);
+            if (tiles.Count == 0)
+                return false;
+
+            foreach (Vector2 tile in tileArea.GetSurroundingTiles())
+            {
+                if (tiles.Contains(tile))
+                    return true;
+            }
+
+            return false;
         }
 
 

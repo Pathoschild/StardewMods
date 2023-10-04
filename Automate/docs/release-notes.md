@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.6
+Released 03 October 2023 for SMAPI 3.14.0 or later.
+
+* Improved compatibility with recent game updates on Android.
+* Fixed Junimo Chest groups not always updated when a machine is placed or removed.
+
 ## 1.28.5
 Released 27 August 2023 for SMAPI 3.14.0 or later.
 

@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public MergeValueProvider()
-            : base(ConditionType.Merge, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.Merge, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.EnableInputArguments(required: false, mayReturnMultipleValues: true, maxPositionalArgs: null);
         }

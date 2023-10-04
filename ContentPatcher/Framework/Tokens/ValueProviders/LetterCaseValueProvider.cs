@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type. This must be one of <see cref="ConditionType.Lowercase"/> or <see cref="ConditionType.Uppercase"/>.</param>
         public LetterCaseValueProvider(ConditionType type)
-            : base(type, mayReturnMultipleValuesForRoot: false)
+            : base(type, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             if (type != ConditionType.Lowercase && type != ConditionType.Uppercase)
                 throw new ArgumentException($"The {nameof(type)} must be one of {ConditionType.Lowercase} or {ConditionType.Uppercase}.", nameof(type));

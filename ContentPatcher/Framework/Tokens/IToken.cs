@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether this token is only valid with input arguments.</summary>
         bool RequiresInput { get; }
 
+        /// <summary>Whether the token always contains the same values in every context given the same input arguments (i.e. it's immutable if its input arguments are).</summary>
+        bool IsDeterministicForInput { get; }
+
         /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
         bool BypassesContextValidation { get; }
 

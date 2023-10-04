@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.10
+Released 03 October 2023 for SMAPI 3.14.0 or later.
+
+* Improved compatibility with recent game updates on Android.
+* Improved translations. Thanks to Moredistant (updated Chinese)!
+
 ## 1.15.9
 Released 27 August 2023 for SMAPI 3.14.0 or later.
 

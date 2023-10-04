@@ -32,7 +32,7 @@
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
-    "type.map-tile": "地格",
+    "type.map-tile": "图块",
     "type.monster": "怪物",
     "type.player": "玩家",
     "type.tree": "树",
@@ -243,8 +243,8 @@
 
     // values
     "building.animals.summary": "已容纳{{count}}只动物，最大可容纳{{max}}只动物",
-    "building.construction.summary": "完成至 {{date}}",
-    "building.feed-trough.automated": "自动化",
+    "building.construction.summary": "{{date}} 完成",
+    "building.feed-trough.automated": "自动喂食",
     "building.feed-trough.summary": "{{filled}}喂食格已填充，最大可填充喂食格为{{max}}格",
     "building.horse-location.summary": "{{location}}（{{x}}, {{y}}）",
     "building.junimo-harvesting-enabled": "自动收获已启用",
@@ -356,7 +356,7 @@
     "item.contents": "内容",
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
-    "item.neutral-about-this": "中性",
+    "item.neutral-about-this": "无感",
     "item.dislikes-this": "不喜欢",
     "item.hates-this": "讨厌",
     "item.needed-for": "用于",
@@ -451,20 +451,20 @@
     // labels
     "item.melee-weapon.accuracy": "精准度",
     "item.melee-weapon.critical-chance": "暴击率",
-    "item.melee-weapon.critical-damage": "暴击力量",
+    "item.melee-weapon.critical-damage": "暴击伤害(力量)",
     "item.melee-weapon.damage": "伤害",
     "item.melee-weapon.defense": "防御",
-    "item.melee-weapon.knockback": "击退",
+    "item.melee-weapon.knockback": "击退(重量)",
     "item.melee-weapon.reach": "范围",
-    "item.melee-weapon.speed": "攻击速度",
+    "item.melee-weapon.speed": "攻速(速度)",
 
     // values
-    "item.melee-weapon.critical-damage.label": "{{multiplier}}倍伤害 (在获得加成前)",
-    "item.melee-weapon.defense.label": "当装备后{{amount}}",
+    "item.melee-weapon.critical-damage.label": "{{multiplier}} 倍正常伤害(未计算玩家加成)",
+    "item.melee-weapon.defense.label": "{{amount}} (装备时)",
     "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} 倍正常距离)",
     "item.melee-weapon.reach.label": "{{amount}} 像素",
-    "item.melee-weapon.speed.shown-vs-actual": "当前显示: {{shownSpeed}}{{lineBreak}} 实际: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} (在没有获得攻速加成时每次挥舞间隔{{milliseconds}}毫秒)",
+    "item.melee-weapon.speed.shown-vs-actual": "显示: {{shownSpeed}}{{lineBreak}} 实际: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} (攻击动画 {{milliseconds}} 毫秒，未计算玩家加成)",
 
 
     /*********
@@ -473,13 +473,13 @@
     // labels
     "item.movie-snack-preference": "喜好",
     "item.movie-ticket.movie-this-week": "本周电影",
-    "item.movie-ticket.loves-movie": "热爱电影",
+    "item.movie-ticket.loves-movie": "最爱电影",
     "item.movie-ticket.likes-movie": "喜欢电影",
     "item.movie-ticket.dislikes-movie": "不喜欢电影",
     "item.movie-ticket.rejects-movie": "拒绝电影",
 
     // values
-    "item.movie-snack-preference.love": "{{name}}酷爱这个",
+    "item.movie-snack-preference.love": "{{name}}最爱这个",
     "item.movie-snack-preference.like": "{{name}}喜欢这个",
     "item.movie-snack-preference.dislike": "{{name}}不喜欢这个",
     "item.movie-ticket.movie-this-week.none": "本周没有电影",
@@ -507,7 +507,7 @@
 
     // values
     "monster.drops.nothing": "无",
-    "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}}（击杀了总数{{requiredCount}}中的{{count}}）",
+    "monster.adventure-guild.eradication-goal": "击杀目标：{{name}}（要求击杀{{requiredCount}}个，已击杀{{count}}个）",
 
 
     /*********
@@ -524,18 +524,18 @@
     "npc.hugged-today": "今日已拥抱",
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
-    "npc.neutral-gifts": "普通",
+    "npc.neutral-gifts": "无感",
     "npc.dislikes-gifts": "不喜欢",
-    "npc.hates-gifts": "厌恶",
+    "npc.hates-gifts": "讨厌",
 
     // values
-    "npc.can-romance.married": "你已经结婚了！ <", // < turns into a heart
-    "npc.can-romance.housemate": "你是室友！",
+    "npc.can-romance.married": "你们已结婚! ♡", // < turns into a heart
+    "npc.can-romance.housemate": "你们是室友!",
     "npc.friendship.not-met": "你们还没有见过面",
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
-    "npc.undiscovered-gift-taste": "{{count}} 个没揭露的品目",
-    "npc.unowned-gift-taste": "{{count}} 未知物品",
+    "npc.undiscovered-gift-taste": "{{count}} 个未揭露的物品",
+    "npc.unowned-gift-taste": "{{count}} 个未拥有的物品",
 
 
     /*********
@@ -602,11 +602,11 @@
     ** Puzzles
     *********/
     // labels
-    "puzzle.solution": "解决方案",
+    "puzzle.solution": "解决方法",
 
     // values
     "puzzle.solution.solved": "谜题已解决！",
-    "puzzle.solution.hidden": "谜题解决方案隐藏在进度模式中。",
+    "puzzle.solution.hidden": "在进度模式下谜题解决方法不可见",
 
 
     /*********
@@ -648,18 +648,18 @@
     ** Tile lookups
     *********/
     // labels
-    "tile.description": "地图上此位置的地格。显示此信息是因为你在设置中打开了地格信息显示功能。",
+    "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
     "tile.game-location": "位置",
     "tile.map-name": "地图名",
-    "tile.tile": "地格",
-    "tile.tile-index": "{{layerName}}：地格号",
-    "tile.tilesheet": "{{layerName}}: 地格层",
+    "tile.tile": "图块",
+    "tile.tile-index": "{{layerName}}: 图块索引",
+    "tile.tilesheet": "{{layerName}}: 图块集",
     "tile.blend-mode": "{{layerName}}: 混合模式",
-    "tile.index-property": "{{layerName}}: 指数属性: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: 属性: {{propertyName}}",
+    "tile.index-property": "{{layerName}}: 索引属性: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: 图块属性: {{propertyName}}",
 
     // values
-    "tile.tile.none-here": "此处无地格",
+    "tile.tile.none-here": "此处无图块",
 
 
     /*********
@@ -708,56 +708,56 @@
     // main options
     "config.title.main-options": "常规",
     "config.progression-mode.name": "进度模式",
-    "config.progression-mode.desc": "根据游戏进度显示信息（比如npc对礼物的好感度）。",
+    "config.progression-mode.desc": "是否隐藏某些内容(如礼物品位和谜题解决方法)，直到你在游戏中发现它",
     "config.force-full-screen.name": "强制全屏",
-    "config.force-full-screen.desc": "强制菜单为全屏。",
+    "config.force-full-screen.desc": "是否全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
 
     // gift tastes
-    "config.title.gift-tastes": "礼物喜好",
+    "config.title.gift-tastes": "礼物品位",
     "config.show-gift-tastes.loved.name": "显示最爱的礼物",
-    "config.show-gift-tastes.loved.desc": "是否在NPC和物品查找中显示最爱的礼物",
+    "config.show-gift-tastes.loved.desc": "是否在NPC和物品查询中显示最爱的礼物",
     "config.show-gift-tastes.liked.name": "显示喜欢的礼物",
-    "config.show-gift-tastes.liked.desc": "是否在NPC和物品查找中显示喜欢的礼物",
-    "config.show-gift-tastes.neutral.name": "显示普通的礼物",
-    "config.show-gift-tastes.neutral.desc": "是否在NPC和物品查找中显示普通礼物",
+    "config.show-gift-tastes.liked.desc": "是否在NPC和物品查询中显示喜欢的礼物",
+    "config.show-gift-tastes.neutral.name": "显示无感的礼物",
+    "config.show-gift-tastes.neutral.desc": "是否在NPC和物品查询中显示无感的礼物",
     "config.show-gift-tastes.disliked.name": "显示不喜欢的礼物",
-    "config.show-gift-tastes.disliked.desc": "是否在NPC和物品查找中显示不喜欢的礼物",
-    "config.show-gift-tastes.hated.name": "显示厌恶的礼物",
-    "config.show-gift-tastes.hated.desc": "是否在NPC和物品查找中显示厌恶的礼物",
+    "config.show-gift-tastes.disliked.desc": "是否在NPC和物品查询中显示不喜欢的礼物",
+    "config.show-gift-tastes.hated.name": "显示讨厌的礼物",
+    "config.show-gift-tastes.hated.desc": "是否在NPC和物品查询中显示讨厌的礼物",
 
-    "config.show-unowned-gifts.name": "显示未知的礼物喜好",
-    "config.show-unowned-gifts.desc": "是否将物品显示在喜好里即使玩家还没有获取过该物品",
+    "config.show-unowned-gifts.name": "显示未拥有的礼物",
+    "config.show-unowned-gifts.desc": "是否在NPC和物品查询中显示未拥有的礼物",
 
-    "config.highlight-unrevealed-gift-tastes.name": "加粗未揭露的礼物好感度",
-    "config.highlight-unrevealed-gift-tastes.desc": "对未揭露的npc礼物好感度，加粗显示。",
+    "config.highlight-unrevealed-gift-tastes.name": "加粗显示未揭露的礼物",
+    "config.highlight-unrevealed-gift-tastes.desc": "是否加粗显示未揭露的礼物品位",
 
     // advanced options
     "config.title.advanced-options": "高级",
-    "config.tile-lookups.name": "地格信息",
-    "config.tile-lookups.desc": "显示地图网格的信息。",
-    "config.data-mining-fields.name": "显示数据字段",
-    "config.data-mining-fields.desc": "显示目标在源码中的数据。此选项不是为玩家准备的。",
+    "config.tile-lookups.name": "图块查询",
+    "config.tile-lookups.desc": "是否将地图图块变为可查询对象",
+    "config.data-mining-fields.name": "显示数据挖掘字段",
+    "config.data-mining-fields.desc": "是否显示对数据挖掘者有用的原始数据(作为查询结果底部的单独字段)。这是一个高级功能，不适合大多数玩家。",
     "config.target-redirection.name": "目标重定向",
     "config.target-redirection.desc": "游戏在某些情况下会生成一个暂时的替身来指代某个目标。比如，矿井中的阿比盖尔实际上只是一个暂时的npc，导致查询时并不会显示阿比盖尔的信息。开启该选项后，才能显示阿比盖尔的真正信息。",
     "config.scroll-amount.name": "滚动值",
-    "config.scroll-amount.desc": "菜单每次上下滚动的像素。",
+    "config.scroll-amount.desc": "每次上下滚动时移动的像素数。",
 
     // controls section
-    "config.title.controls": "键位",
+    "config.title.controls": "快捷键",
     "config.hide-on-key-up.name": "松开时隐藏",
-    "config.hide-on-key-up.desc": "当你松开查询键时隐藏查询菜单。",
+    "config.hide-on-key-up.desc": "松开查询键时自动关闭查询窗口",
     "config.toggle-lookup.name": "查询",
-    "config.toggle-lookup.desc": "打开查询菜单的按键。",
+    "config.toggle-lookup.desc": "自定义查询快捷键",
     "config.toggle-search.name": "搜索",
-    "config.toggle-search.desc": "打开搜索菜单的按键。",
+    "config.toggle-search.desc": "自定义搜索快捷键",
     "config.scroll-up.name": "向上滚动",
-    "config.scroll-up.desc": "菜单向上滚动。",
+    "config.scroll-up.desc": "自定义长内容向上滚动快捷键",
     "config.scroll-down.name": "向下滚动",
-    "config.scroll-down.desc": "菜单向下滚动。",
+    "config.scroll-down.desc": "自定义长内容向下滚动快捷键",
     "config.page-up.name": "向上滚动一页",
-    "config.page-up.desc": "菜单向上滚动一页。",
+    "config.page-up.desc": "自定义长内容向上滚动一页快捷键",
     "config.page-down.name": "向下滚动一页",
-    "config.page-down.desc": "菜单向下滚动一页。",
+    "config.page-down.desc": "自定义长内容向下滚动一页快捷键",
     "config.toggle-debug.name": "调试模式",
-    "config.toggle-debug.desc": "显示/隐藏 调试信息。"
+    "config.toggle-debug.desc": "自定义显示或隐藏调试信息快捷键"
 }

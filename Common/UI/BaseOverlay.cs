@@ -162,20 +162,7 @@ namespace Pathoschild.Stardew.Common.UI
             if (Context.ScreenId != this.ScreenId)
                 return;
 
-            if (Constants.TargetPlatform == GamePlatform.Android)
-            {
-                object originMatrix = this.Reflection.GetField<object?>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
-                float nativeZoomLevel = this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
-
-                Game1.spriteBatch.End();
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(nativeZoomLevel));
-                this.DrawUi(Game1.spriteBatch);
-                Game1.spriteBatch.End();
-
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
-            }
-            else
-                this.DrawUi(Game1.spriteBatch);
+            this.DrawUi(Game1.spriteBatch);
         }
 
         /// <inheritdoc cref="IDisplayEvents.RenderedWorld"/>

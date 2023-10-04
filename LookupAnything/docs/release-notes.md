@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.40.2
+Released 03 October 2023 for SMAPI 3.14.0 or later.
+
+* Fixed item search not matching Pickled Ginger and Wild Honey.
+* Improved translations. Thanks to CoolRabbit123 (updated German) and Moredistant (updated Chinese)!
+
 ## 1.40.1
 Released 27 August 2023 for SMAPI 3.14.0 or later.
 

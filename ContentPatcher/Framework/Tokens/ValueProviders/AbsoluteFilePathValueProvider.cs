@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="baseDirPath">The absolute path to the content pack's folder.</param>
         public AbsoluteFilePathValueProvider(string baseDirPath)
-            : base(ConditionType.AbsoluteFilePath, mayReturnMultipleValuesForRoot: false)
+            : base(ConditionType.AbsoluteFilePath, mayReturnMultipleValuesForRoot: false, isDeterministicForInput: true)
         {
             this.BaseDirPath = baseDirPath;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);

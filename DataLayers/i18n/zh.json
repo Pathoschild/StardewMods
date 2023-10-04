@@ -35,7 +35,7 @@
     "crop-harvest.name": "作物：收获",
     "crop-harvest.ready": "可收获",
     "crop-harvest.not-ready": "不可收获",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "时间不足(或已枯萎)",
 
     // crops: watered
     "crop-water.name": "作物：浇水",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "肥料",
     "crop-fertilizer.retaining-soil": "保湿土壤",
     "crop-fertilizer.speed-gro": "生长激素",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "多重肥料",
 
     // machine processing
     "machines.name": "机器运转",

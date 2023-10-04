@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.15.9</Version>
+    <Version>1.15.10</Version>
     <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 

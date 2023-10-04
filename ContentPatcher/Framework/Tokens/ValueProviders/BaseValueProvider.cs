@@ -42,6 +42,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public bool IsMutable { get; protected set; } = true;
 
         /// <inheritdoc />
+        public bool IsDeterministicForInput { get; protected set; } = false;
+
+        /// <inheritdoc />
         public bool IsReady => this.State.IsReady;
 
         /// <inheritdoc />
@@ -222,17 +225,20 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The value provider name.</param>
         /// <param name="mayReturnMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
-        protected BaseValueProvider(string name, bool mayReturnMultipleValuesForRoot)
+        /// <param name="isDeterministicForInput">Whether the value provider always contains the same values in every context given the same input arguments (i.e. it's immutable if its input arguments are).</param>
+        protected BaseValueProvider(string name, bool mayReturnMultipleValuesForRoot, bool isDeterministicForInput = false)
         {
             this.Name = name;
             this.MayReturnMultipleValuesForRoot = mayReturnMultipleValuesForRoot;
+            this.IsDeterministicForInput = isDeterministicForInput;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The value provider name.</param>
         /// <param name="mayReturnMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
-        protected BaseValueProvider(ConditionType type, bool mayReturnMultipleValuesForRoot)
-            : this(type.ToString(), mayReturnMultipleValuesForRoot) { }
+        /// <param name="isDeterministicForInput">Whether the value provider always contains the same values in every context given the same input arguments (i.e. it's immutable if its input arguments are).</param>
+        protected BaseValueProvider(ConditionType type, bool mayReturnMultipleValuesForRoot, bool isDeterministicForInput = false)
+            : this(type.ToString(), mayReturnMultipleValuesForRoot, isDeterministicForInput) { }
 
         /// <summary>Enable input arguments for this value provider.</summary>
         /// <param name="required">Whether input arguments are required when using this value provider.</param>

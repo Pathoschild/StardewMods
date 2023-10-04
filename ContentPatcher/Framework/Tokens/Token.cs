@@ -30,6 +30,9 @@ namespace ContentPatcher.Framework.Tokens
         public bool IsMutable => this.Values.IsMutable;
 
         /// <inheritdoc />
+        public bool IsDeterministicForInput => !this.Values.IsMutable || this.Values.IsDeterministicForInput;
+
+        /// <inheritdoc />
         public bool IsReady => this.Values.IsReady;
 
         /// <inheritdoc />
