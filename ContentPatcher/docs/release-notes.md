@@ -9,10 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed unhandled exception when loading patches with immutable-but-broken tokens.
+
 ## 1.30.2
 Released 04 October 2023 for SMAPI 3.18.1 or later.
 
-* Fixed "_Can't get values from a non-ready token string_" warnings in 1.30.0+.
+* Temporarily reverted 1.30.0 optimizations to fix "_Can't get values from a non-ready token string_" warnings.
 
 ## 1.30.1
 Released 03 October 2023 for SMAPI 3.18.1 or later.
