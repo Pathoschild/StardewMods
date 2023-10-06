@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed Android-only error loading data.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
 ## 1.40.2
