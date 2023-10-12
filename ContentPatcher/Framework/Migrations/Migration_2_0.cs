@@ -15,6 +15,11 @@ using InnerPatch = Pathoschild.Stardew.Common.Utilities.InvariantDictionary<Newt
 namespace ContentPatcher.Framework.Migrations
 {
     internal record DataLocationsState(JArray forage, JArray fish, JArray artifacts);
+    internal class ObjectsState
+    {
+        // Assuming food if not present
+        public string Type { get; set; } = "food";
+    }
     internal enum DataLocationType
     {
         Fish,
@@ -110,8 +115,12 @@ namespace ContentPatcher.Framework.Migrations
                                 ["5"] = this.MapSingle("CanBeRomanced", val => val.ToLowerInvariant() == "datable"),
                                 ["6"] = this.MapSingle("LoveInterest"),
                                 ["7"] = this.MapSingle("HomeRegion"),
-                                ["8"] = (patch, _, _, val) =>
+                                ["8"] = (patch, outerKey, _, val) =>
                                 {
+                                    if (this.Lexer.MightContainTokens(val))
+                                    {
+                                        return $"Cannot convert the npc birthday information in {outerKey} when it is contains tokens ({val})";
+                                    }
                                     // from 1.5.6's NPCDisposition parsing, with added checks for conventional "null"
                                     if (val.Length > 0 && val != "null")
                                     {
@@ -131,7 +140,7 @@ namespace ContentPatcher.Framework.Migrations
                                         {
                                             for (int i = 0; i < Math.Floor((double)relationComponents.Length / 2); i++)
                                             {
-                                                // TODO: Replace common occurances with the vanilla Translatable strings instead
+                                                // TODO: Replace common occurrences with the vanilla Translatable strings instead
                                                 friendsAndFamily[relationComponents[2 * i]] = relationComponents[2 * i + 1].Replace("'", "");
                                             }
                                         }
@@ -274,6 +283,198 @@ namespace ContentPatcher.Framework.Migrations
                             return false;
                         }
                     }
+                    else if (PathUtilities.NormalizeAssetName(patch.Target) == "Data/ObjectInformation")
+                    {
+                        patch.Target = "Data/Objects";
+                        if (patch.TargetField.Count > 0)
+                        {
+                            error = "Unable to convert ObjectInformation when TargetField is used";
+                            return false;
+                        }
+
+                        // Misc fields relate to a different field, tracking it in state
+                        if (!this.ConvertDataModel<ObjectsState>(new(), patch,
+                            mapping: new()
+                            {
+                                ["0"] = this.MapSingle("Name"),
+                                ["1"] = this.MapSingle("Price"),
+                                ["2"] = this.MapSingle("Edibility"),
+                                // Note 1.5.6 behavior for this field was... weird, so this may need more love
+                                ["3"] = (patch, _, _, val) =>
+                                {
+                                    if (val.Length > 0 && val != "null")
+                                    {
+                                        string[] typeAndCategory = val.Split(' ');
+                                        patch["Type"] = typeAndCategory[0];
+                                        if (typeAndCategory.Length > 1)
+                                        {
+                                            patch["Category"] = Convert.ToInt32(typeAndCategory[1]);
+                                        }
+                                    }
+                                    return null;
+                                },
+                                ["4"] = this.MapSingle("DisplayName"),
+                                ["5"] = this.MapSingle("Description"),
+                                ["6"] = (patch, _, state, val) =>
+                                {
+                                    state.Type = val;
+                                    if (val == "drink")
+                                    {
+                                        patch["IsDrink"] = true;
+                                    }
+                                    return null;
+                                },
+                                ["7"] = (patch, _, state, val) =>
+                                {
+                                    if (state.Type == "food" || state.Type == "drink")
+                                    {
+                                        string[] foodEffects = val.Split(" ");
+                                        for (int i = 0; i <= foodEffects.Length - 1; i++)
+                                        {
+                                            if (int.TryParse(foodEffects[i], out int foodEffect))
+                                            {
+                                                string? key = i switch
+                                                {
+                                                    00 => "FarmingLevel",
+                                                    01 => "FishingLevel",
+                                                    02 => "MiningLevel",
+                                                    03 => null,
+                                                    04 => "LuckLevel",
+                                                    05 => "ForagingLevel",
+                                                    06 => null,
+                                                    07 => "MaxStamina",
+                                                    08 => "MagneticRadius",
+                                                    09 => "Speed",
+                                                    10 => "Defense",
+                                                    11 => "Attack",
+                                                    _ => null
+                                                };
+                                                if (key == null) continue;
+                                                if (!patch.ContainsKey("Buff"))
+                                                {
+                                                    patch["Buff"] = new JObject();
+                                                }
+                                                if (!(patch["Buff"] as JObject)!.ContainsKey("CustomAttributes"))
+                                                {
+                                                    patch["Buff"]!["CustomAttributes"] = new JObject();
+                                                }
+                                                patch["Buff"]!["CustomAttributes"]![key] = foodEffect;
+                                            }
+                                        }
+                                    }
+                                    // TODO: implement other formats
+                                    else
+                                    {
+                                        return state.Type;
+                                    }
+
+                                    return null;
+                                },
+                                ["8"] = (patch, _, _, val) =>
+                                {
+                                    if (!patch.ContainsKey("Buff"))
+                                    {
+                                        patch["Buff"] = new JObject();
+                                    }
+                                    patch["Buff"]!["Duration"] = val;
+                                    return null;
+                                },
+                            },
+                            out error)
+                        )
+                        {
+                            return false;
+                        }
+                    }
+                    else if (PathUtilities.NormalizeAssetName(patch.Target) == "Data/BigCraftableInformation")
+                    {
+                        patch.Target = "Data/BigCraftables";
+                        if (patch.TargetField.Count > 0)
+                        {
+                            error = "Unable to convert BigCraftableInformation when TargetField is used";
+                            return false;
+                        }
+
+                        if (!this.ConvertDataModel<object?>(null, patch,
+                            mapping: new()
+                            {
+                                ["0"] = this.MapSingle("Name"),
+                                ["1"] = this.MapSingle("Price"),
+                                ["2"] = (patch, _, _, val) =>
+                                {
+                                    // This is 1.5.6 Edibility which doesn't exist anymore
+                                    return null;
+                                },
+                                ["3"] = (patch, _, _, val) =>
+                                {
+                                    // This is 1.5.6 type+category which doesn't exist anymore
+                                    return null;
+                                },
+                                ["4"] = this.MapSingle("DisplayName"),
+                                ["5"] = this.MapSingle("CanBePlacedOutdoors"),
+                                ["6"] = this.MapSingle("CanBePlacedIndoors"),
+                                ["7"] = this.MapSingle("Fragility"),
+                                ["8"] = this.MapSingle("IsLamp", val => val == "true"),
+                                ["9"] = this.MapSingle("DisplayName")
+                            },
+                            out error)
+                        )
+                        {
+                            return false;
+                        }
+                    }
+                    else if (PathUtilities.NormalizeAssetName(patch.Target) == "Data/Crops")
+                    {
+                        if (!this.ConvertDataModel<object?>(null, patch,
+                            mapping: new()
+                            {
+                                ["0"] = this.MapSingle("DaysInPhase", val => JArray.FromObject(val.Split(" "))),
+                                ["1"] = this.MapSingle("Seasons", val => JArray.FromObject(val.Split(" "))),
+                                ["2"] = this.MapSingle("SpriteIndex"),
+                                ["3"] = this.MapSingle("HarvestItemId"),
+                                ["4"] = this.MapSingle("RegrowDays"),
+                                ["5"] = this.MapSingle("HarvestMethod", val => val == "1" ? "Scythe" : "Grab"),
+                                ["6"] = (patch, _, _, val) =>
+                                {
+                                    /*
+                                     * Format in 1.5.6 was one of the following
+                                     * false
+                                     * true minHarvest maxHarvest maxHarvestIncreasePerFarmingLevel chanceForExtraCrops
+                                     */
+                                    string[] split = val.Split(" ");
+                                    if (split.Length > 0 && split[0] == "true")
+                                    {
+                                        patch["HarvestMinStack"] = split[1];
+                                        patch["HarvestMaxStack"] = split[2];
+                                        patch["HarvestMaxIncreasePerFarmingLevel"] = split[3];
+                                        patch["ExtraHarvestChance"] = split[4];
+                                    }
+                                    return null;
+                                },
+                                ["7"] = this.MapSingle("IsRaised"),
+                                ["8"] = (patch, _, _, val) =>
+                                {
+                                    /*
+                                     * Format in 1.5.6 was one of the following
+                                     * false
+                                     * true [R G B]
+                                     * where [] indicates repeating pairs of three values
+                                     */
+                                    string[] split = val.Split(" ");
+                                    if (split.Length > 0 && split[0] == "true")
+                                    {
+                                        string[] segments = split.Skip(1).Chunk(3).Select(row => string.Join(' ', row)).ToArray();
+                                        patch["TintColors"] = JArray.FromObject(segments);
+                                    }
+                                    return null;
+                                }
+                            },
+                            out error)
+                        )
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
             if (replacementMap.Count > 0)
@@ -336,7 +537,7 @@ namespace ContentPatcher.Framework.Migrations
                 foreach (string key in patch.Keys.ToArray())
                 {
                     var value = patch[key];
-                    if (value.Type != JTokenType.String) continue;
+                    if (value?.Type != JTokenType.String) continue;
                     // This is invoking JToken's explicit string operator and tests if it was a string token, if so spit out the value.
                     string? strValue = (string?)value;
                     if (strValue == null) continue;
