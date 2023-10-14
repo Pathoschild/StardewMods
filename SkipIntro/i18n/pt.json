@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Avançar para",
+    "config.skip-to.tooltip": "Para qual tela avançar. Padrão Título.",
+    "config.skip-to.values.title-menu": "Menu de Título",
+    "config.skip-to.values.load-menu": "Menu de Carregamento",
+    "config.skip-to.values.join-coop": "Entrar no Cooperativo",
+    "config.skip-to.values.host-coop": "Hospedar Cooperativo"
+}
