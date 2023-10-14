@@ -12,6 +12,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Re-enabled optimizations disabled in 1.30.2.
 * Fixed unhandled exception when loading patches with immutable-but-broken tokens.
+* Fixed `Format` not recognizing version 1.30.0.
 
 ## 1.30.2
 Released 04 October 2023 for SMAPI 3.18.1 or later.
