@@ -231,7 +231,7 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.stats.DaysPlayed,
-                reading: save => (save.player.stats ?? save.stats).DaysPlayed,
+                reading: save => (save.obsolete_stats ?? save.player.stats).DaysPlayed,
                 defaultValue: 0u
             );
         }

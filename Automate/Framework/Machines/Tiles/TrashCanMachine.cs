@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         private void MarkChecked()
         {
             this.TrashCansChecked[this.TrashCanIndex] = true;
-            Game1.stats.incrementStat("trashCansChecked", 1);
+            Game1.stats.Increment("trashCansChecked");
         }
 
         /// <summary>Get a random trash item ID.</summary>
