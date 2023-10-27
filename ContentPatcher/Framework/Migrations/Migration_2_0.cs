@@ -750,6 +750,8 @@ namespace ContentPatcher.Framework.Migrations
                         }
                         if (season != null)
                         {
+                            // On the event of multiple seasons, have unique ID's
+                            newObject["ID"] = $"{args[i]}_${season}";
                             newObject["Season"] = season;
                         }
                         (dataset switch
