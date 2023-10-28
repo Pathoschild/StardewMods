@@ -63,7 +63,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
             }
 
-            Dictionary<PatchConfig, (bool, List<PatchConfig>)> replacementMap = new();
+            Dictionary<PatchConfig, (bool Replace, List<PatchConfig> Patches)> replacementMap = new();
 
             foreach (PatchConfig? patch in patches)
             {
@@ -484,12 +484,12 @@ namespace ContentPatcher.Framework.Migrations
                 foreach (var (patch, replacementEntry) in replacementMap)
                 {
                     int index = patchList.IndexOf(patch);
-                    if (replacementEntry.Item1)
+                    if (replacementEntry.Replace)
                     {
                         patchList.RemoveAt(index);
                     }
                     // if we are not replacing, then the index needs to be incremented by 1, as EditDataPatch evaluates TextOperations after Entries/Records and Fields
-                    patchList.InsertRange(index + (replacementEntry.Item1 ? 0 : 1), replacementEntry.Item2);
+                    patchList.InsertRange(index + (replacementEntry.Replace ? 0 : 1), replacementEntry.Patches);
                 }
                 patches = patchList.ToArray();
             }
@@ -500,7 +500,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <summary>This method converts previously <c>Dictionary&lt;string, string&gt;</c> data model patches into <c>Dictionary&lt;string, T&gt;</c></summary>
         /// <remarks>
         /// This method is intended to be operated on EditData patches where the target is 
-        /// where values were / seperated values.
+        /// where values were / separated values.
         /// 
         /// This method will convert the Fields and Entries of the patch into a form that can be run on  instead
         /// mapping the keys from the old integer indexes into new string values represented in the new data model,
@@ -604,7 +604,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="textOperationFilter">Whether this text operation is valid for the transformer.</param>
         /// <param name="textOperationMapper">Transforms the empty patch with the text operation into a patch with content.</param>
         /// <param name="error">The error message if anything went wrong</param>
-        /// <returns>This returns whether the conversion was successsful. If it wasn't then <paramref name="error"/> will explain why.</returns>
+        /// <returns>This returns whether the conversion was successful. If it wasn't then <paramref name="error"/> will explain why.</returns>
         private bool ConvertTextOperations(
             PatchConfig patch,
             Dictionary<PatchConfig, (bool, List<PatchConfig>)> replacementMap,
@@ -717,7 +717,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <summary>
-        /// This is an abstraction for all the cases in Data/Locations where they are all space seperated strings working in pairs.
+        /// This is an abstraction for all the cases in Data/Locations where they are all space separated strings working in pairs.
         /// </summary>
         /// <param name="season">The season this index of the patch is operating on, or null if it doesn't operate on a season.</param>
         /// <param name="dataset">Which dataset is this index associated with</param>
