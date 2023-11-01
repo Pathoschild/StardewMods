@@ -36,6 +36,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         bool IsSameAs(IList<Item?>? inventory);
 
         /// <summary>Open a menu to transfer items between the player's inventory and this container.</summary>
+        /// <returns>Returns an instance of the opened menu assigned to <see cref="Game1.activeClickableMenu"/>.</returns>
         IClickableMenu OpenMenu();
 
         /// <summary>Persist the container data.</summary>

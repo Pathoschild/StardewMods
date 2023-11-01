@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.15.10</Version>
+    <Version>1.15.11</Version>
     <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
     <TranslationClassBuilder_AddKeyMap>true</TranslationClassBuilder_AddKeyMap>
@@ -17,5 +16,4 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>

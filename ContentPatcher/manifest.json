@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Content Patcher",
     "Author": "Pathoschild",
-    "Version": "1.30.2",
+    "Version": "1.30.3",
     "MinimumApiVersion": "3.18.1",
     "Description": "Loads content packs which edit game data, images, and maps without changing the game files.",
     "UniqueID": "Pathoschild.ContentPatcher",

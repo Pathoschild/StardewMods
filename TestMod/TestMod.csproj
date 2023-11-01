@@ -3,8 +3,5 @@
     <AssemblyName>TestMod</AssemblyName>
     <Version>1.0.0</Version>
     <RootNamespace>Pathoschild.Stardew.TestMod</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
-  <Import Project="..\_build\common.targets" />
 </Project>

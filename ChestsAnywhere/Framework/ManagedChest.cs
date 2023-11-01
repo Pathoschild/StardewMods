@@ -113,6 +113,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
+        /// <returns>Returns an instance of the opened menu assigned to <see cref="Game1.activeClickableMenu"/>.</returns>
         public IClickableMenu OpenMenu()
         {
             return this.Container.OpenMenu();

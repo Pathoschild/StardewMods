@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.9.13</Version>
+    <Version>1.9.14</Version>
     <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,5 +9,4 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>

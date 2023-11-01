@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.40.3
+Released 01 November 2023 for SMAPI 3.14.0 or later.
+
+* Simplified the player lookup skill progression bars (thanks to TehCupcakes!).
+* Fixed Android-only error loading data.
+* Improved translations. Thanks to wally232 (updated Korean)!
+
 ## 1.40.2
 Released 03 October 2023 for SMAPI 3.14.0 or later.
 

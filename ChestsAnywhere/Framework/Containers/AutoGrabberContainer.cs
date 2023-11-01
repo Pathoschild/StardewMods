@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Private methods
         *********/
-        /// <summary>Update when an item is added/removed to the container.</summary>
+        /// <inheritdoc />
         protected override void OnChanged()
         {
             base.OnChanged();

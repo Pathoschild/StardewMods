@@ -28,13 +28,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The underlying inventory.</summary>
+        /// <inheritdoc />
         public IList<Item?> Inventory => this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
 
-        /// <summary>The persisted data for this container.</summary>
+        /// <inheritdoc />
         public ContainerData Data { get; }
 
-        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        /// <inheritdoc />
         public bool CanConfigureAutomate => this.Chest.SpecialChestType != Chest.SpecialChestTypes.JunimoChest && this.Chest.SpecialChestType != Chest.SpecialChestTypes.MiniShippingBin;
 
 
@@ -55,15 +55,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Data = new ContainerData(chest.modData);
         }
 
-        /// <summary>Get whether the inventory can accept the item type.</summary>
-        /// <param name="item">The item.</param>
+        /// <inheritdoc />
         public bool CanAcceptItem(Item item)
         {
             return InventoryMenu.highlightAllItems(item);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="container">The other container.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IContainer? container)
         {
             return
@@ -71,8 +69,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && this.IsSameAs(container.Inventory);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="inventory">The other container's inventory.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IList<Item?>? inventory)
         {
             return
@@ -80,53 +77,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && object.ReferenceEquals(this.Inventory, inventory);
         }
 
-        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
-            ItemGrabMenu menu = Constants.TargetPlatform switch
-            {
-                GamePlatform.Android => new ItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: true,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: null,
-                    message: null,
-                    behaviorOnItemGrab: null,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    source: ItemGrabMenu.source_chest,
-                    sourceItem: this.Chest,
-                    context: this.Context
-                ),
+            this.Chest.ShowMenu();
 
-                _ => new ItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: false,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: this.GrabItemFromPlayer,
-                    message: null,
-                    behaviorOnItemGrab: this.GrabItemFromContainer,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    source: ItemGrabMenu.source_chest,
-                    sourceItem: this.Chest,
-                    context: this.Context
-                )
-            };
-
-            if (!this.ShowColorPicker) // disable color picker for some special cases like the shipping bin, which can't be recolored
+            if (!this.ShowColorPicker && Game1.activeClickableMenu is ItemGrabMenu menu) // disable color picker for some special cases like the shipping bin, which can't be recolored
             {
                 menu.chestColorPicker = null;
                 menu.colorPickerToggleButton = null;
             }
 
-            return menu;
+            return Game1.activeClickableMenu;
         }
 
-        /// <summary>Persist the container data.</summary>
+        /// <inheritdoc />
         public void SaveData()
         {
             this.Data.ToModData(this.Chest.modData);

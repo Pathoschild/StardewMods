@@ -37,13 +37,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The underlying inventory.</summary>
+        /// <inheritdoc />
         public IList<Item?> Inventory => this.ShippingBin;
 
-        /// <summary>The persisted container data.</summary>
+        /// <inheritdoc />
         public ContainerData Data { get; }
 
-        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        /// <inheritdoc />
         public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
 
         /// <summary>The type of shipping bin menu to create.</summary>
@@ -65,15 +65,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Mode = mode;
         }
 
-        /// <summary>Get whether the inventory can accept the item type.</summary>
-        /// <param name="item">The item.</param>
+        /// <inheritdoc />
         public bool CanAcceptItem(Item item)
         {
             return Utility.highlightShippableObjects(item);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="container">The other container.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IContainer? container)
         {
             return
@@ -81,8 +79,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && this.IsSameAs(container.Inventory);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="inventory">The other container's inventory.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IList<Item?>? inventory)
         {
             return
@@ -90,8 +87,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && object.ReferenceEquals(this.Inventory, inventory);
         }
 
-        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
             // build menu
@@ -153,10 +149,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             // use shipping sound
             menu.inventory.moveItemSound = "Ship";
 
-            return menu;
+            return Game1.activeClickableMenu = menu;
         }
 
-        /// <summary>Persist the container data.</summary>
+        /// <inheritdoc />
         public void SaveData()
         {
             this.Data.ToModData(this.Location.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
@@ -196,7 +192,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             // reopen menu
             IClickableMenu menu = Game1.activeClickableMenu;
             int snappedComponentID = menu.currentlySnappedComponent?.myID ?? -1;
-            Game1.activeClickableMenu = menu = this.OpenMenu();
+            menu = this.OpenMenu();
             if (snappedComponentID != -1)
             {
                 menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentID);

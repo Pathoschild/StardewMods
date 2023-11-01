@@ -3,7 +3,6 @@
     <AssemblyName>Pathoschild.Stardew.Tests.Mods</AssemblyName>
     <Version>1.0.0</Version>
     <RootNamespace>Pathoschild.Stardew.Tests.Mods</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <EnableGameDebugging>false</EnableGameDebugging>
     <EnableModDeploy>False</EnableModDeploy>
@@ -24,6 +23,4 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-
-  <Import Project="..\_build\common.targets" />
 </Project>

@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
     /// <param name="LocationName">The location's internal name.</param>
     /// <param name="Area">The area ID within the location, if applicable.</param>
     /// <param name="Seasons">The required seasons.</param>
-    internal record FishSpawnLocationData(string LocationName, string? Area, ISet<string> Seasons)
+    internal record FishSpawnLocationData(string LocationName, string? Area, HashSet<string> Seasons)
     {
         /*********
         ** Accessors

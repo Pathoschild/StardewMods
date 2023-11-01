@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Version>1.28.6</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
@@ -16,5 +15,4 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>

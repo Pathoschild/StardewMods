@@ -525,7 +525,7 @@
     "npc.likes-gifts": "좋아하는 선물",
     "npc.neutral-gifts": "그저그런 선물",
     "npc.dislikes-gifts": "싫어하는 선물",
-    "npc.hates-gifts": "증오하는 선물",
+    "npc.hates-gifts": "혐오하는 선물",
 
     // values
     "npc.can-romance.married": "당신은 이미 결혼했다! <", // < turns into a heart
@@ -534,7 +534,7 @@
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
     "npc.undiscovered-gift-taste": "{{count}} 미공개 품목",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} 소유하지 않은 품목",
 
 
     /*********
@@ -712,21 +712,20 @@
     "config.force-full-screen.desc": "메뉴가 창 중앙이 아닌 항상 전체 화면이어야 하는지 여부. 이 기능은 주로 데이터 마이닝 필드를 볼 때 유용합니다.",
 
     // gift tastes
-    // TODO
-    "config.title.gift-tastes": "Gift tastes",
-    "config.show-gift-tastes.loved.name": "Show loved gifts",
-    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
-    "config.show-gift-tastes.liked.name": "Show liked gifts",
-    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
-    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
-    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
-    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.hated.name": "Show hated gifts",
-    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+    "config.title.gift-tastes": "선물 취향",
+    "config.show-gift-tastes.loved.name": "사랑하는 선물 표시",
+    "config.show-gift-tastes.loved.desc": "NPC 및 아이템 조회 시 사랑하는 선물 표시 여부.",
+    "config.show-gift-tastes.liked.name": "좋아하는 선물 표시",
+    "config.show-gift-tastes.liked.desc": "NPC 및 아이템 조회 시 좋아하는 선물 표시 여부.",
+    "config.show-gift-tastes.neutral.name": "중립적인 선물 표시",
+    "config.show-gift-tastes.neutral.desc": "NPC 및 아이템 조회 시 중립적인 선물 표시 여부.",
+    "config.show-gift-tastes.disliked.name": "싫어하는 선물 표시",
+    "config.show-gift-tastes.disliked.desc": "NPC 및 아이템 조회 시 싫어하는 선물 표시 여부.",
+    "config.show-gift-tastes.hated.name": "혐오하는 선물 표시",
+    "config.show-gift-tastes.hated.desc": "NPC 및 아이템 조회 시 혐오하는 선물 표시 여부.",
 
-    "config.show-unowned-gifts.name": "Show unowned gift tastes",
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+    "config.show-unowned-gifts.name": "소유하지 않은 선물 취향 표시",
+    "config.show-unowned-gifts.desc": "플레이어가 소유하지 않은 아이템에 대한 선물 취향을 표시할지 여부.",
 
     "config.highlight-unrevealed-gift-tastes.name": "미공개 선물 취향 강조",
     "config.highlight-unrevealed-gift-tastes.desc": "NPC 프로필에 표시되지 않은 항목 선물 취향을 강조 표시할지 여부. 활성화하면 공개되지 않은 선물 취향이 굵게 표시됩니다.",

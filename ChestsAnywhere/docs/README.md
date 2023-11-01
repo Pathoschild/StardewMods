@@ -104,6 +104,8 @@ Default `true`. Whether to show the chest name in a tooltip when you point at a 
 
 Default `true`. Whether to allow access to the shipping bin through Chests Anywhere.
 
+**Note:** this feature is disabled on Android due to compatibility issues.
+
   </td>
 </tr>
 

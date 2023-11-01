@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Necessita a Flauta de Cavalo",
+    "config.require-flute.description": "Se você precisa ter o item da flauta de cavalo no seu inventário para convocar o cavalo. Padrão falso.",
+
+    "config.summon-horse-button.name": "Botão de Convocação do Cavalo",
+    "config.summon-horse-button.description": "O botão que deverá ser pressionado para tocar a flauta e convocar o cavalo. Padrão {{defaultValue}}."
+}
