@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -72,15 +71,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
-            Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems
-                .OfType<ISalable>() // cast as ISalable, and also ignore null in rare cases
-                .ToDictionary(item => item, _ => new[] { 0, 1 });
+            this.Furniture.ShowChestMenu();
 
-            return new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, this.Furniture.GetShopMenuContext())
-            {
-                source = this.Furniture,
-                behaviorBeforeCleanup = _ => this.Furniture.mutex.ReleaseLock()
-            };
+            return Game1.activeClickableMenu;
         }
 
         /// <inheritdoc />

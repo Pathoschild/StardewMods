@@ -218,10 +218,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer)
             {
                 if (menu is ItemGrabMenu chestMenu && (!chestMenu.showReceivingMenu || chestMenu.inventory.highlightMethod?.Target is not ShippingBinContainer))
-                {
-                    menu = (ItemGrabMenu)chest.OpenMenu();
-                    Game1.activeClickableMenu = this.ForMenuInstance.Value = menu;
-                }
+                    this.ForMenuInstance.Value = menu = (ItemGrabMenu)chest.OpenMenu();
             }
 
             // add overlay
@@ -245,7 +242,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 overlay.OnChestSelected += selected =>
                 {
                     this.LastChest.Value = selected;
-                    Game1.activeClickableMenu = selected.OpenMenu();
+                    selected.OpenMenu();
                 };
                 this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
             }
@@ -280,7 +277,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             // render menu
-            Game1.activeClickableMenu = selectedChest.OpenMenu();
+            selectedChest.OpenMenu();
         }
 
         /// <summary>Notify Automate that a chest's automation options updated.</summary>

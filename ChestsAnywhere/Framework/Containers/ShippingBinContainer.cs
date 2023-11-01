@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             // use shipping sound
             menu.inventory.moveItemSound = "Ship";
 
-            return menu;
+            return Game1.activeClickableMenu = menu;
         }
 
         /// <inheritdoc />
@@ -192,7 +192,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             // reopen menu
             IClickableMenu menu = Game1.activeClickableMenu;
             int snappedComponentID = menu.currentlySnappedComponent?.myID ?? -1;
-            Game1.activeClickableMenu = menu = this.OpenMenu();
+            menu = this.OpenMenu();
             if (snappedComponentID != -1)
             {
                 menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentID);

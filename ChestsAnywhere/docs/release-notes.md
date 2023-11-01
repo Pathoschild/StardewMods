@@ -1,10 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming
+* Further improved compatibility with Stardew Valley 1.5.6 on Android.
+
 ## 1.22.8
 Released 03 October 2023 for SMAPI 3.14.0 or later.
 
-* Improved compatibility with recent game updates on Android.
+* Improved compatibility with Stardew Valley 1.5.6 on Android.
 
 ## 1.22.7
 Released 25 June 2023 for SMAPI 3.14.0 or later.
