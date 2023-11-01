@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming
 * Further improved compatibility with Stardew Valley 1.5.6 on Android.
+* Disabled shipping bin feature on Android due to compatibility issues.
 
 ## 1.22.8
 Released 03 October 2023 for SMAPI 3.14.0 or later.
