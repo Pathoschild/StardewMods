@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Simplified the player lookup skill progression bars (thanks to TehCupcakes!).
 * Fixed Android-only error loading data.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
