@@ -23,13 +23,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The underlying inventory.</summary>
+        /// <inheritdoc />
         public IList<Item?> Inventory => this.Furniture.heldItems;
 
-        /// <summary>The persisted data for this container.</summary>
+        /// <inheritdoc />
         public ContainerData Data { get; }
 
-        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        /// <inheritdoc />
         public bool CanConfigureAutomate { get; } = false; // Automate doesn't support storage containers
 
 
@@ -47,15 +47,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
         }
 
-        /// <summary>Get whether the inventory can accept the item type.</summary>
-        /// <param name="item">The item.</param>
+        /// <inheritdoc />
         public bool CanAcceptItem(Item item)
         {
             return StorageFurnitureContainer.DresserCategories.Contains(item.Category);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="container">The other container.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IContainer? container)
         {
             return
@@ -63,8 +61,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && this.IsSameAs(container.Inventory);
         }
 
-        /// <summary>Get whether another instance wraps the same underlying container.</summary>
-        /// <param name="inventory">The other container's inventory.</param>
+        /// <inheritdoc />
         public bool IsSameAs(IList<Item?>? inventory)
         {
             return
@@ -72,8 +69,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 && object.ReferenceEquals(this.Inventory, inventory);
         }
 
-        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="StorageFurniture.checkForAction"/>.</remarks>
+        /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
             Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems
@@ -87,7 +83,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             };
         }
 
-        /// <summary>Persist the container data.</summary>
+        /// <inheritdoc />
         public void SaveData()
         {
             this.Data.ToModData(this.Furniture.modData);
