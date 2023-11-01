@@ -52,18 +52,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             const int barWidth = 25;
             float leftOffset = 0;
             int barHeight = 0;
-            for (int i = 0; i < pointsPerLevel.Length; i++)
+            for (int level = 0; level < pointsPerLevel.Length; level++)
             {
-                int levelExp = pointsPerLevel[i];
-                float progress = Math.Min(1f, this.CurrentValue / (levelExp * 1f));
-                if (i < currentLevel)
-                {
+                float progress;
+                if (level < currentLevel)
                     progress = 1f;
-                }
-                else if (i > currentLevel)
-                {
+                else if (level > currentLevel)
                     progress = 0f;
+                else
+                {
+                    int levelExp = pointsPerLevel[level];
+                    progress = Math.Min(1f, this.CurrentValue / (levelExp * 1f));
                 }
+
                 Vector2 barSize = this.DrawBar(spriteBatch, position + new Vector2(leftOffset, 0), progress, this.FilledColor, this.EmptyColor, barWidth);
                 barHeight = (int)barSize.Y;
                 leftOffset += barSize.X + 2;
