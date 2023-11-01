@@ -12,7 +12,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-[*.{csproj,nuspec,targets}]
+[*.{csproj,nuspec,props,targets}]
 indent_size = 2
 
 [*.csproj]

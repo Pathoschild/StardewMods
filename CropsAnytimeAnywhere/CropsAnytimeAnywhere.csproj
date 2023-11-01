@@ -2,12 +2,10 @@
   <PropertyGroup>
     <Version>1.4.7</Version>
     <RootNamespace>Pathoschild.Stardew.CropsAnytimeAnywhere</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>

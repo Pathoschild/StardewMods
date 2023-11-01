@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Version>2.4.9</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <EnableHarmony>true</EnableHarmony>
     <IgnoreModFilePaths>assets/paths.png, assets/spring_beach.png, assets/spring_island_tilesheet_1.png, assets/spring_outdoorsTileSheet.png, assets/spring_town.png</IgnoreModFilePaths>
@@ -14,5 +13,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>

@@ -2,7 +2,6 @@
   <PropertyGroup>
     <Version>1.22.8</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
 
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
@@ -20,5 +19,4 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="..\_build\common.targets" />
 </Project>
