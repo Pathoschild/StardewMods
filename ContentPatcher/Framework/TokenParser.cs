@@ -164,7 +164,7 @@ namespace ContentPatcher.Framework
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
         public bool TryParseJson(JToken? rawJson, IInvariantSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, out TokenizableJToken? parsed)
         {
-            if (rawJson == null || rawJson.Type == JTokenType.Null)
+            if (rawJson == null || rawJson.Type == JTokenType.Null || rawJson.Type == JTokenType.Comment)
             {
                 error = null;
                 parsed = null;
@@ -254,6 +254,7 @@ namespace ContentPatcher.Framework
             switch (token)
             {
                 case JValue valueToken:
+                    if (valueToken.Type != JTokenType.Comment)
                     {
                         string? value = valueToken.Value<string?>();
                         if (!this.TryInjectJsonProxyField(value, assumeModIds, val => valueToken.Value = val, path, out error, out TokenizableProxy? proxy))
