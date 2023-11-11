@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -14,6 +13,7 @@ using StardewValley;
 using StardewValley.GameData.WildTrees;
 using StardewValley.Mods;
 using StardewValley.Network;
+using StardewValley.Pathfinding;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -188,12 +188,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             str.AppendLine($"- {pair.Key}: {pair.Value}");
                         return str.ToString().TrimEnd();
                     }
+                    break;
+
+                case SchedulePathDescription schedulePath:
+                    return $"{schedulePath.time / 100:00}:{schedulePath.time % 100:00} {schedulePath.targetLocationName} ({schedulePath.targetTile.X}, {schedulePath.targetTile.Y}) {schedulePath.facingDirection} {schedulePath.endOfRouteMessage}";
+
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();
                         str.AppendLine();
-                        foreach (FieldInfo field in stats.GetType().GetFields())
-                            str.AppendLine($"- {field.Name}: {I18n.Stringify(field.GetValue(stats))}");
+                        foreach ((string key, uint statValue) in stats.Values)
+                            str.AppendLine($"- {key}: {I18n.Stringify(statValue)}");
                         return str.ToString().TrimEnd();
                     }
                 case Warp warp:
