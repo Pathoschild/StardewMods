@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [2.0](#20)
   * [1.25](#125)
   * [1.24](#124)
   * [1.21](#121)
@@ -73,6 +74,70 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](release-notes.md) for a full list of changes.
+
+## 2.0
+Upcoming release.
+
+<ul>
+<li>
+
+See _[migrate to Stardew Valley 1.6](https://stardewvalleywiki.com/Modding:Migrate_to_Stardew_Valley_1.6)_ for
+  content changes in the game update.
+
+</li>
+<li>
+
+[`CustomLocations`](custom-locations.md) is now deprecated, since you can add custom locations directly using the [new
+`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data) in Stardew Valley 1.6.
+
+For example, if you have a custom location like this:
+
+```js
+"CustomLocations": [
+    {
+        "Name": "Custom_ExampleMod_AbigailCloset",
+        "FromMapFile": "assets/abigail-closet.tmx"
+    }
+]
+```
+
+You can now add it to the game directly like this:
+
+```js
+"Changes": [
+    // add map
+    {
+        "Action": "Load",
+        "Target": "Maps/Your.ModId_AbigailCloset",
+        "FromFile": "assets/abigail-closet.tmx"
+    },
+
+    // add location
+    {
+        "Action": "EditData",
+        "Target": "Data/Locations",
+        "Entries": {
+            "Your.ModId_AbigailCloset": {
+                "CreateOnLoad": { "MapPath": "Maps/Your.ModId_AbigailCloset" },
+                "FormerLocationNames": [ "Custom_ExampleMod_AbigailCloset" ]
+            }
+        }
+    }
+]
+```
+
+The game uses a standard [unique string ID](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs)
+format for the location name. In the example above, we use the new name format (`Your.ModId_AbigailCloset`) and add the
+old name (`Custom_ExampleMod_AbigailCloset`) to the `FormerLocationNames` field so the location will be migrated
+automatically for current players. You should replace `Your.ModId` with [your mod's manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest).
+
+**Known limitations:**
+* You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,
+you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
+`Data/Locations` to edit the data added for your location.
+
+</li>
+</ul>
 
 ## 1.25
 Released 27 February 2022.

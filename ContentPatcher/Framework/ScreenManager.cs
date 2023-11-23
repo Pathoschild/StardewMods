@@ -110,7 +110,7 @@ namespace ContentPatcher.Framework
         {
             // add locations
             if (newStage is LoadStage.CreatedInitialLocations or LoadStage.SaveAddedLocations)
-                this.CustomLocationManager.Apply(saveLocations: SaveGame.loaded?.locations, gameLocations: Game1.locations);
+                this.CustomLocationManager.AddTmxlLocations(saveLocations: SaveGame.loaded?.locations, gameLocations: Game1.locations);
 
             // update context
             switch (newStage)
