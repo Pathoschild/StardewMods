@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * `CustomLocations` is now deprecated in favor of the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data).
   Locations added through it are now added to `Data/Locations` automatically.
 * `CustomLocations` now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
+* Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
 
 **Update notes for mod authors:**  
 See the [migration guide](author-migration-guide.md#20) for help updating content pack code.

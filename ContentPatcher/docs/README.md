@@ -71,32 +71,6 @@ Default `false`. Whether to enable [debug features meant for content pack creato
 </tr>
 
 <tr>
-  <td><code>GroupEditsByMod</code></td>
-  <td>
-
-Default `true`. Whether to apply changes from each content pack in a separate operation. This has
-two main benefits:
-
-* SMAPI logs will show the content pack name to simplify troubleshooting. For example:
-  ```
-  when true:
-      Content Patcher edited Characters/Abigail (for the 'Abigail Wears a Bow' content pack).
-      Content Patcher edited Characters/Abigail (for the 'Fancy Abigail' content pack).
-
-  when false:
-      Content Patcher edited Characters/Abigail.
-  ```
-* If applying changes from one content pack fails due to an error, changes from other content packs
-  will still be applied.
-
-If you have a large number of content packs and are noticing lag spikes in-game, you can try
-disabling this to improve performance. If you do, make sure to re-enable it before sharing your
-SMAPI log when asking for help.
-
-  </td>
-</tr>
-
-<tr>
   <td><code>Controls</code></td>
   <td>
 

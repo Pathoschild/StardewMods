@@ -31,9 +31,6 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>Whether to apply changes from each content pack in a separate operation.</summary>
-        private readonly bool GroupEditsByMod;
-
         /// <summary>Manages the available contextual tokens.</summary>
         private readonly TokenManager TokenManager;
 
@@ -80,13 +77,11 @@ namespace ContentPatcher.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tokenManager">Manages the available contextual tokens.</param>
         /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-        /// <param name="groupEditsByMod">Whether to apply changes from each content pack in a separate operation.</param>
-        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators, bool groupEditsByMod)
+        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators)
         {
             this.Monitor = monitor;
             this.TokenManager = tokenManager;
             this.AssetValidators = assetValidators;
-            this.GroupEditsByMod = groupEditsByMod;
         }
 
         /****
@@ -478,24 +473,14 @@ namespace ContentPatcher.Framework
             // apply edit patches
             if (editors.Any())
             {
-                if (this.GroupEditsByMod)
+                List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
+                foreach (List<IPatch> group in editGroups)
                 {
-                    List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
-                    foreach (List<IPatch> group in editGroups)
-                    {
-                        List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
-                        e.Edit(
-                            apply: data => this.ApplyEdits<T>(patches, data),
-                            priority: AssetEditPriority.Default,
-                            onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
-                        );
-                    }
-                }
-                else
-                {
+                    List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
                     e.Edit(
-                        apply: data => this.ApplyEdits<T>(editors, data),
-                        priority: AssetEditPriority.Default
+                        apply: data => this.ApplyEdits<T>(patches, data),
+                        priority: AssetEditPriority.Default,
+                        onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
                     );
                 }
             }

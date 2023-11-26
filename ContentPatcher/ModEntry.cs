@@ -113,9 +113,6 @@ namespace ContentPatcher
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
 
-            if (!this.Config.GroupEditsByMod)
-                this.Monitor.Log("Grouping edits by mod is disabled in config.json. This will reduce the usefulness of log info.");
-
             // enable temporary PyTK legacy mode (unless running in SMAPI strict mode)
             IModInfo? pyTk = helper.ModRegistry.Get("Platonymous.Toolkit");
             EditImagePatch.EnablePyTkLegacyMode =
@@ -324,8 +321,7 @@ namespace ContentPatcher
                 monitor: this.Monitor,
                 installedMods: this.GetInstalledMods(),
                 modTokens: modTokens,
-                assetValidators: this.AssetValidators(),
-                groupEditsByMod: this.Config.GroupEditsByMod
+                assetValidators: this.AssetValidators()
             );
         }
 

@@ -64,13 +64,12 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
         /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-        /// <param name="groupEditsByMod">Whether to apply changes from each content pack in a separate operation.</param>
-        public ScreenManager(IModHelper helper, IMonitor monitor, IInvariantSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators, bool groupEditsByMod)
+        public ScreenManager(IModHelper helper, IMonitor monitor, IInvariantSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators)
         {
             this.Helper = helper;
             this.Monitor = monitor;
             this.TokenManager = new TokenManager(helper.GameContent, installedMods, modTokens);
-            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators, groupEditsByMod);
+            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
             this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, helper.GameContent.ParseAssetName);
             this.CustomLocationManager = new CustomLocationManager(this.Monitor, helper.GameContent);
         }
