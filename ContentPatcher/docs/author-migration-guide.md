@@ -87,6 +87,12 @@ See _[migrate to Stardew Valley 1.6](https://stardewvalleywiki.com/Modding:Migra
 </li>
 <li>
 
+[`Load` patches](author-guide/action-load.md) have a new `Priority` field. It's optional, but you can improve mod
+compatibility by using it when relevant.
+
+</li>
+<li>
+
 [`CustomLocations`](custom-locations.md) is now deprecated, since you can add custom locations directly using the [new
 `Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data) in Stardew Valley 1.6.
 

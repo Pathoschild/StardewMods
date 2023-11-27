@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace ContentPatcher.Framework.Patches
@@ -39,6 +39,10 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
         ITokenString? RawTargetAsset { get; }
+
+        /// <summary>The priority for this patch when multiple patches apply.</summary>
+        /// <remarks>This is an <see cref="AssetLoadPriority"/> or <see cref="AssetEditPriority"/> value, depending on the patch type.</remarks>
+        int Priority { get; }
 
         /// <summary>When the patch should be updated.</summary>
         UpdateRate UpdateRate { get; }

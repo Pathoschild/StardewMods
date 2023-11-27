@@ -11,6 +11,7 @@ using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Commands;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Commands.Commands
@@ -314,14 +315,17 @@ namespace ContentPatcher.Framework.Commands.Commands
                     }
 
                     // print patches
+                    int priorityColWidth = Math.Max("priority".Length, patchGroup.Max(p => this.GetDisplayPriority(p)?.Length ?? 0));
+
                     output.AppendLine();
                     output.AppendLine("   Patches:");
-                    output.AppendLine("      loaded  | conditions | applied | name + details");
-                    output.AppendLine("      ------- | ---------- | ------- | --------------");
+                    output.AppendLine($"      loaded  | conditions | applied | {"priority".PadRight(priorityColWidth)} | name + details");
+                    output.AppendLine($"      ------- | ---------- | ------- | {"".PadRight(priorityColWidth, '-')} | --------------");
                     foreach (PatchInfo patch in patchGroup.OrderBy(p => p, new PatchDisplaySortComparer()))
                     {
-                        // log checkbox and patch name
-                        output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
+                        // log checkboxes, priority, and patch name
+                        string? priority = this.GetDisplayPriority(patch);
+                        output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {(priority ?? "").PadRight(priorityColWidth)} | {patch.PathWithoutContentPackPrefix}");
 
                         // log target value if different from name
                         {
@@ -480,6 +484,55 @@ namespace ContentPatcher.Framework.Commands.Commands
                 values = values.OrderByHuman();
 
             return values;
+        }
+
+        /// <summary>Get the human-readable display text for a patch's priority, if any.</summary>
+        /// <param name="patch">The patch whose priority to display.</param>
+        private string? GetDisplayPriority(PatchInfo patch)
+        {
+            if (patch.Priority.HasValue)
+            {
+                switch (patch.ParsedType)
+                {
+                    case PatchType.Load:
+                        return this.GetDisplayPriority<AssetLoadPriority>(patch.Priority.Value);
+
+                    case PatchType.EditData:
+                    case PatchType.EditImage:
+                    case PatchType.EditMap:
+                        return this.GetDisplayPriority<AssetEditPriority>(patch.Priority.Value);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>Get the human readable display text for a priority value.</summary>
+        /// <typeparam name="TPriority">The priority enum type.</typeparam>
+        /// <param name="value">The priority value.</param>
+        private string GetDisplayPriority<TPriority>(int value)
+            where TPriority : struct, Enum
+        {
+            // matches an enum name
+            if (Enum.IsDefined(typeof(TPriority), value))
+                return ((TPriority)(object)value).ToString();
+
+            // else create a label like "Low + 5" based on the closest enum value
+            int bestDistance = 0;
+            string? label = null;
+            foreach (TPriority nearbyValue in Enum.GetValues<TPriority>())
+            {
+                int offset = value - (int)(object)nearbyValue;
+                int newDistance = Math.Abs(offset);
+
+                if (label is null || newDistance < bestDistance)
+                {
+                    label = $"{nearbyValue} {(offset > 0 ? "+" : "-")} {newDistance}";
+                    bestDistance = newDistance;
+                }
+            }
+
+            return label ?? value.ToString();
         }
     }
 }

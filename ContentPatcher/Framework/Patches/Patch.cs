@@ -93,6 +93,9 @@ namespace ContentPatcher.Framework.Patches
         public ITokenString? RawTargetAsset => this.ManagedRawTargetAsset;
 
         /// <inheritdoc />
+        public int Priority { get; }
+
+        /// <inheritdoc />
         public UpdateRate UpdateRate { get; set; }
 
         /// <inheritdoc />
@@ -213,20 +216,22 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
-        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
+        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(int[] indexPath, LogPathBuilder path, PatchType type, IManagedTokenString? assetName, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName, IManagedTokenString? fromAsset = null)
+        protected Patch(int[] indexPath, LogPathBuilder path, PatchType type, IManagedTokenString? assetName, int priority, UpdateRate updateRate, IEnumerable<Condition> conditions, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName, IManagedTokenString? fromAsset = null)
         {
             this.IndexPath = indexPath;
             this.Path = path;
             this.Type = type;
             this.ManagedRawTargetAsset = assetName;
-            this.Conditions = conditions.ToArray();
+            this.Priority = priority;
             this.UpdateRate = updateRate;
+            this.Conditions = conditions.ToArray();
             this.ParseAssetNameImpl = parseAssetName;
             this.PrivateContext = new LocalContext(scope: contentPack.Manifest.UniqueID);
             this.ManagedRawFromAsset = fromAsset;

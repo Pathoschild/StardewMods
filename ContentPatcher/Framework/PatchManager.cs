@@ -430,50 +430,67 @@ namespace ContentPatcher.Framework
         {
             IAssetName assetName = e.NameWithoutLocale;
 
-            // pre-validate loaders to show more user-friendly messages
-            if (loaders.Length > 1)
+            // validate & select loader by priority
+            IPatch? loader = null;
+            foreach (IPatch candidate in loaders)
             {
-                string[] modNames = loaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByHuman().ToArray();
-                string[] patchNames = loaders.Select(p => p.Path.ToString()).OrderByHuman().ToArray();
-                switch (modNames.Length)
+                // skip if patch is invalid
+                if (!candidate.FromAssetExists())
                 {
-                    case 1:
-                        this.Monitor.Log($"'{modNames[0]}' has multiple patches which load the '{assetName}' asset at the same time ({string.Join(", ", patchNames)}). None will be applied. You should report this to the content pack author.", LogLevel.Error);
-                        break;
-
-                    case 2:
-                        this.Monitor.Log($"Two content packs want to load the '{assetName}' asset ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
-                        break;
-
-                    default:
-                        this.Monitor.Log($"Multiple content packs want to load the '{assetName}' asset ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
-                        break;
+                    this.Monitor.Log($"Can't apply load \"{candidate.Path}\" to {candidate.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{candidate.FromAsset}' doesn't exist.", LogLevel.Warn);
+                    continue;
                 }
 
-                loaders = Array.Empty<IPatch>();
-            }
-            else if (loaders.Length == 1 && !loaders[0].FromAssetExists())
-            {
-                this.Monitor.Log($"Can't apply load \"{loaders[0].Path}\" to {loaders[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{loaders[0].FromAsset}' doesn't exist.", LogLevel.Warn);
-                loaders = Array.Empty<IPatch>();
+                // skip if we already found a better match
+                if (loader?.Priority > candidate.Priority)
+                    continue;
+
+                // abort if we have multiple exclusive patches
+                const int exclusivePriority = (int)AssetLoadPriority.Exclusive;
+                if (candidate.Priority is exclusivePriority && loader?.Priority == exclusivePriority)
+                {
+                    IPatch[] exclusiveLoaders = loaders.Where(p => p.Priority == exclusivePriority).ToArray();
+                    string[] modNames = exclusiveLoaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByHuman().ToArray();
+                    string[] patchNames = exclusiveLoaders.Select(p => p.Path.ToString()).OrderByHuman().ToArray();
+                    switch (modNames.Length)
+                    {
+                        case 1:
+                            this.Monitor.Log($"'{modNames[0]}' has multiple patches with the '{nameof(AssetLoadPriority.Exclusive)}' priority which load the '{assetName}' asset at the same time ({string.Join(", ", patchNames)}). None will be applied. You should report this to the content pack author.", LogLevel.Error);
+                            break;
+
+                        case 2:
+                            this.Monitor.Log($"Two content packs want to load the '{assetName}' asset with the '{nameof(AssetLoadPriority.Exclusive)}' priority ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                            this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
+                            break;
+
+                        default:
+                            this.Monitor.Log($"Multiple content packs want to load the '{assetName}' asset with the '{nameof(AssetLoadPriority.Exclusive)}' priority ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                            this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
+                            break;
+                    }
+
+                    loader = null;
+                    break;
+                }
+
+                // else best match so far
+                loader = candidate;
             }
 
-            // apply load patches
-            if (loaders.Any())
+            // apply selected load patch
+            if (loader != null)
             {
                 e.LoadFrom(
-                    load: () => this.ApplyLoad<T>(loaders[0], assetName)!, // only returns null when invalid, in which case there's no other way to abort
+                    load: () => this.ApplyLoad<T>(loader, assetName)!, // only returns null when invalid, in which case there's no other way to abort
                     priority: AssetLoadPriority.Exclusive,
-                    onBehalfOf: loaders[0].ContentPack.Manifest.UniqueID
+                    onBehalfOf: loader.ContentPack.Manifest.UniqueID
                 );
             }
 
             // apply edit patches
             if (editors.Any())
             {
-                List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
+                List<List<IPatch>> editGroups = this.SortAndGroupEditPatches(editors);
                 foreach (List<IPatch> group in editGroups)
                 {
                     List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
@@ -578,15 +595,15 @@ namespace ContentPatcher.Framework
             return patches;
         }
 
-        /// <summary>Group a list of patches by the mod which defines them, without changing the order they're applied.</summary>
+        /// <summary>Sort a list of patches by priority and group sequential edits by mod.</summary>
         /// <param name="patches">The patches to group.</param>
-        private List<List<IPatch>> GroupSortedPatchesByMod(IEnumerable<IPatch> patches)
+        private List<List<IPatch>> SortAndGroupEditPatches(IEnumerable<IPatch> patches)
         {
             List<List<IPatch>> groups = new();
 
             string? lastModId = null;
             List<IPatch> group = new();
-            foreach (IPatch patch in patches)
+            foreach (IPatch patch in patches.OrderBy(p => p.Priority))
             {
                 string modId = patch.ContentPack.Manifest.UniqueID;
                 if (modId != lastModId)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -16,19 +17,21 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
-        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
+        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName)
+        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, AssetLoadPriority priority, UpdateRate updateRate, IEnumerable<Condition> conditions, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
                 type: PatchType.Load,
                 assetName: assetName,
-                conditions: conditions,
+                priority: (int)priority,
                 updateRate: updateRate,
+                conditions: conditions,
                 contentPack: contentPack,
                 parentPatch: parentPatch,
                 parseAssetName: parseAssetName,

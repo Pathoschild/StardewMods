@@ -4,6 +4,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -37,6 +38,10 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The parsed asset name (if available).</summary>
         public ITokenString? ParsedTargetAsset { get; }
 
+        /// <summary>The priority for this patch when multiple patches apply.</summary>
+        /// <remarks>This is an <see cref="AssetLoadPriority"/> or <see cref="AssetEditPriority"/> value, depending on the patch type.</remarks>
+        public int? Priority { get; }
+
         /// <summary>The content pack which requested the patch.</summary>
         public IContentPack ContentPack { get; }
 
@@ -60,6 +65,7 @@ namespace ContentPatcher.Framework.Commands
                 path: patch.Path,
                 rawType: patch.RawType,
                 parsedType: patch.ParsedType,
+                priority: null,
                 conditions: Array.Empty<Condition>(),
                 matchesContext: false,
                 state: new ContextualState().AddError(patch.ReasonDisabled),
@@ -76,6 +82,7 @@ namespace ContentPatcher.Framework.Commands
                 path: patch.Path,
                 rawType: patch.Type.ToString(),
                 parsedType: patch.Type,
+                priority: patch.Priority,
                 conditions: patch.Conditions,
                 matchesContext: patch.IsReady,
                 state: patch.GetDiagnosticState(),
@@ -115,16 +122,18 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="rawType">The raw patch type.</param>
         /// <param name="parsedType">The parsed patch type, if valid.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="conditions">The parsed conditions (if available).</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="matchesContext">Whether the patch should be applied in the current context.</param>
         /// <param name="state">Diagnostic info about the patch.</param>
-        private PatchInfo(LogPathBuilder path, string? rawType, PatchType? parsedType, Condition[] conditions, IContentPack contentPack, bool matchesContext, IContextualState state)
+        private PatchInfo(LogPathBuilder path, string? rawType, PatchType? parsedType, int? priority, Condition[] conditions, IContentPack contentPack, bool matchesContext, IContextualState state)
             : base(conditions, matchesContext, state)
         {
             this.Path = path;
             this.RawType = rawType;
             this.ParsedType = parsedType;
+            this.Priority = priority;
             this.ContentPack = contentPack;
 
             this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1));
