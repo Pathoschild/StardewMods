@@ -1,0 +1,96 @@
+{
+    /**********
+    ** Chest UI
+    **********/
+    // default chest names
+    "default-name.fridge": "Koelkast",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "Verstuur items",
+    "default-name.shipping-bin.take": "Items terughalen",
+
+    // default category names
+    "default-category.owned-cabin": "Hut ({{owner}})",
+    "default-category.unowned-cabin": "Hut (leeg)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Locatie",
+    "label.location.tile": "Tegel {{x}}, {{y}}",
+    "label.name": "Naam",
+    "label.category": "Categorie",
+    "label.order": "Volgorde",
+    "label.hide-chest": "Verberg deze kist",
+    "label.hide-chest-hidden": "Verberg deze kist (Je moet de kist vinden om dit ongedaan te maken!)",
+    "label.automate-options": "Automatiseer",
+    "label.automate-store": "Stop items in deze kist",
+    "label.automate-store-first": "Stop eerst items in deze kist",
+    "label.automate-store-disabled": "Nooit items in deze kist stoppen",
+    "label.automate-take": "Items uit kist halen",
+    "label.automate-take-first": "Haal eerst items uit deze kist",
+    "label.automate-take-disabled": "Haal nooit items uit deze kist",
+    "label.automate-prevent-remove-stacks": "Vermijd het verwijderen van het laatste item in een stack",
+
+    // button labels
+    "button.edit-chest": "Bewerk kist",
+    "button.sort-inventory": "sorteer inventaris",
+    "button.save": "Sla op",
+    "button.reset": "reset",
+
+
+    /**********
+    ** Errors
+    **********/
+    “errors.disabled-from-here”: “Je kunt geen kisten openen vanaf hier.”, 
+    “errors.no-chests”: “Je hebt nog geen kisten.”, 
+    “errors.no-chests-in-location”: “Je hebt geen kisten in dit gebied.”, 
+    “errors.no-chests-in-range”: “Je hebt geen kisten binnen bereik.”
+
+    /**********
+    ** Generic Mod Config Menu UI
+    **********/
+    // general options
+   “config.title.general-options”: “Algemene opties”, 
+   “config.show-hover-tooltips.name”: “Toon zwevende tooltips”, 
+   “config.show-hover-tooltips.desc”: “Of de naam van de kist in een tooltip moet worden weergegeven als je naar een kist wijst.”, 
+   “config.enable-shipping-bin.name”: “Verzendbak inschakelen”, 
+   “config.enable-shipping-bin.desc”: “Of toegang tot de verzendbak mogelijk moet zijn.”, 
+   “config.add-organize-player-items.name”: “Voeg knop toe om spelersitems te organiseren”, 
+   “config.add-organize-player-items.desc”: “Of er een ‘organiseren’ knop moet worden toegevoegd in de kist UI’s voor de spelerinventaris.”, 
+   “config.range.name”: “Bereik”, 
+   “config.range.desc”: “Het bereik waarbinnen kisten toegankelijk zijn via het menu.”, 
+   “config.range.unlimited”: “Alle kisten”, 
+   “config.range.currentWorldArea”: “Kisten binnen het huidige wereldgebied”, 
+   “config.range.currentLocation”: “Kisten binnen de huidige locatie”, 
+   “config.range.none”: “Geen (kan geen kisten op afstand openen)”,
+
+    // general controls
+    "config.title.general-controls": "Algemene besturing",
+    "config.toggle-ui-key.name": "UI Aan/Uit",
+    "config.toggle-ui-key.desc": "De toetsen die de UI van de kist tonen of verbergen",
+
+    // controls when chest UI is open
+    "config.title.menu-controls": "Bepaald wanneer de UI van de kist aan staat.",
+    "config.edit-chest.name": "Bewerkt kist",
+    "config.edit-chest.desc": "De toetsen die de opties van de kist aanpassen.",
+    "config.sort-items.name": "Sorteer items",
+    "config.sort-items.desc": "De toetsen die items sorteren in de huidige kist.",
+    "config.navigate-prev-chest.name": "Naar: vorige kist",
+    "config.navigate-prev-chest.desc": "De toetsen die navigeren naar de vorige kist terwijl het menu open is.",
+    "config.navigate-next-chest.name": "Naar: volgende kist",
+    "config.navigate-next-chest.desc": "De toetsen die navigeren naar de volgende kist terwijl het menu open is.",
+    "config.navigate-prev-category.name": "Navigate: previous category",
+    "config.navigate-prev-category.desc": "De toetsen die navigeren naar de vorige categorie terwijl het menu open is.",
+    "config.navigate-next-category.name": "Naar: volgende categorie",
+    "config.navigate-next-category.desc": "De toetsen die navigeren naar de volgende categorie terwijl het menu open is.",
+    "config.hold-to-scroll-categories.name": "Houd ingedrukt om door categorieën te scrollen",
+    "config.hold-to-scroll-categories.desc": "De toetsen die, mits ingehouden, het mogelijk maken te scrollen door categorieën via de dropdown menu doormiddel van de muiswiel.",
+    "config.hold-to-scroll-chests.name": "Houd ingedrukt om door kisten de scrollen",
+    "config.hold-to-scroll-chests.desc": "De toetsen die, mits ingehouden, het mogelijk maken te scrollen via de dropdown menu doormiddel van de muiswiel.",
+
+    // disable in locations
+    "config.title.disable-in-locations": "Uitzetting in locaties",
+    "config.disable-mines.name": "Mines en Skull Cavern",
+    "config.disable-mines.desc": "Of je de toegang tot kisten wilt inschakelen of uitschakelen in de Mines of Skull Cavern.",
+    "config.disable-custom-names.name": "Aangepaste namen voor locaties",
+    "config.disable-custom-names.desc": "De interne namen (zoals word laten zien in de Debug Mode mod) voor locaties waarvan je de toegang tot kisten wilt uitschakelen. Je kan meerdere kiezen doormiddel van komma's."
+}
