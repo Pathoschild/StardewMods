@@ -111,14 +111,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
                         where
                             !field.IsLiteral // exclude constants
                             && !field.Name.EndsWith(">k__BackingField") // exclude backing fields, which will be handled by the properties below
-                        select new { field.Name, Type = field.FieldType, Value = this.GetDebugValue(obj, field) }
+                        select new { field.Name, Type = field.FieldType, Value = this.GetDebugValue(obj, field), IsProperty = false }
                     )
                     .Concat(
                         from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
                         where property.CanRead
-                        select new { property.Name, Type = property.PropertyType, Value = this.GetDebugValue(obj, property) }
+                        select new { property.Name, Type = property.PropertyType, Value = this.GetDebugValue(obj, property), IsProperty = true }
                     )
-                    .OrderBy(field => field.Name, StringComparer.OrdinalIgnoreCase);
+                    .OrderBy(field => field.Name, StringComparer.OrdinalIgnoreCase)
+                    .ThenByDescending(field => field.IsProperty);
 
                 // yield valid values
                 foreach (var field in fields)
