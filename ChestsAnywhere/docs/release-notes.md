@@ -1,6 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Reverted Android compatibility changes in 1.22.9.  
+  _(The changes caused issues like dressers acting as regular chests and broke compatibility with some mods like Better Chests.)_
+
 ## 1.22.9
 Released 01 November 2023 for SMAPI 3.14.0 or later.
 
