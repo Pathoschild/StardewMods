@@ -108,7 +108,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
                 var fields =
                     (
                         from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                        where !field.IsLiteral // exclude constants
+                        where
+                            !field.IsLiteral // exclude constants
+                            && !field.Name.EndsWith(">k__BackingField") // exclude backing fields, which will be handled by the properties below
                         select new { field.Name, Type = field.FieldType, Value = this.GetDebugValue(obj, field) }
                     )
                     .Concat(
