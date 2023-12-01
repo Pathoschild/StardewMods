@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.22.9</Version>
+    <Version>1.22.10</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
 
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>

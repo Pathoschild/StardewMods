@@ -9,6 +9,12 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.30.4
+Released 01 December 2023 for SMAPI 3.18.1 or later.
+
+* When a patch fails, Content Patcher now lists all issues in `patch summary` instead of the first one.
+* Fixed edge cases where validation fails due to commented-out code in the content pack (thanks to atravita!).
+
 ## 1.30.3
 Released 01 November 2023 for SMAPI 3.18.1 or later.
 

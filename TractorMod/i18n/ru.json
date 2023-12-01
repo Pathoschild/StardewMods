@@ -3,8 +3,8 @@
     ** Tractor
     *********/
     "buff.name": "Мощность трактора",
-    "garage.name": "Тракторный гараж",
-    "garage.description": "Гараж для хранения вашей одноимённой машины. Аппарат прилагается!",
+    "garage.name": "Гараж для трактора",
+    "garage.description": "Гараж для хранения вашей одноимённой машины. Трактор прилагается!",
 
 
     /*********
@@ -13,196 +13,196 @@
     /****
     ** Section titles
     ****/
-    "config.main-options": "Основные Опции",
+    "config.main-options": "Основные настройки",
     "config.controls": "Управление",
-    "config.axe": "Возможности Топора",
-    "config.hoe": "Возможности Мотыги",
-    "config.pickaxe": "Возможности Кирки",
-    "config.scythe": "Возможности Косы",
-    "config.melee-blunt": "Возможности Молотов",
-    "config.melee-dagger": "Возможности Кинжалов",
-    "config.melee-sword": "Возможности Мечей",
-    "config.other-tools": "Остальные Инструменты",
-    "config.custom-tools": "Пользовательские Инструменты",
+    "config.axe": "Возможности топора",
+    "config.hoe": "Возможности мотыги",
+    "config.pickaxe": "Возможности кирки",
+    "config.scythe": "Возможности косы",
+    "config.melee-blunt": "Возможности молотов",
+    "config.melee-dagger": "Возможности кинжалов",
+    "config.melee-sword": "Возможности мечей",
+    "config.other-tools": "Остальные инструменты",
+    "config.custom-tools": "Пользовательские инструменты",
 
 
     /****
     ** Main options
     ****/
     "config.distance.name": "Радиус воздействия",
-    "config.distance.tooltip": "Количество клеток в каждом направлении вокруг трактора, на которые он влияет(также относится клетка под ним). По умолчанию {{defaultValue}}; значение {{maxRecommendedValue}} покрывает большую часть видимого экрана, и более высокие значения могут негативно повлиять на производительность игры.",
+    "config.distance.tooltip": "Количество клеток в каждом направлении вокруг трактора, на которые он влияет (также относится клетка под ним). По умолчанию {{defaultValue}}; значение {{maxRecommendedValue}} покрывает большую часть видимого экрана, и более высокие значения могут негативно повлиять на производительность игры.",
 
-    "config.speed.name": "Скорость Трактора",
+    "config.speed.name": "Скорость трактора",
     "config.speed.tooltip": "Скорость с которой ездит трактор. По умолчанию {{defaultValue}}.",
 
-    "config.magnetic-radius.name": "Радиус Магнетизма",
+    "config.magnetic-radius.name": "Радиус магнетизма",
     "config.magnetic-radius.tooltip": "Радиус подбора предметов (более высокие значения притягивают предметы издалека). Значение по умолчанию {{defaultValue}}.",
 
-    "config.build-price.name": "Стоимость Строительства",
-    "config.build-price.tooltip": "Количество золота потребованного для покупки гаража от трактора. По умолчанию {{defaultValue}}з.",
+    "config.build-price.name": "Стоимость строительства",
+    "config.build-price.tooltip": "Цена покупки в золоте гаража для трактора. По умолчанию {{defaultValue}}з.",
 
-    "config.can-summon-without-garage.name": "Возможность Вызывать Без Гаража",
+    "config.can-summon-without-garage.name": "Возможность вызывать без гаража",
     "config.can-summon-without-garage.tooltip": "Возможность вызывать трактор без постройки гаража (по горячей клавише).",
 
-    "config.invincible-on-tractor.name": "Неуязвимость на Тракторе",
+    "config.invincible-on-tractor.name": "Неуязвимость на тракторе",
     "config.invincible-on-tractor.tooltip": "Отсутствие получения любого вида урона при езде на тракторе.",
 
-    "config.highlight-radius.name": "Выделение Радиуса (отладка)",
+    "config.highlight-radius.name": "Выделение радиуса (отладка)",
     "config.highlight-radius.tooltip": "При езде на тракторе визуально показывает радиус действия трактора (параметр \"радиус воздействия\").",
 
 
     /****
     ** Keybind options
     ****/
-    "config.summon-key.name": "Вызов Трактора",
-    "config.summon-key.tooltip": "Вызывает к вам доступный трактор (должен быть построен гараж для трактора или же включена функция \"Возможность Вызывать Без Гаража\"). По умолчанию {{defaultValue}}.",
+    "config.summon-key.name": "Вызов трактора",
+    "config.summon-key.tooltip": "Вызывает к вам доступный трактор (должен быть построен гараж для трактора или же включена функция \"Возможность вызывать без гаража\"). По умолчанию {{defaultValue}}.",
 
-    "config.dismiss-key.name": "Отзыв Трактора",
+    "config.dismiss-key.name": "Отзыв трактора",
     "config.dismiss-key.tooltip": "Возвращает ваш трактор домой.",
 
-    "config.hold-to-activate-key.name": "Кнопка Действия",
+    "config.hold-to-activate-key.name": "Кнопка действия",
     "config.hold-to-activate-key.tooltip": "Если данная опция включена, ваши инструменты будут работать только в том случае, если вы зажимаете установленную клавишу. Если данная опция отключена (кнопка не назначена), ваши инструменты будут работать автоматически.",
 
 
     /****
     ** Trees & bushes
     ****/
-    "config.chop-fruit-trees-seeds.name": "Срубка Фруктовых Деревьев (Семечки)",
+    "config.chop-fruit-trees-seeds.name": "Срубка фруктовых деревьев (Семечки)",
     "config.chop-fruit-trees-seeds.tooltip": "Будет срубать семена фруктовых деревьев.",
 
-    "config.chop-fruit-trees-saplings.name": "Срубка Фруктовых Деревьев (Саженцев)",
+    "config.chop-fruit-trees-saplings.name": "Срубка фруктовых деревьевв (Саженцев)",
     "config.chop-fruit-trees-saplings.tooltip": "Будет срубать фруктовые деревья, которые еще не полностью выросли.",
 
-    "config.chop-fruit-trees-grown.name": "Срубка Фруктовых Деревьев (Выросших)",
+    "config.chop-fruit-trees-grown.name": "Срубка фруктовых деревьев (Выросших)",
     "config.chop-fruit-trees-grown.tooltip": "Будет срубать выросшие фруктовые деревья.",
 
-    "config.chop-trees-seeds.name": "Срубка Деревьев (Семечки)",
+    "config.chop-trees-seeds.name": "Срубка деревьев (Семечки)",
     "config.chop-trees-seeds.tooltip": "Будет срубать семена обычных деревьев.",
 
-    "config.chop-trees-saplings.name": "Срубка Деревьев (Саженцев)",
+    "config.chop-trees-saplings.name": "Срубка деревьев (Саженцев)",
     "config.chop-trees-saplings.tooltip": "Будет срубать обычные деревья, которые еще не полностью выросли.",
 
-    "config.chop-trees-grown.name": "Срубка Деревьев (Выросших)",
+    "config.chop-trees-grown.name": "Срубка деревьев (Выросших)",
     "config.chop-trees-grown.tooltip": "Будет срубать выросшие обычные деревья.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", // TODO
+    "config.chop-trees-stumps.name": "Срубка деревьев (Пни)",
+    "config.chop-trees-stumps.tooltip": "Будет срубать пни обычных деревьев. (Это не относится к гигантским пням, которые считаются мусором.)",
 
-    "config.chop-bushes.name": "Срубка Кустов",
+    "config.chop-bushes.name": "Срубка кустов",
     "config.chop-bushes.tooltip": "Будет срубать кусты, которые можно срубить (не волокна).",
 
-    "config.harvest-fruit-trees.name": "Сбор Урожая Фруктовых Деревьев",
+    "config.harvest-fruit-trees.name": "Сбор урожая фруктовых деревьев",
     "config.harvest-fruit-trees.tooltip": "Будет собирать урожай с фруктовых деревьев.",
 
 
     /****
     ** Crops/forage/grass
     ****/
-    "config.clear-dead-crops.name": "Убирает Мёртвые Посевы",
+    "config.clear-dead-crops.name": "Убирает мёртвые посевы",
     "config.clear-dead-crops.tooltip": "Будет убирать мёртвые посевы.",
 
-    "config.clear-live-crops.name": "Убирает Живые Посевы",
+    "config.clear-live-crops.name": "Убирает живые посевы",
     "config.clear-live-crops.tooltip": "Будет убирать посаженные живые посевы.",
 
-    "config.harvest-giant-crops.name": "Сруб Гигантского Урожая",
+    "config.harvest-giant-crops.name": "Сруб гигантского урожая",
     "config.harvest-giant-crops.tooltip": "Будет срубать гигантский урожай (гигантскую тыкву, дыню и цветную капусту).",
 
-    "config.harvest-crops.name": "Сбор Урожая",
+    "config.harvest-crops.name": "Сбор урожая",
     "config.Harvest Crops.tooltip": "Будет собирать урожай.",
 
-    "config.harvest-flowers.name": "Сбор Цветов",
+    "config.harvest-flowers.name": "Сбор цветов",
     "config.harvest-flowers.tooltip": "Будет собирать цветы.",
 
     "config.harvest-forage.name": "Собираемые предметы",
     "config.harvest-forage.tooltip": "Будет собирать дикие растения, морские раковины и т.д. ",
 
-    "config.harvest-grass.name": "Покос Травы",
+    "config.harvest-grass.name": "Покос травы",
     "config.harvest-grass.tooltip": "Будет скашивать траву. Если у вас есть свободное место в силосной башне, то будет собирать сено.",
 
 
     /****
     ** Debris
     ****/
-    "config.clear-debris.name": "Уборка Мусора",
+    "config.clear-debris.name": "Уборка мусора",
     "config.clear-debris.tooltip": "Будет убирать сорняки, ветки, большие пни и брёвна.",
 
-    "config.clear-weeds.name": "Уборка Сорняков",
+    "config.clear-weeds.name": "Уборка сорняков",
     "config.clear-weeds.tooltip": "Будет срубать сорняки.",
 
 
     /****
     ** Dirt
     ****/
-    "config.till-dirt.name": "Вспашка Земли",
+    "config.till-dirt.name": "Вспашка земли",
     "config.till-dirt.tooltip": "Будет вспахивать землю.",
 
-    "config.dig-artifact-spots.name": "Выкапывание Артефактов",
+    "config.dig-artifact-spots.name": "Выкапывание артефактов",
     "config.dig-artifact-spots.tooltip": "Выкапывает землю с червями.",
 
-    "config.clear-tilled-dirt.name": "Очистка Вспаханной Земли",
+    "config.clear-tilled-dirt.name": "Очистка вспаханной земли",
     "config.clear-tilled-dirt.tooltip": "Очищает вспаханную землю от сорняков.",
 
 
     /****
     ** Mining
     ****/
-    "config.break-boulders-and-meteorites.name": "Разбитие Валунов и Метеоритов",
+    "config.break-boulders-and-meteorites.name": "Разрушение валунов и метеоритов",
     "config.break-boulders-and-meteorites.tooltip": "Будет разбивать валуны и метеориты.",
 
-    "config.harvest-mine-spawns.name": "Сбор Шахтёрский Минералов",
+    "config.harvest-mine-spawns.name": "Сбор шахтёрских минералов",
     "config.harvest-mine-spawns.tooltip": "Будет собирать шахтёрские минералы, такие как: кварц обычный и огненный, замёрзшие слезы и земляные кристаллы.",
 
 
     /****
     ** Placed items
     ****/
-    "config.break-flooring.name": "Разрушение Полов",
+    "config.break-flooring.name": "Разрушение полов",
     "config.break-flooring.tooltip": "Будет разбивать дорожные покрытия.",
 
-    "config.break-objects.name": "Разрушение Объектов",
+    "config.break-objects.name": "Разрушение объектов",
     "config.break-objects.tooltip": "Будет разбивать размещённые объекты.",
 
-    "config.break-mine-containers.name": "Разрушение Шахтёрских Бочек",
+    "config.break-mine-containers.name": "Разрушение шахтёрских бочек",
     "config.break-mine-containers.tooltip": "Будет разбивает бочки (контейнеры), которые появляются в шахте.",
 
-    "config.harvest-machines.name": "Сбор с Оборудования",
+    "config.harvest-machines.name": "Сбор с оборудования",
     "config.harvest-machines.tooltip": "Собирает готовые предметы с оборудования.",
 
 
     /****
     ** Melee
     ****/
-    "config.Attack-monsters.name": "Атака по Монстрам",
+    "config.Attack-monsters.name": "Атака по монстрам",
     "config.Attack-monsters.tooltip": "При включении будет нападать на монстров (данная функция зависит от настройки скорости трактора).",
 
 
     /****
     ** Other
     ****/
-    "config.milk-pail.name": "Сбор Молока",
-    "config.milk-pail.tooltip": "Будет собирать молоко у домашних животных используя подойник.",
+    "config.milk-pail.name": "Сбор молока",
+    "config.milk-pail.tooltip": "Будет собирать молоко у домашних животных, используя подойник.",
 
-    "config.shears.name": "Сбор Шерсти",
-    "config.shears.tooltip": "Будет собирать шерсть с домашних животных используя ножницы.",
+    "config.shears.name": "Сбор шерсти",
+    "config.shears.tooltip": "Будет собирать шерсть с домашних животных, используя ножницы.",
 
-    "config.watering-can.name": "Полив Растений",
+    "config.watering-can.name": "Полив растений",
     "config.watering-can.tooltip": "Будет поливать растения из лейки в рамках заданных параметров (Радиус воздействия). Не будет расходовать воду из лейки.",
 
-    "config.fertilizer.name": "Использование Удобрений",
+    "config.fertilizer.name": "Использование удобрений",
     "config.fertilizer.tooltip": "Будет удобрять вспаханную почву.",
 
-    "config.grass-starters.name": "Посадка Травы",
+    "config.grass-starters.name": "Посадка травы",
     "config.grass-starters.tooltip": "Будет использовать рассаду травы.",
 
-    "config.seeds.name": "Посадка Семян",
+    "config.seeds.name": "Посадка семян",
     "config.seeds.tooltip": "Будет сажать семена.",
 
-    "config.seed-bags.name": "Посадка Мешков с Семенами",
+    "config.seed-bags.name": "Посадка мешков с семенами",
     "config.seed-bags.tooltip": "Будет  сажать мешки с семенами из мода Seed Bag.",
 
-    "config.slingshot.name": "Использование Рогатки",
+    "config.slingshot.name": "Использование рогатки",
     "config.slingshot.tooltip": "Будет стрелять из рогатки в направлении курсора. (Имеет подавляющее воздействие из-за функции \"скорость трактора\", но сильно расходует боеприпасы).",
 
-    "config.custom-tool-names.name": "Названия Пользовательских Инструментов",
-    "config.custom-tool-names.tooltip": "Пользовательские предметы/ инструменты для использования во время езды на тракторе. Инструменты будут использоваться на каждой окружающей плитке, в то время как предметы будут использоваться. Если вы укажете что-то, что уже поддерживается (например топор), то это отменит все ограничения на его использование. Вы должны указать точное внутреннее название (не переведенное на ваш язык, то есть на английском), например 'Axe' или 'MegaBomb'. Возможно использовать несколько предметов, указав их через запятые."
+    "config.custom-tool-names.name": "Названия пользовательских инструментов",
+    "config.custom-tool-names.tooltip": "Пользовательские предметы/инструменты для использования во время езды на тракторе. Инструменты будут использоваться на каждой окружающей плитке, в то время как предметы будут использоваться. Если вы укажете что-то, что уже поддерживается (например топор), то это отменит все ограничения на его использование. Вы должны указать точное внутреннее название (не переведенное на ваш язык, то есть на английском), например 'Axe' или 'MegaBomb'. Возможно использовать несколько предметов, указав их через запятые."
 }

@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "Общие настройки",
+    "config.enable-game-debug.name": "Включить горячие клавиши отладки игры",
+    "config.enable-game-debug.desc": "Показавать отладочную информацию и включать горячие клавиши отладки в игре, например, нажатие клавиши 5 для телепорта на пляж.",
+    "config.enable-dangerous-hotkeys.name": "Разрешить использование опасных горячих клавиш",
+    "config.enable-dangerous-hotkeys.desc": "При включении горячих клавиш отладки игры также включаются разрушающие горячие клавиши, которые могут немедленно завершить текущий день, рандомизировать игрока или декорации фермы, а также немедленно завершить игру.",
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "Управление",
+    "config.toggle-debug-key.name": "Включить отладочную информацию",
+    "config.toggle-debug-key.desc": "Клавиши для включения отладочной информации."
 }

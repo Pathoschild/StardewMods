@@ -3,7 +3,7 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    "config.title.main-options": "Основные опции",
+    "config.title.main-options": "Основные настройки",
     "config.enabled.name": "Включено",
     "config.enabled.desc": "Следует ли включать функции автоматизации. Если этот параметр отключен, никакие машины не будут автоматизированы и каналы соединения не будет работать.",
     "config.automation-interval.name": "Автоматизированный интервал",
@@ -20,26 +20,24 @@
     "config.custom-connectors.desc": "Точное название предмета на английском, который соединит соседние машины вместе. Вы можете перечислить несколько предметов с помощью запятых.", // note: названия пользовательских предметов должны быть английскими даже при воспроизведении на других языках
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Поведение Домиков Джунимо",
+    "config.junimo-hut-gems.name": "Драгоценные камни",
+    "config.junimo-hut-gems.desc": "Что должны делать домики Джунимо с драгоценными камнями. Параметр 'Автоопределение' будет игнорировать их.",
+    "config.junimo-hut-fertilizer.name": "Удобрения",
+    "config.junimo-hut-fertilizer.desc": "Что должны делать домики Джунимо с удобрениями. Параметр 'Автоопределение' будет игнорировать их, если установлен мод Better Junimos, в противном случае перенос их из домиков в соединенные сундуки.",
+    "config.junimo-hut-seeds.name": "Семена",
+    "config.junimo-hut-seeds.desc": "Что должны делать домики Джунимо с семенами. Параметр 'Автоопределение' будет игнорировать их, если установлен мод Better Junimos, в противном случае перенос их из домиков в соединенные сундуки.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Автоопределение",
+    "config.junimo-huts.ignore": "Игнорировать их",
+    "config.junimo-huts.move-into-chests": "Переместить из домиков Джунимо в сундуки",
+    "config.junimo-huts.move-into-huts": "Переместить из сундуков в домики Джунимо",
 
     // machine overrides
     "config.title.machine-overrides": "Машины отправки товаров",
     "config.override.ShippingBin-name": "Ящик продажи",
     "config.override.MiniShippingBin-name": "Мини-ящик для отгрузок",
-    "config.override.desc": "Следует ли автоматизировать{{machineName}} .",
-    "config.custom-overrides-note": "Для получения информации о пользовательских машин отправки товаров см. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure за помощью обращайтесь непосредственно к редактированию файла config.json."
+    "config.override.desc": "Следует ли автоматизировать {{machineName}}.",
+    "config.custom-overrides-note": "Для получения информации о пользовательских машин отправки товаров см. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure, за помощью обращайтесь непосредственно к редактированию файла config.json."
 }

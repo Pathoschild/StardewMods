@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Требование лошадиной дудочки",
+    "config.require-flute.description": "Обязательно ли иметь в багаже предмет Лошадиная дудочка, чтобы вызвать лошадь. По умолчанию нет (false).",
+
+    "config.summon-horse-button.name": "Клавиша призыва лошади",
+    "config.summon-horse-button.description": "Клавиша, при нажатии на которую звучит дудочка и призывается лошадь. По умолчанию {{defaultValue}}."
+}

@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.13.11
+Released 01 December 2023 for SMAPI 3.14.0 or later.
+
+* Improved translations. Thanks to angel4killer (added Russian)!
+
 ## 1.13.10
 Released 27 August 2023 for SMAPI 3.14.0 or later.
 

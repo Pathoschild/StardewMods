@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Пропуск к...",
+    "config.skip-to.tooltip": "К какому меню перейти после пропуска. По умолчанию это Главное меню.",
+    "config.skip-to.values.title-menu": "Главное меню",
+    "config.skip-to.values.load-menu": "Меню загрузки",
+    "config.skip-to.values.join-coop": "Меню совместной игры",
+    "config.skip-to.values.host-coop": "Меню создания совместной игры"
+}

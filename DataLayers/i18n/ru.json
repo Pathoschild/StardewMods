@@ -35,7 +35,7 @@
     "crop-harvest.name": "Состояние готовности урожая к сбору",
     "crop-harvest.ready": "Культура готова к сбору урожая",
     "crop-harvest.not-ready": "Культура ещё не готова к сбору урожая",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "Культуре не хватает времени (или мертво)",
 
     // crops: watered
     "crop-water.name": "Состояние влажности почвы для культур",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "Здесь применено удобрение ",
     "crop-fertilizer.retaining-soil": "Здесь влагосохраняющая почва",
     "crop-fertilizer.speed-gro": "Здесь применён \"СкороРост\"",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "Несколько видов удобрений",
 
     // machine processing
     "machines.name": "Статус механической обработки",

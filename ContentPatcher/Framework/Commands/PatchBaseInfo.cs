@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 
@@ -40,12 +41,20 @@ namespace ContentPatcher.Framework.Commands
             IContextualState state = this.State;
 
             // state error
-            if (state.InvalidTokens.Any())
-                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByHuman())}";
-            if (state.UnreadyTokens.Any())
-                return $"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByHuman())}";
-            if (state.Errors.Any())
-                return string.Join("; ", state.Errors);
+            if (state.InvalidTokens.Count > 0 || state.UnreadyTokens.Count > 0 || state.Errors.Count > 0)
+            {
+                List<string> reasons = new();
+
+                if (state.InvalidTokens.Any())
+                    reasons.Add($"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByHuman())}");
+                if (state.UnreadyTokens.Any())
+                    reasons.Add($"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByHuman())}");
+                if (state.Errors.Any())
+                    reasons.Add(string.Join("; ", state.Errors));
+
+                if (reasons.Any())
+                    return string.Join("; ", reasons);
+            }
 
             // conditions not matched
             if (!this.MatchesContext && this.ParsedConditions.Any())

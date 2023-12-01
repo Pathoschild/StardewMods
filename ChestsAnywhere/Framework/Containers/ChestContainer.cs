@@ -80,15 +80,47 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
-            this.Chest.ShowMenu();
+            ItemGrabMenu menu = Constants.TargetPlatform switch
+            {
+                GamePlatform.Android => new ItemGrabMenu(
+                    inventory: this.Inventory,
+                    reverseGrab: true,
+                    showReceivingMenu: true,
+                    highlightFunction: this.CanAcceptItem,
+                    behaviorOnItemSelectFunction: null,
+                    message: null,
+                    behaviorOnItemGrab: null,
+                    canBeExitedWithKey: true,
+                    showOrganizeButton: true,
+                    source: ItemGrabMenu.source_chest,
+                    sourceItem: this.Chest,
+                    context: this.Context
+                ),
 
-            if (!this.ShowColorPicker && Game1.activeClickableMenu is ItemGrabMenu menu) // disable color picker for some special cases like the shipping bin, which can't be recolored
+                _ => new ItemGrabMenu(
+                    inventory: this.Inventory,
+                    reverseGrab: false,
+                    showReceivingMenu: true,
+                    highlightFunction: this.CanAcceptItem,
+                    behaviorOnItemSelectFunction: this.GrabItemFromPlayer,
+                    message: null,
+                    behaviorOnItemGrab: this.GrabItemFromContainer,
+                    canBeExitedWithKey: true,
+                    showOrganizeButton: true,
+                    source: ItemGrabMenu.source_chest,
+                    sourceItem: this.Chest,
+                    context: this.Context
+                )
+            };
+
+            if (!this.ShowColorPicker) // disable color picker for some special cases like the shipping bin, which can't be recolored
             {
                 menu.chestColorPicker = null;
                 menu.colorPickerToggleButton = null;
             }
 
-            return Game1.activeClickableMenu;
+            Game1.activeClickableMenu = menu;
+            return menu;
         }
 
         /// <inheritdoc />

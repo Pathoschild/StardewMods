@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.40.4
+Released 01 December 2023 for SMAPI 3.14.0 or later.
+
+* Datamining mode now shows properties instead of fields where equivalent.
+* Fixed datamining mode showing internal backing fields for properties.
+
 ## 1.40.3
 Released 01 November 2023 for SMAPI 3.14.0 or later.
 
