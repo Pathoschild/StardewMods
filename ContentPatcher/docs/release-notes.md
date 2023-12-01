@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed edge cases where validation fails due to commented-out code in the content pack (thanks to atravita!).
+
 ## 1.30.3
 Released 01 November 2023 for SMAPI 3.18.1 or later.
 
