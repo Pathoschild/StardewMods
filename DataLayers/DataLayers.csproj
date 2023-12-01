@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.15.11</Version>
+    <Version>1.15.12</Version>
     <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
 
     <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>

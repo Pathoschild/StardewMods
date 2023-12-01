@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.30.3</Version>
+    <Version>1.30.4</Version>
     <RootNamespace>ContentPatcher</RootNamespace>
   </PropertyGroup>
 
