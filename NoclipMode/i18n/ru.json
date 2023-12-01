@@ -9,7 +9,6 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
     "config.title.general-options": "Общие настройки",
     "config.enabled-message.name": "Показать сообщение о включении",
     "config.enabled-message.desc": "Показывать ли внутриигровое сообщение в углу экрана при включении режима свободного перемещения.",
