@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -10,25 +9,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CrystalariumMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        public CrystalariumMachine(SObject machine, GameLocation location, Vector2 tile, IReflectionHelper reflection)
-            : base(machine, location, tile)
-        {
-            this.Reflection = reflection;
-        }
+        public CrystalariumMachine(SObject machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
@@ -44,7 +32,22 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             return this.GetTracked(output, onEmpty: _ =>
             {
-                machine.MinutesUntilReady = this.Reflection.GetMethod(machine, "getMinutesForCrystalarium").Invoke<int>(output!.QualifiedItemId);
+                machine.MinutesUntilReady = output.QualifiedItemId switch
+                {
+                    // temporarily taken from Data/Machines until Automate is updated to use it
+                    "(O)80" => 420,
+                    "(O)60" => 3000,
+                    "(O)68" => 1120,
+                    "(O)70" => 2400,
+                    "(O)64" => 3000,
+                    "(O)62" => 2240,
+                    "(O)66" => 1360,
+                    "(O)72" => 7200,
+                    "(O)82" => 1300,
+                    "(O)84" => 1120,
+                    "(O)86" => 800,
+                    _ => 5000
+                };
                 machine.readyForHarvest.Value = false;
             });
         }

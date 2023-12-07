@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new CoffeeMakerMachine(obj, location, tile);
 
                 case "(BC)21":
-                    return new CrystalariumMachine(obj, location, tile, this.Reflection);
+                    return new CrystalariumMachine(obj, location, tile);
 
                 case "(BC)265":
                     return new DeconstructorMachine(obj, location, tile);
