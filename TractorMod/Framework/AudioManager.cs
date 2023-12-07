@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="e">The event data.</param>
         public void OnAssetRequested(AssetRequestedEventArgs e)
         {
-            if (e.NameWithoutLocale.IsEquivalentTo("Data/AudioCueModificationData"))
+            if (e.NameWithoutLocale.IsEquivalentTo("Data/AudioChanges"))
             {
                 e.Edit(editor =>
                 {
