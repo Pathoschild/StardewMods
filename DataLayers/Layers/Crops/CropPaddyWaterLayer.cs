@@ -104,7 +104,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             // note: paddyWaterCheck() only works if the dirt contains a paddy crop
             HoeDirt? dirt = this.GetDirt(location, tile, ignorePot: true);
             if (dirt?.hasPaddyCrop() != true && this.IsTillable(location, tile) && location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport))
-                dirt = new HoeDirt(HoeDirt.watered, samplePaddyCrop.Value);
+            {
+                dirt = new HoeDirt(HoeDirt.watered, samplePaddyCrop.Value)
+                {
+                    Location = location,
+                    Tile = tile
+                };
+            }
             return dirt?.paddyWaterCheck() ?? false;
         }
 
