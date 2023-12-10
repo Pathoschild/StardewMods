@@ -134,7 +134,7 @@ namespace Pathoschild.Stardew.Common.Items
 
             // get secret note IDs
             var ids = this
-                .TryLoad<int, string>("Data\\SecretNotes")
+                .TryLoad(() => DataLoader.SecretNotes(Game1.content))
                 .Keys
                 .Where(isJournalScrap
                     ? id => (id >= GameLocation.JOURNAL_INDEX)
@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.Common.Items
             simpleTags = new HashSet<string>();
             complexTags = new List<List<string>>();
 
-            foreach (FishPondData data in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
+            foreach (FishPondData data in this.TryLoad(() => DataLoader.FishPondData(Game1.content)))
             {
                 if (data.ProducedItems.All(p => p.ItemId is not ("812" or "(O)812")))
                     continue; // doesn't produce roe
@@ -247,21 +247,20 @@ namespace Pathoschild.Stardew.Common.Items
             }
         }
 
-        /// <summary>Try to load a data file, and return empty data if it's invalid.</summary>
-        /// <typeparam name="TKey">The asset key type.</typeparam>
-        /// <typeparam name="TValue">The asset value type.</typeparam>
-        /// <param name="assetName">The data asset name.</param>
-        private Dictionary<TKey, TValue> TryLoad<TKey, TValue>(string assetName)
-            where TKey : notnull
+        /// <summary>Try to load a data asset, and return empty data if it's invalid.</summary>
+        /// <typeparam name="TAsset">The asset type.</typeparam>
+        /// <param name="load">A callback which loads the asset.</param>
+        private TAsset TryLoad<TAsset>(Func<TAsset> load)
+            where TAsset : new()
         {
             try
             {
-                return Game1.content.Load<Dictionary<TKey, TValue>>(assetName);
+                return load();
             }
             catch (ContentLoadException)
             {
                 // generally due to a player incorrectly replacing a data file with an XNB mod
-                return new Dictionary<TKey, TValue>();
+                return new TAsset();
             }
         }
 

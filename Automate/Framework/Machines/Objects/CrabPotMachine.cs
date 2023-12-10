@@ -91,7 +91,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             owner.gainExperience(Farmer.fishingSkill, 5);
 
             // mark fish caught for achievements and stats
-            IDictionary<string, string> fishData = Game1.content.Load<Dictionary<string, string>>("Data\\Fish");
+            IDictionary<string, string> fishData = DataLoader.Fish(Game1.content);
             if (fishData.TryGetValue(item.ItemId, out string? fishRow))
             {
                 int size = 0;

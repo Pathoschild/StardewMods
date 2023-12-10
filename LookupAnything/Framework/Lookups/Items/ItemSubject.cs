@@ -285,7 +285,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // derived from FishPond::doAction and FishPond::isLegalFishForPonds
             if (!item.HasContextTag("fish_legendary") && (item.Category == SObject.FishCategory || item.QualifiedItemId is "(O)393"/*coral*/ or "(O)397"/*sea urchin*/))
             {
-                foreach (FishPondData fishPondData in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
+                foreach (FishPondData fishPondData in DataLoader.FishPondData(Game1.content))
                 {
                     if (!fishPondData.RequiredTags.All(item.HasContextTag))
                         continue;
@@ -534,7 +534,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                     // TODO 1.6: update for new combinations (e.g. min/max without extra chance) and extra per farming level
                     if (minStack != maxStack)
-                        summary.Add(I18n.Crop_Summary_DropsXToY(min: minStack, max: maxStack, percent: (int) Math.Round(extraHarvestChance * 100, 2)));
+                        summary.Add(I18n.Crop_Summary_DropsXToY(min: minStack, max: maxStack, percent: (int)Math.Round(extraHarvestChance * 100, 2)));
                     else if (minStack > 1)
                         summary.Add(I18n.Crop_Summary_DropsX(count: minStack));
                 }

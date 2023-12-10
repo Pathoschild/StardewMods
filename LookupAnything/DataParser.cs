@@ -139,7 +139,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // get raw fish data
             string[] fishFields;
             {
-                if (!Game1.content.Load<Dictionary<string, string>>("Data\\Fish").TryGetValue(fishID, out string? rawData))
+                if (!DataLoader.Fish(Game1.content).TryGetValue(fishID, out string? rawData))
                     return null;
                 fishFields = rawData.Split('/');
                 if (fishFields.Length < 13)
@@ -148,19 +148,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // parse location data
             var locations = new List<FishSpawnLocationData>();
-            var locationsData = Game1.content.Load<Dictionary<string, LocationData>>("Data\\Locations");
-            foreach ((string locationName, LocationData value) in locationsData)
+            foreach ((string locationName, LocationData value) in DataLoader.Locations(Game1.content))
             {
                 if (metadata.IgnoreFishingLocations.Contains(locationName))
                     continue; // ignore event data
 
                 List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
 
-                foreach (var fish in value.Fish)
+                foreach (SpawnFishData fish in value.Fish)
                 {
-                    var fishItem = ItemRegistry.GetData(fish.ItemId);
-                    if (fishItem == null || fishItem.ObjectType != "Fish") { continue; }
-                    if (fishItem.ItemId != fishID) continue;
+                    ParsedItemData? fishItem = ItemRegistry.GetData(fish.ItemId);
+                    if (fishItem?.ObjectType != "Fish" || fishItem.ItemId != fishID)
+                        continue;
 
                     if (fish.Season.HasValue)
                     {
@@ -170,15 +169,13 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         var conditionData = GameStateQuery.Parse(fish.Condition);
                         var seasonalConditions = conditionData.Where(condition => GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]));
-                        foreach (var condition in seasonalConditions)
+                        foreach (GameStateQuery.ParsedGameStateQuery condition in seasonalConditions)
                         {
                             var seasons = new List<string>();
-                            foreach (string season in new string[] { "spring", "summer", "fall", "winter"})
+                            foreach (string season in new[] { "spring", "summer", "fall", "winter" })
                             {
                                 if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
-                                {
                                     seasons.Add(season);
-                                }
                             }
                             curLocations.Add(new FishSpawnLocationData(locationName, fish.FishAreaId, seasons.ToArray()));
                         }
@@ -278,13 +275,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/>, <see cref="GameLocation.monsterDrop"/>, and the <see cref="Debris"/> constructor.</remarks>
         public IEnumerable<MonsterData> GetMonsters()
         {
-            Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Monsters");
-
-            foreach (var entry in data)
+            foreach ((string name, string rawData) in DataLoader.Monsters(Game1.content))
             {
                 // monster fields
-                string[] fields = entry.Value.Split('/');
-                string name = entry.Key;
+                string[] fields = rawData.Split('/');
                 int health = int.Parse(fields[0]);
                 int damageToFarmer = int.Parse(fields[1]);
                 //int minCoins = int.Parse(fields[2]);
