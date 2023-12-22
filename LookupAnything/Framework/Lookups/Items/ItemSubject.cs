@@ -14,6 +14,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Extensions;
 using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Movies;
 using StardewValley.Locations;
@@ -462,7 +463,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="location">The location containing the crop, if applicable.</param>
         private Crop? TryGetCropForSeed(Item seed, GameLocation? location)
         {
-            if (seed is not SObject obj || obj.bigCraftable.Value)
+            if (!seed.HasTypeId(ItemRegistry.type_object))
                 return null;
 
             try

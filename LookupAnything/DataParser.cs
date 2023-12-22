@@ -446,25 +446,22 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 if (inputID != null)
                 {
-                    switch (ItemRegistry.GetDataOrErrorItem(outputID).ItemId)
+                    var objectDefinition = ItemRegistry.GetObjectTypeDefinition();
+                    switch (ItemRegistry.QualifyItemId(outputID))
                     {
-                        case "342":
-                            obj.preserve.Value = SObject.PreserveType.Pickle;
+                        case "(O)342":
+                            obj = objectDefinition.CreateFlavoredPickle(ItemRegistry.Create(inputID) as SObject);
                             break;
-                        case "344":
-                            obj.preserve.Value = SObject.PreserveType.Jelly;
+                        case "(O)344":
+                            obj = objectDefinition.CreateFlavoredJelly(ItemRegistry.Create(inputID) as SObject);
                             break;
-                        case "348":
-                            obj.preserve.Value = SObject.PreserveType.Wine;
+                        case "(O)348":
+                            obj = objectDefinition.CreateFlavoredWine(ItemRegistry.Create(inputID) as SObject);
                             break;
-                        case "350":
-                            obj.preserve.Value = SObject.PreserveType.Juice;
+                        case "(O)350":
+                            obj = objectDefinition.CreateFlavoredJuice(ItemRegistry.Create(inputID) as SObject);
                             break;
                     }
-                }
-                if (obj.preserve.Value.HasValue)
-                {
-                    obj.preservedParentSheetIndex.Value = ItemRegistry.GetDataOrErrorItem(inputID).ItemId;
                 }
 
                 if (output != null)
@@ -472,6 +469,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     obj.preservedParentSheetIndex.Value = output.PreservedParentSheetIndex ?? obj.preservedParentSheetIndex.Value;
                     obj.preserve.Value = output.PreserveType ?? obj.preserve.Value;
                 }
+                return obj;
             }
 
             return item;
