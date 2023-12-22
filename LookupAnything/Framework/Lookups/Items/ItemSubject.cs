@@ -468,14 +468,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
             try
             {
-                if (Crop.TryGetData(seed.ItemId, out _))
-                {
-                    Crop crop = new(seed.ItemId, 0, 0, location ?? Game1.getFarm());
-                    return CommonHelper.IsItemId(crop.netSeedIndex.Value)
-                        ? crop
-                        : null;
-                }
-                return null;
+                return Crop.TryGetData(seed.ItemId, out _)
+                    ? new(seed.ItemId, 0, 0, location ?? Game1.getFarm())
+                    : null;
             }
             catch
             {
