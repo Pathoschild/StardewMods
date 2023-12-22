@@ -446,29 +446,25 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 if (inputID != null)
                 {
-                    switch (outputID)
+                    switch (ItemRegistry.GetDataOrErrorItem(outputID).ItemId)
                     {
-                        case "(O)342":
                         case "342":
                             obj.preserve.Value = SObject.PreserveType.Pickle;
-                            obj.preservedParentSheetIndex.Value = inputID;
                             break;
-                        case "(O)344":
                         case "344":
                             obj.preserve.Value = SObject.PreserveType.Jelly;
-                            obj.preservedParentSheetIndex.Value = inputID;
                             break;
-                        case "(O)348":
                         case "348":
                             obj.preserve.Value = SObject.PreserveType.Wine;
-                            obj.preservedParentSheetIndex.Value = inputID;
                             break;
-                        case "(O)350":
                         case "350":
                             obj.preserve.Value = SObject.PreserveType.Juice;
-                            obj.preservedParentSheetIndex.Value = inputID;
                             break;
                     }
+                }
+                if (obj.preserve.Value.HasValue)
+                {
+                    obj.preservedParentSheetIndex.Value = ItemRegistry.GetDataOrErrorItem(inputID).ItemId;
                 }
 
                 if (output != null)
