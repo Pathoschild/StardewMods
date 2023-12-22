@@ -394,7 +394,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.MachineInput,
                     displayType: machineName,
                     ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.QualifiedItemId, outputId, output),
+                    item: ingredient => this.CreateRecipeItem(ingredient, outputId, output),
                     isKnown: () => true,
                     exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
                     outputQualifiedItemId: outputId,
@@ -417,7 +417,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.BuildingInput,
                     displayType: TokenParser.ParseText(buildingData?.Name) ?? entry.BuildingKey,
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.QualifiedItemId, entry.Output, null),
+                    item: ingredient => this.CreateRecipeItem(ingredient, entry.Output, null),
                     isKnown: () => true,
                     outputQualifiedItemId: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
@@ -435,44 +435,44 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Private methods
         *********/
         /// <summary>Create a custom recipe output.</summary>
-        /// <param name="inputID">The input ingredient ID.</param>
-        /// <param name="outputID">The output item ID.</param>
-        /// <param name="output">The output data, if applicable.</param>
-        private Item CreateRecipeItem(string? inputID, string outputID, MachineRecipeOutputData? output)
+        /// <param name="ingredient">The input ingredient.</param>
+        /// <param name="outputId">The output item ID.</param>
+        /// <param name="outputData">The output data, if applicable.</param>
+        private Item CreateRecipeItem(Item ingredient, string outputId, MachineRecipeOutputData? outputData)
         {
-            Item item = ItemRegistry.Create(outputID);
+            outputId = ItemRegistry.QualifyItemId(outputId);
 
-            if (item is SObject obj)
+            Item output;
+            switch (outputId)
             {
-                if (inputID != null)
-                {
-                    var objectDefinition = ItemRegistry.GetObjectTypeDefinition();
-                    switch (ItemRegistry.QualifyItemId(outputID))
-                    {
-                        case "(O)342":
-                            obj = objectDefinition.CreateFlavoredPickle(ItemRegistry.Create(inputID) as SObject);
-                            break;
-                        case "(O)344":
-                            obj = objectDefinition.CreateFlavoredJelly(ItemRegistry.Create(inputID) as SObject);
-                            break;
-                        case "(O)348":
-                            obj = objectDefinition.CreateFlavoredWine(ItemRegistry.Create(inputID) as SObject);
-                            break;
-                        case "(O)350":
-                            obj = objectDefinition.CreateFlavoredJuice(ItemRegistry.Create(inputID) as SObject);
-                            break;
-                    }
-                }
+                case "(O)342":
+                    output = ItemRegistry.GetObjectTypeDefinition().CreateFlavoredPickle(ingredient as SObject);
+                    break;
 
-                if (output != null)
-                {
-                    obj.preservedParentSheetIndex.Value = output.PreservedParentSheetIndex ?? obj.preservedParentSheetIndex.Value;
-                    obj.preserve.Value = output.PreserveType ?? obj.preserve.Value;
-                }
-                return obj;
+                case "(O)344":
+                    output = ItemRegistry.GetObjectTypeDefinition().CreateFlavoredJelly(ingredient as SObject);
+                    break;
+
+                case "(O)348":
+                    output = ItemRegistry.GetObjectTypeDefinition().CreateFlavoredWine(ingredient as SObject);
+                    break;
+
+                case "(O)350":
+                    output = ItemRegistry.GetObjectTypeDefinition().CreateFlavoredJuice(ingredient as SObject);
+                    break;
+
+                default:
+                    output = ItemRegistry.Create(outputId);
+                    break;
             }
 
-            return item;
+            if (outputData != null && output is SObject obj)
+            {
+                obj.preservedParentSheetIndex.Value = outputData.PreservedParentSheetIndex ?? obj.preservedParentSheetIndex.Value;
+                obj.preserve.Value = outputData.PreserveType ?? obj.preserve.Value;
+            }
+
+            return output;
         }
     }
 }
