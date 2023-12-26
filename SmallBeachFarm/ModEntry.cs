@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                     var data = editor.GetData<List<ModFarmType>>();
                     data.Add(new()
                     {
-                        ID = this.ModManifest.UniqueID,
+                        Id = this.ModManifest.UniqueID,
                         TooltipStringPath = $"Strings/UI:{farmKey}_Description",
                         MapName = farmKey
                     });
@@ -286,7 +286,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         private bool IsSmallBeachFarm(GameLocation? location)
         {
             return
-                Game1.whichModFarm?.ID == this.ModManifest.UniqueID
+                Game1.whichModFarm?.Id == this.ModManifest.UniqueID
                 && location?.Name == "Farm"
                 && location is Farm;
         }

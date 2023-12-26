@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 

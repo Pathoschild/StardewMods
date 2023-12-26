@@ -529,7 +529,7 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.whichFarm == Farm.mod_layout
-                    ? Game1.whichModFarm?.ID ?? FarmType.Custom.ToString()
+                    ? Game1.whichModFarm?.Id ?? FarmType.Custom.ToString()
                     : this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(),
                 reading: save => int.TryParse(save.whichFarm, out _) && Enum.TryParse(save.whichFarm, out FarmType farmType)
                     ? farmType.ToString()
