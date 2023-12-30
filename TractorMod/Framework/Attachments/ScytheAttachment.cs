@@ -17,13 +17,11 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for the scythe.</summary>
-    internal class ScytheAttachment : BaseAttachment
+    internal class ScytheAttachment : ExtendedDistanceAttachment<ScytheConfig>
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly ScytheConfig Config;
 
         /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest"/>.</summary>
         private readonly Dictionary<string, bool> IsFlowerCache = new();
@@ -37,10 +35,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public ScytheAttachment(ScytheConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
-        {
-            this.Config = config;
-        }
+            : base(config, modRegistry, reflection) { }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>

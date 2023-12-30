@@ -210,5 +210,17 @@
     "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
 
     "config.custom-tool-names.name": "Custom Tool Names",
-    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas.",
+
+    "config.increase-scythe-distance": "Increase Scythe Distance",
+    "config.increase-scythe-distance.tooltip": "Whether to make the scythe tool affect an area around the tractor one tile wider than the base distance (e.g. with this checked, the scythe will affect a 5x5 area while the hoe only affects 3x3)",
+
+    "config.increase-watering-can-distance": "Increase Watering Can Distance",
+    "config.increase-watering-can-distance.tooltip": "Whether to make the watering can affect an area around the tractor one tile wider than the base distance (e.g. with this checked, water will spray over a 5x5 area while the hoe only affects 3x3)",
+
+    "config.increase-fertilizer-distance": "Increase Fertilizer Distance",
+    "config.increase-fertilizer-distance.tooltip": "Whether to make spreading fertilizer affect an area around the tractor one tile wide than the base distance (e.g. with this checked, fertilizer will spray over a 5x5 area while the hoe only affects 3x3)",
+
+    "config.increase-seeding-distance": "Increase Seeder Distance",
+    "config.increase-seeding-distance.tooltip": "Whether to make seed spreading affect an area around the tractor one tile wide than the base distance (e.g. with this checked, seeds will affect a 5x5 area while the hoe only affects 3x3)"
 }

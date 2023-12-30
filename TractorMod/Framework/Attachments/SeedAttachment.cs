@@ -11,15 +11,8 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for seeds.</summary>
-    internal class SeedAttachment : BaseAttachment
+    internal class SeedAttachment : ExtendedDistanceAttachment<ExtendedDistanceConfig>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
-
-
         /*********
         ** Public methods
         *********/
@@ -27,11 +20,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public SeedAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
-        {
-            this.Config = config;
-        }
+        public SeedAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(config, modRegistry, reflection) { }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>

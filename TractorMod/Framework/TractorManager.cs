@@ -331,13 +331,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // This must be done outside the temporary interaction block below, since that dismounts
             // the player which changes their position from what the player may expect.
             Vector2 origin = Game1.player.Tile;
-            Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
+            HashSet<Vector2> coreGrid = this.GetTileGrid(origin, this.Config.Distance).ToHashSet();
+            Vector2[] extendedGrid = this.GetTileGrid(origin, this.Config.Distance+1).ToArray();
 
             // apply tools
             this.TemporarilyFakeInteraction(() =>
             {
-                foreach (Vector2 tile in grid)
+                foreach (Vector2 tile in extendedGrid)
                 {
+                    bool isCoreTile = coreGrid.Contains(tile);
+
                     // face tile to avoid game skipping interaction
                     this.GetRadialAdjacentTile(origin, tile, out Vector2 adjacentTile, out int facingDirection);
                     player.Position = adjacentTile * Game1.tileSize;
@@ -348,7 +351,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     location.terrainFeatures.TryGetValue(tile, out TerrainFeature? tileFeature);
                     foreach (IAttachment attachment in attachments)
                     {
-                        if (attachment.Apply(tile, tileObj, tileFeature, Game1.player, tool, item, Game1.currentLocation))
+                        if ((isCoreTile || attachment.IsDistanceExtended)
+                            && attachment.Apply(tile, tileObj, tileFeature, Game1.player, tool, item, Game1.currentLocation))
                         {
                             this.ResetCooldown(attachment);
                             break;

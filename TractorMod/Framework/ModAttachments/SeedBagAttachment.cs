@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
+        private readonly ExtendedDistanceConfig Config;
 
 
         /*********
@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public SeedBagAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+        public SeedBagAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
             : base(modRegistry, reflection)
         {
             this.Config = config;
