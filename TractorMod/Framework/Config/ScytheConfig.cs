@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
 
-        /// <inheritdoc/>
+        /// <summary>If true, causes the area of effect to be increased somewhat from <see cref="ModConfig.Distance"/></summary>
         public bool IncreaseDistance { get; set; } = true;
     }
 }
