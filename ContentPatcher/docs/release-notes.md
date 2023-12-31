@@ -12,6 +12,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
 * Added asset load & edit priority (see updated [action docs](author-guide.md#actions)).
+* Added new tokens:
+  * [`ModId`](author-guide/tokens.md#ModId) to get the unique ID of the current content pack.
 * `CustomLocations` is now deprecated in favor of the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data).
   Locations added through it are now added to `Data/Locations` automatically.
 * `CustomLocations` now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).

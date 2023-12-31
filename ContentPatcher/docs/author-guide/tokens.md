@@ -1106,6 +1106,22 @@ For custom languages added via `Data/AdditionalLanguages`, the token will contai
 </td>
 <td><a href="#Language">#</a></td>
 </tr>
+
+<tr valign="top" id="ModId">
+<td>ModId</td>
+<td>
+
+The current content pack's unique ID (from the `UniqueID` field in its `manifest.json`).
+
+This is typically used to build [unique string IDs](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
+For example:
+```json
+"Id": "{{ModId}}_ExampleItem"
+```
+
+</td>
+<td><a href="#ModId">#</a></td>
+</tr>
 </table>
 
 ### Field references

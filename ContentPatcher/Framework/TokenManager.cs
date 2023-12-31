@@ -276,9 +276,12 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
+            InvariantSet modIdSet = new(contentPack.Manifest.UniqueID);
+
             return new IValueProvider[]
             {
                 new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
+                new ImmutableValueProvider(nameof(ConditionType.ModId), modIdSet, allowedValues: modIdSet),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
                 new InternalAssetKeyValueProvider(contentPack.ModContent.GetInternalAssetName),
