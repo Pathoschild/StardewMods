@@ -177,7 +177,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     && obj.Type != "Fish"
                     && obj.Type != "Mineral"
                     && obj.Type != "Cooking"
-                    && SObject.isPotentialBasicShippedCategory(obj.ItemId, obj.Category)
+                    && SObject.isPotentialBasicShipped(obj.ItemId, obj.Category, obj.Type)
 
                 select new KeyValuePair<string, bool>(obj.QualifiedItemId, Game1.player.basicShipped.ContainsKey(obj.ItemId))
             );
@@ -185,7 +185,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
-        /// Derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        /// Derived from <see cref="Utility.ForEachItem(Func{Item,bool})"/> with some differences:
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
         ///   * added hay in silos.
         /// </remarks>

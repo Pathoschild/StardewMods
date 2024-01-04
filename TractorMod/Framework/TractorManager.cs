@@ -151,7 +151,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     this.RiderHealth = Game1.player.health;
 
                 // reset held-down tool power
-                Game1.player.toolPower = 0;
+                Game1.player.toolPower.Value = 0;
 
                 // set sound
                 this.AudioManager.SetEngineState(this.IsCurrentPlayerRiding ? EngineState.Idle : EngineState.Stop);
