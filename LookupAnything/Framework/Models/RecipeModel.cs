@@ -172,7 +172,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public static RecipeIngredientModel[] ParseIngredients(CraftingRecipe recipe)
         {
             return recipe.recipeList
-                .Select(p => new RecipeIngredientModel(p.Key, p.Value))
+                .Select(p => new RecipeIngredientModel(ItemRegistry.QualifyItemId(p.Key), p.Value))
                 .ToArray();
         }
 
