@@ -1022,10 +1022,13 @@ namespace ContentPatcher.Framework
                     string?[] targets = { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
                     if (string.IsNullOrWhiteSpace(moveEntry.ID))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
-                    if (targets.All(string.IsNullOrWhiteSpace))
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
-                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    switch (targets.Count(p => !string.IsNullOrWhiteSpace(p)))
+                    {
+                        case 0:
+                            return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                        case > 1:
+                            return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    }
 
                     // parse IDs
                     if (!tokenParser.TryParseString(moveEntry.ID, assumeModIds, localPath.With(nameof(moveEntry.ID)), out string? idError, out IManagedTokenString? moveId))
