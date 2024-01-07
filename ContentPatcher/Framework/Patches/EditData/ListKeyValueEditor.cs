@@ -119,6 +119,9 @@ namespace ContentPatcher.Framework.Patches.EditData
                 ? anchorIndex + 1
                 : anchorIndex;
 
+            if (entryIndex < anchorIndex)
+                newIndex--; // list will shift up when we remove the old entry
+
             this.Data.RemoveAt(entryIndex);
             this.Data.Insert(newIndex, entry);
             return MoveResult.Success;

@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.GameData.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -30,33 +29,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the output item.</summary>
         public override ITrackedStack? GetOutput()
         {
-            // get raw output
-            SObject? output = this.Machine.heldObject.Value;
-            if (output == null)
+            if (this.Machine.heldObject.Value is null)
                 return null;
 
-            // get flower data
-            string? flowerId = null;
-            string? flowerName = null;
-            int addedPrice = 0;
-            {
-                Crop? flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation, 5, crop => !crop.forageCrop.Value);
-                if (flower != null)
-                {
-                    flowerId = flower.indexOfHarvest.Value;
-                    ObjectData data = Game1.objectData[flowerId];
-                    flowerName = data.Name;
-                    addedPrice = data.Price * 2;
-                }
-            }
-
-            // build object
-            SObject result = new(output.QualifiedItemId, output.Stack)
-            {
-                name = $"{flowerName ?? "Wild"} Honey",
-                Price = output.Price + addedPrice,
-                preservedParentSheetIndex = { Value = flowerId }
-            };
+            SObject result = ItemRegistry.GetObjectTypeDefinition().CreateFlavoredHoney(this.GetNearbyFlower());
             return new TrackedItem(result, onEmpty: this.Reset);
         }
 
@@ -82,6 +58,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             machine.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, 4);
             machine.readyForHarvest.Value = false;
             machine.showNextIndex.Value = false;
+        }
+
+        /// <summary>Find the nearby flower whose flavor to use for produced honey, if any.</summary>
+        private SObject? GetNearbyFlower()
+        {
+            Crop? flowerCrop = Utility.findCloseFlower(this.Location, this.Machine.TileLocation, 5, crop => !crop.forageCrop.Value);
+            return flowerCrop is not null
+                ? ItemRegistry.Create<SObject>(ItemRegistry.type_object + flowerCrop.indexOfHarvest.Value)
+                : null;
         }
     }
 }
