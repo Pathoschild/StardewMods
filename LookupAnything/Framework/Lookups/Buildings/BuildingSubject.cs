@@ -15,6 +15,7 @@ using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FishPonds;
 using StardewValley.Locations;
 using StardewValley.Monsters;
+using StardewValley.TokenizableStrings;
 using xTile;
 using SObject = StardewValley.Object;
 

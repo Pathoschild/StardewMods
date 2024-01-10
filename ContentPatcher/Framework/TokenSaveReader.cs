@@ -391,7 +391,7 @@ namespace ContentPatcher.Framework
             Func<Child, string> filter = type switch
             {
                 ConditionType.ChildNames => (child => child.Name),
-                ConditionType.ChildGenders => (child => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString()),
+                ConditionType.ChildGenders => (child => child.Gender.ToString()),
                 _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
             };
             return children.Select(filter);
@@ -488,7 +488,7 @@ namespace ContentPatcher.Framework
                         if (spouse != null)
                         {
                             name = spouse.Name;
-                            gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
+                            gender = spouse.Gender;
                             isPlayer = false;
                         }
                     }

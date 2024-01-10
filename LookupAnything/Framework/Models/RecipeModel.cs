@@ -6,6 +6,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.GameData.Buildings;
+using StardewValley.TokenizableStrings;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {

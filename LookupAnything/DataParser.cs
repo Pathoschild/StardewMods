@@ -15,6 +15,7 @@ using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Locations;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.TokenizableStrings;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
