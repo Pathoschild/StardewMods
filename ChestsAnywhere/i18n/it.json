@@ -28,7 +28,6 @@
     "label.automate-take": "Prendi oggetti da questo baule",
     "label.automate-take-first": "Prendi prima gli oggetti da questo baule",
     "label.automate-take-disabled": "Non prendere mai oggetti da questo baule",
-    "label.automate-prevent-remove-stacks": "Evita di rimuovere l'ultimo oggetto da un mucchio",
 
     // button labels
     "button.edit-chest": "modifica baule",

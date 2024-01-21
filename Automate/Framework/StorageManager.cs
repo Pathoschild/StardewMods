@@ -59,13 +59,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             foreach (IContainer container in this.OutputContainers)
             {
-                bool preventRemovingStacks = container.ModData.ReadField(AutomateContainerHelper.PreventRemovingStacksKey, bool.Parse);
-
                 foreach (ITrackedStack stack in container)
                 {
-                    if (preventRemovingStacks)
-                        stack.PreventEmptyStacks();
-
                     if (stack.Count > 0)
                         yield return stack;
                 }

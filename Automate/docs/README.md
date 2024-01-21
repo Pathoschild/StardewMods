@@ -291,9 +291,8 @@ Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) l
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
-This adds three options for Automate:
+This adds two options for Automate:
 
-* Avoid removing the last item in a stack.
 * Whether to put items in this chest. Possible values:
   * _Put items in this chest_ (default).
   * _Put items in this chest first_: Automate will push machine output into this chest first, and

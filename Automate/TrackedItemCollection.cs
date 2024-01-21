@@ -108,12 +108,5 @@ namespace Pathoschild.Stardew.Automate
             item.Stack = count;
             return item;
         }
-
-        /// <inheritdoc />
-        public void PreventEmptyStacks()
-        {
-            foreach (ITrackedStack stack in this.Stacks)
-                stack.PreventEmptyStacks();
-        }
     }
 }

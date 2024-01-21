@@ -28,7 +28,6 @@
     "label.automate-take": "Take items from this chest",
     "label.automate-take-first": "Take items from this chest first",
     "label.automate-take-disabled": "Never take items from this chest",
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack",
 
     // button labels
     "button.edit-chest": "edit chest",

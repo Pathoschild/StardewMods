@@ -28,7 +28,6 @@
     "label.automate-take": "ใช้ไอเท็มจากกล่องใบนี้",
     "label.automate-take-first": "ใช้ไอเท็มจากกล่องใบนี้เป็นลำดับแรก",
     "label.automate-take-disabled": "ไม่นำไอเท็มออกจากกล่องใบนี้",
-    "label.automate-prevent-remove-stacks": "หลีกเลี่ยงการนำไอเท็มชิ้นสุดท้ายในกองออกมา",
 
     // button labels
     "button.edit-chest": "ตั้งค่ากล่องใส่ของ",

@@ -160,7 +160,6 @@ Here are the recognized options:
 `Pathoschild.ChestsAnywhere/IsIgnored` | Set to `true` to hide the chest from the dropdowns. Defaults to `false`.
 `Pathoschild.ChestsAnywhere/Order` | An integer sort order in the dropdowns, relative to other chests. Defaults to 0.
 `Pathoschild.Automate/StoreItems`<br />`Pathoschild.Automate/TakeItems` | How Automate stores/takes items in the chest. The possible values are `Allow` (_store/take items in this chest_), `Prefer` (_store/take items in this chest first_), or `Disabled` (_never store/take items in this chest_). Defaults to `Allow`.
-`Pathoschild.Automate/PreventRemovingStacks` | Set to `true` to prevent Automate from removing the last item in a stack. Default `false`.
 
 ## See also
 * [Release notes](release-notes.md)
