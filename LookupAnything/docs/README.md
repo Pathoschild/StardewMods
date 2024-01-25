@@ -293,6 +293,14 @@ a `HoveredItem` field with any `Item` type and Lookup Menu will detect it:
 public Object HoveredItem;
 ```
 
+### Hovered NPCs in custom menus
+Lookup Anything detects when the cursor is over an NPC in standard menus. For custom menus, create
+a `hoveredNpc` field with an `NPC` type and Lookup Menu will detect it:
+
+```c#
+public NPC hoveredNpc;
+```
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/518)

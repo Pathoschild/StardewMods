@@ -200,6 +200,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         }
                     }
                     break;
+
+                /****
+                ** Custom mod menu with NPCs
+                ****/
+                case not null when this.Reflection.GetField<NPC?>(targetMenu, "hoveredNpc", false)?.GetValue() != null:
+                    {
+                        NPC npc = this.Reflection.GetField<NPC>(targetMenu, "hoveredNpc").GetValue();
+                        return this.BuildSubject(npc);
+                    }
             }
 
             return null;
