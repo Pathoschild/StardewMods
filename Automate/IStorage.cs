@@ -8,6 +8,16 @@ namespace Pathoschild.Stardew.Automate
     public interface IStorage
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The storage containers that accept input, in priority order.</summary>
+        IContainer[] InputContainers { get; }
+
+        /// <summary>The storage containers that provide items, in priority order.</summary>
+        IContainer[] OutputContainers { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Get all items from the given pipes.</summary>

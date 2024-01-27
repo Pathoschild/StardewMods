@@ -3,11 +3,11 @@
 # Release notes
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
+* Added support for custom machines in the new `Data/Machines` asset.
 * Added support for custom floors/paths as connectors.
 * Removed the 'prevent empty stack' chest option. This is no longer feasible due to how machines work in Stardew Valley 1.6.
 
 **Known issues:**
-* Custom machine rules in `Data/Machines` aren't supported yet.
 * Fairy dust in chests isn't applied to connected machines yet.
 
 ## 1.28.7
