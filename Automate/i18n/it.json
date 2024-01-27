@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Sovrascrittura macchinari",
-    "config.override.ShippingBin-name": "Cassetta delle Spedizioni",
-    "config.override.MiniShippingBin-name": "Mini-Cassetta per Spedizioni",
     "config.override.desc": "Scegli se abilitare l'automazione di {{machineName}}.",
     "config.custom-overrides-note": "Per sovrascritture personalizzate, vedi https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure se ti serve una mano per modificare config.json direttamente."
 }

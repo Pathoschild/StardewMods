@@ -38,8 +38,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Anulación de máquinas",
-    "config.override.ShippingBin-name": "Caja de envio",
-    "config.override.MiniShippingBin-name": "Mini-caja de envio",
     "config.override.desc": "Si se activa la automatización de {{machineName}}.",
     "config.custom-overrides-note": "Para las anulaciones personalizadas, consulte https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure para obtener ayuda para editar el archivo config.json directamente."
 }

@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Überbrückung von Maschinen",
-    "config.override.ShippingBin-name": "Versandbehälter",
-    "config.override.MiniShippingBin-name": "Mini-Versandbehälter",
     "config.override.desc": "Ob Automatisierung für {{machineName}} aktiviert werden soll.",
     "config.custom-overrides-note": "Für benutzerdefinierte Überbrückungen finden Sie unter https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure Hilfe, um die Datei config.json direkt zu bearbeiten."
 }

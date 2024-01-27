@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Машины отправки товаров",
-    "config.override.ShippingBin-name": "Ящик продажи",
-    "config.override.MiniShippingBin-name": "Мини-ящик для отгрузок",
     "config.override.desc": "Следует ли автоматизировать {{machineName}}.",
     "config.custom-overrides-note": "Для получения информации о пользовательских машин отправки товаров см. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure, за помощью обращайтесь непосредственно к редактированию файла config.json."
 }

@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Gépi felülbírálások",
-    "config.override.ShippingBin-name": "Szállítmány",
-    "config.override.MiniShippingBin-name": "Mini szállítmány",
     "config.override.desc": "A(z) {{machineName}} automatizálásának engedélyezése.",
     "config.custom-overrides-note": "Az egyéni felülbíráláshoz látogass el a 'https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure' oldalt a 'Config.json' fájl közvetlen szerkesztéséhez."
 }

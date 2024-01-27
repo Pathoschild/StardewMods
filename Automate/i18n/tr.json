@@ -38,8 +38,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Makine geçersiz kılmaları",
-    "config.override.ShippingBin-name": "Nakliye Kutusu",
-    "config.override.MiniShippingBin-name": "Küçük Nakliye Kutusu",
     "config.override.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
     "config.custom-overrides-note": "Özel geçersiz kılmalar için, config.json dosyasını doğrudan düzenleme konusunda yardım için https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure adresine bakın."
 }

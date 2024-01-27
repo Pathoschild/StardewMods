@@ -6,7 +6,6 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 using StardewValley.GameData.FloorsAndPaths;
 using StardewValley.TerrainFeatures;
 
@@ -240,7 +239,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="key">The unique machine key.</param>
         public string GetTranslatedMachineName(string key)
         {
-            return I18n.GetByKey($"config.override.{key}-name").Default(key);
+            switch (key)
+            {
+                case "ShippingBin":
+                    return GameI18n.GetBuildingName("Shipping Bin");
+
+                case "MiniShippingBin":
+                    return GameI18n.GetBigCraftableName("248");
+
+                default:
+                    return ItemRegistry.GetData(key)?.DisplayName ?? key;
+            }
         }
 
         /// <summary>Get the custom override for a mod, if any.</summary>

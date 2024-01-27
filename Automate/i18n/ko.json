@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "기계 재설정",
-    "config.override.ShippingBin-name": "배송 상자",
-    "config.override.MiniShippingBin-name": "미니 배송 상자",
     "config.override.desc": "{{machineName}} 자동화 활성화 여부.",
     "config.custom-overrides-note": "사용자 지정 재정의의 경우 config.json 파일을 직접 편집하는 방법에 대한 도움말은 https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure를 참조하십시오."
 }

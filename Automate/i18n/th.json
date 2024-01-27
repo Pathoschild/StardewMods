@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "การแทนที่เครื่องจักร",
-    "config.override.ShippingBin-name": "ถังส่งของ",
-    "config.override.MiniShippingBin-name": "ถังขนส่งขนาดเล็ก",
     "config.override.desc": "เปิดใช้งานเพื่อให้ {{machineName}} เป็นระบบอัตโนมัติ",
     "config.custom-overrides-note": "สำหรับการแทนที่แบบกำหนดเองได้ โปรดดูที่ https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure สำหรับความช่วยเหลือในการแก้ไขไฟล์ config.json โดยตรง"
 }

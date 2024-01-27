@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using StardewValley;
+using StardewValley.GameData.Buildings;
+using StardewValley.TokenizableStrings;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -20,11 +22,31 @@ namespace Pathoschild.Stardew.Common
             try
             {
                 var data = ItemRegistry.GetData($"{ItemRegistry.type_bigCraftable}{id}");
-                return data?.DisplayName ?? $"(missing translation: no bigcraftable #{id})";
+                return data?.DisplayName ?? $"(missing translation: no bigcraftable with ID '{id}')";
             }
             catch
             {
-                return $"(missing translation: bigcraftable object #{id} has an invalid format)";
+                return $"(missing translation: bigcraftable object with ID '{id}' has an invalid format)";
+            }
+        }
+
+        /// <summary>Get the translated name for a building.</summary>
+        /// <param name="id">The object's unqualified ID.</param>
+        public static string GetBuildingName(string id)
+        {
+            if (Game1.buildingData == null)
+                return "(missing translation: game hasn't loaded object data yet)";
+
+            try
+            {
+                if (Game1.buildingData.TryGetValue(id, out BuildingData? data))
+                    return TokenParser.ParseText(data?.Name) ?? id;
+
+                return $"(missing translation: no building with ID '{id}')";
+            }
+            catch
+            {
+                return $"(missing translation: building with ID '{id}' has an invalid format)";
             }
         }
 
@@ -38,11 +60,11 @@ namespace Pathoschild.Stardew.Common
             try
             {
                 var data = ItemRegistry.GetData($"{ItemRegistry.type_object}{id}");
-                return data?.DisplayName ?? $"(missing translation: no object #{id})";
+                return data?.DisplayName ?? $"(missing translation: no object with ID '{id}')";
             }
             catch
             {
-                return $"(missing translation: object #{id} has an invalid format)";
+                return $"(missing translation: object with ID '{id}' has an invalid format)";
             }
         }
 

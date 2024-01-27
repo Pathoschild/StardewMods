@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Remplacement de la machine",
-    "config.override.ShippingBin-name": "Bac d'expédition",
-    "config.override.MiniShippingBin-name": "Mini-bac d'expédition",
     "config.override.desc": "Si vous souhaitez activer l'automatisation de {{machineName}}.",
     "config.custom-overrides-note": "Pour les remplacements personnalisés, consultez https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure pour obtenir de l'aide afin de modifier directement le fichier config.json."
 }

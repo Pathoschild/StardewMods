@@ -36,8 +36,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Machine overrides",
-    "config.override.ShippingBin-name": "Shipping Bin",
-    "config.override.MiniShippingBin-name": "Mini-Shipping Bin",
     "config.override.desc": "Whether to enable {{machineName}} automation.",
     "config.custom-overrides-note": "For custom overrides, see https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure for help editing the config.json file directly."
 }

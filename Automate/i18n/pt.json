@@ -38,8 +38,6 @@
 
     // machine overrides
     "config.title.machine-overrides": "Prioridade de Máquinas",
-    "config.override.ShippingBin-name": "Caixa de Remessas",
-    "config.override.MiniShippingBin-name": "Mini Caixa de Remessas",
     "config.override.desc": "Para habilitar automação de {{machineName}}.",
     "config.custom-overrides-note": "Para prioridades customizadas, veja https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure para ajuda na edição do arquivo config.json diretamente."
 }
