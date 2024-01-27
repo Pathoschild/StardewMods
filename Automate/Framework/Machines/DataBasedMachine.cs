@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -17,7 +16,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The tile covered by the machine.</param>
         public DataBasedMachine(SObject machine, GameLocation location, Vector2 tile)
-            : base(machine, location, tile, GetMachineId(machine)) { }
+            : base(machine, location, tile, DataBasedMachine.GetMachineId(machine.Name)) { }
 
         /// <inheritdoc />
         public override bool SetInput(IStorage input)
@@ -39,10 +38,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines
         ** Private methods
         *********/
         /// <summary>Get a machine ID for a machine item.</summary>
-        /// <param name="machine">The machine item.</param>
-        private static string GetMachineId(SObject machine)
+        /// <param name="name">The machine's internal item.</param>
+        public static string GetMachineId(string name)
         {
-            return new string(machine.Name.Where(char.IsLetterOrDigit).ToArray());
+            return new string(name.Where(char.IsLetterOrDigit).ToArray());
         }
     }
 }
