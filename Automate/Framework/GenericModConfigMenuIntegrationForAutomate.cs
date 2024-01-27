@@ -131,15 +131,33 @@ namespace Pathoschild.Stardew.Automate.Framework
                 set: (config, value) => config.JunimoHutBehaviorForSeeds = value
             );
 
-            // machine overrides
-            menu.AddSectionTitle(I18n.Config_Title_MachineOverrides);
-            foreach ((string machineId, string translationOrItemId) in this.GetMachineIds().OrderBy(p => this.GetTranslatedMachineName(p.Value), new HumanSortComparer()))
+            // per-machine settings
+            var machines = this
+                .GetMachineIds()
+                .OrderByDescending(p => p.Key == "MiniShippingBin")
+                .ThenByDescending(p => p.Key == "ShippingBin")
+                .ThenBy(p => this.GetTranslatedMachineName(p.Value), new HumanSortComparer());
+            foreach ((string machineId, string translationOrItemId) in machines)
             {
+                string GetName()
+                {
+                    return this.GetTranslatedMachineName(translationOrItemId);
+                }
+
+                menu.AddSectionTitle(() => I18n.Config_Title_MachineSettings(machineName: GetName()));
                 menu.AddCheckbox(
-                    name: () => this.GetTranslatedMachineName(translationOrItemId),
-                    tooltip: () => I18n.Config_Override_Desc(machineName: this.GetTranslatedMachineName(translationOrItemId)),
+                    name: I18n.Config_MachineSettingsEnabled_Name,
+                    tooltip: () => I18n.Config_MachineSettingsEnabled_Desc(machineName: GetName()),
                     get: config => this.IsMachineEnabled(config, machineId),
-                    set: (config, value) => this.SetCustomOverride(config, machineId, value)
+                    set: (config, value) => this.SetMachineOptions(config, machineId, options => options.Enabled = value)
+                );
+                menu.AddNumberField(
+                    name: I18n.Config_MachineSettingsPriority_Name,
+                    tooltip: () => I18n.Config_MachineSettingsPriority_Desc(GetName()),
+                    get: config => this.GetMachinePriority(config, machineId),
+                    set: (config, value) => this.SetMachineOptions(config, machineId, options => options.Priority = value),
+                    min: -100,
+                    max: 100
                 );
             }
         }
@@ -301,15 +319,26 @@ namespace Pathoschild.Stardew.Automate.Framework
                 ?? true;
         }
 
-        /// <summary>Get the custom override for a mod, if any.</summary>
+        /// <summary>Get the current machine priority.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        /// <param name="enabled">Whether the custom override should be enabled; else disabled.</param>
-        private void SetCustomOverride(ModConfig config, string name, bool enabled)
+        private int GetMachinePriority(ModConfig config, string name)
+        {
+            return
+                this.GetCustomOverride(config, name)?.Priority
+                ?? this.GetDefaultOverride(name)?.Priority
+                ?? 0;
+        }
+
+        /// <summary>Set the options for a machine.</summary>
+        /// <param name="config">The mod configuration.</param>
+        /// <param name="name">The machine name.</param>
+        /// <param name="set">Set the machine options.</param>
+        private void SetMachineOptions(ModConfig config, string name, Action<ModConfigMachine> set)
         {
             // get updated settings
-            ModConfigMachine options = this.GetCustomOverride(config, name) ?? new ModConfigMachine { Enabled = enabled };
-            options.Enabled = enabled;
+            ModConfigMachine options = this.GetCustomOverride(config, name) ?? new();
+            set(options);
 
             // check if it matches the default
             ModConfigMachine? defaults = this.GetDefaultOverride(name);

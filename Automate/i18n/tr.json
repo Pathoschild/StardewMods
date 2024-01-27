@@ -36,8 +36,10 @@
     "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
     "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
-    // machine overrides
-    "config.title.machine-overrides": "Makine geçersiz kılmaları",
-    "config.override.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
-    "config.custom-overrides-note": "Özel geçersiz kılmalar için, config.json dosyasını doğrudan düzenleme konusunda yardım için https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure adresine bakın."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} Ayarları",
+    "config.machine-settings-enabled.Name": "Etkin",
+    "config.machine-settings-enabled.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
+    "config.machine-settings-priority.name": "Öncelik",
+    "config.machine-settings-priority.desc": "Diğer makinelerle kıyasla {{machineName}} makinelerinin işlenme öncelik sırası. Makinelerin varsayılan önceliği 0'dır, daha yüksek değerler önce işlenir."
 }

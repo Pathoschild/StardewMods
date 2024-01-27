@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.6.
 * Added support for custom machines in the new `Data/Machines` asset.
 * Added support for custom floors/paths as connectors.
+* Added options in Generic Mod Config Menu to toggle or set the priority for all machines in `Data/Machines`.
 * Removed the 'prevent empty stack' chest option. This is no longer feasible due to how machines work in Stardew Valley 1.6.
 
 **Known issues:**
