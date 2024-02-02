@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Common
 
             try
             {
-                var data = ItemRegistry.GetData($"{ItemRegistry.type_bigCraftable}{id}");
+                var data = ItemRegistry.GetData(ItemRegistry.ManuallyQualifyItemId(id, ItemRegistry.type_bigCraftable));
                 return data?.DisplayName ?? $"(missing translation: no bigcraftable with ID '{id}')";
             }
             catch
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Common
 
             try
             {
-                var data = ItemRegistry.GetData($"{ItemRegistry.type_object}{id}");
+                var data = ItemRegistry.GetData(ItemRegistry.ManuallyQualifyItemId(id, ItemRegistry.type_object));
                 return data?.DisplayName ?? $"(missing translation: no object with ID '{id}')";
             }
             catch
