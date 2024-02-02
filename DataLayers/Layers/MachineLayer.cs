@@ -31,15 +31,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
+        /// <param name="colors">The colors to render.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public MachineLayer(LayerConfig config, ModIntegrations mods)
+        public MachineLayer(LayerConfig config, ColorScheme colors, ModIntegrations mods)
             : base(I18n.Machines_Name(), config)
         {
+            const string layerId = "MachineProcessing";
+
             this.Legend = new[]
             {
-                this.Empty = new LegendEntry(I18n.Keys.Machines_Empty, Color.Red),
-                this.Processing = new LegendEntry(I18n.Keys.Machines_Processing, Color.Orange),
-                this.Finished = new LegendEntry(I18n.Keys.Machines_Finished, Color.Green)
+                this.Empty = new LegendEntry(I18n.Keys.Machines_Empty, colors.Get(layerId, "Empty", Color.Red)),
+                this.Processing = new LegendEntry(I18n.Keys.Machines_Processing, colors.Get(layerId, "Processing", Color.Orange)),
+                this.Finished = new LegendEntry(I18n.Keys.Machines_Finished, colors.Get(layerId, "Finished", Color.Green))
             };
             this.Mods = mods;
         }

@@ -1,0 +1,69 @@
+﻿/*
+    This file defines the colors shown in the Data Layers UI.
+
+    You can use any color value defined here:
+    https://stardewvalleywiki.com/Modding:Migrate_to_Stardew_Valley_1.6#Color_fields
+*/
+
+{
+    "Default": {
+        /****
+        ** Coverage
+        ****/
+        "BeeHouseCoverage_Covered": "Green",
+        "BeeHouseCoverage_Selected": "Blue",
+
+        "JunimoHutCoverage_Covered": "Green",
+        "JunimoHutCoverage_NotCovered": "Red",
+        "JunimoHutCoverage_Selected": "Blue",
+
+        "ScarecrowCoverage_Covered": "Green",
+        "ScarecrowCoverage_NotCovered": "Red",
+        "ScarecrowCoverage_Selected": "Blue",
+
+        "SprinklerCoverage_Covered": "Green",
+        "SprinklerCoverage_NotCovered": "Red",
+        "SprinklerCoverage_Selected": "Blue",
+
+        "FertilizedCrops_Fertilizer": "Green",
+        "FertilizedCrops_RetainingSoil": "Blue",
+        "FertilizedCrops_SpeedGro": "Magenta",
+        "FertilizedCrops_Multiple": "Red",
+
+
+        /****
+        ** Crops
+        ****/
+        "CropsReadyToHarvest_Ready": "Green",
+        "CropsReadyToHarvest_NotReady": "Black",
+        "CropsReadyToHarvest_NotEnoughTimeOrDead": "Red",
+
+        "WaterForPaddyCrops_InRange": "Green",
+        "WaterForPaddyCrops_NotInRange": "Red",
+
+        "WateredCrops_Watered": "Green",
+        "WateredCrops_Dry": "Red",
+
+
+        /****
+        ** Other
+        ****/
+        "Accessible_Clear": "Green",
+        "Accessible_Occupied": "Orange",
+        "Accessible_Impassable": "Red",
+        "Accessible_Warp": "Blue",
+
+        "Buildable_Buildable": "Green",
+        "Buildable_Occupied": "Orange",
+        "Buildable_NotBuildable": "Red",
+
+        "MachineProcessing_Empty": "Red",
+        "MachineProcessing_Processing": "Orange",
+        "MachineProcessing_Finished": "Green",
+
+        "Tillable_Tilled": "DarkMagenta",
+        "Tillable_Tillable": "Green",
+        "Tillable_Occupied": "Orange",
+        "Tillable_NotTillable": "Red"
+    }
+}

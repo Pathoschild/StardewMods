@@ -36,18 +36,21 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
+        /// <param name="colors">The colors to render.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public CropFertilizerLayer(LayerConfig config, ModIntegrations mods)
+        public CropFertilizerLayer(LayerConfig config, ColorScheme colors, ModIntegrations mods)
             : base(I18n.CropFertilizer_Name(), config)
         {
+            const string layerId = "FertilizedCrops";
+
             this.Legend =
                 new[]
                 {
-                    this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, Color.Green),
-                    this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
-                    this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, Color.Magenta),
+                    this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, colors.Get(layerId, "Fertilizer", Color.Green)),
+                    this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, colors.Get(layerId, "RetainingSoil", Color.Blue)),
+                    this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, colors.Get(layerId, "SpeedGro", Color.Magenta)),
                     this.Multiple = mods.MultiFertilizer.IsLoaded
-                        ? new LegendEntry(I18n.Keys.CropFertilizer_Multiple, Color.Red)
+                        ? new LegendEntry(I18n.Keys.CropFertilizer_Multiple, colors.Get(layerId, "Multiple", Color.Red))
                         : null
                 }
                 .WhereNotNull()

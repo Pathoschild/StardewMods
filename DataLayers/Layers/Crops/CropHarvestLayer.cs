@@ -28,14 +28,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public CropHarvestLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public CropHarvestLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.CropHarvest_Name(), config)
         {
+            const string layerId = "CropsReadyToHarvest";
+
             this.Legend = new[]
             {
-                this.Ready = new LegendEntry(I18n.Keys.CropHarvest_Ready, Color.Green),
-                this.NotReady = new LegendEntry(I18n.Keys.CropHarvest_NotReady, Color.Black),
-                this.NotEnoughTimeOrDead = new LegendEntry(I18n.Keys.CropHarvest_NotEnoughTimeOrDead, Color.Red)
+                this.Ready = new LegendEntry(I18n.Keys.CropHarvest_Ready, colors.Get(layerId, "Ready", Color.Green)),
+                this.NotReady = new LegendEntry(I18n.Keys.CropHarvest_NotReady, colors.Get(layerId, "NotReady", Color.Black)),
+                this.NotEnoughTimeOrDead = new LegendEntry(I18n.Keys.CropHarvest_NotEnoughTimeOrDead, colors.Get(layerId, "NotEnoughTimeOrDead", Color.Red))
             };
         }
 

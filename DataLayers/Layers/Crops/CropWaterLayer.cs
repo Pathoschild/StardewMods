@@ -25,13 +25,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public CropWaterLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public CropWaterLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.CropWater_Name(), config)
         {
+            const string layerId = "WateredCrops";
+
             this.Legend = new[]
             {
-               this.Watered = new LegendEntry(I18n.Keys.CropWater_Watered, Color.Green),
-               this.Dry = new LegendEntry(I18n.Keys.CropWater_Dry, Color.Red)
+               this.Watered = new LegendEntry(I18n.Keys.CropWater_Watered, colors.Get(layerId, "Watered", Color.Green)),
+               this.Dry = new LegendEntry(I18n.Keys.CropWater_Dry, colors.Get(layerId, "Dry", Color.Red))
             };
         }
 

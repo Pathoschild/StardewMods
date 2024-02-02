@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private readonly LegendEntry Exposed;
 
         /// <summary>The border color for the scarecrow under the cursor.</summary>
-        private readonly Color SelectedColor = Color.Blue;
+        private readonly Color SelectedColor;
 
         /// <summary>The maximum number of tiles from the center to search for scarecrows.</summary>
         private readonly int MaxSearchRadius = 20;
@@ -33,13 +33,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public ScarecrowLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public ScarecrowLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.Scarecrows_Name(), config)
         {
+            const string layerId = "ScarecrowCoverage";
+
+            this.SelectedColor = colors.Get(layerId, "Selected", Color.Blue);
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(I18n.Keys.Scarecrows_Protected, Color.Green),
-                this.Exposed = new LegendEntry(I18n.Keys.Scarecrows_Exposed, Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.Scarecrows_Protected, colors.Get(layerId, "Covered", Color.Green)),
+                this.Exposed = new LegendEntry(I18n.Keys.Scarecrows_Exposed, colors.Get(layerId, "NotCovered", Color.Red))
             };
         }
 
