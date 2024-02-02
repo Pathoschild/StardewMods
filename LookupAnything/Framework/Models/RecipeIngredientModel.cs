@@ -75,6 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             // item fields
             bool matchesId =
                 this.PossibleIds.Contains(item.Category.ToString())
+                || this.PossibleIds.Contains(item.ItemId)
                 || this.PossibleIds.Contains(item.QualifiedItemId);
             if (!matchesId)
                 return false;
