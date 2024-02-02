@@ -3,8 +3,9 @@
 # Release notes
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.  
-  _Thanks to SinZ163 for help with the location fish model!_
+  _Thanks to SinZ163 for contributing some of the fixes!_
 * Added more seed info for tree lookups.
+* Added support for looking up NPCs in some custom mod menus (thanks to BinaryLip!).
 * Improved debug field format for player stats and schedules.
 
 ## 1.40.4

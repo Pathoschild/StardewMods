@@ -287,7 +287,7 @@ Lookup Anything will detect the field and search inside it too.
 
 ### Hovered items in custom menus
 Lookup Anything detects when the cursor is over an item in standard menus. For custom menus, create
-a `HoveredItem` field with any `Item` type and Lookup Menu will detect it:
+a `HoveredItem` field with any `Item` type and Lookup Anything will detect it:
 
 ```c#
 public Object HoveredItem;
@@ -295,10 +295,10 @@ public Object HoveredItem;
 
 ### Hovered NPCs in custom menus
 Lookup Anything detects when the cursor is over an NPC in standard menus. For custom menus, create
-a `hoveredNpc` field with an `NPC` type and Lookup Menu will detect it:
+a `HoveredNpc` field with an `NPC` type and Lookup Anything will detect it:
 
 ```c#
-public NPC hoveredNpc;
+public NPC HoveredNpc;
 ```
 
 ## See also

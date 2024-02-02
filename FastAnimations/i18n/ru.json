@@ -36,8 +36,8 @@
     "config.shear.name": "Ножницы",
     "config.shear.tooltip": "Как быстро вы используете ножницы. Значение по умолчанию {{defaultValue}}x.",
 
-    "config.slingshot.name": "Стрельба из рогатки", // TODO
-    "config.slingshot.tooltip": "Как вы быстро стреляете из рогатки. Значение по умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.", // TODO
+    "config.slingshot.name": "Стрельба из рогатки",
+    "config.slingshot.tooltip": "Как вы быстро стреляете из рогатки. Значение по умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.",
 
     "config.tool.name": "Размахивание инструментами",
     "config.tool.tooltip": "Как быстро вы размахиваете своим оружием. По умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.",
