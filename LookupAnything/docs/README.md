@@ -74,6 +74,16 @@ multi-key bindings with plus signs (like `LeftShift + F1`).
 </tr>
 
 <tr>
+  <td><code>MinMinutesForFairyDust</code></td>
+  <td>
+
+Default `20`. The minimum machine processing time in minutes for which to apply any [fairy
+dust](https://stardewvalleywiki.com/Fairy_Dust) in the chest.
+
+  </td>
+</tr>
+
+<tr>
   <td><code>ProgressionMode</code></td>
   <td>
 

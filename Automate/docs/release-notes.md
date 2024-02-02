@@ -5,12 +5,10 @@
 * Updated for Stardew Valley 1.6.
 * Added support for custom machines in the new `Data/Machines` asset.
 * Added support for custom floors/paths as connectors.
+* Added support for fairy dust. You can configure the minimum processing time for which to apply it in `config.json`.
 * Added options in Generic Mod Config Menu to toggle or set the priority for all machines in `Data/Machines`.
 * `automate summary` now shows each chest's automation options if edited.
 * Removed the 'prevent empty stack' chest option. This is no longer feasible due to how machines work in Stardew Valley 1.6.
-
-**Known issues:**
-* Fairy dust in chests isn't applied to connected machines yet.
 
 ## 1.28.7
 Released 01 December 2023 for SMAPI 3.14.0 or later.

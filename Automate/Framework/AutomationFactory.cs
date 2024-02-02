@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // machine in Data/Machines
             if (obj.GetMachineData() != null)
-                return new DataBasedMachine(obj, location, tile);
+                return new DataBasedMachine(obj, location, tile, () => this.Config().MinMinutesForFairyDust);
 
             // connector
             if (this.IsConnector(obj))
