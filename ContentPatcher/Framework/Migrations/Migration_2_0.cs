@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_2_0 : BaseMigration
     {
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private readonly Lexer Lexer = this.Lexer.Instance;
+        private readonly Lexer Lexer = Lexer.Instance;
 
         /*********
         ** Public methods
@@ -660,7 +660,7 @@ namespace ContentPatcher.Framework.Migrations
         /// </summary>
         /// <param name="newKey">The key you are mapping to</param>
         /// <param name="transformer">An optional transformer that takes in the raw string value and spits out the <c>JToken</c> it should now be</param>
-        /// <returns>The return value can be directly inserted into the mapping table of <see cref="ConvertDataModel" /></returns>
+        /// <returns>The return value can be directly inserted into the mapping table of <see cref="ConvertDataModel{T}" /></returns>
         private Func<InnerPatch, string, object?, string, string?> MapSingle(string newKey, Func<string, JToken>? transformer = null)
         {
             return (patch, _, _, val) =>
