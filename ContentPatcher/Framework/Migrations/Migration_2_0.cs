@@ -44,8 +44,10 @@ namespace ContentPatcher.Framework.Migrations
             this.AddedTokens = new InvariantSet(
                 nameof(ConditionType.ModId)
             );
+            this.MigrationWarnings = [
+                "Some content packs haven't been updated for Stardew Valley 1.6.0. Content Patcher will try to auto-migrate them, but compatibility isn't guaranteed."
+            ];
         }
-
 
         /// <inheritdoc />
         public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)

@@ -25,6 +25,9 @@ namespace ContentPatcher.Framework.Migrations
         /// <inheritdoc />
         public ISemanticVersion Version { get; }
 
+        /// <inheritdoc />
+        public string[] MigrationWarnings { get; protected set; } = Array.Empty<string>();
+
 
         /*********
         ** Public methods

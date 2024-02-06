@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -29,8 +28,11 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Accessors
         *********/
-        /// <summary>The version to which this migration applies.</summary>
+        /// <inheritdoc />
         public ISemanticVersion Version { get; }
+
+        /// <inheritdoc />
+        public string[] MigrationWarnings { get; }
 
 
         /*********
@@ -45,6 +47,7 @@ namespace ContentPatcher.Framework.Migrations
             this.ValidVersions = new HashSet<string>(migrations.Select(p => p.Version.ToString()));
             this.LatestVersion = migrations.Last().Version.ToString();
             this.Migrations = migrations.Where(m => m.Version.IsNewerThan(version)).ToArray();
+            this.MigrationWarnings = this.Migrations.SelectMany(p => p.MigrationWarnings).Distinct().ToArray();
         }
 
         /// <inheritdoc />
