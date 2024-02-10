@@ -9,14 +9,13 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enabled-message.name": "Show enabled message",
-    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
-    "config.disabled-message.name": "Show disabled message",
-    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+    "config.title.general-options": "Genel seçenekler",
+    "config.enabled-message.name": "Etkin mesajı göster",
+    "config.enabled-message.desc": "Noclip modu açıldığında ekranın köşesinde oyun içi bir mesajın gösterilip gösterilmeyeceği.",
+    "config.disabled-message.name": "Devre dışı bırakılan mesajı göster",
+    "config.disabled-message.desc": "Noclip modu kapatıldığında ekranın köşesinde oyun içi bir mesajın gösterilip gösterilmeyeceği.",
 
-    "config.title.controls": "Controls",
-    "config.toggle-key.name": "Toggle key",
-    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
+    "config.title.controls": "Kontroller",
+    "config.toggle-key.name": "Geçiş tuşu",
+    "config.toggle-key.desc": "Oyun içinde noclip modunu açıp kapatan tuşlar."
 }
