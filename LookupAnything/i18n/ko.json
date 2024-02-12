@@ -91,16 +91,6 @@
 
     // override item text
     "data.item.egg-incubator.description": "알을 병아리나 새끼 오리로 부화시킨다.",
-    "data.item.colored-stone.name": "유색의 돌",
-    "data.item.colored-stone.description": "평범한 돌이다. 돌, 광석 또는 정동석을 얻을 수 있을지도 모른다.",
-    "data.item.mine-stone.name": "돌",
-    "data.item.mine-stone.description": "부수면 돌과 철광석을 얻을 수 있다.",
-
-    // other stones
-    "data.item.clay-stone.name": "점토 노드",
-    "data.item.clay-stone.description": "부수면 점토를 얻을 수 있다.",
-    "data.item.fossil-stone.name": "화석 노드",
-    "data.item.fossil-stone.description": "부수면 화석과  얻을 수 있다.",
 
     // mine containers
     "data.item.barrel.name": "나무통",
