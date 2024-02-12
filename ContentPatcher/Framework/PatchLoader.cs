@@ -486,6 +486,7 @@ namespace ContentPatcher.Framework
                                 conditions: conditions,
                                 localAsset: fromAsset,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 parseAssetName: this.ParseAssetName
                             );
@@ -548,6 +549,7 @@ namespace ContentPatcher.Framework
                                 targetField: targetField,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName,
@@ -595,6 +597,7 @@ namespace ContentPatcher.Framework
                                 patchMode: patchMode,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName
@@ -733,6 +736,7 @@ namespace ContentPatcher.Framework
                                 textOperations: textOperations,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName

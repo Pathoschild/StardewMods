@@ -93,9 +93,9 @@ namespace ContentPatcher.Framework
         public void OnAssetRequested(AssetRequestedEventArgs e, bool ignoreLoadPatches)
         {
             IAssetName assetName = e.NameWithoutLocale;
-            IPatch[] loaders = !ignoreLoadPatches
+            LoadPatch[] loaders = !ignoreLoadPatches
                 ? this.GetCurrentLoaders(assetName).ToArray()
-                : Array.Empty<IPatch>();
+                : Array.Empty<LoadPatch>();
             IPatch[] editors = this.GetCurrentEditors(assetName, e.DataType).ToArray();
 
             if (loaders.Any() || editors.Any())
@@ -396,11 +396,12 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get patches which load the given asset in the current context.</summary>
         /// <param name="assetName">The asset being intercepted.</param>
-        public IEnumerable<IPatch> GetCurrentLoaders(IAssetName assetName)
+        public IEnumerable<LoadPatch> GetCurrentLoaders(IAssetName assetName)
         {
             return this
                 .GetPatches(assetName)
-                .Where(patch => patch.Type == PatchType.Load && patch.IsReady);
+                .Where(patch => patch.IsReady)
+                .OfType<LoadPatch>();
         }
 
         /// <summary>Get patches which edit the given asset in the current context.</summary>
@@ -425,14 +426,14 @@ namespace ContentPatcher.Framework
         /// <param name="e">The asset requested context.</param>
         /// <param name="loaders">The load patch to apply.</param>
         /// <param name="editors">The edit patch to apply.</param>
-        private void ApplyPatchesToAsset<T>(AssetRequestedEventArgs e, IPatch[] loaders, IPatch[] editors)
+        private void ApplyPatchesToAsset<T>(AssetRequestedEventArgs e, LoadPatch[] loaders, IPatch[] editors)
             where T : notnull
         {
             IAssetName assetName = e.NameWithoutLocale;
 
             // validate & select loader by priority
-            IPatch? loader = null;
-            foreach (IPatch candidate in loaders)
+            LoadPatch? loader = null;
+            foreach (LoadPatch candidate in loaders)
             {
                 // skip if patch is invalid
                 if (!candidate.FromAssetExists())
@@ -512,25 +513,52 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to apply.</param>
         /// <param name="assetName">The asset name to load.</param>
         /// <returns>Returns the loaded asset data.</returns>
-        private T? ApplyLoad<T>(IPatch patch, IAssetName assetName)
+        private T? ApplyLoad<T>(LoadPatch patch, IAssetName assetName)
             where T : notnull
         {
             if (this.Monitor.IsVerbose)
                 this.Monitor.Log($"Patch \"{patch.Path}\" loaded {assetName}.");
 
-            T data = patch.Load<T>(assetName);
-
-            foreach (IAssetValidator validator in this.AssetValidators)
+            try
             {
-                if (!validator.TryValidate(assetName, data, patch, out string? error))
+                // apply runtime migration
                 {
-                    this.Monitor.Log($"Can't apply patch {patch.Path} to {assetName}: {error}.", LogLevel.Error);
-                    return default;
+                    T? data = default;
+                    if (patch.Migrator.TryApplyLoadPatch<T>(patch, assetName, ref data, out string? error))
+                    {
+                        patch.IsApplied = true;
+                        return data;
+                    }
+
+                    if (error != null)
+                    {
+                        this.Monitor.Log($"Can't apply patch {patch.Path} to {assetName}: {error}.", LogLevel.Error);
+                        return default;
+                    }
+                }
+
+                // else load normally
+                {
+                    T data = patch.Load<T>(assetName);
+
+                    foreach (IAssetValidator validator in this.AssetValidators)
+                    {
+                        if (!validator.TryValidate(assetName, data, patch, out string? error))
+                        {
+                            this.Monitor.Log($"Can't apply patch {patch.Path} to {assetName}: {error}.", LogLevel.Error);
+                            return default;
+                        }
+                    }
+
+                    patch.IsApplied = true;
+                    return data;
                 }
             }
-
-            patch.IsApplied = true;
-            return data;
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Can't apply patch {patch.Path} to {assetName}:\n{ex}.", LogLevel.Error);
+                return default;
+            }
         }
 
         /// <summary>Apply edit patches to an asset.</summary>
@@ -547,8 +575,18 @@ namespace ContentPatcher.Framework
 
                 try
                 {
-                    patch.Edit<T>(asset);
-                    patch.IsApplied = true;
+                    // apply runtime migration
+                    if (patch.Migrator.TryApplyEditPatch<T>(patch, asset, out string? error))
+                        patch.IsApplied = true;
+                    else if (error != null)
+                        this.Monitor.Log($"Can't apply patch {patch.Path} to {asset.Name}: {error}.", LogLevel.Error);
+
+                    // else apply normally
+                    else
+                    {
+                        patch.Edit<T>(asset);
+                        patch.IsApplied = true;
+                    }
                 }
                 catch (Exception ex)
                 {

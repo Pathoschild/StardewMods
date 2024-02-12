@@ -4,13 +4,14 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens.Json;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
     /// <summary>Aggregates content pack migrations.</summary>
-    internal class AggregateMigration : IMigration
+    internal class AggregateMigration : IRuntimeMigration
     {
         /*********
         ** Fields
@@ -23,6 +24,9 @@ namespace ContentPatcher.Framework.Migrations
 
         /// <summary>The migrations to apply.</summary>
         private readonly IMigration[] Migrations;
+
+        /// <summary>The migrations to apply at runtime.</summary>
+        private readonly IRuntimeMigration[] RuntimeMigrations;
 
 
         /*********
@@ -47,9 +51,13 @@ namespace ContentPatcher.Framework.Migrations
             this.ValidVersions = new HashSet<string>(migrations.Select(p => p.Version.ToString()));
             this.LatestVersion = migrations.Last().Version.ToString();
             this.Migrations = migrations.Where(m => m.Version.IsNewerThan(version)).ToArray();
+            this.RuntimeMigrations = this.Migrations.OfType<IRuntimeMigration>().ToArray();
             this.MigrationWarnings = this.Migrations.SelectMany(p => p.MigrationWarnings).Distinct().ToArray();
         }
 
+        /****
+        ** IMigration
+        ****/
         /// <inheritdoc />
         public bool TryMigrateMainContent(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
@@ -148,6 +156,60 @@ namespace ContentPatcher.Framework.Migrations
             // no issues found
             error = null;
             return true;
+        }
+
+        /****
+        ** IRuntimeMigration
+        ****/
+        /// <inheritdoc />
+        public IAssetName? RedirectTarget(IAssetName assetName, IPatch patch)
+        {
+            IAssetName? target = null;
+
+            foreach (IRuntimeMigration migration in this.RuntimeMigrations)
+                target = migration.RedirectTarget(target ?? assetName, patch);
+
+            return target;
+        }
+
+        /// <inheritdoc />
+        public bool TryApplyLoadPatch<T>(LoadPatch patch, IAssetName assetName, [NotNullWhen(true)] ref T? asset, out string? error)
+            where T : notnull
+        {
+            bool anyChanged = false;
+
+            error = null;
+
+            foreach (IRuntimeMigration migration in this.RuntimeMigrations)
+            {
+                if (migration.TryApplyLoadPatch(patch, assetName, ref asset, out error))
+                    anyChanged = true;
+
+                if (error != null)
+                    return false;
+            }
+
+            return anyChanged;
+        }
+
+        /// <inheritdoc />
+        public bool TryApplyEditPatch<T>(IPatch patch, IAssetData asset, out string? error)
+            where T : notnull
+        {
+            bool anyChanged = false;
+
+            error = null;
+
+            foreach (IRuntimeMigration migration in this.RuntimeMigrations)
+            {
+                if (migration.TryApplyEditPatch<T>(patch, asset, out error))
+                    anyChanged = true;
+
+                if (error != null)
+                    return false;
+            }
+
+            return anyChanged;
         }
     }
 }

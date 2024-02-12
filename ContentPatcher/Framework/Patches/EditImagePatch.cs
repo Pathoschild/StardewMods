@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,10 +57,11 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public EditImagePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
+        public EditImagePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -71,6 +73,7 @@ namespace ContentPatcher.Framework.Patches
                 parseAssetName: parseAssetName,
                 fromAsset: fromAsset,
                 contentPack: contentPack,
+                migrator: migrator,
                 parentPatch: parentPatch
             )
         {
