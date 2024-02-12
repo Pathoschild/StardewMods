@@ -4,6 +4,7 @@
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
 * You can now till the campfire wood pile.
+* Improved translations. Thanks to EmWhyKay (updated Turkish)!
 
 ## 2.4.10
 Released 01 December 2023 for SMAPI 3.14.0 or later.
