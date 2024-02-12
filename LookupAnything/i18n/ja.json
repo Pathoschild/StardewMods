@@ -134,16 +134,6 @@
 
     "location.unknown-fish-area": "{{locationName}}(エリア{{id}})",
 
-    // location names (Stardew Valley Expanded)
-    "location.Custom_BlueMoonVineyard.fish-area-0": "ブルームーンブドウ園(海側)",
-    "location.Custom_BlueMoonVineyard.fish-area-1": "ブルームーンブドウ園(川側)",
-    "location.Custom_ForestWest": "西の森",
-    "location.Custom_ShearwaterBridge": "ミズナギドリ橋",
-    "location.Custom_AdventurerSummit": "アドベンチャーサミット",
-    "location.Custom_JunimoWoods": "ジュニモの森",
-    "location.Custom_DeepCave": "農場の洞窟の奥",
-    "location.Custom_CrimsonBadlands": "クリムゾンバッドランド",
-    "location.ExteriorMuseum": "水族館ビーチ",
 
     /*********
     ** Animal lookups
