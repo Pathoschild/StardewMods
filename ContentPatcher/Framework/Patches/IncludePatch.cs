@@ -65,6 +65,7 @@ namespace ContentPatcher.Framework.Patches
                 fromAsset: fromFile,
                 parentPatch: parentPatch,
                 contentPack: contentPack.ContentPack,
+                migrator: contentPack.Migrator,
                 parseAssetName: parseAssetName
             )
         {

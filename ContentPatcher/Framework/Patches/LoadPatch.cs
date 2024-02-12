@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Migrations;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -21,9 +22,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, AssetLoadPriority priority, UpdateRate updateRate, IEnumerable<Condition> conditions, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName)
+        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, AssetLoadPriority priority, UpdateRate updateRate, IEnumerable<Condition> conditions, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -33,6 +35,7 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 conditions: conditions,
                 contentPack: contentPack,
+                migrator: migrator,
                 parentPatch: parentPatch,
                 parseAssetName: parseAssetName,
                 fromAsset: localAsset

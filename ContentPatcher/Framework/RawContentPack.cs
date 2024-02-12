@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework
         private ContentConfig? ContentImpl;
 
         /// <summary>The backing field for <see cref="Migrator"/>.</summary>
-        private IMigration? MigratorImpl;
+        private IRuntimeMigration? MigratorImpl;
 
 
         /*********
@@ -36,7 +36,7 @@ namespace ContentPatcher.Framework
         public ContentConfig Content => this.ContentImpl ?? throw new InvalidOperationException($"Must call {nameof(RawContentPack)}.{nameof(this.TryReloadContent)} before accessing the {nameof(this.Content)} field.");
 
         /// <summary>The migrations to apply for the content pack version.</summary>
-        public IMigration Migrator => this.MigratorImpl ?? throw new InvalidOperationException($"Must call {nameof(RawContentPack)}.{nameof(this.TryReloadContent)} before accessing the {nameof(this.Migrator)} field.");
+        public IRuntimeMigration Migrator => this.MigratorImpl ?? throw new InvalidOperationException($"Must call {nameof(RawContentPack)}.{nameof(this.TryReloadContent)} before accessing the {nameof(this.Migrator)} field.");
 
         /// <summary>The content pack's index in the load order.</summary>
         public int Index { get; }
@@ -98,7 +98,7 @@ namespace ContentPatcher.Framework
 
             // apply high-level migrations
             // patch-level migrations are applied by PatchLoader
-            IMigration migrator = new AggregateMigration(content.Format, this.GetMigrations(content));
+            IRuntimeMigration migrator = new AggregateMigration(content.Format, this.GetMigrations(content));
             if (!migrator.TryMigrateMainContent(content, out error))
                 return false;
 

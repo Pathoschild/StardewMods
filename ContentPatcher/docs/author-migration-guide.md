@@ -21,7 +21,7 @@ This document helps mod authors update their content packs for newer versions of
 
 ## FAQs
 <dl>
-<dt>Does this affect me as a player?</dt>
+<dt>Does this page affect me as a player?</dt>
 <dd>
 
 No, this is only for content pack authors. Existing content packs should work fine.
@@ -31,31 +31,28 @@ No, this is only for content pack authors. Existing content packs should work fi
 <dt>Are Content Patcher updates backwards-compatible?</dt>
 <dd>
 
-Yep; even content packs written for Content Patcher 1.0 still work in the latest versions.
-
-Content Patcher updates rarely have breaking changes, but the [`Format` field in your
-`content.json`](author-guide.md#format) says which version it was created for. When a future
-version of Content Patcher loads your content pack, it internally migrates your `content.json` to
-the latest format (without changing the actual files). Content Patcher itself no longer supports
-older formats, but your content pack is just changed to use the latest one.
+Yes, even content packs written for Content Patcher 1.0.0 should still work. Content Patcher uses
+your [`Format` field](author-guide.md#format) to convert the content pack to the latest version if
+needed (without changing the actual files).
 
 </dd>
 
-<dt>So I never need to update my content packs?</dt>
+<dt>Do I need to update my content packs?</dt>
 <dd>
 
-Technically you don't need to (aside from game changes), but **updating your `Format` version when
-you update the content pack is strongly encouraged**.
+Usually your content packs will work indefinitely without manual updates. Game changes may
+sometimes break content packs (though Content Patcher will try to rewrite those too).
 
-Using an old `Format` version has major disadvantages:
+However, using an old `Format` version has some major disadvantages. Your content pack...
 
-* You can't use newer features.
-* You may have undocumented behavior. (For example, the `Weather` token before `Format` version 1.6
-  uses the same value for sunny and windy days, but that's not documented since it only does so for
-  backwards compatibility.)
-* There's more risk of bugs and startup time is impacted. (For example, a content pack which uses
-  `"Format": "1.0"` has over a dozen automated migrations applied, which increases the chance that
-  something will be migrated incorrectly and increases startup time.)
+* Won't have access to newer features.
+* May have legacy behavior that doesn't match the current docs.
+* May increase startup time or cause in-game lag. Rewriting code for compatibility is sometimes
+  complicated and inefficient, so it's much faster if the code is already updated instead.
+* May have more bugs. For example, a content pack for `Format` version 1.0 has dozens of automated
+  migrations applied, which increases the chance that something will be migrated incorrectly.
+
+Migrating to the latest format when you update the content pack is strongly encouraged.
 
 </dd>
 
@@ -66,7 +63,8 @@ Just set the `Format` field to the latest version shown in the [author guide](au
 then review the sections below for any changes you need to make. If a version isn't listed on this
 page, there's nothing else to change for that version.
 
-Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need help!
+> [!TIP]
+> Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need help!
 
 </dd>
 </dl>
@@ -93,8 +91,9 @@ compatibility by using it when relevant.
 </li>
 <li>
 
-[`CustomLocations`](custom-locations.md) is now deprecated, since you can add custom locations directly using the [new
-`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data) in Stardew Valley 1.6.
+[`CustomLocations`](custom-locations.md) is now deprecated. You should add custom locations to the
+[new `Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data) in Stardew Valley
+1.6 instead.
 
 For example, if you have a custom location like this:
 
@@ -114,7 +113,7 @@ You can now add it to the game directly like this:
     // add map
     {
         "Action": "Load",
-        "Target": "Maps/Your.ModId_AbigailCloset",
+        "Target": "Maps/{{ModId}}_AbigailCloset",
         "FromFile": "assets/abigail-closet.tmx"
     },
 
@@ -123,8 +122,8 @@ You can now add it to the game directly like this:
         "Action": "EditData",
         "Target": "Data/Locations",
         "Entries": {
-            "Your.ModId_AbigailCloset": {
-                "CreateOnLoad": { "MapPath": "Maps/Your.ModId_AbigailCloset" },
+            "{{ModId}}_AbigailCloset": {
+                "CreateOnLoad": { "MapPath": "Maps/{{ModId}}_AbigailCloset" },
                 "FormerLocationNames": [ "Custom_ExampleMod_AbigailCloset" ]
             }
         }
@@ -133,9 +132,11 @@ You can now add it to the game directly like this:
 ```
 
 The game uses a standard [unique string ID](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs)
-format for the location name. In the example above, we use the new name format (`Your.ModId_AbigailCloset`) and add the
+format for the location name. In the example above, we use the new name format (`{{ModId}}_AbigailCloset`) and add the
 old name (`Custom_ExampleMod_AbigailCloset`) to the `FormerLocationNames` field so the location will be migrated
-automatically for current players. You should replace `Your.ModId` with [your mod's manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest).
+automatically for current players.
+
+Content Patcher will replace `{{ModId}}` automatically with [your mod's manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest).
 
 **Known limitations:**
 * You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,

@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches.EditData;
 using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
@@ -89,11 +90,12 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="targetField">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<ITextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<ITextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -103,6 +105,7 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 conditions: conditions,
                 contentPack: contentPack,
+                migrator: migrator,
                 parentPatch: parentPatch,
                 parseAssetName: parseAssetName,
                 fromAsset: fromFile
