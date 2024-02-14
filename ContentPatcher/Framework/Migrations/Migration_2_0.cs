@@ -36,6 +36,8 @@ namespace ContentPatcher.Framework.Migrations
             this.Migrators = new IEditAssetMigrator[]
             {
                 new BigCraftableInformationMigrator(),
+                new BlueprintsMigrator(),
+                new BootsMigrator(),
                 new CropsMigrator(),
                 new LocationsMigrator(),
                 new NpcDispositionsMigrator(),

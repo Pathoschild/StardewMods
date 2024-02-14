@@ -42,5 +42,26 @@ namespace ContentPatcher.Framework.Migrations.Internal
             cache[rawItemId] = metadata.LocalItemId;
             return metadata.LocalItemId;
         }
+
+        /// <summary>Count the number of fields in a delimited string.</summary>
+        /// <param name="row">The row in which to count fields.</param>
+        /// <param name="delimiter">The character which delimits fields in the row.</param>
+        public static int CountFields(string row, char delimiter = '/')
+        {
+            int count = 1; // count field before first delimiter
+
+            int lastIndex = -1;
+            while (true)
+            {
+                lastIndex = row.IndexOf('/', lastIndex + 1);
+
+                if (lastIndex == -1)
+                    break;
+
+                count++;
+            }
+
+            return count;
+        }
     }
 }
