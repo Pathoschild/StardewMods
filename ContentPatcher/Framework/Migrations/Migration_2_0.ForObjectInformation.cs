@@ -253,16 +253,16 @@ namespace ContentPatcher.Framework.Migrations
                 entry.Buff.CustomAttributes ??= new BuffAttributesData();
 
                 BuffAttributesData effects = entry.Buff.CustomAttributes;
-                effects.FarmingLevel = ArgUtility.GetInt(fields, 0, effects.FarmingLevel);
-                effects.FishingLevel = ArgUtility.GetInt(fields, 1, effects.FishingLevel);
-                effects.MiningLevel = ArgUtility.GetInt(fields, 2, effects.MiningLevel);
-                effects.LuckLevel = ArgUtility.GetInt(fields, 4, effects.LuckLevel);
-                effects.ForagingLevel = ArgUtility.GetInt(fields, 5, effects.ForagingLevel);
-                effects.MaxStamina = ArgUtility.GetInt(fields, 7, effects.MaxStamina);
-                effects.MagneticRadius = ArgUtility.GetInt(fields, 8, effects.MagneticRadius);
-                effects.Speed = ArgUtility.GetInt(fields, 9, effects.Speed);
-                effects.Defense = ArgUtility.GetInt(fields, 10, effects.Defense);
-                effects.Attack = ArgUtility.GetInt(fields, 11, effects.Attack);
+                effects.FarmingLevel = ArgUtility.GetFloat(fields, 0, effects.FarmingLevel);
+                effects.FishingLevel = ArgUtility.GetFloat(fields, 1, effects.FishingLevel);
+                effects.MiningLevel = ArgUtility.GetFloat(fields, 2, effects.MiningLevel);
+                effects.LuckLevel = ArgUtility.GetFloat(fields, 4, effects.LuckLevel);
+                effects.ForagingLevel = ArgUtility.GetFloat(fields, 5, effects.ForagingLevel);
+                effects.MaxStamina = ArgUtility.GetFloat(fields, 7, effects.MaxStamina);
+                effects.MagneticRadius = ArgUtility.GetFloat(fields, 8, effects.MagneticRadius);
+                effects.Speed = ArgUtility.GetFloat(fields, 9, effects.Speed);
+                effects.Defense = ArgUtility.GetFloat(fields, 10, effects.Defense);
+                effects.Attack = ArgUtility.GetFloat(fields, 11, effects.Attack);
             }
 
             /// <summary>Merge a pre-1.6 'miscellaneous' field into the new object data.</summary>
@@ -337,7 +337,7 @@ namespace ContentPatcher.Framework.Migrations
                     }
 
                     // step 1: remove or update existing entries
-                    if (data.ArtifactSpotChances.Count > 0)
+                    if (data.ArtifactSpotChances?.Count > 0)
                     {
                         foreach (string dropId in data.ArtifactSpotChances.Keys)
                         {
