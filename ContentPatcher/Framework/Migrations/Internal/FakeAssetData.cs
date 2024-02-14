@@ -1,7 +1,7 @@
 using System;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework.Migrations
+namespace ContentPatcher.Framework.Migrations.Internal
 {
     /// <summary>An implementation of <see cref="IAssetData"/> used to apply edits to temporary data during runtime content migrations.</summary>
     internal class FakeAssetData : IAssetData

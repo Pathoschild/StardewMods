@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using ContentPatcher.Framework.Migrations.Internal;
 using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.Content;
@@ -16,7 +17,7 @@ namespace ContentPatcher.Framework.Migrations
     internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /// <summary>The migration logic to apply pre-1.6 <c>Data/ObjectInformation</c> patches to <c>Data/Objects</c>.</summary>
-        public class ObjectInformationMigrator : IEditAssetMigrator
+        private class ObjectInformationMigrator : IEditAssetMigrator
         {
             /*********
             ** Fields
@@ -27,20 +28,10 @@ namespace ContentPatcher.Framework.Migrations
             /// <summary>The 1.6 asset name.</summary>
             private const string NewAssetName = "Data/Objects";
 
-            /// <summary>Get the unqualified object ID, if it's a valid object ID.</summary>
-            private readonly Func<string, string?> ParseObjectId;
-
 
             /*********
             ** Public methods
             *********/
-            /// <summary>Construct an instance.</summary>
-            /// <param name="parseObjectId">Get the unqualified object ID, if it's a valid object ID.</param>
-            public ObjectInformationMigrator(Func<string, string?> parseObjectId)
-            {
-                this.ParseObjectId = parseObjectId;
-            }
-
             /// <inheritdoc />
             public bool AppliesTo(IAssetName assetName)
             {
@@ -218,7 +209,7 @@ namespace ContentPatcher.Framework.Migrations
                         from drop in data.GeodeDrops
                         where GameStateQuery.IsImmutablyTrue(drop.Condition)
 
-                        let itemId = this.ParseObjectId(drop.ItemId)
+                        let itemId = RuntimeMigrationHelper.ParseObjectId(drop.ItemId)
                         where itemId != null
 
                         select itemId
@@ -285,7 +276,7 @@ namespace ContentPatcher.Framework.Migrations
                             var entry = data.GeodeDrops[i];
 
                             // parse entry
-                            string? curObjectId = this.ParseObjectId(entry.ItemId);
+                            string? curObjectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                             if (curObjectId is null || !GameStateQuery.IsImmutablyTrue(entry.Condition))
                                 continue;
 

@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.ItemTypeDefinitions;
 
 namespace ContentPatcher.Framework.Migrations
 {
@@ -17,9 +14,6 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Fields
         *********/
-        /// <summary>The backing cache for <see cref="ParseObjectId"/>.</summary>
-        private readonly Dictionary<string, string?> ParseObjectIdCache = new();
-
         /// <summary>The migrators that convert pre-1.6 edit patches to a newer asset or format.</summary>
         /// <remarks>For each edit, the first migrator which applies or returns errors is used.</remarks>
         private readonly IEditAssetMigrator[] Migrators;
@@ -43,9 +37,9 @@ namespace ContentPatcher.Framework.Migrations
             {
                 new BigCraftableInformationMigrator(),
                 new CropsMigrator(),
-                new LocationsMigrator(this.ParseObjectId),
+                new LocationsMigrator(),
                 new NpcDispositionsMigrator(),
-                new ObjectInformationMigrator(this.ParseObjectId)
+                new ObjectInformationMigrator()
             };
         }
 
@@ -128,34 +122,6 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the unqualified object ID, if it's a valid object ID.</summary>
-        /// <param name="rawItemId">The raw item ID, which may be an item query or non-object ID.</param>
-        /// <returns>Returns the unqualified object ID, or <c>null</c> if it's not a valid object ID.</returns>
-        private string? ParseObjectId(string rawItemId)
-        {
-            // skip null
-            if (rawItemId is null)
-                return null;
-
-            // skip cached
-            {
-                if (this.ParseObjectIdCache.TryGetValue(rawItemId, out string? cached))
-                    return cached;
-            }
-
-            // skip non-object-ID value
-            ItemMetadata metadata = ItemRegistry.GetMetadata(rawItemId);
-            if (metadata?.Exists() is not true || metadata.TypeIdentifier != ItemRegistry.type_object)
-            {
-                this.ParseObjectIdCache[rawItemId] = null;
-                return null;
-            }
-
-            // apply
-            this.ParseObjectIdCache[rawItemId] = metadata.LocalItemId;
-            return metadata.LocalItemId;
-        }
-
         /// <summary>The migration logic to apply pre-1.6 edit patches to a new asset or format.</summary>
         private interface IEditAssetMigrator
         {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using ContentPatcher.Framework.Migrations.Internal;
 using ContentPatcher.Framework.Patches;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -13,7 +14,7 @@ namespace ContentPatcher.Framework.Migrations
     internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /// <summary>The migration logic to apply pre-1.6 <c>Data/Crops</c> patches to the new format.</summary>
-        public class CropsMigrator : IEditAssetMigrator
+        private class CropsMigrator : IEditAssetMigrator
         {
             /*********
             ** Fields

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using ContentPatcher.Framework.Migrations.Internal;
 using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
 using StardewValley;
@@ -27,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
     internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /// <summary>The migration logic to apply pre-1.6 <c>Data/Locations</c> patches to the new format.</summary>
-        public class LocationsMigrator : IEditAssetMigrator
+        private class LocationsMigrator : IEditAssetMigrator
         {
             /*********
             ** Fields
@@ -41,9 +42,6 @@ namespace ContentPatcher.Framework.Migrations
             /// <summary>The valid season values.</summary>
             private readonly Season[] ValidSeasons = new[] { Season.Spring, Season.Summer, Season.Fall, Season.Winter };
 
-            /// <summary>Get the unqualified object ID, if it's a valid object ID.</summary>
-            private readonly Func<string, string?> ParseObjectId;
-
             /// <summary>The backing cache for <see cref="ParseEffectiveSeasons"/>.</summary>
             private readonly Dictionary<string, IReadOnlySet<Season>?> ParseSeasonsCache = new();
 
@@ -54,13 +52,6 @@ namespace ContentPatcher.Framework.Migrations
             /*********
             ** Public methods
             *********/
-            /// <summary>Construct an instance.</summary>
-            /// <param name="parseObjectId">Get the unqualified object ID, if it's a valid object ID.</param>
-            public LocationsMigrator(Func<string, string?> parseObjectId)
-            {
-                this.ParseObjectId = parseObjectId;
-            }
-
             /// <inheritdoc />
             public bool AppliesTo(IAssetName assetName)
             {
@@ -290,7 +281,7 @@ namespace ContentPatcher.Framework.Migrations
                         var entry = targetLocationEntry.Forage[i];
 
                         // parse entry
-                        string? objectId = this.ParseObjectId(entry.ItemId);
+                        string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                         IReadOnlySet<Season>? actualSeasons = this.ParseEffectiveSeasons(entry.Season, entry.Condition);
                         if (objectId is null || actualSeasons is null)
                             continue;
@@ -403,7 +394,7 @@ namespace ContentPatcher.Framework.Migrations
                         var entry = targetLocationEntry.Fish[i];
 
                         // parse entry
-                        string? objectId = this.ParseObjectId(entry.ItemId);
+                        string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                         IReadOnlySet<Season>? actualSeasons = this.ParseEffectiveSeasons(entry.Season, entry.Condition);
                         if (objectId is null || actualSeasons is null)
                             continue;
@@ -482,7 +473,7 @@ namespace ContentPatcher.Framework.Migrations
                         var entry = targetLocationEntry.ArtifactSpots[i];
 
                         // parse entry
-                        string? objectId = this.ParseObjectId(entry.ItemId);
+                        string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                         IReadOnlySet<Season>? actualSeasons = this.ParseEffectiveSeasons(null, entry.Condition);
                         if (objectId is null || actualSeasons is null)
                             continue;
@@ -642,7 +633,7 @@ namespace ContentPatcher.Framework.Migrations
                 foreach (SpawnForageData entry in data)
                 {
                     // parse raw data
-                    string? objectId = this.ParseObjectId(entry.ItemId);
+                    string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                     IReadOnlySet<Season>? seasons = this.ParseEffectiveSeasons(entry.Season, entry.Condition);
                     if (objectId is null || seasons is null)
                         continue;
@@ -678,7 +669,7 @@ namespace ContentPatcher.Framework.Migrations
                 foreach (ArtifactSpotDropData entry in data)
                 {
                     // parse raw data
-                    string? objectId = this.ParseObjectId(entry.ItemId);
+                    string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                     IReadOnlySet<Season>? seasons = this.ParseEffectiveSeasons(null, entry.Condition);
                     if (objectId is null || seasons is null)
                         continue;
@@ -713,7 +704,7 @@ namespace ContentPatcher.Framework.Migrations
                         continue; // can't convert fish chances to 1.5.6
 
                     // parse raw data
-                    string? objectId = this.ParseObjectId(entry.ItemId);
+                    string? objectId = RuntimeMigrationHelper.ParseObjectId(entry.ItemId);
                     IReadOnlySet<Season>? seasons = this.ParseEffectiveSeasons(null, entry.Condition);
                     if (objectId is null || seasons is null)
                         continue;

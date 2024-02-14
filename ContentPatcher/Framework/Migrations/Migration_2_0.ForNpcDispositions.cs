@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using ContentPatcher.Framework.Migrations.Internal;
 using ContentPatcher.Framework.Patches;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -14,7 +15,7 @@ namespace ContentPatcher.Framework.Migrations
     internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /// <summary>The migration logic to apply pre-1.6 <c>Data/NPCDispositions</c> patches to <c>Data/Characters</c>.</summary>
-        public class NpcDispositionsMigrator : IEditAssetMigrator
+        private class NpcDispositionsMigrator : IEditAssetMigrator
         {
             /*********
             ** Fields
