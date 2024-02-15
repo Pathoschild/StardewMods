@@ -280,7 +280,7 @@ namespace ContentPatcher
                 foreach (IGrouping<string, string> warningGroup in contentPacksByWarning.OrderBy(p => p.Key, new HumanSortComparer()))
                 {
                     this.Monitor.Log(
-                        $"{warningGroup.Key}\n\nAffected content packs:\n- {string.Join("\n- ", warningGroup.OrderByHuman(p => p))}\n\nFor mod authors, see how to update a mod: https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-migration-guide.md.",
+                        $"{warningGroup.Key}\n\nAffected content packs:\n- {string.Join("\n- ", warningGroup.OrderByHuman(p => p))}\n\nFor mod authors, see how to update a mod: https://smapi.io/cp-migrate.",
                         LogLevel.Info
                     );
                 }
