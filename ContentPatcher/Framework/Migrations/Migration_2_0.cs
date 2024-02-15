@@ -28,7 +28,9 @@ namespace ContentPatcher.Framework.Migrations
                 new CropsMigrator(),
                 new LocationsMigrator(),
                 new NpcDispositionsMigrator(),
-                new ObjectInformationMigrator()
+                new ObjectContextTagsMigrator(),
+                new ObjectInformationMigrator(),
+                new WeaponsMigrator()
             ];
         }
 
