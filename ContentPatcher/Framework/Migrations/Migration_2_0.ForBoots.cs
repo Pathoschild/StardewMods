@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Migrations.Internal;
@@ -45,10 +46,10 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             /// <inheritdoc />
-            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, out string? error)
+            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, Action<string, IMonitor> onWarning, out string? error)
             {
                 var data = (Dictionary<string, string>)asset.Data;
-                patch.Edit<Dictionary<string, string>>(asset);
+                patch.Edit<Dictionary<string, string>>(asset, onWarning);
                 this.MigrateData(data);
 
                 error = null;

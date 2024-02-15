@@ -77,13 +77,13 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             /// <inheritdoc />
-            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, out string? error)
+            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, Action<string, IMonitor> onWarning, out string? error)
             {
                 var assetData = asset.GetData<Dictionary<string, LocationData>>();
                 Dictionary<string, string> tempData = this.GetOldFormat(assetData, out HashSet<string> skippedDueToNoData);
                 Dictionary<string, string> tempDataBackup = new(tempData);
 
-                patch.Edit<Dictionary<string, string>>(new FakeAssetData(asset, asset.Name, tempData));
+                patch.Edit<Dictionary<string, string>>(new FakeAssetData(asset, asset.Name, tempData), onWarning);
                 this.MergeIntoNewFormat(assetData, tempData, tempDataBackup, skippedDueToNoData, patch.ContentPack.Manifest.UniqueID);
 
                 error = null;

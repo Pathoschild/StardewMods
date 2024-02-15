@@ -63,11 +63,26 @@ Just set the `Format` field to the latest version shown in the [author guide](au
 then review the sections below for any changes you need to make. If a version isn't listed on this
 page, there's nothing else to change for that version.
 
-> [!TIP]
-> Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need help!
+</dd>
+
+<dt>
+  Why does my content pack show "reported warnings when applying runtime migration 2.0.0" in the
+  SMAPI console?
+</dt>
+<dd>
+
+Your content pack has a `Format` version from before Stardew Valley 1.6, so Content Patcher tried
+to migrate your content pack to the new asset format and failed.
+
+You can fix it by:
+1. Setting `"Format": "2.0.0"` in your `content.json`.
+2. Updating your content pack to the latest Content Patcher and Stardew Valley format (see below).
 
 </dd>
 </dl>
+
+> [!TIP]
+> Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need help!
 
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed

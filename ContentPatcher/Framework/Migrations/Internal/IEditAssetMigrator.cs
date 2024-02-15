@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
@@ -19,6 +20,10 @@ namespace ContentPatcher.Framework.Migrations.Internal
         bool TryApplyLoadPatch<T>(LoadPatch patch, IAssetName assetName, [NotNullWhen(true)] ref T? asset, out string? error);
 
         /// <inheritdoc cref="IRuntimeMigration.TryApplyEditPatch{T}" />
-        bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, out string? error);
+        /// <param name="patch" />
+        /// <param name="asset" />
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        /// <param name="error" />
+        bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, Action<string, IMonitor> onWarning, out string? error);
     }
 }

@@ -67,9 +67,18 @@ namespace ContentPatcher.Framework.Migrations
                 {
                     if (migrator.AppliesTo(patch.TargetAssetBeforeRedirection ?? asset.Name))
                     {
-                        if (migrator.TryApplyEditPatch<T>(editPatch, asset, out error))
-                            return true;
+                        // log warning if runtime migration has issues
+                        bool hasLoggedWarning = false;
+                        void OnWarning(string warning, IMonitor monitor)
+                        {
+                            if (!hasLoggedWarning)
+                                monitor.Log($"Data patch \"{patch.Path}\" reported warnings when applying runtime migration {this.Version}. (For the mod author: see https://smapi.io/cp-migrate to avoid runtime migrations.)", LogLevel.Warn);
+                            hasLoggedWarning = true;
+                        }
 
+                        // apply
+                        if (migrator.TryApplyEditPatch<T>(editPatch, asset, OnWarning, out error))
+                            return true;
                         if (error != null)
                             return false;
                     }

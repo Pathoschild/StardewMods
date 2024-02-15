@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -51,12 +52,12 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             /// <inheritdoc />
-            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, out string? error)
+            public bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, Action<string, IMonitor> onWarning, out string? error)
             {
                 var data = asset.GetData<Dictionary<string, CropData>>();
                 Dictionary<string, string> tempData = this.GetOldFormat(data);
                 Dictionary<string, string> tempDataBackup = new(tempData);
-                patch.Edit<Dictionary<string, string>>(new FakeAssetData(asset, asset.Name, tempData));
+                patch.Edit<Dictionary<string, string>>(new FakeAssetData(asset, asset.Name, tempData), onWarning);
                 this.MergeIntoNewFormat(data, tempData, tempDataBackup);
 
                 error = null;
