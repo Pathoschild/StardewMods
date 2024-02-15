@@ -13,10 +13,10 @@ namespace ContentPatcher.Framework.Migrations
     internal abstract class BaseMigration : IMigration
     {
         /*********
-        ** Private methods
+        ** Fields
         *********/
         /// <summary>The tokens added in this format version.</summary>
-        protected InvariantSet? AddedTokens { get; set; }
+        protected InvariantSet? AddedTokens;
 
 
         /*********

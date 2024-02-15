@@ -14,6 +14,9 @@ namespace ContentPatcher.Framework.Migrations.Internal
         private static readonly Dictionary<string, string?> ParseObjectIdCache = new();
 
 
+        /*********
+        ** Public methods
+        *********/
         /// <summary>Get the unqualified object ID, if it's a valid object ID.</summary>
         /// <param name="rawItemId">The raw item ID, which may be an item query or non-object ID.</param>
         /// <returns>Returns the unqualified object ID, or <c>null</c> if it's not a valid object ID.</returns>

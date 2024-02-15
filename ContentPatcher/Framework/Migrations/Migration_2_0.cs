@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -12,14 +11,6 @@ namespace ContentPatcher.Framework.Migrations
     internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>The migrators that convert pre-1.6 edit patches to a newer asset or format.</summary>
-        /// <remarks>For each edit, the first migrator which applies or returns errors is used.</remarks>
-        private readonly IEditAssetMigrator[] Migrators;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -29,12 +20,8 @@ namespace ContentPatcher.Framework.Migrations
             this.AddedTokens = new InvariantSet(
                 nameof(ConditionType.ModId)
             );
-            this.MigrationWarnings = [
-                "Some content packs haven't been updated for Stardew Valley 1.6.0. Content Patcher will try to auto-migrate them, but compatibility isn't guaranteed."
-            ];
-
-            this.Migrators = new IEditAssetMigrator[]
-            {
+            this.MigrationWarnings = ["Some content packs haven't been updated for Stardew Valley 1.6.0. Content Patcher will try to auto-migrate them, but compatibility isn't guaranteed."];
+            this.RuntimeEditDataMigrators = [
                 new BigCraftableInformationMigrator(),
                 new BlueprintsMigrator(),
                 new BootsMigrator(),
@@ -42,7 +29,7 @@ namespace ContentPatcher.Framework.Migrations
                 new LocationsMigrator(),
                 new NpcDispositionsMigrator(),
                 new ObjectInformationMigrator()
-            };
+            ];
         }
 
         /// <inheritdoc />
@@ -62,83 +49,6 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             return true;
-        }
-
-        /// <inheritdoc />
-        public override IAssetName? RedirectTarget(IAssetName assetName, IPatch patch)
-        {
-            foreach (IEditAssetMigrator migrator in this.Migrators)
-            {
-                if (migrator.AppliesTo(assetName))
-                {
-                    IAssetName? newName = migrator.RedirectTarget(assetName, patch);
-                    if (newName != null)
-                        return newName;
-                }
-            }
-
-            return base.RedirectTarget(assetName, patch);
-        }
-
-        /// <inheritdoc />
-        public override bool TryApplyLoadPatch<T>(LoadPatch patch, IAssetName assetName, [NotNullWhen(true)] ref T? asset, out string? error)
-            where T : default
-        {
-            foreach (IEditAssetMigrator migrator in this.Migrators)
-            {
-                if (migrator.AppliesTo(patch.TargetAssetBeforeRedirection ?? assetName))
-                {
-                    if (migrator.TryApplyLoadPatch(patch, assetName, ref asset, out error))
-                        return true;
-
-                    if (error != null)
-                        return false;
-                }
-            }
-
-            return base.TryApplyLoadPatch<T>(patch, assetName, ref asset, out error);
-        }
-
-        /// <inheritdoc />
-        public override bool TryApplyEditPatch<T>(IPatch patch, IAssetData asset, out string? error)
-        {
-            if (patch is EditDataPatch editPatch)
-            {
-                foreach (IEditAssetMigrator migrator in this.Migrators)
-                {
-                    if (migrator.AppliesTo(patch.TargetAssetBeforeRedirection ?? asset.Name))
-                    {
-                        if (migrator.TryApplyEditPatch<T>(editPatch, asset, out error))
-                            return true;
-
-                        if (error != null)
-                            return false;
-                    }
-                }
-            }
-
-            return base.TryApplyEditPatch<T>(patch, asset, out error);
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>The migration logic to apply pre-1.6 edit patches to a new asset or format.</summary>
-        private interface IEditAssetMigrator
-        {
-            /// <summary>Get whether this migration applies to a patch.</summary>
-            /// <param name="assetName">The asset name to check. If the asset was redirected, this is the asset name before redirection.</param>
-            bool AppliesTo(IAssetName assetName);
-
-            /// <inheritdoc cref="IRuntimeMigration.RedirectTarget" />
-            IAssetName? RedirectTarget(IAssetName assetName, IPatch patch);
-
-            /// <inheritdoc cref="IRuntimeMigration.TryApplyLoadPatch{T}" />
-            bool TryApplyLoadPatch<T>(LoadPatch patch, IAssetName assetName, [NotNullWhen(true)] ref T? asset, out string? error);
-
-            /// <inheritdoc cref="IRuntimeMigration.TryApplyEditPatch{T}" />
-            bool TryApplyEditPatch<T>(EditDataPatch patch, IAssetData asset, out string? error);
         }
     }
 }
