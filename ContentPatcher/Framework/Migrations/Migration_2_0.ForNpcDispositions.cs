@@ -170,9 +170,7 @@ namespace ContentPatcher.Framework.Migrations
                         if (rawHome != ArgUtility.Get(backupFields, 10))
                             this.MergeHomeIntoNewFormat(entry, rawHome);
 
-                        string displayName = ArgUtility.Get(fields, 11);
-                        if (!string.IsNullOrWhiteSpace(displayName) && displayName != ArgUtility.Get(backupFields, 11) && displayName != StardewTokenParser.ParseText(entry.DisplayName))
-                            entry.DisplayName = displayName;
+                        entry.DisplayName = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 11), ArgUtility.Get(backupFields, 11), entry.DisplayName);
                     }
 
                     // set value

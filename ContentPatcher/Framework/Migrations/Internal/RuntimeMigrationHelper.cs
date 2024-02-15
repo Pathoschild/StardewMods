@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
+using StardewTokenParser = StardewValley.TokenizableStrings.TokenParser;
 
 namespace ContentPatcher.Framework.Migrations.Internal
 {
@@ -65,6 +66,17 @@ namespace ContentPatcher.Framework.Migrations.Internal
             }
 
             return count;
+        }
+
+        /// <summary>Get the value to set for a tokenizable string field based on the edit state.</summary>
+        /// <param name="newValue">The literal text from the temporary data with the patch edit applied.</param>
+        /// <param name="prevValue">The literal text from the temporary data before the patch edit was applied.</param>
+        /// <param name="assetValue">The current tokenizable string value in the target asset.</param>
+        public static string? MigrateLiteralTextToTokenizableField(string? newValue, string? prevValue, string? assetValue)
+        {
+            return !string.IsNullOrWhiteSpace(newValue) && newValue != prevValue && newValue != StardewTokenParser.ParseText(assetValue)
+                ? newValue
+                : assetValue;
         }
     }
 }

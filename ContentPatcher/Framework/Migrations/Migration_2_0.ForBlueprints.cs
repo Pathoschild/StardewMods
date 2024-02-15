@@ -156,12 +156,6 @@ namespace ContentPatcher.Framework.Migrations
                     {
                         string[] fields = fromEntry.Split('/');
 
-                        /*
-                           fields[14] = entry.MaxOccupants.ToString();
-                           fields[17] = entry.BuildCost.ToString();
-                           fields[18] = entry.MagicalConstruction.ToString().ToLowerInvariant();
-                         */
-
                         string rawItemsRequired = ArgUtility.Get(fields, 0);
                         if (rawItemsRequired != ArgUtility.Get(backupFields, 0))
                             this.MergeItemsRequiredFieldIntoNewFormat(entry, rawItemsRequired);
@@ -185,18 +179,8 @@ namespace ContentPatcher.Framework.Migrations
                         if (string.IsNullOrWhiteSpace(entry.IndoorMap) || entry.IndoorMapType == "null")
                             entry.IndoorMap = null;
 
-                        {
-                            string displayName = ArgUtility.Get(fields, 8);
-                            if (!string.IsNullOrWhiteSpace(displayName) && displayName != ArgUtility.Get(backupFields, 8) && displayName != StardewTokenParser.ParseText(entry.Name))
-                                entry.Name = displayName;
-                        }
-
-                        {
-                            string description = ArgUtility.Get(fields, 9);
-                            if (!string.IsNullOrWhiteSpace(description) && description != ArgUtility.Get(backupFields, 9) && description != StardewTokenParser.ParseText(entry.Description))
-                                entry.Description = description;
-                        }
-
+                        entry.Name = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 8), ArgUtility.Get(backupFields, 8), entry.Name);
+                        entry.Description = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 9), ArgUtility.Get(backupFields, 9), entry.Description);
                         entry.MaxOccupants = ArgUtility.GetInt(fields, 14, entry.MaxOccupants);
                         entry.BuildCost = ArgUtility.GetInt(fields, 17, entry.BuildCost);
                         entry.MagicalConstruction = ArgUtility.GetBool(fields, 18, entry.MagicalConstruction);

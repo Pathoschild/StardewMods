@@ -143,19 +143,12 @@ namespace ContentPatcher.Framework.Migrations
 
                         entry.Name = ArgUtility.Get(fields, 0, entry.Name, allowBlank: false);
                         entry.Price = ArgUtility.GetInt(fields, 1, entry.Price);
-
-                        string description = ArgUtility.Get(fields, 4);
-                        if (!string.IsNullOrWhiteSpace(description) && description != ArgUtility.Get(backupFields, 4) && description != StardewTokenParser.ParseText(entry.Description))
-                            entry.Description = description;
-
+                        entry.Description = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 4), ArgUtility.Get(backupFields, 4), entry.Description);
                         entry.CanBePlacedOutdoors = ArgUtility.GetBool(fields, 5, entry.CanBePlacedOutdoors);
                         entry.CanBePlacedIndoors = ArgUtility.GetBool(fields, 6, entry.CanBePlacedIndoors);
                         entry.Fragility = ArgUtility.GetInt(fields, 7, entry.Fragility);
                         entry.IsLamp = ArgUtility.GetBool(fields, 8, entry.IsLamp);
-
-                        string displayName = ArgUtility.Get(fields, 9);
-                        if (!string.IsNullOrWhiteSpace(displayName) && displayName != ArgUtility.Get(backupFields, 9) && displayName != StardewTokenParser.ParseText(entry.DisplayName))
-                            entry.DisplayName = displayName;
+                        entry.DisplayName = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 9), ArgUtility.Get(backupFields, 9), entry.DisplayName);
                     }
 
                     // set value

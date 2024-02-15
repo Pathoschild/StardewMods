@@ -162,15 +162,9 @@ namespace ContentPatcher.Framework.Migrations
                             entry.Category = ArgUtility.GetInt(parts, 1, entry.Category);
                         }
 
-                        // display name
-                        string displayName = ArgUtility.Get(fields, 4);
-                        if (!string.IsNullOrWhiteSpace(displayName) && displayName != ArgUtility.Get(backupFields, 4) && displayName != StardewTokenParser.ParseText(entry.DisplayName))
-                            entry.DisplayName = displayName;
-
-                        // description
-                        string description = ArgUtility.Get(fields, 5);
-                        if (!string.IsNullOrWhiteSpace(description) && description != ArgUtility.Get(backupFields, 5) && description != StardewTokenParser.ParseText(entry.Description))
-                            entry.Description = description;
+                        // display text
+                        entry.DisplayName = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 4), ArgUtility.Get(backupFields, 4), entry.DisplayName);
+                        entry.Description = RuntimeMigrationHelper.MigrateLiteralTextToTokenizableField(ArgUtility.Get(fields, 5), ArgUtility.Get(backupFields, 5), StardewTokenParser.ParseText(entry.Description));
 
                         // miscellaneous
                         string rawMiscellaneous = ArgUtility.Get(fields, 6);
