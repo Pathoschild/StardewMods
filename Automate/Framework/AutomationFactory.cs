@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether the Better Junimos mod is installed.</summary>
         private readonly bool IsBetterJunimosLoaded;
 
@@ -42,13 +39,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="isBetterJunimosLoaded">Whether the Better Junimos mod is installed.</param>
-        public AutomationFactory(Func<ModConfig> config, IMonitor monitor, IReflectionHelper reflection, bool isBetterJunimosLoaded)
+        public AutomationFactory(Func<ModConfig> config, IMonitor monitor, bool isBetterJunimosLoaded)
         {
             this.Config = config;
             this.Monitor = monitor;
-            this.Reflection = reflection;
             this.IsBetterJunimosLoaded = isBetterJunimosLoaded;
         }
 
@@ -76,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // indoor pot
             if (obj is IndoorPot indoorPot && BushMachine.CanAutomate(indoorPot.bush.Value))
-                return new BushMachine(indoorPot, tile, location, this.Reflection);
+                return new BushMachine(indoorPot, tile, location);
 
             // tapper
             if (obj.IsTapper())
@@ -87,7 +82,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // crab pot
             if (obj is CrabPot crabPot)
-                return new CrabPotMachine(crabPot, location, tile, this.Monitor, this.Reflection);
+                return new CrabPotMachine(crabPot, location, tile, this.Monitor);
 
             // machine by item ID
             switch (obj.QualifiedItemId)

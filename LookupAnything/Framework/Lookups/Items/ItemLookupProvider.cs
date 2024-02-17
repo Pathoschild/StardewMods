@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             foreach ((Vector2 tile, TerrainFeature feature) in location.terrainFeatures.Pairs)
             {
                 if (feature is HoeDirt { crop: not null } dirt && this.GameHelper.CouldSpriteOccludeTile(tile, lookupTile))
-                    yield return new CropTarget(this.GameHelper, dirt, tile, this.Reflection, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
+                    yield return new CropTarget(this.GameHelper, dirt, tile, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 // inventory
                 case InventoryPage inventory:
                     {
-                        Item? item = Game1.player.CursorSlotItem ?? this.Reflection.GetField<Item?>(inventory, "hoveredItem").GetValue();
+                        Item? item = Game1.player.CursorSlotItem ?? inventory.hoveredItem;
                         if (item != null)
                             return this.BuildSubject(item, ObjectContext.Inventory, null);
                     }
@@ -129,16 +129,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     return this.GetSubject(tailoringMenu.inventory, cursorX, cursorY);
 
                 // toolbar
-                case Toolbar:
+                case Toolbar toolbar:
                     {
                         // find hovered slot
-                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
-                        ClickableComponent? hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint(cursorX, cursorY));
+                        ClickableComponent? hoveredSlot = toolbar.buttons.FirstOrDefault(slot => slot.containsPoint(cursorX, cursorY));
                         if (hoveredSlot == null)
                             return null;
 
                         // get inventory index
-                        int index = slots.IndexOf(hoveredSlot);
+                        int index = toolbar.buttons.IndexOf(hoveredSlot);
                         if (index < 0 || index > Game1.player.Items.Count - 1)
                             return null;
 
@@ -195,22 +194,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     {
                         // player inventory item
                         {
-                            Item? item = this.Reflection.GetField<Item?>(crafting, "hoverItem").GetValue();
+                            Item? item = crafting.hoverItem;
                             if (item != null)
                                 return this.BuildSubject(item, ObjectContext.Inventory, null);
                         }
 
                         // learned crafting recipe
                         {
-                            CraftingRecipe? recipe = this.Reflection.GetField<CraftingRecipe?>(crafting, "hoverRecipe").GetValue();
+                            CraftingRecipe? recipe = crafting.hoverRecipe;
                             if (recipe != null)
                                 return this.BuildSubject(recipe.createItem(), ObjectContext.Inventory, null);
                         }
 
                         // undiscovered crafting recipe
                         {
-                            int currentCraftingPage = this.Reflection.GetField<int>(crafting, "currentCraftingPage").GetValue();
-                            if (crafting.pagesOfCraftingRecipes.TryGetIndex(currentCraftingPage, out Dictionary<ClickableTextureComponent, CraftingRecipe?>? page))
+                            if (crafting.pagesOfCraftingRecipes.TryGetIndex(crafting.currentCraftingPage, out Dictionary<ClickableTextureComponent, CraftingRecipe?>? page))
                             {
                                 foreach ((ClickableTextureComponent sprite, CraftingRecipe? recipe) in page)
                                 {
@@ -245,7 +243,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     {
                         // hovered inventory item
                         {
-                            Item? item = this.Reflection.GetField<Item?>(menu, "hoveredItem").GetValue();
+                            Item? item = bundleMenu.hoveredItem;
                             if (item != null)
                                 return this.BuildSubject(item, ObjectContext.Inventory, null);
                         }
@@ -255,9 +253,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         {
                             if (bundleMenu.ingredientList[i].containsPoint(cursorX, cursorY))
                             {
-                                Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
+                                Bundle bundle = bundleMenu.currentPageBundle;
                                 var ingredient = bundle.ingredients[i];
-                                var item = ItemRegistry.Create(ingredient.id, ingredient.stack);
+                                Item? item = ItemRegistry.Create(ingredient.id, ingredient.stack);
                                 item.Quality = ingredient.quality;
                                 return this.BuildSubject(item, ObjectContext.Inventory, null);
                             }

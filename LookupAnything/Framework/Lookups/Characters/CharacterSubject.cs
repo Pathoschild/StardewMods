@@ -9,7 +9,6 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
@@ -36,9 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
-
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
 
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
@@ -74,18 +70,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="showGiftTastes">Which gift taste levels to show.</param>
         /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
         /// <param name="showUnownedGifts">Whether to show gift tastes that the player doesn't own somewhere in the world.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
+        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
             : base(gameHelper)
         {
             this.Codex = codex;
-            this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
             this.ShowGiftTastes = showGiftTastes;
@@ -266,7 +260,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // basic info
             bool canRerollDrops = Game1.player.isWearingRing(Ring.BurglarsRingId);
 
-            yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
+            yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: monster.invincibleCountdown), hasValue: monster.isInvincible());
             yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
             yield return new ItemDropListField(this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
             yield return new GenericField(I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
@@ -292,8 +286,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <remarks>Derived from <see cref="Pet.checkAction"/> and <see cref="Pet.dayUpdate"/>.</remarks>
         private IEnumerable<ICustomField> GetDataForPet(Pet pet)
         {
-            Farm farm = Game1.getFarm();
-
             // friendship
             yield return new CharacterFriendshipField(I18n.Pet_Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet));
 
@@ -334,9 +326,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // show item wanted
             if (questsDone < maxQuests)
             {
-                this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
-                string itemWantedIndex = this.Reflection.GetField<string>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(itemWantedIndex), this.Codex);
+                trashBear.updateItemWanted();
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(trashBear.itemWantedIndex), this.Codex);
             }
 
             // show progress

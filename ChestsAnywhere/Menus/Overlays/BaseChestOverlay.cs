@@ -634,9 +634,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
-            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
-            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit, this.Reflection) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
+            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
             this.EditAutomateStorage = new SimpleDropdown<AutomateContainerPreference>(
                 this.Reflection,

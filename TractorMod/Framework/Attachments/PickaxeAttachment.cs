@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             [ResourceClump.boulderIndex] = Tool.steel
         };
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -39,9 +42,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public PickaxeAttachment(PickAxeConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+            : base(modRegistry)
         {
             this.Config = config;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -133,7 +137,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         private bool CanBreakBoulderAt(GameLocation location, Vector2 tile, Farmer player, Tool tool, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
         {
             return
-                this.TryGetResourceClumpCoveringTile(location, tile, player, out ResourceClump? clump, out applyTool)
+                this.TryGetResourceClumpCoveringTile(location, tile, player, this.Reflection, out ResourceClump? clump, out applyTool)
                 && (
                     !this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel)
                     || tool.UpgradeLevel >= requiredUpgradeLevel

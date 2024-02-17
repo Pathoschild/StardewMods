@@ -357,9 +357,8 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, IMonitor monitor)
+        public RecipeModel[] GetRecipes(Metadata metadata, IMonitor monitor)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 

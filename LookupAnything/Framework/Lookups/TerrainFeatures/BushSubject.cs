@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -21,9 +19,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>The underlying target.</summary>
         private readonly Bush Target;
 
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
 
         /*********
         ** Public methods
@@ -31,12 +26,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
-        public BushSubject(GameHelper gameHelper, Bush bush, IReflectionHelper reflection)
+        public BushSubject(GameHelper gameHelper, Bush bush)
             : base(gameHelper)
         {
             this.Target = bush;
-            this.Reflection = reflection;
 
             if (this.IsBerryBush(bush))
                 this.Initialize(I18n.Bush_Name_Berry(), I18n.Bush_Description_Berry(), I18n.Type_Bush());
@@ -108,7 +101,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             Bush bush = this.Target;
 
             // get source info
-            Rectangle sourceArea = this.Reflection.GetField<NetRectangle>(bush, "sourceRect").GetValue().Value;
+            Rectangle sourceArea = bush.sourceRect.Value;
             Point spriteSize = new(sourceArea.Width * Game1.pixelZoom, sourceArea.Height * Game1.pixelZoom);
             SpriteEffects spriteEffects = bush.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 

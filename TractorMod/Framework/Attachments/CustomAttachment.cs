@@ -24,9 +24,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="customAttachments">The enabled custom tool or item names.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public CustomAttachment(string[] customAttachments, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+        public CustomAttachment(string[] customAttachments, IModRegistry modRegistry)
+            : base(modRegistry)
         {
             this.CustomNames = new InvariantSet(customAttachments);
         }

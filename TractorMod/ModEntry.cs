@@ -486,25 +486,29 @@ namespace Pathoschild.Stardew.TractorMod
             var reflection = this.Helper.Reflection;
             var toolConfig = this.Config.StandardAttachments;
 
-            manager.UpdateConfig(this.Config, this.Keys, new IAttachment?[]
-            {
-                new CustomAttachment(this.Config.CustomAttachments, modRegistry, reflection), // should be first so it can override default attachments
-                new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
-                new FertilizerAttachment(toolConfig.Fertilizer, modRegistry, reflection),
-                new GrassStarterAttachment(toolConfig.GrassStarter, modRegistry, reflection),
-                new HoeAttachment(toolConfig.Hoe, modRegistry, reflection),
-                new MeleeBluntAttachment(toolConfig.MeleeBlunt, modRegistry, reflection),
-                new MeleeDaggerAttachment(toolConfig.MeleeDagger, modRegistry, reflection),
-                new MeleeSwordAttachment(toolConfig.MeleeSword, modRegistry, reflection),
-                new MilkPailAttachment(toolConfig.MilkPail, modRegistry, reflection),
-                new PickaxeAttachment(toolConfig.PickAxe, modRegistry, reflection),
-                new ScytheAttachment(toolConfig.Scythe, modRegistry, reflection),
-                new SeedAttachment(toolConfig.Seeds, modRegistry, reflection),
-                modRegistry.IsLoaded(SeedBagAttachment.ModId) ? new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry, reflection) : null,
-                new ShearsAttachment(toolConfig.Shears, modRegistry, reflection),
-                new SlingshotAttachment(toolConfig.Slingshot, modRegistry, reflection),
-                new WateringCanAttachment(toolConfig.WateringCan, modRegistry, reflection)
-            });
+            manager.UpdateConfig(
+                this.Config,
+                this.Keys,
+                new IAttachment?[]
+                {
+                    new CustomAttachment(this.Config.CustomAttachments, modRegistry), // should be first so it can override default attachments
+                    new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
+                    new FertilizerAttachment(toolConfig.Fertilizer, modRegistry, reflection),
+                    new GrassStarterAttachment(toolConfig.GrassStarter, modRegistry),
+                    new HoeAttachment(toolConfig.Hoe, modRegistry),
+                    new MeleeBluntAttachment(toolConfig.MeleeBlunt, modRegistry),
+                    new MeleeDaggerAttachment(toolConfig.MeleeDagger, modRegistry),
+                    new MeleeSwordAttachment(toolConfig.MeleeSword, modRegistry),
+                    new MilkPailAttachment(toolConfig.MilkPail, modRegistry),
+                    new PickaxeAttachment(toolConfig.PickAxe, modRegistry, reflection),
+                    new ScytheAttachment(toolConfig.Scythe, modRegistry),
+                    new SeedAttachment(toolConfig.Seeds, modRegistry, reflection),
+                    modRegistry.IsLoaded(SeedBagAttachment.ModId) ? new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry) : null,
+                    new ShearsAttachment(toolConfig.Shears, modRegistry),
+                    new SlingshotAttachment(toolConfig.Slingshot, modRegistry),
+                    new WateringCanAttachment(toolConfig.WateringCan, modRegistry)
+                }.WhereNotNull().ToArray()
+            );
         }
 
         /// <summary>Summon an unused tractor to the player's current position, if any are available.</summary>

@@ -277,17 +277,14 @@ namespace Pathoschild.Stardew.DebugMode
             if (Game1.CurrentEvent != null)
             {
                 Event curEvent = Game1.CurrentEvent;
-                string[] eventCommands = this.Helper.Reflection.GetField<string[]>(curEvent, "eventCommands").GetValue();
-                bool isFestival = curEvent.isFestival;
-                string festivalName = curEvent.FestivalName;
-                double progress = curEvent.CurrentCommand / (double)eventCommands.Length;
+                double progress = curEvent.CurrentCommand / (double)curEvent.eventCommands.Length;
 
-                if (isFestival)
-                    yield return $"{I18n.Label_FestivalName()}: {festivalName}";
+                if (curEvent.isFestival)
+                    yield return $"{I18n.Label_FestivalName()}: {curEvent.FestivalName}";
 
                 yield return $"{I18n.Label_EventId()}: {curEvent.id}";
 
-                if (!isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < eventCommands.Length)
+                if (!curEvent.isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < curEvent.eventCommands.Length)
                     yield return $"{I18n.Label_EventScript()}: {curEvent.GetCurrentCommand()} ({(int)(progress * 100)}%)";
             }
 

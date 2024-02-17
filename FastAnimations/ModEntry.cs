@@ -104,12 +104,12 @@ namespace Pathoschild.Stardew.FastAnimations
             if (Game1.eventUp || !this.Handlers.Any())
                 return;
 
-            int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
+            int playerAnimationId = Game1.player.FarmerSprite.currentSingleAnimation;
             foreach (IAnimationHandler handler in this.Handlers)
             {
-                if (handler.IsEnabled(playerAnimationID))
+                if (handler.IsEnabled(playerAnimationId))
                 {
-                    handler.Update(playerAnimationID);
+                    handler.Update(playerAnimationId);
                     break;
                 }
             }
@@ -154,17 +154,17 @@ namespace Pathoschild.Stardew.FastAnimations
             if (config.BreakGeodeSpeed > 1)
                 yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
             if (config.CasinoSlotsSpeed > 1)
-                yield return new CasinoSlotsHandler(config.CasinoSlotsSpeed, this.Helper.Reflection);
+                yield return new CasinoSlotsHandler(config.CasinoSlotsSpeed);
             if (config.PamBusSpeed > 1)
                 yield return new PamBusHandler(config.PamBusSpeed);
             if (config.TreeFallSpeed > 1)
-                yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
+                yield return new TreeFallingHandler(config.TreeFallSpeed);
 
             // UI animations
             if (config.TitleMenuTransitionSpeed > 1)
-                yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed, this.Helper.Reflection);
+                yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed);
             if (config.LoadGameBlinkSpeed > 1)
-                yield return new LoadGameMenuHandler(config.LoadGameBlinkSpeed, this.Helper.Reflection);
+                yield return new LoadGameMenuHandler(config.LoadGameBlinkSpeed);
         }
     }
 }

@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             [ResourceClump.hollowLogIndex] = Tool.steel
         };
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -38,9 +41,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public AxeAttachment(AxeConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+            : base(modRegistry)
         {
             this.Config = config;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -96,7 +100,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // cut resource stumps
             if (this.Config.ClearDebris || this.Config.CutGiantCrops)
             {
-                if (this.TryGetResourceClumpCoveringTile(location, tile, player, out ResourceClump? clump, out Func<Tool, bool>? applyTool))
+                if (this.TryGetResourceClumpCoveringTile(location, tile, player, this.Reflection, out ResourceClump? clump, out Func<Tool, bool>? applyTool))
                 {
                     // giant crops
                     if (this.Config.CutGiantCrops && clump is GiantCrop)

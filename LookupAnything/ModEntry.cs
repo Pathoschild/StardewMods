@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 return;
 
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
+            this.GameHelper.ResetCache(this.Monitor);
         }
 
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>

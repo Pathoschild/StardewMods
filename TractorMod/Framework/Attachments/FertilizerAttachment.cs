@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly GenericAttachmentConfig Config;
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -25,9 +28,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public FertilizerAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+            : base(modRegistry)
         {
             this.Config = config;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -73,7 +77,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         return false;
 
                     // ignore if there's a giant crop, meteorite, etc covering the tile
-                    if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile))
+                    if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile, this.Reflection))
                         return false;
 
                     // apply fertilizer

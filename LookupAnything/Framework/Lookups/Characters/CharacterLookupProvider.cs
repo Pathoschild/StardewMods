@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
-                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.Tile, this.Reflection, () => this.BuildSubject(gourmand));
+                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.Tile, () => this.BuildSubject(gourmand));
             }
 
             // NPCs
@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 Vector2 entityTile = npc.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, this.Reflection, () => this.BuildSubject(npc));
+                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, () => this.BuildSubject(npc));
             }
 
             // animals
@@ -154,9 +154,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         ClickableComponent? button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
                         {
-                            int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
-                            var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
-                            LoadGameMenu.SaveFileSlot? slot = slots[index] as LoadGameMenu.SaveFileSlot;
+                            int index = loadMenu.currentItemIndex + int.Parse(button.name);
+                            LoadGameMenu.SaveFileSlot? slot = loadMenu.MenuSlots[index] as LoadGameMenu.SaveFileSlot;
                             if (slot?.Farmer != null)
                                 return new FarmerSubject(this.GameHelper, slot.Farmer, isLoadMenu: true);
                         }
@@ -285,7 +284,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 npc: npc,
                 type: this.GetSubjectType(npc),
                 metadata: this.GameHelper.Metadata,
-                reflectionHelper: this.Reflection,
                 progressionMode: config.ProgressionMode,
                 highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
                 showGiftTastes: config.ShowGiftTastes,

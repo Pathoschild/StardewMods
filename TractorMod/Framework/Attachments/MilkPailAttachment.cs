@@ -29,9 +29,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public MilkPailAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+        public MilkPailAttachment(GenericAttachmentConfig config, IModRegistry modRegistry)
+            : base(modRegistry)
         {
             this.Config = config;
         }
@@ -58,17 +57,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
-            tool = tool.AssertNotNull();
+            MilkPail milkPail = (MilkPail)tool.AssertNotNull();
 
             if (this.TryStartCooldown(tile.ToString(), this.AnimalCheckDelay))
             {
-                FarmAnimal? animal = this.GetBestHarvestableFarmAnimal(tool, location, tile);
+                FarmAnimal? animal = this.GetBestHarvestableFarmAnimal(milkPail, location, tile);
                 if (animal != null)
                 {
                     Vector2 useAt = this.GetToolPixelPosition(tile);
 
-                    this.Reflection.GetField<FarmAnimal>(tool, "animal").SetValue(animal);
-                    tool.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
+                    milkPail.animal = animal;
+                    milkPail.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
 
                     return true;
                 }
