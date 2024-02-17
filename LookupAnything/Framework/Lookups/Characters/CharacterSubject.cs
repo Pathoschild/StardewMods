@@ -13,10 +13,12 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Pets;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
+using StardewValley.TokenizableStrings;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
@@ -421,9 +423,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case SubjectType.Monster:
                     return I18n.Type_Monster();
 
-                case SubjectType.Pet:
+                case SubjectType.Pet when npc is Pet pet && Pet.TryGetData(pet.petType.Value, out PetData petData):
                     {
-                        string typeName = GameI18n.GetString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
+                        string typeName = TokenParser.ParseText(petData.DisplayName);
                         if (typeName.Length > 1)
                             typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
                         return typeName;
