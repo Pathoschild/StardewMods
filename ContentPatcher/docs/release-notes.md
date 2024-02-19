@@ -17,6 +17,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Deprecated `CustomLocations`. This is now a shortcut for editing the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data), and now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
 * Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
 * Fixed off-by-one position with `MoveEntries` when the target entry is already before the anchor entry.
+* Fixed some tokens (notably `Hearts` and `Relationship`) being briefly unavailable during part of the save load process. This affected some specific cases like editing island resort dialogue.
 
 **Update notes for mod authors:**  
 * Stardew Valley 1.6 has major content changes. Your content packs may still work due to the new runtime migrations,

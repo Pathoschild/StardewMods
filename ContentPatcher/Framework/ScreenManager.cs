@@ -116,13 +116,26 @@ namespace ContentPatcher.Framework
             {
                 case LoadStage.SaveParsed:
                 case LoadStage.SaveLoadedBasicInfo or LoadStage.CreatedBasicInfo:
-                case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {newStage}.");
 
                     this.TokenManager.IsSaveParsed = true;
                     this.TokenManager.IsSaveBasicInfoLoaded = newStage != LoadStage.SaveParsed;
 
                     this.UpdateContext(ContextUpdateType.All);
+                    break;
+
+                case LoadStage.Preloaded:
+                case LoadStage.Loaded:
+                    this.Monitor.VerboseLog($"Updating context: load stage changed to {newStage}.");
+
+                    if (!this.TokenManager.IsSaveLoaded)
+                    {
+                        this.TokenManager.IsSaveParsed = true;
+                        this.TokenManager.IsSaveBasicInfoLoaded = true;
+                        this.TokenManager.IsSaveLoaded = true;
+
+                        this.UpdateContext(ContextUpdateType.All);
+                    }
                     break;
             }
         }

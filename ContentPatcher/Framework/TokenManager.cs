@@ -49,6 +49,9 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsSaveBasicInfoLoaded { get; set; }
 
+        /// <summary>This happens before the game applies problem fixes, checks for achievements, starts music, etc.</summary>
+        public bool IsSaveLoaded { get; set; }
+
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, IInvariantSet>[] TokensWithSpecialUpdateRates { get; } = {
             Tuple.Create(UpdateRate.OnLocationChange, "location tokens", InvariantSets.From(new[] { nameof(ConditionType.LocationContext), nameof(ConditionType.LocationName), nameof(ConditionType.LocationUniqueName), nameof(ConditionType.IsOutdoors) })),
@@ -192,7 +195,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, IInvariantSet installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
-            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
+            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded, isSaveLoaded: () => this.IsSaveLoaded);
 
             return new IValueProvider[]
             {
