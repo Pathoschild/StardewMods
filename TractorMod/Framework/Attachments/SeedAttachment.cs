@@ -11,14 +11,11 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for seeds.</summary>
-    internal class SeedAttachment : BaseAttachment
+    internal class SeedAttachment : ExtendedDistanceAttachment<ExtendedDistanceConfig>
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
-
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -30,10 +27,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public SeedAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry)
+        public SeedAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(config, modRegistry)
         {
-            this.Config = config;
             this.Reflection = reflection;
         }
 

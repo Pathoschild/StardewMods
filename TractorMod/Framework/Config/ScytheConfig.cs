@@ -1,7 +1,7 @@
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
     /// <summary>Configuration for the scythe attachment.</summary>
-    internal class ScytheConfig
+    internal class ScytheConfig : IExtendedDistanceConfig
     {
         /// <summary>Whether to harvest crops.</summary>
         public bool HarvestCrops { get; set; } = true;
@@ -29,5 +29,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
+
+        /// <summary>If true, causes the area of effect to be increased somewhat from <see cref="ModConfig.Distance"/></summary>
+        public bool IncreaseDistance { get; set; } = true;
     }
 }

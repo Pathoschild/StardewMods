@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public AxeConfig Axe { get; set; } = new();
 
         /// <summary>Configuration for the fertilizer attachment.</summary>
-        public GenericAttachmentConfig Fertilizer { get; set; } = new();
+        public ExtendedDistanceConfig Fertilizer { get; set; } = new() { IncreaseDistance = false };
 
         /// <summary>Configuration for the grass starter attachment.</summary>
         public GenericAttachmentConfig GrassStarter { get; set; } = new();
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public ScytheConfig Scythe { get; set; } = new();
 
         /// <summary>Configuration for the seeds attachment.</summary>
-        public GenericAttachmentConfig Seeds { get; set; } = new();
+        public ExtendedDistanceConfig Seeds { get; set; } = new() { IncreaseDistance = false };
 
         /// <summary>Configuration for the shears attachment.</summary>
         public GenericAttachmentConfig Shears { get; set; } = new();
@@ -43,9 +43,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public GenericAttachmentConfig Slingshot { get; set; } = new() { Enable = false };
 
         /// <summary>Configuration for the watering can attachment.</summary>
-        public GenericAttachmentConfig WateringCan { get; set; } = new();
+        public ExtendedDistanceConfig WateringCan { get; set; } = new();
 
         /// <summary>Configuration for the Seed Bag mod attachment.</summary>
-        public GenericAttachmentConfig SeedBagMod { get; set; } = new();
+        public ExtendedDistanceConfig SeedBagMod { get; set; } = new();
     }
 }

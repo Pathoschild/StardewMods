@@ -10,14 +10,11 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for the watering can.</summary>
-    internal class WateringCanAttachment : BaseAttachment
+    internal class WateringCanAttachment : ExtendedDistanceAttachment<ExtendedDistanceConfig>
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
-
         /// <summary>An infinite watering can to apply.</summary>
         private readonly WateringCan WateringCan = new()
         {
@@ -33,11 +30,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        public WateringCanAttachment(GenericAttachmentConfig config, IModRegistry modRegistry)
-            : base(modRegistry)
-        {
-            this.Config = config;
-        }
+        public WateringCanAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry)
+            : base(config, modRegistry) { }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>

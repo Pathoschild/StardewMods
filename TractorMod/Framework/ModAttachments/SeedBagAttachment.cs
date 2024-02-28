@@ -9,15 +9,8 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
 {
     /// <summary>An attachment for the Seed Bag mod.</summary>
-    internal class SeedBagAttachment : BaseAttachment
+    internal class SeedBagAttachment : ExtendedDistanceAttachment<ExtendedDistanceConfig>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
-
-
         /*********
         ** Accessors
         *********/
@@ -31,10 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        public SeedBagAttachment(GenericAttachmentConfig config, IModRegistry modRegistry)
-            : base(modRegistry)
+        public SeedBagAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry)
+            : base(config, modRegistry)
         {
-            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>

@@ -287,6 +287,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 // scythe
                 .AddSectionTitle(I18n.Config_Scythe)
                 .AddCheckbox(
+                    name: I18n.Config_IncreaseScytheDistance,
+                    tooltip: I18n.Config_IncreaseScytheDistance_Tooltip,
+                    get: config => config.StandardAttachments.Scythe.IncreaseDistance,
+                    set: (config, value) => config.StandardAttachments.Scythe.IncreaseDistance = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_HarvestCrops_Name,
                     tooltip: I18n.Config_HarvestCrops_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestCrops,
@@ -413,10 +419,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.WateringCan.Enable = value
                 )
                 .AddCheckbox(
+                    name: I18n.Config_IncreaseWateringCanDistance,
+                    tooltip: I18n.Config_IncreaseWateringCanDistance_Tooltip,
+                    get: config => config.StandardAttachments.WateringCan.IncreaseDistance,
+                    set: (config, value) => config.StandardAttachments.WateringCan.IncreaseDistance = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_Fertilizer_Name,
                     tooltip: I18n.Config_Fertilizer_Tooltip,
                     get: config => config.StandardAttachments.Fertilizer.Enable,
                     set: (config, value) => config.StandardAttachments.Fertilizer.Enable = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_IncreaseFertilizerDistance,
+                    tooltip: I18n.Config_IncreaseFertilizerDistance_Tooltip,
+                    get: config => config.StandardAttachments.Fertilizer.IncreaseDistance,
+                    set: (config, value) => config.StandardAttachments.Fertilizer.IncreaseDistance = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_GrassStarters_Name,
@@ -429,6 +447,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     tooltip: I18n.Config_Seeds_Tooltip,
                     get: config => config.StandardAttachments.Seeds.Enable,
                     set: (config, value) => config.StandardAttachments.Seeds.Enable = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_IncreaseSeedingDistance,
+                    tooltip: I18n.Config_IncreaseSeedingDistance_Tooltip,
+                    get: config => config.StandardAttachments.Seeds.IncreaseDistance || config.StandardAttachments.SeedBagMod.IncreaseDistance,
+                    set: (config, value) => { config.StandardAttachments.Seeds.IncreaseDistance = value; config.StandardAttachments.SeedBagMod.IncreaseDistance = value; }
                 )
                 .AddCheckbox(
                     name: I18n.Config_SeedBags_Name,

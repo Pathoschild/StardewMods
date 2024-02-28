@@ -62,6 +62,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The current location.</param>
         public abstract bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location);
 
+        /// <summary>Determines if the tool range should be applied in an extended pattern or just the core area.</summary>
+        public virtual bool IsDistanceExtended => false;
+
+
         /// <summary>Method called when the tractor attachments have been activated for a location.</summary>
         /// <param name="location">The current tractor location.</param>
         public virtual void OnActivated(GameLocation location)

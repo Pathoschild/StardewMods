@@ -8,14 +8,11 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for fertilizer or speed-gro.</summary>
-    internal class FertilizerAttachment : BaseAttachment
+    internal class FertilizerAttachment : ExtendedDistanceAttachment<ExtendedDistanceConfig>
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The attachment settings.</summary>
-        private readonly GenericAttachmentConfig Config;
-
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -27,10 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public FertilizerAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry)
+        public FertilizerAttachment(ExtendedDistanceConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(config, modRegistry)
         {
-            this.Config = config;
             this.Reflection = reflection;
         }
 
