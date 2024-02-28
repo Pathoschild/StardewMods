@@ -41,6 +41,10 @@ namespace ContentPatcher.Framework
         /// <summary>The last context update for which cached values were updated.</summary>
         private int LastCacheTick;
 
+        /// <summary>Whether locations have been loaded from the save file into the game world.</summary>
+        /// <remarks>When loading a save file, locations aren't loaded yet when <see cref="IsBasicInfoLoaded"/> is first set. However, they are loaded at that point when creating a save.</remarks>
+        private bool AreLocationsLoaded => this.IsLoaded || (this.IsBasicInfoLoaded && SaveGame.loaded is null);
+
 
         /*********
         ** Accessors
@@ -130,8 +134,8 @@ namespace ContentPatcher.Framework
                 if (Context.IsWorldReady)
                     return player?.currentLocation;
 
-                // save data loaded (note: locations aren't set yet during IsSaveBasicInfoLoaded)
-                if (this.IsLoaded)
+                // save data loaded
+                if (this.AreLocationsLoaded)
                 {
                     return
                         player?.currentLocation
@@ -613,8 +617,8 @@ namespace ContentPatcher.Framework
 
             return this.GetCached($"Location:{name}", () =>
             {
-                // loaded (note: locations aren't set yet during IsSaveBasicInfoLoaded)
-                if (this.IsLoaded)
+                // loaded
+                if (this.AreLocationsLoaded)
                     return Game1.getLocationFromName(name);
 
                 // loading
@@ -630,8 +634,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetCached("Locations", () =>
             {
-                // loaded (note: locations aren't set yet during IsSaveBasicInfoLoaded)
-                if (this.IsLoaded)
+                // loaded
+                if (this.AreLocationsLoaded)
                     return CommonHelper.GetLocations();
 
                 // loading
