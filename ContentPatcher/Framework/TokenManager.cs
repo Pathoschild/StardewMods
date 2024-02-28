@@ -195,7 +195,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, IInvariantSet installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
-            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded, isSaveLoaded: () => this.IsSaveLoaded);
+            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isParsed: NeedsSave, isBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded, isLoaded: () => this.IsSaveLoaded);
 
             return new IValueProvider[]
             {
