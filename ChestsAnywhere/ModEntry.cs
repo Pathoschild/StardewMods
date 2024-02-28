@@ -174,7 +174,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // open from inventory if it's safe to close the inventory screen
-                    else if (Game1.activeClickableMenu is GameMenu { currentTab: GameMenu.inventoryTab } gameMenu)
+                    else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
                     {
                         IClickableMenu inventoryPage = gameMenu.pages[GameMenu.inventoryTab];
                         if (inventoryPage.readyToClose())
