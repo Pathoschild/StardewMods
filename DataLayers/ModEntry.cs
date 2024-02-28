@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.Commands;
@@ -25,6 +27,9 @@ namespace Pathoschild.Stardew.DataLayers
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
+
+        /// <summary>The display colors to use.</summary>
+        private ColorScheme Colors = null!; // loaded in Entry
 
         /// <summary>The available data layers.</summary>
         private ILayer[]? Layers;
@@ -53,6 +58,7 @@ namespace Pathoschild.Stardew.DataLayers
 
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Colors = this.LoadColorScheme();
 
             // init
             I18n.Init(helper.Translation);
@@ -103,31 +109,32 @@ namespace Pathoschild.Stardew.DataLayers
         private IEnumerable<ILayer> GetLayers(ModConfig config, ModIntegrations mods)
         {
             ModConfig.LayerConfigs layers = config.Layers;
+            var colors = this.Colors;
 
             if (layers.Accessible.IsEnabled())
-                yield return new AccessibleLayer(layers.Accessible);
+                yield return new AccessibleLayer(layers.Accessible, colors);
             if (layers.Buildable.IsEnabled())
-                yield return new BuildableLayer(layers.Buildable);
+                yield return new BuildableLayer(layers.Buildable, colors);
             if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(layers.CoverageForBeeHouses);
+                yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
             if (layers.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowLayer(layers.CoverageForScarecrows);
+                yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
             if (layers.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerLayer(layers.CoverageForSprinklers, mods);
+                yield return new SprinklerLayer(layers.CoverageForSprinklers, colors, mods);
             if (layers.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, mods);
+                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, colors, mods);
             if (layers.CropWater.IsEnabled())
-                yield return new CropWaterLayer(layers.CropWater);
+                yield return new CropWaterLayer(layers.CropWater, colors);
             if (layers.CropPaddyWater.IsEnabled())
-                yield return new CropPaddyWaterLayer(layers.CropPaddyWater);
+                yield return new CropPaddyWaterLayer(layers.CropPaddyWater, colors);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(layers.CropFertilizer, mods);
+                yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
             if (layers.CropHarvest.IsEnabled())
-                yield return new CropHarvestLayer(layers.CropHarvest);
+                yield return new CropHarvestLayer(layers.CropHarvest, colors);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
-                yield return new MachineLayer(layers.Machines, mods);
+                yield return new MachineLayer(layers.Machines, colors, mods);
             if (layers.Tillable.IsEnabled())
-                yield return new TillableLayer(layers.Tillable);
+                yield return new TillableLayer(layers.Tillable, colors);
 
             // add separate grid layer if grid isn't enabled for all layers
             if (!config.ShowGrid && layers.TileGrid.IsEnabled())
@@ -217,12 +224,12 @@ namespace Pathoschild.Stardew.DataLayers
         {
             if (this.CurrentOverlay.Value != null)
             {
-                this.CurrentOverlay.Value!.Dispose();
+                this.CurrentOverlay.Value.Dispose();
                 this.CurrentOverlay.Value = null;
             }
             else
             {
-                this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers!, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
                 this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
             }
         }
@@ -235,8 +242,57 @@ namespace Pathoschild.Stardew.DataLayers
 
             return
                 Context.IsPlayerFree // player is free to roam
-                || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()) // on Robin's or Wizard's build screen
+                || (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.onFarm) // on Robin's or Wizard's build screen
                 || (this.Mods!.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
+        }
+
+        /// <summary>Load the color scheme to apply.</summary>
+        private ColorScheme LoadColorScheme()
+        {
+            Dictionary<string, Color> colors = new(StringComparer.OrdinalIgnoreCase);
+
+            foreach ((string name, string? rawColor) in this.LoadRawColorScheme())
+            {
+                Color? color = Utility.StringToColor(rawColor);
+
+                if (color is null)
+                {
+                    this.Monitor.Log($"Can't load color '{name}' from{(!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) ? $" color scheme '{this.Config.ColorScheme}'" : "")} '{ColorScheme.AssetName}'. The value '{rawColor}' isn't a valid color format.", LogLevel.Warn);
+                    continue;
+                }
+
+                colors[name] = color.Value;
+            }
+
+            return new ColorScheme(this.Config.ColorScheme, colors, this.Monitor);
+        }
+
+        /// <summary>Load the raw color scheme to apply.</summary>
+        private Dictionary<string, string?> LoadRawColorScheme()
+        {
+            // load raw data
+            var data = this.Helper.Data.ReadJsonFile<Dictionary<string, Dictionary<string, string?>>>(ColorScheme.AssetName);
+            data = data is not null
+                ? new(data, StringComparer.OrdinalIgnoreCase)
+                : new(StringComparer.OrdinalIgnoreCase);
+
+            // get requested scheme
+            if (data.TryGetValue(this.Config.ColorScheme, out Dictionary<string, string?>? colorData))
+                return new(colorData, StringComparer.OrdinalIgnoreCase);
+
+            // fallback to default scheme
+            if (!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) && data.TryGetValue("Default", out colorData))
+            {
+                this.Monitor.Log($"Color scheme '{this.Config.ColorScheme}' not found in '{ColorScheme.AssetName}', reset to default.", LogLevel.Warn);
+                this.Config.ColorScheme = "Default";
+                this.Helper.WriteConfig(this.Config);
+
+                return new(colorData, StringComparer.OrdinalIgnoreCase);
+            }
+
+            // fallback to empty data
+            this.Monitor.Log($"Color scheme '{this.Config.ColorScheme}' not found in '{ColorScheme.AssetName}'. The mod may be installed incorrectly.", LogLevel.Warn);
+            return new(StringComparer.OrdinalIgnoreCase);
         }
     }
 }

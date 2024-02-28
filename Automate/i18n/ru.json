@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Переместить из домиков Джунимо в сундуки",
     "config.junimo-huts.move-into-huts": "Переместить из сундуков в домики Джунимо",
 
-    // machine overrides
-    "config.title.machine-overrides": "Машины отправки товаров",
-    "config.override.ShippingBin-name": "Ящик продажи",
-    "config.override.MiniShippingBin-name": "Мини-ящик для отгрузок",
-    "config.override.desc": "Следует ли автоматизировать {{machineName}}.",
-    "config.custom-overrides-note": "Для получения информации о пользовательских машин отправки товаров см. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure, за помощью обращайтесь непосредственно к редактированию файла config.json."
+    // per-machine settings
+    "config.title.machine-settings": "Поведение {{machineName}}",
+    "config.machine-settings-enabled.Name": "Включено",
+    "config.machine-settings-enabled.desc": "Следует ли автоматизировать {{machineName}}.",
+    "config.machine-settings-priority.name": "Приоритет",
+    "config.machine-settings-priority.desc": "Порядок приоритета, в котором должны обрабатываться машины {{machineName}} по сравнению с другими машинами. У машин по умолчанию приоритет равен 0, сначала обрабатываются машины с более высокими значениями."
 }

@@ -28,7 +28,6 @@
     "label.automate-take": "Sacar objetos de este cofre",
     "label.automate-take-first": "Sacar primero los objetos de este cofre",
     "label.automate-take-disabled": "Nunca tomes objetos de este cofre",
-    "label.automate-prevent-remove-stacks": "Evite eliminar el último objeto de una pila",
 
     // button labels
     "button.edit-chest": "editar cofre",

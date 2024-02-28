@@ -90,16 +90,6 @@
 
     // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
-    "data.item.colored-stone.name": "Pierre colorée",
-    "data.item.colored-stone.description": "Une pierre. Peut contenir de la pierre, du minerais ou des géodes.",
-    "data.item.mine-stone.name": "Pierre",
-    "data.item.mine-stone.description": "A casser pour obtenir de la pierre avec une chance de charbon.",
-
-    // other stones
-    "data.item.clay-stone.name": "Veine d'argile",
-    "data.item.clay-stone.description": "A casser pour obtenir de l'argile.",
-    "data.item.fossil-stone.name": "Pierre fossile",
-    "data.item.fossil-stone.description": "A casser pour obtenir des fossiles et des os.",
 
     // mine containers
     "data.item.barrel.name": "Tonneau",

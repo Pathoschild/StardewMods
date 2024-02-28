@@ -22,9 +22,6 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The last stack size handlers were notified of.</summary>
         private int LastCount;
 
-        /// <summary>Whether <see cref="PreventEmptyStacks"/> has already been applied.</summary>
-        private bool PreventedEmptyStacks;
-
 
         /*********
         ** Accessors
@@ -79,16 +76,6 @@ namespace Pathoschild.Stardew.Automate
             return this.GetNewStack(this.Item, count);
         }
 
-        /// <inheritdoc />
-        public void PreventEmptyStacks()
-        {
-            if (!this.PreventedEmptyStacks)
-            {
-                this.PreventedEmptyStacks = true;
-                this.Count = Math.Max(0, this.Count - 1);
-            }
-        }
-
 
         /*********
         ** Private methods
@@ -103,7 +90,7 @@ namespace Pathoschild.Stardew.Automate
 
             // notify handlers
             this.OnReduced?.Invoke(this.Item);
-            if (this.Count <= 0 && !this.PreventedEmptyStacks)
+            if (this.Count <= 0)
                 this.OnEmpty?.Invoke(this.Item);
         }
 

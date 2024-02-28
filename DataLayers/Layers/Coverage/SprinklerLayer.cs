@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private readonly LegendEntry Dry;
 
         /// <summary>The border color for the sprinkler under the cursor.</summary>
-        private readonly Color SelectedColor = Color.Blue;
+        private readonly Color SelectedColor;
 
         /// <summary>The maximum number of tiles outside the visible screen area to search for sprinklers.</summary>
         private readonly int SearchRadius;
@@ -37,16 +37,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
+        /// <param name="colors">The colors to render.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public SprinklerLayer(LayerConfig config, ModIntegrations mods)
+        public SprinklerLayer(LayerConfig config, ColorScheme colors, ModIntegrations mods)
             : base(I18n.Sprinklers_Name(), config)
         {
+            const string layerId = "SprinklerCoverage";
+
             // init
             this.Mods = mods;
+            this.SelectedColor = colors.Get(layerId, "Selected", Color.Blue);
             this.Legend = new[]
             {
-                this.Wet = new LegendEntry(I18n.Keys.Sprinklers_Covered, Color.Green),
-                this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, Color.Red)
+                this.Wet = new LegendEntry(I18n.Keys.Sprinklers_Covered, colors.Get(layerId, "Covered", Color.Green)),
+                this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, colors.Get(layerId, "NotCovered", Color.Red))
             };
 
             // get search radius

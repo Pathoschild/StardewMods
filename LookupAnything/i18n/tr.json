@@ -182,7 +182,7 @@
     "building.output-processing": "Ürün işleniyor",
     "building.output-ready": "Ürün hazır",
     "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca",
-    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
+    "building.stored-hay.summary": "Bu konumda {{hayCount}}/{{maxHayInLocation}} saman (bu binadaki maksimum kapasite: {{maxHayInBuilding}})",
     "building.upgrades.barn.0": "4 hayvana kadar, inekler eklenebilir",
     "building.upgrades.barn.1": "8 hayvana kadar, hamilelik ve keçiler eklenebilir",
     "building.upgrades.barn.2": "12 hayvana kadar, oto yemleme, domuzlar, ve koyunlar eklenebilir",
@@ -377,24 +377,22 @@
     ** Item > melee weapon lookups
     *********/
     // labels
-    // TODO
-    "item.melee-weapon.accuracy": "Accuracy",
-    "item.melee-weapon.critical-chance": "Critical chance",
-    "item.melee-weapon.critical-damage": "Critical damage",
-    "item.melee-weapon.damage": "Damage",
-    "item.melee-weapon.defense": "Defense",
-    "item.melee-weapon.knockback": "Knockback",
-    "item.melee-weapon.reach": "Reach",
-    "item.melee-weapon.speed": "Attack speed",
+    "item.melee-weapon.accuracy": "Kesinlik",
+    "item.melee-weapon.critical-chance": "Kritik şans",
+    "item.melee-weapon.critical-damage": "Kritik hasar",
+    "item.melee-weapon.damage": "Hasar",
+    "item.melee-weapon.defense": "Savunma",
+    "item.melee-weapon.knockback": "Geri tepme",
+    "item.melee-weapon.reach": "Menzil",
+    "item.melee-weapon.speed": "Atak hızı",
 
     // values
-    // TODO
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} times normal damage (before player bonuses)",
-    "item.melee-weapon.defense.label": "{{amount}} while equipped",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} times normal distance)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
-    "item.melee-weapon.speed.shown-vs-actual": "shown: {{shownSpeed}}{{lineBreak}}actual: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} milliseconds per swing frame, before player speed bonuses)",
+    "item.melee-weapon.critical-damage.label": "Normal hasarın {{multiplier}} katı (oyuncu bonuslarından önce)",
+    "item.melee-weapon.defense.label": "Donanımlıyken {{amount}}",
+    "item.melee-weapon.knockback.label": "{{amount}} (normal mesafenin {{multiplier}} katı)",
+    "item.melee-weapon.reach.label": "{{amount}} piksel",
+    "item.melee-weapon.speed.shown-vs-actual": "gösterilen: {{shownSpeed}}{{lineBreak}} gerçek: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{hız}} (dönüş karesi başına {{milisaniye}} milisaniye, oyuncu hız bonuslarından önce)",
 
 
     /*********
@@ -406,7 +404,7 @@
     "item.movie-ticket.loves-movie": "Filmi sevenler",
     "item.movie-ticket.likes-movie": "Filmi beğenenler",
     "item.movie-ticket.dislikes-movie": "Filmi beğenmeyenler",
-    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
+    "item.movie-ticket.rejects-movie": "Film izlemeyeceğim",
 
     // values
     "item.movie-snack-preference.love": "{{name}} bunu seviyor",
@@ -465,7 +463,7 @@
     "npc.friendship.need-bouquet": "ilerlemek için buket gerekli",
     "npc.friendship.need-points": "{{count}} puana gelişir",
     "npc.undiscovered-gift-taste": "{{count}} gizli nesneler",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
+    "npc.unowned-gift-taste": "{{count}} sahipsiz öğe",
 
 
     /*********
@@ -581,12 +579,12 @@
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.tile": "Tile", // TODO
-    "tile.tile-index": "{{layerName}}: tile index", // TODO
-    "tile.tilesheet": "{{layerName}}: tilesheet", // TODO
-    "tile.blend-mode": "{{layerName}}: blend mode", // TODO
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
+    "tile.tile": "Karo",
+    "tile.tile-index": "{{layerName}}: karo indeksi",
+    "tile.tilesheet": "{{layerName}}: karo seti",
+    "tile.blend-mode": "{{layerName}}: karışım modu",
+    "tile.index-property": "{{layerName}}: ix destekleri: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: destekler: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "burada karo yok",
@@ -622,9 +620,9 @@
     "tree.next-growth.winter": "gübrelenmediği sürece kışın sera dışında büyüyemez",
     "tree.next-growth.adjacent-trees": "büyüyemiyor çünkü diğer ağaçlar çok yakın",
     "tree.next-growth.chance": "{{chance}}% şansla yarın {{stage}} aşamasına olgunlaşacak",
-    "tree.seed.not-ready": "Not ready", // TODO
-    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
-    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
+    "tree.seed.not-ready": "Hazır değil",
+    "tree.seed.probability-daily": "Her gün {{itemName}} şansının %{{chance}}.",
+    "tree.seed.probability-on-chop": "Kesildiğinde {{itemName}} düşürme şansı: %{{chance}}.",
 
     // growth stages
     "tree.stages.seed": "tohum",
@@ -646,24 +644,23 @@
     "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
 
     // gift tastes
-    // TODO
-    "config.title.gift-tastes": "Gift tastes",
-    "config.show-gift-tastes.loved.name": "Show loved gifts",
-    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
-    "config.show-gift-tastes.liked.name": "Show liked gifts",
-    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
-    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
-    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
-    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.hated.name": "Show hated gifts",
-    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+    "config.title.gift-tastes": "Hediye Zevkleri",
+    "config.show-gift-tastes.loved.name": "En Sevilen hediyeleri göster",
+    "config.show-gift-tastes.loved.desc": "En Sevilen hediyelerin NPC'de ve eşya aramalarında gösterilip gösterilmeyeceği.",
+    "config.show-gift-tastes.liked.name": "Beğenilen hediyeleri göster",
+    "config.show-gift-tastes.liked.desc": "Beğenilen hediyelerin NPC'de ve eşya aramalarında gösterilip gösterilmeyeceği.",
+    "config.show-gift-tastes.neutral.name": "Tarafsız hediyeleri göster",
+    "config.show-gift-tastes.neutral.desc": "NPC'de ve eşya aramalarında tarafsız hediyelerin gösterilip gösterilmeyeceği.",
+    "config.show-gift-tastes.disliked.name": "Beğenilmeyen hediyeleri göster",
+    "config.show-gift-tastes.disliked.desc": "Beğenilmeyen hediyelerin NPC'de ve eşya aramalarında gösterilip gösterilmeyeceği.",
+    "config.show-gift-tastes.hated.name": "Nefret edilen hediyeleri göster",
+    "config.show-gift-tastes.hated.desc": "Nefret edilen hediyelerin NPC'de ve eşya aramalarında gösterilip gösterilmeyeceği.",
 
-    "config.show-unowned-gifts.name": "Show unowned gift tastes",
+    "config.show-unowned-gifts.name": "Sahip olunmayan hediye zevklerini göster",
     "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
 
     "config.highlight-unrevealed-gift-tastes.name": "Açıklanmayan hediye zevklerini vurgulayın",
-    "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak.",
+    "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri gösterilecek.",
 
     // advanced options
     "config.title.advanced-options": "Gelişmiş Seçenekler",
@@ -678,7 +675,7 @@
 
     // controls section
     "config.title.controls": "Kontroller",
-    "config.hide-on-key-up.name": "Hide on key up", // TODO
+    "config.hide-on-key-up.name": "Anahtar açıldığında gizlen",
     "config.hide-on-key-up.desc": "Arama anahtarını bıraktığınızda arama kullanıcı arabiriminin gizlenip gizlenmeyeceği.",
     "config.toggle-lookup.name": "Aramayı aç/kapat",
     "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",

@@ -25,9 +25,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public MeleeBluntAttachment(MeleeBluntConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+        public MeleeBluntAttachment(MeleeBluntConfig config, IModRegistry modRegistry)
+            : base(modRegistry)
         {
             this.Config = config;
         }

@@ -1,4 +1,3 @@
-using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -22,9 +21,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="autoGrabber">The underlying auto-grabber.</param>
         /// <param name="chest">The underlying auto-grabber chest.</param>
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public AutoGrabberContainer(SObject autoGrabber, Chest chest, object context, IReflectionHelper reflection)
-            : base(chest, context, showColorPicker: false, reflection)
+        public AutoGrabberContainer(SObject autoGrabber, Chest chest, object context)
+            : base(chest, context, showColorPicker: false)
         {
             this.AutoGrabber = autoGrabber;
         }

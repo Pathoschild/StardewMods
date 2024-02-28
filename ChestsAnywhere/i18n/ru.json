@@ -28,7 +28,6 @@
     "label.automate-take": "Брать предметы из этого сундука",
     "label.automate-take-first": "Сначала брать предметы из этого сундука",
     "label.automate-take-disabled": "Никогда не брать предметы из этого сундука",
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "Редактировать сундук",

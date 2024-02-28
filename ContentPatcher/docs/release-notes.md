@@ -12,16 +12,17 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
 * Added asset load & edit priority (see updated [action docs](author-guide.md#actions)).
-* Added new tokens:
-  * [`ModId`](author-guide/tokens.md#ModId) to get the unique ID of the current content pack.
-* `CustomLocations` is now deprecated in favor of the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data).
-  Locations added through it are now added to `Data/Locations` automatically.
-* `CustomLocations` now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
+* Added [`ModId`](author-guide/tokens.md#ModId) token to get the unique ID of the current content pack.
+* Added runtime migrations for content assets which changed in Stardew Valley 1.6. (Thanks to SinZ for the help creating some of the main migrations!)
+* Deprecated `CustomLocations`. This is now a shortcut for editing the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data), and now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
 * Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
 * Fixed off-by-one position with `MoveEntries` when the target entry is already before the anchor entry.
+* Fixed some tokens (notably `Hearts` and `Relationship`) being briefly unavailable during part of the save load process. This affected some specific cases like editing island resort dialogue.
 
 **Update notes for mod authors:**  
-See the [migration guide](author-migration-guide.md#20) for help updating content pack code.
+* Stardew Valley 1.6 has major content changes. Your content packs may still work due to the new runtime migrations,
+  but these can have a significant performance impact. [Updating your code to the latest format](author-migration-guide.md#20)
+  is strongly recommended.
 
 ## 1.30.4
 Released 01 December 2023 for SMAPI 3.18.1 or later.

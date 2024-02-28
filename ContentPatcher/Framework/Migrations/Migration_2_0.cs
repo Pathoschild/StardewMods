@@ -6,9 +6,9 @@ using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
-    /// <summary>Migrates patches to format version 2.0.</summary>
+    /// <summary>Migrates patches to format version 2.0 and Stardew Valley 1.6.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
-    internal class Migration_2_0 : BaseMigration
+    internal partial class Migration_2_0 : BaseRuntimeMigration
     {
         /*********
         ** Public methods
@@ -20,8 +20,19 @@ namespace ContentPatcher.Framework.Migrations
             this.AddedTokens = new InvariantSet(
                 nameof(ConditionType.ModId)
             );
+            this.MigrationWarnings = ["Some content packs haven't been updated for Stardew Valley 1.6.0. Content Patcher will try to auto-migrate them, but compatibility isn't guaranteed."];
+            this.RuntimeEditDataMigrators = [
+                new BigCraftableInformationMigrator(),
+                new BlueprintsMigrator(),
+                new BootsMigrator(),
+                new CropsMigrator(),
+                new LocationsMigrator(),
+                new NpcDispositionsMigrator(),
+                new ObjectContextTagsMigrator(),
+                new ObjectInformationMigrator(),
+                new WeaponsMigrator()
+            ];
         }
-
 
         /// <inheritdoc />
         public override bool TryMigrate(ref PatchConfig[] patches, [NotNullWhen(false)] out string? error)

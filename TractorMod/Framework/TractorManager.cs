@@ -230,12 +230,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The new mod configuration.</param>
         /// <param name="keys">The new key bindings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IEnumerable<IAttachment?> attachments)
+        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IAttachment[] attachments)
         {
             // update config
             this.Config = config;
             this.Keys = keys;
-            this.Attachments = attachments.WhereNotNull().ToArray();
+            this.Attachments = attachments;
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, _ => 0);
 
             // reset cooldowns

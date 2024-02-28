@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private readonly LegendEntry NotCovered;
 
         /// <summary>The border color for the Junimo hut under the cursor.</summary>
-        private readonly Color SelectedColor = Color.Blue;
+        private readonly Color SelectedColor;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
@@ -35,16 +35,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
+        /// <param name="colors">The colors to render.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public JunimoHutLayer(LayerConfig config, ModIntegrations mods)
+        public JunimoHutLayer(LayerConfig config, ColorScheme colors, ModIntegrations mods)
             : base(I18n.JunimoHuts_Name(), config)
         {
-            // init
+            const string layerId = "JunimoHutCoverage";
+
             this.Mods = mods;
+            this.SelectedColor = colors.Get(layerId, "Selected", Color.Blue);
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(I18n.Keys.JunimoHuts_CanHarvest, Color.Green),
-                this.NotCovered = new LegendEntry(I18n.Keys.JunimoHuts_CannotHarvest, Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.JunimoHuts_CanHarvest, colors.Get(layerId, "Covered", Color.Green)),
+                this.NotCovered = new LegendEntry(I18n.Keys.JunimoHuts_CannotHarvest, colors.Get(layerId, "NotCovered", Color.Red))
             };
         }
 
@@ -142,7 +145,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get a Junimo hut tile radius.</summary>
         /// <param name="tileX">The hut's tile X position.</param>
         /// <param name="tileY">The hut's tile Y position.</param>
-        /// <remarks>Derived from <see cref="StardewValley.Characters.JunimoHarvester.pathFindToNewCrop_doWork"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.Characters.JunimoHarvester.pathfindToNewCrop"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(JunimoHut hut, int tileX, int tileY)
         {
             // center radius on door

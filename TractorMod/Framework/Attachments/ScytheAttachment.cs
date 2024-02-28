@@ -33,9 +33,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public ScytheAttachment(ScytheConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(config, modRegistry, reflection) { }
+        public ScytheAttachment(ScytheConfig config, IModRegistry modRegistry)
+            : base(config, modRegistry) { }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>

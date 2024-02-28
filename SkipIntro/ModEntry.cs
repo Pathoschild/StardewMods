@@ -175,14 +175,12 @@ namespace Pathoschild.Stardew.SkipIntro
             // skip button transition
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                IReflectedField<bool> isTransitioningButtons = this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons");
-                while (isTransitioningButtons.GetValue())
+                while (menu.isTransitioningButtons)
                     menu.update(Game1.currentGameTime);
             }
             else
             {
-                IReflectedField<int> buttonsToShow = this.Helper.Reflection.GetField<int>(menu, "buttonsToShow");
-                while (buttonsToShow.GetValue() < TitleMenu.numberOfButtons)
+                while (menu.buttonsToShow < TitleMenu.numberOfButtons)
                     menu.update(Game1.currentGameTime);
             }
 

@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Provides multiplayer utilities.</summary>
         private readonly IMultiplayerHelper Multiplayer;
 
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly Func<bool> EnableShippingBin;
 
@@ -41,12 +38,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplayer">Provides multiplayer utilities.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IMultiplayerHelper multiplayer, IReflectionHelper reflection, Func<bool> enableShippingBin)
+        public ChestFactory(IMultiplayerHelper multiplayer, Func<bool> enableShippingBin)
         {
             this.Multiplayer = multiplayer;
-            this.Reflection = reflection;
             this.EnableShippingBin = enableShippingBin;
         }
 
@@ -95,7 +90,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (obj is Chest chest && chest.playerChest.Value)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
+                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location)),
                                 location: location,
                                 tile: tile,
                                 mapEntity: chest,
@@ -108,7 +103,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         else if (obj.QualifiedItemId == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
                         {
                             yield return new ManagedChest(
-                                container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
+                                container: new AutoGrabberContainer(obj, grabberChest, context: obj),
                                 location: location,
                                 tile: tile,
                                 mapEntity: obj,
@@ -124,7 +119,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(fridge, context: fridge, showColorPicker: false, this.Reflection),
+                                container: new ChestContainer(fridge, context: fridge, showColorPicker: false),
                                 location: location,
                                 tile: Vector2.Zero,
                                 mapEntity: null,
@@ -154,7 +149,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (building is JunimoHut hut)
                         {
                             yield return new ManagedChest(
-                                container: new JunimoHutContainer(hut, this.Reflection),
+                                container: new JunimoHutContainer(hut),
                                 location: location,
                                 tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
                                 mapEntity: building,

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.Mods;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -47,6 +48,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <inheritdoc />
         public object InventoryReferenceId { get; }
 
+        /// <inheritdoc />
+        public IInventory Inventory => this.Chest.Items;
 
 
         /*********

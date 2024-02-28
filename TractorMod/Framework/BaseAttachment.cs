@@ -25,9 +25,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Fetches metadata about loaded mods.</summary>
         protected IModRegistry ModRegistry { get; }
 
-        /// <summary>Simplifies access to private code.</summary>
-        protected IReflectionHelper Reflection { get; }
-
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
         private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
 
@@ -82,12 +79,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(IModRegistry modRegistry, IReflectionHelper reflection, int rateLimit = 0)
+        protected BaseAttachment(IModRegistry modRegistry, int rateLimit = 0)
         {
             this.ModRegistry = modRegistry;
-            this.Reflection = reflection;
             this.RateLimit = rateLimit;
 
             this.HasFarmTypeManager = modRegistry.IsLoaded("Esca.FarmTypeManager");
@@ -208,18 +203,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
-        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
-            return this.TryGetResourceClumpCoveringTile(location, tile, Game1.player, out _, out _);
+            return this.TryGetResourceClumpCoveringTile(location, tile, Game1.player, reflection, out _, out _);
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="player">The current player.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="clump">The resource clump on the tile, if found.</param>
         /// <param name="applyTool">Applies a tool to the resource clump.</param>
-        protected bool TryGetResourceClumpCoveringTile(GameLocation location, Vector2 tile, Farmer player, [NotNullWhen(true)] out ResourceClump? clump, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
+        protected bool TryGetResourceClumpCoveringTile(GameLocation location, Vector2 tile, Farmer player, IReflectionHelper reflection, [NotNullWhen(true)] out ResourceClump? clump, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
         {
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
 
@@ -241,10 +238,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 {
                     if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox().Intersects(tileArea))
                     {
-                        clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
+                        clump = reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool =>
                         {
-                            this.Reflection.GetField<Farmer>(tool, "lastUser").SetValue(player);
+                            tool.lastUser = player;
                             return feature.performToolAction(tool, 0, tile);
                         };
                         return true;
@@ -366,7 +363,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="animationIds">The animation IDs to detect.</param>
         protected void CancelAnimation(Farmer player, params int[] animationIds)
         {
-            int animationId = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation").GetValue();
+            int animationId = player.FarmerSprite.currentSingleAnimation;
             foreach (int id in animationIds)
             {
                 if (id == animationId)

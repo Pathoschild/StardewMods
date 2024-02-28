@@ -34,15 +34,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public TillableLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public TillableLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.Tillable_Name(), config)
         {
+            const string layerId = "Tillable";
+
             this.Legend = new[]
             {
-                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, Color.DarkMagenta),
-                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, Color.Green),
-                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, Color.Orange),
-                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, Color.Red)
+                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, colors.Get(layerId, "Tilled", Color.DarkMagenta)),
+                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, colors.Get(layerId, "Tillable", Color.Green)),
+                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, colors.Get(layerId, "Occupied", Color.Orange)),
+                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, colors.Get(layerId, "NotTillable", Color.Red))
             };
         }
 

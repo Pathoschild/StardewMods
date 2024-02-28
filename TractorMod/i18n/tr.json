@@ -38,12 +38,11 @@
     "config.magnetic-radius.name": "Manyetik Yarıçap",
     "config.magnetic-radius.tooltip": "Eşya manyetizma miktarı (yüksek değerler eşyaları atadan uzağa çeker). Varsayılan {{defaultValue}}.",
 
-    // TODO
-    "config.tractor-sounds.name": "Sound Effects",
-    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "no sounds",
-    "config.tractor-sounds.value.Horse": "horse sounds",
-    "config.tractor-sounds.value.Tractor": "tractor sounds",
+    "config.tractor-sounds.name": "Ses efektleri",
+    "config.tractor-sounds.tooltip": "Traktörü sürerken hangi ses efektlerinin çalınacağı. Kaydı yeniden yükleyene kadar değişiklikler tam olarak etkili olmayabilir. Varsayılan {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "ses yok",
+    "config.tractor-sounds.value.Horse": "at sesleri",
+    "config.tractor-sounds.value.Tractor": "traktör sesleri",
 
     "config.build-price.name": "Yapı Fiyatı",
     "config.build-price.tooltip": "Traktör garajı satın almak için altın fiyatı. Varsayılan {{defaultValue}}g.",

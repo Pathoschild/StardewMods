@@ -112,9 +112,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>A dropdown which configures how Automate takes items from this chest.</summary>
         private SimpleDropdown<AutomateContainerPreference> EditAutomateFetch;
 
-        /// <summary>A checkbox which configures whether Automate should avoid removing the last item in a stack.</summary>
-        private Checkbox EditAutomatePreventRemovingStacks;
-
         /// <summary>The clickable area which saves the edit form.</summary>
         private ClickableComponent EditSaveButtonArea;
 
@@ -299,11 +296,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     topOffset += padding;
                     topOffset += batch.DrawTextBlock(Game1.smallFont, I18n.Label_AutomateOptions(), new Vector2(bounds.X + padding, bounds.Y + topOffset), wrapWidth: bounds.Width - bounds.X - padding, bold: true).Y;
 
-                    // checkboxes
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomatePreventRemovingStacks, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomatePreventRemoveStacks()).Y;
-
                     // buttons
-                    DrawButtons(yOffset: this.EditAutomateStorage.Bounds.Height + this.EditAutomateFetch.Bounds.Height + this.EditAutomatePreventRemovingStacks.GetBounds().Height + padding);
+                    DrawButtons(yOffset: this.EditAutomateStorage.Bounds.Height + this.EditAutomateFetch.Bounds.Height + padding);
 
                     // dropdowns
                     this.EditAutomateFetch.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset + this.EditAutomateStorage.Bounds.Height);
@@ -463,8 +457,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.EditHideChestField.Toggle();
 
                     // Automate options
-                    else if (this.EditAutomatePreventRemovingStacks.GetBounds().Contains(x, y))
-                        this.EditAutomatePreventRemovingStacks.Toggle();
                     else if (this.EditAutomateStorage.TryClick(x, y) || this.EditAutomateFetch.TryClick(x, y))
                     {
                         // handled internally
@@ -598,7 +590,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             nameof(BaseChestOverlay.EditCategoryField),
             nameof(BaseChestOverlay.EditOrderField),
             nameof(BaseChestOverlay.EditHideChestField),
-            nameof(BaseChestOverlay.EditAutomatePreventRemovingStacks),
             nameof(BaseChestOverlay.EditAutomateStorage),
             nameof(BaseChestOverlay.EditAutomateFetch),
             nameof(BaseChestOverlay.EditSaveButtonArea),
@@ -643,11 +634,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
-            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
-            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit, this.Reflection) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
+            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
-            this.EditAutomatePreventRemovingStacks = new Checkbox();
             this.EditAutomateStorage = new SimpleDropdown<AutomateContainerPreference>(
                 this.Reflection,
                 options: new[]
@@ -686,7 +676,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString() ?? string.Empty;
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomatePreventRemovingStacks.Value = this.Chest.PreventRemovingStacks;
             this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
             this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
         }
@@ -711,14 +700,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // update chest
             AutomateContainerPreference automateStore = this.EditAutomateStorage.SelectedKey;
             AutomateContainerPreference automateTake = this.EditAutomateFetch.SelectedKey;
-            bool automatePreventRemovingStacks = this.EditAutomatePreventRemovingStacks.Value;
-            bool automateChanged = this.Chest.CanConfigureAutomate && (automatePreventRemovingStacks != this.Chest.PreventRemovingStacks || automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
+            bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
             this.Chest.Update(
                 name: this.EditNameField.Text,
                 category: this.EditCategoryField.Text,
                 order: order,
                 ignored: this.EditHideChestField.Value,
-                automatePreventRemovingStacks: automatePreventRemovingStacks,
                 automateStoreItems: automateStore,
                 automateTakeItems: automateTake
             );
@@ -833,7 +820,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString() ?? string.Empty;
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomatePreventRemovingStacks.Value = this.Chest.PreventRemovingStacks;
             this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
             this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
 

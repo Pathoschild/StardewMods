@@ -139,6 +139,16 @@ Default `false`. Whether to show a tile grid when a layer is open.
   </td>
 </tr>
 <tr>
+  <td><code>ColorScheme</code></td>
+  <td>
+
+Default `Default`. The color scheme in `assets/colors.json` to use.
+
+`Default` is the only bundled color scheme currently.
+
+  </td>
+</tr>
+<tr>
   <td><code>CombineOverlappingBorders</code></td>
   <td>
 

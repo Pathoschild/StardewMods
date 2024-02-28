@@ -270,6 +270,22 @@ namespace ContentPatcher
                     this.Monitor.Log($"{group.ModName} added {(group.TokenNames.Length == 1 ? "a custom token" : $"{group.TokenNames.Length} custom tokens")} with prefix '{group.ModPrefix}': {string.Join(", ", group.TokenNames)}.");
             }
 
+            // log content pack migration warnings
+            {
+                ILookup<string, string> contentPacksByWarning =
+                    this.ContentPacks
+                        .SelectMany(pack => pack.Migrator.MigrationWarnings.Select(warning => new { pack.Manifest.Name, Warning = warning }))
+                        .ToLookup(p => p.Warning, p => p.Name);
+
+                foreach (IGrouping<string, string> warningGroup in contentPacksByWarning.OrderBy(p => p.Key, new HumanSortComparer()))
+                {
+                    this.Monitor.Log(
+                        $"{warningGroup.Key}\n\nAffected content packs:\n- {string.Join("\n- ", warningGroup.OrderByHuman(p => p))}\n\nFor mod authors, see how to update a mod: https://smapi.io/cp-migrate.",
+                        LogLevel.Info
+                    );
+                }
+            }
+
             // set up events
             if (this.Config.EnableDebugFeatures)
                 helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;

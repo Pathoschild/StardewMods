@@ -44,17 +44,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 switch (feature)
                 {
                     case FruitTree fruitTree:
-                        if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
+                        if (fruitTree.alpha >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
                             yield return new FruitTreeTarget(this.GameHelper, fruitTree, entityTile, () => this.BuildSubject(fruitTree, entityTile));
                         break;
 
                     case Tree tree:
-                        if (this.Reflection.GetField<float>(tree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
+                        if (tree.alpha >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
                             yield return new TreeTarget(this.GameHelper, tree, entityTile, () => this.BuildSubject(tree, entityTile));
                         break;
 
                     case Bush bush: // planted bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection, () => this.BuildSubject(bush));
+                        yield return new BushTarget(this.GameHelper, bush, () => this.BuildSubject(bush));
                         break;
                 }
             }
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 switch (feature)
                 {
                     case Bush bush: // wild bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection, () => this.BuildSubject(bush));
+                        yield return new BushTarget(this.GameHelper, bush, () => this.BuildSubject(bush));
                         break;
                 }
             }
@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="bush">The entity to look up.</param>
         private ISubject BuildSubject(Bush bush)
         {
-            return new BushSubject(this.GameHelper, bush, this.Reflection);
+            return new BushSubject(this.GameHelper, bush);
         }
 
         /// <summary>Build a subject.</summary>

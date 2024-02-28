@@ -28,14 +28,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public BuildableLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public BuildableLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.Buildable_Name(), config)
         {
+            const string layerId = "Buildable";
+
             this.Legend = new[]
             {
-                this.Buildable = new LegendEntry(I18n.Keys.Buildable_Buildable, Color.Green),
-                this.Occupied = new LegendEntry(I18n.Keys.Buildable_Occupied, Color.Orange),
-                this.NonBuildable = new LegendEntry(I18n.Keys.Buildable_NotBuildable, Color.Red)
+                this.Buildable = new LegendEntry(I18n.Keys.Buildable_Buildable, colors.Get(layerId, "Buildable", Color.Green)),
+                this.Occupied = new LegendEntry(I18n.Keys.Buildable_Occupied, colors.Get(layerId, "Occupied", Color.Orange)),
+                this.NonBuildable = new LegendEntry(I18n.Keys.Buildable_NotBuildable, colors.Get(layerId, "NotBuildable", Color.Red))
             };
         }
 

@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -13,9 +12,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The underlying tree texture.</summary>
         private readonly Texture2D? Texture;
 
@@ -30,13 +26,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
-        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
+        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, Func<ISubject> getSubject)
             : base(gameHelper, SubjectType.Crop, value, tilePosition, getSubject)
         {
-            this.Reflection = reflectionHelper;
-
             this.GetSpriteSheet(value.crop, out this.Texture, out this.SourceRect);
         }
 
@@ -86,7 +79,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private void GetSpriteSheet(Crop target, out Texture2D? texture, out Rectangle sourceRect)
         {
             texture = target.DrawnCropTexture;
-            sourceRect = this.Reflection.GetField<Rectangle>(target, "sourceRect").GetValue();
+            sourceRect = target.sourceRect;
             if (target.forageCrop.Value)
             {
                 if (target.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())

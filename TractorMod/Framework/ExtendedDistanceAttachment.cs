@@ -12,8 +12,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     {
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The configuration for the attachment.</param>
-        protected ExtendedDistanceAttachment(TConfig config, IModRegistry modRegistry, IReflectionHelper reflection, int rateLimit = 0)
-            : base(modRegistry, reflection, rateLimit)
+        protected ExtendedDistanceAttachment(TConfig config, IModRegistry modRegistry, int rateLimit = 0)
+            : base(modRegistry, rateLimit)
         {
             this.Config = config;
         }

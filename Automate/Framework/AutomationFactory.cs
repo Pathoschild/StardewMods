@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Machines;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
 using Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures;
@@ -28,9 +29,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether the Better Junimos mod is installed.</summary>
         private readonly bool IsBetterJunimosLoaded;
 
@@ -41,13 +39,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="isBetterJunimosLoaded">Whether the Better Junimos mod is installed.</param>
-        public AutomationFactory(Func<ModConfig> config, IMonitor monitor, IReflectionHelper reflection, bool isBetterJunimosLoaded)
+        public AutomationFactory(Func<ModConfig> config, IMonitor monitor, bool isBetterJunimosLoaded)
         {
             this.Config = config;
             this.Monitor = monitor;
-            this.Reflection = reflection;
             this.IsBetterJunimosLoaded = isBetterJunimosLoaded;
         }
 
@@ -75,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // indoor pot
             if (obj is IndoorPot indoorPot && BushMachine.CanAutomate(indoorPot.bush.Value))
-                return new BushMachine(indoorPot, tile, location, this.Reflection);
+                return new BushMachine(indoorPot, tile, location);
 
             // tapper
             if (obj.IsTapper())
@@ -84,18 +80,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new TapperMachine(obj, location, tile, tree);
             }
 
-            // machine by type
-            switch (obj)
-            {
-                case Cask cask:
-                    return new CaskMachine(cask, location, tile);
-
-                case CrabPot crabPot:
-                    return new CrabPotMachine(crabPot, location, tile, this.Monitor, this.Reflection);
-
-                case WoodChipper woodChipper:
-                    return new WoodChipperMachine(woodChipper, location, tile);
-            }
+            // crab pot
+            if (obj is CrabPot crabPot)
+                return new CrabPotMachine(crabPot, location, tile, this.Monitor);
 
             // machine by item ID
             switch (obj.QualifiedItemId)
@@ -103,93 +90,13 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "(BC)165":
                     return new AutoGrabberMachine(obj, location, tile);
 
-                case "(BC)10":
-                    return new BeeHouseMachine(obj, location, tile);
-
-                case "(BC)90":
-                    return new BoneMillMachine(obj, location, tile);
-
-                case "(BC)114":
-                    return new CharcoalKilnMachine(obj, location, tile);
-
-                case "(BC)16":
-                    return new CheesePressMachine(obj, location, tile);
-
-                case "(BC)246":
-                    return new CoffeeMakerMachine(obj, location, tile);
-
-                case "(BC)21":
-                    return new CrystalariumMachine(obj, location, tile);
-
-                case "(BC)265":
-                    return new DeconstructorMachine(obj, location, tile);
-
                 case "(BC)99":
                     return new FeedHopperMachine(location, tile);
-
-                case "(BC)13":
-                    return new FurnaceMachine(obj, location, tile);
-
-                case "(BC)182":
-                    return new GeodeCrusherMachine(obj, location, tile);
-
-                case "(BC)101":
-                    return new CoopIncubatorMachine(obj, location, tile);
-
-                case "(BC)12":
-                    return new KegMachine(obj, location, tile);
-
-                case "(BC)9":
-                    return new LightningRodMachine(obj, location, tile);
-
-                case "(BC)17":
-                    return new LoomMachine(obj, location, tile);
-
-                case "(BC)24":
-                    return new MayonnaiseMachine(obj, location, tile);
-
-                case "(BC)128":
-                    return new MushroomBoxMachine(obj, location, tile);
-
-                case "(BC)19":
-                    return new OilMakerMachine(obj, location, tile);
-
-                case "(BC)254":
-                    return new OstrichIncubatorMachine(obj, location, tile);
-
-                case "(BC)15":
-                    return new PreservesJarMachine(obj, location, tile);
-
-                case "(BC)20":
-                    return new RecyclingMachine(obj, location, tile);
-
-                case "(BC)25":
-                    return new SeedMakerMachine(obj, location, tile);
-
-                case "(BC)158":
-                    return new SlimeEggPressMachine(obj, location, tile);
-
-                case "(BC)156":
-                    return new SlimeIncubatorMachine(obj, location, tile);
-
-                case "(BC)117":
-                    return new SodaMachine(obj, location, tile);
-
-                case "(BC)231":
-                    return new SolarPanelMachine(obj, location, tile);
-
-                case "(BC)127":
-                    return new StatueOfEndlessFortuneMachine(obj, location, tile);
-
-                case "(BC)160":
-                    return new StatueOfPerfectionMachine(obj, location, tile);
-
-                case "(BC)280":
-                    return new StatueOfTruePerfectionMachine(obj, location, tile);
-
-                case "(BC)154":
-                    return new WormBinMachine(obj, location, tile);
             }
+
+            // machine in Data/Machines
+            if (obj.GetMachineData() != null)
+                return new DataBasedMachine(obj, location, tile, () => this.Config().MinMinutesForFairyDust);
 
             // connector
             if (this.IsConnector(obj))

@@ -8,6 +8,7 @@ using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Enums;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -32,6 +33,9 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         private readonly Func<bool> IsSaveBasicInfoLoadedImpl;
 
+        /// <summary>This happens before the game applies problem fixes, checks for achievements, starts music, etc.</summary>
+        private readonly Func<bool> IsSaveLoadedImpl;
+
         /// <summary>A cache of common values fetched during the current context updates.</summary>
         private readonly Dictionary<string, object?> Cache = new();
 
@@ -48,6 +52,9 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsSaveBasicInfoLoaded => this.IsSaveBasicInfoLoadedImpl();
 
+        /// <summary>This happens before the game applies problem fixes, checks for achievements, starts music, etc.</summary>
+        public bool IsSaveLoaded => this.IsSaveLoadedImpl();
+
 
         /*********
         ** Public methods
@@ -56,11 +63,13 @@ namespace ContentPatcher.Framework
         /// <param name="updateTick">The number of context updates since the game was launched, including the current one if applicable.</param>
         /// <param name="isSaveParsed">Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</param>
         /// <param name="isSaveBasicInfoLoaded">Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet</param>
-        public TokenSaveReader(Func<int> updateTick, Func<bool> isSaveParsed, Func<bool> isSaveBasicInfoLoaded)
+        /// <param name="isSaveLoaded">This happens before the game applies problem fixes, checks for achievements, starts music, etc.</param>
+        public TokenSaveReader(Func<int> updateTick, Func<bool> isSaveParsed, Func<bool> isSaveBasicInfoLoaded, Func<bool> isSaveLoaded)
         {
             this.GetUpdateTick = updateTick;
             this.IsSaveParsed = isSaveParsed;
             this.IsSaveBasicInfoLoadedImpl = isSaveBasicInfoLoaded;
+            this.IsSaveLoadedImpl = isSaveLoaded;
         }
 
         /****
@@ -91,7 +100,7 @@ namespace ContentPatcher.Framework
             return this.GetCached(
                 nameof(this.GetAllPlayers),
                 () => this.GetForState(
-                loaded: Game1.getAllFarmers,
+                    loaded: Game1.getAllFarmers,
                     reading: save => new[] { save.player }.Concat(save.farmhands),
                     defaultValue: Array.Empty<Farmer>()
                 )
@@ -111,7 +120,9 @@ namespace ContentPatcher.Framework
                     reading: _ => player != null
                         ? this.GetLocationFromName(player.lastSleepLocation.Value)
                         : null,
-                    defaultValue: null
+                    defaultValue: null,
+
+                    requiresPreload: true
                 )
             );
         }
@@ -391,7 +402,7 @@ namespace ContentPatcher.Framework
             Func<Child, string> filter = type switch
             {
                 ConditionType.ChildNames => (child => child.Name),
-                ConditionType.ChildGenders => (child => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString()),
+                ConditionType.ChildGenders => (child => child.Gender.ToString()),
                 _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
             };
             return children.Select(filter);
@@ -488,7 +499,7 @@ namespace ContentPatcher.Framework
                         if (spouse != null)
                         {
                             name = spouse.Name;
-                            gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
+                            gender = spouse.Gender;
                             isPlayer = false;
                         }
                     }
@@ -580,7 +591,9 @@ namespace ContentPatcher.Framework
                 () => this.GetForState(
                     loaded: () => Game1.getLocationFromName(name),
                     reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name),
-                    defaultValue: null
+                    defaultValue: null,
+
+                    requiresPreload: true
                 )
             );
         }
@@ -601,7 +614,9 @@ namespace ContentPatcher.Framework
                             select building.indoors.Value
                         ),
 
-                    defaultValue: Enumerable.Empty<GameLocation>()
+                    defaultValue: Enumerable.Empty<GameLocation>(),
+
+                    requiresPreload: true
                 )
             );
         }
@@ -686,9 +701,10 @@ namespace ContentPatcher.Framework
         /// <param name="loaded">Get the value if the save file is loaded into the base game data.</param>
         /// <param name="reading">Get the value if the save file has been parsed, but not loaded yet.</param>
         /// <param name="defaultValue">The default value if no save is parsed or loaded.</param>
-        private TValue GetForState<TValue>(Func<TValue> loaded, Func<SaveGame, TValue> reading, TValue defaultValue)
+        /// <param name="requiresPreload">Whether to only use <paramref name="loaded"/> if we've reached <see cref="LoadStage.Preloaded"/> or <see cref="LoadStage.Loaded"/>. This is needed when reading location data, which is restored later in the load process.</param>
+        private TValue GetForState<TValue>(Func<TValue> loaded, Func<SaveGame, TValue> reading, TValue defaultValue, bool requiresPreload = false)
         {
-            if (this.IsSaveBasicInfoLoaded)
+            if (this.IsSaveLoaded || (!requiresPreload && this.IsSaveBasicInfoLoaded))
                 return loaded();
 
             if (this.IsSaveParsed())

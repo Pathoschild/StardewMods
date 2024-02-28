@@ -89,17 +89,16 @@ namespace Pathoschild.Stardew.LookupAnything
             this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
             //this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);  // TODO: restore when PFM is updated
 
-            this.ResetCache(reflection, monitor);
+            this.ResetCache(monitor);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
         [MemberNotNull(nameof(GameHelper.Objects), nameof(GameHelper.Recipes))]
-        public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
+        public void ResetCache(IMonitor monitor)
         {
             this.Objects = new(() => this.ItemRepository.GetAll(onlyType: ItemRegistry.type_object).Where(p => p.Item is not Ring).ToArray());
-            this.Recipes = new(() => this.GetAllRecipes(reflection, monitor).ToArray());
+            this.Recipes = new(() => this.GetAllRecipes(monitor).ToArray());
         }
 
         /****
@@ -599,12 +598,11 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
+        private RecipeModel[] GetAllRecipes(IMonitor monitor)
         {
             // get vanilla recipes
-            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, monitor).ToList();
 
             // TODO: restore when PFM is updated
             //// get recipes from Producer Framework Mod

@@ -45,15 +45,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public AccessibleLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public AccessibleLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.Accessible_Name(), config)
         {
+            const string layerId = "Accessible";
+
             this.Legend = new[]
             {
-                this.Clear = new LegendEntry(I18n.Keys.Accessible_Clear, Color.Green),
-                this.Occupied = new LegendEntry(I18n.Keys.Accessible_Occupied, I18n.Accessible_Occupied(), Color.Orange),
-                this.Impassable = new LegendEntry(I18n.Keys.Accessible_Impassable, I18n.Accessible_Impassable(), Color.Red),
-                this.Warp = new LegendEntry(I18n.Keys.Accessible_Warp, I18n.Accessible_Warp(), Color.Blue)
+                this.Clear = new LegendEntry(I18n.Keys.Accessible_Clear, colors.Get(layerId, "Clear", Color.Green)),
+                this.Occupied = new LegendEntry(I18n.Keys.Accessible_Occupied, I18n.Accessible_Occupied(), colors.Get(layerId, "Occupied", Color.Orange)),
+                this.Impassable = new LegendEntry(I18n.Keys.Accessible_Impassable, I18n.Accessible_Impassable(), colors.Get(layerId, "Impassable", Color.Red)),
+                this.Warp = new LegendEntry(I18n.Keys.Accessible_Warp, I18n.Accessible_Warp(), colors.Get(layerId, "Warp", Color.Blue))
             };
         }
 
@@ -119,7 +122,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="tile">The tile to check.</param>
         /// <param name="tilePixels">The tile area in pixels.</param>
         /// <param name="buildingDoors">The tile positions for farm building doors in the current location.</param>
-        /// <remarks>Derived from <see cref="GameLocation.isCollidingWithWarp"/>, <see cref="GameLocation.performAction"/>, and <see cref="GameLocation.performTouchAction"/>.</remarks>
+        /// <remarks>Derived from <see cref="GameLocation.isCollidingWithWarp"/>, <see cref="GameLocation.performAction(string[],Farmer,Location)"/>, and <see cref="GameLocation.performTouchAction(string[],Vector2)"/>.</remarks>
         private bool IsWarp(GameLocation location, Vector2 tile, Rectangle tilePixels, HashSet<Vector2> buildingDoors)
         {
             // check farm building doors

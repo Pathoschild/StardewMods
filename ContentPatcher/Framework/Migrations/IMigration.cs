@@ -16,6 +16,9 @@ namespace ContentPatcher.Framework.Migrations
         /// <summary>The format version to which this migration applies.</summary>
         ISemanticVersion Version { get; }
 
+        /// <summary>If set, content packs for which this migration applies will be listed in an <c>INFO</c> log with these messages.</summary>
+        public string[] MigrationWarnings { get; }
+
 
         /*********
         ** Public methods

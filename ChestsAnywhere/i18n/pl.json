@@ -28,7 +28,6 @@
     "label.automate-take": "Wyjmuj przedmioty z tej skrzyni",
     "label.automate-take-first": "Wyjmuj przedmioty z tej skrzyni w pierwszej kolejności",
     "label.automate-take-disabled": "Nigdy nie wyjmuj przedmiotów z tej skrzyni",
-    "label.automate-prevent-remove-stacks": "Unikaj usuwania ostatniego przedmiotu w stercie",
 
     // button labels
     "button.edit-chest": "edytuj skrzynię",

@@ -4,7 +4,7 @@
     *********/
     // main options
     "config.title.main-options": "Opciones principales",
-    "config.enabled.name": "Enabled", // TODO
+    "config.enabled.name": "Habilitado",
     "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
     "config.automation-interval.name": "Intervalo de automatización",
     "config.automation-interval.desc": "El número de ticks entre cada proceso de automatización (60 para una vez por segundo, 120 para cada dos segundos, etc.).",
@@ -36,10 +36,10 @@
     "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
     "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
-    // machine overrides
-    "config.title.machine-overrides": "Anulación de máquinas",
-    "config.override.ShippingBin-name": "Caja de envio",
-    "config.override.MiniShippingBin-name": "Mini-caja de envio",
-    "config.override.desc": "Si se activa la automatización de {{machineName}}.",
-    "config.custom-overrides-note": "Para las anulaciones personalizadas, consulte https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure para obtener ayuda para editar el archivo config.json directamente."
+    // per-machine settings
+    "config.title.machine-settings": "Configuraciones de {{machineName}}",
+    "config.machine-settings-enabled.Name": "Habilitado",
+    "config.machine-settings-enabled.desc": "Si se activa la automatización de {{machineName}}.",
+    "config.machine-settings-priority.name": "Prioridad",
+    "config.machine-settings-priority.desc": "El orden de prioridad en el que las máquinas {{machineName}} deben ser procesadas en relación con otras máquinas. Las máquinas tienen una prioridad predeterminada de 0, procesándose primero los valores más altos."
 }

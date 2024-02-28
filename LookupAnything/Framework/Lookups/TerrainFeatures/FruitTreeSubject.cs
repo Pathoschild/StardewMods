@@ -10,6 +10,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.GameData.FruitTrees;
 using StardewValley.TerrainFeatures;
+using StardewValley.TokenizableStrings;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 {

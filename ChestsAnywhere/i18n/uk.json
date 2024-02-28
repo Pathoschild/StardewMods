@@ -28,7 +28,6 @@
     "label.automate-take": "Брати предмети з цієї скрині",
     "label.automate-take-first": "Спочатку брати предмети з цієї скрині",
     "label.automate-take-disabled": "Ніколи не брати предмети з цієї скрині",
-    "label.automate-prevent-remove-stacks": "Уникати видалення останнього предмета у стаці",
 
     // button labels
     "button.edit-chest": "редагувати скриню",

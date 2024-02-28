@@ -12,6 +12,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Whether to show a tile grid when a layer is open.</summary>
         public bool ShowGrid { get; set; }
 
+        /// <summary>The color scheme in <see cref="ColorScheme.AssetName"/> to use.</summary>
+        public string ColorScheme { get; set; } = "Default";
+
         /// <summary>The key bindings.</summary>
         public ModConfigKeys Controls { get; set; } = new();
 

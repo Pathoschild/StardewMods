@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Переміщувати з хатинок джунімо до скринь",
     "config.junimo-huts.move-into-huts": "Переміщувати зі скринь до хатинок джунімо",
 
-    // machine overrides
-    "config.title.machine-overrides": "Перевизначення машини",
-    "config.override.ShippingBin-name": "Ящик для продажу",
-    "config.override.MiniShippingBin-name": "Маленький ящик для продажу",
-    "config.override.desc": "Увімкнення автоматизації машини \"{{machineName}}\".",
-    "config.custom-overrides-note": "Про користувацькі з'єднання див. https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure, щоб отримати допомогу щодо безпосереднього редагування файлу config.json."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} Поведінка",
+    "config.machine-settings-enabled.Name": "Увімкнено",
+    "config.machine-settings-enabled.desc": "Увімкнення автоматизації машини \"{{machineName}}\".",
+    "config.machine-settings-priority.name": "Пріоритет",
+    "config.machine-settings-priority.desc": "Порядок пріоритету, у якому машини {{machineName}} мають оброблятися в порівнянні з іншими машинами. Машини мають стандартний пріоритет 0, при цьому спочатку обробляються машини з вищими значеннями."
 }

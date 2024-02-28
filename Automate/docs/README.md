@@ -79,7 +79,8 @@ By default, Automate supports these machines:
 * [tappers](https://stardewvalleywiki.com/Tapper);
 * [trees](https://stardewvalleywiki.com/Trees);
 * [wood chippers](https://stardewvalleywiki.com/Wood_Chipper);
-* and [worm bins](https://stardewvalleywiki.com/Worm_Bin).
+* [worm bins](https://stardewvalleywiki.com/Worm_Bin);
+* and custom machines added via the game's `Data/Machines`.
 
 And these containers:
 
@@ -129,6 +130,15 @@ Here are some example machine group setups. You can increase production by just 
   > ![](screenshots/iridium-cheese-factory.png)
 
 ## Automation techniques
+### Fairy dust
+You can add [fairy dust](https://stardewvalleywiki.com/Fairy_Dust) to the chest to apply it
+automatically to machines when they're filled. You can [choose the minimum processing time](#configure)
+for which to apply it; by default it applies to any machine that will take 20 in-game minutes or
+more.
+
+Adding fairy dust to a chest won't retroactively add it to machines that are already running
+though.
+
 ### Connectors
 You can optionally configure specific furniture/objects/paths as connectors, which link machines
 together. For example, here are wooden paths used as connectors:
@@ -291,9 +301,8 @@ Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) l
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
-This adds three options for Automate:
+This adds two options for Automate:
 
-* Avoid removing the last item in a stack.
 * Whether to put items in this chest. Possible values:
   * _Put items in this chest_ (default).
   * _Put items in this chest first_: Automate will push machine output into this chest first, and

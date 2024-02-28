@@ -42,6 +42,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The configuration for specific machines by ID.</summary>
         public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new();
 
+        /// <summary>The minimum machine processing time in minutes for which to apply fairy dust.</summary>
+        public int MinMinutesForFairyDust { get; set; } = 20;
+
 
         /*********
         ** Public methods

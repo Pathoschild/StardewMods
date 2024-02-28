@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Automate.Framework.Machines;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 using StardewValley.GameData.FloorsAndPaths;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -129,18 +131,35 @@ namespace Pathoschild.Stardew.Automate.Framework
                 set: (config, value) => config.JunimoHutBehaviorForSeeds = value
             );
 
-            // machine overrides
-            menu.AddSectionTitle(I18n.Config_Title_MachineOverrides);
-            foreach (var entry in this.Data.DefaultMachineOverrides)
+            // per-machine settings
+            var machines = this
+                .GetMachineIds()
+                .OrderByDescending(p => p.Key == "MiniShippingBin")
+                .ThenByDescending(p => p.Key == "ShippingBin")
+                .ThenBy(p => this.GetTranslatedMachineName(p.Value), new HumanSortComparer());
+            foreach ((string machineId, string translationOrItemId) in machines)
             {
+                string GetName()
+                {
+                    return this.GetTranslatedMachineName(translationOrItemId);
+                }
+
+                menu.AddSectionTitle(() => I18n.Config_Title_MachineSettings(machineName: GetName()));
                 menu.AddCheckbox(
-                    name: () => this.GetTranslatedMachineName(entry.Key),
-                    tooltip: () => I18n.Config_Override_Desc(machineName: this.GetTranslatedMachineName(entry.Key)),
-                    get: config => this.IsMachineEnabled(config, entry.Key),
-                    set: (config, value) => this.SetCustomOverride(config, entry.Key, value)
+                    name: I18n.Config_MachineSettingsEnabled_Name,
+                    tooltip: () => I18n.Config_MachineSettingsEnabled_Desc(machineName: GetName()),
+                    get: config => this.IsMachineEnabled(config, machineId),
+                    set: (config, value) => this.SetMachineOptions(config, machineId, options => options.Enabled = value)
+                );
+                menu.AddNumberField(
+                    name: I18n.Config_MachineSettingsPriority_Name,
+                    tooltip: () => I18n.Config_MachineSettingsPriority_Desc(GetName()),
+                    get: config => this.GetMachinePriority(config, machineId),
+                    set: (config, value) => this.SetMachineOptions(config, machineId, options => options.Priority = value),
+                    min: -100,
+                    max: 100
                 );
             }
-            menu.AddParagraph(I18n.Config_CustomOverridesNote);
         }
 
 
@@ -236,36 +255,63 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** Machine overrides
         ****/
-        /// <summary>Get the translated name for a machine.</summary>
-        /// <param name="key">The unique machine key.</param>
-        public string GetTranslatedMachineName(string key)
+        /// <summary>Get the machine IDs and item IDs to show in the config UI.</summary>
+        private Dictionary<string, string> GetMachineIds()
         {
-            return I18n.GetByKey($"config.override.{key}-name").Default(key);
+            Dictionary<string, string> machineIds = new();
+
+            foreach (string id in this.Data.DefaultMachineOverrides.Keys)
+                machineIds[id] = id;
+
+            foreach (string itemId in DataLoader.Machines(Game1.content).Keys)
+            {
+                ParsedItemData? data = ItemRegistry.GetData(itemId);
+                if (data is null)
+                    continue; // invalid entry
+
+                string machineId = DataBasedMachine.GetMachineId(data.InternalName);
+                machineIds[machineId] = itemId;
+            }
+
+            return machineIds;
+        }
+
+        /// <summary>Get the translated name for a machine.</summary>
+        /// <param name="key">The unique item ID or translation key.</param>
+        private string GetTranslatedMachineName(string key)
+        {
+            switch (key)
+            {
+                case "ShippingBin":
+                    return GameI18n.GetBuildingName("Shipping Bin");
+
+                case "MiniShippingBin":
+                    return GameI18n.GetBigCraftableName("248");
+
+                default:
+                    return ItemRegistry.GetData(key)?.DisplayName ?? key;
+            }
         }
 
         /// <summary>Get the custom override for a mod, if any.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        public ModConfigMachine? GetCustomOverride(ModConfig config, string name)
+        private ModConfigMachine? GetCustomOverride(ModConfig config, string name)
         {
-            return config.MachineOverrides.TryGetValue(name, out ModConfigMachine? @override)
-                ? @override
-                : null;
+            return config.MachineOverrides.GetValueOrDefault(name);
         }
 
         /// <summary>Get the default override for a mod, if any.</summary>
         /// <param name="name">The machine name.</param>
-        public ModConfigMachine? GetDefaultOverride(string name)
+        private ModConfigMachine? GetDefaultOverride(string name)
         {
-            return this.Data.DefaultMachineOverrides.TryGetValue(name, out ModConfigMachine? @override)
-            ? @override
-            : null;
+            return this.Data.DefaultMachineOverrides.GetValueOrDefault(name);
         }
 
         /// <summary>Get whether a machine is currently enabled.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        public bool IsMachineEnabled(ModConfig config, string name)
+        private bool IsMachineEnabled(ModConfig config, string name)
         {
             return
                 this.GetCustomOverride(config, name)?.Enabled
@@ -273,15 +319,26 @@ namespace Pathoschild.Stardew.Automate.Framework
                 ?? true;
         }
 
-        /// <summary>Get the custom override for a mod, if any.</summary>
+        /// <summary>Get the current machine priority.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        /// <param name="enabled">Whether the custom override should be enabled; else disabled.</param>
-        public void SetCustomOverride(ModConfig config, string name, bool enabled)
+        private int GetMachinePriority(ModConfig config, string name)
+        {
+            return
+                this.GetCustomOverride(config, name)?.Priority
+                ?? this.GetDefaultOverride(name)?.Priority
+                ?? 0;
+        }
+
+        /// <summary>Set the options for a machine.</summary>
+        /// <param name="config">The mod configuration.</param>
+        /// <param name="name">The machine name.</param>
+        /// <param name="set">Set the machine options.</param>
+        private void SetMachineOptions(ModConfig config, string name, Action<ModConfigMachine> set)
         {
             // get updated settings
-            ModConfigMachine options = this.GetCustomOverride(config, name) ?? new ModConfigMachine { Enabled = enabled };
-            options.Enabled = enabled;
+            ModConfigMachine options = this.GetCustomOverride(config, name) ?? new();
+            set(options);
 
             // check if it matches the default
             ModConfigMachine? defaults = this.GetDefaultOverride(name);

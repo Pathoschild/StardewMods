@@ -74,6 +74,16 @@ multi-key bindings with plus signs (like `LeftShift + F1`).
 </tr>
 
 <tr>
+  <td><code>MinMinutesForFairyDust</code></td>
+  <td>
+
+Default `20`. The minimum machine processing time in minutes for which to apply any [fairy
+dust](https://stardewvalleywiki.com/Fairy_Dust) in the chest.
+
+  </td>
+</tr>
+
+<tr>
   <td><code>ProgressionMode</code></td>
   <td>
 
@@ -287,10 +297,18 @@ Lookup Anything will detect the field and search inside it too.
 
 ### Hovered items in custom menus
 Lookup Anything detects when the cursor is over an item in standard menus. For custom menus, create
-a `HoveredItem` field with any `Item` type and Lookup Menu will detect it:
+a `HoveredItem` field with any `Item` type and Lookup Anything will detect it:
 
 ```c#
 public Object HoveredItem;
+```
+
+### Hovered NPCs in custom menus
+Lookup Anything detects when the cursor is over an NPC in standard menus. For custom menus, create
+a `HoveredNpc` field with an `NPC` type and Lookup Anything will detect it:
+
+```c#
+public NPC HoveredNpc;
 ```
 
 ## See also

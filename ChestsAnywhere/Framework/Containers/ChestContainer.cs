@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
         private readonly object Context;
 
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether to show the chest color picker.</summary>
         private readonly bool ShowColorPicker;
 
@@ -45,13 +42,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="chest">The in-game chest.</param>
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
         /// <param name="showColorPicker">Whether to show the chest color picker.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public ChestContainer(Chest chest, object context, bool showColorPicker, IReflectionHelper reflection)
+        public ChestContainer(Chest chest, object context, bool showColorPicker)
         {
             this.Chest = chest;
             this.Context = context;
             this.ShowColorPicker = showColorPicker;
-            this.Reflection = reflection;
             this.Data = new ContainerData(chest.modData);
         }
 
@@ -157,7 +152,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             if (Game1.activeClickableMenu is ItemGrabMenu itemGrabMenu)
             {
                 itemGrabMenu.behaviorOnItemGrab = this.GrabItemFromContainer;
-                this.Reflection.GetField<ItemGrabMenu.behaviorOnItemSelect>(itemGrabMenu, "behaviorFunction").SetValue(this.GrabItemFromPlayer);
+                itemGrabMenu.behaviorFunction = this.GrabItemFromPlayer;
             }
         }
     }

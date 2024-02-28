@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Storage;
-using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -11,13 +10,13 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class StorageManager : IStorage
     {
         /*********
-        ** Fields
+        ** Accessors
         *********/
-        /// <summary>The storage containers that accept input, in priority order.</summary>
-        private IContainer[] InputContainers;
+        /// <inheritdoc />
+        public IContainer[] InputContainers { get; private set; }
 
-        /// <summary>The storage containers that provide items, in priority order.</summary>
-        private IContainer[] OutputContainers;
+        /// <inheritdoc />
+        public IContainer[] OutputContainers { get; private set; }
 
 
         /*********
@@ -59,13 +58,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             foreach (IContainer container in this.OutputContainers)
             {
-                bool preventRemovingStacks = container.ModData.ReadField(AutomateContainerHelper.PreventRemovingStacksKey, bool.Parse);
-
                 foreach (ITrackedStack stack in container)
                 {
-                    if (preventRemovingStacks)
-                        stack.PreventEmptyStacks();
-
                     if (stack.Count > 0)
                         yield return stack;
                 }

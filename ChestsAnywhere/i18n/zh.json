@@ -28,7 +28,6 @@
     "label.automate-take": "从这个箱子里拿取物品",
     "label.automate-take-first": "优先从这个箱子里拿取物品",
     "label.automate-take-disabled": "不要从这个箱子里拿取物品",
-    "label.automate-prevent-remove-stacks": "不要拿取每叠的最后一个物品",
 
     // button labels
     "button.edit-chest": "编辑箱子",
