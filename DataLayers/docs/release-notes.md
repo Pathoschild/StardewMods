@@ -4,6 +4,7 @@
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
 * Added support for customizable color schemes.
+* Fixed errors if some config fields are set to null.
 
 ## 1.15.12
 Released 01 December 2023 for SMAPI 3.14.0 or later.

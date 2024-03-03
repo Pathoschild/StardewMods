@@ -8,6 +8,7 @@
 * Added support for looking up NPCs in some custom mod menus (thanks to BinaryLip!).
 * Improved debug field format for player stats and schedules.
 * Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Fixed errors if some config fields are set to null.
 
 ## 1.40.4
 Released 01 December 2023 for SMAPI 3.14.0 or later.

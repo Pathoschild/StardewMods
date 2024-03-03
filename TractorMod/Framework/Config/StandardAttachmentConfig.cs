@@ -1,3 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
+
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
     /// <summary>Configuration for the built-in tractor attachments.</summary>
@@ -47,5 +51,33 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Configuration for the Seed Bag mod attachment.</summary>
         public GenericAttachmentConfig SeedBagMod { get; set; } = new();
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.Axe ??= new AxeConfig();
+            this.Fertilizer ??= new GenericAttachmentConfig();
+            this.GrassStarter ??= new GenericAttachmentConfig();
+            this.Hoe ??= new HoeConfig();
+            this.MilkPail ??= new GenericAttachmentConfig();
+            this.MeleeBlunt ??= new MeleeBluntConfig();
+            this.MeleeDagger ??= new MeleeDaggerConfig();
+            this.MeleeSword ??= new MeleeSwordConfig();
+            this.PickAxe ??= new PickAxeConfig();
+            this.Scythe ??= new ScytheConfig();
+            this.Seeds ??= new GenericAttachmentConfig();
+            this.Shears ??= new GenericAttachmentConfig();
+            this.Slingshot ??= new GenericAttachmentConfig { Enable = false };
+            this.WateringCan ??= new GenericAttachmentConfig();
+            this.SeedBagMod ??= new GenericAttachmentConfig();
+        }
     }
 }

@@ -108,7 +108,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         private IEnumerable<ILayer> GetLayers(ModConfig config, ModIntegrations mods)
         {
-            ModConfig.LayerConfigs layers = config.Layers;
+            ModConfigLayers layers = config.Layers;
             var colors = this.Colors;
 
             if (layers.Accessible.IsEnabled())

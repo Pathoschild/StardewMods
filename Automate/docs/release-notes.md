@@ -10,6 +10,7 @@
 * `automate summary` now shows each chest's automation options if edited.
 * Removed the 'prevent empty stack' chest option. This is no longer feasible due to how machines work in Stardew Valley 1.6.
 * Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Fixed errors if some config fields are set to null.
 
 ## 1.28.7
 Released 01 December 2023 for SMAPI 3.14.0 or later.

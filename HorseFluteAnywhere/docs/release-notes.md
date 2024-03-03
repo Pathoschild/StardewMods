@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
+* Fixed errors if some config fields are set to null.
 
 ## 1.1.22
 Released 01 December 2023 for SMAPI 3.14.0 or later.

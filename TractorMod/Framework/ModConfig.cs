@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Object = StardewValley.Object;
 
@@ -51,5 +54,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Whether the player should be invincible while they're on the tractor.</summary>
         public bool InvincibleOnTractor { get; set; } = true;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.BuildMaterials ??= new Dictionary<string, int>();
+            this.StandardAttachments ??= new StandardAttachmentsConfig();
+            this.Controls ??= new ModConfigKeys();
+            this.CustomAttachments ??= Array.Empty<string>();
+        }
     }
 }

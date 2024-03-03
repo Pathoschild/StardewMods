@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MapExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SuppressReasons.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\IInvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\MutableInvariantSet.cs" />
     <Compile Include="..\Common\Commands\GenericHelpCommand.cs" />

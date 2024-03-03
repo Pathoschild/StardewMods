@@ -1,4 +1,6 @@
-using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
@@ -11,32 +13,28 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The keys which toggle the display of debug information.</summary>
-        public KeybindList ToggleDebug { get; }
+        public KeybindList ToggleDebug { get; set; } = new(SButton.F3);
 
         /// <summary>The keys which switch to the previous texture.</summary>
-        public KeybindList DebugPrevTexture { get; }
+        public KeybindList DebugPrevTexture { get; set; } = new(SButton.LeftControl);
 
         /// <summary>The keys which switch to the next texture.</summary>
-        public KeybindList DebugNextTexture { get; }
+        public KeybindList DebugNextTexture { get; set; } = new(SButton.RightControl);
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        public ModConfigKeys()
-            : this(null, null, null) { }
-
-        /// <summary>Construct an instance.</summary>
-        /// <param name="toggleDebug">The keys which toggle the display of debug information.</param>
-        /// <param name="debugPrevTexture">The keys which switch to the previous texture.</param>
-        /// <param name="debugNextTexture">The keys which switch to the next texture.</param>
-        [JsonConstructor]
-        public ModConfigKeys(KeybindList? toggleDebug, KeybindList? debugPrevTexture, KeybindList? debugNextTexture)
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
         {
-            this.ToggleDebug = toggleDebug ?? new(SButton.F3);
-            this.DebugPrevTexture = debugPrevTexture ?? new(SButton.LeftControl);
-            this.DebugNextTexture = debugNextTexture ?? new(SButton.RightControl);
+            this.ToggleDebug ??= new KeybindList();
+            this.DebugPrevTexture ??= new KeybindList();
+            this.DebugNextTexture ??= new KeybindList();
         }
     }
 }

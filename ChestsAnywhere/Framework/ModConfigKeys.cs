@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
@@ -35,5 +38,27 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</summary>
         public KeybindList HoldToMouseWheelScrollCategories { get; set; } = new(SButton.LeftAlt);
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.Toggle ??= new KeybindList();
+            this.PrevChest ??= new KeybindList();
+            this.NextChest ??= new KeybindList();
+            this.PrevCategory ??= new KeybindList();
+            this.NextCategory ??= new KeybindList();
+            this.EditChest ??= new KeybindList();
+            this.SortItems ??= new KeybindList();
+            this.HoldToMouseWheelScrollChests ??= new KeybindList();
+            this.HoldToMouseWheelScrollCategories ??= new KeybindList();
+        }
     }
 }

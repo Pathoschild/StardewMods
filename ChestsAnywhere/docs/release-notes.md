@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.6.
 * Removed migration for pre-1.20 chest options.  
 * Fixed misaligned chest UI when the zoom level and UI scale don't match (thanks to SinZ163!).
+* Fixed errors if some config fields are set to null.
 
 **Breaking changes for players:**
 * If you edited a chest's name/options before Chests Anywhere 1.20.0 (December 2020) and haven't loaded the save since

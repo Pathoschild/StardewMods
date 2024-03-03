@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
+using StardewValley.Extensions;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
@@ -33,15 +34,12 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         /// <summary>Normalize the model after it's deserialized.</summary>
         /// <param name="context">The deserialization context.</param>
         [OnDeserialized]
-        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition", Justification = "This method enforces the expected nullability.")]
-        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "This method enforces the expected nullability.")]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
         public void OnDeserialized(StreamingContext context)
         {
             this.Locations ??= new Dictionary<string, PerLocationConfig>();
-
-            // remove null values
-            foreach (string key in this.Locations.Where(p => p.Value == null).Select(p => p.Key).ToArray())
-                this.Locations.Remove(key);
+            this.Locations.RemoveWhere(p => p.Value is null);
         }
     }
 }

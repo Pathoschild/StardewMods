@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -28,5 +31,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The locations in which to disable remote chest lookups.</summary>
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
         public HashSet<string> DisabledInLocations { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.Controls ??= new ModConfigKeys();
+
+            this.DisabledInLocations.RemoveWhere(string.IsNullOrWhiteSpace);
+        }
     }
 }

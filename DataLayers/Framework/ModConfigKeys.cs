@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
@@ -17,5 +20,21 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>The keys which cycle forward through data layers.</summary>
         public KeybindList NextLayer { get; set; } = KeybindList.Parse($"{SButton.RightControl}, {SButton.RightShoulder}");
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.ToggleLayer ??= new KeybindList();
+            this.PrevLayer ??= new KeybindList();
+            this.NextLayer ??= new KeybindList();
+        }
     }
 }
