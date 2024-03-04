@@ -226,13 +226,19 @@ namespace ContentPatcher.Framework.Migrations
             private void MergeBirthdayIntoNewFormat(CharacterData entry, string birthday)
             {
                 string[] fields = ArgUtility.SplitBySpace(birthday, 2);
+                string rawSeason = ArgUtility.Get(fields, 0);
+                int day = ArgUtility.GetInt(fields, 1);
 
-                if (fields[0] == "null" || string.IsNullOrWhiteSpace(fields[0]))
-                    entry.BirthSeason = null;
-                else if (Utility.TryParseEnum(fields[0], out Season season))
+                if (Utility.TryParseEnum(rawSeason, out Season season))
+                {
                     entry.BirthSeason = season;
-
-                entry.BirthDay = ArgUtility.GetInt(fields, 1, entry.BirthDay);
+                    entry.BirthDay = day;
+                }
+                else
+                {
+                    entry.BirthSeason = null;
+                    entry.BirthDay = 0;
+                }
             }
 
             /// <summary>Get the pre-1.6 'friends and family' field from the new asset.</summary>
