@@ -80,7 +80,7 @@ The patches for an asset (across all mods) are applied in this order:
 2. then by mod load order (e.g. based on dependencies);
 3. then by the order the patches are listed in your `content.json`.
 
-If you need a more specific order, you can use a simple offset like `"Default + 2"` or `"High - 10"`.
+If you need a more specific order, you can use a simple offset like `"Default + 2"` or `"Late - 10"`.
 The default levels are -1000 (early), 0 (default), and 1000 (late).
 
 This field does _not_ support tokens, and capitalization doesn't matter.
