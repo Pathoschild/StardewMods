@@ -172,6 +172,7 @@ namespace ContentPatcher.Framework
 
             this.TokenManager.IsSaveParsed = false;
             this.TokenManager.IsSaveBasicInfoLoaded = false;
+            this.TokenManager.IsSaveLoaded = false;
 
             this.UpdateContext(ContextUpdateType.All);
         }
