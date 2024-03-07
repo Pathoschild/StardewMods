@@ -137,6 +137,17 @@ namespace ContentPatcher.Framework
                         this.UpdateContext(ContextUpdateType.All);
                     }
                     break;
+
+                case LoadStage.None:
+                case LoadStage.ReturningToTitle:
+                    this.Monitor.VerboseLog($"Updating context: load stage changed to {newStage}.");
+
+                    this.TokenManager.IsSaveParsed = false;
+                    this.TokenManager.IsSaveBasicInfoLoaded = false;
+                    this.TokenManager.IsSaveLoaded = false;
+
+                    this.UpdateContext(ContextUpdateType.All);
+                    break;
             }
         }
 
@@ -163,18 +174,6 @@ namespace ContentPatcher.Framework
         {
             this.Monitor.VerboseLog("Updating context: player warped.");
             this.UpdateContext(ContextUpdateType.OnLocationChange);
-        }
-
-        /// <summary>The method invoked when the player returns to the title screen.</summary>
-        public void OnReturnedToTitle()
-        {
-            this.Monitor.VerboseLog("Updating context: returned to title.");
-
-            this.TokenManager.IsSaveParsed = false;
-            this.TokenManager.IsSaveBasicInfoLoaded = false;
-            this.TokenManager.IsSaveLoaded = false;
-
-            this.UpdateContext(ContextUpdateType.All);
         }
 
         /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>

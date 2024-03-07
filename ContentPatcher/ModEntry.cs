@@ -212,14 +212,6 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnWarped();
         }
 
-        /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
-        {
-            this.ScreenManager.Value.OnReturnedToTitle();
-        }
-
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -290,7 +282,6 @@ namespace ContentPatcher
             if (this.Config.EnableDebugFeatures)
                 helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Content.AssetRequested += this.OnAssetRequested;
-            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.Player.Warped += this.OnWarped;
