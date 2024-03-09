@@ -20,6 +20,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [Player config](#player-config)
   * [Translations](#translations)
   * [Text operations](#text-operations)
+  * [Trigger actions](#trigger-actions)
 * [Troubleshoot](#troubleshoot)
 * [FAQs](#faqs)
   * [How often are patch changes applied?](#update-rate)
@@ -439,6 +440,12 @@ For example, this adds pufferfish as a universally loved gift:
 ```
 
 See the [text operations documentation](author-guide/text-operations.md) for more info.
+
+### Trigger actions
+Content Patcher adds custom [trigger actions](https://stardewvalleywiki.com/Modding:Trigger_actions) for specialized
+cases like updating pre-existing saves for renamed content IDs.
+
+See [Content Patcher's trigger action documentation](author-guide/trigger-actions.md) for more info.
 
 ## Troubleshoot
 See the [troubleshooting guide](author-guide/troubleshooting.md) for more info.

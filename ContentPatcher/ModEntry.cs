@@ -11,6 +11,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.TriggerActions;
 using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
@@ -18,6 +19,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Triggers;
 using TokenParser = ContentPatcher.Framework.TokenParser;
 
 [assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
@@ -286,6 +288,10 @@ namespace ContentPatcher
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
+
+            // set up trigger actions
+            // (This needs to happen before content packs are loaded below, since they may use these.)
+            TriggerActionManager.RegisterAction($"{this.ModManifest.UniqueID}_MigrateIds", new MigrateIdsAction().Handle);
 
             // load screen manager
             this.InitializeScreenManagerIfNeeded(this.ContentPacks);

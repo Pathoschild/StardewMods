@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added asset load & edit priority (see updated [action docs](author-guide.md#actions)).
 * Added [`ModId`](author-guide/tokens.md#ModId) token to get the unique ID of the current content pack.
 * Added runtime migrations for content assets which changed in Stardew Valley 1.6. (Thanks to SinZ for the help creating some of the main migrations!)
+* Added trigger action to change content IDs automatically (see [new docs](author-guide/trigger-actions.md)). 
 * Deprecated `CustomLocations`. This is now a shortcut for editing the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data), and now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
 * Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
 * Fixed off-by-one position with `MoveEntries` when the target entry is already before the anchor entry.
