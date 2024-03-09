@@ -90,12 +90,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (isFullyGrown && !string.IsNullOrWhiteSpace(data.SeedItemId))
             {
                 string seedName = GameI18n.GetObjectName(data.SeedItemId);
-                float seedChance = data.SeedChance >= 0
-                    ? data.SeedChance
-                    : Tree.chanceForDailySeed;
-                float seedOnChopChance = data.SeedOnChopChance >= 0
-                    ? data.SeedOnChopChance
-                    : 0.75f;
 
                 if (tree.hasSeed.Value)
                     yield return new ItemIconField(this.GameHelper, I18n.Tree_Seed(), ItemRegistry.Create(data.SeedItemId), this.Codex);
@@ -103,10 +97,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 {
                     List<string> lines = new(2);
 
-                    if (seedChance > 0)
-                        lines.Add(I18n.Tree_Seed_ProbabilityDaily(chance: seedChance * 100, itemName: seedName));
-                    if (seedOnChopChance > 0)
-                        lines.Add(I18n.Tree_Seed_ProbabilityOnChop(chance: seedOnChopChance * 100, itemName: seedName));
+                    if (data.SeedOnShakeChance > 0)
+                        lines.Add(I18n.Tree_Seed_ProbabilityDaily(chance: data.SeedOnShakeChance * 100, itemName: seedName));
+                    if (data.SeedOnChopChance > 0)
+                        lines.Add(I18n.Tree_Seed_ProbabilityOnChop(chance: data.SeedOnChopChance * 100, itemName: seedName));
 
                     if (lines.Any())
                         yield return new GenericField(I18n.Tree_Seed(), I18n.Tree_Seed_NotReady() + Environment.NewLine + string.Join(Environment.NewLine, lines));
