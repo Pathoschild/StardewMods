@@ -327,11 +327,13 @@ namespace ContentPatcher.Framework.Migrations
             /// <param name="rawHome">The 'home' field value.</param>
             private void MergeHomeIntoNewFormat(CharacterData entry, string rawHome)
             {
-                string[] fields = ArgUtility.SplitBySpace(rawHome, 3);
+                string[] fields = ArgUtility.SplitBySpace(rawHome);
 
                 string locationName = fields[0];
                 if (!ArgUtility.TryGetPoint(fields, 1, out Point tile, out _))
                     tile = Point.Zero;
+                if (!ArgUtility.TryGetInt(fields, 3, out int direction, out _))
+                    direction = Game1.up;
 
                 // update existing entry
                 if (entry.Home?.Count > 0)
@@ -353,7 +355,14 @@ namespace ContentPatcher.Framework.Migrations
                 {
                     Id = "Default",
                     Location = locationName,
-                    Tile = tile
+                    Tile = tile,
+                    Direction = direction switch
+                    {
+                        Game1.down => nameof(Game1.down),
+                        Game1.left => nameof(Game1.left),
+                        Game1.right => nameof(Game1.right),
+                        _ => nameof(Game1.up)
+                    }
                 });
             }
         }
