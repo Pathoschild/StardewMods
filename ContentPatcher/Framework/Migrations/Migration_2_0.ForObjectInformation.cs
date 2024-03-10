@@ -89,8 +89,10 @@ namespace ContentPatcher.Framework.Migrations
                 string[] fields = new string[9];
                 foreach ((string objectId, ObjectData entry) in from)
                 {
-                    BuffEffects? buffEffects = entry.Buff?.CustomAttributes != null
-                        ? new(entry.Buff?.CustomAttributes)
+                    ObjectBuffData? buff = entry.Buffs.FirstOrDefault();
+
+                    BuffEffects? buffEffects = buff?.CustomAttributes != null
+                        ? new(buff.CustomAttributes)
                         : null;
 
                     fields[0] = entry.Name;
@@ -101,7 +103,7 @@ namespace ContentPatcher.Framework.Migrations
                     fields[5] = StardewTokenParser.ParseText(entry.Description);
                     fields[6] = this.GetOldMiscellaneousField(objectId, entry);
                     fields[7] = buffEffects?.HasAnyValue() is true ? string.Join(" ", buffEffects.ToLegacyAttributeFormat()) : string.Empty;
-                    fields[8] = entry.Buff?.Duration.ToString() ?? string.Empty;
+                    fields[8] = buff?.Duration.ToString() ?? string.Empty;
 
                     data[objectId] = string.Join('/', fields);
                 }
@@ -177,8 +179,8 @@ namespace ContentPatcher.Framework.Migrations
                             this.MergeBuffFieldIntoNewFormat(entry, rawBuffEffects);
 
                         // buff duration
-                        if (entry.Buff != null)
-                            entry.Buff.Duration = ArgUtility.GetInt(fields, 8, entry.Buff.Duration);
+                        if (entry.Buffs?.Count > 0)
+                            entry.Buffs[0].Duration = ArgUtility.GetInt(fields, 8, entry.Buffs[0].Duration);
                     }
 
                     // set value
@@ -220,7 +222,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // food/drink
-                if (data.Buff != null)
+                if (data.Buffs?.Count > 0)
                     return data.IsDrink ? "drink" : "food";
 
                 // none
@@ -234,10 +236,10 @@ namespace ContentPatcher.Framework.Migrations
             {
                 string[] fields = field.Split(' ');
 
-                entry.Buff ??= new ObjectBuffData() { BuffId = entry.IsDrink ? "drink" : "food" };
-                entry.Buff.CustomAttributes ??= new BuffAttributesData();
+                ObjectBuffData buff = new ObjectBuffData() { BuffId = entry.IsDrink ? "drink" : "food" };
+                buff.CustomAttributes ??= new BuffAttributesData();
 
-                BuffAttributesData effects = entry.Buff.CustomAttributes;
+                BuffAttributesData effects = buff.CustomAttributes;
                 effects.FarmingLevel = ArgUtility.GetFloat(fields, 0, effects.FarmingLevel);
                 effects.FishingLevel = ArgUtility.GetFloat(fields, 1, effects.FishingLevel);
                 effects.MiningLevel = ArgUtility.GetFloat(fields, 2, effects.MiningLevel);
@@ -248,6 +250,14 @@ namespace ContentPatcher.Framework.Migrations
                 effects.Speed = ArgUtility.GetFloat(fields, 9, effects.Speed);
                 effects.Defense = ArgUtility.GetFloat(fields, 10, effects.Defense);
                 effects.Attack = ArgUtility.GetFloat(fields, 11, effects.Attack);
+
+                if (new BuffEffects(buff.CustomAttributes).HasAnyValue())
+                {
+                    entry.Buffs ??= new();
+                    entry.Buffs.Add(buff);
+                }
+                else
+                    entry.Buffs = null;
             }
 
             /// <summary>Merge a pre-1.6 'miscellaneous' field into the new object data.</summary>
