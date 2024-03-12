@@ -181,7 +181,7 @@
     "building.output-processing": "Produzione in corso",
     "building.output-ready": "Produzione pronta",
     "building.slimes.summary": "{{count}} di un massimo di {{max}} melme",
-    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
+    "building.stored-hay.summary": "{{hayCount}} su {{maxHayInLocation}} di fieno sono in questo luogo (capacità max di questo edificio: {{maxHayInBuilding}})",
     "building.upgrades.barn.0": "fino a 4 animali, aggiunge le mucche",
     "building.upgrades.barn.1": "fino a 8 animali, aggiunge la maternità e le capre",
     "building.upgrades.barn.2": "fino a 12 animali, aggiunge l'auto-nutrimento, i maiali, e le pecore",
@@ -619,9 +619,9 @@
     "tree.next-growth.winter": "non può crescere fuori da una serra in inverno se non fertilizzata",
     "tree.next-growth.adjacent-trees": "non può crescere perchè gli altri alberi sono troppo vicini",
     "tree.next-growth.chance": "{{chance}}% probabilità di diventare un '{{stage}}' domani",
-    "tree.seed.not-ready": "Not ready", // TODO
-    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
-    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
+    "tree.seed.not-ready": "Non pronto",
+    "tree.seed.probability-daily": "{{chance}}% di probabilità di {{itemName}} ogni giorno.",
+    "tree.seed.probability-on-chop": "{{chance}}% di probabilità di far cadere {{itemName}} quando viene abbattuto.",
 
     // growth stages
     "tree.stages.seed": "seme",
