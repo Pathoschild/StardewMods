@@ -19,6 +19,10 @@
    <property name="Diggable" value="t"/>
    <property name="Type" value="Grass"/>
   </properties>
+  <animation>
+   <frame tileid="151" duration="1000"/>
+   <frame tileid="152" duration="1000"/>
+  </animation>
  </tile>
  <tile id="152">
   <properties>
@@ -26,6 +30,10 @@
    <property name="Diggable" value="t"/>
    <property name="Type" value="Grass"/>
   </properties>
+  <animation>
+   <frame tileid="152" duration="1000"/>
+   <frame tileid="151" duration="1000"/>
+  </animation>
  </tile>
  <tile id="153">
   <properties>

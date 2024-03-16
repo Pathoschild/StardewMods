@@ -4,6 +4,7 @@
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
 * You can now till the campfire wood pile.
+* Various visual improvements to the map (thanks to FlashShifter!).
 * Improved translations. Thanks to EmWhyKay (updated Turkish)!
 
 ## 2.4.10
