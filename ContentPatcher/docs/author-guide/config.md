@@ -43,7 +43,7 @@ applied:
 
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -103,7 +103,7 @@ For example, this adds two sections:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "ConfigSchema": {
         // appearance section
         "Material": {

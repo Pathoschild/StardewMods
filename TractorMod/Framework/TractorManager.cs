@@ -17,14 +17,14 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    /// <summary>Manages tractor effects when the current player is riding a tractor horse.</summary>
+    /// <summary>Manages tractor effects when the current player is riding a tractor.</summary>
     internal sealed class TractorManager
     {
         /*********
         ** Fields
         *********/
         /// <summary>The unique buff ID for the tractor speed.</summary>
-        private readonly int BuffUniqueID = 58012397;
+        private readonly string BuffUniqueID = "Pathoschild.TractorMod";
 
         /// <summary>The number of ticks between each tractor action check.</summary>
         private readonly int TicksPerAction = 12; // roughly five times per second
@@ -32,8 +32,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The <see cref="Horse.modData"/> key which indicates it's a tractor.</summary>
         private const string TractorDataKey = "Pathoschild.TractorMod";
 
+        /// <summary>Manages audio effects for the tractor.</summary>
+        private readonly AudioManager AudioManager;
+
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
+
+        /// <summary>Get the buff icon texture.</summary>
+        private readonly Func<Texture2D?> GetBuffIconTexture;
 
         /// <summary>The tractor attachments to apply.</summary>
         private IAttachment[] Attachments = Array.Empty<IAttachment>();
@@ -77,20 +83,27 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The mod settings.</param>
         /// <param name="keys">The configured key bindings.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection)
+        /// <param name="getBuffIconTexture">Get the buff icon texture.</param>
+        /// <param name="audioManager">Manages audio effects for the tractor.</param>
+        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture, AudioManager audioManager)
         {
             this.Config = config;
             this.Keys = keys;
             this.Reflection = reflection;
+            this.GetBuffIconTexture = getBuffIconTexture;
+            this.AudioManager = audioManager;
         }
 
         /// <summary>Set the base tractor data for a horse.</summary>
         /// <param name="tractor">The tractor instance.</param>
+        /// <param name="disableHorseSounds">Whether to disable the default horse sounds.</param>
         /// <returns>Returns the tractor instance for convenience.</returns>
-        public static Horse SetTractorInfo(Horse tractor)
+        public static Horse SetTractorInfo(Horse tractor, bool disableHorseSounds)
         {
             tractor.Name = $"tractor/{tractor.HorseId:N}";
             tractor.modData[TractorManager.TractorDataKey] = "1";
+            if (disableHorseSounds)
+                tractor.onFootstepAction = _ => { }; // disable horse clops, tractor audio will be managed separately
 
             return tractor;
         }
@@ -138,7 +151,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     this.RiderHealth = Game1.player.health;
 
                 // reset held-down tool power
-                Game1.player.toolPower = 0;
+                Game1.player.toolPower.Value = 0;
+
+                // set sound
+                this.AudioManager.SetEngineState(this.IsCurrentPlayerRiding ? EngineState.Idle : EngineState.Stop);
+            }
+
+            // update audio
+            if (this.IsCurrentPlayerRiding)
+            {
+                bool idle = !Game1.player.isMoving();
+
+                this.AudioManager.SetEngineState(idle ? EngineState.Idle : EngineState.Rev);
+                this.AudioManager.Update();
             }
 
             // detect activation or location change
@@ -161,7 +186,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 }
 
                 // apply tractor buff
-                this.UpdateBuff();
+                this.UpdateBuff(true);
 
                 // apply tool effects
                 if (this.UpdateCooldown())
@@ -170,6 +195,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         this.UpdateAttachmentEffects();
                 }
             }
+            else
+                this.UpdateBuff(false);
         }
 
         /// <summary>Draw a radius around the player.</summary>
@@ -178,7 +205,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             bool enabled = this.IsEnabled();
 
-            foreach (Vector2 tile in this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance))
+            foreach (Vector2 tile in this.GetTileGrid(Game1.player.Tile, this.Config.Distance))
             {
                 // get tile area in screen pixels
                 Rectangle area = new((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
@@ -203,16 +230,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The new mod configuration.</param>
         /// <param name="keys">The new key bindings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IEnumerable<IAttachment?> attachments)
+        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IAttachment[] attachments)
         {
             // update config
             this.Config = config;
             this.Keys = keys;
-            this.Attachments = attachments.WhereNotNull().ToArray();
+            this.Attachments = attachments;
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, _ => 0);
-
-            // clear buff so it's reapplied with new values
-            Game1.buffsDisplay?.otherBuffs?.RemoveAll(p => p.which == this.BuffUniqueID);
 
             // reset cooldowns
             this.SkippedActionTicks = 0;
@@ -237,15 +261,35 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         }
 
         /// <summary>Apply the tractor buff to the current player.</summary>
-        private void UpdateBuff()
+        /// <param name="isRiding">Whether the player is riding the</param>
+        private void UpdateBuff(bool isRiding)
         {
-            Buff? buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
-            if (buff == null)
+            // remove if no longer riding
+            if (!isRiding)
             {
-                buff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", I18n.Buff_Name()) { which = this.BuffUniqueID };
-                Game1.buffsDisplay.addOtherBuff(buff);
+                Game1.player.buffs.Remove(this.BuffUniqueID);
+                return;
             }
-            buff.millisecondsDuration = 100;
+
+            // else reapply if expired or expiring
+            Game1.player.buffs.AppliedBuffs.TryGetValue(this.BuffUniqueID, out Buff? buff);
+            if (buff == null || buff.millisecondsDuration < 5000 || buff.effects.MagneticRadius.Value != this.Config.MagneticRadius || buff.effects.Speed.Value != this.Config.TractorSpeed)
+            {
+                buff = new Buff(
+                    id: this.BuffUniqueID,
+                    source: "Tractor Power",
+                    displayName: I18n.Buff_Name(),
+                    duration: 60000,
+                    iconTexture: this.GetBuffIconTexture(),
+                    iconSheetIndex: 0,
+                    effects: new StardewValley.Buffs.BuffEffects()
+                    {
+                        MagneticRadius = { this.Config.MagneticRadius },
+                        Speed = { this.Config.TractorSpeed }
+                    }
+                );
+                Game1.player.applyBuff(buff);
+            }
         }
 
         /// <summary>Update the attachment cooldown.</summary>
@@ -286,7 +330,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // get tile grid to affect
             // This must be done outside the temporary interaction block below, since that dismounts
             // the player which changes their position from what the player may expect.
-            Vector2 origin = Game1.player.getTileLocation();
+            Vector2 origin = Game1.player.Tile;
             Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
 
             // apply tools

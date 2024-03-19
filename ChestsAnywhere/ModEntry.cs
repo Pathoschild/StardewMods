@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Multiplayer, helper.Reflection, () => this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Multiplayer, () => this.Config.EnableShippingBin);
 
             // Android workaround: shipping bin feature isn't compatible and breaks the UI
             if (Constants.TargetPlatform == GamePlatform.Android && this.Config.EnableShippingBin)
@@ -116,10 +116,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // show multiplayer limitations warning
             if (!Context.IsMainPlayer)
                 this.Monitor.Log("Multiplayer limitations: you can only access chests in synced locations since you're not the main player. This is due to limitations in the game's sync logic.", LogLevel.Info);
-
-            // migrate legacy chest data
-            if (Context.IsMainPlayer)
-                Migrator.MigrateLegacyData(this.ChestFactory, this.Helper.Data);
         }
 
         /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
@@ -178,7 +174,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // open from inventory if it's safe to close the inventory screen
-                    else if (Game1.activeClickableMenu is GameMenu { currentTab: GameMenu.inventoryTab } gameMenu)
+                    else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
                     {
                         IClickableMenu inventoryPage = gameMenu.pages[GameMenu.inventoryTab];
                         if (inventoryPage.readyToClose())

@@ -15,14 +15,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
-        private static readonly ISet<int> LoggedInvalidDataErrors = new HashSet<int>();
+        /// <summary>The qualified fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
+        private static readonly ISet<string> LoggedInvalidDataErrors = new HashSet<string>();
 
 
         /*********
@@ -31,14 +28,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        public CrabPotMachine(CrabPot machine, GameLocation location, Vector2 tile, IMonitor monitor, IReflectionHelper reflection)
+        public CrabPotMachine(CrabPot machine, GameLocation location, Vector2 tile, IMonitor monitor)
             : base(machine, location, tile)
         {
             this.Monitor = monitor;
-            this.Reflection = reflection;
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -64,11 +59,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override bool SetInput(IStorage input)
         {
             // get bait
-            if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable? bait))
+            if (input.TryGetIngredient(p => p.Sample.TypeDefinitionId == ItemRegistry.type_object && p.Sample.Category == SObject.baitCategory, 1, out IConsumable? bait))
             {
                 this.Machine.bait.Value = (SObject)bait.Take()!;
-                this.Reflection.GetField<bool>(this.Machine, "lidFlapping").SetValue(true);
-                this.Reflection.GetField<float>(this.Machine, "lidFlapTimer").SetValue(60);
+                this.Machine.lidFlapping = true;
+                this.Machine.lidFlapTimer = 60;
                 return true;
             }
 
@@ -91,8 +86,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             owner.gainExperience(Farmer.fishingSkill, 5);
 
             // mark fish caught for achievements and stats
-            IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-            if (fishData.TryGetValue(item.ParentSheetIndex, out string? fishRow))
+            IDictionary<string, string> fishData = DataLoader.Fish(Game1.content);
+            if (fishData.TryGetValue(item.ItemId, out string? fishRow))
             {
                 int size = 0;
                 try
@@ -106,21 +101,21 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 {
                     // The fish length stats don't affect anything, so it's not worth notifying the
                     // user; just log one trace message per affected fish for troubleshooting.
-                    if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.ParentSheetIndex))
-                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}");
+                    if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.QualifiedItemId))
+                        this.Monitor.Log($"The game's fish data has an invalid entry ({item.ItemId}: {fishData[item.ItemId]}). Automated crab pots won't track fish length stats for that fish.\n{ex}");
                 }
 
-                owner.caughtFish(item.ParentSheetIndex, size);
+                owner.caughtFish(item.ItemId, size);
             }
 
             // reset pot
             this.GenericReset(item);
             pot.tileIndexToShow = 710;
             pot.bait.Value = null;
-            this.Reflection.GetField<bool>(pot, "lidFlapping").SetValue(true);
-            this.Reflection.GetField<float>(pot, "lidFlapTimer").SetValue(60f);
-            this.Reflection.GetField<Vector2>(pot, "shake").SetValue(Vector2.Zero);
-            this.Reflection.GetField<float>(pot, "shakeTimer").SetValue(0f);
+            pot.lidFlapping = true;
+            pot.lidFlapTimer = 60f;
+            pot.shake = Vector2.Zero;
+            pot.shakeTimer = 0f;
         }
 
         /// <summary>Get whether the current player needs to bait crab pots.</summary>

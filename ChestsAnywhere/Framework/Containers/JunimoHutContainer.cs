@@ -1,4 +1,3 @@
-using StardewModdingAPI;
 using StardewValley.Buildings;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
@@ -11,8 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="junimoHut">The in-game junimo hut.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public JunimoHutContainer(JunimoHut junimoHut, IReflectionHelper reflection)
-            : base(junimoHut.output.Value, context: junimoHut, showColorPicker: false, reflection) { }
+        public JunimoHutContainer(JunimoHut junimoHut)
+            : base(junimoHut.GetOutputChest(), context: junimoHut, showColorPicker: false) { }
     }
 }

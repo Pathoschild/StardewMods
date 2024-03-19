@@ -12,6 +12,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         /// <summary>The container name.</summary>
         public string Name { get; }
 
+        /// <summary>The preference for storing items in these containers.</summary>
+        public AutomateContainerPreference StoragePreference { get; }
+
+        /// <summary>The preference for taking items from these containers.</summary>
+        public AutomateContainerPreference TakeItemsPreference { get; }
+
         /// <summary>The number of containers in the group.</summary>
         public int Count { get; }
 
@@ -30,10 +36,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The container name.</param>
+        /// <param name="storagePreference">The preference for storing items in these containers.</param>
+        /// <param name="takeItemsPreference">The preference for taking items from these containers.</param>
         /// <param name="containers">The containers in the group.</param>
-        public GroupContainerStats(string name, IEnumerable<IContainer> containers)
+        public GroupContainerStats(string name, AutomateContainerPreference storagePreference, AutomateContainerPreference takeItemsPreference, IEnumerable<IContainer> containers)
         {
             this.Name = name;
+            this.StoragePreference = storagePreference;
+            this.TakeItemsPreference = takeItemsPreference;
 
             foreach (IContainer container in containers)
             {

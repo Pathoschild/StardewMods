@@ -23,14 +23,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /*********
         ** Fields
         *********/
-        /// <summary>The item ID for auto-grabbers.</summary>
-        private readonly int AutoGrabberID = 165;
+        /// <summary>The qualified item ID for auto-grabbers.</summary>
+        private readonly string AutoGrabberID = "(O)165";
 
         /// <summary>Provides multiplayer utilities.</summary>
         private readonly IMultiplayerHelper Multiplayer;
-
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
 
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly Func<bool> EnableShippingBin;
@@ -41,12 +38,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplayer">Provides multiplayer utilities.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IMultiplayerHelper multiplayer, IReflectionHelper reflection, Func<bool> enableShippingBin)
+        public ChestFactory(IMultiplayerHelper multiplayer, Func<bool> enableShippingBin)
         {
             this.Multiplayer = multiplayer;
-            this.Reflection = reflection;
             this.EnableShippingBin = enableShippingBin;
         }
 
@@ -95,7 +90,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (obj is Chest chest && chest.playerChest.Value)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
+                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location)),
                                 location: location,
                                 tile: tile,
                                 mapEntity: chest,
@@ -105,10 +100,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         }
 
                         // auto-grabbers
-                        else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
+                        else if (obj.QualifiedItemId == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
                         {
                             yield return new ManagedChest(
-                                container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
+                                container: new AutoGrabberContainer(obj, grabberChest, context: obj),
                                 location: location,
                                 tile: tile,
                                 mapEntity: obj,
@@ -124,7 +119,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(fridge, context: fridge, showColorPicker: false, this.Reflection),
+                                container: new ChestContainer(fridge, context: fridge, showColorPicker: false),
                                 location: location,
                                 tile: Vector2.Zero,
                                 mapEntity: null,
@@ -149,28 +144,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // buildings
-                    if (location is BuildableGameLocation buildableLocation)
+                    foreach (Building building in location.buildings)
                     {
-                        foreach (Building building in buildableLocation.buildings)
+                        if (building is JunimoHut hut)
                         {
-                            if (building is JunimoHut hut)
-                            {
-                                yield return new ManagedChest(
-                                    container: new JunimoHutContainer(hut, this.Reflection),
-                                    location: location,
-                                    tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
-                                    mapEntity: building,
-                                    defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetBuildingName("Junimo Hut"), nameCounts),
-                                    defaultCategory: category
-                                );
-                            }
+                            yield return new ManagedChest(
+                                container: new JunimoHutContainer(hut),
+                                location: location,
+                                tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
+                                mapEntity: building,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetString("Strings\\Buildings:JunimoHut_Name"), nameCounts),
+                                defaultCategory: category
+                            );
                         }
                     }
 
                     // shipping bin
                     if (this.HasShippingBin(location))
                     {
-                        string shippingBinLabel = GameI18n.GetBuildingName("Shipping Bin");
+                        string shippingBinLabel = GameI18n.GetString("Strings\\Buildings:ShippingBin_Name");
 
                         if (Constants.TargetPlatform == GamePlatform.Android)
                         {
@@ -368,20 +360,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     return this.GetChestInventory(chest);
 
                 // auto-grabber
-                case SObject obj when obj.ParentSheetIndex == this.AutoGrabberID:
+                case SObject obj when obj.QualifiedItemId == this.AutoGrabberID:
                     return this.GetChestInventory(obj.heldObject.Value as Chest);
-
-                // buildings
-                case JunimoHut hut:
-                    return this.GetChestInventory(hut.output.Value);
-                case Mill mill:
-                    return this.GetChestInventory(mill.output.Value);
 
                 // shipping bin
                 case Farm:
                 case IslandWest:
                 case ShippingBin:
                     return Game1.getFarm().getShippingBin(Game1.player);
+
+                // buildings
+                case JunimoHut hut:
+                    return this.GetChestInventory(hut.GetOutputChest());
+                case Building building:
+                    {
+                        // 'output' convention (e.g. vanilla Mill)
+                        Chest? output = building.GetBuildingChest("Output");
+                        if (output != null)
+                            return output.Items;
+
+                        // else only chest
+                        IList<Chest>? chests = building.buildingChests;
+                        if (chests?.Count == 1)
+                            return chests[0].Items;
+
+                        // else no match
+                        return null;
+                    }
 
                 // dresser
                 case StorageFurniture furniture:

@@ -6,7 +6,7 @@
     <RepositoryUrl>https://github.com/Pathoschild/StardewMods</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

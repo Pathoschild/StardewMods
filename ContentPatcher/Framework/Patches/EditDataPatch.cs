@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches.EditData;
 using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
@@ -12,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using xTile;
 
 namespace ContentPatcher.Framework.Patches
@@ -78,6 +80,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
         /// <param name="records">The data records to edit.</param>
@@ -87,19 +90,22 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="targetField">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<ITextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<ITextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
                 type: PatchType.EditData,
                 assetName: assetName,
-                conditions: conditions,
+                priority: (int)priority,
                 updateRate: updateRate,
+                conditions: conditions,
                 contentPack: contentPack,
+                migrator: migrator,
                 parentPatch: parentPatch,
                 parseAssetName: parseAssetName,
                 fromAsset: fromFile
@@ -174,10 +180,18 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
+            this.Edit<T>(asset, onWarning: null);
+        }
+
+        /// <inheritdoc cref="Edit{T}(IAssetData)" />
+        /// <param name="asset" />
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        public void Edit<T>(IAssetData asset, Action<string, IMonitor>? onWarning)
+        {
             // get editor
             if (!this.EditorFactory.TryGetEditorFor(asset.Data, out IKeyValueEditor? editor))
             {
-                this.WarnForPatch(this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true));
+                this.WarnForPatch(this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true), onWarning);
                 return;
             }
 
@@ -212,7 +226,7 @@ namespace ContentPatcher.Framework.Patches
 
                     if (!this.EditorFactory.TryGetEditorFor(data, out editor))
                     {
-                        this.WarnForPatch(this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key)));
+                        this.WarnForPatch(this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key)), onWarning);
                         return;
                     }
                 }
@@ -220,7 +234,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply edits
             char fieldDelimiter = this.GetStringFieldDelimiter(asset);
-            this.ApplyEdits(editor, fieldDelimiter);
+            this.ApplyEdits(editor, fieldDelimiter, onWarning);
         }
 
         /// <inheritdoc />
@@ -304,17 +318,19 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Apply the patch to a data asset.</summary>
         /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
-        private void ApplyEdits(IKeyValueEditor editor, char fieldDelimiter)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void ApplyEdits(IKeyValueEditor editor, char fieldDelimiter, Action<string, IMonitor>? onWarning)
         {
-            this.ApplyRecords(editor);
-            this.ApplyFields(editor, fieldDelimiter);
-            this.ApplyTextOperations(editor, fieldDelimiter);
-            this.ApplyMoveEntries(editor);
+            this.ApplyRecords(editor, onWarning);
+            this.ApplyFields(editor, fieldDelimiter, onWarning);
+            this.ApplyTextOperations(editor, fieldDelimiter, onWarning);
+            this.ApplyMoveEntries(editor, onWarning);
         }
 
         /// <summary>Apply entry overwrites to the data asset.</summary>
         /// <param name="editor">The asset editor to apply.</param>
-        private void ApplyRecords(IKeyValueEditor editor)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void ApplyRecords(IKeyValueEditor editor, Action<string, IMonitor>? onWarning)
         {
             int i = 0;
             foreach (EditDataPatchRecord record in this.Records)
@@ -331,16 +347,16 @@ namespace ContentPatcher.Framework.Patches
                 if (!editor.CanAddEntries && !editor.HasEntry(key))
                 {
                     if (editor is ModelKeyValueEditor modelEditor)
-                        this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model, must be one of: {string.Join(", ", modelEditor.FieldNames)}.");
+                        this.WarnForRecord(i, $"this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model, must be one of: {string.Join(", ", modelEditor.FieldNames)}.", onWarning);
                     else
-                        this.WarnForRecord(i, $"this asset doesn't allow adding new entries, and the entry '{record.Key.Value}' isn't defined in the model.");
+                        this.WarnForRecord(i, $"this asset doesn't allow adding new entries, and the entry '{record.Key.Value}' isn't defined in the model.", onWarning);
                     continue;
                 }
                 if (targetType is null)
                 {
                     // This shouldn't happen in practice per the remarks on IKeyValueEditor.GetEntryType.
                     // If you're here because it did happen, sorry!
-                    this.WarnForRecord(i, $"this asset doesn't have a type for entry '{record.Key.Value}', so new entries can't be added.");
+                    this.WarnForRecord(i, $"this asset doesn't have a type for entry '{record.Key.Value}', so new entries can't be added.", onWarning);
                     continue;
                 }
 
@@ -359,7 +375,7 @@ namespace ContentPatcher.Framework.Patches
                 }
                 catch (Exception ex)
                 {
-                    this.WarnForRecord(i, $"failed converting {(fromType == JTokenType.Object ? "entry" : $"{fromType} value")} to the expected type '{targetType.FullName}': {ex.Message}.");
+                    this.WarnForRecord(i, $"failed converting {(fromType == JTokenType.Object ? "entry" : $"{fromType} value")} to the expected type '{targetType.FullName}': {ex.Message}.", onWarning);
                     continue;
                 }
 
@@ -370,7 +386,7 @@ namespace ContentPatcher.Framework.Patches
                 }
                 catch (Exception ex)
                 {
-                    this.WarnForRecord(i, $"failed setting '{key}' entry: {ex.Message}");
+                    this.WarnForRecord(i, $"failed setting '{key}' entry: {ex.Message}", onWarning);
                     continue;
                 }
             }
@@ -379,7 +395,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Apply field overwrites to the data asset.</summary>
         /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
-        private void ApplyFields(IKeyValueEditor editor, char fieldDelimiter)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void ApplyFields(IKeyValueEditor editor, char fieldDelimiter, Action<string, IMonitor>? onWarning)
         {
             foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value!))
             {
@@ -390,7 +407,7 @@ namespace ContentPatcher.Framework.Patches
                 // skip if doesn't exist
                 if (!editor.HasEntry(key))
                 {
-                    this.WarnForField($"there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.");
+                    this.WarnForField($"there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", onWarning);
                     continue;
                 }
 
@@ -402,12 +419,12 @@ namespace ContentPatcher.Framework.Patches
                     {
                         if (!int.TryParse(field.FieldKey.Value, out int index))
                         {
-                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\" instead)).");
+                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\" instead)).", onWarning);
                             continue;
                         }
                         if (index < 0 || index > actualFields.Length - 1)
                         {
-                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {index} (must be 0 to {actualFields.Length - 1}).");
+                            this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {index} (must be 0 to {actualFields.Length - 1}).", onWarning);
                             continue;
                         }
 
@@ -432,25 +449,33 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Apply text operations to the data asset.</summary>
         /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
-        private void ApplyTextOperations(IKeyValueEditor editor, char fieldDelimiter)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void ApplyTextOperations(IKeyValueEditor editor, char fieldDelimiter, Action<string, IMonitor>? onWarning)
         {
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
                 if (!this.TryApplyTextOperation(this.TextOperations[i], editor, fieldDelimiter, out string? error))
-                    this.Monitor.Log($"Can't apply data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
+                {
+                    string warning = $"Can't apply data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}";
+                    onWarning?.Invoke(warning, this.Monitor);
+                    this.Monitor.Log(warning, LogLevel.Warn);
+                }
             }
         }
 
         /// <summary>Apply entry moves to the data asset.</summary>
         /// <param name="editor">The asset editor to apply.</param>
-        private void ApplyMoveEntries(IKeyValueEditor editor)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void ApplyMoveEntries(IKeyValueEditor editor, Action<string, IMonitor>? onWarning)
         {
             if (!this.MoveRecords.Any())
                 return;
 
             if (!editor.CanMoveEntries)
             {
-                this.Monitor.LogOnce($"Can't move records for \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list.", LogLevel.Warn);
+                string warning = $"Can't move records for \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list.";
+                onWarning?.Invoke(warning, this.Monitor);
+                this.Monitor.LogOnce(warning, LogLevel.Warn);
                 return;
             }
 
@@ -485,24 +510,29 @@ namespace ContentPatcher.Framework.Patches
                 // log error
                 if (result != MoveResult.Success)
                 {
+                    string logMessage;
+
                     switch (result)
                     {
                         case MoveResult.TargetNotFound:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with ID '{key}' exists.", LogLevel.Warn);
+                            logMessage = $"Can't move {errorLabel}: no entry with ID '{key}' exists.";
                             break;
 
                         case MoveResult.AnchorNotFound:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with ID '{anchorKey}' exists.", LogLevel.Warn);
+                            logMessage = $"Can't move {errorLabel}: no entry with ID '{anchorKey}' exists.";
                             break;
 
                         case MoveResult.AnchorIsMain:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
+                            logMessage = $"Can't move {errorLabel}: can't move entry relative to itself.";
                             break;
 
                         default:
-                            this.Monitor.LogOnce($"Can't move {errorLabel}: an unknown error occurred.", LogLevel.Warn);
+                            logMessage = $"Can't move {errorLabel}: an unknown error occurred.";
                             break;
                     }
+
+                    onWarning?.Invoke(logMessage, this.Monitor);
+                    this.Monitor.LogOnce(logMessage, LogLevel.Warn);
                 }
             }
         }
@@ -604,24 +634,33 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Log a warning for an issue when applying the patch.</summary>
         /// <param name="message">The message to log.</param>
-        private void WarnForPatch(string message)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void WarnForPatch(string message, Action<string, IMonitor>? onWarning)
         {
-            this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+            string warning = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}";
+            onWarning?.Invoke(warning, this.Monitor);
+            this.Monitor.Log(warning, LogLevel.Warn);
         }
 
         /// <summary>Log a warning for an issue when applying a field edit.</summary>
         /// <param name="message">The message to log.</param>
-        private void WarnForField(string message)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void WarnForField(string message, Action<string, IMonitor>? onWarning)
         {
-            this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+            string warning = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: {message}";
+            onWarning?.Invoke(warning, this.Monitor);
+            this.Monitor.Log(warning, LogLevel.Warn);
         }
 
         /// <summary>Log a warning for an issue when applying a record.</summary>
         /// <param name="index">The index of the record in the <see cref="Records"/> list.</param>
         /// <param name="message">The message to log.</param>
-        private void WarnForRecord(int index, string message)
+        /// <param name="onWarning">A callback to invoke before logging a warning message. The warning message is still logged after calling it.</param>
+        private void WarnForRecord(int index, string message, Action<string, IMonitor>? onWarning)
         {
-            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{index}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
+            string warning = $"Can't apply data patch \"{this.Path} > entry #{index}\" to {this.TargetAsset}: {message}";
+            onWarning?.Invoke(warning, this.Monitor);
+            this.Monitor.Log(warning, LogLevel.Warn);
         }
 
 

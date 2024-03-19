@@ -304,12 +304,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="id">The item id.</param>
         /// <param name="ingredient">The recipe ingredient model for the item.</param>
         /// <returns>The equivalent item entry model, or <c>null</c> for a category with no matching items.</returns>
-        private RecipeItemEntry? TryCreateItemEntry(int id, RecipeIngredientModel ingredient)
+        private RecipeItemEntry? TryCreateItemEntry(string id, RecipeIngredientModel ingredient)
         {
             // from category
-            if (id < 0)
+            if (int.TryParse(id, out int category) && category < 0)
             {
-                Item? input = this.GameHelper.GetObjectsByCategory(id).FirstOrDefault();
+                Item? input = this.GameHelper.GetObjectsByCategory(category).FirstOrDefault();
                 if (input == null)
                     return null;
 
@@ -338,12 +338,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // from item
             {
-                Item input = this.GameHelper.GetObjectBySpriteIndex(id);
+                Item input = ItemRegistry.Create(id);
 
                 if (input is SObject obj)
                 {
-                    if (ingredient.PreservedParentSheetIndex != null)
-                        obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
+                    if (ingredient.PreservedItemId != null)
+                        obj.preservedParentSheetIndex.Value = ingredient.PreservedItemId;
                     if (ingredient.PreserveType != null)
                         obj.preserve.Value = ingredient.PreserveType.Value;
                 }
@@ -396,9 +396,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the cartesian product of the possible input ingredients for a recipe.</summary>
         /// <param name="recipe">The recipe whose input sets to list.</param>
         /// <returns>An enumerable containing each set of item ids.</returns>
-        private IEnumerable<int[]> GetCartesianInputs(RecipeModel recipe)
+        private IEnumerable<string[]> GetCartesianInputs(RecipeModel recipe)
         {
-            int[][] sets = recipe.Ingredients.Select(p => p.PossibleIds.ToArray()).ToArray();
+            string[][] sets = recipe.Ingredients.Select(p => p.PossibleIds.ToArray()).ToArray();
             return this.GetCartesianProduct(sets);
         }
 

@@ -32,9 +32,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public HoeAttachment(HoeConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+        public HoeAttachment(HoeConfig config, IModRegistry modRegistry)
+            : base(modRegistry)
         {
             this.Config = config;
         }
@@ -64,17 +63,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             tool = tool.AssertNotNull();
 
             // clear weeds
-            if (this.Config.ClearWeeds && this.IsWeed(tileObj))
+            if (this.Config.ClearWeeds && tileObj?.IsWeeds() == true)
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // collect artifact spots
-            if (this.Config.DigArtifactSpots && tileObj?.ParentSheetIndex == HoeAttachment.ArtifactSpotItemID)
+            if (this.Config.DigArtifactSpots && tileObj?.QualifiedItemId == $"{ItemRegistry.type_object}{HoeAttachment.ArtifactSpotItemID}")
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // harvest ginger
-            if (this.Config.HarvestGinger && tileFeature is HoeDirt dirt && dirt.crop?.whichForageCrop.Value == Crop.forageCrop_ginger && dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
+            if (this.Config.HarvestGinger && tileFeature is HoeDirt dirt && dirt.crop?.whichForageCrop.Value == Crop.forageCrop_ginger.ToString() && dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
             {
-                dirt.destroyCrop(tile, showAnimation: false, location);
+                dirt.destroyCrop(showAnimation: false);
                 return true;
             }
 

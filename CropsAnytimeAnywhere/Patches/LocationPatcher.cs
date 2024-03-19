@@ -10,8 +10,8 @@ using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Locations;
-using xTile.ObjectModel;
 using xTile.Tiles;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
@@ -175,19 +175,11 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <remarks>Derived from <see cref="GameLocation.doesTileHaveProperty(int, int, string, string)"/> with optimizations.</remarks>
         private static string? GetProperty(Tile tile, string name)
         {
-            if (tile.TileIndexProperties?.TryGetValue(name, out PropertyValue? property) == true)
-            {
-                string? value = property?.ToString();
-                if (value != null)
-                    return value;
-            }
+            if (tile.TileIndexProperties?.TryGetValue(name, out string? value) is true)
+                return value;
 
-            if (tile.Properties?.TryGetValue(name, out property) == true)
-            {
-                string? value = property?.ToString();
-                if (value != null)
-                    return value;
-            }
+            if (tile.Properties?.TryGetValue(name, out value) is true)
+                return value;
 
             return null;
         }

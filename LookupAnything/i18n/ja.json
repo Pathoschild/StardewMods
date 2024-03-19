@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "ゴミ拾いをする優しい心の持ち主。",
 
     // item types
-    "data.type.debris": "破片",
-    "data.type.stone": "石",
     "data.type.container": "入れ物",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "卵を孵化させる",
-    "data.item.broken-branch.name": "木片",
-    "data.item.broken-branch.description": "木片　斧で叩くと木材を入手できる",
-    "data.item.stone.name": "石",
-    "data.item.stone.description": "変哲もない石　叩き割ると石材になる",
-    "data.item.geode.name": "晶洞石の末端",
-    "data.item.geode.description": "破壊するとジオードが手に入る",
-    "data.item.frozen-geode.name": "凍った晶洞石の末端",
-    "data.item.frozen-geode.description": "破壊するとフローズンジオードが手に入る",
-    "data.item.magma-geode.name": "マグマ晶洞石の末端",
-    "data.item.magma-geode.description": "破壊するとマグマジオードが手に入る",
-
-    // weeds & crystals
-    "data.item.weed.name": "雑草",
-    "data.item.weed.description": "変哲もない雑草。 繊維や混ざった種が含まれているかも",
-    "data.item.fertile-weed.name": "肥えた雑草",
-    "data.item.fertile-weed.description": "野生の種を落とすことが保証されている",
-    "data.item.ice-crystal.name": "氷の結晶",
-    "data.item.ice-crystal.description": "変哲もない氷の結晶。 極稀に精製した水晶が手に入る",
-
-    // mine gems
-    "data.item.amethyst-node.name": "アメシスト鉱脈",
-    "data.item.amethyst-node.description": "壊すとアメシストが手に入る",
-    "data.item.aquamarine-node.name": "アクアマリン鉱脈",
-    "data.item.aquamarine-node.description": "壊すとアクアマリンが手に入る",
-    "data.item.diamond-node.name": "ダイアモンド鉱脈",
-    "data.item.diamond-node.description": "壊すとダイアモンドが手に入る",
-    "data.item.emerald-node.name": "エメラルド鉱脈",
-    "data.item.emerald-node.description": "壊すとエメラルドが手に入る",
-    "data.item.gem-node.name": "宝石鉱脈",
-    "data.item.gem-node.description": "以下の宝石を入手: エメラルド,アクアマリン,ルビー,アメシスト, トパーズ,ヒスイ,ダイアモンド",
-    "data.item.jade-node.name": "ヒスイ鉱脈",
-    "data.item.jade-node.description": "壊すとヒスイが手に入る",
-    "data.item.mystic-stone.name": "神秘の鉱脈",
-    "data.item.mystic-stone.description": "壊すとレインボージェムを含むレアな鉱石・宝石を手に入れられる",
-    "data.item.prismatic-node.name": "虹色の鉱脈",
-    "data.item.prismatic-node.description": "壊すとレインボージェムが手に入る",
-    "data.item.ruby-node.name": "ルビー鉱脈",
-    "data.item.ruby-node.description": "壊すとルビーが手に入る",
-    "data.item.topaz-node.name": "トパーズ鉱脈",
-    "data.item.topaz-node.description": "壊すとトパーズが手に入る",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "噴石の鉱脈",
-    "data.item.cinder-shard-node.description": "壊すと噴石のかけらが手に入る",
-    "data.item.copper-node.name": "銅鉱脈",
-    "data.item.copper-node.description": "壊すと銅鉱石が手に入る",
-    "data.item.gold-node.name": "金鉱脈",
-    "data.item.gold-node.description": "壊すと金鉱石が手に入る",
-    "data.item.iridium-node.name": "イリジウム鉱脈",
-    "data.item.iridium-node.description": "壊すとイリジウム鉱石が手に入る",
-    "data.item.iron-node.name": "鉄鉱脈",
-    "data.item.iron-node.description": "壊すと鉄鉱石が手に入る",
-    "data.item.omni-geode-node.name": "オムニジオード鉱脈",
-    "data.item.omni-geode-node.description": "壊すとオムニジオードが手に入る",
-
-    // mine stones
-    "data.item.colored-stone.name": "色付きの石",
-    "data.item.colored-stone.description": "変哲もない石。 石材,鉱石,ジオードを含んでいるかもしれない",
-    "data.item.mine-stone.name": "石",
-    "data.item.mine-stone.description": "壊すと石材と確率で石炭が手に入る",
-
-    // other stones
-    "data.item.clay-stone.name": "粘土石",
-    "data.item.clay-stone.description": "壊すと粘土が手に入る",
-    "data.item.fossil-stone.name": "化石の石",
-    "data.item.fossil-stone.description": "壊すと化石などが手に入る",
-
-    // mine containers
     "data.item.barrel.name": "タル",
     "data.item.barrel.description": "壊すと色々なアイテムが手に入る",
     "data.item.box.name": "箱",
@@ -204,16 +134,6 @@
 
     "location.unknown-fish-area": "{{locationName}}(エリア{{id}})",
 
-    // location names (Stardew Valley Expanded)
-    "location.Custom_BlueMoonVineyard.fish-area-0": "ブルームーンブドウ園(海側)",
-    "location.Custom_BlueMoonVineyard.fish-area-1": "ブルームーンブドウ園(川側)",
-    "location.Custom_ForestWest": "西の森",
-    "location.Custom_ShearwaterBridge": "ミズナギドリ橋",
-    "location.Custom_AdventurerSummit": "アドベンチャーサミット",
-    "location.Custom_JunimoWoods": "ジュニモの森",
-    "location.Custom_DeepCave": "農場の洞窟の奥",
-    "location.Custom_CrimsonBadlands": "クリムゾンバッドランド",
-    "location.ExteriorMuseum": "水族館ビーチ",
 
     /*********
     ** Animal lookups
@@ -262,8 +182,7 @@
     "building.output-processing": "処理中",
     "building.output-ready": "準備完了",
     "building.slimes.summary": "最大{{max}}匹中{{count}}のスライムがいる",
-    "building.stored-hay.summary-one-silo": "{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{siloCount}}基のサイロに{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "4匹まで動物が入り、牛が飼える",
     "building.upgrades.barn.1": "8匹まで動物が入り、動物の妊娠とヤギの飼育ができる",
     "building.upgrades.barn.2": "12匹まで動物が入り、 自動給餌と、豚や羊の飼育ができる",
@@ -363,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "内容",
     "item.loves-this": "これが大好きな人",
     "item.likes-this": "これが好きな人",
@@ -381,6 +301,7 @@
     "item.produces-dye": "染色",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "設置した {{name}}",
     "item.contents.ready": "{{name}}が回収可能",
     "item.contents.partial": "{{time}}で{{name}}",
@@ -687,7 +608,7 @@
     // labels
     "tree.stage": "成長段階",
     "tree.next-growth": "次の成長",
-    "tree.has-seed": "種をつけている",
+    "tree.seed": "種をつけている",
     "tree.is-fertilized": "肥料",
 
     // values
@@ -703,6 +624,9 @@
     "tree.next-growth.winter": "肥料を与えないと温室の外では冬に育たない",
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
     "tree.next-growth.chance": "{{chance}}%の確率で明日{{stage}}に成長する",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "種",

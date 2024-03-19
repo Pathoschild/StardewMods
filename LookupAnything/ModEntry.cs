@@ -7,7 +7,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
@@ -114,12 +113,9 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!this.IsDataValid)
                 return;
 
-            // get mod APIs
-            JsonAssetsIntegration jsonAssets = new JsonAssetsIntegration(this.Helper.ModRegistry, this.Monitor);
-
             // initialize functionality
             this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, jsonAssets, () => this.Config.EnableTileLookups);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
             this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
             // add Generic Mod Config Menu integration
@@ -142,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 return;
 
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
+            this.GameHelper.ResetCache(this.Monitor);
         }
 
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>

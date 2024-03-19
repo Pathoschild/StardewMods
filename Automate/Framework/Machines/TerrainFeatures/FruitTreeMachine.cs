@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             if (this.Machine.growthStage.Value < FruitTree.treeStage)
                 return MachineState.Disabled;
 
-            return this.Machine.fruitsOnTree.Value > 0
+            return this.Machine.fruit.Count > 0
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -37,17 +37,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
             // if struck by lightning => coal
             if (tree.struckByLightningCountdown.Value > 0)
-                return new TrackedItem(new SObject(382, tree.fruitsOnTree.Value), onReduced: this.OnOutputReduced);
+                return new TrackedItem(ItemRegistry.Create(SObject.coalQID, tree.fruit.Count), onReduced: _ => tree.fruit.Clear());
 
             // else => fruit
-            int quality = SObject.lowQuality;
-            if (tree.daysUntilMature.Value <= -112)
-                quality = SObject.medQuality;
-            if (tree.daysUntilMature.Value <= -224)
-                quality = SObject.highQuality;
-            if (tree.daysUntilMature.Value <= -336)
-                quality = SObject.bestQuality;
-            return new TrackedItem(new SObject(tree.indexOfFruit.Value, tree.fruitsOnTree.Value, quality: quality), onReduced: this.OnOutputReduced);
+            return new TrackedItem(tree.fruit[^1], onReduced: item => tree.fruit.Remove(item));
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -56,17 +49,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         public override bool SetInput(IStorage input)
         {
             return false; // no input
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="item">The output item that was taken.</param>
-        private void OnOutputReduced(Item item)
-        {
-            this.Machine.fruitsOnTree.Value = item.Stack;
         }
     }
 }

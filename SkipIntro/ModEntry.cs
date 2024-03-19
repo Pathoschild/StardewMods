@@ -6,6 +6,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.SDKs;
 
 namespace Pathoschild.Stardew.SkipIntro
 {
@@ -168,17 +169,18 @@ namespace Pathoschild.Stardew.SkipIntro
             // skip to title screen
             menu.skipToTitleButtons();
 
+            // avoid game crash since Game1.currentSong isn't set yet
+            Game1.currentSong ??= Game1.soundBank.GetCue("MainTheme");
+
             // skip button transition
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                IReflectedField<bool> isTransitioningButtons = this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons");
-                while (isTransitioningButtons.GetValue())
+                while (menu.isTransitioningButtons)
                     menu.update(Game1.currentGameTime);
             }
             else
             {
-                IReflectedField<int> buttonsToShow = this.Helper.Reflection.GetField<int>(menu, "buttonsToShow");
-                while (buttonsToShow.GetValue() < TitleMenu.numberOfButtons)
+                while (menu.buttonsToShow < TitleMenu.numberOfButtons)
                     menu.update(Game1.currentGameTime);
             }
 
@@ -221,6 +223,11 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <returns>Returns the next step in the skip logic.</returns>
         private Stage StartTransitionToCoop(TitleMenu menu)
         {
+            // wait until the game client SDK is ready, which is needed to load the co-op menus
+            SDKHelper sdk = this.Helper.Reflection.GetProperty<SDKHelper>(typeof(Program), "sdk").GetValue();
+            if (!sdk.ConnectionFinished)
+                return Stage.StartTransitionToCoop;
+
             // start transition
             menu.performButtonAction("Co-op");
 

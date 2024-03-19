@@ -186,7 +186,9 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="facingDirection">The direction the player should be facing after they're moved.</param>
         private void MovePlayerFrom(Farmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
         {
-            if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
+            Point playerTile = player.TilePoint;
+
+            if (playerTile.X == (int)fromTile.X && playerTile.Y == (int)fromTile.Y)
             {
                 player.Position = new Vector2(toTile.X * Game1.tileSize, toTile.Y * Game1.tileSize);
                 player.FacingDirection = (int)facingDirection;
@@ -274,24 +276,20 @@ namespace Pathoschild.Stardew.DebugMode
             // event
             if (Game1.CurrentEvent != null)
             {
-                Event @event = Game1.CurrentEvent;
-                int eventID = this.Helper.Reflection.GetField<int>(@event, "id").GetValue();
-                bool isFestival = @event.isFestival;
-                string festivalName = @event.FestivalName;
-                double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
+                Event curEvent = Game1.CurrentEvent;
+                double progress = curEvent.CurrentCommand / (double)curEvent.eventCommands.Length;
 
-                if (isFestival)
-                    yield return $"{I18n.Label_FestivalName()}: {festivalName}";
-                else
-                {
-                    yield return $"{I18n.Label_EventId()}: {eventID}";
-                    if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
-                        yield return $"{I18n.Label_EventScript()}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
-                }
+                if (curEvent.isFestival)
+                    yield return $"{I18n.Label_FestivalName()}: {curEvent.FestivalName}";
+
+                yield return $"{I18n.Label_EventId()}: {curEvent.id}";
+
+                if (!curEvent.isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < curEvent.eventCommands.Length)
+                    yield return $"{I18n.Label_EventScript()}: {curEvent.GetCurrentCommand()} ({(int)(progress * 100)}%)";
             }
 
             // music
-            if (Game1.currentSong?.Name != null && Game1.currentSong.IsPlaying)
+            if (Game1.currentSong is { Name: not null, IsPlaying: true })
                 yield return $"{I18n.Label_Song()}: {Game1.currentSong.Name}";
         }
 

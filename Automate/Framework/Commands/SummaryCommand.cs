@@ -138,8 +138,39 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
                             }
 
                             // list containers
-                            foreach (var containerGroup in group.Containers)
-                                report.AppendLine($"          {containerGroup.Count} x {containerGroup.Name} ({containerGroup.FilledSlots}/{containerGroup.TotalSlots} full)");
+                            foreach (GroupContainerStats containerGroup in group.Containers)
+                            {
+                                report.Append($"          {containerGroup.Count} x {containerGroup.Name} ({containerGroup.FilledSlots}/{containerGroup.TotalSlots} full)");
+
+                                AutomateContainerPreference storage = containerGroup.StoragePreference;
+                                AutomateContainerPreference takeItems = containerGroup.TakeItemsPreference;
+
+                                bool defaultStorage = storage == AutomateContainerPreference.Allow;
+                                bool defaultTakeItems = takeItems == AutomateContainerPreference.Allow;
+
+                                if (!defaultStorage || !defaultTakeItems)
+                                {
+                                    if (storage == AutomateContainerPreference.Disable && takeItems == AutomateContainerPreference.Disable)
+                                        report.Append(" [disabled]");
+                                    else
+                                    {
+                                        report.Append(" [");
+
+                                        if (!defaultStorage)
+                                            report.Append($"{storage.ToString().ToLower()} storage");
+
+                                        if (!defaultStorage && !defaultTakeItems)
+                                            report.Append(", ");
+
+                                        if (!defaultTakeItems)
+                                            report.Append($"{takeItems.ToString().ToLower()} taking items");
+
+                                        report.Append(']');
+                                    }
+                                }
+
+                                report.AppendLine();
+                            }
 
                             // list Junimo chests
                             if (group.IsJunimoGroup)

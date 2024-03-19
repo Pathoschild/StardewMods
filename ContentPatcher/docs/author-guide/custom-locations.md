@@ -1,5 +1,10 @@
 ﻿← [author guide](../author-guide.md)
 
+**This feature is deprecated. See [Modding:Location data](https://stardewvalleywiki.com/Modding:Location_data) for help
+adding/editing locations through the built-in feature in Stardew Valley 1.6 and later.**
+
+----
+
 The `CustomLocations` feature lets you add new in-game locations, complete with their own maps and
 warps. Content Patcher automatically handles NPC pathfinding, object persistence, etc.
 
@@ -68,13 +73,17 @@ these fields:
 <td><code>Name</code></td>
 <td>
 
-The location's unique internal name. The name must begin with `Custom_` (to avoid conflicting with
-current or future vanilla locations) and can only contain alphanumeric or underscore characters.
+The location's unique internal name.
 
-The name must be **globally unique**, so prefixing it with your mod name like
-`Custom_YourModName_LocationName` is strongly recommended. If two content packs add a location with
-the same name, both will be rejected with an error message. If the player ignores the warning and
-saves anyway at that point, anything in the location will be permanently lost.
+The name:
+* Must only contain alphanumeric or underscore characters.
+* Must begin with [your mod's manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest)
+  (like `Your.ModId_`), to avoid name conflicts. For legacy reasons, you can also start it with
+  `Custom_` instead but this isn't recommended.
+* Must be **globally unique**, so prefixing it with your mod ID is strongly recommended. If
+  two content packs add a location with the same name, both will be rejected with an error message.
+  If the player ignores the warning and saves anyway at that point, anything in the location will be
+  permanently lost.
 
 This field can't contain [tokens](../author-guide.md#tokens).
 
@@ -116,12 +125,12 @@ Here's how you'd do that:
 
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
 
    "CustomLocations": [
       // add the in-game location
       {
-         "Name": "Custom_ExampleMod_AbigailCloset",
+         "Name": "Example.ModId_AbigailCloset",
          "FromMapFile": "assets/abigail-closet.tmx"
       }
    ],
@@ -132,14 +141,14 @@ Here's how you'd do that:
          "Action": "EditMap",
          "Target": "Maps/SeedShop",
          "AddWarps": [
-            "8 10 Custom_ExampleMod_AbigailCloset 7 20"
+            "8 10 Example.ModId_AbigailCloset 7 20"
          ]
       },
 
       // conditionally edit the map if needed
       {
          "Action": "EditMap",
-         "Target": "Maps/Custom_ExampleMod_AbigailCloset",
+         "Target": "Maps/Example.ModId_AbigailCloset",
          "FromFile": "assets/abigail-closet-clean.tmx",
          "When": {
             "HasFlag": "AbigailClosetClean" // example custom mail flag
@@ -178,10 +187,10 @@ For example:
 
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "CustomLocations": [
       {
-         "Name": "Custom_ExampleMod_AbigailCloset",
+         "Name": "Example.ModId_AbigailCloset",
          "FromMapFile": "assets/abigail-closet.tmx",
          "MigrateLegacyNames": [ "Custom_AbbyRoom" ]
       }

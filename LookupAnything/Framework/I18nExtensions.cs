@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -11,7 +10,10 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.WildTrees;
+using StardewValley.Mods;
 using StardewValley.Network;
+using StardewValley.Pathfinding;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -71,22 +73,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a translated season name from the game.</summary>
         /// <param name="season">The English season name.</param>
-        public static string GetSeasonName(string season)
+        public static string GetSeasonName(Season season)
         {
-            if (string.IsNullOrWhiteSpace(season))
-                return season;
-
-            int id = Utility.getSeasonNumber(season);
-            return id != -1
-                ? Utility.getSeasonNameFromNumber(id)
-                : season;
+            return Utility.getSeasonNameFromNumber((int)season);
         }
 
         /// <summary>Get translated season names from the game.</summary>
         /// <param name="seasons">The English season names.</param>
-        public static IEnumerable<string> GetSeasonNames(IEnumerable<string> seasons)
+        public static IEnumerable<string> GetSeasonNames(IEnumerable<Season> seasons)
         {
-            foreach (string season in seasons)
+            foreach (Season season in seasons)
                 yield return I18n.GetSeasonName(season);
         }
 
@@ -192,12 +188,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             str.AppendLine($"- {pair.Key}: {pair.Value}");
                         return str.ToString().TrimEnd();
                     }
+                    break;
+
+                case SchedulePathDescription schedulePath:
+                    return $"{schedulePath.time / 100:00}:{schedulePath.time % 100:00} {schedulePath.targetLocationName} ({schedulePath.targetTile.X}, {schedulePath.targetTile.Y}) {schedulePath.facingDirection} {schedulePath.endOfRouteMessage}";
+
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();
                         str.AppendLine();
-                        foreach (FieldInfo field in stats.GetType().GetFields())
-                            str.AppendLine($"- {field.Name}: {I18n.Stringify(field.GetValue(stats))}");
+                        foreach ((string key, uint statValue) in stats.Values)
+                            str.AppendLine($"- {key}: {I18n.Stringify(statValue)}");
                         return str.ToString().TrimEnd();
                     }
                 case Warp warp:

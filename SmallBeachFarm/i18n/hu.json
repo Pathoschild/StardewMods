@@ -5,6 +5,11 @@
     "farm.name": "Kicsiny Tengerparti Farm",
     "farm.description": "Egy apró, termékeny tengerpart, ahol folyami és tengeri halakat is el tudsz kapni.",
 
+    // TODO
+    "farm.fish-areas.river": "River",
+    "farm.fish-areas.estuary": "Estuary",
+    "farm.fish-areas.ocean": "Ocean",
+
 
     /*********
     ** Generic Mod Config Menu UI

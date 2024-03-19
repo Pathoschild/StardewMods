@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.4.10</Version>
+    <Version>2.5.0</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
 
     <EnableHarmony>true</EnableHarmony>
-    <IgnoreModFilePaths>assets/paths.png, assets/spring_beach.png, assets/spring_island_tilesheet_1.png, assets/spring_outdoorsTileSheet.png, assets/spring_town.png</IgnoreModFilePaths>
+    <IgnoreModFilePaths>assets/paths.png, assets/spring_beach.png, assets/spring_island_tilesheet_1.png, assets/spring_outdoorsTileSheet.png, assets/spring_outdoorsTileSheet2.png, assets/spring_town.png</IgnoreModFilePaths>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,6 +7,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Patches
@@ -58,11 +59,13 @@ namespace ContentPatcher.Framework.Patches
                 path: path,
                 type: PatchType.Include,
                 assetName: assetName,
+                priority: (int)AssetEditPriority.Default,
+                updateRate: updateRate,
                 conditions: conditions,
                 fromAsset: fromFile,
-                updateRate: updateRate,
                 parentPatch: parentPatch,
                 contentPack: contentPack.ContentPack,
+                migrator: contentPack.Migrator,
                 parseAssetName: parseAssetName
             )
         {

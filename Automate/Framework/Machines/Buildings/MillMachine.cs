@@ -1,29 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Netcode;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Inventories;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A mill machine that accepts input and provides output.</summary>
-    /// <remarks>Derived from <see cref="Mill.doAction"/>.</remarks>
-    internal class MillMachine : BaseMachineForBuilding<Mill>
+    internal class MillMachine : BaseMachineForBuilding<Building>
     {
         /*********
         ** Fields
         *********/
         /// <summary>The mill's input chest.</summary>
-        private Chest Input => this.Machine.input.Value;
+        private Chest Input => this.Machine.GetBuildingChest("Input");
 
         /// <summary>The mill's output chest.</summary>
-        private Chest Output => this.Machine.output.Value;
+        private Chest Output => this.Machine.GetBuildingChest("Output");
 
-        /// <summary>The maximum input stack size to allow per item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
-        private readonly IDictionary<int, int> MaxInputStackSize;
+        /// <summary>The maximum input stack size to allow per qualified item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
+        private readonly IDictionary<string, int> MaxInputStackSize;
 
 
         /*********
@@ -32,12 +31,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="mill">The underlying mill.</param>
         /// <param name="location">The location which contains the machine.</param>
-        public MillMachine(Mill mill, GameLocation location)
+        public MillMachine(Building mill, GameLocation location)
             : base(mill, location, BaseMachine.GetTileAreaFor(mill))
         {
-            this.MaxInputStackSize = new Dictionary<int, int>
+            this.MaxInputStackSize = new Dictionary<string, int>
             {
-                [284] = new SObject(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
+                ["(O)284"] = ItemRegistry.Create("(O)284").maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
             };
         }
 
@@ -47,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (this.Machine.isUnderConstruction())
                 return MachineState.Disabled;
 
-            if (this.Output.items.Any(item => item != null))
+            if (this.Output.Items.Any(item => item != null))
                 return MachineState.Done;
 
             return this.InputFull()
@@ -58,7 +57,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the output item.</summary>
         public override ITrackedStack? GetOutput()
         {
-            return this.GetTracked(this.Output.items.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
+            return this.GetTracked(this.Output.Items.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -71,7 +70,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
             // fill input with wheat (262), beets (284), and rice (271)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Type == ItemType.Object && i.Sample.ParentSheetIndex is 262 or 284 or 271))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.QualifiedItemId is "(O)262" or "(O)284" or "(O)271"))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);
@@ -105,7 +104,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
             // try adding to input
             int originalSize = item.Count;
-            IList<Item> slots = this.Input.items;
+            IList<Item> slots = this.Input.Items;
             int maxStackSize = this.GetMaxInputStackSize(item.Sample);
             for (int i = 0; i < Chest.capacity; i++)
             {
@@ -137,7 +136,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get whether the mill's input bin is full.</summary>
         private bool InputFull()
         {
-            NetObjectList<Item?>? slots = this.Input.items;
+            Inventory slots = this.Input.Items;
 
             // free slots
             if (slots.Count < Chest.capacity)
@@ -161,7 +160,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         private void OnOutputTaken(Item item)
         {
             this.Output.clearNulls();
-            this.Output.items.Remove(item);
+            this.Output.Items.Remove(item);
         }
 
         /// <summary>Get the maximum input stack size to allow for an item.</summary>
@@ -171,7 +170,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (item == null)
                 return 0;
 
-            return this.MaxInputStackSize.TryGetValue(item.ParentSheetIndex, out int max)
+            return this.MaxInputStackSize.TryGetValue(item.QualifiedItemId, out int max)
                 ? max
                 : item.maximumStackSize();
         }

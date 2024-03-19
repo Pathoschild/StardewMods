@@ -195,10 +195,47 @@ only target top-level fields.
 
 field         | purpose
 ------------- | -------
-`TargetField` | When targeting a [list or dictionary](#data-assets), the field within the value to set as the root scope; see [_target field_](#target-field) below. This field supports [tokens](../author-guide.md#tokens).
+`TargetField` | _(optional)_ When targeting a [list or dictionary](#data-assets), the field within the value to set as the root scope; see [_target field_](#target-field) below. This field supports [tokens](../author-guide.md#tokens).
 `When`        | _(optional)_ Only apply the patch if the given [conditions](../author-guide.md#conditions) match.
 `LogName`     | _(optional)_ A name for this patch to show in log messages. This is useful for understanding errors; if not specified, it'll default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Update`      | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
+
+</dd>
+<dt>Advanced fields:</dt>
+<dd>
+
+<table>
+  <tr>
+    <td>field</td>
+    <td>purpose</td>
+  </tr>
+  <tr>
+  <td><code>Priority</code></td>
+  <td>
+
+_(optional)_ When multiple patches or mods edit the same asset, the order in which they should be
+applied. The possible values are `Early`, `Default`, and `Late`. The default value is `Default`.
+
+The patches for an asset (across all mods) are applied in this order:
+
+1. by earliest to latest priority;
+2. then by mod load order (e.g. based on dependencies);
+3. then by the order the patches are listed in your `content.json`.
+
+If you need a more specific order, you can use a simple offset like `"Default + 2"` or `"Late - 10"`.
+The default levels are -1000 (early), 0 (default), and 1000 (late).
+
+This field does _not_ support tokens, and capitalization doesn't matter.
+
+> [!TIP]  
+> Priorities can make your changes harder to follow and troubleshoot. Suggested best practices:
+> * Consider only using very general priorities when possible (like `Late` for a cosmetic overlay
+>   meant to be applied over base edits from all mods).
+> * There's no need to set priorities relative to _your own_ patches, since you can just list them
+>   in the order they should be applied.
+
+</td>
+</table>
 
 </dd>
 </dl>
@@ -209,13 +246,13 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
             "Target": "Data/ObjectInformation",
             "Entries": {
-                "900": "Pufferchick/1200/100/Seeds -74/Pufferchick/An example object."
+                "Example.ModId_Pufferchick": "Pufferchick/1200/100/Seeds -74/Pufferchick/An example object.////0/Mods\\Example.ModId\\Objects"
             }
         },
     ]
@@ -229,7 +266,7 @@ for an item:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -248,7 +285,7 @@ You can also delete an entry by setting its value to `null`. For example, this d
 recreate it with different conditions:
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -285,7 +322,7 @@ The order is often important for list assets (e.g. the game will use the first e
 `MoveEntries` field. For example, this moves the `Abigail` entry using each possible operation:
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -373,7 +410,7 @@ the entire entry:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",

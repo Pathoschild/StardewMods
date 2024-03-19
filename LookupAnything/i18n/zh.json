@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "清理垃圾的友好精灵。",
 
     // item types
-    "data.type.debris": "残骸",
-    "data.type.stone": "石头",
     "data.type.container": "容器",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "将蛋孵化成小鸡或小鸭。",
-    "data.item.broken-branch.name": "碎木枝",
-    "data.item.broken-branch.description": "一条碎木枝。用斧劈砍之后可以获得木材。",
-    "data.item.stone.name": "石头",
-    "data.item.stone.description": "一颗常见的灰色石头。打碎之后可以获得石头。",
-    "data.item.geode.name": "晶球矿点",
-    "data.item.geode.description": "打碎之后可以获得晶球。",
-    "data.item.frozen-geode.name": "冰封晶球矿点",
-    "data.item.frozen-geode.description": "打碎之后可以获得冰封晶球。",
-    "data.item.magma-geode.name": "岩浆晶球矿点",
-    "data.item.magma-geode.description": "打碎之后可以获得岩浆晶球。",
-
-    // weeds & crystals
-    "data.item.weed.name": "杂草",
-    "data.item.weed.description": "一片常见的杂草，可能含有纤维或混合种子。",
-    "data.item.fertile-weed.name": "茂盛的杂草",
-    "data.item.fertile-weed.description": "必定收获种子",
-    "data.item.ice-crystal.name": "冰晶",
-    "data.item.ice-crystal.description": "一种普通的冰晶。含有精炼石英的概率很小。",
-
-    // mine gems
-    "data.item.amethyst-node.name": "紫水晶矿点",
-    "data.item.amethyst-node.description": "打碎之后可以获得紫水晶。",
-    "data.item.aquamarine-node.name": "海蓝宝石矿点",
-    "data.item.aquamarine-node.description": "打碎之后可以获得海蓝宝石。",
-    "data.item.diamond-node.name": "钻石矿点",
-    "data.item.diamond-node.description": "打碎之后可以获得钻石。",
-    "data.item.emerald-node.name": "绿宝石矿点",
-    "data.item.emerald-node.description": "打碎之后可以获得绿宝石。",
-    "data.item.gem-node.name": "宝石矿点",
-    "data.item.gem-node.description": "打碎之后可以获得绿宝石、海蓝宝石、红宝石、紫水晶、黄水晶、翡翠或钻石。",
-    "data.item.jade-node.name": "翡翠矿点",
-    "data.item.jade-node.description": "打碎之后可以获得翡翠。",
-    "data.item.mystic-stone.name": "神秘石",
-    "data.item.mystic-stone.description": "打碎之后可以获得稀有宝石和矿石，包括五彩碎片。",
-    "data.item.prismatic-node.name": "五彩矿点",
-    "data.item.prismatic-node.description": "打碎之后可以获得五彩碎片。",
-    "data.item.ruby-node.name": "红宝石矿点",
-    "data.item.ruby-node.description": "打碎之后可以获得红宝石。",
-    "data.item.topaz-node.name": "黄水晶矿点",
-    "data.item.topaz-node.description": "打碎之后可以获得黄水晶。",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "火山晶石矿点",
-    "data.item.cinder-shard-node.description": "打碎之后可以获得火山晶石。",
-    "data.item.copper-node.name": "铜矿点",
-    "data.item.copper-node.description": "打碎之后可以获得铜矿石。",
-    "data.item.gold-node.name": "黄金矿点",
-    "data.item.gold-node.description": "打碎之后可以获得黄金矿石。",
-    "data.item.iridium-node.name": "铱矿点",
-    "data.item.iridium-node.description": "打碎之后可以获得铱矿石。",
-    "data.item.iron-node.name": "铁矿点",
-    "data.item.iron-node.description": "打碎之后可以获得铁矿石。",
-    "data.item.omni-geode-node.name": "万象晶球矿点",
-    "data.item.omni-geode-node.description": "打碎之后可以获得万象晶球。",
-
-    // mine stones
-    "data.item.colored-stone.name": "各色石头",
-    "data.item.colored-stone.description": "一颗常见的石头。可能藏有石头、矿石或晶洞。",
-    "data.item.mine-stone.name": "石头",
-    "data.item.mine-stone.description": "打碎之后可以获得石头，有几率获得煤炭。",
-
-    // other stones
-    "data.item.clay-stone.name": "粘土石头",
-    "data.item.clay-stone.description": "打碎之后可以获得粘土。",
-    "data.item.fossil-stone.name": "化石石头",
-    "data.item.fossil-stone.description": "打碎之后可以获得化石和骨头。",
-
-    // mine containers
     "data.item.barrel.name": "桶",
     "data.item.barrel.description": "打碎之后可以获得各种物品。",
     "data.item.box.name": "箱",
@@ -252,8 +182,7 @@
     "building.output-processing": "产品处理中",
     "building.output-ready": "产品完成",
     "building.slimes.summary": "已容纳{{count}}只史莱姆，最大可容纳{{max}}只史莱姆",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} 个干草（最大容量: {{maxHay}}）",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} 个干草在 {{siloCount}} 个筒仓（最大容量: {{maxHay}}）",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "可容纳动物量上升至 4 只动物，解锁牛",
     "building.upgrades.barn.1": "可容纳动物量上升至 8 只动物，解锁繁殖和山羊",
     "building.upgrades.barn.2": "可容纳动物量上升至 12 只动物，解锁自动喂食、猪和绵羊",
@@ -353,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "内容",
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
@@ -371,6 +301,7 @@
     "item.produces-dye": "产生染料",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
     "item.contents.partial": "{{name}}在{{time}}后完成",
@@ -676,7 +607,7 @@
     // labels
     "tree.stage": "生长阶段",
     "tree.next-growth": "下次生长",
-    "tree.has-seed": "产出种子",
+    "tree.seed": "产出种子",
     "tree.is-fertilized": "播洒树肥",
 
     // values
@@ -692,6 +623,9 @@
     "tree.next-growth.winter": "除非施肥，冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
     "tree.next-growth.chance": "有{{chance}}%几率明天成长到{{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "种子",

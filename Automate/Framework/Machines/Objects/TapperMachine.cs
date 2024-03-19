@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             this.Machine.heldObject.Value = null;
             this.Machine.readyForHarvest.Value = false;
-            this.Tree.UpdateTapperProduct(tapper_instance: this.Machine, previous_object: item as SObject);
+            this.Tree.UpdateTapperProduct(tapper: this.Machine, previousOutput: item as SObject);
         }
     }
 }

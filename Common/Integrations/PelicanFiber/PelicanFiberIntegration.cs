@@ -1,5 +1,6 @@
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Common.Integrations.PelicanFiber
 {
@@ -37,14 +38,13 @@ namespace Pathoschild.Stardew.Common.Integrations.PelicanFiber
         }
 
         /// <summary>Get the selected blueprint from the Pelican Fiber build menu, if it's open.</summary>
-        public BluePrint? GetBuildMenuBlueprint()
+        public CarpenterMenu.BlueprintEntry? GetBuildMenuBlueprint()
         {
             this.AssertLoaded();
 
-            if (!this.IsBuildMenuOpen())
-                return null;
-
-            return this.Reflection.GetProperty<BluePrint>(Game1.activeClickableMenu, "currentBlueprint").GetValue();
+            return this.IsBuildMenuOpen()
+                ? this.Reflection.GetProperty<CarpenterMenu.BlueprintEntry>(Game1.activeClickableMenu, "Blueprint").GetValue()
+                : null;
         }
     }
 }

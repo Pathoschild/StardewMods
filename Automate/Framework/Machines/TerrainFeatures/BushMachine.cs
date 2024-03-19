@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
-using Netcode;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -33,11 +31,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="indoorPot">The indoor pot containing the bush.</param>
         /// <param name="indoorPotTile">The tile coordinate of the indoor pot containing this bush.</param>
         /// <param name="location">The machine's in-game location.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public BushMachine(IndoorPot indoorPot, Vector2 indoorPotTile, GameLocation location, IReflectionHelper reflection)
+        public BushMachine(IndoorPot indoorPot, Vector2 indoorPotTile, GameLocation location)
             : this(indoorPot.bush.Value, location, GetTileAreaFor(indoorPotTile))
         {
-            this.UpdateIndoorPotOnLoad(indoorPot, reflection);
+            this.UpdateIndoorPotOnLoad(indoorPot);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -48,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             : base(bush, location, tileArea)
         {
             this.IsInSeason = new Cached<bool>(
-                getCacheKey: () => $"{Game1.GetSeasonForLocation(bush.currentLocation)},{Game1.dayOfMonth},{bush.overrideSeason.Value}",
+                getCacheKey: () => $"{Game1.GetSeasonForLocation(bush.Location)},{Game1.dayOfMonth},{bush.IsSheltered()}",
                 fetchNew: this.RecalculateIsInSeason
             );
         }
@@ -58,13 +55,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             // tea bush
             if (this.Machine.size.Value == Bush.greenTeaBush)
-                return new TrackedItem(new SObject(815, 1), onReduced: this.OnOutputReduced);
+                return new TrackedItem(ItemRegistry.Create("(O)815"), onReduced: this.OnOutputReduced);
 
             // berry bush
-            int itemId = Game1.currentSeason == "fall" ? 410 : 296; // blackberry or salmonberry
+            string itemId = Game1.GetSeasonForLocation(this.Machine.Location) == Season.Fall ? "(O)410"/*blackberry*/ : "(O)296"/*salmonberry*/;
             int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
             int count = 1 + Game1.player.ForagingLevel / 4;
-            return new TrackedItem(new SObject(itemId, initialStack: count, quality: quality), onReduced: this.OnOutputReduced);
+            return new TrackedItem(ItemRegistry.Create(itemId, count, quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -128,19 +125,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             // get info
             Bush bush = this.Machine;
-            string season = Game1.GetSeasonForLocation(bush.currentLocation);
-            int day = Game1.dayOfMonth;
 
             // check if in season
             if (bush.tileSheetOffset.Value == 1)
-                return bush.inBloom(season, day);
+                return bush.inBloom();
 
             // workaround: we want to know if it's in season, not whether it's currently blooming
             int prevOffset = bush.tileSheetOffset.Value;
             try
             {
                 bush.tileSheetOffset.Value = 1;
-                return bush.inBloom(season, day);
+                return bush.inBloom();
             }
             finally
             {
@@ -150,15 +145,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
         /// <summary>Update the indoor pot state on load for automation.</summary>
         /// <param name="indoorPot">The indoor pot to update.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <remarks>Derived from <see cref="IndoorPot.updateWhenCurrentLocation"/>. When an indoor pot is loaded from the save file, the bush it contains isn't updated immediately. Instead it's marked dirty and will call <see cref="Bush.loadSprite"/> when the player first enters the location. For Automate, that means a bush that's already harvested may reset and produce a new harvest for the day.</remarks>
-        private void UpdateIndoorPotOnLoad(IndoorPot indoorPot, IReflectionHelper reflection)
+        private void UpdateIndoorPotOnLoad(IndoorPot indoorPot)
         {
-            NetBool bushLoadDirty = reflection.GetField<NetBool>(indoorPot, "bushLoadDirty").GetValue();
-            if (bushLoadDirty.Value)
+            if (indoorPot.bushLoadDirty.Value)
             {
                 indoorPot.bush.Value.loadSprite();
-                bushLoadDirty.Value = false;
+                indoorPot.bushLoadDirty.Value = false;
             }
         }
     }

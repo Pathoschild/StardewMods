@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
@@ -19,14 +18,13 @@ namespace Pathoschild.Stardew.Automate
         /*********
         ** Accessors
         *********/
-        /// <summary>A sample item for comparison.</summary>
-        /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
-        public Item Sample { get; }
+        /// <inheritdoc />
+        public Item Sample { get; private set; }
 
-        /// <summary>The underlying item type.</summary>
-        public ItemType Type { get; }
+        /// <inheritdoc />
+        public string Type { get; private set; }
 
-        /// <summary>The number of items in the stack.</summary>
+        /// <inheritdoc />
         public int Count => this.Stacks.Sum(p => p.Count);
 
 
@@ -41,7 +39,7 @@ namespace Pathoschild.Stardew.Automate
                 throw new InvalidOperationException("Can't create a tracked item collection containing no items.");
 
             this.Sample = stacks[0].Sample;
-            this.Type = (ItemType)this.Sample.GetItemType();
+            this.Type = this.Sample.TypeDefinitionId;
 
             foreach (ITrackedStack stack in stacks)
                 this.Add(stack);
@@ -109,13 +107,6 @@ namespace Pathoschild.Stardew.Automate
             Item item = this.Sample.getOne();
             item.Stack = count;
             return item;
-        }
-
-        /// <inheritdoc />
-        public void PreventEmptyStacks()
-        {
-            foreach (ITrackedStack stack in this.Stacks)
-                stack.PreventEmptyStacks();
         }
     }
 }

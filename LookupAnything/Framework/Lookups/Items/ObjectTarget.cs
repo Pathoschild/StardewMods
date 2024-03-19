@@ -2,7 +2,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -15,9 +14,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /*********
         ** Public methods
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The item sprite.</summary>
         private readonly SpriteInfo? CustomSprite;
 
@@ -29,12 +25,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
-        public ObjectTarget(GameHelper gameHelper, SObject value, Vector2 tilePosition, IReflectionHelper reflection, Func<ISubject> getSubject)
+        public ObjectTarget(GameHelper gameHelper, SObject value, Vector2 tilePosition, Func<ISubject> getSubject)
             : base(gameHelper, SubjectType.Object, value, tilePosition, getSubject)
         {
-            this.Reflection = reflection;
             this.CustomSprite = gameHelper.GetSprite(value, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
         }
 
@@ -45,20 +39,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 return this.CustomSprite.SourceRectangle;
 
             SObject obj = this.Value;
-            switch (obj)
+            return obj switch
             {
-                case Fence fence:
-                    return this.GetSpritesheetArea(fence, Game1.currentLocation);
-
-                case Furniture furniture:
-                    return furniture.sourceRect.Value;
-
-                default:
-                    return obj.bigCraftable.Value
-                        ? SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex)
-                        : Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize);
-            }
-
+                Fence fence => this.GetSpritesheetArea(fence, Game1.currentLocation),
+                Furniture furniture => furniture.sourceRect.Value,
+                _ => ItemRegistry.GetDataOrErrorItem(obj.QualifiedItemId).GetSourceRect()
+            };
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -66,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             // get object info
             SObject obj = this.Value;
-            Rectangle boundingBox = obj.getBoundingBox(this.Tile);
+            Rectangle boundingBox = obj.GetBoundingBox();
 
             // get sprite area
             if (this.CustomSprite != null)
@@ -95,14 +81,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             Texture2D spriteSheet;
             if (this.CustomSprite != null)
                 spriteSheet = this.CustomSprite.Spritesheet;
-            else if (obj is Furniture)
-                spriteSheet = Furniture.furnitureTexture;
-            else if (obj is Fence)
-                spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(obj, "fenceTexture").GetValue().Value;
-            else if (obj.bigCraftable.Value)
-                spriteSheet = Game1.bigCraftableSpriteSheet;
+            else if (obj is Fence fence)
+                spriteSheet = fence.fenceTexture.Value;
             else
-                spriteSheet = Game1.objectSpriteSheet;
+                spriteSheet = ItemRegistry.GetDataOrErrorItem(obj.QualifiedItemId).GetTexture();
 
             // check pixel from sprite sheet
             Rectangle sourceRectangle = this.GetSpritesheetArea();
@@ -124,23 +106,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 // connected to right fence
                 tile.X += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.ItemId))
                     index += 100;
 
                 // connected to left fence
                 tile.X -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.ItemId))
                     index += 10;
 
                 // connected to top fence
                 tile.X += 1;
                 tile.Y += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.ItemId))
                     index += 500;
 
                 // connected to bottom fence
                 tile.Y -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.ItemId))
                     index += 1000;
                 if (fence.isGate.Value)
                 {
@@ -154,7 +136,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     spriteID = Fence.fenceDrawGuide[index];
             }
 
-            Texture2D texture = this.Reflection.GetField<Lazy<Texture2D>>(fence, "fenceTexture").GetValue().Value;
+            Texture2D texture = fence.fenceTexture.Value;
             return new Rectangle(spriteID * Fence.fencePieceWidth % texture.Bounds.Width, spriteID * Fence.fencePieceWidth / texture.Bounds.Width * Fence.fencePieceHeight, Fence.fencePieceWidth, Fence.fencePieceHeight);
         }
     }

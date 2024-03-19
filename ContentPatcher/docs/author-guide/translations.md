@@ -96,7 +96,7 @@ You can inject the translated text directly into your patches using the `i18n`
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -133,7 +133,7 @@ which edits every festival in the game to add dynamic dialogue based on the tran
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",

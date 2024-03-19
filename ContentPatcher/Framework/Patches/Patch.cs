@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
@@ -72,6 +73,9 @@ namespace ContentPatcher.Framework.Patches
         public IContentPack ContentPack { get; }
 
         /// <inheritdoc />
+        public IRuntimeMigration Migrator { get; }
+
+        /// <inheritdoc />
         public IPatch? ParentPatch { get; }
 
         /// <inheritdoc />
@@ -90,7 +94,13 @@ namespace ContentPatcher.Framework.Patches
         public IAssetName? TargetAsset { get; private set; }
 
         /// <inheritdoc />
+        public IAssetName? TargetAssetBeforeRedirection { get; private set; }
+
+        /// <inheritdoc />
         public ITokenString? RawTargetAsset => this.ManagedRawTargetAsset;
+
+        /// <inheritdoc />
+        public int Priority { get; }
 
         /// <inheritdoc />
         public UpdateRate UpdateRate { get; set; }
@@ -213,24 +223,28 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
-        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
+        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(int[] indexPath, LogPathBuilder path, PatchType type, IManagedTokenString? assetName, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName, IManagedTokenString? fromAsset = null)
+        protected Patch(int[] indexPath, LogPathBuilder path, PatchType type, IManagedTokenString? assetName, int priority, UpdateRate updateRate, IEnumerable<Condition> conditions, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, Func<string, IAssetName> parseAssetName, IManagedTokenString? fromAsset = null)
         {
             this.IndexPath = indexPath;
             this.Path = path;
             this.Type = type;
             this.ManagedRawTargetAsset = assetName;
-            this.Conditions = conditions.ToArray();
+            this.Priority = priority;
             this.UpdateRate = updateRate;
+            this.Conditions = conditions.ToArray();
             this.ParseAssetNameImpl = parseAssetName;
             this.PrivateContext = new LocalContext(scope: contentPack.Manifest.UniqueID);
             this.ManagedRawFromAsset = fromAsset;
             this.ContentPack = contentPack;
+            this.Migrator = migrator;
             this.ParentPatch = parentPatch;
 
             this.Contextuals
@@ -295,7 +309,12 @@ namespace ContentPatcher.Framework.Patches
 
             if (this.RawTargetAsset.IsReady)
             {
-                this.TargetAsset = this.ParseAssetNameImpl(this.RawTargetAsset.Value!);
+                IAssetName assetName = this.ParseAssetNameImpl(this.RawTargetAsset.Value!);
+                IAssetName? redirectedTo = this.Migrator.RedirectTarget(assetName, this);
+
+                this.TargetAsset = redirectedTo ?? assetName;
+                this.TargetAssetBeforeRedirection = redirectedTo != null ? assetName : null;
+
                 context.SetLocalValue(nameof(ConditionType.Target), this.TargetAsset.Name);
                 context.SetLocalValue(nameof(ConditionType.TargetPathOnly), System.IO.Path.GetDirectoryName(this.TargetAsset.Name));
                 context.SetLocalValue(nameof(ConditionType.TargetWithoutPath), System.IO.Path.GetFileName(this.TargetAsset.Name));

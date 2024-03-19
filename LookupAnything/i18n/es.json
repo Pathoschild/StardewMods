@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Un espíritu amistodo que limpia la basura.",
 
     // item types
-    "data.type.debris": "Maleza",
-    "data.type.stone": "Piedra",
     "data.type.container": "Contenedor",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Incuba huevos en pollitos y patitos.",
-    "data.item.broken-branch.name": "Rama rota",
-    "data.item.broken-branch.description": "Una rama rota. Córtala con un hacha para obtener madera.",
-    "data.item.stone.name": "Piedra",
-    "data.item.stone.description": "Una piedra gris. Rómpela para obtener piedra.",
-    "data.item.geode.name": "Nodo de geoda",
-    "data.item.geode.description": "Romper para obtener geodas.",
-    "data.item.frozen-geode.name": "Nodo de geodas congeladas",
-    "data.item.frozen-geode.description": "Romper para obtener geodas congeladas.",
-    "data.item.magma-geode.name": "Nodo de geoda de magma",
-    "data.item.magma-geode.description": "Romper para obtener geodas de magma.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Hierba",
-    "data.item.weed.description": "Una hierba. Tal vez contenga fibras o semillas silvestres.",
-    "data.item.fertile-weed.name": "Hierba fértil",
-    "data.item.fertile-weed.description": "Está garantizado que va a soltar semillas silvestres.",
-    "data.item.ice-crystal.name": "Cristal de hielo",
-    "data.item.ice-crystal.description": "Un cristal de hielo. Posibilidad muy baja de contener un cuarzo refinado.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Conjunto de Amatistas",
-    "data.item.amethyst-node.description": "Romper para obtener amatistas.",
-    "data.item.aquamarine-node.name": "Nodo de Acuamarina",
-    "data.item.aquamarine-node.description": "Romper para obtener acuamarinas.",
-    "data.item.diamond-node.name": "Nodo de Diamante",
-    "data.item.diamond-node.description": "Romper para obtener diamantes.",
-    "data.item.emerald-node.name": "Nodo de Esmeralda",
-    "data.item.emerald-node.description": "Romper para obtener esmeraldas.",
-    "data.item.gem-node.name": "Nodo de Gema",
-    "data.item.gem-node.description": "Romper para obtener esmeraldas, acuamarinas, rubíes, amatistas, topacios, jades o diamantes.",
-    "data.item.jade-node.name": "Nodo de Jade",
-    "data.item.jade-node.description": "Romper para obtener jade.",
-    "data.item.mystic-stone.name": "Piedra Mística",
-    "data.item.mystic-stone.description": "Romper para obtener gemas raras o minerales, incluyendo fragmentos prismáticos.",
-    "data.item.prismatic-node.name": "Nodo Prismático",
-    "data.item.prismatic-node.description": "Romper para obtener fragmentos prismáticos.",
-    "data.item.ruby-node.name": "Nodo de Rubí",
-    "data.item.ruby-node.description": "Romper para obtener rubíes.",
-    "data.item.topaz-node.name": "Nodo de Topacio",
-    "data.item.topaz-node.description": "Romper para obtener topacio.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Nodo de fragmento de ceniza",
-    "data.item.cinder-shard-node.description": "Romper para obtejer fragmento de ceniza.",
-    "data.item.copper-node.name": "Nodo de cobre",
-    "data.item.copper-node.description": "Romper para obtener mineral de cobre.",
-    "data.item.gold-node.name": "Nodo de oro",
-    "data.item.gold-node.description": "Romper para obtener mineral de oro.",
-    "data.item.iridium-node.name": "Nodo de iridio",
-    "data.item.iridium-node.description": "Romper para obtener mineral de iridio.",
-    "data.item.iron-node.name": "Nodo de hierro",
-    "data.item.iron-node.description": "Romper para obtener mineral de hierro.",
-    "data.item.omni-geode-node.name": "Nodo de Omnigeoda",
-    "data.item.omni-geode-node.description": "Romper para obtener una Omnigeoda",
-
-    // mine stones
-    "data.item.colored-stone.name": "Piedra de colores",
-    "data.item.colored-stone.description": "Una piedra. Tal vez contenga piedras, minerales o geodas.",
-    "data.item.mine-stone.name": "Piedra",
-    "data.item.mine-stone.description": "Romper para obtener una piedra. Tiene una probabilidad de obtener carbón",
-
-    // other stones
-    "data.item.clay-stone.name": "Piedra de arcilla",
-    "data.item.clay-stone.description": "Romper para obtener arcilla",
-    "data.item.fossil-stone.name": "Piedra fósil",
-    "data.item.fossil-stone.description": "Romper para obtener fósiles y huesos.",
-
-    // mine containers
     "data.item.barrel.name": "Barril",
     "data.item.barrel.description": "Romper para obtener diversos bienes.",
     "data.item.box.name": "Caja",
@@ -251,8 +181,7 @@
     "building.output-processing": "Procesando producto", // translator note: changed 'output' to 'product' as we don't have a word with the same meaning
     "building.output-ready": "Producto listo",
     "building.slimes.summary": "{{count}} de {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} heno (capacidad máxima: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} heno en {{siloCount}} silos (capacidad máxima: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "hasta 4 animales, añade vacas",
     "building.upgrades.barn.1": "hasta 8 animales, añade cabras y permite embarazos",
     "building.upgrades.barn.2": "hasta 12 animales, añade cerdos, ovejas y automatiza los comederos",
@@ -352,6 +281,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "Contiene",
     "item.loves-this": "Lo ama",
     "item.likes-this": "Le gusta a",
@@ -370,6 +300,7 @@
     "item.produces-dye": "Produce  tinte",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}}",
     "item.contents.ready": "{{name}} listo",
     "item.contents.partial": "{{name}} en {{time}}",
@@ -677,7 +608,7 @@
     // labels
     "tree.stage": "Etapa de crecimiento",
     "tree.next-growth": "Evolución",
-    "tree.has-seed": "Tiene semilla",
+    "tree.seed": "Tiene semilla",
     "tree.is-fertilized": "ha sido fertilizado",
 
     // values
@@ -693,6 +624,9 @@
     "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero a menos que se fertilice",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros árboles estan muy cerca",
     "tree.next-growth.chance": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "Semilla",

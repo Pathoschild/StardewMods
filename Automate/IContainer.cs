@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using StardewValley;
+using StardewValley.Inventories;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -22,6 +24,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>An object instance which uniquely identifies the underlying inventory.</summary>
         /// <remarks>Normal chests should have a unique instance, while chests with shared inventories (like Junimo Chests) should share this instance too. This isn't necessarily the inventory itself, though that's the default implementation.</remarks>
         object InventoryReferenceId { get; }
+
+        /// <summary>The underlying inventory.</summary>
+        IInventory Inventory { get; }
 
 
         /*********

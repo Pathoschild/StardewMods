@@ -86,78 +86,10 @@
     "data.npc.trash-bear.description": "Un esprit amical qui nettoie les déchets.",
 
     // item types
-    "data.type.debris": "Débris",
-    "data.type.stone": "Pierre",
     "data.type.container": "Contenant",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
-    "data.item.broken-branch.name": "Branche cassée",
-    "data.item.broken-branch.description": "Une branche cassée. A couper avec une hache pour obtenir du bois.",
-    "data.item.stone.name": "Pierre",
-    "data.item.stone.description": "Une pierre grise. A casser avec une pioche pour obtenir de la pierre.",
-    "data.item.geode.name": "Filon de géode",
-    "data.item.geode.description": "A casser pour obtenir des géodes.",
-    "data.item.frozen-geode.name": "Filon de géode gelée",
-    "data.item.frozen-geode.description": "A casser pour obtenir des géodes gelées.",
-    "data.item.magma-geode.name": "Filon de géode de lave",
-    "data.item.magma-geode.description": "A casser pour obtenir des géodes de lave.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Herbe",
-    "data.item.weed.description": "Une herbe. Peut donner des fibres ou des graines..",
-    "data.item.fertile-weed.name": "Herbe fertile",
-    "data.item.fertile-weed.description": "Donne des graines.",
-    "data.item.ice-crystal.name": "Cristal de glace",
-    "data.item.ice-crystal.description": "Un cristal de glace. A une petite chance de contenir du quartz.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Filon d'améthyste",
-    "data.item.amethyst-node.description": "A casser pour obtenir de l'améthyste.",
-    "data.item.aquamarine-node.name": "Filon d'aigue-marine",
-    "data.item.aquamarine-node.description": "A casser pour obtenir de l'aigue-marine.",
-    "data.item.diamond-node.name": "Filon de diamant",
-    "data.item.diamond-node.description": "A casser pour obtenir du diamant.",
-    "data.item.emerald-node.name": "Filon d'émeraude",
-    "data.item.emerald-node.description": "A casser pour obtenir de l'émeraude.",
-    "data.item.gem-node.name": "Filon de gemme",
-    "data.item.gem-node.description": "A casser pour obtenir de l'émeraude, de l'aigue-marine, du rubis, de l'améthyste, de la topaze, de la jade, ou du diamant.",
-    "data.item.jade-node.name": "Filon de jade",
-    "data.item.jade-node.description": "A casser pour obtenir de la jade.",
-    "data.item.mystic-stone.name": "Pierre mystique",
-    "data.item.mystic-stone.description": "A casser pour obtenir des gemmes et minerais rares, dont du tesson prismatique.",
-    "data.item.prismatic-node.name": "Filon prismatique",
-    "data.item.prismatic-node.description": "A casser pour obtenir du tesson prismatique.",
-    "data.item.ruby-node.name": "Filon de rubis",
-    "data.item.ruby-node.description": "A casser pour obtenir du rubis.",
-    "data.item.topaz-node.name": "Filon de topaze",
-    "data.item.topaz-node.description": "A casser pour obtenir de la topaze.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Filon d'éclats de braise",
-    "data.item.cinder-shard-node.description": "A casser pour obtenir des éclats de braise.",
-    "data.item.copper-node.name": "Filon de cuivre",
-    "data.item.copper-node.description": "A casser pour obtenir du minerais de cuivre.",
-    "data.item.gold-node.name": "Filon d'or",
-    "data.item.gold-node.description": "A casser pour obtenir du minerais d'or.",
-    "data.item.iridium-node.name": "Filon d'iridium",
-    "data.item.iridium-node.description": "A casser pour obtenir du minerais d'iridium.",
-    "data.item.iron-node.name": "Filon de fer",
-    "data.item.iron-node.description": "A casser pour obtenir du minerais du fer.",
-    "data.item.omni-geode-node.name": "Filon de Géode-omni",
-    "data.item.omni-geode-node.description": "A casser pour obtenir des géodes-omni.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Pierre colorée",
-    "data.item.colored-stone.description": "Une pierre. Peut contenir de la pierre, du minerais ou des géodes.",
-    "data.item.mine-stone.name": "Pierre",
-    "data.item.mine-stone.description": "A casser pour obtenir de la pierre avec une chance de charbon.",
-
-    // other stones
-    "data.item.clay-stone.name": "Veine d'argile",
-    "data.item.clay-stone.description": "A casser pour obtenir de l'argile.",
-    "data.item.fossil-stone.name": "Pierre fossile",
-    "data.item.fossil-stone.description": "A casser pour obtenir des fossiles et des os.",
 
     // mine containers
     "data.item.barrel.name": "Tonneau",
@@ -251,8 +183,7 @@
     "building.output-processing": "Production en cours",
     "building.output-ready": "Production prête",
     "building.slimes.summary": "{{count}} sur {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} foin (capacité: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} foin dans {{siloCount}} silos (capacité: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "jusqu'à 4 animaux, permet les vaches",
     "building.upgrades.barn.1": "jusqu'à 8 animaux, permet les grossesses et les chèvres",
     "building.upgrades.barn.2": "jusqu'à 12 animaux, ajoute le nourrissage automatique, permet les cochons et les moutons",
@@ -352,6 +283,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "Contenu",
     "item.loves-this": "Adore ça",
     "item.likes-this": "Apprécie ça",
@@ -370,6 +302,7 @@
     "item.produces-dye": "Produit du colorant",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}} placé",
     "item.contents.ready": "{{name}} prêt",
     "item.contents.partial": "{{name}} in {{time}}",
@@ -674,7 +607,7 @@
     // labels
     "tree.stage": "Niveau de croissance",
     "tree.next-growth": "Prochaine croissance",
-    "tree.has-seed": "A des graines",
+    "tree.seed": "A des graines",
     "tree.is-fertilized": "Est fertilisé",
 
     // values
@@ -690,6 +623,9 @@
     "tree.next-growth.winter": "ne peut pousser en dehors de la serre en hiver à moins d'être fertilisé",
     "tree.next-growth.adjacent-trees": "ne peut pousser car d'autres arbres sont trop près",
     "tree.next-growth.chance": "{{chance}}% de chance de grandir en {{stage}} demain",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "graine",

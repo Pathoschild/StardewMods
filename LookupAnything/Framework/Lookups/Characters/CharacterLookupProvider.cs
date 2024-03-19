@@ -47,32 +47,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
-                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
+                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.Tile, () => this.BuildSubject(gourmand));
             }
 
             // NPCs
             foreach (NPC npc in Game1.CurrentEvent?.actors ?? (IEnumerable<NPC>)location.characters)
             {
-                Vector2 entityTile = npc.getTileLocation();
+                Vector2 entityTile = npc.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, this.Reflection, () => this.BuildSubject(npc));
+                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, () => this.BuildSubject(npc));
             }
 
             // animals
-            if (location is IAnimalLocation animalLocation)
+            foreach (FarmAnimal animal in location.Animals.Values)
             {
-                foreach (FarmAnimal animal in animalLocation.Animals.Values)
-                {
-                    Vector2 entityTile = animal.getTileLocation();
-                    if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                        yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
-                }
+                Vector2 entityTile = animal.Tile;
+                if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                    yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
             }
 
             // players
             foreach (Farmer farmer in location.farmers)
             {
-                Vector2 entityTile = farmer.getTileLocation();
+                Vector2 entityTile = farmer.Tile;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     yield return new FarmerTarget(this.GameHelper, farmer, () => this.BuildSubject(farmer));
             }
@@ -95,8 +92,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case ProfileMenu profileMenu:
                     if (profileMenu.hoveredItem == null)
                     {
-                        if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetByEntity(npc, npc.currentLocation);
+                        Character character = profileMenu.Current.Character;
+                        if (character != null)
+                            return this.Codex.GetByEntity(character, character.currentLocation);
                     }
                     break;
 
@@ -106,20 +104,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     {
                         if (slot.containsPoint(cursorX, cursorY))
                         {
-                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[slot.myID];
+                            SocialPage.SocialEntry entry = socialPage.SocialEntries[slot.myID];
 
-                            // player slot
-                            if (socialID is long playerID)
+                            switch (entry.Character)
                             {
-                                Farmer player = Game1.getFarmerMaybeOffline(playerID);
-                                return this.BuildSubject(player);
-                            }
+                                case Farmer player:
+                                    return this.BuildSubject(player);
 
-                            // NPC slot
-                            if (socialID is string villagerName)
-                            {
-                                NPC? npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
-                                if (npc != null)
+                                case NPC npc:
                                     return this.BuildSubject(npc);
                             }
                         }
@@ -148,8 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         NPC? target = this.GameHelper
                             .GetAllCharacters()
                             .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
-                            .OrderByDescending(p => p.CanSocialize) // SVE duplicates the Marlon NPC, but only one of them is marked social
-                            .FirstOrDefault();
+                            .MaxBy(p => p.CanSocialize); // SVE duplicates the Marlon NPC, but only one of them is marked social
                         if (target != null)
                             return this.BuildSubject(target);
                     }
@@ -163,9 +154,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         ClickableComponent? button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
                         {
-                            int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
-                            var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
-                            LoadGameMenu.SaveFileSlot? slot = slots[index] as LoadGameMenu.SaveFileSlot;
+                            int index = loadMenu.currentItemIndex + int.Parse(button.name);
+                            LoadGameMenu.SaveFileSlot? slot = loadMenu.MenuSlots[index] as LoadGameMenu.SaveFileSlot;
                             if (slot?.Farmer != null)
                                 return new FarmerSubject(this.GameHelper, slot.Farmer, isLoadMenu: true);
                         }
@@ -200,6 +190,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         }
                     }
                     break;
+
+                /****
+                ** By convention for mod menus
+                ****/
+                case not null:
+                    {
+                        NPC? npc =
+                            this.Reflection.GetField<NPC>(targetMenu, "hoveredNpc", required: false)?.GetValue()
+                            ?? this.Reflection.GetField<NPC>(targetMenu, "HoveredNpc", required: false)?.GetValue();
+                        if (npc is not null)
+                            return this.BuildSubject(npc);
+                    }
+                    break;
             }
 
             return null;
@@ -229,7 +232,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     yield return this.BuildSubject(npc);
 
                 // animals
-                foreach (var location in CommonHelper.GetLocations().OfType<IAnimalLocation>())
+                foreach (GameLocation location in CommonHelper.GetLocations())
                 {
                     foreach (FarmAnimal animal in location.Animals.Values)
                         yield return this.BuildSubject(animal);
@@ -281,7 +284,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 npc: npc,
                 type: this.GetSubjectType(npc),
                 metadata: this.GameHelper.Metadata,
-                reflectionHelper: this.Reflection,
                 progressionMode: config.ProgressionMode,
                 highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
                 showGiftTastes: config.ShowGiftTastes,

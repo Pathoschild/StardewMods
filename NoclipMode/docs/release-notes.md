@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.3.11
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
+* Updated for Stardew Valley 1.6.
+* Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Fixed errors if some config fields are set to null.
+
 ## 1.3.10
 Released 01 December 2023 for SMAPI 3.14.0 or later.
 

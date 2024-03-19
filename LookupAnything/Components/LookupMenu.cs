@@ -285,9 +285,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 // you can look up anyway is the farmer.)
                 if (!this.ValidatedDrawMode)
                 {
-                    IReflectedField<SpriteSortMode> sortModeField =
-                        this.Reflection.GetField<SpriteSortMode>(Game1.spriteBatch, "spriteSortMode", required: false) // XNA
-                        ?? this.Reflection.GetField<SpriteSortMode>(Game1.spriteBatch, "_sortMode"); // MonoGame
+                    IReflectedField<SpriteSortMode> sortModeField = this.Reflection.GetField<SpriteSortMode>(Game1.spriteBatch, "_sortMode");
                     if (sortModeField.GetValue() == SpriteSortMode.Immediate)
                     {
                         this.Monitor.Log("Aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).", LogLevel.Warn);

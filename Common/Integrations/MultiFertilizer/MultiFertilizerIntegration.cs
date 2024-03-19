@@ -19,35 +19,35 @@ namespace Pathoschild.Stardew.Common.Integrations.MultiFertilizer
         /// <summary>Get the fertilizer item IDs applied to a dirt tile.</summary>
         /// <param name="dirt">The dirt tile to check.</param>
         /// <remarks>See <a href="https://github.com/spacechase0/StardewValleyMods/tree/develop/MultiFertilizer#for-mod-authors">MultiFertilizer's mod author docs</a> for details.</remarks>
-        public IEnumerable<int> GetAppliedFertilizers(HoeDirt dirt)
+        public IEnumerable<string> GetAppliedFertilizers(HoeDirt dirt)
         {
             if (!this.IsLoaded)
                 yield break;
 
-            if (dirt.fertilizer.Value > 0)
+            if (CommonHelper.IsItemId(dirt.fertilizer.Value, allowZero: false))
                 yield return dirt.fertilizer.Value;
 
             foreach (string key in new[] { "FertilizerLevel", "SpeedGrowLevel", "WaterRetainLevel" })
             {
                 if (dirt.modData.TryGetValue($"spacechase0.MultiFertilizer/{key}", out string rawValue) && int.TryParse(rawValue, out int level))
                 {
-                    int fertilizer = $"{key}:{level}" switch
+                    string? fertilizer = $"{key}:{level}" switch
                     {
-                        "FertilizerLevel:1" => HoeDirt.fertilizerLowQuality,
-                        "FertilizerLevel:2" => HoeDirt.fertilizerHighQuality,
-                        "FertilizerLevel:3" => HoeDirt.fertilizerDeluxeQuality,
+                        "FertilizerLevel:1" => HoeDirt.fertilizerLowQualityQID,
+                        "FertilizerLevel:2" => HoeDirt.fertilizerHighQualityQID,
+                        "FertilizerLevel:3" => HoeDirt.fertilizerDeluxeQualityQID,
 
-                        "SpeedGrowLevel:1" => HoeDirt.speedGro,
-                        "SpeedGrowLevel:2" => HoeDirt.superSpeedGro,
-                        "SpeedGrowLevel:3" => HoeDirt.hyperSpeedGro,
+                        "SpeedGrowLevel:1" => HoeDirt.speedGroQID,
+                        "SpeedGrowLevel:2" => HoeDirt.superSpeedGroQID,
+                        "SpeedGrowLevel:3" => HoeDirt.hyperSpeedGroQID,
 
-                        "WaterRetainLevel:1" => HoeDirt.waterRetentionSoil,
-                        "WaterRetainLevel:2" => HoeDirt.waterRetentionSoilQuality,
-                        "WaterRetainLevel:3" => HoeDirt.waterRetentionSoilDeluxe,
+                        "WaterRetainLevel:1" => HoeDirt.waterRetentionSoilQID,
+                        "WaterRetainLevel:2" => HoeDirt.waterRetentionSoilQualityQID,
+                        "WaterRetainLevel:3" => HoeDirt.waterRetentionSoilDeluxeQID,
 
-                        _ => -1
+                        _ => null
                     };
-                    if (fertilizer > 0)
+                    if (fertilizer != null)
                         yield return fertilizer;
                 }
             }

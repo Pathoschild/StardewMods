@@ -97,6 +97,19 @@ multi-key bindings with plus signs (like `LeftShift + Backspace`).
 <tr>
 <td>
 
+`SoundEffects`
+
+</td>
+<td>
+
+Which sound effects to play while riding the tractor. The possible values are `None`, `Horse`, or `Tractor`. Default `Tractor`.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `BuildPrice`
 
 </td>
@@ -501,7 +514,8 @@ The mod will load the seasonal texture if present, else it'll load the default n
 `tractor.png`).
 
 ### For mod authors
-You can edit Tractor Mod's textures by patching two assets:
+You can edit Tractor Mod's textures by patching three assets:
+* `Mods/Pathoschild.TractorMod/BuffIcon`
 * `Mods/Pathoschild.TractorMod/Garage`
 * `Mods/Pathoschild.TractorMod/Tractor`
 

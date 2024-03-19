@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Дружелюбный дух, который убирает мусор.",
 
     // item types
-    "data.type.debris": "Мусор",
-    "data.type.stone": "Камень",
     "data.type.container": "Контейнер",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Вылупляет цыплят и утят.",
-    "data.item.broken-branch.name": "Сломанная ветка",
-    "data.item.broken-branch.description": "Сломанная ветка. Разрубите топором, чтобы получить дерево.",
-    "data.item.stone.name": "Камень",
-    "data.item.stone.description": "Невзрачный серый камень. Разбейте, чтобы получить камень.",
-    "data.item.geode.name": "Жеодовая жила",
-    "data.item.geode.description": "Разбейте, чтобы получить жеоды.",
-    "data.item.frozen-geode.name": "Морозная жеодовая жила",
-    "data.item.frozen-geode.description": "Разбейте, чтобы получить морозные жеоды.",
-    "data.item.magma-geode.name": "Магма-жеодовая жила",
-    "data.item.magma-geode.description": "Разбейте, чтобы получить Магма-жеоды.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Сорняк",
-    "data.item.weed.description": "Невзрачный сорняк. Может содержать волокно или смешанные семена.",
-    "data.item.fertile-weed.name": "Плодородный сорняк",
-    "data.item.fertile-weed.description": "Гарантированно выпадают смешанные семена.",
-    "data.item.ice-crystal.name": "Ледяной кристалл",
-    "data.item.ice-crystal.description": "Невзрачный ледяной кристалл. Очень малый шанс выпадения очищенного кварца.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Аметистовая жила",
-    "data.item.amethyst-node.description": "Разбейте для получения аметистов.",
-    "data.item.aquamarine-node.name": "Аквамариновая жила",
-    "data.item.aquamarine-node.description": "Разбейте для получения аквамаринов.",
-    "data.item.diamond-node.name": "Алмазная жила",
-    "data.item.diamond-node.description": "Разбейте для получения алмазов.",
-    "data.item.emerald-node.name": "Изумрудная жила",
-    "data.item.emerald-node.description": "Разбейте для получения изумрудов.",
-    "data.item.gem-node.name": "Самоцветная жила",
-    "data.item.gem-node.description": "Разбейте для получения изумрудов, аквамаринов, рубинов, аметистов, топазов, нефритов, или алмазов.",
-    "data.item.jade-node.name": "Нефритовая жила",
-    "data.item.jade-node.description": "Разбейте для получения нефритов.",
-    "data.item.mystic-stone.name": "Мистический камень",
-    "data.item.mystic-stone.description": "Разбейте для получения редких самоцветов и руд, включая призматические осколки.",
-    "data.item.prismatic-node.name": "Призматическая жила",
-    "data.item.prismatic-node.description": "Разбейте для получения призматических осколков.",
-    "data.item.ruby-node.name": "Рубиновая жила",
-    "data.item.ruby-node.description": "Разбейте для получения рубинов.",
-    "data.item.topaz-node.name": "Жила топазов",
-    "data.item.topaz-node.description": "Разбейте для получения топазов.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Залежи тлеющих осколков",
-    "data.item.cinder-shard-node.description": "Разбейте для получения тлеющих осколков.",
-    "data.item.copper-node.name": "Медная жила",
-    "data.item.copper-node.description": "Разбейте для получения медной руды.",
-    "data.item.gold-node.name": "Золотая жила",
-    "data.item.gold-node.description": "Разбейте для получения золотой руды.",
-    "data.item.iridium-node.name": "Иридиевая жила",
-    "data.item.iridium-node.description": "Разбейте для получения иридиевой руды.",
-    "data.item.iron-node.name": "Железная жила",
-    "data.item.iron-node.description": "Разбейте для получения железной руды.",
-    "data.item.omni-geode-node.name": "Залежи омнижеод",
-    "data.item.omni-geode-node.description": "Разбейте для получения омнижеод.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Цветной камень",
-    "data.item.colored-stone.description": "Невзрачный камень. Может содержать камни, руду или жеоды.",
-    "data.item.mine-stone.name": "Камень",
-    "data.item.mine-stone.description": "Разбейте для получения камня с шансом получения угля.",
-
-    // other stones
-    "data.item.clay-stone.name": "Залежи глины",
-    "data.item.clay-stone.description": "Разбейте для получения глины.",
-    "data.item.fossil-stone.name": "Залежи окаменелостей",
-    "data.item.fossil-stone.description": "Разбейте для получения окаменелостей и костей.",
-
-    // mine containers
     "data.item.barrel.name": "Бочка",
     "data.item.barrel.description": "Разбейте, чтобы получить разные вещи.",
     "data.item.box.name": "Ящик",
@@ -252,8 +182,7 @@
     "building.output-processing": "В очереди",
     "building.output-ready": "Готово",
     "building.slimes.summary": "{{count}} из {{max}} слизней",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} сена (максимум: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} сена в {{siloCount}} силосных башнях (максимум: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "до 4-ёх животных, разблокируется: коровы.",
     "building.upgrades.barn.1": "до 8-ми животных; разблокируются: козлы и беременность животных.",
     "building.upgrades.barn.2": "до 12-ти животных; разблокируются: система подачи корма, свиньи и овцы.",
@@ -353,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "Содержит",
     "item.loves-this": "Любят",
     "item.likes-this": "Нравится",
@@ -371,6 +301,7 @@
     "item.produces-dye": "Производит краситель",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "содержит {{name}}",
     "item.contents.ready": "{{name}} готов",
     "item.contents.partial": "{{name}} через {{time}}",
@@ -677,7 +608,7 @@
     // labels
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
-    "tree.has-seed": "Содержит семена",
+    "tree.seed": "Содержит семена",
     "tree.is-fertilized": "Использовано удобрение",
 
     // values
@@ -693,6 +624,9 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы без удобрения",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.chance": "20% шанс, что завтра вырастит в {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "семя",

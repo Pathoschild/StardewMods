@@ -42,13 +42,51 @@ field     | purpose
 `Update`  | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
 
 </dd>
+<dt>Advanced fields:</dt>
+<dd>
+
+<table>
+  <tr>
+    <th>field</th>
+    <th>purpose</th>
+  </tr>
+  <tr>
+    <td><code>Priority</code></td>
+    <td>
+
+_(optional)_ When multiple patches or mods load the same asset, the priority which decides which
+one is applied. Default `Exclusive`.
+
+The possible values are:
+
+* `Low`, `Medium`, or `High`: the highest-priority patch is applied. If multiple patches have the
+  same priority, the first one in the list (by load order + patch order) is applied.
+* `Exclusive`: all or nothing. If one patch uses it, it's applied and all other load patches are
+  ignored. If multiple patches use it, then _no patches_ are applied and an error message is shown.
+
+  Avoid using `Exclusive` when possible, since it significantly reduces mod compatibility. This is
+  only the default value because Content Patcher can't know whether your content pack will still
+  work if another patch is loaded instead.
+
+If you need very specific ordering, you can use a simple offset like `"High + 2"` or `"Medium - 10"`.
+The default levels are -1000 (low), 0 (medium), and 1000 (high). This isn't usually needed though,
+since patches with the same priority are already sorted by the order they're listed in your content
+pack.
+
+This field does _not_ support tokens, and capitalization doesn't matter.
+
+</td>
+  </tr>
+</table>
+
+</dd>
 </dl>
 
 ### Examples
 This replaces Abigail's portraits with your own image (see [NPC modding](https://stardewvalleywiki.com/Modding:NPC_data)):
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "Load",
@@ -63,7 +101,7 @@ You can list any number of load patches, as long as each asset is only loaded by
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "Load",
@@ -84,13 +122,28 @@ files at once:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "Load",
             "Target": "Portraits/Abigail, Portraits/Penny",
             "FromFile": "assets/{{TargetWithoutPath}}.png" // assets/Abigail.png, assets/Penny.png
         },
+    ]
+}
+```
+
+You can use `Priority` to have an optional load (e.g. if it'll still work when another mod loads it first):
+```js
+{
+    "Format": "2.0.0",
+    "Changes": [
+        {
+            "Action": "Load",
+            "Target": "Data/Events/AdventureGuild",
+            "FromFile": "assets/empty-event-file.json",
+            "Priority": "Low"
+        }
     ]
 }
 ```

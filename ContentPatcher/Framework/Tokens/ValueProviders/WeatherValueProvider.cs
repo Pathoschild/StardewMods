@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Utilities;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -18,18 +17,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly TokenSaveReader SaveReader;
 
         /// <summary>The values as of the last context update.</summary>
-        private readonly IDictionary<LocationContext, Weather> Values = CommonHelper
-            .GetEnumValues<LocationContext>()
-            .ToDictionary(p => p, _ => Weather.Sun);
+        private readonly IDictionary<string, string?> Values = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
 
-        /// <summary>The weather values that can be returned by this token.</summary>
-        private readonly IInvariantSet ValidWeathers = InvariantSets.From(Enum.GetNames(typeof(Weather)));
-
-        /// <summary>The input arguments recognized by this token.</summary>
-        private readonly IInvariantSet ValidInputKeys = InvariantSets.From(Enum.GetNames(typeof(LocationContext)).Concat(new[] { "Current" }));
-
-        /// <summary>The context for the current location.</summary>
-        private LocationContext CurrentLocation;
+        /// <summary>The context name for the current location.</summary>
+        private string? CurrentLocationContextName;
 
 
         /*********
@@ -54,35 +45,31 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
                     // current location
-                    var newLocation = this.SaveReader.GetCurrentLocationContext(this.SaveReader.GetCurrentPlayer()) ?? LocationContext.Valley;
-                    changed |= newLocation != this.CurrentLocation;
-                    this.CurrentLocation = newLocation;
+                    string newLocation = this.SaveReader.GetCurrentLocationContext(this.SaveReader.GetCurrentPlayer());
+                    changed |= newLocation != this.CurrentLocationContextName;
+                    this.CurrentLocationContextName = newLocation;
 
-                    // weather values
-                    foreach (LocationContext location in CommonHelper.GetEnumValues<LocationContext>())
+                    // update weather values
+                    HashSet<string> currentContexts = this.SaveReader.GetContexts();
+                    foreach (string locationContext in currentContexts)
                     {
-                        Weather newWeather = this.SaveReader.GetWeather(location);
+                        string? newWeather = this.SaveReader.GetWeather(locationContext);
 
-                        changed |= newWeather != this.Values[location];
-                        this.Values[location] = newWeather;
+                        changed |= !this.Values.TryGetValue(locationContext, out string? oldWeather) || oldWeather != newWeather;
+
+                        this.Values[locationContext] = newWeather;
+                    }
+
+                    // remove disappeared contexts
+                    foreach (string locationContext in this.Values.Keys.Where(p => !currentContexts.Contains(p)).ToArray())
+                    {
+                        this.Values.Remove(locationContext);
+                        changed = true;
                     }
                 }
 
                 return changed;
             });
-        }
-
-        /// <inheritdoc />
-        public override IInvariantSet GetValidPositionalArgs()
-        {
-            return this.ValidInputKeys;
-        }
-
-        /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out IInvariantSet allowedValues)
-        {
-            allowedValues = this.ValidWeathers;
-            return true;
         }
 
         /// <inheritdoc />
@@ -92,10 +79,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             var values = this
                 .GetContextsFor(input)
-                .Select(context => this.Values.TryGetValue(context, out Weather weather)
-                    ? weather.ToString()
-                    : Weather.Sun.ToString() // the game treats an invalid context (e.g. MAX) as always sunny
-                );
+                .Select(context => context != null && this.Values.TryGetValue(context, out string? weather)
+                    ? weather
+                    : Game1.weather_sunny // the game treats an invalid context (e.g. MAX) as always sunny
+                )
+                .WhereNotNull();
 
             return InvariantSets.From(values);
         }
@@ -107,20 +95,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the contexts which apply for the given input arguments.</summary>
         /// <param name="input">The input arguments.</param>
         /// <returns>Returns the resulting inputs.</returns>
-        private IEnumerable<LocationContext> GetContextsFor(IInputArguments input)
+        private IEnumerable<string?> GetContextsFor(IInputArguments input)
         {
             if (!input.HasPositionalArgs)
             {
-                yield return this.CurrentLocation;
+                yield return this.CurrentLocationContextName;
                 yield break;
             }
 
-            foreach (string arg in input.PositionalArgs)
+            foreach (string context in input.PositionalArgs)
             {
-                if (arg.EqualsIgnoreCase("current"))
-                    yield return this.CurrentLocation;
-
-                else if (Enum.TryParse(arg, ignoreCase: true, out LocationContext context))
+                if (context.EqualsIgnoreCase("current"))
+                    yield return this.CurrentLocationContextName;
+                else
                     yield return context;
             }
         }

@@ -87,78 +87,10 @@
     "data.npc.trash-bear.description": "쓰레기를 치우는 친절한 정신.",
 
     // item types
-    "data.type.debris": "잔해",
-    "data.type.stone": "돌",
     "data.type.container": "수납용기",
 
-    // farm items 농장
+    // override item text
     "data.item.egg-incubator.description": "알을 병아리나 새끼 오리로 부화시킨다.",
-    "data.item.broken-branch.name": "부러진 나뭇가지",
-    "data.item.broken-branch.description": "부러진 나뭇가지다. 도끼로 찍어 나무를 얻을 수 있다.",
-    "data.item.stone.name": "돌",
-    "data.item.stone.description": "특징없는 평범한 회색 돌. 부수어 돌을 얻을 수 있다.",
-    "data.item.geode.name": "정동석 노드",
-    "data.item.geode.description": "부수면 정동석을 얻을 수 있다",
-    "data.item.frozen-geode.name": "얼어붙은 정동석 노드",
-    "data.item.frozen-geode.description": "부수면 얼어붙은 정동석을 얻을 수 있다.",
-    "data.item.magma-geode.name": "마그마 정동석 노드",
-    "data.item.magma-geode.description": "부수면 마그마 정동석을 얻을 수 있다.",
-
-    // weeds & crystals
-    "data.item.weed.name": "잡초",
-    "data.item.weed.description": "흔한 특징없는 잡초. 풀무더기 또는 씨앗 무더기를 얻을지도 모른다.",
-    "data.item.fertile-weed.name": "다 자란 잡초",
-    "data.item.fertile-weed.description": "야생 씨앗을 확실히 얻을 수 있는 풀입니다.",
-    "data.item.ice-crystal.name": "얼음 결정",
-    "data.item.ice-crystal.description": "특색없는 얼음 결정. 매우 희박한 확률로 정제된 석영을 획득 가능하다.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "자수정 클러스터",
-    "data.item.amethyst-node.description": "부수면 자수정을 얻을 수 있다.",
-    "data.item.aquamarine-node.name": "아쿠아마린 노드",
-    "data.item.aquamarine-node.description": "부수면 아쿠아마린을 얻을 수 있다.",
-    "data.item.diamond-node.name": "다이아몬드 노드",
-    "data.item.diamond-node.description": "부수면 다이아몬드를 얻을 수 있다.",
-    "data.item.emerald-node.name": "에메랄드 노드",
-    "data.item.emerald-node.description": "부수면 에메랄드를 얻을 수 있다.",
-    "data.item.gem-node.name": "보석 노드",
-    "data.item.gem-node.description": "부수면 에메랄드, 아쿠아마린, 루비, 자수정, 토파즈, 옥 또는 다이아몬드를 얻을 수 있다.",
-    "data.item.jade-node.name": "옥 노드",
-    "data.item.jade-node.description": "부수면 옥을 얻을 수 있다.",
-    "data.item.mystic-stone.name": "신비한 돌",
-    "data.item.mystic-stone.description": "부수면 무지개 파편을 포함한, 희귀한 보석 및 광석들을 얻을 수 있다.",
-    "data.item.prismatic-node.name": "무지갯빛 노드",
-    "data.item.prismatic-node.description": "부수면 무지개 파편을 얻을 수 있다.",
-    "data.item.ruby-node.name": "루비 노드",
-    "data.item.ruby-node.description": "부수면 루비를 얻을 수 있다.",
-    "data.item.topaz-node.name": "토파즈 노드",
-    "data.item.topaz-node.description": "부수면 토파즈를 얻을 수 있다.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "잉걸불 노드",
-    "data.item.cinder-shard-node.description": "부스면 잉걸불 파편을 얻을 수 있다.",
-    "data.item.copper-node.name": "구리 노드",
-    "data.item.copper-node.description": "부수면 구리 광석을 얻을 수 있다.",
-    "data.item.gold-node.name": "금 노드",
-    "data.item.gold-node.description": "부수면 금 광석을 얻을 수 있다.",
-    "data.item.iridium-node.name": "이리듐 노드",
-    "data.item.iridium-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
-    "data.item.iron-node.name": "철 노드",
-    "data.item.iron-node.description": "부수면 철 광석을 얻을 수 있다.",
-    "data.item.omni-geode-node.name": "전 전동석 노드",
-    "data.item.omni-geode-node.description": "부수면 전 전동석을 얻을 수 있다.",
-
-    // mine stones
-    "data.item.colored-stone.name": "유색의 돌",
-    "data.item.colored-stone.description": "평범한 돌이다. 돌, 광석 또는 정동석을 얻을 수 있을지도 모른다.",
-    "data.item.mine-stone.name": "돌",
-    "data.item.mine-stone.description": "부수면 돌과 철광석을 얻을 수 있다.",
-
-    // other stones
-    "data.item.clay-stone.name": "점토 노드",
-    "data.item.clay-stone.description": "부수면 점토를 얻을 수 있다.",
-    "data.item.fossil-stone.name": "화석 노드",
-    "data.item.fossil-stone.description": "부수면 화석과  얻을 수 있다.",
 
     // mine containers
     "data.item.barrel.name": "나무통",
@@ -252,8 +184,7 @@
     "building.output-processing": "처리중",
     "building.output-ready": "생산물 준비 완료",
     "building.slimes.summary": "최대 {{max}}마리까지의 슬라임 중 {{count}}마리 수용 중.",
-    "building.stored-hay.summary-one-silo": "건초 {{hayCount}}개 (최대 건초 수용한도: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}}개의 건초가 {{siloCount}}채의 사일로에 저장됨 (최대 수용량: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "최대 4마리의 동물 수용 가능, 소를 추가",
     "building.upgrades.barn.1": "최대 8마리의 동물 수용 가능, 임신이 가능해지며, 염소를 추가",
     "building.upgrades.barn.2": "최대 12마리의 동물 수용 가능, 먹이통 자동화가 가능해지며, 돼지와 양을 추가",
@@ -353,6 +284,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "내용물",
     "item.loves-this": "사랑함",
     "item.likes-this": "좋아함",
@@ -371,6 +303,7 @@
     "item.produces-dye": "생산 염료",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}}이/가 들어감",
     "item.contents.ready": "{{name}}이/가 준비됨",
     "item.contents.partial": "{{name}}이/가 준비되기까지 {{time}} 남음.",
@@ -675,7 +608,7 @@
     // labels
     "tree.stage": "성장 단계",
     "tree.next-growth": "다음 성장",
-    "tree.has-seed": "씨앗 보유 여부",
+    "tree.seed": "씨앗 보유 여부",
     "tree.is-fertilized": "수정됨",
 
     // values
@@ -691,6 +624,9 @@
     "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
     "tree.next-growth.chance": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "씨앗",

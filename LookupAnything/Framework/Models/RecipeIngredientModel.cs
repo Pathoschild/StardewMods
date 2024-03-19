@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Accessors
         *********/
         /// <summary>The unique item IDs that can be used for this ingredient slot.</summary>
-        public ISet<int> PossibleIds { get; }
+        public ISet<string> PossibleIds { get; }
 
         /// <summary>The number required.</summary>
         public int Count { get; }
@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public SObject.PreserveType? PreserveType { get; }
 
         /// <summary>The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</summary>
-        public int? PreservedParentSheetIndex { get; }
+        public string? PreservedItemId { get; }
 
 
         /*********
@@ -31,26 +31,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="inputId">The unique item ID that can be used for this ingredient slot.</param>
         /// <param name="count">The number required.</param>
         /// <param name="preserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
-        /// <param name="preservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
-        public RecipeIngredientModel(int inputId, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
+        /// <param name="preservedItemId">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+        public RecipeIngredientModel(string inputId, int count, SObject.PreserveType? preserveType = null, string? preservedItemId = null)
         {
-            this.PossibleIds = new HashSet<int> { inputId };
+            this.PossibleIds = new HashSet<string> { inputId };
             this.Count = count;
             this.PreserveType = preserveType;
-            this.PreservedParentSheetIndex = preservedParentSheetIndex;
+            this.PreservedItemId = preservedItemId;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="possibleIds">The unique item IDs that can be used for this ingredient slot.</param>
         /// <param name="count">The number required.</param>
         /// <param name="preserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
-        /// <param name="preservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
-        public RecipeIngredientModel(int[] possibleIds, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
+        /// <param name="preservedItemId">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+        public RecipeIngredientModel(string[] possibleIds, int count, SObject.PreserveType? preserveType = null, string? preservedItemId = null)
         {
-            this.PossibleIds = new HashSet<int>(possibleIds);
+            this.PossibleIds = new HashSet<string>(possibleIds);
             this.Count = count;
             this.PreserveType = preserveType;
-            this.PreservedParentSheetIndex = preservedParentSheetIndex;
+            this.PreservedItemId = preservedItemId;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 possibleIds: ingredient.PossibleIds,
                 count: ingredient.Count ?? 1,
                 preserveType: ingredient.PreserveType,
-                preservedParentSheetIndex: ingredient.PreservedParentSheetIndex
+                preservedItemId: ingredient.PreservedItemId
             )
         { }
 
@@ -74,17 +74,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
             // item fields
             bool matchesId =
-                this.PossibleIds.Contains(item.Category)
-                || (item.ParentSheetIndex >= 0 && this.PossibleIds.Contains(item.ParentSheetIndex)); // ignore special items like fences which have a negative item ID
+                this.PossibleIds.Contains(item.Category.ToString())
+                || this.PossibleIds.Contains(item.ItemId)
+                || this.PossibleIds.Contains(item.QualifiedItemId);
             if (!matchesId)
                 return false;
 
             // object fields
-            if (this.PreservedParentSheetIndex != null || this.PreserveType != null)
+            if (this.PreservedItemId != null || this.PreserveType != null)
             {
                 if (item is not SObject obj)
                     return false;
-                if (this.PreservedParentSheetIndex != null && this.PreservedParentSheetIndex != obj.preservedParentSheetIndex.Value)
+                if (this.PreservedItemId != null && this.PreservedItemId != obj.preservedParentSheetIndex.Value)
                     return false;
                 if (this.PreserveType != null && this.PreserveType != obj.preserve.Value)
                     return false;

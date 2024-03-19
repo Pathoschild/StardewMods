@@ -75,6 +75,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     min: 0,
                     max: 1000
                 )
+                .AddDropdown(
+                    name: I18n.Config_TractorSounds_Name,
+                    tooltip: () => I18n.Config_TractorSounds_Tooltip(defaultValue: I18n.GetByKey($"config.tractor-sounds.value.{defaultConfig.SoundEffects}")),
+                    formatAllowedValue: value => I18n.GetByKey($"config.tractor-sounds.value.{value}"),
+                    allowedValues: Enum.GetNames<TractorSoundType>(),
+                    get: config => config.SoundEffects.ToString(),
+                    set: (config, value) => config.SoundEffects = Enum.Parse<TractorSoundType>(value)
+                )
                 .AddNumberField(
                     name: I18n.Config_BuildPrice_Name,
                     tooltip: () => I18n.Config_BuildPrice_Tooltip(defaultValue: defaultConfig.BuildPrice),

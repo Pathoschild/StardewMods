@@ -5,6 +5,10 @@
     "farm.name": "Küçük Sahil Çiftliği",
     "farm.description": "Hem nehir hem de okyanus balıklarını yakalayabileceğiniz küçük, verimli bir cep plajı.",
 
+    "farm.fish-areas.river": "Nehir",
+    "farm.fish-areas.estuary": "Haliç",
+    "farm.fish-areas.ocean": "Okyanus",
+
 
     /*********
     ** Generic Mod Config Menu UI
@@ -12,40 +16,39 @@
     /****
     ** Farm options
     ****/
-    "config.farm-options-section": "Other farm options", // TODO
+    "config.farm-options-section": "Diğer çiftlik seçenekleri",
 
     "config.beach-sounds.name": "Plaj sesleri çal",
     "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "Canavarları varsayılan olarak doğurur",
+    "config.spawn-monsters.tooltip": "Yeni bir kayıt oluştururken 'canavarları geceleri doğur' seçeneğinin varsayılan değeri. Yeni bir kayıt oluştururken seçeneği yine de değiştirebilirsiniz. Bunun mevcut kayıtlar üzerinde hiçbir etkisi yoktur.",
 
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "Çiftlik düzeni",
 
     "config.campfire.name": "Kamp ateşi ekle",
     "config.campfire.tooltip": "Çiftlik evinin önüne işlevsel bir kamp ateşi ekler.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "Balıkçı iskelesi ekle",
+    "config.pier.tooltip": "Balık tutabileceğiniz bir iskele ekler.",
 
     "config.islands.name": "Adalar ekle",
     "config.islands.tooltip": "Ekstra arazi alanına sahip okyanus adaları ekler.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "Nakliye kutusu yolu ekle",
+    "config.shipping-bin-path.tooltip": "Taş yol döşemelerini varsayılan nakliye kutusu konumunun önüne yerleştirir.",
 
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "Çiftlik pozisyonları",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "Balıkçı iskelesi X",
+    "config.pier-x.tooltip": "Etkinleştirilmişse, balıkçı iskelesinin eklenmesi gereken döşeme konumu. Otomatik olarak konumlandırmak için hem X hem de Y'yi sıfıra ayarlayın.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "Balıkçı iskelesi Y",
+    "config.pier-y.tooltip": "Etkinleştirilmişse, balıkçı iskelesinin eklenmesi gereken döşeme konumu. Otomatik olarak konumlandırmak için hem X hem de Y'yi sıfıra ayarlayın."
 }

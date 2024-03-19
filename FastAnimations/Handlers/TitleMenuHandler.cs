@@ -10,23 +10,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
     class TitleMenuHandler : BaseAnimationHandler
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
-        public TitleMenuHandler(float multiplier, IReflectionHelper reflection)
-            : base(multiplier)
-        {
-            this.Reflection = reflection;
-        }
+        public TitleMenuHandler(float multiplier)
+            : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
@@ -34,7 +23,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             return
                 Game1.activeClickableMenu is TitleMenu titleMenu
-                && this.GetIsTransitionField(titleMenu).GetValue();
+                && titleMenu.isTransitioningButtons;
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
@@ -42,23 +31,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override void Update(int playerAnimationID)
         {
             TitleMenu titleMenu = (TitleMenu)Game1.activeClickableMenu;
-            var isTransition = this.GetIsTransitionField(titleMenu);
 
             this.ApplySkips(
                 run: () => titleMenu.update(Game1.currentGameTime),
-                until: () => !isTransition.GetValue()
+                until: () => !titleMenu.isTransitioningButtons
             );
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the private title menu field which indicates whether it's currently transitioning.</summary>
-        /// <param name="menu">The title menu.</param>
-        private IReflectedField<bool> GetIsTransitionField(TitleMenu menu)
-        {
-            return this.Reflection.GetField<bool>(menu, "isTransitioningButtons");
         }
     }
 }

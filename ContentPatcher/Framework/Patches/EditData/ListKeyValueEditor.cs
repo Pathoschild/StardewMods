@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using StardewValley.GameData;
-using StardewValley.GameData.Crafting;
-using StardewValley.GameData.FishPond;
-using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework.Patches.EditData
 {
@@ -123,6 +119,9 @@ namespace ContentPatcher.Framework.Patches.EditData
                 ? anchorIndex + 1
                 : anchorIndex;
 
+            if (entryIndex < anchorIndex)
+                newIndex--; // list will shift up when we remove the old entry
+
             this.Data.RemoveAt(entryIndex);
             this.Data.Insert(newIndex, entry);
             return MoveResult.Success;
@@ -184,19 +183,6 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <summary>Get a function which returns the unique key for an entry, if available.</summary>
         public Func<TValue, string?>? GetAssetKeyFunc()
         {
-            Type type = typeof(TValue);
-
-            // predefined asset key
-            bool hasPredefined =
-                typeof(ConcessionItemData).IsAssignableFrom(type)
-                || typeof(ConcessionTaste).IsAssignableFrom(type)
-                || typeof(FishPondData).IsAssignableFrom(type)
-                || typeof(MovieCharacterReaction).IsAssignableFrom(type)
-                || typeof(RandomBundleData).IsAssignableFrom(type)
-                || typeof(TailorItemRecipe).IsAssignableFrom(type);
-            if (hasPredefined)
-                return this.GetPredefinedAssetKey;
-
             // ID property
             {
                 PropertyInfo? property = typeof(TValue).GetProperty("Id") ?? typeof(TValue).GetProperty("ID");
@@ -212,36 +198,6 @@ namespace ContentPatcher.Framework.Patches.EditData
             }
 
             return null;
-        }
-
-        /// <summary>Get the predefined key for a list asset entry.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="entity">The entity whose ID to fetch.</param>
-        public string GetPredefinedAssetKey(TValue entity)
-        {
-            switch (entity)
-            {
-                case ConcessionItemData entry:
-                    return entry.ID.ToString();
-
-                case ConcessionTaste entry:
-                    return entry.Name;
-
-                case FishPondData entry:
-                    return string.Join(",", entry.RequiredTags);
-
-                case MovieCharacterReaction entry:
-                    return entry.NPCName;
-
-                case RandomBundleData entry:
-                    return entry.AreaName;
-
-                case TailorItemRecipe entry:
-                    return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
-
-                default:
-                    throw new NotSupportedException($"No ID implementation for list asset value type {typeof(TValue).FullName}."); // should never happen, since we check before calling this method
-            }
         }
     }
 }

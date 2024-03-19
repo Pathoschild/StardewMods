@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()
         {
-            return this.Value.getSourceRectForMenu();
+            return this.Value.getSourceRectForMenu() ?? this.Value.getSourceRect();
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>

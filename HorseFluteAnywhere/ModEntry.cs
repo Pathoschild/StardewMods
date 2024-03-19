@@ -23,10 +23,10 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         ** Fields
         *********/
         /// <summary>The unique item ID for a horse flute.</summary>
-        private const int HorseFluteId = 911;
+        private const string HorseFluteId = "911";
 
         /// <summary>The horse flute to play when the summon key is pressed.</summary>
-        private readonly Lazy<SObject> HorseFlute = new(() => new SObject(ModEntry.HorseFluteId, 1));
+        private readonly Lazy<SObject> HorseFlute = new(() => ItemRegistry.Create<SObject>("(O)" + ModEntry.HorseFluteId));
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config = null!; // set in Entry
@@ -143,92 +143,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             if (!this.CanPlayFlute(Game1.player))
                 return false;
 
-            int[] warpRestrictions = Utility.GetHorseWarpRestrictionsForFarmer(Game1.player).ToArray();
-            if (warpRestrictions.Length == 1 && warpRestrictions[0] == 2 && this.TryFallbackSummonHorse())
-            {
-                // GetHorseWarpRestrictionsForFarmer patch failed (usually on macOS), but we
-                // were able to fallback to summoning the horse manually.
-            }
-            else
-                this.HorseFlute.Value.performUseAction(Game1.currentLocation);
-
-            return true;
-        }
-
-        /// <summary>Summon the horse manually if the <see cref="UtilityPatcher.After_GetHorseWarpRestrictionsForFarmer"/> patch isn't working for some reason.</summary>
-        /// <remarks>On macOS, patches on <see cref="Utility.GetHorseWarpRestrictionsForFarmer"/> are never called for some unknown reason. Derived from <see cref="SObject.performUseAction"/> and <see cref="FarmerTeam.OnRequestHorseWarp"/>.</remarks>
-        private bool TryFallbackSummonHorse()
-        {
-            // find horse
-            Horse horse = Utility.findHorseForPlayer(Game1.player.UniqueMultiplayerID);
-            if (horse == null)
-                return false;
-
-            // play flute
-            this.Monitor.Log("Falling back to custom summon...");
-            Game1.player.faceDirection(Game1.down);
-            Game1.soundBank.PlayCue("horse_flute");
-            Game1.player.FarmerSprite.animateOnce(new[]
-            {
-                new FarmerSprite.AnimationFrame(98, 400, true, false),
-                new FarmerSprite.AnimationFrame(99, 200, true, false),
-                new FarmerSprite.AnimationFrame(100, 200, true, false),
-                new FarmerSprite.AnimationFrame(99, 200, true, false),
-                new FarmerSprite.AnimationFrame(98, 400, true, false),
-                new FarmerSprite.AnimationFrame(99, 200, true, false),
-            });
-            Game1.player.freezePause = 1500;
-
-            // summon horse
-            DelayedAction.functionAfterDelay(() =>
-            {
-                horse.mutex.RequestLock(() =>
-                {
-                    horse.mutex.ReleaseLock();
-
-                    Multiplayer multiplayer = this.Helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
-                    GameLocation location = horse.currentLocation;
-                    Vector2 tileLocation = horse.getTileLocation();
-
-                    for (int i = 0; i < 8; i++)
-                    {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
-                        {
-                            layerDepth = 1f,
-                            motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
-                        });
-                    }
-
-                    location.playSoundAt("wand", horse.getTileLocation());
-
-                    location = Game1.player.currentLocation;
-                    tileLocation = Game1.player.getTileLocation();
-
-                    location.playSoundAt("wand", tileLocation);
-
-                    for (int i = 0; i < 8; i++)
-                    {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
-                        {
-                            layerDepth = 1f,
-                            motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
-                        });
-                    }
-
-                    Game1.warpCharacter(horse, Game1.player.currentLocation, tileLocation);
-                    int j = 0;
-                    for (int x = (int)tileLocation.X + 3; x >= (int)tileLocation.X - 3; x--)
-                    {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tileLocation.Y) * Game1.tileSize, Color.White, 8, false, 50f)
-                        {
-                            layerDepth = 1f,
-                            delayBeforeAnimationStart = j * 25,
-                            motion = new Vector2(-.25f, 0)
-                        });
-                        j++;
-                    }
-                });
-            }, 1500);
+            this.HorseFlute.Value.performUseAction(Game1.currentLocation);
             return true;
         }
 
@@ -337,11 +252,12 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="player">The player to check.</param>
         private bool CanPlayFlute(Farmer player)
         {
+            const string id = $"{ItemRegistry.type_object}{ModEntry.HorseFluteId}";
             return
                 Context.IsPlayerFree
                 && (
                     !this.Config.RequireHorseFlute
-                    || player.Items.Any(p => Utility.IsNormalObjectAtParentSheetIndex(p, ModEntry.HorseFluteId))
+                    || player.Items.Any(p => p?.QualifiedItemId == id)
                 );
         }
 

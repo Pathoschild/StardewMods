@@ -1,6 +1,18 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.41.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
+* Updated for Stardew Valley 1.6.  
+  _Thanks to SinZ163 for contributing some of the fixes!_
+* Item lookups now show which mod added the item, if the mod follows the [unique string ID](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs) format.
+* Added more seed info in tree lookups.
+* Added support for looking up NPCs in some custom mod menus (thanks to BinaryLip!).
+* Improved debug field format for player stats and schedules.
+* Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
+* Fixed errors if some config fields are set to null.
+
 ## 1.40.4
 Released 01 December 2023 for SMAPI 3.14.0 or later.
 

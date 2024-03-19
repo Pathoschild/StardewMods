@@ -25,9 +25,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
-        public SlingshotAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection, rateLimit: 60)
+        public SlingshotAttachment(GenericAttachmentConfig config, IModRegistry modRegistry)
+            : base(modRegistry, rateLimit: 60)
         {
             this.Config = config;
         }
@@ -54,10 +53,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
-            tool = tool.AssertNotNull();
+            Slingshot slingshot = (Slingshot)tool.AssertNotNull();
 
-            this.Reflection.GetField<bool>(tool, "canPlaySound").SetValue(false);
-            return this.UseToolOnTile(tool, tile, player, location);
+            slingshot.canPlaySound = false;
+            return this.UseToolOnTile(slingshot, tile, player, location);
         }
     }
 }

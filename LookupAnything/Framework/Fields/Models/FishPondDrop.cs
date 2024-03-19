@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         ** Accessors
         *********/
         /// <summary>An instance of the produced item.</summary>
-        public Object SampleItem { get; }
+        public Item SampleItem { get; }
 
         /// <summary>The sprite icon to draw.</summary>
         public SpriteInfo? Sprite { get; }
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <param name="sampleItem">An instance of the produced item.</param>
         /// <param name="sprite">The sprite icon to draw.</param>
         /// <param name="isUnlocked">Whether the item has been unlocked for the current fish pond.</param>
-        public FishPondDrop(FishPondDropData data, Object sampleItem, SpriteInfo? sprite, bool isUnlocked)
+        public FishPondDrop(FishPondDropData data, Item sampleItem, SpriteInfo? sprite, bool isUnlocked)
             : base(data.MinPopulation, data.ItemID, data.MinDrop, data.MaxDrop, data.Probability)
         {
             this.SampleItem = sampleItem;

@@ -49,6 +49,9 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsSaveBasicInfoLoaded { get; set; }
 
+        /// <summary>This happens before the game applies problem fixes, checks for achievements, starts music, etc.</summary>
+        public bool IsSaveLoaded { get; set; }
+
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, IInvariantSet>[] TokensWithSpecialUpdateRates { get; } = {
             Tuple.Create(UpdateRate.OnLocationChange, "location tokens", InvariantSets.From(new[] { nameof(ConditionType.LocationContext), nameof(ConditionType.LocationName), nameof(ConditionType.LocationUniqueName), nameof(ConditionType.IsOutdoors) })),
@@ -192,7 +195,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, IInvariantSet installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
-            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
+            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isParsed: NeedsSave, isBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded, isLoaded: () => this.IsSaveLoaded);
 
             return new IValueProvider[]
             {
@@ -209,20 +212,20 @@ namespace ContentPatcher.Framework
                 // player
                 new PerPlayerValueProvider(ConditionType.DailyLuck, player => save.GetDailyLuck(player).ToString(CultureInfo.InvariantCulture), save),
                 new PerPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save),
-                new PerPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys, save),
                 new PerPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save),
                 new PerPlayerValueProvider(ConditionType.HasCookingRecipe, player => player.cookingRecipes.Keys, save),
                 new PerPlayerValueProvider(ConditionType.HasCraftingRecipe, player => player.craftingRecipes.Keys, save),
-                new PerPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered.Select(p => p.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered, save),
                 new PerPlayerValueProvider(ConditionType.HasFlag, player => save.GetFlags(player), save),
                 new PerPlayerValueProvider(ConditionType.HasProfession, player => player.professions.Select(id => ((Profession)id).ToString()), save),
                 new PerPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, save),
-                new PerPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save),
-                new PerPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen, save),
+                new PerPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value), save),
                 new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsSave, allowedValues: Enum.GetNames(typeof(WalletItem))),
                 new PerPlayerValueProvider(ConditionType.IsMainPlayer, player => player.IsMainPlayer.ToString(), save),
                 new PerPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save),
-                new PerPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player), save),
                 new PerPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save),
                 new PerPlayerValueProvider(ConditionType.LocationOwnerId, player => save.GetLocationOwnerId(save.GetCurrentLocation(player))?.ToString(), save),
                 new PerPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save),
@@ -276,9 +279,12 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
+            InvariantSet modIdSet = new(contentPack.Manifest.UniqueID);
+
             return new IValueProvider[]
             {
                 new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
+                new ImmutableValueProvider(nameof(ConditionType.ModId), modIdSet, allowedValues: modIdSet),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
                 new InternalAssetKeyValueProvider(contentPack.ModContent.GetInternalAssetName),

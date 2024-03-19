@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Áthelyezés a Junimo kunyhókból a ládákba",
     "config.junimo-huts.move-into-huts": "Áthelyezés a ládákból a Junimo kunyhókba",
 
-    // machine overrides
-    "config.title.machine-overrides": "Gépi felülbírálások",
-    "config.override.ShippingBin-name": "Szállítmány",
-    "config.override.MiniShippingBin-name": "Mini szállítmány",
-    "config.override.desc": "A(z) {{machineName}} automatizálásának engedélyezése.",
-    "config.custom-overrides-note": "Az egyéni felülbíráláshoz látogass el a 'https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure' oldalt a 'Config.json' fájl közvetlen szerkesztéséhez."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} viselkedés",
+    "config.machine-settings-enabled.Name": "Engedélyezve",
+    "config.machine-settings-enabled.desc": "A(z) {{machineName}} automatizálásának engedélyezése.",
+    "config.machine-settings-priority.name": "Prioritás",
+    "config.machine-settings-priority.desc": "Az a sorrend, amelyben a {{machineName}} gépeket más gépekhez képest kell feldolgozni. Az alapértelmezett prioritás 0, a magasabb értékek kerülnek először feldolgozásra."
 }

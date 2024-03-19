@@ -8,9 +8,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Characters;
-using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -39,6 +37,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>The buff icon texture.</summary>
+        public Texture2D? BuffIconTexture { get; private set; }
+
         /// <summary>The garage texture to apply.</summary>
         public Texture2D? GarageTexture { get; private set; }
 
@@ -78,40 +79,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 this.GarageTexture = texture;
             else
                 this.Monitor.Log(error, LogLevel.Error);
-        }
 
-        /// <summary>Apply the mod textures to the given menu, if applicable.</summary>
-        /// <param name="menu">The menu to change.</param>
-        /// <param name="isFarmExpansion">Whether the menu is the Farm Expansion build menu.</param>
-        /// <param name="isPelicanFiber">Whether the menu is the Pelican Fiber build menu.</param>
-        /// <param name="isGarage">Whether a blueprint is for a tractor garage.</param>
-        /// <param name="reflection">The SMAPI API for accessing internal code.</param>
-        public void ApplyTextures(IClickableMenu menu, bool isFarmExpansion, bool isPelicanFiber, Func<BluePrint, bool> isGarage, IReflectionHelper reflection)
-        {
-            // vanilla menu
-            if (menu is CarpenterMenu carpenterMenu)
-            {
-                if (isGarage(carpenterMenu.CurrentBlueprint))
-                {
-                    Building building = reflection.GetField<Building>(carpenterMenu, "currentBuilding").GetValue();
-                    if (building.texture.Value != this.GarageTexture && this.GarageTexture != null)
-                        building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-                }
-                return;
-            }
-
-            // Farm Expansion & Pelican Fiber menus
-
-            if (isFarmExpansion || isPelicanFiber)
-            {
-                BluePrint currentBlueprint = reflection.GetProperty<BluePrint>(menu, isFarmExpansion ? "CurrentBlueprint" : "currentBlueprint").GetValue();
-                if (isGarage(currentBlueprint))
-                {
-                    Building building = reflection.GetField<Building>(menu, "currentBuilding").GetValue();
-                    if (building.texture.Value != this.GarageTexture && this.GarageTexture != null)
-                        building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-                }
-            }
+            // buff icon
+            if (this.TryLoadFromContent("buffIcon", out texture, out error))
+                this.BuffIconTexture = texture;
+            else
+                this.Monitor.Log(error, LogLevel.Error);
         }
 
         /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
@@ -123,15 +96,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 horse!.Sprite.spriteTexture = this.TractorTexture;
         }
 
-        /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
-        /// <param name="stable">The stable to change.</param>
-        /// <param name="isGarage">Get whether a stable is a garage.</param>
-        public void ApplyTextures(Stable stable, Func<Stable, bool> isGarage)
-        {
-            if (this.GarageTexture != null && isGarage(stable))
-                stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-        }
-
         /// <inheritdoc cref="IContentEvents.AssetRequested"/>
         /// <param name="e">The event data.</param>
         public void OnAssetRequested(AssetRequestedEventArgs e)
@@ -141,8 +105,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (e.NameWithoutLocale.IsEquivalentTo("Buildings/TractorGarage") && this.GarageTexture != null)
                 e.LoadFrom(() => this.GarageTexture, AssetLoadPriority.Low);
 
-            // load tractor or garage texture
-            if (e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Tractor") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Garage"))
+            // load tractor, garage, or buff texture
+            if (e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Tractor") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Garage") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/BuffIcon"))
             {
                 string key = PathUtilities.GetSegments(e.NameWithoutLocale.Name).Last();
                 e.LoadFrom(

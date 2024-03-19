@@ -46,9 +46,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored => this.Container.Data.IsIgnored;
 
-        /// <summary>Whether to avoid removing the last item in a stack.</summary>
-        public bool PreventRemovingStacks => this.Container.Data.AutomatePreventRemovingStacks;
-
         /// <summary>Whether Automate should take items from this container.</summary>
         public AutomateContainerPreference AutomateTakeItems => this.Container.Data.AutomateTakeItems;
 
@@ -90,10 +87,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="category">The category name (if any).</param>
         /// <param name="order">The sort value (if any).</param>
         /// <param name="ignored">Whether the chest should be ignored.</param>
-        /// <param name="automatePreventRemovingStacks">Whether Automate should avoid removing the last item in a stack.</param>
         /// <param name="automateStoreItems">Whether Automate should take items from this container.</param>
         /// <param name="automateTakeItems">Whether Automate should put items in this container.</param>
-        public void Update(string? name, string? category, int? order, bool ignored, bool automatePreventRemovingStacks, AutomateContainerPreference automateStoreItems, AutomateContainerPreference automateTakeItems)
+        public void Update(string? name, string? category, int? order, bool ignored, AutomateContainerPreference automateStoreItems, AutomateContainerPreference automateTakeItems)
         {
             ContainerData data = this.Container.Data;
 
@@ -105,7 +101,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 : null;
             data.Order = order;
             data.IsIgnored = ignored;
-            data.AutomatePreventRemovingStacks = automatePreventRemovingStacks;
             data.AutomateStoreItems = automateStoreItems;
             data.AutomateTakeItems = automateTakeItems;
 

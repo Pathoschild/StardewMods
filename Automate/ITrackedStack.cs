@@ -12,8 +12,8 @@ namespace Pathoschild.Stardew.Automate
         /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
         Item Sample { get; }
 
-        /// <summary>The underlying item type.</summary>
-        ItemType Type { get; }
+        /// <summary>The identifier for the type definition which contains the item, matching one of the <see cref="ItemRegistry"/> <c>type_</c> constants.</summary>
+        string Type { get; }
 
         /// <summary>The number of items in the stack.</summary>
         int Count { get; }
@@ -29,8 +29,5 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Remove the specified number of this item from the stack and return a new stack matching the count.</summary>
         /// <param name="count">The number to get.</param>
         Item? Take(int count);
-
-        /// <summary>Ignore one item in each stack, to ensure that no stack can be fully consumed.</summary>
-        void PreventEmptyStacks();
     }
 }

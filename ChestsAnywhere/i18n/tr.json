@@ -28,7 +28,6 @@
     "label.automate-take": "Bu sandıktan nesneleri al",
     "label.automate-take-first": "Bu sandıktan ilk önce nesneleri al",
     "label.automate-take-disabled": "Asla bu sandıktan nesneleri alma",
-    "label.automate-prevent-remove-stacks": "Yığındaki son nesneye dokunma",
 
     // button labels
     "button.edit-chest": "sandığı düzenle",

@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "วิญญาณที่แสนเป็นมิตร ผู้คอยช่วยจัดการกับขยะ",
 
     // item types
-    "data.type.debris": "ซากผุพัง",
-    "data.type.stone": "ก้อนหิน",
     "data.type.container": "ภาชนะ",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "ใช้ฟักไข่ให้กลายเป็น ลูกเจี๊ยบ หรือลูกเป็ด",
-    "data.item.broken-branch.name": "กิ่งไม้หัก",
-    "data.item.broken-branch.description": "กิ่งไม้หัก เมื่อสับด้วยขวาน จะได้เป็นท่อนไม้ (Wood)",
-    "data.item.stone.name": "ก้อนหิน",
-    "data.item.stone.description": "ก้อนหินสีเทาที่ระบุประเภทไม่ได้ เมื่อทำลายมันจะได้รับ ก้อนหิน (Stone)",
-    "data.item.geode.name": "ผลึกโพรง",
-    "data.item.geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรง (Geodes)",
-    "data.item.frozen-geode.name": "ก้อนผลึกโพรงน้ำแข็ง",
-    "data.item.frozen-geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงน้ำแข็ง (Frozen Geodes)",
-    "data.item.magma-geode.name": "ก้อนผลึกโพรงแม็กม่า",
-    "data.item.magma-geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงแม็กม่า (Magma Geodes)",
-
-    // weeds & crystals
-    "data.item.weed.name": "วัชพืช",
-    "data.item.weed.description": "วัชพืชที่ระบุประเภทไม่ได้ มีโอกาสได้รับ ใยพืช (Fibers) หรือ เมล็ดพันธุ์คละชนิด (Mixed Seeds)",
-    "data.item.fertile-weed.name": "วัชพืชเจริญพันธุ์",
-    "data.item.fertile-weed.description": "จะได้รับ เมล็ดพันธุ์คละชนิด (Mixed Seeds) ทุกครั้ง",
-    "data.item.ice-crystal.name": "คริสตัลน้ำแข็ง",
-    "data.item.ice-crystal.description": "คริสตัลน้ำแข็งที่ระบุประเภทไม่ได้ มีโอกาสเล็กน้อยที่จะได้รับควอตซ์บริสุทธิ์ (Refined Quartz)",
-
-    // mine gems
-    "data.item.amethyst-node.name": "ก้อนอเมทิสต์",
-    "data.item.amethyst-node.description": "เมื่อทำลายมันจะได้ รับอเมทิสต์ (Amethyst)",
-    "data.item.aquamarine-node.name": "ก้อนอะความารีน",
-    "data.item.aquamarine-node.description": "เมื่อทำลายมันจะได้รับ อะความารีน (Aquamarine)",
-    "data.item.diamond-node.name": "ก้อนเพชร",
-    "data.item.diamond-node.description": "เมื่อทำลายมันจะได้รับ เพชร (Diamond)",
-    "data.item.emerald-node.name": "ก้อนมรกต",
-    "data.item.emerald-node.description": "เมื่อทำลายมันจะได้รับ มรกต (Emerald)",
-    "data.item.gem-node.name": "ก้อนแร่อัญมณี",
-    "data.item.gem-node.description": "เมื่อทำลายมันจะได้รับ มรกต (Emerald), อะความารีน (Aquamarines), ทับทิม (Ruby), อเมทิสต์ (Amethyst), โทแพส (Topaz), หยก (Jade), หรือ เพชร (Diamond)",
-    "data.item.jade-node.name": "ก้อนหยก",
-    "data.item.jade-node.description": "เมื่อทำลายมันจะได้รับ หยก (Jade)",
-    "data.item.mystic-stone.name": "ก้อนหินปริศนา",
-    "data.item.mystic-stone.description": "เมื่อทำลายมันจะได้รับ อัญมณีหายาก (Rare Gems) หรือ แร่ (Ores), รวมถึง สะเก็ดแก้วปริซึม (Prismatic Shard)",
-    "data.item.prismatic-node.name": "ก้อนสะเก็ดแก้วปริซึม",
-    "data.item.prismatic-node.description": "เมื่อทำลายมันจะได้รับ (Prismatic shard)",
-    "data.item.ruby-node.name": "ก้อนทับทิม",
-    "data.item.ruby-node.description": "เมื่อทำลายมันจะได้รับ ทับทิม (Ruby)",
-    "data.item.topaz-node.name": "ก้อนโทแพส",
-    "data.item.topaz-node.description": "เมื่อทำลายมันจะได้รับ โทแพส (Topaz)",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "ก้อนสะเก็ดแม็กม่า",
-    "data.item.cinder-shard-node.description": "เมื่อทำลายมันจะได้รับ สะเก็ดแม็กม่า (Cinder Shards)",
-    "data.item.copper-node.name": "ก้อนแร่ทองแดง",
-    "data.item.copper-node.description": "เมื่อทำลายมันจะได้รับ แร่ทองแดง (Copper Ore)",
-    "data.item.gold-node.name": "ก้อนแร่ทองคำ",
-    "data.item.gold-node.description": "เมื่อทำลายมันจะได้รับ แร่ทองคำ (Gold Ore)",
-    "data.item.iridium-node.name": "ก้อนแร่อิริเดียม",
-    "data.item.iridium-node.description": "เมื่อทำลายมันจะได้รับ แร่อิริเดียม (Iridium Ore)",
-    "data.item.iron-node.name": "ก้อนแร่เหล็ก",
-    "data.item.iron-node.description": "เมื่อทำลายมันจะได้รับ แร่เหล็ก (Iron Ore)",
-    "data.item.omni-geode-node.name": "ก้อนผลึกโพรงผสม",
-    "data.item.omni-geode-node.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงผสม (Omni Geode)",
-
-    // mine stones
-    "data.item.colored-stone.name": "หินสี",
-    "data.item.colored-stone.description": "ก้อนหินที่ระบุประเภทไม่ได้ มีโอกาสได้รับ ก้อนหิน (Stone), แร่ (Ores), หรือผลึกโพรง (Geodes)",
-    "data.item.mine-stone.name": "ก้อนหิน",
-    "data.item.mine-stone.description": "เมื่อทำลายมันจะได้รับ ก้อนหิน (Stone) และมีโอกาสจะได้รับ ถ่านหิน (Coal)",
-
-    // other stones
-    "data.item.clay-stone.name": "หินโคลน",
-    "data.item.clay-stone.description": "เมื่อทำลายมันจะได้รับ ดินเหนียว (Clay)",
-    "data.item.fossil-stone.name": "หินฟอสซิล",
-    "data.item.fossil-stone.description": "เมื่อทำลายมันจะได้รับ ฟอสซิล (Fossil) และ กระดูก (Bone)",
-
-    // mine containers
     "data.item.barrel.name": "ถัง",
     "data.item.barrel.description": "เมื่อทำลายมันจะได้รับของจิปาถะ",
     "data.item.box.name": "กล่อง",
@@ -252,8 +182,7 @@
     "building.output-processing": "กำลังทำผลผลิต",
     "building.output-ready": "ผลผลิตพร้อมใช้งาน",
     "building.slimes.summary": "{{count}} ตัว จากจำนวนสูงสุด {{max}} ตัว",
-    "building.stored-hay.summary-one-silo": "มี {{hayCount}} ฟาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
-    "building.stored-hay.summary-multiple-silos": "มี {{hayCount}} ฟางใน {{siloCount}} ยุ้งฉาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "มีสัตว์เลี้ยงสูงสุด 4 ตัว, สามารถเลี้ยงวัวได้",
     "building.upgrades.barn.1": "มีสัตว์เลี้ยงสูงสุด 8 ตัว, สัตว์เลี้ยงสามารถสืบพันธุ์ได้ และสามารถเลี้ยงแพะได้",
     "building.upgrades.barn.2": "มีสัตว์เลี้ยงสูงสุด 12 ตัว, ให้อาหารอัตโนมัติ, สามารถเลี้ยงหมูและแกะได้",
@@ -353,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "รายละเอียด",
     "item.loves-this": "ชอบสิ่งนี้มากๆ",
     "item.likes-this": "ชอบสิ่งนี้",
@@ -371,6 +301,7 @@
     "item.produces-dye": "ทำสีย้อมได้",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}} วางแล้ว",
     "item.contents.ready": "{{name}} พร้อมแล้ว",
     "item.contents.partial": "{{name}} ใน {{time}}",
@@ -677,7 +608,7 @@
     // labels
     "tree.stage": "ระยะการเจริญเติบโต",
     "tree.next-growth": "การเติบโตถัดไป",
-    "tree.has-seed": "มีเมล็ด",
+    "tree.seed": "มีเมล็ด",
     "tree.is-fertilized": "ใส่ปุ๋ยแล้วหรือยัง",
 
     // values
@@ -693,6 +624,9 @@
     "tree.next-growth.winter": "ไม่สามารถเติบโตได้ ในสภาพอากาศหนาว ภายนอกเรือนกระจก (Green House)",
     "tree.next-growth.adjacent-trees": "ไม่สามารถเติบโตได้ เนื่องจากมีต้นไม้อยู่ใกล้ ๆ",
     "tree.next-growth.chance": "โอกาส {{chance}}% ที่จะโตเป็น{{stage}}ในวันพรุ่งนี้",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "เมล็ดพันธุ์",

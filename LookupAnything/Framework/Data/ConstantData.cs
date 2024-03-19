@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /****
         ** Items
         ****/
-        /// <summary>Items which can have an iridium quality. This is a list of category IDs (negative) or item IDs (positive).</summary>
+        /// <summary>Items which can have an iridium quality. This is a list of category IDs or qualified item IDs.</summary>
         /// <remarks>
         /// The following can have iridium quality:
         /// - animal produce;
@@ -83,14 +83,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /// - artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
         /// - forage crops.
         /// </remarks>
-        public int[] ItemsWithIridiumQuality { get; set; } = Array.Empty<int>();
+        public string[] ItemsWithIridiumQuality { get; set; } = Array.Empty<string>();
 
         /****
         ** Achievements
         ****/
-        /// <summary>The crops that must be shipped for the polyculture achievement.</summary>
+        /// <summary>The qualified item IDs crops that must be shipped for the polyculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
-        public int[] PolycultureCrops { get; set; } = Array.Empty<int>();
+        public string[] PolycultureCrops { get; set; } = Array.Empty<string>();
 
         /// <summary>The number of each crop that must be shipped for the polyculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>

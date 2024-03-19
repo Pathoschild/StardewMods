@@ -1,3 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
+
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The parsed mod configuration.</summary>
@@ -45,5 +49,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.Controls ??= new ModConfigKeys();
+            this.ShowGiftTastes ??= new ModGiftTasteConfig();
+        }
     }
 }

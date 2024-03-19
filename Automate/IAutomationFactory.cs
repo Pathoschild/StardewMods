@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
-        IAutomatable? GetFor(Building building, BuildableGameLocation location, in Vector2 tile);
+        IAutomatable? GetFor(Building building, GameLocation location, in Vector2 tile);
 
         /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
         /// <param name="location">The location to check.</param>

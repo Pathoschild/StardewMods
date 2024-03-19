@@ -2,8 +2,12 @@
     /*********
     ** Farm info
     *********/
-    "farm.name": "Small Beach Farm",
+    "farm.name": "Fattoria sulla Spiaggetta",
     "farm.description": "Una piccola e fertile spiaggia tascabile, dove si possono pescare sia pesci di fiume che di mare.",
+
+    "farm.fish-areas.river": "Fiume",
+    "farm.fish-areas.estuary": "Estuario",
+    "farm.fish-areas.ocean": "Oceano",
 
 
     /*********

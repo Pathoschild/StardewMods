@@ -7,8 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
-using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
-using Pathoschild.Stardew.Common.Items.ItemData;
+using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -20,12 +19,12 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Buildings;
 using StardewValley.GameData.Crafting;
-using StardewValley.GameData.FishPond;
+using StardewValley.GameData.FishPonds;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything
@@ -39,11 +38,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The Custom Farming Redux integration.</summary>
         private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
 
-        /// <summary>The Producer Framework Mod integration.</summary>
-        private readonly ProducerFrameworkModIntegration ProducerFrameworkMod;
+        // TODO: restore when PFM is updated
+        ///// <summary>The Producer Framework Mod integration.</summary>
+        //private readonly ProducerFrameworkModIntegration ProducerFrameworkMod;
 
         /// <summary>Parses the raw game data into usable models.</summary>
-        private readonly DataParser DataParser;
+        private readonly DataParser DataParser = new();
 
         /// <summary>Scans the game world for owned items.</summary>
         private readonly WorldItemScanner WorldItemScanner;
@@ -54,7 +54,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Encapsulates logging to the console.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The cached item data filtered to <see cref="ItemType.Object"/> items.</summary>
+        /// <summary>The SMAPI API for fetching metadata about loaded mods.</summary>
+        private readonly IModRegistry ModRegistry;
+
+        /// <summary>The cached item data filtered to <see cref="ItemRegistry.type_object"/> items.</summary>
         private Lazy<SearchableItem[]> Objects;
 
         /// <summary>The cached recipes.</summary>
@@ -81,26 +84,25 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="reflection">Simplifies access to protected code.</param>
         public GameHelper(Metadata metadata, IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
-            this.DataParser = new DataParser(this);
             this.Metadata = metadata;
             this.Monitor = monitor;
+            this.ModRegistry = modRegistry;
             this.WorldItemScanner = new WorldItemScanner(reflection);
 
             this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, this.Monitor);
             this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
-            this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);
+            //this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);  // TODO: restore when PFM is updated
 
-            this.ResetCache(reflection, monitor);
+            this.ResetCache(monitor);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
         [MemberNotNull(nameof(GameHelper.Objects), nameof(GameHelper.Recipes))]
-        public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
+        public void ResetCache(IMonitor monitor)
         {
-            this.Objects = new(() => this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }).ToArray());
-            this.Recipes = new(() => this.GetAllRecipes(reflection, monitor).ToArray());
+            this.Objects = new(() => this.ItemRepository.GetAll(onlyType: ItemRegistry.type_object).Where(p => p.Item is not Ring).ToArray());
+            this.Recipes = new(() => this.GetAllRecipes(monitor).ToArray());
         }
 
         /****
@@ -158,17 +160,17 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Data helpers
         ****/
         /// <summary>Get the number of times the player has shipped a given item.</summary>
-        /// <param name="itemID">The item's parent sprite index.</param>
-        public int GetShipped(int itemID)
+        /// <param name="itemID">The item's unqualified ID.</param>
+        public int GetShipped(string itemID)
         {
             return Game1.player.basicShipped.ContainsKey(itemID)
                 ? Game1.player.basicShipped[itemID]
                 : 0;
         }
 
-        /// <summary>Get all shippable items.</summary>
+        /// <summary>Get all shippable items by qualified item ID.</summary>
         /// <remarks>Derived from <see cref="Utility.hasFarmerShippedAllItems"/>.</remarks>
-        public IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
+        public IEnumerable<KeyValuePair<string, bool>> GetFullShipmentAchievementItems()
         {
             return (
                 from entry in this.Objects.Value
@@ -178,15 +180,15 @@ namespace Pathoschild.Stardew.LookupAnything
                     && obj.Type != "Fish"
                     && obj.Type != "Mineral"
                     && obj.Type != "Cooking"
-                    && SObject.isPotentialBasicShippedCategory(obj.ParentSheetIndex, obj.Category.ToString())
+                    && SObject.isPotentialBasicShipped(obj.ItemId, obj.Category, obj.Type)
 
-                select new KeyValuePair<int, bool>(obj.ParentSheetIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSheetIndex))
+                select new KeyValuePair<string, bool>(obj.QualifiedItemId, Game1.player.basicShipped.ContainsKey(obj.ItemId))
             );
         }
 
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
-        /// Derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        /// Derived from <see cref="Utility.ForEachItem(Func{Item,bool})"/> with some differences:
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
         ///   * added hay in silos.
         /// </remarks>
@@ -199,7 +201,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<NPC> GetAllCharacters()
         {
             return Utility
-                .getAllCharacters(new List<NPC>())
+                .getAllCharacters()
                 .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
         }
 
@@ -258,7 +260,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
             return
                 (
-                    from entry in this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }, includeVariants: false)
+                    from entry in this.ItemRepository.GetAll(onlyType: ItemRegistry.type_object, includeVariants: false)
+                    where entry.Item is not Ring
+
                     let item = entry.CreateItem()
                     let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
@@ -307,7 +311,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
         /// <param name="fishID">The fish ID.</param>
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-        public FishSpawnData? GetFishSpawnRules(int fishID)
+        public FishSpawnData? GetFishSpawnRules(string fishID)
         {
             return this.DataParser.GetFishSpawnRules(fishID, this.Metadata);
         }
@@ -360,7 +364,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             // ignore invalid ingredients
-            if (item.GetItemType() != ItemType.Object)
+            if (item.TypeDefinitionId != ItemRegistry.type_object)
                 return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
@@ -381,8 +385,8 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 RecipeIngredientModel? ingredient = recipe.Ingredients.FirstOrDefault();
                 return
-                    ingredient?.PossibleIds.Any(p => p < 0) == true
-                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
+                    ingredient?.PossibleIds.Any(p => int.TryParse(p, out int id) && id < 0) == true
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.QualifiedItemId) == true && other.DisplayType == recipe.DisplayType);
             });
 
             // from construction recipes
@@ -434,51 +438,6 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
-        /// <summary>Get an object by its parent sprite index if it can be parsed.</summary>
-        /// <param name="index">The parent sprite index.</param>
-        /// <param name="obj">The constructed object.</param>
-        /// <param name="stack">The number of items in the stack.</param>
-        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
-        public bool TryGetObjectBySpriteIndex(int index, [NotNullWhen(true)] out SObject? obj, int stack = 1, bool bigcraftable = false)
-        {
-            try
-            {
-                obj = this.GetObjectBySpriteIndex(index, stack, bigcraftable);
-                return true;
-            }
-            catch
-            {
-                obj = null;
-                return false;
-            }
-        }
-
-        /// <summary>Get an object by its parent sprite index.</summary>
-        /// <param name="index">The parent sprite index.</param>
-        /// <param name="stack">The number of items in the stack.</param>
-        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
-        public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
-        {
-            try
-            {
-                return bigcraftable
-                    ? new SObject(Vector2.Zero, index) { stack = { stack } }
-                    : new SObject(index, stack);
-            }
-            catch (Exception ex)
-            {
-                string error = $"The game can't construct {(bigcraftable ? "bigcraftable" : "object")} #{index}.";
-
-                var data = bigcraftable ? Game1.bigCraftablesInformation : Game1.objectInformation;
-                if (data != null && data.TryGetValue(index, out string? dataStr))
-                    error += $"\nRaw data: {dataStr}";
-                else
-                    error += " No raw data found.";
-
-                throw new InvalidOperationException(error, ex);
-            }
-        }
-
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="category">The category number.</param>
         public IEnumerable<SObject> GetObjectsByCategory(int category)
@@ -501,6 +460,36 @@ namespace Pathoschild.Stardew.LookupAnything
 
             return true;
         }
+
+        /// <summary>Get the mod which added an item, if it follows the <a href="https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID">unique string item ID convention</a>.</summary>
+        /// <param name="itemId">The unqualified item ID to parse.</param>
+        public IModInfo? TryGetModFromItemId(string itemId)
+        {
+            // The unique string ID convention is `{mod id}_{item id}`, but both the mod ID and item ID can contain
+            // underscores. So here we split by `_` and check every possible prefix before the final underscore to see
+            // if it's a valid mod ID. We take the longest match since some mods use suffixes for grouped mods, like
+            // `mainMod` and `mainMod_cp`.
+
+            string[] parts = itemId.Split('_');
+            if (parts.Length == 1)
+                return null;
+
+            IModInfo? mod = null;
+            {
+                string modId = parts[0];
+                int itemIdIndex = parts.Length - 1;
+                for (int i = 0; i < itemIdIndex; i++)
+                {
+                    if (i != 0)
+                        modId += '_' + parts[i];
+
+                    mod = this.ModRegistry.Get(modId) ?? mod;
+                }
+            }
+
+            return mod;
+        }
+
 
         /****
         ** Coordinates
@@ -587,52 +576,22 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
         public SpriteInfo? GetSprite(Item? item, bool onlyCustom = false)
         {
-            SObject? obj = item as SObject;
-
             // Custom Farming Redux
-            if (obj != null && this.CustomFarmingRedux.IsLoaded)
+            if (item is SObject obj && this.CustomFarmingRedux.IsLoaded)
             {
                 SpriteInfo? data = this.CustomFarmingRedux.GetSprite(obj);
                 if (data != null)
                     return data;
             }
 
-            if (onlyCustom)
-                return null;
-
-            // standard object
-            if (obj != null)
+            // standard item
+            if (!onlyCustom && item is not null)
             {
-                return obj.bigCraftable.Value
-                    ? new SpriteInfo(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
-                    : new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+                var data = ItemRegistry.GetDataOrErrorItem(item.QualifiedItemId);
+                return new SpriteInfo(data.GetTexture(), data.GetSourceRect());
             }
 
-            // boots or ring
-            if (item is Boots or Ring)
-            {
-                int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
-                return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
-            }
-
-            // clothing
-            if (item is Clothing clothing)
-            {
-                switch (clothing.clothesType.Value)
-                {
-                    case (int)Clothing.ClothesType.SHIRT:
-                        return new ShirtSpriteInfo(clothing);
-
-                    case (int)Clothing.ClothesType.PANTS:
-                        return new SpriteInfo(FarmerRenderer.pantsTexture, new Rectangle(192 * (clothing.indexInTileSheetMale.Value % (FarmerRenderer.pantsTexture.Width / 192)), 688 * (clothing.indexInTileSheetMale.Value / (FarmerRenderer.pantsTexture.Width / 192)) + 672, 16, 16));
-                }
-            }
-
-            // hat
-            if (item is Hat hat)
-                return new SpriteInfo(FarmerRenderer.hatsTexture, new Rectangle(hat.which.Value * 20 % FarmerRenderer.hatsTexture.Width, hat.which.Value * 20 / FarmerRenderer.hatsTexture.Width * 20 * 4, 20, 20));
-
-            // unknown item
+            // unknown
             return null;
         }
 
@@ -666,82 +625,66 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="b">The second item to compare.</param>
         private bool AreEquivalent(Item? a, Item? b)
         {
-            if (a == null || b == null || a.ParentSheetIndex != b.ParentSheetIndex)
-                return false;
-
-            // special case: torches change from SObject to Torch when placed
-            if (new[] { a, b }.All(p => p is Torch || (p.ParentSheetIndex == 93 && p.GetItemType() == ItemType.Object)))
-                return true;
-
-            // equivalent
             return
-                a.Category == b.Category
-                && a.GetType() == b.GetType()
-                && a.GetItemType() == b.GetItemType()
-                && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
-                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
-                && (a as Fence)?.isGate == (b as Fence)?.isGate
-                && (a as Fence)?.whichType == (b as Fence)?.whichType
-                && (a as Hat)?.which == (b as Hat)?.which
-                && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
-                && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
-                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex;
+                a != null
+                && b != null
+                && a.QualifiedItemId == b.QualifiedItemId;
         }
 
         /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
-        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
+        private RecipeModel[] GetAllRecipes(IMonitor monitor)
         {
             // get vanilla recipes
-            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, monitor).ToList();
 
-            // get recipes from Producer Framework Mod
-            if (this.ProducerFrameworkMod.IsLoaded)
-            {
-                List<RecipeModel> customRecipes = new List<RecipeModel>();
-                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
-                {
-                    if (recipe.HasContextTags())
-                        continue;
+            // TODO: restore when PFM is updated
+            //// get recipes from Producer Framework Mod
+            //if (this.ProducerFrameworkMod.IsLoaded)
+            //{
+            //    List<RecipeModel> customRecipes = new List<RecipeModel>();
+            //    foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
+            //    {
+            //        if (recipe.HasContextTags())
+            //            continue;
 
-                    // remove vanilla recipes overridden by a PFM one
-                    // This is always an integer currently, but the API may return context_tag keys in the future.
-                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
+            //        // remove vanilla recipes overridden by a PFM one
+            //        // This is always an integer currently, but the API may return context_tag keys in the future.
+            //        recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineId == recipe.MachineId.ToString() && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value.ToString()));
 
-                    // get machine
-                    if (!this.TryGetObjectBySpriteIndex(recipe.MachineId, out SObject? machine, bigcraftable: true))
-                        continue;
+            //        // get machine
+            //        if (!this.TryGetObjectBySpriteIndex(recipe.MachineId.ToString(), out SObject? machine, bigcraftable: true))
+            //            continue;
 
-                    // add recipe
-                    customRecipes.Add(new RecipeModel(
-                        key: null,
-                        type: RecipeType.MachineInput,
-                        displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId!.Value, p.Count)),
-                        item: ingredient =>
-                        {
-                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
-                            if (ingredient?.ParentSheetIndex != null)
-                            {
-                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
-                                output.preserve.Value = recipe.PreserveType;
-                            }
-                            return output;
-                        },
-                        isKnown: () => true,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
-                        outputItemIndex: recipe.OutputId,
-                        minOutput: recipe.MinOutput,
-                        maxOutput: recipe.MaxOutput,
-                        outputChance: (decimal)recipe.OutputChance,
-                        machineParentSheetIndex: recipe.MachineId,
-                        isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == recipe.MachineId
-                    ));
-                }
+            //        // add recipe
+            //        customRecipes.Add(new RecipeModel(
+            //            key: null,
+            //            type: RecipeType.MachineInput,
+            //            displayType: machine.DisplayName,
+            //            ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId!.Value.ToString(), p.Count)),
+            //            item: ingredient =>
+            //            {
+            //                SObject output = this.GetObjectById(recipe.OutputId.ToString());
+            //                if (ingredient?.ParentSheetIndex != null)
+            //                {
+            //                    output.preservedParentSheetIndex.Value = ingredient.ItemId;
+            //                    output.preserve.Value = recipe.PreserveType;
+            //                }
+            //                return output;
+            //            },
+            //            isKnown: () => true,
+            //            exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
+            //            outputItemIndex: recipe.OutputId,
+            //            minOutput: recipe.MinOutput,
+            //            maxOutput: recipe.MaxOutput,
+            //            outputChance: (decimal)recipe.OutputChance,
+            //            machineId: recipe.MachineId,
+            //            isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == recipe.MachineId
+            //        ));
+            //    }
 
-                recipes.AddRange(customRecipes);
-            }
+            //    recipes.AddRange(customRecipes);
+            //}
 
             // get tailoring recipes
             recipes.AddRange(this.GetAllTailorRecipes());
@@ -799,14 +742,14 @@ namespace Pathoschild.Stardew.LookupAnything
                 Item[] spoolItems = GetObjectsWithTags(recipe.SecondItemTags);
 
                 // get output IDs
-                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
-                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
-                    : new[] { recipe.CraftedItemID };
+                string[] outputItemIds = recipe.CraftedItemIds?.Any() == true
+                    ? recipe.CraftedItemIds.ToArray()
+                    : new[] { recipe.CraftedItemId };
 
                 // build recipe models
-                foreach (int outputId in outputItemIds)
+                foreach (string outputId in outputItemIds)
                 {
-                    if (outputId < 0)
+                    if (int.TryParse(outputId, out int categoryId) && categoryId < 0)
                         continue;
 
                     foreach (Item clothItem in clothItems)
@@ -814,7 +757,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         foreach (Item spoolItem in spoolItems)
                         {
                             // skip if this combination was handled by an earlier recipe
-                            if (!seenPermutation.Add($"{clothItem.ParentSheetIndex}|{spoolItem.ParentSheetIndex}"))
+                            if (!seenPermutation.Add($"{clothItem.QualifiedItemId}|{spoolItem.QualifiedItemId}"))
                                 continue;
 
                             // get recipe output
@@ -836,13 +779,13 @@ namespace Pathoschild.Stardew.LookupAnything
                                 displayType: I18n.RecipeType_Tailoring(),
                                 ingredients: new[]
                                 {
-                                    new RecipeIngredientModel(clothItem.ParentSheetIndex, 1),
-                                    new RecipeIngredientModel(spoolItem.ParentSheetIndex, 1)
+                                    new RecipeIngredientModel(clothItem.QualifiedItemId, 1),
+                                    new RecipeIngredientModel(spoolItem.QualifiedItemId, 1)
                                 },
                                 item: _ => output.getOne(),
                                 isKnown: () => Game1.player.HasTailoredThisItem(output),
-                                outputItemIndex: recipe.CraftedItemID,
-                                machineParentSheetIndex: null,
+                                outputQualifiedItemId: $"{ItemRegistry.type_object}{recipe.CraftedItemId}",
+                                machineId: null,
                                 isForMachine: _ => false
                             );
                         }
@@ -856,9 +799,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="tailor">The tailoring menu.</param>
         /// <param name="spoolItem">The item in the tailoring spool slot.</param>
         /// <remarks>Derived from <see cref="TailoringMenu.CraftItem"/>.</remarks>
-        private Item GetTailoredItem(int craftedItemId, TailoringMenu tailor, Item spoolItem)
+        private Item GetTailoredItem(string craftedItemId, TailoringMenu tailor, Item spoolItem)
         {
-            Item obj = craftedItemId >= 0 ? (craftedItemId is < 2000 or >= 3000 ? new Clothing(craftedItemId) : new Hat(craftedItemId - 2000)) : new SObject(-craftedItemId, 1);
+            Item obj = ItemRegistry.Create(craftedItemId);
             if (obj is Clothing clothing)
                 tailor.DyeItems(clothing, spoolItem, 1);
             return obj;
@@ -883,45 +826,29 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get construction recipes which use an item as a building material.</summary>
         /// <param name="input">The ingredient to match.</param>
-        /// <remarks>Derived from <see cref="CarpenterMenu(bool)"/>.</remarks>
+        /// <remarks>Derived from the <see cref="CarpenterMenu"/> constructor.</remarks>
         private IEnumerable<RecipeModel> GetConstructionRecipes(Item? input)
         {
-            if (input?.GetItemType() != ItemType.Object)
+            if (input?.TypeDefinitionId != ItemRegistry.type_object)
                 yield break;
 
-            var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
-            foreach ((string key, string value) in data)
+            foreach ((string key, BuildingData data) in Game1.buildingData)
             {
-                // ignore invalid blueprints
-                if (key == "Mine Elevator" || value.StartsWith("animal/"))
-                    continue;
-
-                // parse blueprint
-                BluePrint blueprint;
-                try
-                {
-                    blueprint = new BluePrint(key);
-                }
-                catch
-                {
-                    continue;
-                }
-
                 // create recipe
-                RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(blueprint);
+                RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(data);
                 if (ingredients.Any(p => p.Matches(input)))
                 {
                     Building building;
                     try
                     {
-                        building = new Building(blueprint, Vector2.Zero);
+                        building = new Building(key, Vector2.Zero);
                     }
                     catch
                     {
                         continue; // ignore recipe if the building data is invalid
                     }
 
-                    yield return new RecipeModel(blueprint, building, ingredients);
+                    yield return new RecipeModel(building, ingredients);
                 }
             }
         }

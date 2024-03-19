@@ -14,7 +14,9 @@ using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley;
 
 namespace ContentPatcher.Framework
 {
@@ -470,15 +472,21 @@ namespace ContentPatcher.Framework
                             if (fromAsset == null)
                                 return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
 
+                            // parse priority
+                            if (!this.TryParsePriority(entry, AssetLoadPriority.Exclusive, out AssetLoadPriority priority, out string? error))
+                                return TrackSkip(error);
+
                             // save
                             patch = new LoadPatch(
                                 indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset!,
+                                priority: priority,
+                                updateRate: updateRate,
                                 conditions: conditions,
                                 localAsset: fromAsset,
-                                updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 parseAssetName: this.ParseAssetName
                             );
@@ -515,21 +523,23 @@ namespace ContentPatcher.Framework
                             List<EditDataPatchField>? fields = null;
                             List<EditDataPatchMoveRecord>? moveEntries = null;
                             List<IManagedTokenString>? targetField = null;
-                            if (fromAsset == null)
-                            {
-                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out targetField, out string? error))
-                                    return TrackSkip(error);
-                            }
+                            if (fromAsset == null && !TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out targetField, out string? error))
+                                return TrackSkip(error);
+
+                            // parse priority
+                            if (!this.TryParsePriority(entry, AssetEditPriority.Default, out AssetEditPriority priority, out error))
+                                return TrackSkip(error);
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
-                                return TrackSkip(parseError);
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
+                                return TrackSkip(error);
 
                             // save
                             patch = new EditDataPatch(
                                 indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset!,
+                                priority: priority,
                                 conditions: conditions,
                                 fromFile: fromAsset,
                                 records: entries,
@@ -539,6 +549,7 @@ namespace ContentPatcher.Framework
                                 targetField: targetField,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName,
@@ -569,11 +580,16 @@ namespace ContentPatcher.Framework
                             if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
                                 return TrackSkip(error);
 
+                            // parse priority
+                            if (!this.TryParsePriority(entry, AssetEditPriority.Default, out AssetEditPriority priority, out error))
+                                return TrackSkip(error);
+
                             // save
                             patch = new EditImagePatch(
                                 indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset!,
+                                priority: priority,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
@@ -581,6 +597,7 @@ namespace ContentPatcher.Framework
                                 patchMode: patchMode,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName
@@ -678,8 +695,8 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out string? parseError))
-                                return TrackSkip(parseError);
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
+                                return TrackSkip(error);
 
                             // read from/to asset areas
                             TokenRectangle? fromArea = null;
@@ -698,11 +715,16 @@ namespace ContentPatcher.Framework
                             if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !addWarps.Any() && !textOperations.Any())
                                 return TrackSkip($"must specify at least one of {nameof(entry.AddWarps)}, {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
 
+                            // parse priority
+                            if (!this.TryParsePriority(entry, AssetEditPriority.Default, out AssetEditPriority priority, out error))
+                                return TrackSkip(error);
+
                             // save
                             patch = new EditMapPatch(
                                 indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset!,
+                                priority: priority,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
@@ -714,6 +736,7 @@ namespace ContentPatcher.Framework
                                 textOperations: textOperations,
                                 updateRate: updateRate,
                                 contentPack: pack,
+                                migrator: rawContentPack.Migrator,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 parseAssetName: this.ParseAssetName
@@ -757,6 +780,56 @@ namespace ContentPatcher.Framework
             {
                 return TrackSkip($"error reading info. Technical details:\n{ex}");
             }
+        }
+
+        /// <summary>Parse the priority field for a patch.</summary>
+        /// <typeparam name="TPriority">The priority type (one of <see cref="AssetEditPriority"/> or <see cref="AssetLoadPriority"/>).</typeparam>
+        /// <param name="patch">The patch whose priority to parse.</param>
+        /// <param name="defaultValue">The default priority if not specified.</param>
+        /// <param name="priority">The parsed priority value, if valid.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        private bool TryParsePriority<TPriority>(PatchConfig patch, TPriority defaultValue, out TPriority priority, [NotNullWhen(false)] out string? error)
+            where TPriority : struct
+        {
+            // default if omitted
+            if (string.IsNullOrWhiteSpace(patch.Priority))
+            {
+                priority = defaultValue;
+                error = null;
+                return true;
+            }
+
+            // parse as enum value
+            if (Utility.TryParseEnum(patch.Priority, out TPriority newPriority))
+            {
+                priority = newPriority;
+                error = null;
+                return true;
+            }
+
+            // parse as an offset like 'Medium + 10'
+            int splitAt = patch.Priority.IndexOfAny(new[] { '-', '+' });
+            if (splitAt > 0)
+            {
+                string rawPriority = patch.Priority[..splitAt];
+                char rawSign = patch.Priority[splitAt];
+                string rawOffset = patch.Priority[(splitAt + 1)..];
+
+                if (Utility.TryParseEnum(rawPriority, out newPriority) && int.TryParse(rawOffset, out int offset))
+                {
+                    if (rawSign == '-')
+                        offset *= -1;
+
+                    priority = (TPriority)(object)((int)(object)newPriority + offset);
+                    error = null;
+                    return true;
+                }
+            }
+
+            priority = defaultValue;
+            error = $"the {nameof(patch.Priority)} value '{patch.Priority}' is invalid: expected one of [{string.Join(", ", Enum.GetNames(typeof(TPriority)))}] or a simple offset like '{Activator.CreateInstance(typeof(TPriority))} + 10'";
+            return false;
         }
 
         /// <summary>Parse the text operation fields for an <see cref="PatchType.EditData"/> or <see cref="PatchType.EditMap"/> patch.</summary>
@@ -953,10 +1026,13 @@ namespace ContentPatcher.Framework
                     string?[] targets = { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
                     if (string.IsNullOrWhiteSpace(moveEntry.ID))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
-                    if (targets.All(string.IsNullOrWhiteSpace))
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
-                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    switch (targets.Count(p => !string.IsNullOrWhiteSpace(p)))
+                    {
+                        case 0:
+                            return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                        case > 1:
+                            return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    }
 
                     // parse IDs
                     if (!tokenParser.TryParseString(moveEntry.ID, assumeModIds, localPath.With(nameof(moveEntry.ID)), out string? idError, out IManagedTokenString? moveId))
@@ -1030,15 +1106,15 @@ namespace ContentPatcher.Framework
             IManagedTokenString? keyInputStr = tokenParser.CreateTokenStringOrNull(keyLexToken.InputArgs?.Parts, tokenParser.Context, path.With("key"));
             IInputArguments keyInputArgs = tokenParser.CreateInputArgs(keyInputStr);
 
-            // get token
-            IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
-            if (token == null)
-                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition);
+            // This will validate if the token exists, and if not, is it allowed from HasMod checks
             if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIDs.GetImmutable(), out error))
                 return Fail(error, out error, out condition);
 
+            // get token
+            IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
+
             // validate input
-            if (!token.TryValidateInput(keyInputArgs, out error))
+            if (token != null && !token.TryValidateInput(keyInputArgs, out error))
                 return Fail(error, out error, out condition);
 
             // parse values
@@ -1048,11 +1124,11 @@ namespace ContentPatcher.Framework
                 return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
             // validate token keys & values
-            if (!values.IsMutable && values.IsReady && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
+            if (!values.IsMutable && values.IsReady && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
                 return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
             // create condition
-            condition = new Condition(name: token.Name, input: keyInputStr, values: values, isTokenMutable: token.IsMutable);
+            condition = new Condition(name: token?.Name ?? keyLexToken.Name, input: keyInputStr, values: values, isTokenMutable: token?.IsMutable ?? false);
             if (!tokenParser.Migrator.TryMigrate(condition, out error))
                 return Fail(error, out error, out condition);
 

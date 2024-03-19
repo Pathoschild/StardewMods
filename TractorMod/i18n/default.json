@@ -38,6 +38,12 @@
     "config.magnetic-radius.name": "Magnetic Radius",
     "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
 
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
     "config.build-price.name": "Build Price",
     "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
 

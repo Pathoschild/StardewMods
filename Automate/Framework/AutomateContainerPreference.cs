@@ -1,4 +1,4 @@
-using StardewValley;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -26,9 +26,6 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>The <see cref="ModDataDictionary"/> key for chest output options.</summary>
         public const string TakeItemsKey = "Pathoschild.Automate/TakeItems";
-
-        /// <summary>The <see cref="ModDataDictionary"/> key which indicates whether Automate should avoid removing the last item in a stack.</summary>
-        public const string PreventRemovingStacksKey = "Pathoschild.Automate/PreventRemovingStacks";
 
 
         /*********

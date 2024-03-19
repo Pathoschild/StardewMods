@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly GenericAttachmentConfig Config;
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -28,9 +31,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public SeedAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
-            : base(modRegistry, reflection)
+            : base(modRegistry)
         {
             this.Config = config;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -63,16 +67,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
-            if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile))
+            if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile, this.Reflection))
                 return false;
 
             // sow seeds
-            bool sowed = dirt.plant(item.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, false, location);
+            bool sowed = dirt.plant(item.ItemId, player, false);
             if (sowed)
             {
                 this.ConsumeItem(player, item);
 
-                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, true, location))
+                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ItemId, player, true))
                     this.ConsumeItem(enricher, fertilizer);
             }
             return sowed;
@@ -107,11 +111,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 if (
                     sprinkler.IsSprinkler()
-                    && sprinkler.heldObject.Value is { ParentSheetIndex: 913 } enricherObj
+                    && sprinkler.heldObject.Value is { QualifiedItemId: "(O)913" } enricherObj
                     && enricherObj.heldObject.Value is Chest enricher
                     && sprinkler.IsInSprinklerRangeBroadphase(tile)
                     && sprinkler.GetSprinklerTiles().Contains(tile)
-                    && enricher.items.FirstOrDefault() is { Category: SObject.fertilizerCategory } fertilizer
+                    && enricher.Items.FirstOrDefault() is { Category: SObject.fertilizerCategory } fertilizer
                 )
                 {
                     return (enricher, fertilizer);

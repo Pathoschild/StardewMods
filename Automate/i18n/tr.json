@@ -20,26 +20,24 @@
     "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan öğelerin tam İngilizce adları. Birden çok öğeyi virgülle listeleyebilirsiniz.",
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Junimo kulübesi davranışı",
+    "config.junimo-hut-gems.name": "Değerli Taşlar",
+    "config.junimo-hut-gems.desc": "Junimo kulübelerinin değerli taş eşyalarla yapması gerekenler. 'Otomatik algılama' bunları görmezden gelecektir.",
+    "config.junimo-hut-fertilizer.name": "Gübre",
+    "config.junimo-hut-fertilizer.desc": "Junimo kulübelerinin gübre öğeleriyle yapması gerekenler. Better Junimos kuruluysa 'Otomatik algılama' onları yok sayar, aksi takdirde onları kulübeden bağlı sandıklara taşır.",
+    "config.junimo-hut-seeds.name": "Tohumlar",
+    "config.junimo-hut-seeds.desc": "Junimo kulübelerinin tohum öğeleriyle yapması gerekenler. Better Junimos kuruluysa 'Otomatik algılama' onları yok sayacak, aksi takdirde onları kulübeden bağlı sandıklara taşıyacak.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Otomatik algılama",
+    "config.junimo-huts.ignore": "Yok say",
+    "config.junimo-huts.move-into-chests": "Junimo kulübelerinden sandıklara taşı",
+    "config.junimo-huts.move-into-huts": "Sandıklardan Junimo kulübelerine taşı",
 
-    // machine overrides
-    "config.title.machine-overrides": "Makine geçersiz kılmaları",
-    "config.override.ShippingBin-name": "Nakliye Kutusu",
-    "config.override.MiniShippingBin-name": "Küçük Nakliye Kutusu",
-    "config.override.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
-    "config.custom-overrides-note": "Özel geçersiz kılmalar için, config.json dosyasını doğrudan düzenleme konusunda yardım için https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure adresine bakın."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} Ayarları",
+    "config.machine-settings-enabled.Name": "Etkin",
+    "config.machine-settings-enabled.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
+    "config.machine-settings-priority.name": "Öncelik",
+    "config.machine-settings-priority.desc": "Diğer makinelerle kıyasla {{machineName}} makinelerinin işlenme öncelik sırası. Makinelerin varsayılan önceliği 0'dır, daha yüksek değerler önce işlenir."
 }

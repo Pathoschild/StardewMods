@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.TheLongNight
             //    Farmer.passOutFromTired callback from being called.
             FarmerSprite sprite = (FarmerSprite)Game1.player.Sprite;
             var animation = sprite.CurrentAnimation;
-            if (animation != null && animation.Any(frame => frame.frameBehavior == SFarmer.passOutFromTired))
+            if (animation != null && animation.Any(frame => frame.frameStartBehavior == SFarmer.passOutFromTired))
             {
                 this.Monitor.Log("Cancelling player collapse.");
                 Game1.player.freezePause = 0;

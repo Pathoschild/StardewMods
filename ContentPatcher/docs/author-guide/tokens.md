@@ -206,13 +206,14 @@ This can also be used with range tokens:
 The weather type in the current world area (or the area specified with a
 [`LocationContext`](#location-context) argument). Possible values:
 
-value   | meaning
-------- | -------
-`Sun`   | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
-`Rain`  | Rain is falling, but without lightning.
-`Storm` | Rain is falling with lightning.
-`Snow`  | Snow is falling.
-`Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+value    | meaning
+-------- | -------
+`Sun`    | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
+`Rain`   | Rain is falling, but without lightning.
+`Storm`  | Rain is falling with lightning.
+`Snow`   | Snow is falling.
+`Wind`   | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+_custom_ | For custom weathers defined by a mod, the weather ID.
 
 ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token without specifying a
 location context.
@@ -1105,6 +1106,22 @@ For custom languages added via `Data/AdditionalLanguages`, the token will contai
 </td>
 <td><a href="#Language">#</a></td>
 </tr>
+
+<tr valign="top" id="ModId">
+<td>ModId</td>
+<td>
+
+The current content pack's unique ID (from the `UniqueID` field in its `manifest.json`).
+
+This is typically used to build [unique string IDs](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
+For example:
+```json
+"Id": "{{ModId}}_ExampleItem"
+```
+
+</td>
+<td><a href="#ModId">#</a></td>
+</tr>
 </table>
 
 ### Field references
@@ -1233,7 +1250,7 @@ For example, you can use this to provide the textures for a custom farm type:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1255,7 +1272,7 @@ a new asset for it, then use that asset name instead. When doing this, prefixing
 mod ID to the asset name is highly recommended to avoid conflicts. For example:
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1421,7 +1438,7 @@ For example, you can use config values as tokens and conditions:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1639,7 +1656,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1672,7 +1689,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1797,7 +1814,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1817,7 +1834,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.29.0",
+     "Format": "2.0.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1843,7 +1860,7 @@ alternate name and the value is the original token name. For example:
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -1869,7 +1886,7 @@ token](#dynamic-tokens):
 
 ```js
 {
-    "Format": "1.29.0",
+    "Format": "2.0.0",
     "DynamicTokens": [
         {
             "Name": "PufferchickId",

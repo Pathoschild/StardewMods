@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "从祝尼魔屋移动到宝箱内",
     "config.junimo-huts.move-into-huts": "从宝箱移动到祝尼魔屋内",
 
-    // machine overrides
-    "config.title.machine-overrides": "机器禁用",
-    "config.override.ShippingBin-name": "出货箱",
-    "config.override.MiniShippingBin-name": "迷你出货箱",
-    "config.override.desc": "是否启用{{machineName}}自动化",
-    "config.custom-overrides-note": "对于自定义禁用，请参阅 https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure 帮助直接编辑 config.json 文件"
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}}行为",
+    "config.machine-settings-enabled.Name": "启用",
+    "config.machine-settings-enabled.desc": "是否启用{{machineName}}自动化。",
+    "config.machine-settings-priority.name": "优先级",
+    "config.machine-settings-priority.desc": "相对于其他机器，{{machineName}}机器应处理的优先级顺序。机器默认优先级为0，优先处理更高值。"
 }

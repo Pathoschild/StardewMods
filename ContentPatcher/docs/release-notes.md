@@ -9,6 +9,25 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 2.0.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
+* Updated for Stardew Valley 1.6.
+* Added load & edit priorities (see updated [action docs](author-guide.md#actions)).
+* Added [`ModId`](author-guide/tokens.md#ModId) token to get the unique ID of the current content pack.
+* Added runtime migrations for content assets which changed in Stardew Valley 1.6. (Thanks to SinZ for the help creating some of the main migrations!)
+* Added trigger action to change content IDs automatically (see [new docs](author-guide/trigger-actions.md)). 
+* Deprecated `CustomLocations`. This is now a shortcut for editing the new [`Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data), and now allows the [new location name format](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs).
+* Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
+* Fixed off-by-one position with `MoveEntries` when the target entry is already before the anchor entry.
+* Fixed some tokens being briefly unavailable during part of the save load process (notably `Hearts` and `Relationship`). This affected some specific cases like editing island resort dialogue.
+* Fixed some cases where a `HasMod` condition didn't properly prevent warnings when using a token provided by that mod if it's not installed (thanks to SinZ!).
+
+**Update notes for mod authors:**  
+* Stardew Valley 1.6 has major content changes. Your content packs may still work due to the new runtime migrations,
+  but these can have a significant performance impact. [Updating your code to the latest format](author-migration-guide.md#20)
+  is strongly recommended.
+
 ## 1.30.4
 Released 01 December 2023 for SMAPI 3.18.1 or later.
 

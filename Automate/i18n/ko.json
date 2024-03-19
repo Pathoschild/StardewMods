@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "주니모 오두막에서 상자로 이동",
     "config.junimo-huts.move-into-huts": "상자에서 주니모 오두막으로 이동",
 
-    // machine overrides
-    "config.title.machine-overrides": "기계 재설정",
-    "config.override.ShippingBin-name": "배송 상자",
-    "config.override.MiniShippingBin-name": "미니 배송 상자",
-    "config.override.desc": "{{machineName}} 자동화 활성화 여부.",
-    "config.custom-overrides-note": "사용자 지정 재정의의 경우 config.json 파일을 직접 편집하는 방법에 대한 도움말은 https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure를 참조하십시오."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} 동작",
+    "config.machine-settings-enabled.Name": "활성화",
+    "config.machine-settings-enabled.desc": "{{machineName}} 자동화 활성화 여부.",
+    "config.machine-settings-priority.name": "우선 순위",
+    "config.machine-settings-priority.desc": "다른 기계에 비해 {{machineName}} 기계가 처리되어야 하는 우선 순위 순서. 기계들은 기본적으로 0의 우선 순위를 가지며, 더 높은 값이 먼저 처리됩니다."
 }

@@ -5,15 +5,17 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.TextOperations;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley.Extensions;
 using xTile;
 using xTile.Dimensions;
 using xTile.Layers;
-using xTile.ObjectModel;
 using xTile.Tiles;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -63,6 +65,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
+        /// <param name="priority">The priority for this patch when multiple patches apply.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The map area from which to read tiles.</param>
@@ -74,19 +77,22 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="textOperations">The text operations to apply to existing values.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="migrator">The aggregate migration which applies for this patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
+        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
                 type: PatchType.EditMap,
                 assetName: assetName,
-                fromAsset: fromAsset,
-                conditions: conditions,
+                priority: (int)priority,
                 updateRate: updateRate,
+                conditions: conditions,
+                fromAsset: fromAsset,
                 contentPack: contentPack,
+                migrator: migrator,
                 parentPatch: parentPatch,
                 parseAssetName: parseAssetName
             )
@@ -313,8 +319,8 @@ namespace ContentPatcher.Framework.Patches
             // prepend to map property
             if (validWarps.Any())
             {
-                string prevWarps = target.Properties.TryGetValue("Warp", out PropertyValue? rawWarps)
-                    ? rawWarps.ToString()
+                string prevWarps = target.Properties.TryGetValue("Warp", out string? rawWarps)
+                    ? rawWarps
                     : "";
                 string newWarps = string.Join(" ", validWarps);
 
@@ -369,8 +375,8 @@ namespace ContentPatcher.Framework.Patches
 
                         // get key/value
                         string key = operation.Target[1].Value!;
-                        string? value = target.Properties.TryGetValue(key, out PropertyValue? property)
-                            ? property.ToString()
+                        string? value = target.Properties.TryGetValue(key, out string? property)
+                            ? property
                             : null;
 
                         // apply

@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
     "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
-    // machine overrides
-    "config.title.machine-overrides": "Machine overrides",
-    "config.override.ShippingBin-name": "Shipping Bin",
-    "config.override.MiniShippingBin-name": "Mini-Shipping Bin",
-    "config.override.desc": "Whether to enable {{machineName}} automation.",
-    "config.custom-overrides-note": "For custom overrides, see https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure for help editing the config.json file directly."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} settings",
+    "config.machine-settings-enabled.Name": "Enabled",
+    "config.machine-settings-enabled.desc": "Whether to enable {{machineName}} automation.",
+    "config.machine-settings-priority.name": "Priority",
+    "config.machine-settings-priority.desc": "The priority order in which {{machineName}} machines should be processed relative to other machines. Machines have a default priority of 0, with higher values processed first."
 }

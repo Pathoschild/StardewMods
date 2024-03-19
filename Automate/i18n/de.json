@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Von Junimo Hütten in Kisten legen",
     "config.junimo-huts.move-into-huts": "Von Kisten in Junimo Hütten legen",
 
-    // machine overrides
-    "config.title.machine-overrides": "Überbrückung von Maschinen",
-    "config.override.ShippingBin-name": "Versandbehälter",
-    "config.override.MiniShippingBin-name": "Mini-Versandbehälter",
-    "config.override.desc": "Ob Automatisierung für {{machineName}} aktiviert werden soll.",
-    "config.custom-overrides-note": "Für benutzerdefinierte Überbrückungen finden Sie unter https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure Hilfe, um die Datei config.json direkt zu bearbeiten."
+    // per-machine settings
+    "config.title.machine-settings": "{{machineName}} Einstellungen",
+    "config.machine-settings-enabled.Name": "Aktiviert",
+    "config.machine-settings-enabled.desc": "Ob Automatisierung für {{machineName}} aktiviert werden soll.",
+    "config.machine-settings-priority.name": "Priorität",
+    "config.machine-settings-priority.desc": "Die Prioritätsreihenfolge, in der {{machineName}} Maschinen im Verhältnis zu anderen Maschinen verarbeitet werden sollen. Maschinen haben eine Standardpriorität von 0, wobei höhere Werte zuerst verarbeitet werden."
 }

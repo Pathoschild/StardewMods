@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Items.ItemData;
-using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -29,20 +25,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Fetches metadata about loaded mods.</summary>
         protected IModRegistry ModRegistry { get; }
 
-        /// <summary>Simplifies access to private code.</summary>
-        protected IReflectionHelper Reflection { get; }
-
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
         private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>Whether the Farm Type Manager mod is installed.</summary>
         private readonly bool HasFarmTypeManager;
-
-        /// <summary>Whether the current player found the golden scythe.</summary>
-        private readonly Cached<bool> FoundGoldenScythe = new(
-            getCacheKey: () => $"{Game1.uniqueIDForThisGame},{Game1.ticks / 300}", // refresh every 5 seconds
-            fetchNew: () => Game1.player?.mailReceived?.Contains("gotGoldenScythe") == true
-        );
 
         /// <summary>A fake pickaxe to use for clearing dead crops to ensure consistent behavior.</summary>
         private readonly Lazy<Pickaxe> FakePickaxe = new(() => new Pickaxe());
@@ -88,12 +75,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(IModRegistry modRegistry, IReflectionHelper reflection, int rateLimit = 0)
+        protected BaseAttachment(IModRegistry modRegistry, int rateLimit = 0)
         {
             this.ModRegistry = modRegistry;
-            this.Reflection = reflection;
             this.RateLimit = rateLimit;
 
             this.HasFarmTypeManager = modRegistry.IsLoaded("Esca.FarmTypeManager");
@@ -158,7 +143,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 who: player
             );
             if (attacked)
-                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe");
+                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe", tile);
             return attacked;
         }
 
@@ -169,20 +154,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool CheckTileAction(GameLocation location, Vector2 tile, Farmer player)
         {
             return location.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, player);
-        }
-
-        /// <summary>Get whether a given object is a twig.</summary>
-        /// <param name="obj">The world object.</param>
-        protected bool IsTwig([NotNullWhen(true)] SObject? obj)
-        {
-            return obj?.ParentSheetIndex is 294 or 295;
-        }
-
-        /// <summary>Get whether a given object is a weed.</summary>
-        /// <param name="obj">The world object.</param>
-        protected bool IsWeed([NotNullWhen(true)] SObject? obj)
-        {
-            return obj is not Chest && obj?.Name == "Weeds";
         }
 
         /// <summary>Remove the specified items from the player inventory.</summary>
@@ -205,12 +176,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             if (item.Stack <= 0)
             {
-                for (int i = 0; i < chest.items.Count; i++)
+                for (int i = 0; i < chest.Items.Count; i++)
                 {
-                    Item slot = chest.items[i];
+                    Item slot = chest.Items[i];
                     if (slot != null && object.ReferenceEquals(item, slot))
                     {
-                        chest.items[i] = null;
+                        chest.Items[i] = null;
                         break;
                     }
                 }
@@ -225,48 +196,30 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return new Rectangle((int)pos.X, (int)pos.Y, Game1.tileSize, Game1.tileSize);
         }
 
-        /// <summary>Get the resource clumps in a given location.</summary>
-        /// <param name="location">The location to search.</param>
-        private IEnumerable<ResourceClump> GetNormalResourceClumps(GameLocation location)
-        {
-            IEnumerable<ResourceClump> clumps = location.resourceClumps;
-
-            switch (location)
-            {
-                case Forest { log: not null } forest:
-                    clumps = clumps.Concat(new[] { forest.log });
-                    break;
-
-                case Woods woods when woods.stumps.Any():
-                    clumps = clumps.Concat(woods.stumps);
-                    break;
-            }
-
-            return clumps;
-        }
-
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
-        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
-            return this.TryGetResourceClumpCoveringTile(location, tile, Game1.player, out _, out _);
+            return this.TryGetResourceClumpCoveringTile(location, tile, Game1.player, reflection, out _, out _);
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="player">The current player.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="clump">The resource clump on the tile, if found.</param>
         /// <param name="applyTool">Applies a tool to the resource clump.</param>
-        protected bool TryGetResourceClumpCoveringTile(GameLocation location, Vector2 tile, Farmer player, [NotNullWhen(true)] out ResourceClump? clump, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
+        protected bool TryGetResourceClumpCoveringTile(GameLocation location, Vector2 tile, Farmer player, IReflectionHelper reflection, [NotNullWhen(true)] out ResourceClump? clump, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
         {
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
 
             // normal resource clumps
-            foreach (ResourceClump cur in this.GetNormalResourceClumps(location))
+            foreach (ResourceClump cur in location.resourceClumps)
             {
-                if (cur.getBoundingBox(cur.tile.Value).Intersects(tileArea))
+                if (cur.getBoundingBox().Intersects(tileArea))
                 {
                     clump = cur;
                     applyTool = tool => this.UseToolOnTile(tool, tile, player, location);
@@ -279,13 +232,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             {
                 foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
                 {
-                    if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
+                    if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox().Intersects(tileArea))
                     {
-                        clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
+                        clump = reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool =>
                         {
-                            this.Reflection.GetField<Farmer>(tool, "lastUser").SetValue(player);
-                            return feature.performToolAction(tool, 0, tile, location);
+                            tool.lastUser = player;
+                            return feature.performToolAction(tool, 0, tile);
                         };
                         return true;
                     }
@@ -304,18 +257,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
         protected FarmAnimal? GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
         {
-            // ignore if location can't have animals
-            if (location is not IAnimalLocation animalLocation)
-                return null;
-
             // get best harvestable animal
             Vector2 useAt = this.GetToolPixelPosition(tile);
             FarmAnimal? animal = Utility.GetBestHarvestableFarmAnimal(
-                animals: animalLocation.Animals.Values,
+                animals: location.Animals.Values,
                 tool: tool,
                 toolRect: new Rectangle((int)useAt.X, (int)useAt.Y, Game1.tileSize, Game1.tileSize)
             );
-            if (animal == null || animal.toolUsedForHarvest.Value != tool.BaseName || animal.currentProduce.Value <= 0 || animal.age.Value < animal.ageWhenMature.Value)
+            if (animal == null || !animal.CanGetProduceWithTool(tool) || !CommonHelper.IsItemId(animal.currentProduce.Value, allowZero: false) || animal.isBaby())
                 return null;
 
             return animal;
@@ -359,15 +308,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tile">The tile position</param>
         /// <param name="tileObj">The object on the tile.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
-        /// <param name="location">The current location.</param>
-        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Tool tool, GameLocation location)
+        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Tool tool)
         {
             if (tileObj is BreakableContainer)
-                return tileObj.performToolAction(tool, location);
+                return tileObj.performToolAction(tool);
 
-            if (tileObj?.GetItemType() == ItemType.Object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool, location))
+            if (tileObj?.TypeDefinitionId == ItemRegistry.type_object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool))
             {
-                tileObj.performRemoveAction(tile, location);
+                tileObj.performRemoveAction();
                 Game1.currentLocation.Objects.Remove(tile);
                 return true;
             }
@@ -393,26 +341,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="grass">The grass to harvest.</param>
         /// <param name="location">The location being harvested.</param>
         /// <param name="tile">The tile being harvested.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="tool">The tool selected by the player (if any).</param>
         /// <returns>Returns whether it was harvested.</returns>
         /// <remarks>Derived from <see cref="Grass.performToolAction"/>.</remarks>
-        protected bool TryHarvestGrass(Grass? grass, GameLocation location, Vector2 tile)
+        protected bool TryHarvestGrass(Grass? grass, GameLocation location, Vector2 tile, Farmer player, Tool tool)
         {
-            if (grass == null)
+            if (grass == null || !location.terrainFeatures.Remove(tile))
                 return false;
 
-            // remove grass
-            location.terrainFeatures.Remove(tile);
-
-            // collect hay
-            Random random = Game1.IsMultiplayer
-                ? Game1.recentMultiplayerRandom
-                : new Random((int)(Game1.uniqueIDForThisGame + tile.X * 1000.0 + tile.Y * 11.0));
-            if (random.NextDouble() < (this.FoundGoldenScythe.Value ? 0.75 : 0.5))
-            {
-                if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
-                    Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
-            }
-
+            grass.TryDropItemsOnCut(tool);
             return true;
         }
 
@@ -421,7 +359,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="animationIds">The animation IDs to detect.</param>
         protected void CancelAnimation(Farmer player, params int[] animationIds)
         {
-            int animationId = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation").GetValue();
+            int animationId = player.FarmerSprite.currentSingleAnimation;
             foreach (int id in animationIds)
             {
                 if (id == animationId)

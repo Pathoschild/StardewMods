@@ -34,10 +34,10 @@
     "config.junimo-huts.move-into-chests": "Déplacement des huttes Junimo vers les coffres",
     "config.junimo-huts.move-into-huts": "Déplacement des coffres vers les huttes Junimo",
 
-    // machine overrides
-    "config.title.machine-overrides": "Remplacement de la machine",
-    "config.override.ShippingBin-name": "Bac d'expédition",
-    "config.override.MiniShippingBin-name": "Mini-bac d'expédition",
-    "config.override.desc": "Si vous souhaitez activer l'automatisation de {{machineName}}.",
-    "config.custom-overrides-note": "Pour les remplacements personnalisés, consultez https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure pour obtenir de l'aide afin de modifier directement le fichier config.json."
+    // per-machine settings
+    "config.title.machine-settings": "Comportement: {{machineName}}",
+    "config.machine-settings-enabled.Name": "Activé",
+    "config.machine-settings-enabled.desc": "Si vous souhaitez activer l'automatisation de {{machineName}}.",
+    "config.machine-settings-priority.name": "Priorité",
+    "config.machine-settings-priority.desc": "L'ordre de priorité dans lequel les machines {{machineName}} doivent être traitées par rapport aux autres machines. Les machines ont une priorité par défaut de 0, les valeurs plus élevées étant traitées en premier."
 }

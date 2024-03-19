@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -26,13 +25,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
-        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, JsonAssetsIntegration jsonAssets, Vector2 tilePosition, Func<ISubject> getSubject)
+        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, Vector2 tilePosition, Func<ISubject> getSubject)
             : base(gameHelper, SubjectType.FruitTree, value, tilePosition, getSubject)
         {
-            this.GetSpriteSheet(value, jsonAssets, out this.Texture, out this.SourceRect);
+            this.GetSpriteSheet(value, out this.Texture, out this.SourceRect);
         }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
@@ -60,7 +58,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             }
 
             // grown tree
-            return new Rectangle(this.SourceRect.X + ((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
+            return new Rectangle(this.SourceRect.X + ((12 + (tree.IgnoresSeasonsHere() ? 1 : Game1.seasonIndex) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -110,19 +108,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         *********/
         /// <summary>Get the in-world sprite sheet for a target.</summary>
         /// <param name="target">The target whose texture to get.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
-        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D? texture, out Rectangle sourceRect)
+        public void GetSpriteSheet(FruitTree target, out Texture2D? texture, out Rectangle sourceRect)
         {
-            // get from Json Assets
-            if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect))
-                return;
-
-            // use vanilla logic
-            texture = FruitTree.texture;
-            sourceRect = new Rectangle(x: 0, y: target.treeType.Value * 5 * 16, width: 432, height: 80);
+            texture = target.texture;
+            sourceRect = new Rectangle(x: 0, y: target.GetSpriteRowNumber() * 5 * 16, width: 432, height: 80);
         }
     }
 }

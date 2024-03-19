@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -35,15 +34,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public TillableLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public TillableLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.Tillable_Name(), config)
         {
+            const string layerId = "Tillable";
+
             this.Legend = new[]
             {
-                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, Color.DarkMagenta),
-                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, Color.Green),
-                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, Color.Orange),
-                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, Color.Red)
+                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, colors.Get(layerId, "Tilled", Color.DarkMagenta)),
+                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, colors.Get(layerId, "Tillable", Color.Green)),
+                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, colors.Get(layerId, "Occupied", Color.Orange)),
+                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, colors.Get(layerId, "NotTillable", Color.Red))
             };
         }
 
@@ -104,7 +106,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 return true;
 
             // objects & large terrain features
-            if (location.objects.ContainsKey(tile) || location.largeTerrainFeatures.Any(p => p.tilePosition.Value == tile))
+            if (location.objects.ContainsKey(tile) || location.largeTerrainFeatures.Any(p => p.Tile == tile))
                 return true;
 
             // non-dirt terrain features
@@ -116,11 +118,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             }
 
             // buildings
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                if (buildableLocation.buildings.Any(building => building.occupiesTile(tile)))
-                    return true;
-            }
+            if (location.buildings.Any(building => building.occupiesTile(tile)))
+                return true;
 
             return false;
         }

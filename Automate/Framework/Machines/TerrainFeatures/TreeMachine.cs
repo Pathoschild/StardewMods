@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Enums;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
+using StardewValley.GameData.WildTrees;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
@@ -19,7 +20,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         ** Fields
         *********/
         /// <summary>The items to drop.</summary>
-        private readonly Cached<Stack<int>> ItemDrops;
+        private readonly Cached<Stack<string>> ItemDrops;
 
 
         /*********
@@ -32,9 +33,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         public TreeMachine(Tree tree, GameLocation location, Vector2 tile)
             : base(tree, location, BaseMachine.GetTileAreaFor(tile))
         {
-            this.ItemDrops = new Cached<Stack<int>>(
-                getCacheKey: () => $"{Game1.currentSeason},{Game1.dayOfMonth},{tree.hasSeed.Value}",
-                fetchNew: () => new Stack<int>()
+            this.ItemDrops = new Cached<Stack<string>>(
+                getCacheKey: () => $"{Game1.season},{Game1.dayOfMonth},{tree.hasSeed.Value}",
+                fetchNew: () => new Stack<string>()
             );
         }
 
@@ -59,18 +60,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             if (!drops.Any())
             {
                 // seed must be last item dropped, since collecting the seed will reset the stack
-                int? seedId = TreeMachine.GetSeedForTree(tree);
-                if (seedId.HasValue)
-                    drops.Push(seedId.Value);
+                string? seedId = TreeMachine.GetSeedForTree(tree, this.Location);
+                if (seedId != null)
+                    drops.Push(seedId);
 
                 // get extra drops
-                foreach (int itemId in this.GetRandomExtraDrops())
+                foreach (string itemId in this.GetRandomExtraDrops())
                     drops.Push(itemId);
             }
 
             // get next drop
             return drops.Any()
-                ? new TrackedItem(new SObject(drops.Peek(), 1), onReduced: this.OnOutputReduced)
+                ? new TrackedItem(ItemRegistry.Create(drops.Peek()), onReduced: this.OnOutputReduced)
                 : null;
         }
 
@@ -84,9 +85,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
         /// <summary>Get whether a tree can be automated.</summary>
         /// <param name="tree">The tree to automate.</param>
-        public static bool CanAutomate(Tree tree)
+        /// <param name="location">The location containing the tree.</param>
+        public static bool CanAutomate(Tree tree, GameLocation location)
         {
-            return TreeMachine.GetSeedForTree(tree) != null;
+            return TreeMachine.GetSeedForTree(tree, location) != null;
         }
 
 
@@ -99,11 +101,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             Tree tree = this.Machine;
 
-            if (item.ParentSheetIndex == TreeMachine.GetSeedForTree(tree))
+            if (item.ItemId == TreeMachine.GetSeedForTree(tree, this.Location))
                 tree.hasSeed.Value = false;
 
-            Stack<int> drops = this.ItemDrops.Value;
-            if (drops.Any() && drops.Peek() == item.ParentSheetIndex)
+            Stack<string> drops = this.ItemDrops.Value;
+            if (drops.Any() && drops.Peek() == item.ItemId)
                 drops.Pop();
         }
 
@@ -116,38 +118,34 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         }
 
         /// <summary>Get the random items that should also drop when this tree has a seed.</summary>
-        private IEnumerable<int> GetRandomExtraDrops()
+        private IEnumerable<string> GetRandomExtraDrops()
         {
             Tree tree = this.Machine;
-            TreeType type = (TreeType)tree.treeType.Value;
+            string type = tree.treeType.Value;
 
             // golden coconut
-            if (type is TreeType.Palm or TreeType.Palm2 && this.Location is IslandLocation && new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed + this.TileArea.X * 13 + this.TileArea.Y * 54).NextDouble() < 0.1)
-                yield return 791;
+            if ((type == TreeType.Palm || type == TreeType.Palm2) && this.Location is IslandLocation && new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed + this.TileArea.X * 13 + this.TileArea.Y * 54).NextDouble() < 0.1)
+                yield return "791";
 
             // Qi bean
             if (Game1.random.NextDouble() <= 0.5 && Game1.player.team.SpecialOrderRuleActive("DROP_QI_BEANS"))
-                yield return 890;
+                yield return "890";
 
         }
 
         /// <summary>Get the seed ID dropped by a tree, regardless of whether it currently has a seed.</summary>
         /// <param name="tree">The tree instance.</param>
-        private static int? GetSeedForTree(Tree tree)
+        /// <param name="location">The location containing the tree.</param>
+        /// <remarks>Derived from <see cref="Tree.shake"/>.</remarks>
+        private static string? GetSeedForTree(Tree tree, GameLocation location)
         {
-            TreeType type = (TreeType)tree.treeType.Value;
-            return type switch
-            {
-                TreeType.Oak => 309, // acorn
-                TreeType.Maple => Game1.GetSeasonForLocation(tree.currentLocation) == "fall" && Game1.dayOfMonth >= 14
-                    ? 408 // hazelnut
-                    : 310, // maple seed
-                TreeType.Pine => 311, // pine code
-                TreeType.Palm => 88, // coconut
-                TreeType.Palm2 => 88, // coconut
-                TreeType.Mahogany => 292, // mahogany seed
-                _ => null
-            };
+            WildTreeData? data = tree.GetData();
+
+            string? seed = data?.SeedItemId;
+            if (Game1.GetSeasonForLocation(location) == Season.Fall && seed == "309"/*acorn*/ && Game1.dayOfMonth >= 14)
+                seed = "408";/*hazelnut*/
+
+            return seed;
         }
     }
 }

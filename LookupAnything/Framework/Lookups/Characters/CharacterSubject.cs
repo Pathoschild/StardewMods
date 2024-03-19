@@ -9,14 +9,16 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Pets;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
+using StardewValley.TokenizableStrings;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
@@ -35,9 +37,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
-
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
 
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
@@ -73,18 +72,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="showGiftTastes">Which gift taste levels to show.</param>
         /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
         /// <param name="showUnownedGifts">Whether to show gift tastes that the player doesn't own somewhere in the world.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
+        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, bool progressionMode, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool enableTargetRedirection, bool showUnownedGifts)
             : base(gameHelper)
         {
             this.Codex = codex;
-            this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
             this.ShowGiftTastes = showGiftTastes;
@@ -237,13 +234,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 var checkboxes = new List<KeyValuePair<IFormattedText[], bool>>();
                 for (int i = 0; i < maxQuests; i++)
                 {
-                    int index = cave.IndexForRequest(i);
-                    if (index == -1)
+                    string wantedKey = cave.IndexForRequest(i);
+                    if (!CommonHelper.IsItemId(wantedKey))
                         continue;
 
                     checkboxes.Add(
                         CheckboxListField.Checkbox(
-                            text: this.GameHelper.GetObjectBySpriteIndex(index).DisplayName,
+                            text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
                             value: questsDone > i
                         )
                     );
@@ -263,9 +260,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private IEnumerable<ICustomField> GetDataForMonster(Monster monster)
         {
             // basic info
-            bool canRerollDrops = Game1.player.isWearingRing(Ring.burglarsRing);
+            bool canRerollDrops = Game1.player.isWearingRing(Ring.BurglarsRingId);
 
-            yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
+            yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: monster.invincibleCountdown), hasValue: monster.isInvincible());
             yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
             yield return new ItemDropListField(this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
             yield return new GenericField(I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
@@ -291,8 +288,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <remarks>Derived from <see cref="Pet.checkAction"/> and <see cref="Pet.dayUpdate"/>.</remarks>
         private IEnumerable<ICustomField> GetDataForPet(Pet pet)
         {
-            Farm farm = Game1.getFarm();
-
             // friendship
             yield return new CharacterFriendshipField(I18n.Pet_Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet));
 
@@ -308,7 +303,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // water bowl
-            yield return new GenericField(I18n.Pet_WaterBowl(), farm.petBowlWatered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
+            PetBowl bowl = pet.GetPetBowl();
+            if (bowl != null)
+                yield return new GenericField(I18n.Pet_WaterBowl(), bowl.watered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
         }
 
         /// <summary>Get the fields to display for the trash bear.</summary>
@@ -331,9 +328,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // show item wanted
             if (questsDone < maxQuests)
             {
-                this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
-                int itemWantedIndex = this.Reflection.GetField<int>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), this.GameHelper.GetObjectBySpriteIndex(itemWantedIndex), this.Codex);
+                trashBear.updateItemWanted();
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(trashBear.itemWantedIndex), this.Codex);
             }
 
             // show progress
@@ -427,9 +423,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case SubjectType.Monster:
                     return I18n.Type_Monster();
 
-                case SubjectType.Pet:
+                case SubjectType.Pet when npc is Pet pet && Pet.TryGetData(pet.petType.Value, out PetData petData):
                     {
-                        string typeName = GameI18n.GetString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
+                        string typeName = TokenParser.ParseText(petData.DisplayName);
                         if (typeName.Length > 1)
                             typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
                         return typeName;
@@ -469,7 +465,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 // The player probably changed the game date, so the birthday would be before the
                 // game started. We'll just drop the year number from the output in that case.
-                return new SDate(Game1.dayOfMonth, Game1.currentSeason, 100_000_000)
+                return new SDate(Game1.dayOfMonth, Game1.season, 100_000_000)
                     .AddDays(-daysOld)
                     .ToLocaleString(withYear: false);
             }
@@ -512,7 +508,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             possibleDrops ??= Array.Empty<ItemDropData>();
 
             // get actual drops
-            IDictionary<int, List<ItemDropData>> dropsLeft = monster
+            IDictionary<string, List<ItemDropData>> dropsLeft = monster
                 .objectsToDrop
                 .Select(this.GetActualDrop)
                 .GroupBy(p => p.ItemID)
@@ -551,29 +547,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Get the drop info for a <see cref="Monster.objectsToDrop"/> ID, if it's valid.</summary>
         /// <param name="id">The ID to parse.</param>
         /// <remarks>Derived from <see cref="GameLocation.monsterDrop"/> and the <see cref="Debris"/> constructor.</remarks>
-        private ItemDropData GetActualDrop(int id)
+        private ItemDropData GetActualDrop(string id)
         {
             // basic info
             int minDrop = 1;
             int maxDrop = 1;
 
             // negative ID means the monster will drop 1-3 of the item
-            if (id < 0)
+            if (int.TryParse(id, out int numericId) && numericId < 0)
             {
-                id = -id;
+                id = (-numericId).ToString();
                 maxDrop = 3;
             }
 
             // handle hardcoded ID mappings in Debris constructor
             id = id switch
             {
-                0 => SObject.copper,
-                2 => SObject.iron,
-                4 => SObject.coal,
-                6 => SObject.gold,
-                10 => SObject.iridium,
-                12 => SObject.wood,
-                14 => SObject.stone,
+                "0" => SObject.copper.ToString(),
+                "2" => SObject.iron.ToString(),
+                "4" => SObject.coal.ToString(),
+                "6" => SObject.gold.ToString(),
+                "10" => SObject.iridium.ToString(),
+                "12" => SObject.wood.ToString(),
+                "14" => SObject.stone.ToString(),
                 _ => id
             };
 

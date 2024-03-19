@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using SObject = StardewValley.Object;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         protected GameHelper GameHelper;
 
         /// <summary>The possible drops.</summary>
-        private readonly Tuple<ItemDropData, SObject, SpriteInfo?>[] Drops;
+        private readonly Tuple<ItemDropData, Item, SpriteInfo?>[] Drops;
 
         /// <summary>The text to display before the list, if any.</summary>
         private readonly string? Preface;
@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // list drops
             Vector2 iconSize = new(font.MeasureString("ABC").Y);
-            foreach ((ItemDropData drop, SObject item, SpriteInfo? sprite) in this.Drops)
+            foreach ((ItemDropData drop, Item item, SpriteInfo? sprite) in this.Drops)
             {
                 // get data
                 bool isGuaranteed = drop.Probability > .99f;
@@ -119,11 +119,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the internal drop list entries.</summary>
         /// <param name="drops">The possible drops.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        private IEnumerable<Tuple<ItemDropData, SObject, SpriteInfo?>> GetEntries(IEnumerable<ItemDropData> drops, GameHelper gameHelper)
+        private IEnumerable<Tuple<ItemDropData, Item, SpriteInfo?>> GetEntries(IEnumerable<ItemDropData> drops, GameHelper gameHelper)
         {
             foreach (ItemDropData drop in drops)
             {
-                SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                Item item = ItemRegistry.Create(drop.ItemID);
                 SpriteInfo? sprite = gameHelper.GetSprite(item);
                 yield return Tuple.Create(drop, item, sprite);
             }

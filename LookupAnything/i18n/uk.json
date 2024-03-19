@@ -87,80 +87,10 @@
     "data.npc.trash-bear.description": "Дружній дух, що прибирає сміття.",
 
     // item types
-    "data.type.debris": "Сміття",
-    "data.type.stone": "Каміння",
     "data.type.container": "Контейнер",
 
-    // farm items
+    // override item text
     "data.item.egg-incubator.description": "Висиджує яйця курчат та каченят.",
-    "data.item.broken-branch.name": "Зламана гілка",
-    "data.item.broken-branch.description": "Зламана гілка. Розрубіть сокирою, щоб отримати деревину.",
-    "data.item.stone.name": "Камінь",
-    "data.item.stone.description": "Невиразний сірий камінь. Розбийте, щоб отримати каміння.",
-    "data.item.geode.name": "Жеодова жила",
-    "data.item.geode.description": "Розбийте, щоб отримати жеоди.",
-    "data.item.frozen-geode.name": "Крижана жеодна жила",
-    "data.item.frozen-geode.description": "Розбийте, щоб отримати крижану жеоду.",
-    "data.item.magma-geode.name": "Магмажеодова жила",
-    "data.item.magma-geode.description": "Розбийте, щоб отримати магмажеоди.",
-
-    // weeds & crystals
-    "data.item.weed.name": "Бур'ян",
-    "data.item.weed.description": "Невиразний бур'ян. Може містити волокно чи змішане насіння.",
-    "data.item.fertile-weed.name": "Плодючий бур'ян",
-    "data.item.fertile-weed.description": "Гарантовано містить змішане насіння.",
-    "data.item.ice-crystal.name": "Льодяний кристал",
-    "data.item.ice-crystal.description": "Невиразний льодяний кристал. Дуже маленький шанс випадіння очищеного кварцу.",
-
-    // mine gems
-    "data.item.amethyst-node.name": "Аметистова жила",
-    "data.item.amethyst-node.description": "Розбийте, щоб отримати аметисти.",
-    "data.item.aquamarine-node.name": "Аквамаринова жила",
-    "data.item.aquamarine-node.description": "Розбийте, щоб отримати аквамарини.",
-    "data.item.diamond-node.name": "Діамантова жила",
-    "data.item.diamond-node.description": "Розбийте, щоб отримати діаманти.",
-    "data.item.emerald-node.name": "Смарагдова жила",
-    "data.item.emerald-node.description": "Розбийте, щоб отримати смарагди.",
-    "data.item.gem-node.name": "Коштовна жила",
-    "data.item.gem-node.description": "Розбийте, щоб отримати смарагди, аквамарини, рубіни, аметисти, топаз, нефрит або діамант.",
-    "data.item.jade-node.name": "Нефритова жила",
-    "data.item.jade-node.description": "Розбийте, щоб отримати нефрити.",
-    "data.item.mystic-stone.name": "Містичний камінь",
-    "data.item.mystic-stone.description": "Розбийте, щоб отримати рідкісні самоцвіти та руди, включаючи веселковий уламок.",
-    "data.item.prismatic-node.name": "Веселкова жила",
-    "data.item.prismatic-node.description": "Розбийте, щоб отримати веселковий уламок.",
-    "data.item.ruby-node.name": "Рубінова жила",
-    "data.item.ruby-node.description": "Розбийте, щоб отримати рубіни.",
-    "data.item.topaz-node.name": "Топазна жила",
-    "data.item.topaz-node.description": "Розбийте, щоб отримати топази.",
-
-    // mine ores
-    "data.item.cinder-shard-node.name": "Жила уламку попелу",
-    "data.item.cinder-shard-node.description": "Розбийте, щоб отримати уламок попелу.",
-    "data.item.copper-node.name": "Мідна жила",
-    "data.item.copper-node.description": "Розбийте, щоб отримати мідну руду.",
-    "data.item.gold-node.name": "Золота жила",
-    "data.item.gold-node.description": "Розбийте, щоб отримати золоту руду.",
-    "data.item.iridium-node.name": "Іридієва жила",
-    "data.item.iridium-node.description": "Розбийте, щоб отримати іридієву руду.",
-    "data.item.iron-node.name": "Залізна жила",
-    "data.item.iron-node.description": "Розбийте, щоб отримати залізну руду.",
-    "data.item.omni-geode-node.name": "Омніжеодна жила",
-    "data.item.omni-geode-node.description": "Розбийте, шоб отримати омніжеоду.",
-
-    // mine stones
-    "data.item.colored-stone.name": "Кольоровий камінь",
-    "data.item.colored-stone.description": "Невиразний камінь. Може містити каміння, руду або жеоди.",
-    "data.item.mine-stone.name": "Камінь",
-    "data.item.mine-stone.description": "Розбийте, щоб отримати каміння.",
-
-    // other stones
-    "data.item.clay-stone.name": "Глиняний камінь",
-    "data.item.clay-stone.description": "Розбийте, що отримати глину.",
-    "data.item.fossil-stone.name": "Камень скам'янілостей",
-    "data.item.fossil-stone.description": "Розбийте, щоб отримати скам'янілості або кістки.",
-
-    // mine containers
     "data.item.barrel.name": "Діжка",
     "data.item.barrel.description": "Розбийте, щоб отримати різні речі.",
     "data.item.box.name": "Ящик",
@@ -252,8 +182,7 @@
     "building.output-processing": "У черзі",
     "building.output-ready": "Готово",
     "building.slimes.summary": "{{count}} з {{max}} слаймів",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} од. сіна (максимум: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} сіна у {{siloCount}} силосних вежах (максимум: {{maxHay}})",
+    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
     "building.upgrades.barn.0": "До 4-ох тварин, розблоковує : корови",
     "building.upgrades.barn.1": "До 8-ох тварин, розблоковує : кози та вагітність тварин",
     "building.upgrades.barn.2": "До 12-ох тварин, розблоковує : автоматичне подавання корму, свині та вівці",
@@ -353,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "Містить",
     "item.loves-this": "Любить",
     "item.likes-this": "Подобається",
@@ -371,6 +301,7 @@
     "item.produces-dye": "Продукує барвник",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "Містить {{name}}",
     "item.contents.ready": "{{name}} готово",
     "item.contents.partial": "{{name}} за {{time}}",
@@ -675,7 +606,7 @@
     // labels
     "tree.stage": "Стадія росту",
     "tree.next-growth": "Наступна стадія",
-    "tree.has-seed": "Містить насінини",
+    "tree.seed": "Містить насінини",
     "tree.is-fertilized": "Використано добриво",
 
     // values
@@ -691,6 +622,9 @@
     "tree.next-growth.winter": "Не може рости взимку поза теплицею",
     "tree.next-growth.adjacent-trees": "Не може рости, бо поряд займано місце",
     "tree.next-growth.chance": "{{chance}}% шанс, що завтра буде {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "Насінина",

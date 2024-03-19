@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -10,10 +11,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /*********
         ** Accessors
         *********/
-        /// <summary>The name to use for each floor ID.</summary>
-        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
-        public Dictionary<int, DataModelFloor> FloorNames { get; } = new();
-
         /// <summary>Mods which add custom machine recipes and require a separate automation component.</summary>
         public DataModelIntegration[] SuggestedIntegrations { get; }
 
@@ -30,6 +27,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public DataModel(DataModelIntegration[]? suggestedIntegrations)
         {
             this.SuggestedIntegrations = suggestedIntegrations ?? Array.Empty<DataModelIntegration>();
+            this.DefaultMachineOverrides = this.DefaultMachineOverrides.ToNonNullCaseInsensitive();
         }
     }
 }

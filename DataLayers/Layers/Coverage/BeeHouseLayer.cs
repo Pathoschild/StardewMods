@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private readonly LegendEntry Covered;
 
         /// <summary>The border color for the bee house under the cursor.</summary>
-        private readonly Color SelectedColor = Color.Blue;
+        private readonly Color SelectedColor;
 
         /// <summary>The maximum number of tiles from the center a bee house can cover.</summary>
         private readonly int MaxRadius = 5;
@@ -33,14 +33,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public BeeHouseLayer(LayerConfig config)
+        /// <param name="colors">The colors to render.</param>
+        public BeeHouseLayer(LayerConfig config, ColorScheme colors)
             : base(I18n.BeeHouses_Name(), config)
         {
+            const string layerId = "BeeHouseCoverage";
+
+            this.SelectedColor = colors.Get(layerId, "Selected", Color.Blue);
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(I18n.Keys.BeeHouses_Range, Color.Green)
+                this.Covered = new LegendEntry(I18n.Keys.BeeHouses_Range, colors.Get(layerId, "Covered", Color.Green))
             };
-
             this.RelativeRange = BeeHouseLayer
                 .GetRelativeCoverage()
                 .ToArray();
@@ -104,7 +107,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get a bee house tile radius.</summary>
         /// <param name="location">The bee house's location.</param>
         /// <param name="origin">The bee house's tile.</param>
-        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower(GameLocation, Vector2)"/>.</remarks>
+        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(GameLocation location, Vector2 origin)
         {
             if (!location.IsOutdoors)
@@ -115,7 +118,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         }
 
         /// <summary>Get the relative tiles covered by a bee house.</summary>
-        /// <remarks>Derived from <see cref="Utility.findCloseFlower(GameLocation, Vector2)"/>.</remarks>
+        /// <remarks>Derived from <see cref="Utility.findCloseFlower"/>.</remarks>
         private static IEnumerable<Vector2> GetRelativeCoverage()
         {
             const int range = 5;
