@@ -1106,15 +1106,15 @@ namespace ContentPatcher.Framework
             IManagedTokenString? keyInputStr = tokenParser.CreateTokenStringOrNull(keyLexToken.InputArgs?.Parts, tokenParser.Context, path.With("key"));
             IInputArguments keyInputArgs = tokenParser.CreateInputArgs(keyInputStr);
 
-            // get token
-            IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
-            if (token == null)
-                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition);
+            // This will validate if the token exists, and if not, is it allowed from HasMod checks
             if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIDs.GetImmutable(), out error))
                 return Fail(error, out error, out condition);
 
+            // get token
+            IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
+
             // validate input
-            if (!token.TryValidateInput(keyInputArgs, out error))
+            if (token != null && !token.TryValidateInput(keyInputArgs, out error))
                 return Fail(error, out error, out condition);
 
             // parse values
@@ -1124,11 +1124,11 @@ namespace ContentPatcher.Framework
                 return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
             // validate token keys & values
-            if (!values.IsMutable && values.IsReady && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
+            if (!values.IsMutable && values.IsReady && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
                 return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
             // create condition
-            condition = new Condition(name: token.Name, input: keyInputStr, values: values, isTokenMutable: token.IsMutable);
+            condition = new Condition(name: token?.Name ?? keyLexToken.Name, input: keyInputStr, values: values, isTokenMutable: token?.IsMutable ?? false);
             if (!tokenParser.Migrator.TryMigrate(condition, out error))
                 return Fail(error, out error, out condition);
 
