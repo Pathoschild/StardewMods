@@ -284,6 +284,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "내용물",
     "item.loves-this": "사랑함",
     "item.likes-this": "좋아함",
@@ -302,6 +303,7 @@
     "item.produces-dye": "생산 염료",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}}이/가 들어감",
     "item.contents.ready": "{{name}}이/가 준비됨",
     "item.contents.partial": "{{name}}이/가 준비되기까지 {{time}} 남음.",

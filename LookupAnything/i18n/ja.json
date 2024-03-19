@@ -282,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "内容",
     "item.loves-this": "これが大好きな人",
     "item.likes-this": "これが好きな人",
@@ -300,6 +301,7 @@
     "item.produces-dye": "染色",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "設置した {{name}}",
     "item.contents.ready": "{{name}}が回収可能",
     "item.contents.partial": "{{time}}で{{name}}",

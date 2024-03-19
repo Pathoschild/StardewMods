@@ -54,6 +54,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Encapsulates logging to the console.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>The SMAPI API for fetching metadata about loaded mods.</summary>
+        private readonly IModRegistry ModRegistry;
+
         /// <summary>The cached item data filtered to <see cref="ItemRegistry.type_object"/> items.</summary>
         private Lazy<SearchableItem[]> Objects;
 
@@ -83,6 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Metadata = metadata;
             this.Monitor = monitor;
+            this.ModRegistry = modRegistry;
             this.WorldItemScanner = new WorldItemScanner(reflection);
 
             this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, this.Monitor);
@@ -456,6 +460,36 @@ namespace Pathoschild.Stardew.LookupAnything
 
             return true;
         }
+
+        /// <summary>Get the mod which added an item, if it follows the <a href="https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID">unique string item ID convention</a>.</summary>
+        /// <param name="itemId">The unqualified item ID to parse.</param>
+        public IModInfo? TryGetModFromItemId(string itemId)
+        {
+            // The unique string ID convention is `{mod id}_{item id}`, but both the mod ID and item ID can contain
+            // underscores. So here we split by `_` and check every possible prefix before the final underscore to see
+            // if it's a valid mod ID. We take the longest match since some mods use suffixes for grouped mods, like
+            // `mainMod` and `mainMod_cp`.
+
+            string[] parts = itemId.Split('_');
+            if (parts.Length == 1)
+                return null;
+
+            IModInfo? mod = null;
+            {
+                string modId = parts[0];
+                int itemIdIndex = parts.Length - 1;
+                for (int i = 0; i < itemIdIndex; i++)
+                {
+                    if (i != 0)
+                        modId += '_' + parts[i];
+
+                    mod = this.ModRegistry.Get(modId) ?? mod;
+                }
+            }
+
+            return mod;
+        }
+
 
         /****
         ** Coordinates

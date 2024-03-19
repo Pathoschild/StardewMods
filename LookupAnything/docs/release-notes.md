@@ -4,6 +4,7 @@
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.  
   _Thanks to SinZ163 for contributing some of the fixes!_
+* Added mod which added a custom item to its lookup, if the mod follows the [unique string ID](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs) format.
 * Added more seed info for tree lookups.
 * Added support for looking up NPCs in some custom mod menus (thanks to BinaryLip!).
 * Improved debug field format for player stats and schedules.

@@ -282,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "内容",
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
@@ -300,6 +301,7 @@
     "item.produces-dye": "产生染料",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
     "item.contents.partial": "{{name}}在{{time}}后完成",

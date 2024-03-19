@@ -11,6 +11,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
@@ -129,6 +130,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     this.Type = objData.TypeKey != null ? I18n.GetByKey(objData.TypeKey) : this.Type;
                     showInventoryFields = objData.ShowInventoryFields ?? showInventoryFields;
                 }
+            }
+
+            // show item ID
+            {
+                IModInfo? fromMod = this.GameHelper.TryGetModFromItemId(item.ItemId);
+                if (fromMod != null)
+                    yield return new GenericField(I18n.Item_CustomItem(), I18n.Item_CustomItem_Summary(modName: fromMod.Manifest.Name));
             }
 
             // don't show data for dead crop

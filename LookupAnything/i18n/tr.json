@@ -282,6 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "İçindekiler",
     "item.loves-this": "Bunu seviyor",
     "item.likes-this": "Bunu beğeniyor",
@@ -300,6 +301,7 @@
     "item.produces-dye": "Boya üretir",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}} yerleştirildi",
     "item.contents.ready": "{{name}} hazır",
     "item.contents.partial": "{{name}} içinde {{time}}",

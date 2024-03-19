@@ -283,6 +283,7 @@
     ** Item > generic lookups
     *********/
     // labels
+    "item.custom-item": "Custom item", // TODO
     "item.contents": "Contenu",
     "item.loves-this": "Adore ça",
     "item.likes-this": "Apprécie ça",
@@ -301,6 +302,7 @@
     "item.produces-dye": "Produit du colorant",
 
     // values
+    "item.custom-item.summary": "added by {{modName}}", // TODO
     "item.contents.placed": "{{name}} placé",
     "item.contents.ready": "{{name}} prêt",
     "item.contents.partial": "{{name}} in {{time}}",
