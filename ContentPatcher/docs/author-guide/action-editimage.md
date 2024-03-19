@@ -81,7 +81,7 @@ This field does _not_ support tokens, and capitalization doesn't matter.
 This changes the in-game sprite for one item:
 ```js
 {
-   "Format": "1.29.0",
+   "Format": "2.0.0",
    "Changes": [
       {
          "Action": "EditImage",

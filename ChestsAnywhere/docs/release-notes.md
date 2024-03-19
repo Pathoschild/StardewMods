@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release for Stardew Valley 1.6
+## 1.23.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
 * Updated for Stardew Valley 1.6.
 * Removed migration for pre-1.20 chest options.  
 * Fixed misaligned chest UI when the zoom level and UI scale don't match (thanks to SinZ163!).

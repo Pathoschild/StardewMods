@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.1.22</Version>
+    <Version>1.1.23</Version>
     <RootNamespace>Pathoschild.Stardew.HorseFluteAnywhere</RootNamespace>
 
     <EnableHarmony>true</EnableHarmony>

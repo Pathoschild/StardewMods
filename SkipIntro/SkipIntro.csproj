@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.9.15</Version>
+    <Version>1.9.16</Version>
     <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
   </PropertyGroup>
 

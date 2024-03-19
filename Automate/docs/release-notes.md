@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release for Stardew Valley 1.6
+## 2.0.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
 * Updated for Stardew Valley 1.6.
 * Added support for custom machines in the new `Data/Machines` asset.
 * Added support for custom floors/paths as connectors.

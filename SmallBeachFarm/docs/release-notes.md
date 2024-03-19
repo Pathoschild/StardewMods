@@ -1,10 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release for Stardew Valley 1.6
+## 2.5.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
 * Updated for Stardew Valley 1.6.
 * You can now till the campfire wood pile.
 * Various visual improvements to the map (thanks to FlashShifter!).
+* Removed the last custom tiles, so the now is now automatically compatible with recolor mods (thanks to FlashShifter!).
 * Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
 
 ## 2.4.10

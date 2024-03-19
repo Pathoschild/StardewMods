@@ -1,9 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release for Stardew Valley 1.6
+## 4.17.0
+Released 19 March 2024 for SMAPI 4.0.0 or later.
+
 * Updated for Stardew Valley 1.6.
-* Added tractor sounds (configurable).
+* Added tractor sounds.  
+  _You can disable them through Generic Mod Config Menu or by editing the `config.json` file if desired._
 * Added custom buff icon + name.
 * Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
 * Fixed errors if some config fields are set to null.
