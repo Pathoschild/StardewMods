@@ -5,7 +5,7 @@
 * Updated for Stardew Valley 1.6.
 * Added tractor sounds (configurable).
 * Added custom buff icon + name.
-* Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
 * Fixed errors if some config fields are set to null.
 
 ## 4.16.6

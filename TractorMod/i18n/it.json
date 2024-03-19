@@ -38,7 +38,6 @@
     "config.magnetic-radius.name": "Raggio magnetico",
     "config.magnetic-radius.tooltip": "La quantità di magnetismo dell'oggetto (valori più alti attirano gli oggetti più lontani). Predefinito {{defaultValue}}.",
 
-
     "config.tractor-sounds.name": "Effetti Sonori",
     "config.tractor-sounds.tooltip": "Quali effetti sonori riprodurre durante la guida del trattore. Le modifiche potrebbero non avere effetto fino a quando non si ricarica il salvataggio. Predefinito {{defaultValue}}.",
     "config.tractor-sounds.value.None": "nessun rumore",

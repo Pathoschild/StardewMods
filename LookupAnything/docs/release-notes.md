@@ -8,7 +8,7 @@
 * Added more seed info for tree lookups.
 * Added support for looking up NPCs in some custom mod menus (thanks to BinaryLip!).
 * Improved debug field format for player stats and schedules.
-* Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
 * Fixed errors if some config fields are set to null.
 
 ## 1.40.4

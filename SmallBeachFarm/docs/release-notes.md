@@ -5,7 +5,7 @@
 * Updated for Stardew Valley 1.6.
 * You can now till the campfire wood pile.
 * Various visual improvements to the map (thanks to FlashShifter!).
-* Improved translations. Thanks to EmWhyKay (updated Turkish)!
+* Improved translations. Thanks to EmWhyKay (updated Turkish) and MakinDay (updated Italian)!
 
 ## 2.4.10
 Released 01 December 2023 for SMAPI 3.14.0 or later.

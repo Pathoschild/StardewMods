@@ -19,6 +19,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Removed `GroupEditsByMod` config option. Edits are now grouped automatically based on mod and priority.
 * Fixed off-by-one position with `MoveEntries` when the target entry is already before the anchor entry.
 * Fixed some tokens (notably `Hearts` and `Relationship`) being briefly unavailable during part of the save load process. This affected some specific cases like editing island resort dialogue.
+* Fixed some cases where a `HasMod` condition didn't properly prevent warnings when using a token provided by that mod if it's not installed (thanks to SinZ!).
 
 **Update notes for mod authors:**  
 * Stardew Valley 1.6 has major content changes. Your content packs may still work due to the new runtime migrations,
