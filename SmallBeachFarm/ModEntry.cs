@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
@@ -10,7 +8,6 @@ using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using Pathoschild.Stardew.SmallBeachFarm.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.GameData;
@@ -32,17 +29,11 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The MD5 hash for the default data.json file.</summary>
         private const string DataFileHash = "db6d8c6fb6cc1554c091430476513727";
 
-        /// <summary>The relative path to the folder containing tilesheet variants.</summary>
-        private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
-
         /// <summary>The mod configuration.</summary>
         private ModConfig Config = null!; // set in Entry
 
         /// <summary>The mod's hardcoded data.</summary>
         private ModData Data = null!; // set in Entry
-
-        /// <summary>A fake asset key prefix from which to load tilesheets.</summary>
-        private string FakeAssetPrefix => PathUtilities.NormalizeAssetName($"Mods/{this.ModManifest.UniqueID}");
 
 
         /*********
@@ -137,7 +128,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             {
                 e.Edit(editor =>
                 {
-                     var data = editor.AsDictionary<string, LocationData>().Data;
+                    var data = editor.AsDictionary<string, LocationData>().Data;
                     data[$"Farm_{this.ModManifest.UniqueID}"] = this.Data.LocationData;
                 });
             }
@@ -214,40 +205,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                             editor.PatchMap(source: pier, targetArea: new Rectangle(position.X, position.Y, size.Width, size.Height));
                         }
 
-                        // apply tilesheet recolors
-                        foreach (TileSheet tilesheet in map.TileSheets)
-                        {
-                            IAssetName imageSource = this.Helper.GameContent.ParseAssetName(tilesheet.ImageSource);
-                            if (imageSource.StartsWith($"{this.TilesheetsPath}/_default/"))
-                                tilesheet.ImageSource = PathUtilities.NormalizeAssetName($"{this.FakeAssetPrefix}/{Path.GetFileNameWithoutExtension(tilesheet.ImageSource)}");
-                        }
-
                         return map;
-                    },
-                    AssetLoadPriority.Exclusive
-                );
-            }
-
-            // load tilesheet
-            else if (e.NameWithoutLocale.StartsWith(this.FakeAssetPrefix))
-            {
-                e.LoadFrom(
-                    () =>
-                    {
-                        string filename = Path.GetFileName(e.NameWithoutLocale.Name);
-                        if (!Path.HasExtension(filename))
-                            filename += ".png";
-
-                        // get relative path to load
-                        string? relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))
-                            .EnumerateDirectories()
-                            .FirstOrDefault(p => p.Name != "_default" && this.Helper.ModRegistry.IsLoaded(p.Name))
-                            ?.Name;
-                        relativePath = Path.Combine(this.TilesheetsPath, relativePath ?? "_default", filename);
-
-                        // load asset
-                        Texture2D tilesheet = this.Helper.ModContent.Load<Texture2D>(relativePath);
-                        return tilesheet;
                     },
                     AssetLoadPriority.Exclusive
                 );
@@ -272,13 +230,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 monitor: this.Monitor,
                 manifest: this.ModManifest
             ).Register();
-        }
-
-        /// <summary>Get the full path for a relative path.</summary>
-        /// <param name="relative">The relative path.</param>
-        private string GetFullPath(string relative)
-        {
-            return Path.Combine(this.Helper.DirectoryPath, relative);
         }
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
