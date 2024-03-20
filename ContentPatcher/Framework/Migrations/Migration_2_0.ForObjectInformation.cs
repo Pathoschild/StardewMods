@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework.Migrations
                 string[] fields = new string[9];
                 foreach ((string objectId, ObjectData entry) in from)
                 {
-                    ObjectBuffData? buff = entry.Buffs.FirstOrDefault();
+                    ObjectBuffData? buff = entry.Buffs?.FirstOrDefault();
 
                     BuffEffects? buffEffects = buff?.CustomAttributes != null
                         ? new(buff.CustomAttributes)

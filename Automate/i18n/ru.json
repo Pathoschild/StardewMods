@@ -8,6 +8,8 @@
     "config.enabled.desc": "Следует ли включать функции автоматизации. Если этот параметр отключен, никакие машины не будут автоматизированы и каналы соединения не будет работать.",
     "config.automation-interval.name": "Автоматизированный интервал",
     "config.automation-interval.desc": "Количество тиков между каждым процессом автоматизации (60 раз в секунду, 120 раз в две секунды и т.д.).",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "Клавиша переключения каналов соединения",
     "config.toggle-overlay-key.desc": "Клавиша, которая показывает каналы соединения для автоматизации.",
     "config.warn-for-missing-bridge-mod.name": "Предупреждение об отсутствии bridge mod",

@@ -8,6 +8,8 @@
     "config.enabled.desc": "Чи треба вмикати можливості моду Automate. Якщо вимкнено, жодна з машин не буде автоматизована і не буде з'являтися накладання.",
     "config.automation-interval.name": "Інтервал автоматизації",
     "config.automation-interval.desc": "Кількість тактів між кожним процесом автоматизації (60 разів на секунду, 120 кожні дві секунди тощо).",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "Клавіша перемикання накладання",
     "config.toggle-overlay-key.desc": "Клавіші перемикання накладання автоматизації.",
     "config.warn-for-missing-bridge-mod.name": "Попередженння про відсутність моду Bridge Mod",

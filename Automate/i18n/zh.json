@@ -8,6 +8,8 @@
     "config.enabled.desc": "是否启用自动化功能。如果禁用此选项，则不会自动运行任何机器，热键也不能使用",
     "config.automation-interval.name": "自动化间隔",
     "config.automation-interval.desc": "每个自动化进程之间的间隔数 (每1秒60，每2秒120，以此类推).",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "切换配置键位",
     "config.toggle-overlay-key.desc": "切换自动化配置的键位",
     "config.warn-for-missing-bridge-mod.name": "缺少连接模块警告",

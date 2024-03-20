@@ -77,6 +77,15 @@ namespace Pathoschild.Stardew.Automate.Framework
                     get: config => config.Controls.ToggleOverlay,
                     set: (config, value) => config.Controls.ToggleOverlay = value
                 )
+                .AddNumberField(
+                    name: I18n.Config_MinMinutesForFairyDust_Name,
+                    tooltip: I18n.Config_MinMinutesForFairyDust_Desc,
+                    get: config => config.MinMinutesForFairyDust,
+                    set: (config, value) => config.MinMinutesForFairyDust = (int)(value / 10 * 10), // enforce 10-minute interval
+                    min: 10,
+                    max: 3000,
+                    interval: 10
+                )
                 .AddCheckbox(
                     name: I18n.Config_WarnForMissingBridgeMod_Name,
                     tooltip: I18n.Config_WarnForMissingBridgeMod_Desc,

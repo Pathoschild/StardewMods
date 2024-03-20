@@ -8,6 +8,8 @@
     "config.enabled.desc": "Scegli se abilitare l'automazione. Se disabilitata, i macchinari non saranno automatizzati e non camparirà l'overlay.",
     "config.automation-interval.name": "Intervallo di automazione",
     "config.automation-interval.desc": "Il numero di tick tra ogni processo di automazione (60 per una volta al secondo, 120 per ogni due secondi, ecc.).",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "Imposta il tasto overlay",
     "config.toggle-overlay-key.desc": "I tasti che attivano l'overlay dell'automazione.",
     "config.warn-for-missing-bridge-mod.name": "Avvertimento per la mancanza di mod.",

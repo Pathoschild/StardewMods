@@ -109,6 +109,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             events.GameLoop.DayStarted += this.OnDayStarted;
             events.GameLoop.DayEnding += this.OnDayEnding;
+            events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             events.GameLoop.Saved += this.OnSaved;
             events.Display.RenderedWorld += this.OnRenderedWorld;
             events.Input.ButtonsChanged += this.OnButtonsChanged;
@@ -408,6 +409,14 @@ namespace Pathoschild.Stardew.TractorMod
                     }
                 }
             }
+        }
+
+        /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
+        {
+            this.AudioManager.SetEngineState(EngineState.Stop);
         }
 
         /// <inheritdoc cref="IGameLoopEvents.Saved"/>

@@ -148,6 +148,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             string cropId = crop.indexOfHarvest.Value;
+            if (string.IsNullOrWhiteSpace(cropId))
+                return false;
+
             if (!this.IsFlowerCache.TryGetValue(cropId, out bool isFlower))
             {
                 try
