@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed support for the new big chests in Stardew Valley 1.6.
+
 ## 2.0.0
 Released 19 March 2024 for SMAPI 4.0.0 or later.
 
