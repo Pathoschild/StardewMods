@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.17.1
+Released 20 March 2024 for SMAPI 4.0.0 or later.
+
 * Fixed error collecting forage with the tractor.
 * Fixed unable to break large stumps or boulders with the tractor.
 * Fixed tractor sounds continuing if you exit to title while riding the tractor.

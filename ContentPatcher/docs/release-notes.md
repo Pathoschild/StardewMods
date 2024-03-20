@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 2.0.1
+Released 20 March 2024 for SMAPI 4.0.0 or later.
+
 * Fixed error migrating some content packs to Stardew Valley 1.6.
 
 ## 2.0.0
