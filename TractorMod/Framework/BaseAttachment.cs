@@ -110,6 +110,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // use tool on center of tile
             player.lastClick = this.GetToolPixelPosition(tile);
+            tool.swingTicker++;
             tool.DoFunction(location, (int)player.lastClick.X, (int)player.lastClick.Y, 0, player);
             return true;
         }
