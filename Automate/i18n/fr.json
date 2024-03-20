@@ -8,6 +8,8 @@
     "config.enabled.desc": "Permet d'activer les fonctions d'automatisation. Si cette option est désactivée, aucune machine ne sera automatisée et la superposition n'apparaîtra pas.",
     "config.automation-interval.name": "Intervalle d'automatisation",
     "config.automation-interval.desc": "Le nombre de ticks entre chaque processus d'automatisation (60 pour une fois par seconde, 120 pour toutes les deux secondes, etc.)",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "Touche de basculement de la superposition",
     "config.toggle-overlay-key.desc": "Les touches qui permettent de faire basculer la superposition de l'automatisation.",
     "config.warn-for-missing-bridge-mod.name": "Avertissement pour un pont manquant",

@@ -8,6 +8,8 @@
     "config.enabled.desc": "เปิดใช้งานฟีเจอร์อัตโนมัติหรือไม่ หากปิดใช้งาน จะไม่มีเครื่องจักรใดทำงานอัตโนมัติและการซ้อนทับจะไม่ปรากฏ",
     "config.automation-interval.name": "ช่วงที่ทำงานอัตโนมัติ",
     "config.automation-interval.desc": "จำนวนขีดระหว่างกระบวนการอัตโนมัติแต่ละขั้นตอน (60 ครั้งต่อวินาที 120 ครั้งทุกสองวินาที ฯลฯ)",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "ปุ่มสลับการซ้อนทับ",
     "config.toggle-overlay-key.desc": "ปุ่มที่สลับการซ้อนทับอัตโนมัติ",
     "config.warn-for-missing-bridge-mod.name": "คำเตือนสำหรับ mod สะพานที่หายไป",

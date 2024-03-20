@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed new fairy dust option not shown in Generic Mod Config Menu.
 * Fixed support for the new big chests in Stardew Valley 1.6.
 
 ## 2.0.0

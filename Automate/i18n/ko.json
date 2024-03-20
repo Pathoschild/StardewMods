@@ -8,6 +8,8 @@
     "config.enabled.desc": "자동화 기능을 활성화할지 여부. 비활성화하면 기계가 자동화되지 않고 오버레이가 나타나지 않습니다.",
     "config.automation-interval.name": "자동화 간격",
     "config.automation-interval.desc": "각 자동화 공정 사이의 간격 수.(초당 60개, 2초당 120개 등)",
+    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
+    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
     "config.toggle-overlay-key.name": "오버레이 키 전환 ",
     "config.toggle-overlay-key.desc": "자동화 오버레이를 토글하는 키.",
     "config.warn-for-missing-bridge-mod.name": "연결 모드 누락 경고",
