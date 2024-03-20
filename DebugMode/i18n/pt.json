@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "Opções gerais",
+    "config.enable-game-debug.name": "Ativar teclas de atalho para depuração do jogo",
+    "config.enable-game-debug.desc": "Se mostrar as informações de depuração também ativa as teclas de atalho de depuração do jogo, como pressionar 5 para ir direto para a praia.",
+    "config.enable-dangerous-hotkeys.name": "Permitir teclas de atalho perigosas",
+    "config.enable-dangerous-hotkeys.desc": "Quando as teclas de atalho de depuração do jogo estão ativadas, também permite teclas de atalho destrutivas que podem encerrar imediatamente o dia atual, randomizar o jogador ou decorações da fazenda, ou travar o jogo."
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "Controles",
+    "config.toggle-debug-key.name": "Alternar informações de depuração",
+    "config.toggle-debug-key.desc": "As teclas que alternam as informações de depuração."
 }
