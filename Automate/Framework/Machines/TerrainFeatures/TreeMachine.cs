@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             Tree tree = this.Machine;
 
-            if (item.ItemId == TreeMachine.GetSeedForTree(tree, this.Location))
+            if (ItemRegistry.HasItemId(item, TreeMachine.GetSeedForTree(tree, this.Location)))
                 tree.hasSeed.Value = false;
 
             Stack<string> drops = this.ItemDrops.Value;
