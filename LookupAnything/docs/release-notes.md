@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error looking up players on the Meadowlands farm or a custom `Data/AdditionalFarms` farm type.
+
 ## 1.41.0
 Released 19 March 2024 for SMAPI 4.0.0 or later.
 
