@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Fields
         *********/
         /// <summary>The qualified item ID for auto-grabbers.</summary>
-        private readonly string AutoGrabberID = "(O)165";
+        private readonly string AutoGrabberID = "(BC)165";
 
         /// <summary>Provides multiplayer utilities.</summary>
         private readonly IMultiplayerHelper Multiplayer;
