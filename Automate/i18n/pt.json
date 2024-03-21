@@ -4,12 +4,12 @@
     *********/
     // main options
     "config.title.main-options": "Opções Principais",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.enabled.name": "Habilitado",
+    "config.enabled.desc": "Se habilitar as funcionalidades de Automatização. Se isso estiver desativado, nenhuma máquina será automatizada e a sobreposição não aparecerá.",
     "config.automation-interval.name": "Intervalo de Automação",
     "config.automation-interval.desc": "O número de ticks entre processos (60 para uma vez por segundo, 120 para cada dois segundos, etc).",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
+    "config.min-minutes-for-fairy-dust.name": "Minutos mínimos para pó de fada",
+    "config.min-minutes-for-fairy-dust.desc": "O tempo mínimo de processamento da máquina, em minutos, para aplicar o pó de fada. Por exemplo, definir isso para 30 minutos significa que o pó de fada não será aplicado se a máquina terminar em 20 minutos sem ele.",
     "config.toggle-overlay-key.name": "Tecla de Interface",
     "config.toggle-overlay-key.desc": "A tecla que abrirá a interface de automação.",
     "config.warn-for-missing-bridge-mod.name": "Aviso para falta de mod de ponte",
@@ -22,21 +22,19 @@
     "config.custom-connectors.desc": "Os nomes em inlgês de conectores que juntarão baús e máquinas. Você pode listar vários usando vírgulas. (Precisa ser em inglês).", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Comportamento das cabanas de Junimo",
+    "config.junimo-hut-gems.name": "Gemas",
+    "config.junimo-hut-gems.desc": "O que as cabanas de Junimo devem fazer com itens de pedras preciosas. 'Auto-detecção' irá ignorá-los.",
+    "config.junimo-hut-fertilizer.name": "Fertilizante",
+    "config.junimo-hut-fertilizer.desc": "O que as cabanas de Junimo devem fazer com itens de fertilizantes. 'Auto-detecção' irá ignorá-los se o mod Better Junimos estiver instalado, caso contrário, irá movê-los da cabana para os baús conectados.",
+    "config.junimo-hut-seeds.name": "Sementes",
+    "config.junimo-hut-seeds.desc": "O que as cabanas de Junimo devem fazer com itens de sementes. 'Auto-detecção' irá ignorá-los se o mod Better Junimos estiver instalado, caso contrário, irá movê-los da cabana para os baús conectados."
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Auto-detecção",
+    "config.junimo-huts.ignore": "Ignorá-los",
+    "config.junimo-huts.move-into-chests": "Mover das cabanas de Junimo para os baús",
+    "config.junimo-huts.move-into-huts": "Mover dos baús para as cabanas de Junimo"
 
     // per-machine settings
     "config.title.machine-settings": "Configurações de {{machineName}}",
