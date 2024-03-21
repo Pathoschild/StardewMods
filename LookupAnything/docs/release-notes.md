@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed error looking up wild forage.
 * Fixed error looking up players on the Meadowlands farm or a custom `Data/AdditionalFarms` farm type.
 
 ## 1.41.0

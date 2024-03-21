@@ -499,7 +499,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             bool isForage = CommonHelper.IsItemId(crop.whichForageCrop.Value) && crop.fullyGrown.Value; // show crop fields for growing mixed seeds
 
             // add next-harvest field
-            if (!isSeed)
+            if (!isSeed && !isForage)
             {
                 // get next harvest
                 SDate nextHarvest = data.GetNextHarvest();
