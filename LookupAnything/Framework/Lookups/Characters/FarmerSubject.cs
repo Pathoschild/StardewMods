@@ -8,6 +8,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 
@@ -140,30 +141,38 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Get the human-readable farm type selected by the player.</summary>
         private string? GetFarmType()
         {
-            // get farm type
-            int farmType = Game1.whichFarm;
-            if (this.IsLoadMenu)
+            // get farm type ID
+            string farmTypeId = this.IsLoadMenu
+                ? this.RawSaveData?.Value?.Element("whichFarm")?.Value ?? Game1.GetFarmTypeID()
+                : Game1.GetFarmTypeID();
+
+            // handle pre-1.6 farm types
+            if (int.TryParse(farmTypeId, out int farmTypeNumber))
             {
-                XElement? saveData = this.RawSaveData?.Value;
-                string? rawType = saveData?.Element("whichFarm")?.Value;
-                farmType = rawType != null ? int.Parse(rawType) : -1;
+                string? translationKey = farmTypeNumber switch
+                {
+                    Farm.combat_layout => "Character_FarmCombat",
+                    Farm.default_layout => "Character_FarmStandard",
+                    Farm.forest_layout => "Character_FarmForaging",
+                    Farm.mountains_layout => "Character_FarmMining",
+                    Farm.riverlands_layout => "Character_FarmFishing",
+                    Farm.fourCorners_layout => "Character_FarmFourCorners",
+                    Farm.beach_layout => "Character_FarmBeach",
+                    _ => null
+                };
+                if (translationKey != null)
+                    return GameI18n.GetString("Strings\\UI:" + translationKey).Replace("_", Environment.NewLine);
             }
 
-            // get type name
-            return farmType switch
+            // handle data farm type
+            foreach (ModFarmType farmData in DataLoader.AdditionalFarms(Game1.content))
             {
-                -1 => null,
+                if (farmData?.Id == farmTypeId && farmData.TooltipStringPath != null)
+                    return GameI18n.GetString(farmData.TooltipStringPath).Replace("_", Environment.NewLine);
+            }
 
-                Farm.combat_layout => GameI18n.GetString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine),
-                Farm.default_layout => GameI18n.GetString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine),
-                Farm.forest_layout => GameI18n.GetString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine),
-                Farm.mountains_layout => GameI18n.GetString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine),
-                Farm.riverlands_layout => GameI18n.GetString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine),
-                Farm.fourCorners_layout => GameI18n.GetString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine),
-                Farm.beach_layout => GameI18n.GetString("Strings\\UI:Character_FarmBeach").Replace("_", Environment.NewLine),
-
-                _ => I18n.Player_FarmMap_Custom()
-            };
+            // unknown farm type (e.g. a pre-1.6 custom type)
+            return I18n.Player_FarmMap_Custom();
         }
 
         /// <summary>Get the player's spouse name, if they're married.</summary>

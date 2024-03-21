@@ -37,11 +37,12 @@ of it.
 
 By default, Automate supports these machines:
 
+* custom machines using the Stardew Valley 1.6+ format;
 * [auto-grabbers](https://stardewvalleywiki.com/Auto-Grabber);
 * [bee houses](https://stardewvalleywiki.com/Bee_House);
 * [bone mills](https://stardewvalleywiki.com/Bone_Mill);
 * bushes (including [blackberry](https://stardewvalleywiki.com/Blackberry), [salmonberry](https://stardewvalleywiki.com/Salmonberry), and [tea](https://stardewvalleywiki.com/Tea_Bush) bushes);
-* [casks](https://stardewvalleywiki.com/Cask) (even outside the cellar);
+* [casks](https://stardewvalleywiki.com/Cask);
 * [charcoal kilns](https://stardewvalleywiki.com/Charcoal_Kiln);
 * [cheese presses](https://stardewvalleywiki.com/Cheese_Press);
 * [coffee makers](https://stardewvalleywiki.com/Coffee_Maker);

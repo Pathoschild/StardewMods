@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.41.1
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed error looking up wild forage.
+* Fixed error looking up players on the Meadowlands farm or a custom `Data/AdditionalFarms` farm type.
+
 ## 1.41.0
 Released 19 March 2024 for SMAPI 4.0.0 or later.
 

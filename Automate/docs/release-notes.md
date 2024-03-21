@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.0.2
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed some `Data/Machines` logic not being applied. This caused issues like crystalariums and worm bins not resuming when their output was collected.
+
 ## 2.0.1
 Released 20 March 2024 for SMAPI 4.0.0 or later.
 
@@ -18,6 +23,7 @@ Released 19 March 2024 for SMAPI 4.0.0 or later.
 * Added options in Generic Mod Config Menu to toggle or set the priority for all machines in `Data/Machines`.
 * `automate summary` now shows each chest's automation options if edited.
 * Removed the 'prevent empty stack' chest option. This is no longer feasible due to how machines work in Stardew Valley 1.6.
+* Automating a cask will no longer let it work outside the cellar, due to changes in how the mod works for Stardew Valley 1.6.
 * Improved translations. Thanks to EmWhyKay (updated Turkish)!
 * Fixed errors if some config fields are set to null.
 

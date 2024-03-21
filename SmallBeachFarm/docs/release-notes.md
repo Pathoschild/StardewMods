@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.5.1
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed warp to bus stop in Stardew Valley 1.6.
+
 ## 2.5.0
 Released 19 March 2024 for SMAPI 4.0.0 or later.
 
