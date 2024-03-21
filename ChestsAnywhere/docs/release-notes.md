@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.23.1
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
 * Fixed auto-grabbers no longer accessible remotely.
 
 ## 1.23.0

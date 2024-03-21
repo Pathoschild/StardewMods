@@ -1,8 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed some `Data/Machines` logic not being applied. This caused issues like crystalariums not resuming when their output was collected.
+## 2.0.2
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed some `Data/Machines` logic not being applied. This caused issues like crystalariums and worm bins not resuming when their output was collected.
 
 ## 2.0.1
 Released 20 March 2024 for SMAPI 4.0.0 or later.
