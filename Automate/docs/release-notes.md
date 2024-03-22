@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.0.3
+Released 21 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed machines not pulling items from Junimo chests.
+* Fixed error loading machines if another mod added an empty `Action` map tile property.
+* Fixed error collecting output from data-based machines which provide XP.
+* Fixed repeating errors when a custom automation factory throws an unhandled exception. Automate will now log a single error with the relevant info.
+
 ## 2.0.2
 Released 21 March 2024 for SMAPI 4.0.0 or later.
 

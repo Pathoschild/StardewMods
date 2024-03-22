@@ -199,7 +199,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (location is Town town)
             {
                 string action = town.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
-                if (action != null)
+                if (!string.IsNullOrWhiteSpace(action))
                 {
                     string[] fields = ArgUtility.SplitBySpace(action);
                     if (string.Equals(fields[0], "Garbage", StringComparison.OrdinalIgnoreCase) && ArgUtility.HasIndex(fields, 1))
