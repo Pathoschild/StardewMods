@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error loading machines if another mod added an empty `Action` map tile property.
+* Fixed repeating errors when a custom automation factory throws an unhandled exception. Automate will now log a single error with the relevant info.
 
 ## 2.0.2
 Released 21 March 2024 for SMAPI 4.0.0 or later.
