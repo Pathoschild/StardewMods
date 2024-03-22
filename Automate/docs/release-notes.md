@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed machines not pulling items from Junimo chests.
 * Fixed error loading machines if another mod added an empty `Action` map tile property.
 * Fixed error collecting output from data-based machines which provide XP.
 * Fixed repeating errors when a custom automation factory throws an unhandled exception. Automate will now log a single error with the relevant info.
