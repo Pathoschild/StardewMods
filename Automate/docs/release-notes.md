@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error loading machines if another mod added an empty `Action` map tile property.
+
 ## 2.0.2
 Released 21 March 2024 for SMAPI 4.0.0 or later.
 
