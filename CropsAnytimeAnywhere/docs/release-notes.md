@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.4.9
+Released 22 March 2024 for SMAPI 4.0.0 or later.
+
 * Fixed planting crops in non-farmable locations in 1.6.
 
 ## 1.4.8
