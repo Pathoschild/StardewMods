@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Data = data;
             this.Monitor = monitor;
 
-            this.Factory = new(this.GetMachineOverride, this.BuildStorage);
+            this.Factory = new(this.GetMachineOverride, this.BuildStorage, monitor);
             this.Factory.Add(defaultFactory);
 
             this.JunimoMachineGroup = new(this.Factory.SortMachines, this.BuildStorage);

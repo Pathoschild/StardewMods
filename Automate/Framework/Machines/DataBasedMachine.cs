@@ -130,7 +130,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines
             if (machineData?.ExperienceGainOnHarvest != null)
             {
                 string[] expSplit = machineData.ExperienceGainOnHarvest.Split(' ');
-                for (int i = 0; i < expSplit.Length + 1; i += 2)
+                for (int i = 0; i < expSplit.Length - 1; i += 2)
                 {
                     int skill = Farmer.getSkillNumberFromName(expSplit[i]);
                     if (skill != -1 && expSplit.Length > i + 1)

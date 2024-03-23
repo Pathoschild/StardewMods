@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -177,12 +178,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             if (item.Stack <= 0)
             {
-                for (int i = 0; i < chest.Items.Count; i++)
+                IInventory inventory = chest.GetItemsForPlayer();
+
+                for (int i = 0; i < inventory.Count; i++)
                 {
-                    Item slot = chest.Items[i];
+                    Item slot = inventory[i];
                     if (slot != null && object.ReferenceEquals(item, slot))
                     {
-                        chest.Items[i] = null;
+                        inventory[i] = null;
                         break;
                     }
                 }
