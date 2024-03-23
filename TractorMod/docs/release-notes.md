@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed tractors/garages built before Stardew Valley 1.6 turning into horses/stables.
+* Fixed engine stop sound sometimes played when exiting to title or loading a save even if you weren't on the tractor.
 
 **Migration note for players:**
 * If you already saved after the tractor turned into a horse, unfortunately you'll need to rebuild the garage. You can
