@@ -351,10 +351,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>Derived from <see cref="Grass.performToolAction"/>.</remarks>
         protected bool TryHarvestGrass(Grass? grass, GameLocation location, Vector2 tile, Farmer player, Tool tool)
         {
-            if (grass == null || !location.terrainFeatures.Remove(tile))
+            if (grass == null || !location.terrainFeatures.ContainsKey(tile))
                 return false;
 
-            grass.TryDropItemsOnCut(tool);
+            grass.numberOfWeeds.Value = 0; // grass won't drop anything if it thinks it's non-cut
+            grass.TryDropItemsOnCut(tool); // need to call this before we remove the grass, since it'll check its location
+            location.terrainFeatures.Remove(tile);
             return true;
         }
 
