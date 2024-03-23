@@ -66,8 +66,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
         }
 
-        /// <summary>Set whether to play idle engine effects.</summary>
-        /// <param name="state">The engine state to set.</param>
+        /// <summary>Set the engine sounds that should play.</summary>
+        /// <param name="state">The new engine state.</param>
         public void SetEngineState(EngineState state)
         {
             if (!this.IsActive())
@@ -93,8 +93,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
                 // stop
                 case EngineState.Stop:
-                    if (this.ActiveSound != null)
+                    if (this.ActiveSound is { IsStopped: false }) // only play engine->silence transition if the engine sounds are playing
                         this.StartUnlessPlaying(this.StopSoundId);
+                    else
+                        this.ActiveSound = null;
                     break;
 
                 default:

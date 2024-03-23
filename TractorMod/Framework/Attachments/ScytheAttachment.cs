@@ -207,23 +207,37 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // harvest
             if (this.ShouldHarvest(dirt.crop))
             {
-                // scythe or pick crops
-                if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+                CropData? data = dirt.crop.GetData();
+                HarvestMethod? wasHarvestMethod = data?.HarvestMethod;
+
+                try
                 {
-                    bool isScytheCrop = dirt.crop.GetHarvestMethod() == HarvestMethod.Scythe;
+                    if (data != null)
+                        data.HarvestMethod = HarvestMethod.Scythe; // prevent player from visually stooping off of tractor to grab crop
 
-                    dirt.destroyCrop(showAnimation: isScytheCrop);
-                    if (!isScytheCrop && location is IslandLocation && Game1.random.NextDouble() < 0.05)
-                        Game1.player.team.RequestLimitedNutDrops("IslandFarming", location, (int)tile.X * 64, (int)tile.Y * 64, 5);
+                    // scythe or pick crops
+                    if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+                    {
+                        bool isScytheCrop = dirt.crop.GetHarvestMethod() == HarvestMethod.Scythe;
 
-                    return true;
+                        dirt.destroyCrop(showAnimation: isScytheCrop);
+                        if (!isScytheCrop && location is IslandLocation && Game1.random.NextDouble() < 0.05)
+                            Game1.player.team.RequestLimitedNutDrops("IslandFarming", location, (int)tile.X * 64, (int)tile.Y * 64, 5);
+
+                        return true;
+                    }
+
+                    // hoe crops (e.g. ginger)
+                    if (dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
+                    {
+                        dirt.destroyCrop(showAnimation: false);
+                        return true;
+                    }
                 }
-
-                // hoe crops (e.g. ginger)
-                if (dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
+                finally
                 {
-                    dirt.destroyCrop(showAnimation: false);
-                    return true;
+                    if (data != null)
+                        data.HarvestMethod = wasHarvestMethod!.Value;
                 }
             }
 

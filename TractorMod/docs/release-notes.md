@@ -1,6 +1,24 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 4.17.2
+Released 23 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed 'no sounds' option not working.
+* Fixed grass not dropping hay when scythed by the tractor.
+* Fixed player visually stooping from tractor to grab crops.
+* Fixed tractor sounds not always updated if you change the mid-game.
+* Fixed tractors/garages built before Stardew Valley 1.6 turning into horses/stables.
+* Fixed engine stop sound sometimes played when exiting to title or loading a save even if you weren't on the tractor.
+
+**Migration note for players:**
+* If you already saved after the tractor turned into a horse, unfortunately you'll need to rebuild the garage. You can
+  make the new garage free by opening the mod's `config.json` file in a text editor and replacing these fields with:
+  ```json
+    "BuildPrice": 0,
+    "BuildMaterials": { },
+  ```
+
 ## 4.17.1
 Released 20 March 2024 for SMAPI 4.0.0 or later.
 

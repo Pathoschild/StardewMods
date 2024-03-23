@@ -55,8 +55,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 Migrator.Migrate_to_4_7(helper, monitor, buildableLocations.Value);
             if (lastVersion.IsOlderThan("4.13.0"))
                 Migrator.Migrate_To_4_13(buildableLocations.Value);
-            if (lastVersion.IsOlderThan("4.15.0"))
-                Migrator.Migrate_To_4_15(buildableLocations.Value);
+            if (lastVersion.IsOlderThan("4.17.2"))
+                Migrator.Migrate_To_4_17(buildableLocations.Value);
 
             // update version
             Game1.CustomData[Migrator.LastVersionKey] = currentVersion.ToString();
@@ -85,8 +85,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private static void Migrate_to_4_7(IModHelper helper, IMonitor monitor, GameLocation[] locations)
         {
             // fix building types
-            // Tractor Mod 4.7 replaces custom TractorGarage buildings vanilla stables, with a flag
-            // in the building.MaxOccupants field.
+            // Tractor Mod 4.7 replaces custom TractorGarage buildings with vanilla stables.
             foreach (GameLocation location in locations)
             {
                 for (int i = location.buildings.Count - 1; i >= 0; i--)
@@ -165,9 +164,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Migrate to Tractor Mod 4.15.</summary>
         /// <param name="locations">The locations to scan for tractors and garages.</param>
-        private static void Migrate_To_4_15(GameLocation[] locations)
+        private static void Migrate_To_4_17(GameLocation[] locations)
         {
-            // Tractor Mod 4.15 migrates the tractor garage custom building data.
+            // Tractor Mod 4.17 (for Stardew Valley 1.6) migrates from a vanilla stable to a new Data/Buildings
+            // building.
             foreach (GameLocation location in locations)
             {
                 for (int i = location.buildings.Count - 1; i >= 0; i--)
@@ -218,7 +218,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             Horse horse = garage.getStableHorse();
             if (horse != null && horse.Name.StartsWith("tractor/"))
-                TractorManager.SetTractorInfo(horse, disableHorseSounds: false);
+                TractorManager.SetTractorInfo(horse, TractorSoundType.Horse); // sound effects will be reset later
         }
     }
 }
