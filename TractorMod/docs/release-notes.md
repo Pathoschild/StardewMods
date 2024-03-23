@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.17.2
+Released 23 March 2024 for SMAPI 4.0.0 or later.
+
 * Fixed 'no sounds' option not working.
 * Fixed grass not dropping hay when scythed by the tractor.
 * Fixed player visually stooping from tractor to grab crops.
