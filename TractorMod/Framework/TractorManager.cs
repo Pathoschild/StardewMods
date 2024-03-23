@@ -96,13 +96,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Set the base tractor data for a horse.</summary>
         /// <param name="tractor">The tractor instance.</param>
-        /// <param name="disableHorseSounds">Whether to disable the default horse sounds.</param>
+        /// <param name="soundEffects">Which sound effects to play while riding the tractor.</param>
         /// <returns>Returns the tractor instance for convenience.</returns>
-        public static Horse SetTractorInfo(Horse tractor, bool disableHorseSounds)
+        public static Horse SetTractorInfo(Horse tractor, TractorSoundType soundEffects)
         {
             tractor.Name = $"tractor/{tractor.HorseId:N}";
             tractor.modData[TractorManager.TractorDataKey] = "1";
-            if (disableHorseSounds)
+            if (soundEffects != TractorSoundType.Horse)
                 tractor.onFootstepAction = _ => { }; // disable horse clops, tractor audio will be managed separately
 
             return tractor;
@@ -160,7 +160,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // update audio
             if (this.IsCurrentPlayerRiding)
             {
-                bool idle = !Game1.player.isMoving();
+                bool idle = !Game1.player!.isMoving();
 
                 this.AudioManager.SetEngineState(idle ? EngineState.Idle : EngineState.Rev);
                 this.AudioManager.Update();
