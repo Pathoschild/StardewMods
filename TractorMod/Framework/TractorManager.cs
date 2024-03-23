@@ -154,6 +154,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 Game1.player.toolPower.Value = 0;
 
                 // set sound
+                if (Game1.player.mount != null)
+                    SetTractorInfo(Game1.player.mount, this.Config.SoundEffects);
                 this.AudioManager.SetEngineState(this.IsCurrentPlayerRiding ? EngineState.Idle : EngineState.Stop);
             }
 
