@@ -4,6 +4,7 @@
 ## Upcoming release
 * Fixed 'no sounds' option not working.
 * Fixed grass not dropping hay when scythed by the tractor.
+* Fixed player visually stooping from tractor to grab crops.
 * Fixed tractor sounds not always updated if you change the mid-game.
 * Fixed tractors/garages built before Stardew Valley 1.6 turning into horses/stables.
 * Fixed engine stop sound sometimes played when exiting to title or loading a save even if you weren't on the tractor.
