@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error using search menu if other mods added items with no names.
+
 ## 1.41.1
 Released 21 March 2024 for SMAPI 4.0.0 or later.
 

@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // save data
             this.ShowLookup = showLookup;
             this.Monitor = monitor;
-            this.SearchLookup = searchSubjects.ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            this.SearchLookup = searchSubjects.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
             this.ScrollAmount = scroll;
 
             // create components
