@@ -623,9 +623,9 @@
     "tree.next-growth.winter": "ne peut pousser en dehors de la serre en hiver à moins d'être fertilisé",
     "tree.next-growth.adjacent-trees": "ne peut pousser car d'autres arbres sont trop près",
     "tree.next-growth.chance": "{{chance}}% de chance de grandir en {{stage}} demain",
-    "tree.seed.not-ready": "Not ready", // TODO
-    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
-    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
+    "tree.seed.not-ready": "Pas prêt",
+    "tree.seed.probability-daily": "{{chance}} % de chances d'obtenir {{itemName}} chaque jour.",
+    "tree.seed.probability-on-chop": "{{chance}} % de chances d'obtenir {{itemName}} une fois abattu.",
 
     // growth stages
     "tree.stages.seed": "graine",
@@ -647,21 +647,20 @@
     "config.force-full-screen.desc": "Si le menu doit toujours être en plein écran, au lieu d'être centré dans la fenêtre. Ceci est principalement utile lors de l'affichage des champs d'exploration de données.",
 
     // gift tastes
-    // TODO
-    "config.title.gift-tastes": "Gift tastes",
-    "config.show-gift-tastes.loved.name": "Show loved gifts",
-    "config.show-gift-tastes.loved.desc": "Whether to show loved gifts in NPC and item lookups.",
-    "config.show-gift-tastes.liked.name": "Show liked gifts",
-    "config.show-gift-tastes.liked.desc": "Whether to show liked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.neutral.name": "Show neutral gifts",
-    "config.show-gift-tastes.neutral.desc": "Whether to show neutral gifts in NPC and item lookups.",
-    "config.show-gift-tastes.disliked.name": "Show disliked gifts",
-    "config.show-gift-tastes.disliked.desc": "Whether to show disliked gifts in NPC and item lookups.",
-    "config.show-gift-tastes.hated.name": "Show hated gifts",
-    "config.show-gift-tastes.hated.desc": "Whether to show hated gifts in NPC and item lookups.",
+    "config.title.gift-tastes": "Goûts en matière de cadeaux",
+    "config.show-gift-tastes.loved.name": "Montrer les cadeaux adorés",
+    "config.show-gift-tastes.loved.desc": "Possibilité d'afficher les cadeaux adorés dans les recherches de PNJ et d'objets.",
+    "config.show-gift-tastes.liked.name": "Afficher les cadeaux aimés",
+    "config.show-gift-tastes.liked.desc": "Possibilité d'afficher les cadeaux aimés dans les recherches de PNJ et d'objets.",
+    "config.show-gift-tastes.neutral.name": "Montrer les cadeaux neutres",
+    "config.show-gift-tastes.neutral.desc": "Possibilité d'afficher les cadeaux neutres dans les recherches de PNJ et d'objets.",
+    "config.show-gift-tastes.disliked.name": "Montrer les cadeaux non aimés",
+    "config.show-gift-tastes.disliked.desc": "Possibilité d'afficher les cadeaux non aimés dans les recherches de PNJ et d'objets",
+    "config.show-gift-tastes.hated.name": "Montrer les cadeaux détestés",
+    "config.show-gift-tastes.hated.desc": "Possibilité d'afficher les cadeaux détestés dans les recherches de PNJ et d'objets",
 
-    "config.show-unowned-gifts.name": "Show unowned gift tastes",
-    "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
+    "config.show-unowned-gifts.name": "Afficher les cadeaux non possédés",
+    "config.show-unowned-gifts.desc": "Possibilité d'afficher les goûts en matière de cadeaux pour des objets que le joueur ne possède pas dans le monde.",
 
     "config.highlight-unrevealed-gift-tastes.name": "Mettre en évidence les goûts des cadeaux non révélés",
     "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras.",
