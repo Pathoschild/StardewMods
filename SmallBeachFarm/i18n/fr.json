@@ -5,10 +5,9 @@
     "farm.name": "Petite ferme de plage",
     "farm.description": "Une petite plage de poche fertile, où vous pouvez attraper des poissons de rivière et d'océan.",
 
-    // TODO
-    "farm.fish-areas.river": "River",
-    "farm.fish-areas.estuary": "Estuary",
-    "farm.fish-areas.ocean": "Ocean",
+    "farm.fish-areas.river": "Rivère",
+    "farm.fish-areas.estuary": "Estuaire",
+    "farm.fish-areas.ocean": "Océan",
 
 
     /*********
