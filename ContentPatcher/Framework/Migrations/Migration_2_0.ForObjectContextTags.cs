@@ -133,7 +133,7 @@ namespace ContentPatcher.Framework.Migrations
 
                     foreach ((string oldKey, string rawTags) in contextTags)
                     {
-                        string[] tags = rawTags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries);
+                        string[] tags = rawTags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
                         // add by ID
                         if (oldKey.StartsWith("id_"))
