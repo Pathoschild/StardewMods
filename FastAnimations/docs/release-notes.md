@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed tool animation speed applied to new strafing feature.
+
 ## 1.11.8
 Released 19 March 2024 for SMAPI 4.0.0 or later.
 
