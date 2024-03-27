@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed crop fields no longer shown for some full-grown crops.
 * Fixed error using search menu if other mods added items with no names.
 * Fixed lookups for upgraded barns/coops not showing correct upgrade summary.
 
