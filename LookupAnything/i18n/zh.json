@@ -20,7 +20,7 @@
     "generic.no": "否",
     "generic.seconds": "{{count}}秒",
     "generic.minutes": "{{count}}分",
-    "generic.hours": "{{count}}小时",
+    "generic.hours": "{{count}}时",
     "generic.days": "{{count}}天",
     "generic.in-x-days": "在{{count}}天内",
     "generic.x-days-ago": "{{count}}天前",
@@ -98,8 +98,8 @@
 
     // location names
     "location.backwoods": "边远森林",
-    "location.beach": "沙滩",
-    "location.beach.east-pier": "沙滩（码头东侧）",
+    "location.beach": "海滩",
+    "location.beach.east-pier": "海滩（码头东侧）",
     "location.bugLand": "突变虫穴",
     "location.busStop": "巴士站",
     "location.desert": "沙漠",
@@ -175,14 +175,14 @@
     "building.animals.summary": "已容纳{{count}}只动物，最大可容纳{{max}}只动物",
     "building.construction.summary": "{{date}} 完成",
     "building.feed-trough.automated": "自动喂食",
-    "building.feed-trough.summary": "{{filled}}喂食格已填充，最大可填充喂食格为{{max}}格",
+    "building.feed-trough.summary": "{{filled}}个喂食槽已填充，最大可填充喂食槽为{{max}}个",
     "building.horse-location.summary": "{{location}}（{{x}}, {{y}}）",
     "building.junimo-harvesting-enabled": "自动收获已启用",
     "building.owner.none": "没有屋主",
     "building.output-processing": "产品处理中",
     "building.output-ready": "产品完成",
     "building.slimes.summary": "已容纳{{count}}只史莱姆，最大可容纳{{max}}只史莱姆",
-    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
+    "building.stored-hay.summary": "该地点已存放 {{hayCount}}/{{maxHayInLocation}} 个干草（该建筑最大容量：{{maxHayInBuilding}}）", 
     "building.upgrades.barn.0": "可容纳动物量上升至 4 只动物，解锁牛",
     "building.upgrades.barn.1": "可容纳动物量上升至 8 只动物，解锁繁殖和山羊",
     "building.upgrades.barn.2": "可容纳动物量上升至 12 只动物，解锁自动喂食、猪和绵羊",
@@ -192,7 +192,7 @@
     "building.upgrades.coop.0": "可容纳动物量上升至 4 只动物，解锁鸡",
     "building.upgrades.coop.1": "可容纳动物量上升至 8 只动物，解锁孵化器、恐龙和鸭",
     "building.upgrades.coop.2": "可容纳动物量上升至 12 只动物，解锁自动喂食和兔子",
-    "building.water-trough.summary": "{{filled}}个水槽已填充，最大可填充水槽量{{max}}个",
+    "building.water-trough.summary": "{{filled}}个水槽已填充，最大可填充{{max}}个水槽",
 
 
     /*********
@@ -206,7 +206,7 @@
     // values
     "building.fish-pond.population.empty": "往池塘里加一条鱼以开始养殖。",
     "building.fish-pond.population.next-spawn": "{{relativeDate}}会繁殖新鱼",
-    "building.fish-pond.drops.preface": "当满足以下列表条件时每天有{{chance}}%的机会收获水产品：",
+    "building.fish-pond.drops.preface": "当满足以下列表条件时每天有{{chance}}%几率收获水产品：",
     "building.fish-pond.drops.min-fish": "当有{{count}}条鱼时：",
     "building.fish-pond.quests.done": "扩充到{{count}}条鱼",
     "building.fish-pond.quests.incomplete-one": "扩充到{{count}}条鱼：将需要{{itemName}}",
@@ -282,7 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
-    "item.custom-item": "Custom item", // TODO
+    "item.custom-item": "自定义物品", 
     "item.contents": "内容",
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
@@ -301,7 +301,7 @@
     "item.produces-dye": "产生染料",
 
     // values
-    "item.custom-item.summary": "added by {{modName}}", // TODO
+    "item.custom-item.summary": "由 {{modName}} 添加", 
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
     "item.contents.partial": "{{name}}在{{time}}后完成",
@@ -372,7 +372,7 @@
     "item.fish-spawn-rules.season-any": "任何季节",
     "item.fish-spawn-rules.season-list": "季节：{{seasons}}",
     "item.fish-spawn-rules.time": "一天中出现时间： {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "天气：晴朗",
+    "item.fish-spawn-rules.weather-sunny": "天气：晴天",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
 
 
@@ -382,12 +382,12 @@
     // labels
     "item.melee-weapon.accuracy": "精准度",
     "item.melee-weapon.critical-chance": "暴击率",
-    "item.melee-weapon.critical-damage": "暴击伤害(力量)",
+    "item.melee-weapon.critical-damage": "暴击伤害（力量）",
     "item.melee-weapon.damage": "伤害",
     "item.melee-weapon.defense": "防御",
-    "item.melee-weapon.knockback": "击退(重量)",
+    "item.melee-weapon.knockback": "击退（重量）",
     "item.melee-weapon.reach": "范围",
-    "item.melee-weapon.speed": "攻速(速度)",
+    "item.melee-weapon.speed": "攻速（速度）",
 
     // values
     "item.melee-weapon.critical-damage.label": "{{multiplier}} 倍正常伤害(未计算玩家加成)",
@@ -428,8 +428,8 @@
     ** Monster lookups
     *********/
     // labels
-    "monster.invincible": "无敌的",
-    "monster.health": "血量",
+    "monster.invincible": "无敌",
+    "monster.health": "生命值",
     "monster.drops": "掉落",
     "monster.experience": "经验",
     "monster.defense": "防御",
@@ -494,7 +494,7 @@
     "pet.water-bowl": "是否给水碗添水",
 
     // values
-    "pet.last-petted.yes": "是的（+12友好度）",
+    "pet.last-petted.yes": "是（+12友好度）",
     "pet.last-petted.days-ago": "{{days}}天前",
     "pet.last-petted.never": "还没有抚摸",
     "pet.water-bowl.empty": "水碗是空的",
@@ -511,11 +511,11 @@
     "player.gender": "性别",
     "player.housemate": "室友",
     "player.spouse": "配偶",
-    "player.watched-movie-this-week": "本周看电影",
+    "player.watched-movie-this-week": "本周看过的电影",
     "player.combat-skill": "战斗",
     "player.farming-skill": "耕种",
     "player.fishing-skill": "钓鱼",
-    "player.foraging-skill": "觅食",
+    "player.foraging-skill": "采集",
     "player.mining-skill": "采矿",
     "player.luck": "运气",
     "player.save-format": "保存格式",
@@ -622,10 +622,10 @@
     "tree.stage.partial": "{{stageName}}（总共{{max}}个阶段中的第{{step}}阶段）",
     "tree.next-growth.winter": "除非施肥，冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
-    "tree.next-growth.chance": "有{{chance}}%几率明天成长到{{stage}}",
-    "tree.seed.not-ready": "Not ready", // TODO
-    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
-    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
+    "tree.next-growth.chance": "明天有{{chance}}%几率成长到{{stage}}",
+    "tree.seed.not-ready": "尚未就绪", 
+    "tree.seed.probability-daily": "每天有{{chance}}%几率产生{{itemName}}。", 
+    "tree.seed.probability-on-chop": "砍倒时有{{chance}}%几率掉落{{itemName}}。", 
 
     // growth stages
     "tree.stages.seed": "种子",
