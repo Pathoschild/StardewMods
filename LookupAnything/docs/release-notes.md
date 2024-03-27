@@ -1,13 +1,15 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.41.2
+Released 26 March 2024 for SMAPI 4.0.0 or later.
+
+* Fixed chest lookups counting fridges as owned chests.
 * Fixed crop lookups no longer showing growth info when full-grown.
 * Fixed recipe data no longer shown in some cases.
 * Fixed support for recipes with randomized output items.
 * Fixed error using search menu if other mods added items with no names.
 * Fixed lookups for upgraded barns/coops not showing correct upgrade summary.
-* Fixed chest lookups counting fridges as owned chests.
 
 ## 1.41.1
 Released 21 March 2024 for SMAPI 4.0.0 or later.
