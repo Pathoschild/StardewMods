@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error using search menu if other mods added items with no names.
+* Fixed lookups for upgraded barns/coops not showing correct upgrade summary.
 
 ## 1.41.1
 Released 21 March 2024 for SMAPI 4.0.0 or later.

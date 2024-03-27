@@ -222,7 +222,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="npc">The NPC to check.</param>
         public bool IsSocialVillager(NPC npc)
         {
-            if (!npc.isVillager())
+            if (!npc.IsVillager)
                 return false;
 
             if (this.Metadata.Constants.ForceSocialVillagers.TryGetValue(npc.Name, out bool social))

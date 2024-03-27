@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // use character portrait (most villager NPCs)
-            if (npc.isVillager() && npc.Portrait != null && !this.IsGourmand) // Gourmand uses Professor Snail's portraits
+            if (npc.IsVillager && npc.Portrait != null && !this.IsGourmand) // Gourmand uses Professor Snail's portraits
             {
                 spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
                 return true;
