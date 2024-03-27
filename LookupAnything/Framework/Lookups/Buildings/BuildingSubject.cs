@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 yield return new GenericField(I18n.Building_Animals(), I18n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
 
                 // feed trough
-                if (building is Barn or Coop && upgradeLevel >= 2)
+                if (upgradeLevel >= 2 && (this.IsBarn(building) || this.IsCoop(building)))
                     yield return new GenericField(I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Automated());
                 else
                 {
@@ -233,6 +233,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /*********
         ** Private fields
         *********/
+        /// <summary>Get whether a building is a barn.</summary>
+        /// <param name="building">The building to check.</param>
+        private bool IsBarn(Building? building)
+        {
+            return building?.buildingType.Value is "Barn" or "Big Barn" or "Deluxe Barn";
+        }
+
+        /// <summary>Get whether a building is a coop.</summary>
+        /// <param name="building">The building to check.</param>
+        private bool IsCoop(Building? building)
+        {
+            return building?.buildingType.Value is "Coop" or "Big Coop" or "Deluxe Coop";
+        }
+
         /// <summary>Get the building owner, if any.</summary>
         private Farmer? GetOwner()
         {
@@ -257,7 +271,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         private int? GetUpgradeLevel(Building building)
         {
             // barn
-            if (building is Barn barn && int.TryParse(barn.GetIndoorsName().Substring("Barn".Length), out int barnUpgradeLevel))
+            if (this.IsBarn(building) && int.TryParse(building.GetIndoorsName().Substring("Barn".Length), out int barnUpgradeLevel))
                 return barnUpgradeLevel - 1; // Barn2 is first upgrade
 
             // cabin
@@ -265,7 +279,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 return cabin.upgradeLevel;
 
             // coop
-            if (building is Coop coop && int.TryParse(coop.GetIndoorsName().Substring("Coop".Length), out int coopUpgradeLevel))
+            if (this.IsCoop(building) && int.TryParse(building.GetIndoorsName().Substring("Coop".Length), out int coopUpgradeLevel))
                 return coopUpgradeLevel - 1; // Coop2 is first upgrade
 
             return null;
@@ -300,8 +314,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <param name="upgradeLevel">The current upgrade level, if applicable.</param>
         private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetUpgradeLevelSummary(Building building, int? upgradeLevel)
         {
+            // TODO: animal buildings were de-hardcoded in Stardew Valley 1.6, so we should generate this info from Data/Buildings instead.
+
             // barn
-            if (building is Barn)
+            if (this.IsBarn(building))
             {
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_0(), value: true);
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_1(), value: upgradeLevel >= 1);
@@ -317,7 +333,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             }
 
             // coop
-            else if (building is Coop)
+            else if (this.IsCoop(building))
             {
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_0(), value: true);
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_1(), value: upgradeLevel >= 1);

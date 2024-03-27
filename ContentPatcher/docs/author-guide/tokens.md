@@ -1256,7 +1256,7 @@ For example, you can use this to provide the textures for a custom farm type:
             "Action": "EditData",
             "Target": "Data/AdditionalFarms",
             "Entries": {
-                "Example.ModId/FarmId": {
+                "{{ModId}}_FarmId": {
                     "IconTexture": "{{InternalAssetKey: assets/icon.png}}",
                     …
                 }
@@ -1268,8 +1268,9 @@ For example, you can use this to provide the textures for a custom farm type:
 
 Note that other content packs can't target an internal asset key (which is why it's internal). If
 you need to let other content packs edit it, you can use [`Action: Load`](action-load.md) to create
-a new asset for it, then use that asset name instead. When doing this, prefixing `Mods/` and your
-mod ID to the asset name is highly recommended to avoid conflicts. For example:
+a new asset for it, then use that asset name instead. When doing this, using the [unique string
+ID](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Unique_string_IDs)
+convention is strongly recommended to avoid conflicts. For example:
 ```js
 {
     "Format": "2.0.0",
@@ -1278,15 +1279,15 @@ mod ID to the asset name is highly recommended to avoid conflicts. For example:
             "Action": "EditData",
             "Target": "Data/AdditionalFarms",
             "Entries": {
-                "Example.ModId/FarmId": {
-                    "IconTexture": "Mods/Your.ModId/FarmIcon",
+                "{{ModId}}_FarmId": {
+                    "IconTexture": "Mods/{{ModId}}/FarmIcon",
                     …
                 }
             }
         },
         {
             "Action": "Load",
-            "Target": "Mods/Your.ModId/FarmIcon",
+            "Target": "Mods/{{ModId}}/FarmIcon",
             "FromFile": "assets/icon.png"
         }
     ]

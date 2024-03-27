@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Lookup Anything",
     "Author": "Pathoschild",
-    "Version": "1.41.1",
+    "Version": "1.41.2",
     "MinimumApiVersion": "4.0.0",
     "Description": "View metadata about anything by pressing a button.",
     "UniqueID": "Pathoschild.LookupAnything",

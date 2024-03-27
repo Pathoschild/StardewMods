@@ -222,7 +222,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="npc">The NPC to check.</param>
         public bool IsSocialVillager(NPC npc)
         {
-            if (!npc.isVillager())
+            if (!npc.IsVillager)
                 return false;
 
             if (this.Metadata.Constants.ForceSocialVillagers.TryGetValue(npc.Name, out bool social))
@@ -628,7 +628,8 @@ namespace Pathoschild.Stardew.LookupAnything
             return
                 a != null
                 && b != null
-                && a.QualifiedItemId == b.QualifiedItemId;
+                && a.QualifiedItemId == b.QualifiedItemId
+                && (a as Chest)?.fridge.Value == (b as Chest)?.fridge.Value;
         }
 
         /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
@@ -784,7 +785,7 @@ namespace Pathoschild.Stardew.LookupAnything
                                 },
                                 item: _ => output.getOne(),
                                 isKnown: () => Game1.player.HasTailoredThisItem(output),
-                                outputQualifiedItemId: $"{ItemRegistry.type_object}{recipe.CraftedItemId}",
+                                outputQualifiedItemId: ItemRegistry.QualifyItemId(recipe.CraftedItemId),
                                 machineId: null,
                                 isForMachine: _ => false
                             );

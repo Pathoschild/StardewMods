@@ -23,6 +23,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 
             return
                 Game1.player.UsingTool
+                && !Game1.player.canStrafeForToolUse()
                 && tool != null
                 && (
                     (tool as MeleeWeapon)?.isScythe() == true

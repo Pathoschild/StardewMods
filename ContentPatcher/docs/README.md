@@ -41,7 +41,7 @@ patch type | effect
 ---------- | ------
 visual     | Only visible to players that have it installed.
 maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
-data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
+data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/Objects` and you create a new object, other player will see that object's custom values even if their `Data/Objects` doesn't have those changes.
 
 ## For mod authors
 * To create content packs, see the [author guide](author-guide.md) and its [tokens subpage](author-guide/tokens.md).
