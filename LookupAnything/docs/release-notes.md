@@ -7,6 +7,7 @@
 * Fixed support for recipes with randomized output items.
 * Fixed error using search menu if other mods added items with no names.
 * Fixed lookups for upgraded barns/coops not showing correct upgrade summary.
+* Fixed chest lookups counting fridges as owned chests.
 
 ## 1.41.1
 Released 21 March 2024 for SMAPI 4.0.0 or later.

@@ -628,7 +628,8 @@ namespace Pathoschild.Stardew.LookupAnything
             return
                 a != null
                 && b != null
-                && a.QualifiedItemId == b.QualifiedItemId;
+                && a.QualifiedItemId == b.QualifiedItemId
+                && (a as Chest)?.fridge.Value == (b as Chest)?.fridge.Value;
         }
 
         /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
