@@ -242,7 +242,8 @@ This field does _not_ support tokens, and capitalization doesn't matter.
 
 ### Edit a dictionary
 The simplest edit for a [dictionary](#data-assets) is to create or overwrite an entry. For
-example, this adds an item to `Data/ObjectInformation` (with the key `900`):
+example, this [adds a new item](https://stardewvalleywiki.com/Modding:Items) with the ID
+`{{ModId}}_Pufferchick` to `Data/Objects`:
 
 ```js
 {
@@ -250,9 +251,16 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
     "Changes": [
         {
             "Action": "EditData",
-            "Target": "Data/ObjectInformation",
+            "Target": "Data/Objects",
             "Entries": {
-                "Example.ModId_Pufferchick": "Pufferchick/1200/100/Seeds -74/Pufferchick/An example object.////0/Mods\\Example.ModId\\Objects"
+                "{{ModId}}_Pufferchick": {
+                    "Name": "{{ModId}}_Pufferchick",
+                    "DisplayName": "Pufferchick",
+                    "Description": "An example object.",
+                    "Type": "Seeds",
+                    "Category": -74,
+                    "Price": 1200,
+                    "Texture": "Mods/{{ModId}}/Objects"
             }
         },
     ]
@@ -261,8 +269,9 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
 
 You can also edit a field within the entry. When the entry's value is a string, the value is
 assumed to be a slash-delimited list of fields (each assigned a number starting at zero); otherwise
-fields are entries directly within the given entry. For example, this edits the description field
-for an item:
+fields are entries directly within the given entry.
+
+For example, this edits the description field for an item:
 
 ```js
 {
@@ -270,10 +279,10 @@ for an item:
     "Changes": [
         {
             "Action": "EditData",
-            "Target": "Data/ObjectInformation",
+            "Target": "Data/Objects",
             "Fields": {
-                "128": { // entry 128 (pufferfish)
-                    5: "Weirdly similar to a pufferchick." // field 5 (description)
+                "MossSoup": { // entry with ID 'MossSoup'
+                    "Description": "Maybe a pufferchick would like this."
                 }
             }
         },
@@ -303,19 +312,8 @@ When the value has nested entries, you can use [`TargetField`](#target-field) to
 one.
 
 ### Edit a list
-You can edit a [list](#data-assets) the same way too, with a few caveats.
-
-Although there's no unique key, you can still use the `Entries` field to target a specific entry as
-if it did. Content Patcher will find the entry based on a unique value in the data model:
-
-asset | field used as the key
------ | ---------------------
-_default_ | `Id` or `ID` if it exists.
-`Data/ConcessionTastes` | `Name`
-`Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
-`Data/MoviesReactions` | `NPCName`
-`Data/RandomBundles` | `AreaName`
-`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like <code>item_cloth&#124;category_fish,fish_semi_rare</code>). The key is space-sensitive.
+You can edit a [list](#data-assets) the same way too. Each entry in a list has an `Id` field, which
+is the entry key you'd use to change it.
 
 The order is often important for list assets (e.g. the game will use the first entry in
 `Data\MoviesReactions` that matches the NPC it's checking). You can change the order using the
@@ -328,9 +326,9 @@ The order is often important for list assets (e.g. the game will use the first e
             "Action": "EditData",
             "Target": "Data/MoviesReactions",
             "MoveEntries": [
-                { "ID": "Abigail", "BeforeID": "Leah" }, // move entry so it's right before Leah
-                { "ID": "Abigail", "AfterID": "Leah" }, // move entry so it's right after Leah
-                { "ID": "Abigail", "ToPosition": "Top" }, // move entry to the top of the list
+                { "ID": "Abigail", "BeforeID": "Leah" },     // move entry so it's right before Leah
+                { "ID": "Abigail", "AfterID": "Leah" },      // move entry so it's right after Leah
+                { "ID": "Abigail", "ToPosition": "Top" },    // move entry to the top of the list
                 { "ID": "Abigail", "ToPosition": "Bottom" }, // move entry to the bottom of the list
             ]
         },

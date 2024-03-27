@@ -189,15 +189,15 @@ See the [`Action: Load` documentation](author-guide/action-load.md) for more inf
 <td>
 
 `EditData` changes the data read from a data asset. This supports simple lookup assets like
-`Data/ObjectInformation`, or full data model assets like `Data/WildTrees`. Any number of content
-packs can edit the same asset.
+`Data/Achievements`, or full data model assets like `Data/Objects`. Any number of content packs
+can edit the same asset.
 
 This lets you...
 * add, edit, or delete entries;
 * reorder entries in a list;
 * or edit individual fields within an entry.
 
-For example, this doubles the price of coffee (see [object fields](https://stardewvalleywiki.com/Modding:Object_data)):
+For example, this doubles the price of moss soup (see [object fields](https://stardewvalleywiki.com/Modding:Object_data)):
 
 ```js
 {
@@ -205,10 +205,10 @@ For example, this doubles the price of coffee (see [object fields](https://stard
     "Changes": [
         {
             "Action": "EditData",
-            "Target": "Data/ObjectInformation",
+            "Target": "Data/Objects",
             "Fields": {
-                "395": {   // item #395 (coffee)
-                    1: 300 // set field 1 (price) to 300g
+                "MossSoup": {
+                    "Price": 80
                 }
             }
         }
