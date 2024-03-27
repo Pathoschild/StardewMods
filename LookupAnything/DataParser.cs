@@ -371,7 +371,12 @@ namespace Pathoschild.Stardew.LookupAnything
                 try
                 {
                     var recipe = new CraftingRecipe(entry.Key, entry.IsCookingRecipe);
-                    recipes.Add(new RecipeModel(recipe));
+
+                    foreach (string itemId in recipe.itemToProduce)
+                    {
+                        string qualifiedItemId = RecipeModel.QualifyRecipeOutputId(recipe, itemId) ?? itemId;
+                        recipes.Add(new RecipeModel(recipe, outputQualifiedItemId: qualifiedItemId));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -396,7 +401,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     item: ingredient => this.CreateRecipeItem(ingredient, outputId, output),
                     isKnown: () => true,
                     exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
-                    outputQualifiedItemId: outputId,
+                    outputQualifiedItemId: ItemRegistry.QualifyItemId(outputId) ?? outputId,
                     minOutput: output.MinOutput,
                     maxOutput: output.MaxOutput,
                     outputChance: output.OutputChance,
@@ -418,7 +423,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                     item: ingredient => this.CreateRecipeItem(ingredient, entry.Output, null),
                     isKnown: () => true,
-                    outputQualifiedItemId: entry.Output,
+                    outputQualifiedItemId: ItemRegistry.QualifyItemId(entry.Output) ?? entry.Output,
                     minOutput: entry.OutputCount ?? 1,
                     exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
                     machineId: null,

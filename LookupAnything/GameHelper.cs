@@ -784,7 +784,7 @@ namespace Pathoschild.Stardew.LookupAnything
                                 },
                                 item: _ => output.getOne(),
                                 isKnown: () => Game1.player.HasTailoredThisItem(output),
-                                outputQualifiedItemId: $"{ItemRegistry.type_object}{recipe.CraftedItemId}",
+                                outputQualifiedItemId: ItemRegistry.QualifyItemId(recipe.CraftedItemId),
                                 machineId: null,
                                 isForMachine: _ => false
                             );

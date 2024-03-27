@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
-* Fixed crop fields no longer shown for some full-grown crops.
+* Fixed crop lookups no longer showing growth info when full-grown.
+* Fixed recipe data no longer shown in some cases.
+* Fixed support for recipes with randomized output items.
 * Fixed error using search menu if other mods added items with no names.
 * Fixed lookups for upgraded barns/coops not showing correct upgrade summary.
 
