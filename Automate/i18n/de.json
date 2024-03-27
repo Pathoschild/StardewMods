@@ -8,8 +8,8 @@
     "config.enabled.desc": "Ob automatisierte Funktionen verwendet werden sollen. Wenn deaktiviert werden Maschinen nicht automatisiert und das Overlay erscheint nicht.",
     "config.automation-interval.name": "Automatisierungs-Intervall",
     "config.automation-interval.desc": "Die Anzahl der Ticks zwischen den einzelnen Automatisierungsprozessen (60: 1x pro Sekunde, 120: alle zwei Sekunden usw.).",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
+    "config.min-minutes-for-fairy-dust.name": "Min. Minuten für Feenstaub",
+    "config.min-minutes-for-fairy-dust.desc": "Die minimale Maschinenlaufzeit in Minuten, bei der Feenstaub verwendet wird. Zum Beispiel bedeutet ein Wert von 30 Minuten, dass kein Feenstaub verwendet wird, wenn die Maschine ohne Feenstaub nur 20 Minuten benötigen würde.",
     "config.toggle-overlay-key.name": "Taste zum Umschalten des Overlays",
     "config.toggle-overlay-key.desc": "Die Tasten, mit denen das Automatisierungs-Overlay umgeschaltet wird.",
     "config.warn-for-missing-bridge-mod.name": "Warnung für fehlende Brücken-Mod",

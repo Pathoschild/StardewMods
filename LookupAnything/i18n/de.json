@@ -182,7 +182,7 @@
     "building.output-processing": "Ausgabe in Arbeit",
     "building.output-ready": "Ausgabe fertig",
     "building.slimes.summary": "{{count}} von bis zu {{max}} Schleimen",
-    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
+    "building.stored-hay.summary": "{{hayCount}} von bis zu {{maxHayInLocation}} Heu an diesem Ort (maximale Kapazität in diesem Gebäude: {{maxHayInBuilding}})",
     "building.upgrades.barn.0": "bis zu 4 Tiere, fügt Kühe hinzu",
     "building.upgrades.barn.1": "bis zu 8 Tiere, fügt Schwangerschaft und Ziegen hinzu",
     "building.upgrades.barn.2": "bis zu 12 Tiere, fügt automatische Fütterung, Schweine und Schafe hinzu",
@@ -282,7 +282,7 @@
     ** Item > generic lookups
     *********/
     // labels
-    "item.custom-item": "Custom item", // TODO
+    "item.custom-item": "Benutzerdefinierter Gegenstand",
     "item.contents": "Inhalt",
     "item.loves-this": "Liebt das",
     "item.likes-this": "Mag das",
@@ -301,7 +301,7 @@
     "item.produces-dye": "Erzeugt Farbe",
 
     // values
-    "item.custom-item.summary": "added by {{modName}}", // TODO
+    "item.custom-item.summary": "von {{modName}} hinzugefügt",
     "item.contents.placed": "{{name}} platziert",
     "item.contents.ready": "{{name}} bereit",
     "item.contents.partial": "{{name}} in {{time}}",
@@ -621,9 +621,9 @@
     "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen, wenn es nicht gedüngt wird.",
     "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
     "tree.next-growth.chance": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
-    "tree.seed.not-ready": "Not ready", // TODO
-    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
-    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
+    "tree.seed.not-ready": "Nicht bereit",
+    "tree.seed.probability-daily": "{{chance}}% Chance auf {{itemName}} jeden Tag.",
+    "tree.seed.probability-on-chop": "{{chance}}% Chance {{itemName}} fallenzulassen, wenn es gefällt wird.",
 
     // growth stages
     "tree.stages.seed": "Samen",
