@@ -10,7 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Fixed runtime migration for pre-1.6 `Data/ObjectInformation` patches which edit context tags (thanks to SinZ!). This fixes issues like mayonnaise machines not working anymore.
+* Fixed runtime migrations for...
+  * pre-1.6 `Data/Locations` patches when the new asset has invalid spawn conditions;
+  * pre-1.6 `Data/ObjectInformation` patches which edit context tags (thanks to SinZ!), which fixes issues like mayonnaise machines not working.
 
 ## 2.0.1
 Released 20 March 2024 for SMAPI 4.0.0 or later.

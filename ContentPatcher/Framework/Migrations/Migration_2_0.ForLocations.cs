@@ -939,7 +939,7 @@ namespace ContentPatcher.Framework.Migrations
 
                     // get index where list of seasons starts
                     string[] args = query.Query;
-                    string name = args[0];
+                    string name = ArgUtility.Get(args, 0);
                     int seasonIndex;
                     if (string.Equals(name, nameof(GameStateQuery.DefaultResolvers.LOCATION_SEASON)))
                         seasonIndex = 2;
