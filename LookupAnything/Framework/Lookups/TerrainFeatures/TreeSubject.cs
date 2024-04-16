@@ -4,10 +4,10 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
-using StardewValley.GameData.WildTrees;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
-            WildTreeData data = tree.GetData();
+            StardewValley.GameData.WildTrees.WildTreeData data = tree.GetData();
             GameLocation location = tree.Location;
             bool isFertilized = tree.fertilized.Value;
 
@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 string label = I18n.Tree_NextGrowth();
                 if (!data.GrowsInWinter && location.GetSeason() == Season.Winter && !location.SeedsIgnoreSeasonsHere() && !isFertilized)
                     yield return new GenericField(label, I18n.Tree_NextGrowth_Winter());
-                else if (stage == WildTreeGrowthStage.Tree - 1 && this.HasAdjacentTrees(this.Tile))
+                else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());
                 else
                     yield return new GenericField(label, I18n.Tree_NextGrowth_Chance(stage: I18n.For(stage + 1), chance: (isFertilized ? data.FertilizedGrowthChance : data.GrowthChance) * 100));
@@ -170,7 +170,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 let otherTree = location.terrainFeatures.ContainsKey(adjacentTile)
                     ? location.terrainFeatures[adjacentTile] as Tree
                     : null
-                select otherTree != null && otherTree.growthStage.Value >= (int)(WildTreeGrowthStage.Tree - 1)
+                select otherTree != null && otherTree.growthStage.Value >= (int)(WildTreeGrowthStage.SmallTree)
             ).Any(p => p);
         }
     }
