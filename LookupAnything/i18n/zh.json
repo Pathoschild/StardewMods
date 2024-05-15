@@ -27,7 +27,7 @@
     "generic.price": "{{price}}金",
     "generic.price-for-quality": "{{price}}金（{{quality}}）",
     "generic.price-for-stack": "{{count}}个，总共价值{{price}}金",
-    "generic.show-x-results": "show {{count}} results", // TODO
+    "generic.show-x-results": "显示{{count}}个结果",
 
     // types
     "type.building": "建筑",
