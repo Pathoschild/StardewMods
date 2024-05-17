@@ -136,6 +136,13 @@
 
     "location.unknown-fish-area": "{{locationName}} (рыболовный район {{id}})",
 
+    // context tags (e.g. for machine recipes)
+    // TODO
+    "context-tag.negate": "not {{tag}}",
+    "context-tag.bone": "any bone",
+    "context-tag.egg": "any egg",
+    "context-tag.large-egg": "any large egg",
+
 
     /*********
     ** Animal lookups
@@ -316,9 +323,13 @@
     "item.needed-for.gourmet-chef": "Достижение 'Шеф-повар' (приготовьте рецепт: {{recipes}})",
     "item.needed-for.craft-master": "Достижение 'Мастер' (создайте предмет: {{recipes}})",
     "item.needed-for.quests": "current quests ({{quests}})", // TODO
+    "item.unknown-recipes": "{{count}} unknown recipes", // TODO
     "item.sells-to.shipping-box": "Отгрузочный ящик",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
+    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]", // TODO
+    "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "У вас есть {{count}} шт.",
     "item.number-crafted.summary": "Вы создали {{count}} шт.",
 

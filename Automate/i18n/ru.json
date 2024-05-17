@@ -8,8 +8,8 @@
     "config.enabled.desc": "Следует ли включать функции автоматизации. Если этот параметр отключен, никакие машины не будут автоматизированы и каналы соединения не будет работать.",
     "config.automation-interval.name": "Автоматизированный интервал",
     "config.automation-interval.desc": "Количество тиков между каждым процессом автоматизации (60 раз в секунду, 120 раз в две секунды и т.д.).",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
+    "config.min-minutes-for-fairy-dust.name": "Минимум минут для Волшебного порошка",
+    "config.min-minutes-for-fairy-dust.desc": "Минимальное время машинной обработки в минутах, для которого можно применить Волшебный порошок. Например, установив значение 30 минут, Волшебный порошок не будет применён, если без него машина завершит работу через 20 минут.",
     "config.toggle-overlay-key.name": "Клавиша переключения каналов соединения",
     "config.toggle-overlay-key.desc": "Клавиша, которая показывает каналы соединения для автоматизации.",
     "config.warn-for-missing-bridge-mod.name": "Предупреждение об отсутствии bridge mod",
@@ -44,14 +44,12 @@
     "config.machine-settings-priority.desc": "Порядок приоритета, в котором должны обрабатываться машины {{machineName}} по сравнению с другими машинами. У машин по умолчанию приоритет равен 0, сначала обрабатываются машины с более высокими значениями.",
 
     // machine names
-    // TODO
-    "config.machines.bush": "Bush",
-    "config.machines.fruit-tree": "Tree (Fruit Tree)",
-    "config.machines.trash-can": "Trash Can",
-    "config.machines.wild-tree": "Tree (Wild Tree)",
+    "config.machines.bush": "Куст",
+    "config.machines.fruit-tree": "Дерево (Плодовое дерево)",
+    "config.machines.trash-can": "Мусорка",
+    "config.machines.wild-tree": "Дерево (Дикое Дерево)",
 
     // special settings for individual machines
-    // TODO
-    "config.machines.wild-tree.collect-moss.name": "Collect Moss",
-    "config.machines.wild-tree.collect-moss.desc": "Whether to collect moss on trees. For example, keeping moss on trees will boost the quality of mushrooms from nearby mushroom logs."
+    "config.machines.wild-tree.collect-moss.name": "Собирать Мох",
+    "config.machines.wild-tree.collect-moss.desc": "Собирать ли Мох на деревьях. Например, если оставить на деревьях мох, качество грибов из ближайших Грибных пней повысится."
 }

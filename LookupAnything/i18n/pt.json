@@ -136,6 +136,13 @@
 
     "location.unknown-fish-area": "{{locationName}} (área de pesca {{id}})",
 
+    // context tags (e.g. for machine recipes)
+    // TODO
+    "context-tag.negate": "not {{tag}}",
+    "context-tag.bone": "any bone",
+    "context-tag.egg": "any egg",
+    "context-tag.large-egg": "any large egg",
+
 
     /*********
     ** Animal lookups
@@ -316,9 +323,13 @@
     "item.needed-for.gourmet-chef": "conquista de Chefe Gourmet (cozinhe {{recipes}})",
     "item.needed-for.craft-master": "conquista de Mestre do Artesanato (crie {{recipes}})",
     "item.needed-for.quests": "Missões atuais ({{quests}})",
+    "item.unknown-recipes": "{{count}} unknown recipes", // TODO
     "item.sells-to.shipping-box": "Caixa de envio",
     "item.recipes-for-ingredient.entry": "{{name}} (precisa de {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
+    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
+    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]", // TODO
+    "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "Possui {{count}} desses",
     "item.number-crafted.summary": "Criou {{count}} desses",
 

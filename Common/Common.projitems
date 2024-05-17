@@ -39,6 +39,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\ExtraMachineConfigIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\IExtraMachineConfigApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\LineSprinklers\ILineSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\LineSprinklers\LineSprinklersIntegration.cs" />

@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Simplified tractor names to improve display in mods like NPC Map Locations.
-* Improved translations. Thanks to burunduk (updated Ukrainian), mc-kaishixiaxue (updated Chinese), and mitekano23 (updated Japanese)!
+* Improved translations. Thanks to burunduk (updated Ukrainian), Lexith98 (updated Turkish), mc-kaishixiaxue (updated Chinese), and mitekano23 (updated Japanese)!
 
 **Note for mod authors:**
 * Tractor Mod now sets tractor names to `Tractor` instead of `tractor/<horse id>`, for better compatibility with mods

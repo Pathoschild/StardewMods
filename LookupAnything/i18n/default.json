@@ -136,6 +136,12 @@
 
     "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
 
+    // context tags (e.g. for machine recipes)
+    "context-tag.negate": "not {{tag}}",
+    "context-tag.bone": "any bone",
+    "context-tag.egg": "any egg",
+    "context-tag.large-egg": "any large egg",
+
 
     /*********
     ** Animal lookups
@@ -316,9 +322,13 @@
     "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",
     "item.needed-for.craft-master": "craft master achievement (make {{recipes}})",
     "item.needed-for.quests": "current quests ({{quests}})",
+    "item.unknown-recipes": "{{count}} unknown recipes",
     "item.sells-to.shipping-box": "shipping box",
     "item.recipes-for-ingredient.entry": "{{name}} (needs {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]",
+    "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.",
     "item.number-owned.summary": "you own {{count}} of these",
     "item.number-crafted.summary": "you made {{count}} of these",
 

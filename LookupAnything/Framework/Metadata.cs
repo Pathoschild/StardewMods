@@ -11,7 +11,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
     /// <param name="Items">Metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).</param>
     /// <param name="Characters">Metadata for NPCs in the game.</param>
     /// <param name="BuildingRecipes">The building recipes. Derived from <see cref="StardewValley.Buildings.Mill.dayUpdate"/>.</param>
-    /// <param name="MachineRecipes">The machine recipes. Derived from <see cref="Object.performObjectDropInAction"/>.</param>
     /// <param name="Shops">The shops that buy items from the player. Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</param>
     /// <param name="CustomFishSpawnRules">Added fish spawn rules.</param>
     /// <param name="IgnoreFishingLocations">The fishing location names to hide in the UI (e.g. because they're inaccessible in-game).</param>
@@ -21,7 +20,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ItemData[] Items,
         CharacterData[] Characters,
         BuildingRecipeData[] BuildingRecipes,
-        MachineRecipesData[] MachineRecipes,
         ShopData[] Shops,
         Dictionary<string, FishSpawnData> CustomFishSpawnRules,
         HashSet<string> IgnoreFishingLocations,
@@ -34,7 +32,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get whether the metadata seems to be basically valid.</summary>
         public bool LooksValid()
         {
-            return new object?[] { this.Constants, this.Items, this.Characters, this.BuildingRecipes, this.MachineRecipes, this.Shops, this.CustomFishSpawnRules, this.IgnoreFishingLocations, this.PuzzleSolutions }
+            return new object?[] { this.Constants, this.Items, this.Characters, this.BuildingRecipes, this.Shops, this.CustomFishSpawnRules, this.IgnoreFishingLocations, this.PuzzleSolutions }
                 .All(p => p != null);
         }
 

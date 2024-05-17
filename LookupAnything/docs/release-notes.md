@@ -3,7 +3,12 @@
 # Release notes
 ## Upcoming release
 * Added config options for the new collapsible fields.
-* Re-enabled support for Producer Framework Mod machines (thanks to zombifier!).
+* Added support for machine recipes in `Data/Machines`, including custom recipes from other mods (thanks to collaboration with zombifier!).
+* Added support for machine changes from the Extra Machine Config mod (thanks to zombifier!).
+* Added quality star icons in recipe lists where relevant.
+* Added hint message when some machine rules are too dynamic to display.
+* Re-added support for Producer Framework Mod machines (thanks to zombifier!).
+* The 'progression mode' option now hides recipes you haven't learned yet (thanks to b3nk3lly!).
 * Fixed keg and preserve jar lookups showing incorrect recipe items like "Error Item Jelly" (thanks to b3nk3lly!).
 * Fixed roe lookups showing incorrect caviar recipe (thanks to b3nk3lly!).
 * Fixed roe lookups showing recipes like 'Aged Aged Roe Roe'.
