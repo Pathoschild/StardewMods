@@ -66,6 +66,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for the Stardew Valley Fair wheel spin minigame.</summary>
         public float WheelSpinSpeed { get; set; } = 16;
 
+        /// <summary>The speed multiplier for opening chest.</summary>
+        public float OpenChestSpeed { get; set; } = 4;
+
         /****
         ** UI animations
         ****/

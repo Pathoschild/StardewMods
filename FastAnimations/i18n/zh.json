@@ -71,6 +71,9 @@
     "config.wheel-spin.name": "转轮盘",
     "config.wheel-spin.tooltip": "轮盘旋转的速度。默认{{defaultValue}}x.",
 
+    "config.chest-open.name": "宝箱打开",
+    "config.chest-open.tooltip": "宝箱打开的速度。默认{{defaultValue}}x.",
+
     /****
     ** 'UI Animation Speeds' section
     ****/

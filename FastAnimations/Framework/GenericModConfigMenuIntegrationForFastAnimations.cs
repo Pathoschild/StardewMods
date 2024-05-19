@@ -192,6 +192,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     min: minSpeed,
                     max: maxSpeed
                 )
+                .AddNumberField(
+                    name: I18n.Config_ChestOpen_Name,
+                    tooltip: () => I18n.Config_ChestOpen_Tooltip(defaultValue: defaultConfig.OpenChestSpeed),
+                    get: config => config.OpenChestSpeed,
+                    set: (config, value) => config.OpenChestSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
 
                 .AddSectionTitle(I18n.Config_UiSpeeds)
                 .AddNumberField(
