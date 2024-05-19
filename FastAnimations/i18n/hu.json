@@ -45,6 +45,9 @@
     "config.weapon.name": "Fegyverek lengetése",
     "config.weapon.tooltip": "Milyen gyorsan lengeted fegyvereid. Alapból {{defaultValue}}x, ajánlott {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

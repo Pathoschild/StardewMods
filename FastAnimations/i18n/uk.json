@@ -45,6 +45,9 @@
     "config.weapon.name": "Розмахування зброєю",
     "config.weapon.tooltip": "Як швидко ви розмахуєте зброєю. Типово: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

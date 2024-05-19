@@ -45,6 +45,9 @@
     "config.weapon.name": "Waffen schwingen",
     "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

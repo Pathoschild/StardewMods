@@ -45,6 +45,9 @@
     "config.weapon.name": "Silah sallama",
     "config.weapon.tooltip": "Silahlarınızı ne kadar hızlı salladığınız. Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

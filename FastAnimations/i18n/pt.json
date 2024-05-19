@@ -45,6 +45,9 @@
     "config.weapon.name": "Usar Armas",
     "config.weapon.tooltip": "Quão rápido você usa armas. Padrão {{defaultValue}}x, sugerido {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

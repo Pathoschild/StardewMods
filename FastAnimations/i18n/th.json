@@ -45,6 +45,9 @@
     "config.weapon.name": "อาวุธที่แกว่ง",
     "config.weapon.tooltip": "ต้องการใช้อาวุธที่แกว่งให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{defaultValue}}x",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

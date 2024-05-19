@@ -45,6 +45,9 @@
     "config.weapon.name": "Oscillazione arma",
     "config.weapon.tooltip": "Velocità di brandeggio delle armi. Predefinito {{defaultValue}}x, valore suggerito {{suggestedValue}}x.",
 
+    "config.holdup-item.name": "Hold up item", // TODO
+    "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.", // TODO
+
     /****
     ** 'World Animation Speeds' section
     ****/

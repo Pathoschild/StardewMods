@@ -42,6 +42,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for using weapons.</summary>
         public float WeaponSwingSpeed { get; set; } = 1;
 
+        /// <summary>The speed multiplier for holding up item.</summary>
+        public float ItemHoldUpSpeed { get; set; } = 20;
+
         /****
         ** World animations
         ****/

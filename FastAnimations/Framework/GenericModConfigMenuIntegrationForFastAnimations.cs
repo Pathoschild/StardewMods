@@ -134,6 +134,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     min: minSpeed,
                     max: maxSpeed
                 )
+                .AddNumberField(
+                    name : I18n.Config_HoldupItem_Name,
+                    tooltip: () => I18n.Config_HoldupItem_Tooltip(defaultValue: defaultConfig.ItemHoldUpSpeed),
+                    get: config => config.ItemHoldUpSpeed,
+                    set: (config, value) => config.ItemHoldUpSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
 
                 .AddSectionTitle(I18n.Config_WorldSpeeds)
                 .AddNumberField(

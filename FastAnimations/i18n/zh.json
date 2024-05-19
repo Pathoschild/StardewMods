@@ -45,6 +45,9 @@
     "config.weapon.name": "武器",
     "config.weapon.tooltip": "使用武器的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 
+    "config.holdup-item.name": "举起物品",
+    "config.holdup-item.tooltip": "举起物品的速度。默认{{defaultValue}}x.",
+
     /****
     ** 'World Animation Speeds' section
     ****/
