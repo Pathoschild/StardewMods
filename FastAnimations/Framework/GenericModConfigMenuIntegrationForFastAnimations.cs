@@ -142,6 +142,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     min: minSpeed,
                     max: maxSpeed
                 )
+                .AddNumberField(
+                    name : I18n.Config_ReadBook_Name,
+                    tooltip: () => I18n.Config_ReadBook_Tooltip(defaultValue: defaultConfig.ReadBookSpeed),
+                    get: config => config.ReadBookSpeed,
+                    set: (config, value) => config.ReadBookSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
 
                 .AddSectionTitle(I18n.Config_WorldSpeeds)
                 .AddNumberField(

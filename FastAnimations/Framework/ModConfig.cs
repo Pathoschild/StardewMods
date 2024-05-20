@@ -45,6 +45,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for holding up item.</summary>
         public float ItemHoldUpSpeed { get; set; } = 20;
 
+        /// <summary>The speed multiplier for reading book.</summary>
+        public float ReadBookSpeed { get; set; } = 4;
+
         /****
         ** World animations
         ****/

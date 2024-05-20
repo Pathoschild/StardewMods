@@ -48,6 +48,9 @@
     "config.holdup-item.name": "举起物品",
     "config.holdup-item.tooltip": "举起物品的速度。默认{{defaultValue}}x.",
 
+    "config.read-book.name": "读书",
+    "config.read-book.tooltip": "读书的速度。默认{{defaultValue}}x.",
+
     /****
     ** 'World Animation Speeds' section
     ****/

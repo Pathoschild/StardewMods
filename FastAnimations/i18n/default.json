@@ -48,6 +48,9 @@
     "config.holdup-item.name": "Hold up item",
     "config.holdup-item.tooltip": "How fast you hold up item. Default {{defaultValue}}x.",
 
+    "config.read-book.name": "Read book",
+    "config.read-book.tooltip": "How fast you read book. Default {{defaultValue}}x.",
+
     /****
     ** 'World Animation Speeds' section
     ****/
