@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "주요 설정",
+    "config.audio": "Audio", // TODO
     "config.controls": "단축키 설정",
     "config.axe": "도끼 기능",
     "config.hoe": "호미 기능",
@@ -38,13 +39,6 @@
     "config.magnetic-radius.name": "자력 범위",
     "config.magnetic-radius.tooltip": "아이템을 수집 할 수 있는 반경 설정. (기본 {{defaultValue}})",
 
-    // TODO
-    "config.tractor-sounds.name": "Sound Effects",
-    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "no sounds",
-    "config.tractor-sounds.value.Horse": "horse sounds",
-    "config.tractor-sounds.value.Tractor": "tractor sounds",
-
     "config.build-price.name": "트렉터 건설 가격",
     "config.build-price.tooltip": "트랙터 차고를 건설하기 위한 가격. (기본 {{defaultValue}}골드)",
 
@@ -56,6 +50,20 @@
 
     "config.highlight-radius.name": "하이라이트 반경 표시",
     "config.highlight-radius.tooltip": "거리 옵션을 시각화하는 데 도움이 되도록 트랙터를 탈 때 트랙터 반경을 표시 할 수 있습니다.",
+
+
+    /****
+    ** Audio
+    ****/
+    // TODO
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -101,6 +109,14 @@
     "config.harvest-fruit-trees.name": "과일 수확",
     "config.harvest-fruit-trees.tooltip": "낫으로 과일을 수확 할 수 있습니다.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -123,8 +139,11 @@
     "config.harvest-forage.name": "건초 수확",
     "config.harvest-forage.tooltip": "낫으로 건초를 수확 할 수 있습니다.",
 
-    "config.harvest-grass.name": "잔디 제거",
-    "config.harvest-grass.tooltip": "낫으로 잔디를 제거 할 수 있습니다.",
+    "config.harvest-blue-grass.name": "파란 잔디 제거",
+    "config.harvest-blue-grass.tooltip": "낫으로 파란 잔디를 제거할 수 있습니다.",
+
+    "config.harvest-non-blue-grass.name": "파란색이 아닌 잔디 제거",
+    "config.harvest-non-blue-grass.tooltip": "낫으로 파란색이 아닌 잔디를 제거할 수 있습니다.",
 
 
     /****
@@ -145,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "유물 발굴",
     "config.dig-artifact-spots.tooltip": "유물 발견시 호미로 팔 수 있습니다.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "경작 된 땅 제거",
     "config.clear-tilled-dirt.tooltip": "곡괭이로 경작된 땅을 제거 할 수 있습니다.",

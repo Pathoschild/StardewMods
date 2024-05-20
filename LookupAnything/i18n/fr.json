@@ -27,7 +27,7 @@
     "generic.price": "{{price}}po",
     "generic.price-for-quality": "{{price}}po ({{quality}})",
     "generic.price-for-stack": "{{price}}po le lot de {{count}}",
-    "generic.show-x-results": "show {{count}} results", // TODO
+    "generic.show-x-results": "montrer {{count}} résultats",
 
     // types
     "type.building": "Bâtiment",
@@ -54,6 +54,7 @@
     "friendship-status.divorced": "Divorcé",
     "friendship-status.kicked-out": "Rejeté",
 
+
     /*********
     ** Data translations
     *********/
@@ -71,7 +72,7 @@
     "shop.clint": "Clint",
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
-    "shop.robin": "Robin",
+    "shop.robin": "Robine",
     "shop.volcano": "boutique dans le volcan",
     "shop.willy": "Willy",
 
@@ -81,8 +82,8 @@
     "recipe-type.tailoring": "Couture",
 
     // NPC descriptions
-    "data.npc.pet.description": "Vôtre loyal animal.",
-    "data.npc.horse.description": "Vôtre loyal destrier.",
+    "data.npc.pet.description": "Votre loyal animal.",
+    "data.npc.horse.description": "Votre loyal destrier.",
     "data.npc.junimo.description": "Un esprit de la forêt provenant du monde des esprits. On en sait très peu sur eux.",
     "data.npc.trash-bear.description": "Un esprit amical qui nettoie les déchets.",
 
@@ -94,9 +95,9 @@
 
     // mine containers
     "data.item.barrel.name": "Tonneau",
-    "data.item.barrel.description": "A casser pour obtenir des biens divers.",
+    "data.item.barrel.description": "À casser pour obtenir des biens divers.",
     "data.item.box.name": "Boîte",
-    "data.item.box.description": "A casser pour obtenir des biens divers.",
+    "data.item.box.description": "À casser pour obtenir des biens divers.",
 
     // location names
     "location.backwoods": "forêt inexploitée",
@@ -185,14 +186,14 @@
     "building.animals.summary": "{{count}} sur {{max}} animaux",
     "building.construction.summary": "prêt le {{date}}",
     "building.feed-trough.automated": "automatisé",
-    "building.feed-trough.summary": "{{filled}} sz {{max}} emplacements de nourriture remplis",
+    "building.feed-trough.summary": "{{filled}} de {{max}} emplacements de nourriture remplis",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
     "building.junimo-harvesting-enabled": "Récolte activée",
     "building.owner.none": "pas de propriétaire",
     "building.output-processing": "Production en cours",
     "building.output-ready": "Production prête",
     "building.slimes.summary": "{{count}} sur {{max}} slimes",
-    "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} hay in this location (max capacity in this building: {{maxHayInBuilding}})", // TODO
+    "building.stored-hay.summary": "{{hayCount}} de {{maxHayInLocation}} paille dans ce lieu (capacité max dans ce bâtiment: {{maxHayInBuilding}})",
     "building.upgrades.barn.0": "jusqu'à 4 animaux, permet les vaches",
     "building.upgrades.barn.1": "jusqu'à 8 animaux, permet les grossesses et les chèvres",
     "building.upgrades.barn.2": "jusqu'à 12 animaux, ajoute le nourrissage automatique, permet les cochons et les moutons",
@@ -230,7 +231,7 @@
     // labels
     "bush.name.berry": "Arbuste fruitier",
     "bush.name.plain": "Arbuste ordinaire",
-    "bush.name.tea": "théier",
+    "bush.name.tea": "Théier",
     "bush.description.berry": "Un arbuste qui produit des baies de saumons et des mûres.",
     "bush.description.plain": "Un arbuste ordinaire qui ne fait rien pousser.",
     "bush.description.Tea": "Un arbuste qui fait pousser des feuilles de thé.",
@@ -311,10 +312,10 @@
     "item.produces-dye": "Produit du colorant",
 
     // values
-    "item.custom-item.summary": "added by {{modName}}", // TODO
+    "item.custom-item.summary": "ajouté par {{modName}}",
     "item.contents.placed": "{{name}} placé",
     "item.contents.ready": "{{name}} prêt",
-    "item.contents.partial": "{{name}} in {{time}}",
+    "item.contents.partial": "{{name}} en {{time}}",
     "item.undiscovered-gift-taste": "{{count}} goût(s) de villageois non découvert(s)",
     "item.undiscovered-gift-taste-appended": ", et {{count}} goût(s) de villageois non découvert(s)",
     "item.needed-for.community-center": "centre communautaire ({{bundles}})",
@@ -353,8 +354,8 @@
     ** Item > crab pot lookups
     *********/
     // labels
-    "item.crabpot-bait": "Appat",
-    "item.crabpot-bait-needed": "A besoin d'appat !",
+    "item.crabpot-bait": "Appât",
+    "item.crabpot-bait-needed": "A besoin d'appât !",
     "item.crabpot-bait-not-needed": "N'en a pas besoin grâce à la profession Maître des leurres.",
 
 
@@ -475,7 +476,7 @@
     // values
     "npc.can-romance.married": "Vous êtes mariés ! <", // < turns into a heart
     "npc.can-romance.housemate": "Vous habitez ensemble !",
-    "npc.friendship.not-met": "Vous ne vous êtes pas encore rencontré.",
+    "npc.friendship.not-met": "Vous ne vous êtes pas encore rencontrés.",
     "npc.friendship.need-bouquet": "besoin d'un bouquet",
     "npc.friendship.need-points": "manque {{count}} pts",
     "npc.undiscovered-gift-taste": "{{count}} goût(s) non révelé(s)",
@@ -522,7 +523,7 @@
     "player.farm-map": "Carte de la ferme",
     "player.favorite-thing": "Chose préférée",
     "player.gender": "Sexe",
-    "player.housemate": "Cohabitant",
+    "player.housemate": "Colocataire",
     "player.spouse": "Conjoint(e)",
     "player.watched-movie-this-week": "A regardé un film cette semaine",
     "player.combat-skill": "Combat",
@@ -537,7 +538,7 @@
     "player.farm-map.custom": "Personnalisée",
     "player.gender.male": "masculin",
     "player.gender.female": "féminin",
-    "player.luck.summary": "{{percent}}% pour plusieurs contrôles",
+    "player.luck.summary": "{{percent}}% pour la plupart des jets aléatoires",
     "player.skill.progress": "niv. {{level}} (reste {{expNeeded}} XP)",
     "player.skill.progress-last": "niveau {{level}}",
 
@@ -563,7 +564,7 @@
     // values
     "puzzle.island-crystal-cave.solution.not-activated": "Activez la statue pour lancer le puzzle.",
     "puzzle.island-crystal-cave.solution.waiting": "En attente du jeu pour générer la séquence ...",
-    "puzzle.island-crystal-cave.solution.activated": "Répétez le motif des cristaux activés:",
+    "puzzle.island-crystal-cave.solution.activated": "Répétez le motif des cristaux activés :",
 
 
     /*********
@@ -571,7 +572,7 @@
     *********/
     // labels
     "puzzle.island-mermaid.title": "Puzzle de la sirène des Îles",
-    "puzzle.island-mermaid.solution.intro": "Utilisez des blocs de flûte pour jouer la chanson de la sirène du marché nocturne. Valeurs de hauteur (vous pouvez rechercher un bloc de flûte pour voir sa hauteur):",
+    "puzzle.island-mermaid.solution.intro": "Utilisez des blocs de flûte pour jouer la chanson de la sirène du marché nocturne. Valeurs de hauteur (vous pouvez rechercher un bloc de flûte pour voir sa hauteur) :",
 
 
     /*********
@@ -677,7 +678,7 @@
     "config.show-unowned-gifts.name": "Afficher les cadeaux non possédés",
     "config.show-unowned-gifts.desc": "Possibilité d'afficher les goûts en matière de cadeaux pour des objets que le joueur ne possède pas dans le monde.",
 
-    "config.highlight-unrevealed-gift-tastes.name": "Mettre en évidence les goûts des cadeaux non révélés",
+    "config.highlight-unrevealed-gift-tastes.name": "Mettre en évidence les cadeaux non révélés",
     "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras.",
 
     // collapse fields
@@ -694,9 +695,9 @@
 
     // advanced options
     "config.title.advanced-options": "Options avancées",
-    "config.tile-lookups.name": "Recherche de tuiles",
-    "config.tile-lookups.desc": "Si l'on veut inclure les tuiles de la carte comme cibles de recherche.",
-    "config.data-mining-fields.name": "Afficher les champs d'exploration de données",
+    "config.tile-lookups.name": "Recherche de cases",
+    "config.tile-lookups.desc": "Si l'on veut inclure les cases de la carte comme cibles de recherche.",
+    "config.data-mining-fields.name": "Afficher les données data-minées",
     "config.data-mining-fields.desc": "Afficher ou non les données brutes utiles aux chercheurs de données (sous forme de champs séparés au bas des résultats de la recherche). Il s'agit d'une fonctionnalité avancée qui n'est pas destinée à la plupart des joueurs.",
     "config.target-redirection.name": "Redirection de la cible",
     "config.target-redirection.desc": "Dans certains cas, le jeu crée une entité temporaire pour en représenter une autre. Par exemple, Abigail dans les mines est en fait un PNJ temporaire avec le nom 'AbigailMine', donc la rechercher là-bas ne montrera pas les vraies informations d'Abigail. Si cette option est activée, Lookup Anything recherchera la vraie Abigail à la place.",
@@ -704,13 +705,13 @@
     "config.scroll-amount.desc": "Le nombre de pixels pour déplacer le contenu à chaque défilement vers le haut/bas.",
 
     // controls section
-    "config.title.controls": "Contrôles",
-    "config.hide-on-key-up.name": "Masquer sur la touche haut",
+    "config.title.controls": "Raccourcis",
+    "config.hide-on-key-up.name": "Maintenir la touche pour afficher",
     "config.hide-on-key-up.desc": "Indique si l'interface utilisateur doit être masquée lorsque vous relâchez la touche de consultation.",
-    "config.toggle-lookup.name": "Basculer l'affichage",
-    "config.toggle-lookup.desc": "Les touches qui permettent de basculer l'interface de recherche d'un élément situé sous le curseur.",
-    "config.toggle-search.name": "Basculer la recherche",
-    "config.toggle-search.desc": "Les touches qui permettent de basculer l'interface de recherche.",
+    "config.toggle-lookup.name": "Afficher la fenêtre",
+    "config.toggle-lookup.desc": "Les touches qui permettent d’afficher/cacher l'interface de recherche d'un élément situé sous le curseur.",
+    "config.toggle-search.name": "Afficher la recherche",
+    "config.toggle-search.desc": "Les touches qui permettent d’afficher/cacher l'interface de recherche.",
     "config.scroll-up.name": "Défilement vers le haut",
     "config.scroll-up.desc": "Les touches qui permettent de faire défiler vers le haut un long contenu de quelques lignes.",
     "config.scroll-down.name": "Défilement vers le bas",
@@ -719,6 +720,6 @@
     "config.page-up.desc": "Les touches qui permettent de faire défiler un long contenu d'une page entière vers le haut.",
     "config.page-down.name": "Bas de page",
     "config.page-down.desc": "Les touches qui permettent de faire défiler un long contenu d'une page entière vers le bas.",
-    "config.toggle-debug.name": "Basculer le débogage",
-    "config.toggle-debug.desc": "Les touches qui permettent de basculer l'affichage des informations de débogage."
+    "config.toggle-debug.name": "Afficher le débogage",
+    "config.toggle-debug.desc": "Les touches qui permettent d’afficher/cacher des informations de débogage."
 }

@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "常规",
+    "config.audio": "Audio", // TODO
     "config.controls": "键位",
     "config.axe": "斧头",
     "config.hoe": "锄头",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "吸附半径",
     "config.magnetic-radius.tooltip": "能够吸起掉落物的距离。默认{{defaultValue}}。",
 
-    "config.tractor-sounds.name": "音效",
-    "config.tractor-sounds.tooltip": "驾驶拖拉机时播放的音效。在重新加载存档之前，更改可能不会完全生效。默认{{defaultValue}}。",
-    "config.tractor-sounds.value.None": "无",
-    "config.tractor-sounds.value.Horse": "马蹄",
-    "config.tractor-sounds.value.Tractor": "拖拉机",
-
     "config.build-price.name": "建造价格",
     "config.build-price.tooltip": "拖拉机仓库的价格。默认{{defaultValue}}金。",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "高亮显示距离（调试）",
     "config.highlight-radius.tooltip": "是否突出显示能触及的范围，从而可视化“距离”选项。",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "音效",
+    "config.tractor-sounds.tooltip": "驾驶拖拉机时播放的音效。在重新加载存档之前，更改可能不会完全生效。默认{{defaultValue}}。",
+    "config.tractor-sounds.value.None": "无",
+    "config.tractor-sounds.value.Horse": "马蹄",
+    "config.tractor-sounds.value.Tractor": "拖拉机",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "收获果树",
     "config.harvest-fruit-trees.tooltip": "是否收获果树。",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "收获采集品",
     "config.harvest-forage.tooltip": "是否收获采集品。",
 
-    "config.harvest-grass.name": "收获草",
-    "config.harvest-grass.tooltip": "是否清除草，如果有筒仓，通常会给干草。",
+    "config.harvest-blue-grass.name": "收获蓝色草",
+    "config.harvest-blue-grass.tooltip": "是否清除蓝色草，如果有筒仓，通常会给干草。",
+
+    "config.harvest-non-blue-grass.name": "收获非蓝色草",
+    "config.harvest-non-blue-grass.tooltip": "是否清除非蓝色草，如果有筒仓，通常会给干草。",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "挖掘远古斑点",
     "config.dig-artifact-spots.tooltip": "是否挖掘远古斑点。",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "填平耕地",
     "config.clear-tilled-dirt.tooltip": "是否填平已耕的地块。",

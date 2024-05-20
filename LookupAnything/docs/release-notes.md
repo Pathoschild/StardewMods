@@ -2,17 +2,18 @@
 
 # Release notes
 ## Upcoming release
-* Added config options for the new collapsible fields.
 * Added support for machine recipes in `Data/Buildings` and `Data/Machines`, including custom recipes from other mods (thanks to collaboration with zombifier!).
 * Added support for machine changes from the Extra Machine Config mod (thanks to zombifier!).
 * Added quality star icons in recipe lists where relevant.
+* Added config options for the new collapsible fields, and raised maximum number of items shown before they collapse by default.
 * Added hint message when some machine rules are too dynamic to display.
 * Re-added support for Producer Framework Mod machines (thanks to zombifier!).
 * The 'progression mode' option now hides recipes you haven't learned yet (thanks to b3nk3lly!).
+* Fixed repeating warning when looking up caged monsters at Spirit's Eve.
 * Fixed keg and preserve jar lookups showing incorrect recipe items like "Error Item Jelly" (thanks to b3nk3lly!).
 * Fixed roe lookups showing incorrect caviar recipe (thanks to b3nk3lly!).
 * Fixed roe lookups showing recipes like 'Aged Aged Roe Roe'.
-* Improved translations. Thanks to burunduk (updated Ukrainian), MakinDay (updated Italian), mitekano23 (updated Japanese), nimbXnumb (updated Russian), ShanderB (updated Portuguese), and ykinsoul (updated Chinese)!
+* Improved translations. Thanks to burunduk (updated Ukrainian), Caranud (updated French), MakinDay (updated Italian), mitekano23 (updated Japanese), nimbXnumb (updated Russian), ShanderB (updated Portuguese), and ykinsoul (updated Chinese)!
 
 ## 1.42.0
 Released 21 April 2024 for SMAPI 4.0.0 or later.

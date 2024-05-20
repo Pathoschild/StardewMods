@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Головні налаштування",
+    "config.audio": "Audio", // TODO
     "config.controls": "Елементи керування",
     "config.axe": "Особливості сокири",
     "config.hoe": "Особливості мотики",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Радіус Магнетизму",
     "config.magnetic-radius.tooltip": "Величина магнетизму предмета (При більших значеннях предмети притягуються з більшої відстані). За замовчуванням: {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Звукові ефекти",
-    "config.tractor-sounds.tooltip": "Які звукові ефекти відтворювати під час їзди на тракторі. Зміни можуть не набути чинності до перезавантаження збереженої гри. За замовчуванням {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "без звуків",
-    "config.tractor-sounds.value.Horse": "звуки коня",
-    "config.tractor-sounds.value.Tractor": "звуки трактора",
-
     "config.build-price.name": "Ціна побудови",
     "config.build-price.tooltip": "Золота ціна купівлі гаража трактора. За замовчуванням: {{defaultValue}} зол.",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "Радіус виділення (налагодження)",
     "config.highlight-radius.tooltip": "Можливість виділення радіуса дії трактора під час їзди, щоб допомогти візуалізувати параметр відстані.",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "Звукові ефекти",
+    "config.tractor-sounds.tooltip": "Які звукові ефекти відтворювати під час їзди на тракторі. Зміни можуть не набути чинності до перезавантаження збереженої гри. За замовчуванням {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "без звуків",
+    "config.tractor-sounds.value.Horse": "звуки коня",
+    "config.tractor-sounds.value.Tractor": "звуки трактора",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "Збирати плоди фруктових дерев",
     "config.harvest-fruit-trees.tooltip": "Збір плодів з фруктових дерев.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "Збирати корми",
     "config.harvest-forage.tooltip": "Збір кормів.",
 
-    "config.harvest-grass.name": "Косити траву",
-    "config.harvest-grass.tooltip": "Косіння трави. Якщо у вас є вільне місце в силосній вежі, ви збираєте сіно, як і в звичайній грі.",
+    "config.harvest-blue-grass.name": "Косити синю траву",
+    "config.harvest-blue-grass.tooltip": "Косіння синьої трави. Якщо у вас є вільне місце в силосній вежі, ви збираєте сіно, як і в звичайній грі.",
+
+    "config.harvest-non-blue-grass.name": "Косити не синю траву",
+    "config.harvest-non-blue-grass.tooltip": "Косіння не синьої трави. Якщо у вас є вільне місце в силосній вежі, ви збираєте сіно, як і в звичайній грі.",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "Викопувати артефакти",
     "config.dig-artifact-spots.tooltip": "Викопування артефактів.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "Перекопати оброблений ґрунт",
     "config.clear-tilled-dirt.tooltip": "Переконування обробленого ґрунту.",

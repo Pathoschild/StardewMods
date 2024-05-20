@@ -2,7 +2,17 @@
 
 # Release notes
 ## Upcoming release
+* Added support for...
+  * digging seed spots (with a hoe);
+  * harvesting tree moss (with a scythe);
+  * planting blue grass starter.
+* Added volume level option for tractor sound effects, and lowered default volume by 25%.
+* Split 'harvest grass' option into non-blue and blue grass.
 * Simplified tractor names to improve display in mods like NPC Map Locations.
+* Fixed tool options:
+  * Fixed axe 'chop free trees (saplings)' option affecting full-grown trees.
+  * Fixed pickaxe 'harvest mine spawns' option not working if 'clear placed objects' is also enabled.
+  * Fixed scythe 'harvest tree seeds' option missing in Generic Mod Config Menu UI.
 * Improved translations. Thanks to burunduk (updated Ukrainian), Lexith98 (updated Turkish), mc-kaishixiaxue (updated Chinese), and mitekano23 (updated Japanese)!
 
 **Note for mod authors:**
@@ -13,7 +23,7 @@
 ## 4.17.3
 Released 04 April 2024 for SMAPI 4.0.0 or later.
 
-* Fixed tractor being shown in the animal social menu. (This will take effect in Stardew Valley 1.6.4.)
+* Fixed tractor being shown in the animal social menu.
 * Fixed fertilizer able to apply to grown crops using the tractor (thanks to foxwhite25!).
 * Improved compatibility with mods which change fertilizer logic (thanks to foxwhite25!).
 * Improved translations. Thanks to Scomar82 (updated German), JhonatanMedeiros (updated Portuguese), and Shi974 (updated French)!

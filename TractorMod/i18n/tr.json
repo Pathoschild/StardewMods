@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Ana Seçenekler",
+    "config.audio": "Audio", // TODO
     "config.controls": "Kontroller",
     "config.axe": "Balta Özellikleri",
     "config.hoe": "Çapa özellikleri",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Manyetik Yarıçap",
     "config.magnetic-radius.tooltip": "Eşya manyetizma miktarı (yüksek değerler eşyaları atadan uzağa çeker). Varsayılan {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Ses efektleri",
-    "config.tractor-sounds.tooltip": "Traktörü sürerken hangi ses efektlerinin çalınacağı. Kaydı yeniden yükleyene kadar değişiklikler tam olarak etkili olmayabilir. Varsayılan {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "ses yok",
-    "config.tractor-sounds.value.Horse": "at sesleri",
-    "config.tractor-sounds.value.Tractor": "traktör sesleri",
-
     "config.build-price.name": "Yapı Fiyatı",
     "config.build-price.tooltip": "Traktör garajı satın almak için altın fiyatı. Varsayılan {{defaultValue}}g.",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "Vurgu Yarıçapı (Hata Ayıklama)",
     "config.highlight-radius.tooltip": "Mesafe seçeneğini görselleştirmeye yardımcı olmak için, bir traktörü sürerken traktör yarıçapının vurgulanıp vurgulanmayacağı.",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "Ses efektleri",
+    "config.tractor-sounds.tooltip": "Traktörü sürerken hangi ses efektlerinin çalınacağı. Kaydı yeniden yükleyene kadar değişiklikler tam olarak etkili olmayabilir. Varsayılan {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "ses yok",
+    "config.tractor-sounds.value.Horse": "at sesleri",
+    "config.tractor-sounds.value.Tractor": "traktör sesleri",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "Meyve Ağaçlarını Hasat Et",
     "config.harvest-fruit-trees.tooltip": "Meyve ağaçlarının hasat edilip edilmeyeceği.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "Yiyecekleri Hasat Et",
     "config.harvest-forage.tooltip": "Yiyeceklerin hasat edilip edilmeyeceği.",
 
-    "config.harvest-grass.name": "Otları Hasat Et",
-    "config.harvest-grass.tooltip": "Otların kesilip kesilmeyeceği. Boş silo alanınız varsa, bu size her zamanki gibi saman verir.",
+    "config.harvest-blue-grass.name": "Mavi Otları Hasat Et",
+    "config.harvest-blue-grass.tooltip": "Mavi otların kesilip kesilmeyeceği. Boş silo alanınız varsa, bu size her zamanki gibi saman verir.",
+
+    "config.harvest-non-blue-grass.name": "Mavi Olmayan Otları Hasat Et",
+    "config.harvest-non-blue-grass.tooltip": "Mavi olmayan otların kesilip kesilmeyeceği. Boş silo alanınız varsa, bu size her zamanki gibi saman verir.",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "Eser Noktalarını Kaz",
     "config.dig-artifact-spots.tooltip": "Eser noktalarının kazılıp kazılmayacağı.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "İşlenmiş Toprağı Temizle",
     "config.clear-tilled-dirt.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",

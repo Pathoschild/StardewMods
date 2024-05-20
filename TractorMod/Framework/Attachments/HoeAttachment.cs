@@ -19,9 +19,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly HoeConfig Config;
 
-        /// <summary>The item ID for an artifact spot.</summary>
-        private const int ArtifactSpotItemID = 590;
-
         /// <summary>The minimum delay before attempting to re-till the same empty dirt tile.</summary>
         private readonly TimeSpan TillDirtDelay = TimeSpan.FromSeconds(1);
 
@@ -46,7 +43,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             return
-                (this.Config.TillDirt || this.Config.ClearWeeds || this.Config.DigArtifactSpots)
+                (this.Config.TillDirt || this.Config.ClearWeeds || this.Config.DigArtifactSpots || this.Config.DigSeedSpots)
                 && tool is Hoe;
         }
 
@@ -67,7 +64,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // collect artifact spots
-            if (this.Config.DigArtifactSpots && tileObj?.QualifiedItemId == $"{ItemRegistry.type_object}{HoeAttachment.ArtifactSpotItemID}")
+            if (this.Config.DigArtifactSpots && tileObj?.QualifiedItemId == SObject.artifactSpotQID)
+                return this.UseToolOnTile(tool, tile, player, location);
+
+            // collect seed spots
+            if (this.Config.DigSeedSpots && tileObj?.QualifiedItemId == $"{ItemRegistry.type_object}SeedSpot")
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // harvest ginger

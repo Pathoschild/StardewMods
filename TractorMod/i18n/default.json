@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Main Options",
+    "config.audio": "Audio",
     "config.controls": "Controls",
     "config.axe": "Axe Features",
     "config.hoe": "Hoe Features",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Magnetic Radius",
     "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Sound Effects",
-    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "no sounds",
-    "config.tractor-sounds.value.Horse": "horse sounds",
-    "config.tractor-sounds.value.Tractor": "tractor sounds",
-
     "config.build-price.name": "Build Price",
     "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
 
@@ -55,6 +50,19 @@
 
     "config.highlight-radius.name": "Highlight Radius (Debug)",
     "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+
+
+    /****
+    ** Audio options
+    ****/
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +108,12 @@
     "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
     "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
 
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +136,11 @@
     "config.harvest-forage.name": "Harvest Forage",
     "config.harvest-forage.tooltip": "Whether to harvest forage.",
 
-    "config.harvest-grass.name": "Harvest Grass",
-    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+    "config.harvest-blue-grass.name": "Harvest Grass (Blue)",
+    "config.harvest-blue-grass.tooltip": "Whether to cut blue grass. If you have free silo space, this gives you hay as usual.",
+
+    "config.harvest-non-blue-grass.name": "Harvest Grass (Not Blue)",
+    "config.harvest-non-blue-grass.tooltip": "Whether to cut non-blue grass. If you have free silo space, this gives you hay as usual.",
 
 
     /****
@@ -144,6 +161,9 @@
 
     "config.dig-artifact-spots.name": "Dig Artifact Spots",
     "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
     "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",

@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Hauptoptionen",
+    "config.audio": "Audio", // TODO
     "config.controls": "Steuerung",
     "config.axe": "Axteigenschaften",
     "config.hoe": "Hackeneigenschaften",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Magnetischer Radius",
     "config.magnetic-radius.tooltip": "Der Wert für den Gegenstandsmagnetismus (höhere Werte ziehen Gegenstände weiter weg weg an). Standard {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Sound-Effekte",
-    "config.tractor-sounds.tooltip": "Welche Soundeffekte während der Fahrt mit dem Traktor abgespielt werden sollen. Die Änderungen werden möglicherweise erst nach dem erneuten Laden des Spielstands vollständig wirksam. Standard: {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "Keine Geräusche",
-    "config.tractor-sounds.value.Horse": "Pferdegeräusche",
-    "config.tractor-sounds.value.Tractor": "Traktorgeräusche",
-
     "config.build-price.name": "Baupreis",
     "config.build-price.tooltip": "Der Goldpreis für den Kauf einer Traktor-Garage. Standard {{defaultValue}}g.",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "Radius hervorheben (Debug)",
     "config.highlight-radius.tooltip": "Hervorhebung des Traktorradius bei der Fahrt, um die Entfernungsoption zu verdeutlichen.",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "Sound-Effekte",
+    "config.tractor-sounds.tooltip": "Welche Soundeffekte während der Fahrt mit dem Traktor abgespielt werden sollen. Die Änderungen werden möglicherweise erst nach dem erneuten Laden des Spielstands vollständig wirksam. Standard: {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "Keine Geräusche",
+    "config.tractor-sounds.value.Horse": "Pferdegeräusche",
+    "config.tractor-sounds.value.Tractor": "Traktorgeräusche",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "Obstbäume ernten",
     "config.harvest-fruit-trees.tooltip": "Ob Obstbäume geerntet werden sollen.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "Ernten von Viehfutter",
     "config.harvest-forage.tooltip": "Ob Viehfutter geerntet werden soll.",
 
-    "config.harvest-grass.name": "Gras mähen",
-    "config.harvest-grass.tooltip": "Ob Gras gemäht werden soll. Wenn freier Siloraum existiert, wird daraus wie üblich Heu. ",
+    "config.harvest-blue-grass.name": "Gras mähen (Blau)",
+    "config.harvest-blue-grass.tooltip": "Ob blaues Gras gemäht werden soll. Wenn freier Siloraum existiert, wird daraus wie üblich Heu.",
+
+    "config.harvest-non-blue-grass.name": "Gras mähen (Nicht Blau)",
+    "config.harvest-non-blue-grass.tooltip": "Ob nicht blaues Gras gemäht werden soll. Wenn freier Siloraum existiert, wird daraus wie üblich Heu.",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "Artefakt-Spots ausgraben",
     "config.dig-artifact-spots.tooltip": "Ob Artefaktstellen ausgegraben werden sollen.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "Entferne gepflügten Dreck",
     "config.clear-tilled-dirt.tooltip": "Ob gepflügter Dreck entfernt werden soll",

@@ -54,9 +54,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (lastVersion.IsOlderThan("4.7.0"))
                 Migrator.Migrate_to_4_7(helper, monitor, buildableLocations.Value);
             if (lastVersion.IsOlderThan("4.13.0"))
-                Migrator.Migrate_To_4_13(buildableLocations.Value, helper.Reflection);
+                Migrator.Migrate_To_4_13(buildableLocations.Value);
             if (lastVersion.IsOlderThan("4.17.2"))
-                Migrator.Migrate_To_4_17(buildableLocations.Value, helper.Reflection);
+                Migrator.Migrate_To_4_17(buildableLocations.Value);
 
             // update version
             Game1.CustomData[Migrator.LastVersionKey] = currentVersion.ToString();
@@ -151,22 +151,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Migrate to Tractor Mod 4.13.</summary>
         /// <param name="locations">The locations to scan for tractors and garages.</param>
-        /// <param name="reflection">The SMAPI API to access code dynamically.</param>
-        private static void Migrate_To_4_13(GameLocation[] locations, IReflectionHelper reflection)
+        private static void Migrate_To_4_13(GameLocation[] locations)
         {
             // Tractor Mod 4.13 migrates to the modData field to track whether a stable/horse is
             // part of Tractor Mod.
             foreach (GameLocation location in locations)
             {
                 foreach (Stable stable in location.buildings.OfType<Stable>())
-                    Migrator.AddHorseIfNeeded(stable, reflection);
+                    Migrator.AddHorseIfNeeded(stable);
             }
         }
 
         /// <summary>Migrate to Tractor Mod 4.15.</summary>
         /// <param name="locations">The locations to scan for tractors and garages.</param>
-        /// <param name="reflection">The SMAPI API to access code dynamically.</param>
-        private static void Migrate_To_4_17(GameLocation[] locations, IReflectionHelper reflection)
+        private static void Migrate_To_4_17(GameLocation[] locations)
         {
             // Tractor Mod 4.17 (for Stardew Valley 1.6) migrates from a vanilla stable to a new Data/Buildings
             // building.
@@ -181,7 +179,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     location.buildings.RemoveAt(i);
                     location.buildings.Add(garage);
 
-                    Migrator.AddHorseIfNeeded(garage, reflection);
+                    Migrator.AddHorseIfNeeded(garage);
                 }
             }
         }
@@ -213,12 +211,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Add a tractor to the garage if needed.</summary>
         /// <param name="garage">The garage instance.</param>
-        /// <param name="reflection">The SMAPI API to access code dynamically.</param>
-        private static void AddHorseIfNeeded(Stable garage, IReflectionHelper reflection)
+        private static void AddHorseIfNeeded(Stable garage)
         {
             Horse horse = garage.getStableHorse();
             if (Migrator.IsTractor(horse))
-                TractorManager.SetTractorInfo(horse, TractorSoundType.Horse, reflection); // sound effects will be reset later
+                TractorManager.SetTractorInfo(horse, TractorSoundType.Horse); // sound effects will be reset later
         }
 
         /// <summary>Get whether the given horse should be treated as a tractor, accounting for legacy tractor data.</summary>

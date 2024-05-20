@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "メインオプション",
+    "config.audio": "Audio", // TODO
     "config.controls": "操作方法",
     "config.axe": "オノの特徴",
     "config.hoe": "クワの特徴",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "アイテムを引きつける範囲",
     "config.magnetic-radius.tooltip": "値が高いほど遠くのものを引きつける。標準は{{defaultValue}}。",
 
-    "config.tractor-sounds.name": "効果音",
-    "config.tractor-sounds.tooltip": "トラクター乗車中に再生する効果音。セーブをリロードするまで変更が完全に反映されない場合があります。標準は{{defaultValue}}。",
-    "config.tractor-sounds.value.None": "効果音なし",
-    "config.tractor-sounds.value.Horse": "馬",
-    "config.tractor-sounds.value.Tractor": "トラクター",
-
     "config.build-price.name": "販売価格",
     "config.build-price.tooltip": "トラクターガレージの購入費。標準は{{defaultValue}}gです。",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "有効距離(範囲)の強調表示(デバック向け)",
     "config.highlight-radius.tooltip": "トラクターの有効距離(範囲)を強調表示する。距離オプションの確認などで役立ちます。",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "効果音",
+    "config.tractor-sounds.tooltip": "トラクター乗車中に再生する効果音。セーブをリロードするまで変更が完全に反映されない場合があります。標準は{{defaultValue}}。",
+    "config.tractor-sounds.value.None": "効果音なし",
+    "config.tractor-sounds.value.Horse": "馬",
+    "config.tractor-sounds.value.Tractor": "トラクター",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "果樹の収穫",
     "config.harvest-fruit-trees.tooltip": "果樹から作物を収穫する。",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "採取アイテムの回収",
     "config.harvest-forage.tooltip": "採取アイテムを回収する。",
 
-    "config.harvest-grass.name": "牧草の収穫",
-    "config.harvest-grass.tooltip": "牧草を収穫する。サイロに空きがあれば、干し草を入手可能。",
+    "config.harvest-blue-grass.name": "青い牧草の収穫",
+    "config.harvest-blue-grass.tooltip": "青い牧草を収穫する。サイロに空きがあれば、干し草を入手可能。",
+
+    "config.harvest-non-blue-grass.name": "青くない牧草の収穫",
+    "config.harvest-non-blue-grass.tooltip": "青くない牧草を収穫する。サイロに空きがあれば、干し草を入手可能。",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "発掘品を掘り起こす",
     "config.dig-artifact-spots.tooltip": "発掘品を掘り起こす。",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "耕した土を戻す",
     "config.clear-tilled-dirt.tooltip": "耕した土をもとに戻す。",

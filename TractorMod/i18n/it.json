@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Opzioni principali",
+    "config.audio": "Audio", // TODO
     "config.controls": "Controlli",
     "config.axe": "Caratteristiche dell'ascia",
     "config.hoe": "Caratteristiche dalla zappa",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Raggio magnetico",
     "config.magnetic-radius.tooltip": "La quantità di magnetismo dell'oggetto (valori più alti attirano gli oggetti più lontani). Predefinito {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Effetti Sonori",
-    "config.tractor-sounds.tooltip": "Quali effetti sonori riprodurre durante la guida del trattore. Le modifiche potrebbero non avere effetto fino a quando non si ricarica il salvataggio. Predefinito {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "nessun rumore",
-    "config.tractor-sounds.value.Horse": "rumore di cavalli",
-    "config.tractor-sounds.value.Tractor": "rumore di trattore",
-
     "config.build-price.name": "Prezzo di costruzione",
     "config.build-price.tooltip": "Il prezzo dell'oro per acquistare un garage per trattori. Predefinito {{defaultValue}}g.",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "Evidenzia raggio (Debug)",
     "config.highlight-radius.tooltip": "Scegli se evidenziare il raggio del trattore quando si guida, per aiutare a visualizzare l'opzione della distanza.",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "Effetti Sonori",
+    "config.tractor-sounds.tooltip": "Quali effetti sonori riprodurre durante la guida del trattore. Le modifiche potrebbero non avere effetto fino a quando non si ricarica il salvataggio. Predefinito {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "nessun rumore",
+    "config.tractor-sounds.value.Horse": "rumore di cavalli",
+    "config.tractor-sounds.value.Tractor": "rumore di trattore",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "Raccogli alberi da frutto",
     "config.harvest-fruit-trees.tooltip": "Scegli se vuoi raccogliere gli alberi da frutto.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "Raccogli foraggio",
     "config.harvest-forage.tooltip": "Scegli se vuoi raccogliere il foraggio.",
 
-    "config.harvest-grass.name": "Raccogli erba",
-    "config.harvest-grass.tooltip": "Scegli se vuoi tagliare l'erba. Se hai spazio libero nel silo, ti dà fieno come al solito.",
+    "config.harvest-blue-grass.name": "Raccogli erba (Blu)",
+    "config.harvest-blue-grass.tooltip": "Scegli se vuoi tagliare l'erba blu. Se hai spazio libero nel silo, ti dà fieno come al solito.",
+
+    "config.harvest-non-blue-grass.name": "Raccogli erba (Non Blu)",
+    "config.harvest-non-blue-grass.tooltip": "Scegli se vuoi tagliare l'erba non blu. Se hai spazio libero nel silo, ti dà fieno come al solito.",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "Scava nei punti dei manufatti",
     "config.dig-artifact-spots.tooltip": "Scegli se vuoi scavare nei punti dei manufatti.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "Elimina terra dissodata",
     "config.clear-tilled-dirt.tooltip": "Scegli se vuoi eliminare la terra dissodata.",

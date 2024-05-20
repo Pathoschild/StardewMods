@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return true;
 
                 // indoor pot bush
-                if (this.TryHarvestBush(pot?.bush.Value, location))
+                if (this.TryHarvestBush(pot?.bush.Value))
                     return true;
             }
 
@@ -88,11 +88,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
 
             // grass
-            if (this.Config.HarvestGrass && this.TryHarvestGrass(tileFeature as Grass, location, tile, player, tool))
+            if (tileFeature is Grass grass && this.ShouldHarvest(grass) && this.TryHarvestGrass(grass, location, tile, player, tool))
                 return true;
 
             // tree
-            if (this.TryHarvestTree(tileFeature, location, tile))
+            if (this.TryHarvestTree(tileFeature, tile, tool))
                 return true;
 
             // weeds
@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.HarvestForage)
             {
                 Bush? bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox().Intersects(tileArea)) as Bush;
-                if (this.TryHarvestBush(bush, location))
+                if (this.TryHarvestBush(bush))
                     return true;
             }
 
@@ -139,6 +139,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             return this.Config.HarvestCrops;
         }
 
+        /// <summary>Get whether a grass should be harvested.</summary>
+        /// <param name="grass">The grass to check.</param>
+        private bool ShouldHarvest(Grass grass)
+        {
+            return grass.grassType.Value switch
+            {
+                Grass.blueGrass => this.Config.HarvestBlueGrass,
+                _ => this.Config.HarvestNonBlueGrass
+            };
+        }
+
         /// <summary>Get whether a crop counts as a flower.</summary>
         /// <param name="crop">The crop to check.</param>
         private bool IsFlower([NotNullWhen(true)] Crop? crop)
@@ -168,9 +179,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
         /// <summary>Harvest a bush if it's ready.</summary>
         /// <param name="bush">The bush to harvest.</param>
-        /// <param name="location">The location being harvested.</param>
         /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestBush([NotNullWhen(true)] Bush? bush, GameLocation location)
+        private bool TryHarvestBush([NotNullWhen(true)] Bush? bush)
         {
             // harvest if ready
             if (bush?.tileSheetOffset.Value == 1)
@@ -259,10 +269,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
         /// <summary>Try to harvest a tree.</summary>
         /// <param name="terrainFeature">The tree to harvest.</param>
-        /// <param name="location">The location being harvested.</param>
         /// <param name="tile">The tile being harvested.</param>
+        /// <param name="scythe">The scythe being used.</param>
         /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestTree([NotNullWhen(true)] TerrainFeature? terrainFeature, GameLocation location, Vector2 tile)
+        private bool TryHarvestTree([NotNullWhen(true)] TerrainFeature? terrainFeature, Vector2 tile, Tool scythe)
         {
             switch (terrainFeature)
             {
@@ -282,6 +292,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                             : this.Config.HarvestTreeSeeds;
 
                         if (shouldHarvest && tree.performUseAction(tile))
+                            return true;
+                    }
+
+                    if (tree.hasMoss.Value && this.Config.HarvestTreeMoss)
+                    {
+                        if (tree.performToolAction(scythe, 0, tile))
                             return true;
                     }
                     break;

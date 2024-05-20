@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Options principales",
+    "config.audio": "Audio", // TODO
     "config.controls": "Contrôles",
     "config.axe": "Caractéristiques de la hache",
     "config.hoe": "Caractéristiques de la houe",
@@ -38,12 +39,6 @@
     "config.magnetic-radius.name": "Rayon magnétique",
     "config.magnetic-radius.tooltip": "Le taux de magnétisme des objets (les valeurs les plus élevées attirent les objets de plus loin). Valeur par défaut {{defaultValue}}.",
 
-    "config.tractor-sounds.name": "Effets sonores",
-    "config.tractor-sounds.tooltip": "Quel effet sonore jouer en conduisant le tracteur. Les modifications peuvent ne pas prendre effet tant que vous n'avez pas rechargé la sauvegarde. {{defaultValue}} par défaut.",
-    "config.tractor-sounds.value.None": "pas de bruit",
-    "config.tractor-sounds.value.Horse": "bruit de cheval",
-    "config.tractor-sounds.value.Tractor": "bruit de tracteur",
-
     "config.build-price.name": "Prix de construction",
     "config.build-price.tooltip": "Le prix pour acheter le hangar. Valeur par défaut {{defaultValue}}g.",
 
@@ -55,6 +50,20 @@
 
     "config.highlight-radius.name": "Rayon de surbrillance (Debug)",
     "config.highlight-radius.tooltip": "Possibilité de mettre en évidence le rayon du tracteur lorsqu'on en conduit un, pour aider à visualiser l'option de distance.",
+
+
+    /****
+    ** Audio
+    ****/
+    "config.tractor-sounds.name": "Effets sonores",
+    "config.tractor-sounds.tooltip": "Quel effet sonore jouer en conduisant le tracteur. Les modifications peuvent ne pas prendre effet tant que vous n'avez pas rechargé la sauvegarde. {{defaultValue}} par défaut.",
+    "config.tractor-sounds.value.None": "pas de bruit",
+    "config.tractor-sounds.value.Horse": "bruit de cheval",
+    "config.tractor-sounds.value.Tractor": "bruit de tracteur",
+
+    // TODO
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +109,14 @@
     "config.harvest-fruit-trees.name": "Récolte des arbres fruitiers",
     "config.harvest-fruit-trees.tooltip": "S'il faut récolter les arbres fruitiers.",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +139,11 @@
     "config.harvest-forage.name": "Récolte du fourrage",
     "config.harvest-forage.tooltip": "S'il faut récolter le fourrage.",
 
-    "config.harvest-grass.name": "Récolte de l'herbe",
-    "config.harvest-grass.tooltip": "S'il faut couper l'herbe. Si vous avez de l'espace libre dans le silo, cela vous donne du foin comme d'habitude.",
+    "config.harvest-blue-grass.name": "Récolte de l'herbe (Bleue)",
+    "config.harvest-blue-grass.tooltip": "S'il faut couper l'herbe bleue. Si vous avez de l'espace libre dans le silo, cela vous donne du foin comme d'habitude.",
+
+    "config.harvest-non-blue-grass.name": "Récolte de l'herbe (Non Bleue)",
+    "config.harvest-non-blue-grass.tooltip": "S'il faut couper l'herbe non bleue. Si vous avez de l'espace libre dans le silo, cela vous donne du foin comme d'habitude.",
 
 
     /****
@@ -144,6 +164,10 @@
 
     "config.dig-artifact-spots.name": "Creuser les emplacements d'artefact",
     "config.dig-artifact-spots.tooltip": "S'il faut déterrer les artefacts.",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "Déblayer terre labourée",
     "config.clear-tilled-dirt.tooltip": "S'il faut déblayer une terre labourée.",

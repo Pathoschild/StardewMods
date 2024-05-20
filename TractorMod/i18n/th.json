@@ -14,6 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "ตัวเลือกหลัก",
+    "config.audio": "Audio", // TODO
     "config.controls": "การควบคุม",
     "config.axe": "คุณสมบัติขวาน",
     "config.hoe": "ลักษณะจอบ",
@@ -38,13 +39,6 @@
     "config.magnetic-radius.name": "รัศมีแม่เหล็ก",
     "config.magnetic-radius.tooltip": "ปริมาณการดูดไอเทม (ค่าที่สูงกว่าจะดึงดูดสิ่งของออกไป) ค่าเริ่มต้น {{defaultValue}}.",
 
-    // TODO
-    "config.tractor-sounds.name": "Sound Effects",
-    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "no sounds",
-    "config.tractor-sounds.value.Horse": "horse sounds",
-    "config.tractor-sounds.value.Tractor": "tractor sounds",
-
     "config.build-price.name": "ราคาสร้าง",
     "config.build-price.tooltip": "ราคาทองโรงรถรถแทรกเตอร์ ค่าเริ่มต้น {{defaultValue}}g.",
 
@@ -56,6 +50,20 @@
 
     "config.highlight-radius.name": "รัศมีไฮไลท์ (ดีบัก)",
     "config.highlight-radius.tooltip": "รวมถึงเน้นรัศมีของรถแทรกเตอร์เมื่อขี่หรือไม่ เพื่อช่วยให้เห็นภาพตัวเลือกระยะทาง",
+
+
+    /****
+    ** Audio
+    ****/
+    // TODO
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
+    "config.tractor-volume.name": "Sound Effects Volume",
+    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
 
     /****
@@ -100,6 +108,14 @@
     "config.harvest-fruit-trees.name": "เก็บเกี่ยวไม้ผล",
     "config.harvest-fruit-trees.tooltip": "รวมถึงเป็นการเก็บเกี่ยวไม้ผล",
 
+    // TODO
+    "config.harvest-tree-moss.name": "Harvest Tree Moss",
+    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+
+    // TODO
+    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
+    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+
 
     /****
     ** Crops/forage/grass
@@ -122,8 +138,11 @@
     "config.harvest-forage.name": "เก็บเกี่ยวอาหารสัตว์",
     "config.harvest-forage.tooltip": "รวมถึงเป็นการเก็บเกี่ยวอาหารสัตว์",
 
-    "config.harvest-grass.name": "เก็บเกี่ยวหญ้า",
-    "config.harvest-grass.tooltip": "รวมถึงตัดหญ้า หากคุณมีพื้นที่ไซโลว่าง สิ่งนี้จะช่วยให้คุณมีหญ้าแห้งได้ตามปกติ",
+    "config.harvest-blue-grass.name": "เก็บเกี่ยวหญ้า (สีน้ำเงิน)",
+    "config.harvest-blue-grass.tooltip": "รวมถึงตัดหญ้าสีน้ำเงิน หากคุณมีพื้นที่ไซโลว่าง สิ่งนี้จะช่วยให้คุณมีหญ้าแห้งได้ตามปกติ",
+
+    "config.harvest-non-blue-grass.name": "เก็บเกี่ยวหญ้า (ไม่ใช่สีน้ำเงิน)",
+    "config.harvest-non-blue-grass.tooltip": "รวมถึงตัดหญ้าที่ไม่ใช่สีน้ำเงิน หากคุณมีพื้นที่ไซโลว่าง สิ่งนี้จะช่วยให้คุณมีหญ้าแห้งได้ตามปกติ",
 
 
     /****
@@ -144,6 +163,10 @@
 
     "config.dig-artifact-spots.name": "ไถดิน",
     "config.dig-artifact-spots.tooltip": "จะไถดินทุกอย่าง",
+
+    // TODO
+    "config.dig-seed-spots.name": "Dig Seed Spots",
+    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
     "config.clear-tilled-dirt.name": "ขจัดพื้นดิน",
     "config.clear-tilled-dirt.tooltip": "รวมถึงขจัดดินที่ไถพรวน",

@@ -172,11 +172,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             var config = this.Config;
 
             // seed
-            if (tree.growthStage.Value == Tree.seedStage)
+            if (tree.growthStage.Value == FruitTree.seedStage)
                 return config.ClearFruitTreeSeeds;
 
             // sapling
-            if (tree.growthStage.Value < Tree.treeStage)
+            if (tree.growthStage.Value < FruitTree.treeStage)
                 return config.ClearFruitTreeSaplings;
 
             // full-grown

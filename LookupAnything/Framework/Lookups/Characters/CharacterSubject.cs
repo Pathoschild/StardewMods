@@ -66,6 +66,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Whether the NPC is a magma sprite monster.</summary>
         private readonly bool IsMagmaSprite;
 
+        /// <summary>Whether to disable portraits for this NPC, even if they'd normally be used.</summary>
+        private readonly bool DisablePortraits;
+
 
         /*********
         ** Public methods
@@ -112,6 +115,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
             else
                 this.IsGourmand = type == SubjectType.Villager && npc.Name == "Gourmand" && npc.currentLocation.Name == nameof(IslandFarmCave);
+
+            this.DisablePortraits = CharacterSubject.ShouldDisablePortraits(npc, this.IsGourmand);
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -173,7 +178,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // use character portrait (most villager NPCs)
-            if (npc.IsVillager && npc.Portrait != null && !this.IsGourmand) // Gourmand uses Professor Snail's portraits
+            if (npc.IsVillager && !this.DisablePortraits)
             {
                 spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, new Point(NPC.portrait_width, NPC.portrait_height), Color.White, size.X / NPC.portrait_width);
                 return true;
@@ -445,6 +450,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 default:
                     return npc.GetType().Name;
             }
+        }
+
+        /// <summary>Get whether to disable portraits for an NPC, even if they'd normally be shown.</summary>
+        /// <param name="npc">The NPC to check.</param>
+        /// <param name="isGourmand">Whether the NPC is Gourmand in the Fern Islands farm cave.</param>
+        /// <remarks>Most code should use the cached <see cref="DisablePortraits"/> instead.</remarks>
+        private static bool ShouldDisablePortraits(NPC npc, bool isGourmand)
+        {
+            // at the Spirit's Eve festival, the monsters are spawned as villagers
+            if (Game1.CurrentEvent?.id is "festival_fall27" && npc.Name is "Mummy" or "Stone Golem" or "Wilderness Golem")
+                return true;
+
+            // Gourmand uses Professor Snail's portraits
+            if (isGourmand)
+                return true;
+
+            // if the portraits fail to load, this will log the warning once instead of failing on every draw loop
+            return npc.Portrait is null;
         }
 
         /// <summary>Get how much an NPC likes receiving each item as a gift.</summary>

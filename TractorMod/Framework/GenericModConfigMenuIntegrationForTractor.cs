@@ -75,14 +75,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     min: 0,
                     max: 1000
                 )
-                .AddDropdown(
-                    name: I18n.Config_TractorSounds_Name,
-                    tooltip: () => I18n.Config_TractorSounds_Tooltip(defaultValue: I18n.GetByKey($"config.tractor-sounds.value.{defaultConfig.SoundEffects}")),
-                    formatAllowedValue: value => I18n.GetByKey($"config.tractor-sounds.value.{value}"),
-                    allowedValues: Enum.GetNames<TractorSoundType>(),
-                    get: config => config.SoundEffects.ToString(),
-                    set: (config, value) => config.SoundEffects = Enum.Parse<TractorSoundType>(value)
-                )
                 .AddNumberField(
                     name: I18n.Config_BuildPrice_Name,
                     tooltip: () => I18n.Config_BuildPrice_Tooltip(defaultValue: defaultConfig.BuildPrice),
@@ -108,6 +100,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     tooltip: I18n.Config_HighlightRadius_Tooltip,
                     get: config => config.HighlightRadius,
                     set: (config, value) => config.HighlightRadius = value
+                )
+
+                // audio
+                .AddSectionTitle(I18n.Config_Audio)
+                .AddDropdown(
+                    name: I18n.Config_TractorSounds_Name,
+                    tooltip: () => I18n.Config_TractorSounds_Tooltip(defaultValue: I18n.GetByKey($"config.tractor-sounds.value.{defaultConfig.SoundEffects}")),
+                    formatAllowedValue: value => I18n.GetByKey($"config.tractor-sounds.value.{value}"),
+                    allowedValues: Enum.GetNames<TractorSoundType>(),
+                    get: config => config.SoundEffects.ToString(),
+                    set: (config, value) => config.SoundEffects = Enum.Parse<TractorSoundType>(value)
+                )
+                .AddNumberField(
+                    name: I18n.Config_TractorVolume_Name,
+                    tooltip: () => I18n.Config_TractorVolume_Tooltip(defaultValue: defaultConfig.SoundEffectsVolume),
+                    get: config => config.SoundEffectsVolume,
+                    set: (config, value) => config.SoundEffectsVolume = value,
+                    min: 0,
+                    max: 100
                 )
 
                 // controls
@@ -226,6 +237,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     get: config => config.StandardAttachments.Hoe.DigArtifactSpots,
                     set: (config, value) => config.StandardAttachments.Hoe.DigArtifactSpots = value
                 )
+                .AddCheckbox(
+                    name: I18n.Config_DigSeedSpots_Name,
+                    tooltip: I18n.Config_DigSeedSpots_Tooltip,
+                    get: config => config.StandardAttachments.Hoe.DigSeedSpots,
+                    set: (config, value) => config.StandardAttachments.Hoe.DigSeedSpots = value
+                )
 
                 // pickaxe
                 .AddSectionTitle(I18n.Config_Pickaxe)
@@ -311,16 +328,34 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestFruitTrees = value
                 )
                 .AddCheckbox(
+                    name: I18n.Config_HarvestTreeMoss_Name,
+                    tooltip: I18n.Config_HarvestTreeMoss_Tooltip,
+                    get: config => config.StandardAttachments.Scythe.HarvestTreeMoss,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestTreeMoss = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_HarvestTreeSeeds_Name,
+                    tooltip: I18n.Config_HarvestTreeSeeds_Tooltip,
+                    get: config => config.StandardAttachments.Scythe.HarvestTreeSeeds,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestTreeSeeds = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_HarvestMachines_Name,
                     tooltip: I18n.Config_HarvestMachines_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestMachines,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestMachines = value
                 )
                 .AddCheckbox(
-                    name: I18n.Config_HarvestGrass_Name,
-                    tooltip: I18n.Config_HarvestGrass_Tooltip,
-                    get: config => config.StandardAttachments.Scythe.HarvestGrass,
-                    set: (config, value) => config.StandardAttachments.Scythe.HarvestGrass = value
+                    name: I18n.Config_HarvestBlueGrass_Name,
+                    tooltip: I18n.Config_HarvestBlueGrass_Tooltip,
+                    get: config => config.StandardAttachments.Scythe.HarvestBlueGrass,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestBlueGrass = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_HarvestNonBlueGrass_Name,
+                    tooltip: I18n.Config_HarvestNonBlueGrass_Tooltip,
+                    get: config => config.StandardAttachments.Scythe.HarvestNonBlueGrass,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestNonBlueGrass = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_ClearDeadCrops_Name,

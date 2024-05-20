@@ -98,18 +98,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tractor">The tractor instance.</param>
         /// <param name="soundEffects">Which sound effects to play while riding the tractor.</param>
         /// <returns>Returns the tractor instance for convenience.</returns>
-        /// <param name="reflection">The SMAPI API to access code dynamically.</param>
-        public static Horse SetTractorInfo(Horse tractor, TractorSoundType soundEffects, IReflectionHelper reflection)
+        public static Horse SetTractorInfo(Horse tractor, TractorSoundType soundEffects)
         {
             tractor.Name = "Tractor";
             tractor.modData[TractorManager.TractorDataKey] = "1";
             if (soundEffects != TractorSoundType.Horse)
                 tractor.onFootstepAction = _ => { }; // disable horse clops, tractor audio will be managed separately
 
-            var hideFromAnimalSocialMenu = reflection.GetField<NetBool>(tractor, "hideFromAnimalSocialMenu", required: false); // use reflection to support pre-Stardew-Valley-1.6.4 players
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract -- GetField can return null with `required: false`
-            if (hideFromAnimalSocialMenu != null)
-                hideFromAnimalSocialMenu.GetValue().Value = true;
+            tractor.hideFromAnimalSocialMenu.Value = true;
 
             return tractor;
         }
@@ -161,7 +157,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
                 // set sound
                 if (Game1.player.mount != null)
-                    SetTractorInfo(Game1.player.mount, this.Config.SoundEffects, this.Reflection);
+                    SetTractorInfo(Game1.player.mount, this.Config.SoundEffects);
                 this.AudioManager.SetEngineState(this.IsCurrentPlayerRiding ? EngineState.Idle : EngineState.Stop);
             }
 

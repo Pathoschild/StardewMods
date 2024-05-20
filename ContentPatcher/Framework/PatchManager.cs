@@ -421,7 +421,7 @@ namespace ContentPatcher.Framework
                 .Where(patch =>
                     patch.IsReady
                     && (patch.TargetLocale is null
-                        ? skipLocalizedAssetByDefault
+                        ? !skipLocalizedAssetByDefault
                         : string.Equals(patch.TargetLocale, assetName.LocaleCode, StringComparison.InvariantCultureIgnoreCase)
                     )
                 )
