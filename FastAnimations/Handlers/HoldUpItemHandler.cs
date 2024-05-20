@@ -28,10 +28,7 @@ internal class HoldUpItemHandler : BaseAnimationHandler
     /// <param name="playerAnimationID">The player's current animation ID.</param>
     public override void Update(int playerAnimationID)
     {
-        this.ApplySkips(
-            () => Game1.player.Update(Game1.currentGameTime, Game1.player.currentLocation),
-            () => !this.IsHoldingUpItem()
-        );
+        this.SpeedUpPlayer(() => !this.IsHoldingUpItem());
     }
 
     private bool IsHoldingUpItem()
