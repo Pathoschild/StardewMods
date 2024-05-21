@@ -46,9 +46,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return;
 
             // register
-            menu
-                .Register()
+            menu.Register();
 
+            if (this.ModRegistry.IsLoaded("NermNermNerm.QuestableTractor"))
+                menu.AddParagraph(I18n.Config_QuestableTractorWarning);
+
+            menu
                 // main options
                 .AddSectionTitle(I18n.Config_MainOptions)
                 .AddNumberField(

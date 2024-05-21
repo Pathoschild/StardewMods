@@ -14,7 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Opzioni principali",
-    "config.audio": "Audio", // TODO
+    "config.audio": "Audio",
     "config.controls": "Controlli",
     "config.axe": "Caratteristiche dell'ascia",
     "config.hoe": "Caratteristiche dalla zappa",
@@ -25,6 +25,12 @@
     "config.melee-sword": "Caratteristiche della spada",
     "config.other-tools": "Altri attrezzi",
     "config.custom-tools": "Attrezzi personalizzati",
+
+
+    /****
+    ** Warnings
+    ****/
+    "config.questable-tractor-warning": "Hai installato Questable Tractor. La mod sovrascrive le impostazioni del trattore, quindi potrebbe resettare le modifiche apportate qui.",
 
 
     /****
@@ -61,9 +67,8 @@
     "config.tractor-sounds.value.Horse": "rumore di cavalli",
     "config.tractor-sounds.value.Tractor": "rumore di trattore",
 
-    // TODO
-    "config.tractor-volume.name": "Sound Effects Volume",
-    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
+    "config.tractor-volume.name": "Volume effetti sonori",
+    "config.tractor-volume.tooltip": "Intensità del volume degli effetti sonori del trattore. Predefinito {{defaultValue}}%.",
 
 
     /****
@@ -109,13 +114,11 @@
     "config.harvest-fruit-trees.name": "Raccogli alberi da frutto",
     "config.harvest-fruit-trees.tooltip": "Scegli se vuoi raccogliere gli alberi da frutto.",
 
-    // TODO
-    "config.harvest-tree-moss.name": "Harvest Tree Moss",
-    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+    "config.harvest-tree-moss.name": "Raccogli muschio degli alberi",
+    "config.harvest-tree-moss.tooltip": "Scegli se vuoi raccogliere il muschio dagli alberi.",
 
-    // TODO
-    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
-    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+    "config.harvest-tree-seeds.name": "Raccogli semi degli alberi",
+    "config.harvest-tree-seeds.tooltip": "Scegli se vuoi raccogliere i semi dagli alberi.",
 
 
     /****
@@ -165,9 +168,8 @@
     "config.dig-artifact-spots.name": "Scava nei punti dei manufatti",
     "config.dig-artifact-spots.tooltip": "Scegli se vuoi scavare nei punti dei manufatti.",
 
-    // TODO
-    "config.dig-seed-spots.name": "Dig Seed Spots",
-    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
+    "config.dig-seed-spots.name": "Scava nei punti di semina",
+    "config.dig-seed-spots.tooltip": "Scegli se vuoi scavare nei punti di semina.",
 
     "config.clear-tilled-dirt.name": "Elimina terra dissodata",
     "config.clear-tilled-dirt.tooltip": "Scegli se vuoi eliminare la terra dissodata.",

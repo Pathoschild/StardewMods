@@ -28,6 +28,13 @@
 
 
     /****
+    ** Warnings
+    ****/
+    // TODO
+    "config.questable-tractor-warning": "You have Questable Tractor installed. That mod works by overriding the tractor settings, so it may reset changes you make here.",
+
+
+    /****
     ** Main options
     ****/
     "config.distance.name": "Distance",

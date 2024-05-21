@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
 
             // break mine containers
-            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool))
+            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, player, tool))
                 return true;
 
             // harvest grass

@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "一般オプション",
+    "config.enable-game-debug.name": "ゲームデバッグホットキー",
+    "config.enable-game-debug.desc": "デバッグ情報を表示し、ゲームのデバッグホットキーも有効にする。例えば5を押してビーチにワープなど。",
+    "config.enable-dangerous-hotkeys.name": "推奨しないホットキー",
+    "config.enable-dangerous-hotkeys.desc": "ゲームデバッグホットキーを有効にすると、推奨しないホットキーも有効になり、現在の日が即座に終了したり、プレイヤーや牧場の装飾がランダムになったり、ゲームがクラッシュしたりする。",
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "コントロール",
+    "config.toggle-debug-key.name": "デバッグ情報の切り替え",
+    "config.toggle-debug-key.desc": "デバッグ情報を切り替えるキー。"
 }

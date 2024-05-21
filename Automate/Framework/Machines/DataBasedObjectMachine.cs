@@ -33,6 +33,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines
         }
 
         /// <inheritdoc />
+        public override MachineState GetState()
+        {
+            MachineState state = this.GetGenericState();
+
+            if (state == MachineState.Done && this.Machine.GetMachineData()?.IsIncubator is true)
+                state = MachineState.Processing; // don't grab incubating egg before it hatches
+
+            return state;
+        }
+
+        /// <inheritdoc />
         public override bool SetInput(IStorage input)
         {
             SObject machine = this.Machine;
@@ -65,6 +76,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines
         {
             SObject machine = this.Machine;
             MachineData? machineData = machine.GetMachineData();
+
+            if (machineData?.IsIncubator is true)
+                return null; // don't grab incubating egg before it hatches
 
             // recalculate output if needed (e.g. bee house honey)
             if (machine.lastOutputRuleId.Value != null && machineData != null)

@@ -371,6 +371,8 @@ namespace Pathoschild.Stardew.TractorMod
             // update tractor effects
             if (Context.IsPlayerFree)
                 this.TractorManager.Update();
+            else if (Game1.CurrentEvent is not null)
+                this.AudioManager.SetEngineState(EngineState.Stop);
         }
 
         /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>

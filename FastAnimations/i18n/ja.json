@@ -65,17 +65,17 @@
     "config.casino-slots.name": "カジノスロット",
     "config.casino-slots.tooltip": "カジノスロットの回転速度。標準は{{defaultValue}}x。",
 
-    "config.forge.name": "Forge", // TODO
-    "config.forge.tooltip": "How fast the volcano forge works. Default {{defaultValue}}x.", // TODO
+    "config.forge.name": "鍛造",
+    "config.forge.tooltip": "武器や道具を鍛造するときの速度。標準は{{defaultValue}}x。",
 
-    "config.prize-ticket-machine.name": "Prize ticket machine", // TODO
-    "config.prize-ticket-machine.tooltip": "How fast Lewis' prize ticket machine accepts a ticket and produces an item. Default {{defaultValue}}x.", // TODO
+    "config.prize-ticket-machine.name": "賞品マシーン",
+    "config.prize-ticket-machine.tooltip": "賞品マシーンの演出速度。標準は{{defaultValue}}x。",
 
     "config.tree-fall.name": "倒木",
     "config.tree-fall.tooltip": "切り倒した木が倒れる速さ。標準は{{defaultValue}}x、推奨は{{suggestedValue}}x。",
 
-    "config.wheel-spin.name": "Wheel spin", // TODO
-    "config.wheel-spin.tooltip": "How fast the Stardew Valley Fair wheel minigame spins. Default {{defaultValue}}x.", // TODO
+    "config.wheel-spin.name": "まつりのルーレット",
+    "config.wheel-spin.tooltip": "スターデューバレーまつりのルーレットの演出速度。標準は{{defaultValue}}x。",
 
     "config.chest-open.name": "Chest open", // TODO
     "config.chest-open.tooltip": "How fast the chest open. Default {{defaultValue}}x.", // TODO

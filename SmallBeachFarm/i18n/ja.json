@@ -1,0 +1,54 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "スモールリバーファーム",
+    "farm.description": "小さいが、作物を植えることができるポケットビーチ。川魚も海魚も釣れる。",
+
+    "farm.fish-areas.river": "川",
+    "farm.fish-areas.estuary": "河口",
+    "farm.fish-areas.ocean": "海",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "ファームオプション",
+
+    "config.beach-sounds.name": "ビーチサウンドを再生する",
+    "config.beach-sounds.tooltip": "ビーチファームでビーチのBGM（波の音など）を流す。",
+
+    "config.spawn-monsters.name": "夜間にモンスターが出現",
+    "config.spawn-monsters.tooltip": "夜間になると牧場にモンスターが出現する。新規作成のデータにのみ有効。既存のセーブには影響しない。",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "ファームレイアウト",
+
+    "config.campfire.name": "キャンプファイアの追加",
+    "config.campfire.tooltip": "自宅の前に機能するキャンプファイアを追加する。",
+
+    "config.pier.name": "桟橋の追加",
+    "config.pier.tooltip": "釣りができる桟橋を追加する。",
+
+    "config.islands.name": "島の追加",
+    "config.islands.tooltip": "島を追加する。",
+
+    "config.shipping-bin-path.name": "出荷箱の前に石の床を追加",
+    "config.shipping-bin-path.tooltip": "出荷箱の前に石の床を追加する。",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "ファームポジション",
+
+    "config.pier-x.name": "桟橋のX位置",
+    "config.pier-x.tooltip": "有効にすると、桟橋を追加するタイルの位置を調整できる。XとYの両方を0に設定すると、自動的に位置が決まる。",
+
+    "config.pier-y.name": "桟橋のY位置",
+    "config.pier-y.tooltip": "有効にすると、桟橋を追加するタイルの位置を調整できる。XとYの両方を0に設定すると、自動的に位置が決まる。"
+}

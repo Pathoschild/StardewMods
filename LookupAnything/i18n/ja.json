@@ -137,11 +137,10 @@
     "location.unknown-fish-area": "{{locationName}}(エリア{{id}})",
 
     // context tags (e.g. for machine recipes)
-    // TODO
-    "context-tag.negate": "not {{tag}}",
-    "context-tag.bone": "any bone",
-    "context-tag.egg": "any egg",
-    "context-tag.large-egg": "any large egg",
+    "context-tag.negate": "なし：{{tag}}",
+    "context-tag.bone": "骨系",
+    "context-tag.egg": "タマゴ系",
+    "context-tag.large-egg": "大きなタマゴ系",
 
 
     /*********
@@ -322,14 +321,14 @@
     "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
     "item.needed-for.gourmet-chef": "実績:グルメマスター ({{recipes}}を調理する)",
     "item.needed-for.craft-master": "実績:クラフトマスター ({{recipes}}を作成する)",
-    "item.needed-for.quests": "進行中の依頼({{quests}})",
-    "item.unknown-recipes": "{{count}} unknown recipes", // TODO
+    "item.needed-for.quests": "進行中の依頼：({{quests}})",
+    "item.unknown-recipes": "未知のレシピ：{{count}}個",
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}個必要)",
     "item.recipes-for-machine.multiple-items": "{{name}}が{{count}}個",
-    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
-    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]", // TODO
-    "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
+    "item.recipes-for-machine.same-as-input": "[入れたものと同じ]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.conditions": "[条件：{{conditions}}]",
+    "item.recipes-for-machine.too-complex": "設備ルールの中には、情報量が多すぎると表示できないものもある。",
     "item.number-owned.summary": "{{count}}個持っている",
     "item.number-crafted.summary": "{{count}}個作成した",
 
@@ -680,16 +679,15 @@
     "config.highlight-unrevealed-gift-tastes.desc": "NPCのプロフィールで、渡していない好みを強調する。有効にすると渡していない好みは太字になる。",
 
     // collapse fields
-    // TODO
-    "config.title.collapse-fields": "Collapse large fields",
+    "config.title.collapse-fields": "大きなフィールドを折りたたむ",
 
-    "config.collapse-fields.enabled.name": "Enabled",
-    "config.collapse-fields.enabled.desc": "Whether to collapse large fields, so the lookup menu will replace the list with a clickable 'show X values' link to expand it.",
+    "config.collapse-fields.enabled.name": "有効",
+    "config.collapse-fields.enabled.desc": "大きなフィールドを折りたたみ、確認画面がクリック可能な「Xの値」リンクでリストを展開するように置き換える。",
 
-    "config.collapse-fields.building-recipes.name": "Building lookup: recipes",
-    "config.collapse-fields.item-recipes.name": "Item lookup: recipes",
-    "config.collapse-fields.npc-gift-tastes.name": "NPC lookup: gift tastes",
-    "config.collapse-fields.any.desc": "If the field contains this many values, the lookup menu will replace the list with a clickable 'show X values' link to expand it.",
+    "config.collapse-fields.building-recipes.name": "建物検索：レシピ",
+    "config.collapse-fields.item-recipes.name": "アイテム検索：レシピ",
+    "config.collapse-fields.npc-gift-tastes.name": "NPC検索：贈り物の好み",
+    "config.collapse-fields.any.desc": "フィールドにこれだけの値が含まれている場合、確認画面がクリック可能な「Xの値」リンクでリストを展開するように置き換える。",
 
     // advanced options
     "config.title.advanced-options": "詳細オプション",

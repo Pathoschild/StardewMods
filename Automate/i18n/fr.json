@@ -7,19 +7,19 @@
     "config.enabled.name": "Activé",
     "config.enabled.desc": "Permet d'activer les fonctions d'automatisation. Si cette option est désactivée, aucune machine ne sera automatisée et la superposition n'apparaîtra pas.",
     "config.automation-interval.name": "Intervalle d'automatisation",
-    "config.automation-interval.desc": "Le nombre de ticks entre chaque processus d'automatisation (60 pour une fois par seconde, 120 pour toutes les deux secondes, etc.)",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
-    "config.toggle-overlay-key.name": "Touche de basculement de la superposition",
-    "config.toggle-overlay-key.desc": "Les touches qui permettent de faire basculer la superposition de l'automatisation.",
-    "config.warn-for-missing-bridge-mod.name": "Avertissement pour un pont manquant",
+    "config.automation-interval.desc": "Le nombre de ticks entre chaque processus d'automatisation (60 pour une fois par seconde, 120 pour toutes les deux secondes, etc.).",
+    "config.min-minutes-for-fairy-dust.name": "Min. minutes pour poussière de fée",
+    "config.min-minutes-for-fairy-dust.desc": "Le temps de traitement minimum de la machine en minutes pour lequel appliquer de la poussière de fée. Par exemple, en réglant cela sur 30 minutes, cela signifie que la poussière de fée ne sera pas appliquée si la machine finirait en 20 minutes sans elle.",
+    "config.toggle-overlay-key.name": "Raccourci d’affichage",
+    "config.toggle-overlay-key.desc": "Les touches de raccourci qui permettent d’activer l’affichage de l'automatisation via l’overlay.",
+    "config.warn-for-missing-bridge-mod.name": "Avertissement mod manquant",
     "config.warn-for-missing-bridge-mod.desc": "L'enregistrement d'un avertissement au démarrage si vous avez installé un mod de machine personnalisée qui nécessite un correctif de compatibilité distinct qui n'est pas installé.",
 
     // connectors
     "config.title.connectors": "Connecteurs activés",
     "config.connector.desc": "Si {{itemName}} relie les machines et les coffres entre eux.",
     "config.custom-connectors.name": "Connecteurs personnalisés",
-    "config.custom-connectors.desc": "Les noms anglais exacts des éléments qui relient les machines adjacentes entre elles. Vous pouvez énumérer plusieurs éléments avec des virgules.", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "Les noms anglais EXACTS des éléments qui relient les machines adjacentes entre elles. Vous pouvez énumérer plusieurs éléments avec des virgules.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Comportement de la hutte Junimo",
@@ -44,14 +44,12 @@
     "config.machine-settings-priority.desc": "L'ordre de priorité dans lequel les machines {{machineName}} doivent être traitées par rapport aux autres machines. Les machines ont une priorité par défaut de 0, les valeurs plus élevées étant traitées en premier.",
 
     // machine names
-    // TODO
-    "config.machines.bush": "Bush",
-    "config.machines.fruit-tree": "Tree (Fruit Tree)",
-    "config.machines.trash-can": "Trash Can",
-    "config.machines.wild-tree": "Tree (Wild Tree)",
+    "config.machines.bush": "Buisson",
+    "config.machines.fruit-tree": "Arbre (fruitier)",
+    "config.machines.trash-can": "Poubelle",
+    "config.machines.wild-tree": "Arbre (sauvage)",
 
     // special settings for individual machines
-    // TODO
-    "config.machines.wild-tree.collect-moss.name": "Collect Moss",
-    "config.machines.wild-tree.collect-moss.desc": "Whether to collect moss on trees. For example, keeping moss on trees will boost the quality of mushrooms from nearby mushroom logs."
+    "config.machines.wild-tree.collect-moss.name": "Collecte de mousse",
+    "config.machines.wild-tree.collect-moss.desc": "Active/désactive la collecte de mousse sur les arbres. Par exemple, garder la mousse sur les arbres augment la qualité des champignons des troncs à champignon proches."
 }

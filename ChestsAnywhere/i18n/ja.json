@@ -5,12 +5,12 @@
     // default chest names
     "default-name.fridge": "冷蔵庫",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "ship items", // TODO
-    "default-name.shipping-bin.take": "retrieve items", // TODO
+    "default-name.shipping-bin.store": "出荷品",
+    "default-name.shipping-bin.take": "アイテムを取り出す",
 
     // default category names
-    "default-category.owned-cabin": "小屋 ({{owner}})",
-    "default-category.unowned-cabin": "小屋 (empty)",
+    "default-category.owned-cabin": "小屋：({{owner}})",
+    "default-category.unowned-cabin": "小屋：(empty)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -19,19 +19,19 @@
     "label.name": "名前",
     "label.category": "カテゴリー",
     "label.order": "順番",
-    "label.hide-chest": "このチェストを非表示にする",
-    "label.hide-chest-hidden": "このチェストを非表示にする (再び表示するにはチェストを探して下さい!)",
+    "label.hide-chest": "この箱を非表示にする",
+    "label.hide-chest-hidden": "この箱を非表示にする（再び表示するにはチェックを外してください）",
     "label.automate-options": "Automate",
-    "label.automate-store": "このチェストにはアイテムを入れる",
-    "label.automate-store-first": "このチェストに優先的にアイテムを入れる",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
-    "label.automate-take": "このチェストからはアイテムを取り出す",
-    "label.automate-take-first": "このチェストからは優先的にアイテムを取り出す",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-store": "この箱にはアイテムを入れる",
+    "label.automate-store-first": "この箱に優先的にアイテムを入れる",
+    "label.automate-store-disabled": "この箱にはアイテムを入れない",
+    "label.automate-take": "この箱からはアイテムを取り出す",
+    "label.automate-take-first": "この箱からは優先的にアイテムを取り出す",
+    "label.automate-take-disabled": "この箱にはアイテムを入れない",
 
     // button labels
-    "button.edit-chest": "チェストの編集",
-    "button.sort-inventory": "インベントリの整頓",
+    "button.edit-chest": "箱の編集",
+    "button.sort-inventory": "持ち物の整理",
     "button.save": "セーブ",
     "button.reset": "リセット",
 
@@ -39,62 +39,58 @@
     /**********
     ** Errors
     **********/
-    "errors.disabled-from-here": "ここからチェストにアクセスできません.",
-    "errors.no-chests": "まだチェストがありません",
-    "errors.no-chests-in-location": "この地域にチェストがありません",
-    "errors.no-chests-in-range": "範囲内にチェストがありません",
+    "errors.disabled-from-here": "ここから箱にアクセスできません.",
+    "errors.no-chests": "まだ箱がありません",
+    "errors.no-chests-in-location": "この地域に箱がありません",
+    "errors.no-chests-in-range": "範囲内に箱がありません",
 
 
     /**********
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.show-hover-tooltips.name": "Show hover tooltips",
-    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
-    "config.enable-shipping-bin.name": "Enable shipping bin",
-    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
-    "config.add-organize-player-items.name": "Add organize player items button",
-    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
-    "config.range.name": "Range",
-    "config.range.desc": "The range at which chests are accessible through the menu.",
-    "config.range.unlimited": "All chests",
-    "config.range.currentWorldArea": "Chests within the current world area",
-    "config.range.currentLocation": "Chests within the current location",
-    "config.range.none": "None (can't access chests remotely)",
+    "config.title.general-options": "一般オプション",
+    "config.show-hover-tooltips.name": "ホバーツールチップを表示",
+    "config.show-hover-tooltips.desc": "箱をポイントしたときに、ツールチップに箱名を表示する。",
+    "config.enable-shipping-bin.name": "出荷箱へのアクセス",
+    "config.enable-shipping-bin.desc": "出荷箱へのアクセスを有効にする。",
+    "config.add-organize-player-items.name": "持ち物の整理ボタンを追加",
+    "config.add-organize-player-items.desc": "箱のUIにプレイヤーの持ち物の「整理」ボタンを追加する。",
+    "config.range.name": "範囲",
+    "config.range.desc": "メニューUIから箱にアクセスできる範囲。",
+    "config.range.unlimited": "すべての箱",
+    "config.range.currentWorldArea": "現在マップの箱",
+    "config.range.currentLocation": "現在エリアの箱",
+    "config.range.none": "なし（箱にアクセスしない）",
 
     // general controls
-    // TODO
-    "config.title.general-controls": "General controls",
-    "config.toggle-ui-key.name": "Toggle UI",
-    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+    "config.title.general-controls": "一般コントロール",
+    "config.toggle-ui-key.name": "UIの表示",
+    "config.toggle-ui-key.desc": "箱UIを表示・非表示にするキー。",
 
     // controls when chest UI is open
-    // TODO
-    "config.title.menu-controls": "Controls when chest UI is open",
-    "config.edit-chest.name": "Edit chest",
-    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
-    "config.sort-items.name": "Sort items",
-    "config.sort-items.desc": "The keys which sort items in the current chest.",
-    "config.navigate-prev-chest.name": "Navigate: previous chest",
-    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
-    "config.navigate-next-chest.name": "Navigate: next chest",
-    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
-    "config.navigate-prev-category.name": "Navigate: previous category",
-    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
-    "config.navigate-next-category.name": "Navigate: next category",
-    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
-    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
-    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
-    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+    "config.title.menu-controls": "箱UIが開いているときのコントロール",
+    "config.edit-chest.name": "箱の編集",
+    "config.edit-chest.desc": "現在の箱のオプションを編集するキー。",
+    "config.sort-items.name": "アイテムの並び替え",
+    "config.sort-items.desc": "現在の箱内のアイテムを並べ替えるキー。",
+    "config.navigate-prev-chest.name": "前の箱への移動",
+    "config.navigate-prev-chest.desc": "メニューUIが開いている間、前の箱に移動するキー。",
+    "config.navigate-next-chest.name": "次の箱への移動",
+    "config.navigate-next-chest.desc": "メニューUIが開いている間、次の箱に移動するキー。",
+    "config.navigate-prev-category.name": "前のカテゴリーへの移動",
+    "config.navigate-prev-category.desc": "メニューUIが開いている間、前のカテゴリーに移動するキー。",
+    "config.navigate-next-category.name": "次のカテゴリーへの移動",
+    "config.navigate-next-category.desc": "メニューUIが開いている間、次のカテゴリーに移動するキー。",
+    "config.hold-to-scroll-categories.name": "長押しでカテゴリーをスクロール",
+    "config.hold-to-scroll-categories.desc": "このキーを押しながら、マウスのスクロールホイールするとカテゴリのドロップダウンをスクロールできるようになる。",
+    "config.hold-to-scroll-chests.name": "長押しで箱をスクロール",
+    "config.hold-to-scroll-chests.desc": "このキーを押しながら、マウスのスクロールホイールすると箱のドロップダウンをスクロールできるようになる。",
 
     // disable in locations
-    // TODO
-    "config.title.disable-in-locations": "Disable in locations",
-    "config.disable-mines.name": "Mines and Skull Cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
-    "config.disable-custom-names.name": "Custom location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+    "config.title.disable-in-locations": "無効にする場所",
+    "config.disable-mines.name": "鉱山やドクロの洞窟",
+    "config.disable-mines.desc": "鉱山やドクロの洞窟の箱へのアクセスを無効にする。",
+    "config.disable-custom-names.name": "カスタムロケーション名",
+    "config.disable-custom-names.desc": "箱へのアクセスを無効にする場所の内部名称(Debug Mode modなどで確認可能)。カンマで区切って複数列挙することもできる。"
 }

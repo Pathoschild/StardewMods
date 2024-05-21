@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "馬のフルートの必要有無",
+    "config.require-flute.description": "有効状態だと、馬を呼び寄せるためにインベントリに馬のフルートが必要になる。",
+
+    "config.summon-horse-button.name": "馬を呼ぶキー",
+    "config.summon-horse-button.description": "フルートを吹いて馬を呼び寄せるボタン。標準は{{defaultValue}}です。"
+}

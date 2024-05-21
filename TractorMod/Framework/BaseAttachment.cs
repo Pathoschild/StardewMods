@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool UseToolOnTile(Tool tool, Vector2 tile, Farmer player, GameLocation location)
         {
             // use tool on center of tile
-            player.lastClick = this.GetToolPixelPosition(tile);
+            this.UpdateToolBeforeUse(tool, tile, player);
             tool.swingTicker++;
             tool.DoFunction(location, (int)player.lastClick.X, (int)player.lastClick.Y, 0, player);
             return true;
@@ -241,7 +241,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         clump = reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool =>
                         {
-                            tool.lastUser = player;
+                            this.UpdateToolBeforeUse(tool, tile, player);
                             return feature.performToolAction(tool, 0, tile);
                         };
                         return true;
@@ -311,13 +311,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Break open a container using a tool, if applicable.</summary>
         /// <param name="tile">The tile position</param>
         /// <param name="tileObj">The object on the tile.</param>
+        /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
-        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Tool tool)
+        protected bool TryBreakContainer(Vector2 tile, SObject? tileObj, Farmer player, Tool tool)
         {
             if (tileObj is BreakableContainer)
+            {
+                this.UpdateToolBeforeUse(tool, tile, player);
                 return tileObj.performToolAction(tool);
+            }
 
-            if (tileObj?.TypeDefinitionId == ItemRegistry.type_object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool))
+            if (tileObj is { TypeDefinitionId: ItemRegistry.type_object, Name: "SupplyCrate" } and not Chest && this.UpdateToolBeforeUse(tool, tile, player) && tileObj.performToolAction(tool))
             {
                 tileObj.performRemoveAction();
                 Game1.currentLocation.Objects.Remove(tile);
@@ -376,6 +380,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     break;
                 }
             }
+        }
+
+        /// <summary>Update a tool's fields before it's used. This sets fields like <see cref="Tool.lastUser"/> to avoid errors in some game code.</summary>
+        /// <param name="tool">The tool to use.</param>
+        /// <param name="tile">The tile to affect.</param>
+        /// <param name="player">The current player.</param>
+        /// <returns>Returns <c>true</c> to simplify chaining in conditions.</returns>
+        protected bool UpdateToolBeforeUse(Tool tool, Vector2 tile, Farmer player)
+        {
+            player.lastClick = this.GetToolPixelPosition(tile);
+            tool.lastUser = player;
+
+            return true;
         }
     }
 }

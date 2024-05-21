@@ -3,57 +3,53 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    "config.title.main-options": "Opciones principales",
-    "config.enabled.name": "Habilitado",
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.title.main-options": "Opciones Principales",
+    "config.enabled.name": "Activado",
+    "config.enabled.desc": "Esto activa las funciones de automatización. En caso de estar desactivado, las máquinas no estarán automatizadas y el overlay no aparecerá.",
     "config.automation-interval.name": "Intervalo de automatización",
-    "config.automation-interval.desc": "El número de ticks entre cada proceso de automatización (60 para una vez por segundo, 120 para cada dos segundos, etc.).",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
-    "config.toggle-overlay-key.name": "Tecla de activación de superposición",
-    "config.toggle-overlay-key.desc": "Las teclas que activan la superposición de la automatización.",
-    "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod", // TODO
-    "config.warn-for-missing-bridge-mod.desc": "Si se registra una advertencia al inicio si se ha instalado un mod de máquina personalizada que requiere un parche de compatibilidad separado que no está instalado.",
+    "config.automation-interval.desc": "Número de ticks entre cada proceso de automatización (60 ticks = 1 segundo, 120 ticks = 2 segundos, etc).",
+    "config.min-minutes-for-fairy-dust.name": "Tiempo mínimo para aplicar Polvo de Hadas",
+    "config.min-minutes-for-fairy-dust.desc": "Tiempo de procesamiento mínimo para aplicar Polvo de Hada (en minutos). Por ejemplo, configurar esto a 30 minutos significa que el Polvo de Hada no se usará sobre la máquina si esta puede terminar el proceso en 20 minutos por sí misma.",
+    "config.toggle-overlay-key.name": "Tecla para visualizar el overlay",
+    "config.toggle-overlay-key.desc": "Tecla seleccionada para alternar entre visualizar el overlay de la automatización y la vista normal.",
+    "config.warn-for-missing-bridge-mod.name": "Advertencia incompatibilidad de mods",
+    "config.warn-for-missing-bridge-mod.desc": "Aparecerá una advertencia al inicio, si ha instalado un mod de máquina (o similares) que para funcionar requiera un parche de compatibilidad que no esté instalado.",
 
     // connectors
-    "config.title.connectors": "Conectores habilitados",
-    "config.connector.desc": "Si {{itemName}} vincula máquinas y cofres.",
-    "config.custom-connectors.name": "Conectores personalizados",
-    "config.custom-connectors.desc": "Los nombres exactos en inglés de los elementos que conectan máquinas adyacentes entre sí. Puede enumerar varios elementos con comas.", // note: connector names must be English even when playing in other languages
+    "config.title.connectors": "Permitir conectores",
+    "config.connector.desc": "Usa {{itemName}} para conectar maquinas y cofres.",
+    "config.custom-connectors.name": "Personalizar conectores",
+    "config.custom-connectors.desc": "Puedes usar el ítem de tu preferencia para conectar maquinas a los cofres, para ello debes escribir los nombres de los items en ingles. Puedes escribir más de un items separandolos con comas. (Ejemplo: Torch, Cristal Floor -> para Antorcha y Suelos de Cristal.)", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
-    // TODO
-    "config.title.junimo-huts": "Junimo hut behavior",
-    "config.junimo-hut-gems.name": "Gems",
-    "config.junimo-hut-gems.desc": "What Junimo huts should do with gemstone items. 'Auto-detect' will ignore them.",
-    "config.junimo-hut-fertilizer.name": "Fertilizer",
-    "config.junimo-hut-fertilizer.desc": "What Junimo huts should do with fertilizer items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
-    "config.junimo-hut-seeds.name": "Seeds",
-    "config.junimo-hut-seeds.desc": "What Junimo huts should do with seed items. 'Auto-detect' will ignore them if Better Junimos is installed, else move them from the hut into connected chests.",
+    "config.title.junimo-huts": "Uso de la Cabaña Junimo",
+    "config.junimo-hut-gems.name": "Gemas",
+    "config.junimo-hut-gems.desc": "Que debe hacer la Cabaña Junimo con items de Gemas. 'Detectar Automaticamente' para ignorar items.",
+    "config.junimo-hut-fertilizer.name": "Fertilizante",
+    "config.junimo-hut-fertilizer.desc": "Que debe hacer la Cabaña Junimo con items de Fertilizante. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
+    "config.junimo-hut-seeds.name": "Semillas",
+    "config.junimo-hut-seeds.desc": "Que debe hacer la Cabaña Junimo con items de Semillas. 'Auto-detect' Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
 
     // Junimo hut dropdown values
-    // TODO
-    "config.junimo-huts.auto-detect": "Auto-detect",
-    "config.junimo-huts.ignore": "Ignore them",
-    "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
-    "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
+    "config.junimo-huts.auto-detect": "Detectar Automaticamente",
+    "config.junimo-huts.ignore": "Ignorar",
+    "config.junimo-huts.move-into-chests": "Mover desde la Cabaña Junimo a los cofres",
+    "config.junimo-huts.move-into-huts": "Mover desde los cobres a la Cabaña Junimo",
 
     // per-machine settings
-    "config.title.machine-settings": "Configuraciones de {{machineName}}",
-    "config.machine-settings-enabled.Name": "Habilitado",
-    "config.machine-settings-enabled.desc": "Si se activa la automatización de {{machineName}}.",
+    "config.title.machine-settings": "Configuración de {{machineName}}",
+    "config.machine-settings-enabled.Name": "Permitir",
+    "config.machine-settings-enabled.desc": "Para activar la automatización de {{machineName}}.",
     "config.machine-settings-priority.name": "Prioridad",
-    "config.machine-settings-priority.desc": "El orden de prioridad en el que las máquinas {{machineName}} deben ser procesadas en relación con otras máquinas. Las máquinas tienen una prioridad predeterminada de 0, procesándose primero los valores más altos.",
+    "config.machine-settings-priority.desc": "Orden de prioridad en que trabajarán las máquinas de {{machineName}} respecto a otros tipos de máquinas. Todas las máquinas tiene una prioridad de 0 por default, los valores más altos se procesan primero.",
 
     // machine names
-    // TODO
-    "config.machines.bush": "Bush",
-    "config.machines.fruit-tree": "Tree (Fruit Tree)",
-    "config.machines.trash-can": "Trash Can",
-    "config.machines.wild-tree": "Tree (Wild Tree)",
+    "config.machines.bush": "Arbusto",
+    "config.machines.fruit-tree": "Arbol (Arbol Frutal)",
+    "config.machines.trash-can": "Bote de Basura",
+    "config.machines.wild-tree": "Arbol (Arbol Silvestre)",
 
     // special settings for individual machines
-    // TODO
-    "config.machines.wild-tree.collect-moss.name": "Collect Moss",
-    "config.machines.wild-tree.collect-moss.desc": "Whether to collect moss on trees. For example, keeping moss on trees will boost the quality of mushrooms from nearby mushroom logs."
+    "config.machines.wild-tree.collect-moss.name": "Recolectar musgo",
+    "config.machines.wild-tree.collect-moss.desc": "Recolecta musgo en los árboles. Se debe considerar que mantener musgo en los árboles mejorará la calidad de los hongos de los troncos de hongos cercanos."
 }
