@@ -36,7 +36,7 @@ internal class HoldUpItemHandler : BaseAnimationHandler
         if (this.IsHoldingUpItemEnd)
         {
             this.IsHoldingUpItemEnd = false;
-            Game1.player.freezePause = 0;
+            player.forceCanMove();
         }
 
         return this.IsHoldingUpItem(player);

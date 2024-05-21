@@ -10,6 +10,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers;
 internal class ReadBookHandler : BaseAnimationHandler
 {
     /*********
+     ** Field
+     *********/
+    /// <summary>Whether the read-book animation is End.</summary>
+    private bool IsReadingBookEnd;
+
+    /*********
      ** Public methods
      *********/
     /// <summary>Construct an instance.</summary>
@@ -22,22 +28,45 @@ internal class ReadBookHandler : BaseAnimationHandler
     /// <param name="playerAnimationID">The player's current animation ID.</param>
     public override bool IsEnabled(int playerAnimationID)
     {
-        return this.IsReadingBook();
+        var player = Game1.player;
+
+        // Handler remaining pause time after the end of the animation
+        if (this.IsReadingBookEnd)
+        {
+            this.IsReadingBookEnd = false;
+            player.forceCanMove();
+        }
+
+        return this.IsReadingBook(player);
     }
 
     /// <summary>Perform any logic needed on update while the animation is active.</summary>
     /// <param name="playerAnimationID">The player's current animation ID.</param>
     public override void Update(int playerAnimationID)
     {
-        this.SpeedUpPlayer(() => !this.IsReadingBook());
+        var player = Game1.player;
+        var location = player.currentLocation;
+
+        this.ApplySkips(
+            () =>
+            {
+                // player animation
+                player.Update(Game1.currentGameTime, location);
+
+                this.IsReadingBookEnd = !this.IsReadingBook(player);
+            },
+            () => !this.IsReadingBook(player)
+        );
     }
 
     /*********
      ** Private methods
      *********/
-    private bool IsReadingBook()
+    /// <summary>Check whether the current player's animation is the animation of reading book.</summary>
+    /// <remarks>Derived from <see cref="SObject.readBook"/>.</remarks>
+    private bool IsReadingBook(Farmer player)
     {
-        List<FarmerSprite.AnimationFrame>? currentAnimation = Game1.player.FarmerSprite.CurrentAnimation;
+        List<FarmerSprite.AnimationFrame>? currentAnimation = player.FarmerSprite.CurrentAnimation;
 
         return currentAnimation.Count >= 1 &&
                currentAnimation[0].frame == 57 && currentAnimation[0].milliseconds == 1000;
