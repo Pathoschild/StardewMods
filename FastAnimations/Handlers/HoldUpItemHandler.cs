@@ -12,6 +12,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers;
 internal class HoldUpItemHandler : BaseAnimationHandler
 {
     /*********
+     ** Fields
+     *********/
+    /// <summary>Whether item-holdup animation is end.</summary>
+    private bool IsHoldingUpItemEnd;
+
+    /*********
      ** Public methods
      *********/
     /// <summary>Construct an instance.</summary>
@@ -24,7 +30,16 @@ internal class HoldUpItemHandler : BaseAnimationHandler
     /// <param name="playerAnimationID">The player's current animation ID.</param>
     public override bool IsEnabled(int playerAnimationID)
     {
-        return this.IsHoldingUpItem();
+        var player = Game1.player;
+
+        // Handler remaining pause time after the end of the animation
+        if (this.IsHoldingUpItemEnd)
+        {
+            this.IsHoldingUpItemEnd = false;
+            Game1.player.freezePause = 0;
+        }
+
+        return this.IsHoldingUpItem(player);
     }
 
     /// <summary>Perform any logic needed on update while the animation is active.</summary>
@@ -37,16 +52,20 @@ internal class HoldUpItemHandler : BaseAnimationHandler
         this.ApplySkips(
             () =>
             {
+                // player animation
                 player.Update(Game1.currentGameTime, location);
 
+                // animation of item thrown in the air
                 foreach (var sprite in this.GetTemporarySprites(player).ToArray())
                 {
                     bool done = sprite.update(Game1.currentGameTime);
                     if (done)
                         location.TemporarySprites.Remove(sprite);
                 }
+
+                this.IsHoldingUpItemEnd = !this.IsHoldingUpItem(player);
             },
-            () => !this.IsHoldingUpItem()
+            () => !this.IsHoldingUpItem(player)
         );
     }
 
@@ -59,7 +78,7 @@ internal class HoldUpItemHandler : BaseAnimationHandler
     private IEnumerable<TemporaryAnimatedSprite> GetTemporarySprites(Farmer player)
     {
         // get hold up item
-        Item? holdingItem = player.mostRecentlyGrabbedItem ?? player.ActiveItem;
+        Item? holdingItem = player.mostRecentlyGrabbedItem;
 
         foreach (TemporaryAnimatedSprite sprite in player.currentLocation.TemporarySprites)
         {
@@ -90,13 +109,15 @@ internal class HoldUpItemHandler : BaseAnimationHandler
         }
     }
 
-    private bool IsHoldingUpItem()
+    /// <summary>Check whether the player's current animation is the animation of holding up item.</summary>
+    /// <remarks>Derived from <see cref="Farmer.showHoldingItem"/>.</remarks>
+    private bool IsHoldingUpItem(Farmer player)
     {
-        List<FarmerSprite.AnimationFrame>? currentAnimation = Game1.player.FarmerSprite.CurrentAnimation;
+        List<FarmerSprite.AnimationFrame>? currentAnimation = player.FarmerSprite.CurrentAnimation;
 
         return currentAnimation.Count >= 3 &&
                currentAnimation[0].frame == 57 && currentAnimation[0].milliseconds == 0 &&
                currentAnimation[1].frame == 57 && currentAnimation[1].milliseconds == 2500 &&
-               currentAnimation[2].frame == 0 && currentAnimation[2].milliseconds == 500;
+               currentAnimation[2].milliseconds == 500;
     }
 }
