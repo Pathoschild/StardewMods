@@ -44,14 +44,12 @@
     "config.machine-settings-priority.desc": "Diğer makinelerle kıyasla {{machineName}} makinelerinin işlenme öncelik sırası. Makinelerin varsayılan önceliği 0'dır, daha yüksek değerler önce işlenir.",
 
     // machine names
-    // TODO
-    "config.machines.bush": "Bush",
-    "config.machines.fruit-tree": "Tree (Fruit Tree)",
-    "config.machines.trash-can": "Trash Can",
-    "config.machines.wild-tree": "Tree (Wild Tree)",
+    "config.machines.bush": "Çalı",
+    "config.machines.fruit-tree": "Ağaç (Meyve Ağacı)",
+    "config.machines.trash-can": "Çöp Kutusu",
+    "config.machines.wild-tree": "Ağaç (Vahşi Ağaç)",
 
     // special settings for individual machines
-    // TODO
-    "config.machines.wild-tree.collect-moss.name": "Collect Moss",
-    "config.machines.wild-tree.collect-moss.desc": "Whether to collect moss on trees. For example, keeping moss on trees will boost the quality of mushrooms from nearby mushroom logs."
+    "config.machines.wild-tree.collect-moss.name": "Yosunları Topla",
+    "config.machines.wild-tree.collect-moss.desc": "Yosunların toplanıp toplanmayacağı. Örneğin, ağaçlardaki yosunu toplamamak Mantar Kütüğü tarafından üretilecek mantarların kalitesini arttırır."
 }
