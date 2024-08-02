@@ -44,12 +44,11 @@
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "Ubicaciones dentro de la granja",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "Muelle de pesca X",
+    "config.pier-x.tooltip": "La posición de la casilla donde debe añadirse el muelle de pesca, si esta opción está activada. Los valores de X e Y se establecen en cero automáticamente.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "Muelle de pesca Y",
+    "config.pier-y.tooltip": "La posición de la casilla donde debe añadirse el muelle de pesca, si esta opción está activada. Los valores de X e Y se establecen en cero automáticamente."
 }
