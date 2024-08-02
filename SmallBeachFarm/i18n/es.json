@@ -16,13 +16,13 @@
     /****
     ** Farm options
     ****/
-    "config.farm-options-section": "Other farm options", // TODO
+    "config.farm-options-section": "Otras opciones de granja",
 
     "config.beach-sounds.name": "Reproducir sonidos de la playa",
     "config.beach-sounds.tooltip": "Reproduce la música de fondo de la playa (por ejemplo, sonidos de las olas) en la granja de la playa.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "Generar monstruos por defecto",
+    "config.spawn-monsters.tooltip": "La opción por defecto 'generar monstruos en la noche' estará habilitada para un nuevo guardado. Se puede cambiar la opción cuando se crea un nuevo guardado. Esto no tiene efecto en las partidas guardadas existentes.",
 
     /****
     ** Farm layout
