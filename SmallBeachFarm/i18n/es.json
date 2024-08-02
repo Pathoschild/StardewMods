@@ -27,19 +27,19 @@
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "Farm layout",
 
     "config.campfire.name": "Añadir una hoguera",
     "config.campfire.tooltip": "Añade una hoguera funcional delante de la casa de campo.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "Añadir muelle de pesca",
+    "config.pier.tooltip": "Añade un muelle donde puedes pescar.",
 
     "config.islands.name": "Añadir islas",
     "config.islands.tooltip": "Añade islas oceánicas con superficie extra.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "Añadir camino al cubo de entrega",
+    "config.shipping-bin-path.tooltip": "Añade un camino de piedra en frente de la posición predeterminada del cubo de entrega.",
 
     /****
     ** Farm positions
