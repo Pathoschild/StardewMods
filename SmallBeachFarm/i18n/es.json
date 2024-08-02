@@ -5,10 +5,9 @@
     "farm.name": "Pequeña granja playera",
     "farm.description": "Una pequeña y fértil playa de bolsillo, donde se puede pescar tanto en el río como en el mar.",
 
-    // TODO
-    "farm.fish-areas.river": "River",
-    "farm.fish-areas.estuary": "Estuary",
-    "farm.fish-areas.ocean": "Ocean",
+    "farm.fish-areas.river": "Río",
+    "farm.fish-areas.estuary": "Estuario",
+    "farm.fish-areas.ocean": "Mar",
 
 
     /*********
