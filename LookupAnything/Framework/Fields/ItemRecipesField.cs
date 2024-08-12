@@ -64,6 +64,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.ShowOutputLabels = showOutputLabels;
         }
 
+        /// <summary> Get number of recipes that will be drawn</summary>
+        /// <returns>Number of shown recipes</returns>
+        public int ShownRecipesCount()
+        {
+            return this.RecipesByType.Sum(
+                (group) => group.Recipes.Count(
+                    (entry) => entry.IsValid && (this.ShowUnknownRecipes || entry.IsKnown)));
+        }
+
         /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
@@ -104,6 +113,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // draw recipe lines
                 foreach (RecipeEntry entry in group.Recipes)
                 {
+                    if (!entry.IsValid)
+                    {
+                        continue;
+                    }
                     if (!this.ShowUnknownRecipes && !entry.IsKnown)
                     {
                         hiddenUnknownRecipesCount++;
@@ -281,7 +294,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             maxCount: recipe.MaxOutput,
                             chance: recipe.OutputChance,
                             quality: recipe.Quality,
-                            hasInputAndOutput: true
+                            hasInputAndOutput: true,
+                            isBuilding: recipe.SpecialOutput?.IsBuilding ?? false
                         );
                     }
 
@@ -538,7 +552,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="chance">The chance of creating an output item.</param>
         /// <param name="quality">The item quality that will be produced, if applicable.</param>
         /// <param name="hasInputAndOutput">Whether the item has both input and output ingredients.</param>
-        private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false)
+        private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool isBuilding = false)
         {
             // get display text
             string text;
@@ -564,7 +578,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 Sprite: sprite ?? this.GameHelper.GetSprite(item),
                 DisplayText: text,
                 Quality: quality,
-                IsGoldPrice: false
+                IsGoldPrice: false,
+                IsBuilding: isBuilding,
+                QualifiedItemId: item?.QualifiedItemId ?? "ERROR"
             );
         }
     }

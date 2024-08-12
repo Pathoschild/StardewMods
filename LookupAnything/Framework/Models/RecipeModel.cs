@@ -135,7 +135,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 minOutput: recipe.numberProducedPerCraft,
                 machineId: null,
                 outputQualifiedItemId: RecipeModel.QualifyRecipeOutputId(recipe, outputQualifiedItemId) ?? outputQualifiedItemId
-            ) { }
+            )
+        { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="building">A sample building constructed by the blueprint.</param>
@@ -157,7 +158,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 Sprite: new SpriteInfo(building.texture.Value, building.getSourceRectForMenu() ?? building.getSourceRect()),
                 DisplayText: TokenParser.ParseText(building.GetData()?.Name) ?? building.buildingType.Value,
                 Quality: null,
-                IsGoldPrice: false
+                IsGoldPrice: false,
+                IsBuilding: true
             );
         }
 

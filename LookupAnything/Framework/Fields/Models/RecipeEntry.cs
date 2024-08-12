@@ -37,6 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <summary>A key which uniquely identifies the recipe by its combination of name, inputs, and outputs.</summary>
         public string UniqueKey => this.UniqueKeyImpl.Value;
 
+        /// <summary>True if all items involved in this recipe is valid</summary>
+        public bool IsValid { get; }
+
 
         /*********
         ** Public methods
@@ -57,6 +60,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
             this.Output = output;
             this.Conditions = conditions;
             this.UniqueKeyImpl = new Lazy<string>(() => RecipeEntry.GetUniqueKey(name, inputs, output));
+
+            this.IsValid = output.IsValid && inputs.All((ipt) => ipt.IsValid);
         }
 
 
