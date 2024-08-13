@@ -1,5 +1,4 @@
 using Pathoschild.Stardew.Common;
-using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
 {
