@@ -67,6 +67,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>
         private readonly bool ShowUnknownRecipes;
 
+        /// <summary>Whether to show recipes involving error items.</summary>
+        private readonly bool ShowInvalidRecipes;
+
         /// <summary>The configured minimum field values needed before they're auto-collapsed.</summary>
         private readonly ModCollapseLargeFieldsConfig CollapseFieldsConfig;
 
@@ -87,6 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="showGiftTastes">Which gift taste levels to show.</param>
         /// <param name="showUnknownRecipes">Whether to show recipes the player hasn't learned in-game yet.</param>
+        /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
         /// <param name="collapseFieldsConfig">The configured minimum field values needed before they're auto-collapsed.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
@@ -95,7 +99,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
         /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
+        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
             : base(gameHelper)
         {
             this.Codex = codex;
@@ -103,6 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
             this.ShowGiftTastes = showGiftTastes;
             this.ShowUnknownRecipes = showUnknownRecipes;
+            this.ShowInvalidRecipes = showInvalidRecipes;
             this.CollapseFieldsConfig = collapseFieldsConfig;
             this.Target = item;
             this.FromCrop = fromCrop ?? fromDirt?.crop;
@@ -296,7 +301,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 if (recipes.Length > 0)
                 {
-                    var field = new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes, this.ShowUnknownRecipes);
+                    var field = new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes, this.ShowUnknownRecipes, this.ShowInvalidRecipes);
 
                     // calculate count of recipes that will be shown, in case we're in progression mode and some are hidden
                     int shownRecipesCount = field.ShownRecipesCount();

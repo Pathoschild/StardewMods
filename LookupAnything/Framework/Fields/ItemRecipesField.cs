@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>
         private readonly bool ShowUnknownRecipes;
 
+        /// <summary>Whether to show recipes involving error items.</summary>
+        private readonly bool ShowInvalidRecipes;
+
         /// <summary>Whether to show the recipe group labels even if there's only one group.</summary>
         private readonly bool ShowLabelForSingleGroup;
 
@@ -52,14 +55,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipes to list.</param>
         /// <param name="showUnknownRecipes">Whether to show recipes the player hasn't learned in-game yet.</param>
+        /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
         /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
         /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-        public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
+        public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
             : base(label, true)
         {
             this.GameHelper = gameHelper;
             this.RecipesByType = this.BuildRecipeGroups(ingredient, recipes).ToArray();
             this.ShowUnknownRecipes = showUnknownRecipes;
+            this.ShowInvalidRecipes = showInvalidRecipes;
             this.ShowLabelForSingleGroup = showLabelForSingleGroup;
             this.ShowOutputLabels = showOutputLabels;
         }
@@ -70,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             return this.RecipesByType.Sum(
                 (group) => group.Recipes.Count(
-                    (entry) => entry.IsValid && (this.ShowUnknownRecipes || entry.IsKnown)));
+                    (entry) => (this.ShowInvalidRecipes || entry.IsValid) && (this.ShowUnknownRecipes || entry.IsKnown)));
         }
 
         /// <inheritdoc />
@@ -113,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // draw recipe lines
                 foreach (RecipeEntry entry in group.Recipes)
                 {
-                    if (!entry.IsValid)
+                    if (!this.ShowInvalidRecipes && !entry.IsValid)
                     {
                         continue;
                     }
@@ -261,7 +266,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                                 name: I18n.Item_RecipesForMachine_TooComplex(),
                                 item: outputItem,
                                 sprite: recipe.SpecialOutput?.Sprite,
-                                hasInputAndOutput: false
+                                hasInputAndOutput: false,
+                                isError: false
                             ),
                             conditions: recipe.Conditions.Length > 0
                                 ? I18n.List(recipe.Conditions.Select(HumanReadableConditionParser.Format))
@@ -281,7 +287,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             maxCount: recipe.MaxOutput,
                             chance: recipe.OutputChance,
                             quality: recipe.Quality,
-                            hasInputAndOutput: true
+                            hasInputAndOutput: true,
+                            isError: false
                         );
                     }
                     else
@@ -295,7 +302,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             chance: recipe.OutputChance,
                             quality: recipe.Quality,
                             hasInputAndOutput: true,
-                            isBuilding: recipe.SpecialOutput?.IsBuilding ?? false
+                            isError: recipe.SpecialOutput?.IsError
                         );
                     }
 
@@ -448,7 +455,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     return this.CreateItemEntry(
                         name: I18n.Item_WildSeeds(),
                         minCount: ingredient.Count,
-                        maxCount: ingredient.Count
+                        maxCount: ingredient.Count,
+                        isError: false
                     );
             }
 
@@ -477,7 +485,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     return this.CreateItemEntry(
                         name: displayName,
                         minCount: ingredient.Count,
-                        maxCount: ingredient.Count
+                        maxCount: ingredient.Count,
+                        isError: false
                     );
                 }
             }
@@ -516,7 +525,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 return this.CreateItemEntry(
                     name: I18n.List(ingredient.InputContextTags.Select(HumanReadableContextTagParser.Format)),
                     minCount: ingredient.Count,
-                    maxCount: ingredient.Count
+                    maxCount: ingredient.Count,
+                    isError: false
                 );
             }
 
@@ -538,7 +548,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     sprite: new SpriteInfo(
                         objectTypeDef.GetErrorTexture(),
                         objectTypeDef.GetErrorSourceRect()
-                    )
+                    ),
+                    isError: true
                 );
             }
         }
@@ -552,7 +563,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="chance">The chance of creating an output item.</param>
         /// <param name="quality">The item quality that will be produced, if applicable.</param>
         /// <param name="hasInputAndOutput">Whether the item has both input and output ingredients.</param>
-        private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool isBuilding = false)
+        /// <param name="isError">Mark item entry as error or not error explicitly, otherwise derive based on item.</param>
+        private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool? isError = null)
         {
             // get display text
             string text;
@@ -579,8 +591,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 DisplayText: text,
                 Quality: quality,
                 IsGoldPrice: false,
-                IsBuilding: isBuilding,
-                QualifiedItemId: item?.QualifiedItemId
+                IsError: isError ?? (item != null && ItemRegistry.GetData(item?.QualifiedItemId) == null)
             );
         }
     }

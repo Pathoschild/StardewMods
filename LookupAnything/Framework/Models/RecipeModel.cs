@@ -159,7 +159,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 DisplayText: TokenParser.ParseText(building.GetData()?.Name) ?? building.buildingType.Value,
                 Quality: null,
                 IsGoldPrice: false,
-                IsBuilding: true
+                IsError: false
             );
         }
 

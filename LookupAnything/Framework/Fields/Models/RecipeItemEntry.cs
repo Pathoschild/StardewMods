@@ -8,8 +8,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
     /// <param name="DisplayText">The display text for the item name and count.</param>
     /// <param name="Quality">The item quality that will be produced, if applicable.</param>
     /// <param name="IsGoldPrice">Whether this is a gold price, rather than an ingredient.</param>
-    internal record RecipeItemEntry(SpriteInfo? Sprite, string DisplayText, int? Quality, bool IsGoldPrice, bool IsBuilding = false, string? QualifiedItemId = null)
+    /// <param name="IsError">False if this entry is an error item or category</param>
+    internal record RecipeItemEntry(SpriteInfo? Sprite, string DisplayText, int? Quality, bool IsGoldPrice, bool IsError = false)
     {
-        internal bool IsValid => this.IsBuilding || this.IsGoldPrice || this.QualifiedItemId == null || ItemRegistry.GetData(this.QualifiedItemId) != null;
+        internal bool IsValid => this.IsGoldPrice || !this.IsError;
     }
 }
