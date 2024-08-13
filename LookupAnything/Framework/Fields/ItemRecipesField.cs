@@ -580,7 +580,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 Quality: quality,
                 IsGoldPrice: false,
                 IsBuilding: isBuilding,
-                QualifiedItemId: item?.QualifiedItemId ?? "ERROR"
+                QualifiedItemId: item?.QualifiedItemId
             );
         }
     }
