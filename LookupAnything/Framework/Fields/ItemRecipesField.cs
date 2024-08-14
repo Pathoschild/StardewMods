@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The recipes to list by type.</summary>
         private readonly RecipeByTypeGroup[] RecipesByType;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
@@ -35,6 +38,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
         /// <summary>Whether to show the output item for recipes.</summary>
         private readonly bool ShowOutputLabels;
+
+        /// <summary>Target that produced these recipes, used to exclude from links.</summary>
+        private readonly Item? Target;
 
         /// <summary>The number of pixels between an item's icon and text.</summary>
         private readonly int IconMargin = 5;
@@ -58,15 +64,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
         /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
         /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-        public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
+        public ItemRecipesField(ISubjectRegistry codex, GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true, Item? target = null)
             : base(label, true)
         {
+            this.Codex = codex;
             this.GameHelper = gameHelper;
             this.RecipesByType = this.BuildRecipeGroups(ingredient, recipes).ToArray();
             this.ShowUnknownRecipes = showUnknownRecipes;
             this.ShowInvalidRecipes = showInvalidRecipes;
             this.ShowLabelForSingleGroup = showLabelForSingleGroup;
             this.ShowOutputLabels = showOutputLabels;
+            this.Target = target;
+            this.LinkTextAreas = [];
         }
 
         /// <summary> Get number of recipes that will be drawn</summary>
@@ -131,6 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     // fade recipes which aren't known
                     Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
                     Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
+                    Color linkColor = Color.Blue;
 
                     // reset position for recipe output
                     float recipeLeftMargin = position.X + firstRecipeLeftMargin;
@@ -141,12 +151,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                     // draw output item (icon + name + count + chance)
                     float inputLeft = 0;
+                    bool shouldLink;
                     if (this.ShowOutputLabels)
                     {
-                        Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
+                        shouldLink = entry.Output.Item != null && entry.Output.Item.QualifiedItemId != this.Target?.QualifiedItemId;
+                        Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, shouldLink ? linkColor : textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                         float outputWidth = alignColumns
                             ? group.ColumnWidths[0]
                             : outputSize.X;
+
+                        if (shouldLink)
+                        {
+                            this.LinkTextAreas!.Add(new(
+                                new Rectangle((int)curPos.X, (int)curPos.Y, (int)outputWidth, (int)lineHeight),
+                                () => this.Codex.GetByEntity(entry.Output.Item!, null)
+                            ));
+                        }
 
                         inputLeft = curPos.X + outputWidth + itemSpacer;
                         curPos.X = inputLeft;
@@ -175,8 +195,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             );
                         }
 
+                        shouldLink = input.Item != null && input.Item.QualifiedItemId != this.Target?.QualifiedItemId;
                         // draw input item (icon + name + count)
-                        this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, curIconSize, iconColor, input.Quality);
+                        this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, shouldLink ? linkColor : textColor, input.Sprite, curIconSize, iconColor, input.Quality);
+
+                        if (shouldLink)
+                        {
+                            this.LinkTextAreas!.Add(new(
+                                new Rectangle((int)curPos.X, (int)curPos.Y, (int)inputSize.X, (int)lineHeight),
+                                () => this.Codex.GetByEntity(input.Item!, null)
+                            ));
+                        }
+
                         curPos = new Vector2(
                             x: curPos.X + inputSize.X,
                             y: curPos.Y
@@ -591,6 +621,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 DisplayText: text,
                 Quality: quality,
                 IsGoldPrice: false,
+                Item: item,
                 IsError: isError ?? (item != null && ItemRegistry.GetData(item?.QualifiedItemId) == null)
             );
         }

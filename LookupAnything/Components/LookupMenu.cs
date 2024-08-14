@@ -77,6 +77,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>Click areas for link fields that open a new subject.</summary>
         private readonly IDictionary<ILinkField, Rectangle> LinkFieldAreas = new Dictionary<ILinkField, Rectangle>();
+        /// <summary>Click areas for link fields that open a new subject.</summary>
+        private readonly List<ValueTuple<Rectangle, Func<ISubject?>>> LinkTextAreas = [];
 
         /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
         private readonly bool WasHudEnabled;
@@ -265,7 +267,20 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                         ISubject? subject = link.GetLinkSubject();
                         if (subject != null)
                             this.ShowNewPage(subject);
-                        break;
+                        return;
+                    }
+                }
+
+                foreach ((Rectangle area, Func<ISubject?> getSubject) in this.LinkTextAreas)
+                {
+                    if (area.Contains(x, y + this.CurrentScroll))
+                    {
+                        ISubject? subject = getSubject();
+                        if (subject != null)
+                        {
+                            this.ShowNewPage(subject);
+                            return;
+                        }
                     }
                 }
             }
@@ -375,6 +390,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                 float cellPadding = 3;
                                 float labelWidth = fields.Where(p => p.HasValue).Max(p => font.MeasureString(p.Label).X);
                                 float valueWidth = wrapWidth - labelWidth - cellPadding * 4 - tableBorderWidth;
+                                this.LinkTextAreas.Clear();
                                 foreach (ICustomField field in fields)
                                 {
                                     if (!field.HasValue)
@@ -410,6 +426,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                     // track link area
                                     if (field is ILinkField linkField)
                                         this.LinkFieldAreas[linkField] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
+
+                                    if (field.LinkTextAreas != null)
+                                        this.LinkTextAreas.AddRange(field.LinkTextAreas);
 
                                     // update offset
                                     topOffset += Math.Max(labelSize.Y, valueSize.Y);

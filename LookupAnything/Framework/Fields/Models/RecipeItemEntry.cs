@@ -1,4 +1,5 @@
 using Pathoschild.Stardew.Common;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
 {
@@ -8,7 +9,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
     /// <param name="Quality">The item quality that will be produced, if applicable.</param>
     /// <param name="IsGoldPrice">Whether this is a gold price, rather than an ingredient.</param>
     /// <param name="IsError">False if this entry is an error item or category</param>
-    internal record RecipeItemEntry(SpriteInfo? Sprite, string DisplayText, int? Quality, bool IsGoldPrice, bool IsError = false)
+    internal record RecipeItemEntry(SpriteInfo? Sprite, string DisplayText, int? Quality, bool IsGoldPrice, Item? Item = null, bool IsError = false)
     {
         internal bool IsValid => this.IsGoldPrice || !this.IsError;
     }

@@ -194,7 +194,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                         if (recipes.Length > 0)
                         {
                             // return recipes
-                            var field = new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes); // building recipes don't need to be learned
+                            var field = new ItemRecipesField(this.Codex, this.GameHelper, I18n.Item_Recipes(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes); // building recipes don't need to be learned
                             if (this.CollapseFieldsConfig.Enabled && recipes.Length >= this.CollapseFieldsConfig.BuildingRecipes)
                                 field.CollapseByDefault(I18n.Generic_ShowXResults(count: recipes.Length));
                             yield return field;
@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
 
                 if (recipes.Length > 0)
                 {
-                    var field = new ItemRecipesField(this.GameHelper, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes, showLabelForSingleGroup: false, showOutputLabels: false);
+                    var field = new ItemRecipesField(this.Codex, this.GameHelper, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes, showLabelForSingleGroup: false, showOutputLabels: false);
                     if (this.CollapseFieldsConfig.Enabled && recipes.Length >= this.CollapseFieldsConfig.BuildingRecipes)
                         field.CollapseByDefault(I18n.Generic_ShowXResults(count: recipes.Length));
                     yield return field;

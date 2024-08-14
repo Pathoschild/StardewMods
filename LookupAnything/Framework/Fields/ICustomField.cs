@@ -1,5 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -20,6 +24,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
         /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
         LinkField? ExpandLink { get; }
+
+        /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
+        IList<ValueTuple<Rectangle, Func<ISubject?>>>? LinkTextAreas { get; set; }
 
 
         /*********

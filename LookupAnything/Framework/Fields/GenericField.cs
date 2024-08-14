@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -24,6 +26,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <inheritdoc />
         public bool HasValue { get; protected set; }
 
+        public IList<(Rectangle, Func<ISubject?>)>? LinkTextAreas { get; set; }
+
 
         /*********
         ** Public methods
@@ -37,6 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.Label = label;
             this.Value = this.FormatValue(value);
             this.HasValue = hasValue ?? this.Value?.Any() == true;
+            this.LinkTextAreas = null;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -55,6 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.Label = label;
             this.Value = value.ToArray();
             this.HasValue = hasValue ?? this.Value?.Any() == true;
+
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>
