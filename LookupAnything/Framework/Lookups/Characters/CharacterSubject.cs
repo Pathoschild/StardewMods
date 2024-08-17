@@ -275,7 +275,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
             yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: monster.invincibleCountdown), hasValue: monster.isInvincible());
             yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
-            yield return new ItemDropListField(this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
+            yield return new ItemDropListField(this.Codex, this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
             yield return new GenericField(I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
             yield return new GenericField(I18n.Monster_Defense(), this.Stringify(monster.resilience.Value));
             yield return new GenericField(I18n.Monster_Attack(), this.Stringify(monster.DamageToFarmer));

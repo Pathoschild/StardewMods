@@ -15,6 +15,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
+
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper;
 
@@ -46,9 +50,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="crossOutNonGuaranteed">Whether to cross out non-guaranteed drops.</param>
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
         /// <param name="preface">The text to display before the list, if any.</param>
-        public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
+        public ItemDropListField(ISubjectRegistry codex, GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
             : base(label)
         {
+            this.Codex = codex;
             this.GameHelper = gameHelper;
             this.Drops = this.GetEntries(drops, gameHelper).ToArray();
             if (sort)
@@ -59,6 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.CrossOutNonGuaranteed = crossOutNonGuaranteed;
             this.Preface = preface;
             this.DefaultText = defaultText;
+            this.LinkTextAreas = [];
         }
 
         /// <inheritdoc />
@@ -66,6 +72,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             if (!this.Drops.Any())
                 return spriteBatch.DrawTextBlock(font, this.DefaultText, position, wrapWidth);
+
+            this.LinkTextAreas!.Clear();
 
             float height = 0;
 
@@ -94,11 +102,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Black);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Blue);
 
                 // cross out item if it definitely won't drop
                 if (shouldCrossOut)
                     spriteBatch.DrawLine(position.X + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), this.FadeNonGuaranteed ? Color.Gray : Color.Black);
+                else
+                    this.LinkTextAreas!.Add(new(
+                        new Rectangle((int)(position.X + iconSize.X + 5), (int)((int)position.Y + height), (int)textSize.X, (int)textSize.Y),
+                        () => this.Codex.GetByEntity(item, null)
+                    ));
 
                 // draw conditions
                 if (drop.Conditions != null)

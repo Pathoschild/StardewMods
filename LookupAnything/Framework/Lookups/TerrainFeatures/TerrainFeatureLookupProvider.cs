@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="bush">The entity to look up.</param>
         private ISubject BuildSubject(Bush bush)
         {
-            return new BushSubject(this.GameHelper, bush);
+            return new BushSubject(this.Codex, this.GameHelper, bush);
         }
 
         /// <summary>Build a subject.</summary>

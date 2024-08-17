@@ -90,6 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
+            this.LinkTextAreas!.Clear();
             // get margins
             const int groupVerticalMargin = 6;
             const int groupLeftMargin = 0;
@@ -151,10 +152,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                     // draw output item (icon + name + count + chance)
                     float inputLeft = 0;
-                    bool shouldLink;
                     if (this.ShowOutputLabels)
                     {
-                        shouldLink = entry.Output.Item != null && entry.Output.Item.QualifiedItemId != this.Target?.QualifiedItemId;
+                        bool shouldLink = entry.Output.Item != null && entry.Output.Item.QualifiedItemId != this.Target?.QualifiedItemId;
                         Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, shouldLink ? linkColor : textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                         float outputWidth = alignColumns
                             ? group.ColumnWidths[0]
@@ -195,7 +195,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             );
                         }
 
-                        shouldLink = input.Item != null && input.Item.QualifiedItemId != this.Target?.QualifiedItemId;
+                        bool shouldLink = input.Item != null && input.Item.QualifiedItemId != this.Target?.QualifiedItemId;
                         // draw input item (icon + name + count)
                         this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, shouldLink ? linkColor : textColor, input.Sprite, curIconSize, iconColor, input.Quality);
 
