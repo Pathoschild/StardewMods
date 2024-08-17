@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Migrations
 {

@@ -17,6 +17,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework
 {
@@ -1150,12 +1151,12 @@ namespace ContentPatcher.Framework
                 if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue? contains))
                 {
                     if (bool.TryParse(condition.Values.Value, out bool required) && required)
-                        immutableRequiredModIDs.AddMany(contains.Parsed);
+                        immutableRequiredModIDs.AddRange(contains.Parsed);
                 }
 
                 // values
                 else
-                    immutableRequiredModIDs.AddMany(condition.CurrentValues);
+                    immutableRequiredModIDs.AddRange(condition.CurrentValues);
             }
 
             return true;

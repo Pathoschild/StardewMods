@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -55,7 +56,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             // get possible values from literal token
             IInvariantSet splitValues = possibleValues.SplitValuesUnique();
-            this.AllowedRootValues.AddMany(possibleValues.SplitValuesUnique());
+            this.AllowedRootValues.AddRange(possibleValues.SplitValuesUnique());
             if (splitValues.Count > 1)
                 this.MayReturnMultipleValuesForRoot = true;
         }
@@ -64,7 +65,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="tokens">The token names used.</param>
         public void AddTokensUsed(IEnumerable<string> tokens)
         {
-            this.TokensUsed.AddMany(tokens);
+            this.TokensUsed.AddRange(tokens);
         }
 
         /// <summary>Set the current values.</summary>

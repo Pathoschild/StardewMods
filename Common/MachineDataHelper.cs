@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Extensions;
 using StardewValley.GameData.Buildings;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Objects;
@@ -100,6 +101,67 @@ namespace Pathoschild.Stardew.Common
 
             data = null;
             return false;
+        }
+
+
+        /*********
+        ** Game state queries
+        *********/
+        /// <summary>Get the item data matching a game state query, if the query uniquely identifies one.</summary>
+        /// <param name="query">The context tag to match.</param>
+        /// <param name="data">The item data, if found.</param>
+        /// <returns>Returns whether the <paramref name="data"/> was set to a unique item match.</returns>
+        public static bool TryGetUniqueItemFromGameStateQuery(string query, [NotNullWhen(true)] out ParsedItemData? data)
+        {
+            data = null;
+
+            foreach (GameStateQuery.ParsedGameStateQuery condition in GameStateQuery.Parse(query))
+            {
+                if (condition.Error is not null)
+                    continue;
+
+                string queryName = ArgUtility.Get(condition.Query, 0);
+
+                // handle ITEM_ID
+                if (queryName.EqualsIgnoreCase(nameof(GameStateQuery.DefaultResolvers.ITEM_ID)))
+                {
+                    if (condition.Query.Length == 3 && condition.Query[1].EqualsIgnoreCase("Input"))
+                    {
+                        string itemId = ItemRegistry.QualifyItemId(condition.Query[2]);
+
+                        if (data is null)
+                            data = ItemRegistry.GetData(itemId);
+                        else if (data.QualifiedItemId != itemId)
+                        {
+                            // conflicting ID queries
+                            data = null;
+                            return false;
+                        }
+                    }
+                }
+
+                // handle ITEM_CONTEXT_TAG
+                else if (queryName.EqualsIgnoreCase(nameof(GameStateQuery.DefaultResolvers.ITEM_CONTEXT_TAG)))
+                {
+                    if (condition.Query.Length == 3 && condition.Query[1].EqualsIgnoreCase("Input"))
+                    {
+                        if (MachineDataHelper.TryGetUniqueItemFromContextTag(condition.Query[2], out ParsedItemData? itemData))
+                        {
+                            if (data is null)
+                                data = itemData;
+
+                            else if (data.QualifiedItemId != itemData.QualifiedItemId)
+                            {
+                                // conflicting context tag queries
+                                data = null;
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return data != null;
         }
     }
 }

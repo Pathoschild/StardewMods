@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
         public ShopMenuOverlay(ShopMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-            : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ShopMenu, topOffset: Game1.pixelZoom * 6)
+            : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ShopMenu)
         {
             this.Menu = menu;
             this.DefaultPurchaseFilter = menu.canPurchaseCheck;
@@ -62,6 +62,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.Menu.canPurchaseCheck = _ => false;
                 this.Menu.inventory.highlightMethod = _ => false;
             }
+        }
+
+        /// <inheritdoc />
+        protected override int GetTopOffset(IClickableMenu menu)
+        {
+            return Game1.pixelZoom * 6;
         }
     }
 }

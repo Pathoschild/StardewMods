@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Patches
 {

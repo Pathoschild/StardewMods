@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 {
@@ -80,7 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                     this.LocalPlayerId = localId;
 
                     // update values by player ID
-                    HashSet<long> removeIds = [..this.Values.Keys];
+                    HashSet<long> removeIds = [.. this.Values.Keys];
                     foreach (Farmer player in this.SaveReader.GetAllPlayers())
                     {
                         // get values
@@ -177,7 +178,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                             break;
 
                         case PlayerType.AnyPlayer:
-                            playerIds?.AddMany(this.Values.Keys);
+                            playerIds?.AddRange(this.Values.Keys);
                             break;
 
                         default:
@@ -208,7 +209,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             foreach (long id in playerIds)
             {
                 if (this.Values.TryGetValue(id, out IInvariantSet? set))
-                    values.AddMany(set);
+                    values.AddRange(set);
             }
             return values;
         }

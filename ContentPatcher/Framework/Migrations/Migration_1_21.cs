@@ -6,6 +6,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using StardewModdingAPI;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Migrations
 {

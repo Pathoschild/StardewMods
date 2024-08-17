@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -146,7 +146,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 DrawTextHelper.SoftBreakCharacters.Clear();
                 if (!string.IsNullOrEmpty(characters))
-                    DrawTextHelper.SoftBreakCharacters.AddMany(characters);
+                    DrawTextHelper.SoftBreakCharacters.AddRange(characters);
 
                 DrawTextHelper.LastLanguage = language;
             }

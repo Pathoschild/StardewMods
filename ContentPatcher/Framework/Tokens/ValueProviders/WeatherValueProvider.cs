@@ -4,6 +4,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {

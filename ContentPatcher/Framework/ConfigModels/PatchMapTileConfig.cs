@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.ConfigModels
 
         /// <summary>The tile properties to set.</summary>
         [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
-        public InvariantDictionary<string?> SetProperties { get; } = new();
+        public InvariantDictionary<string?> SetProperties { get; }
 
         /// <summary>Whether to remove the current tile and all its properties.</summary>
         public string? Remove { get; }
@@ -37,14 +37,16 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="position">The tile position to edit, relative to the top-left corner.</param>
         /// <param name="setTilesheet">The tilesheet ID to set.</param>
         /// <param name="setIndex">The tilesheet index to apply, the string <c>false</c> to remove it, or null to leave it as-is.</param>
+        /// <param name="setProperties">The tile properties to set.</param>
         /// <param name="remove">Whether to remove the current tile and all its properties.</param>
         [JsonConstructor]
-        public PatchMapTileConfig(string? layer, PatchPositionConfig? position, string? setTilesheet, string? setIndex, string? remove)
+        public PatchMapTileConfig(string? layer, PatchPositionConfig? position, string? setTilesheet, string? setIndex, InvariantDictionary<string?>? setProperties, string? remove)
         {
             this.Layer = layer;
             this.Position = position;
             this.SetTilesheet = setTilesheet;
             this.SetIndex = setIndex;
+            this.SetProperties = setProperties ?? new InvariantDictionary<string?>();
             this.Remove = remove;
         }
 
@@ -56,6 +58,7 @@ namespace ContentPatcher.Framework.ConfigModels
                   position: other.Position,
                   setTilesheet: other.SetTilesheet,
                   setIndex: other.SetIndex,
+                  setProperties: other.SetProperties,
                   remove: other.Remove
             )
         { }

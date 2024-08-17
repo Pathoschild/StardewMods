@@ -12,6 +12,6 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomBush
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public CustomBushIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("CustomBush", "furyx639.CustomBush", "1.0.5", modRegistry, monitor) { }
+            : base("CustomBush", "furyx639.CustomBush", "1.2.0", modRegistry, monitor) { }
     }
 }

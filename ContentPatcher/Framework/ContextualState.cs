@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework
 {
@@ -130,7 +131,7 @@ namespace ContentPatcher.Framework
             if (source == null)
                 return;
 
-            target.AddMany(source);
+            target.AddRange(source);
         }
     }
 }

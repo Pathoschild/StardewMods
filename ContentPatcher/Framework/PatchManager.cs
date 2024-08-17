@@ -13,6 +13,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Extensions;
 using xTile;
 
 namespace ContentPatcher.Framework
@@ -145,11 +146,11 @@ namespace ContentPatcher.Framework
                     foreach ((ContextUpdateType curType, MutableInvariantSet queued) in this.QueuedTokenChanges)
                     {
                         if (curType != updateType)
-                            queued.AddMany(globalChangedTokens);
+                            queued.AddRange(globalChangedTokens);
                     }
 
                     // get queued changes for the current update point
-                    affectedTokens.AddMany(this.QueuedTokenChanges[updateType]);
+                    affectedTokens.AddRange(this.QueuedTokenChanges[updateType]);
                     this.QueuedTokenChanges[updateType].Clear();
                 }
 
@@ -658,7 +659,7 @@ namespace ContentPatcher.Framework
             }
 
             // add uninitialized patches
-            patches.AddMany(this.PendingPatches);
+            patches.AddRange(this.PendingPatches);
 
             return patches;
         }

@@ -14,6 +14,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Commands.Commands
 {
@@ -485,7 +486,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 if (!effectsByPatch.TryGetValue(displayTarget, out MutableInvariantSet? effects))
                                     effectsByPatch[displayTarget] = effects = [];
 
-                                effects.AddMany(patch.GetChangeLabels());
+                                effects.AddRange(patch.GetChangeLabels());
                             }
                         }
 

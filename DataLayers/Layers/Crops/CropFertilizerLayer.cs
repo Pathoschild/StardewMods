@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
 
+        /// <summary>Whether the Ultimate Fertilizer mod is installed.</summary>
+        private readonly bool HasUltimateFertilizer;
+
 
         /*********
         ** Public methods
@@ -57,6 +60,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
                 .ToArray();
 
             this.Mods = mods;
+            this.HasUltimateFertilizer = mods.IsModInstalled("fox_white25.ultimate_fertilizer");
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -131,7 +135,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             if (dirt is not null && !this.IsDeadCrop(dirt))
             {
                 if (this.Mods.MultiFertilizer.IsLoaded)
-                    applied = [..this.Mods.MultiFertilizer.GetAppliedFertilizers(dirt)];
+                    applied = [.. this.Mods.MultiFertilizer.GetAppliedFertilizers(dirt)];
+                else if (this.HasUltimateFertilizer)
+                    applied = [.. dirt.fertilizer.Value.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)]; // Ultimate Fertilizer allows multiple fertilizers
                 else if (CommonHelper.IsItemId(dirt.fertilizer.Value, allowZero: false))
                     applied = [dirt.fertilizer.Value];
             }

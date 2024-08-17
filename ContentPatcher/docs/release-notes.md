@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed `EditMap` patches with multiple `Target` or `FromFile` values not applying `SetProperties`.
+
 ## 2.3.0
 Released 29 June 2024 for SMAPI 4.0.7 or later. See the [release highlights](https://www.patreon.com/posts/107147109).
 

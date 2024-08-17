@@ -3,6 +3,7 @@ using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewValley.Extensions;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -160,7 +161,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                             parsed.Add(MinesName);
 
                         config.DisabledInLocations.Clear();
-                        config.DisabledInLocations.AddMany(parsed);
+                        config.DisabledInLocations.AddRange(parsed);
                     }
                 );
         }

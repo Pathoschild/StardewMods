@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using StardewValley.Extensions;
 
 namespace Pathoschild.Stardew.Common.Utilities
 {
@@ -67,7 +68,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <returns>Returns <c>true</c> if any value was added; else <c>false</c> if all values were already present.</returns>
         public bool AddBound(IEnumerable<T> values)
         {
-            return this.RestrictToValues.AddMany(values);
+            return this.RestrictToValues.AddRange(values) > 0;
         }
 
         /// <summary>Add values to exclude.</summary>
@@ -83,7 +84,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <returns>Returns <c>true</c> if any value was added; else <c>false</c> if all values were already present.</returns>
         public bool Exclude(IEnumerable<T> values)
         {
-            return this.ExcludeValues.AddMany(values);
+            return this.ExcludeValues.AddRange(values) > 0;
         }
 
         /// <summary>Get whether this constraint allows some values that would be allowed by another.</summary>

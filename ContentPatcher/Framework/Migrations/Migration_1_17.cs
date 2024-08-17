@@ -5,6 +5,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Migrations
 {

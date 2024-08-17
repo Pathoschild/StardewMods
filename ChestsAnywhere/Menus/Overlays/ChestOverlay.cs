@@ -31,6 +31,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The button which sorts the player inventory.</summary>
         private ClickableTextureComponent? SortInventoryButton;
 
+        /// <summary>Whether the color picker was visible when we last initialized the components.</summary>
+        private bool WasColorPickerShown;
+
 
         /*********
         ** Public methods
@@ -46,18 +49,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
         public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-            : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu, topOffset: Game1.pixelZoom * (menu.ItemsToGrabMenu.capacity == 70 ? -13 : -9))
+            : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             this.Menu = menu;
             this.MenuInventoryMenu = menu.ItemsToGrabMenu;
             this.DefaultChestHighlighter = menu.inventory.highlightMethod;
             this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
+            this.WasColorPickerShown = this.IsColorPickerShown(menu);
         }
 
 
         /*********
         ** Protected methods
         *********/
+        /// <inheritdoc />
+        protected override void Update()
+        {
+            base.Update();
+
+            // update positions when the color picker is toggled
+            bool colorPickerShown = this.IsColorPickerShown(this.Menu);
+            if (colorPickerShown != this.WasColorPickerShown)
+            {
+                this.WasColorPickerShown = colorPickerShown;
+                this.ReinitializeComponents();
+            }
+        }
+
         /// <summary>The method invoked when the player left-clicks.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
@@ -163,6 +181,37 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.Menu.inventory.highlightMethod = _ => false;
                 this.MenuInventoryMenu.highlightMethod = _ => false;
             }
+        }
+
+        /// <inheritdoc />
+        protected override int GetTopOffset(IClickableMenu menu)
+        {
+            // get grab menu info
+            bool isBigChest = false;
+            bool hasColorPicker = false;
+            if (menu is ItemGrabMenu grabMenu)
+            {
+                isBigChest = grabMenu.ItemsToGrabMenu.capacity >= 70;
+                hasColorPicker = this.IsColorPickerShown(grabMenu);
+            }
+
+            // get offset
+            int offset = (isBigChest ? -20 : -9) * Game1.pixelZoom;
+            if (hasColorPicker)
+            {
+                offset += 2 * Game1.pixelZoom;
+                if (isBigChest)
+                    offset += 2; // tweak so positions match between small & big chests
+            }
+
+            return offset;
+        }
+
+        /// <summary>Get whether the color picker is visible.</summary>
+        /// <param name="menu">The menu to check.</param>
+        private bool IsColorPickerShown(ItemGrabMenu menu)
+        {
+            return menu.chestColorPicker?.visible ?? false;
         }
     }
 }

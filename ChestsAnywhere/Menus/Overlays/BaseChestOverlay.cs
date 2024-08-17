@@ -88,9 +88,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The edit button.</summary>
         protected ClickableTextureComponent EditButton;
 
-        /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
-        private readonly int TopOffset;
-
         /****
         ** Edit UI
         ****/
@@ -186,13 +183,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
-        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
+        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive)
             : base(events, input, reflection, keepAlive, assumeUiMode: true)
         {
             // data
             this.ShowAutomateOptions = showAutomateOptions;
-            this.TopOffset = topOffset;
 
             // menu
             this.Menu = menu;
@@ -598,6 +593,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         )]
         private void ReinitializeBaseComponents()
         {
+            int topOffset = this.GetTopOffset(this.Menu);
+
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 
             // category dropdown
@@ -606,7 +603,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category);
 
                 if (Constants.TargetPlatform != GamePlatform.Android)
-                    this.CategoryDropdown.bounds.Y = bounds.Y - this.CategoryDropdown.bounds.Height + this.TopOffset;
+                    this.CategoryDropdown.bounds.Y = bounds.Y - this.CategoryDropdown.bounds.Height + topOffset;
                 this.CategoryDropdown.bounds.X -= this.CategoryDropdown.bounds.Width; // right-align
                 this.CategoryDropdown.ReinitializeComponents();
             }
@@ -619,7 +616,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 if (Constants.TargetPlatform != GamePlatform.Android)
                 {
-                    this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + this.TopOffset;
+                    this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + topOffset;
                     this.ChestDropdown.ReinitializeComponents();
                 }
             }
@@ -665,6 +662,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         protected virtual void ReinitializeComponents()
         {
             this.ReinitializeBaseComponents();
+        }
+
+        /// <summary>Get the Y pixel offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
+        /// <param name="menu">The menu for which the UI is being overlaid.</param>
+        protected virtual int GetTopOffset(IClickableMenu menu)
+        {
+            return 0;
         }
 
         /// <summary>Set the form values to match the underlying chest.</summary>

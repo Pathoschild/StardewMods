@@ -1,6 +1,7 @@
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework.Conditions
 {

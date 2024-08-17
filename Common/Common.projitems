@@ -71,6 +71,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ObjectReferenceComparer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utilities\SetExtensions.cs" />
   </ItemGroup>
 </Project>

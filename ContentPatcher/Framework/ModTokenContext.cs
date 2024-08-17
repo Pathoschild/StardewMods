@@ -5,6 +5,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework
 {
@@ -207,7 +208,7 @@ namespace ContentPatcher.Framework
                     if (!resetDynamicTokens && this.DynamicTokenDependents.TryGetValue(token.Name, out MutableInvariantSet? dependents))
                     {
                         updateDynamicTokens ??= [];
-                        updateDynamicTokens.AddMany(dependents);
+                        updateDynamicTokens.AddRange(dependents);
                     }
                 }
             }
@@ -223,7 +224,7 @@ namespace ContentPatcher.Framework
                         if (this.DynamicTokenDependents.TryGetValue(token, out MutableInvariantSet? dependents))
                         {
                             updateDynamicTokens ??= [];
-                            updateDynamicTokens.AddMany(dependents);
+                            updateDynamicTokens.AddRange(dependents);
                         }
                     }
                 }

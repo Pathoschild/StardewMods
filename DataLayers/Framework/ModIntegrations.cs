@@ -13,6 +13,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
     internal class ModIntegrations
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>An API for fetching metadata about loaded mods.</summary>
+        private readonly IModRegistry ModRegistry;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>Handles access to the Automate mod.</summary>
@@ -46,6 +53,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="reflection">An API for accessing private code.</param>
         public ModIntegrations(IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
+            this.ModRegistry = modRegistry;
+
             this.Automate = new AutomateIntegration(modRegistry, monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
             this.BetterSprinklersPlus = new BetterSprinklersPlusIntegration(modRegistry, monitor);
@@ -53,6 +62,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
             this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
             this.SimpleSprinkler = new SimpleSprinklerIntegration(modRegistry, monitor);
+        }
+
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The unique mod ID to check.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.ModRegistry.IsLoaded(id);
         }
     }
 }
