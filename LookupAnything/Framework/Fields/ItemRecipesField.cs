@@ -87,6 +87,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     (entry) => (this.ShowInvalidRecipes || entry.IsValid) && (this.ShowUnknownRecipes || entry.IsKnown)));
         }
 
+        /// <summary>True if item should show as a link</summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected bool ShouldLink(Item? item)
+        {
+            return item != null &&
+                item.ItemId != DataParser.ComplexRecipeId &&
+                item.QualifiedItemId != this.Target?.QualifiedItemId;
+        }
+
         /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
@@ -154,7 +164,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     float inputLeft = 0;
                     if (this.ShowOutputLabels)
                     {
-                        bool shouldLink = entry.Output.Item != null && entry.Output.Item.QualifiedItemId != this.Target?.QualifiedItemId;
+                        bool shouldLink = this.ShouldLink(entry.Output.Item);
                         Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, shouldLink ? linkColor : textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                         float outputWidth = alignColumns
                             ? group.ColumnWidths[0]
@@ -195,7 +205,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             );
                         }
 
-                        bool shouldLink = input.Item != null && input.Item.QualifiedItemId != this.Target?.QualifiedItemId;
+                        bool shouldLink = this.ShouldLink(input.Item);
                         // draw input item (icon + name + count)
                         this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, shouldLink ? linkColor : textColor, input.Sprite, curIconSize, iconColor, input.Quality);
 
