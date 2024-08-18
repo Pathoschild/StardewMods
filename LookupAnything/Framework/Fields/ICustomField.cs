@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
         LinkField? ExpandLink { get; }
 
-        /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
+        /// <summary>List of clickable areas that should open a new page when clicked.</summary>
         IList<ValueTuple<Rectangle, Func<ISubject?>>>? LinkTextAreas { get; set; }
 
 
