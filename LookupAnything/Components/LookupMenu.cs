@@ -273,7 +273,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 foreach ((Rectangle area, Func<ISubject?> getSubject) in this.LinkTextAreas)
                 {
-                    if (area.Contains(x, y + this.CurrentScroll))
+                    if (area.Contains(x, y))
                     {
                         ISubject? subject = getSubject();
                         if (subject != null)
