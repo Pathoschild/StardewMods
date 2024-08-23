@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
+
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper;
 
@@ -38,13 +41,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="currentPopulation">The current population for showing unlocked drops.</param>
         /// <param name="data">The fish pond data.</param>
         /// <param name="preface">>The text to display before the list, if any.</param>
-        public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, string preface)
+        public FishPondDropsField(ISubjectRegistry codex, GameHelper gameHelper, string label, int currentPopulation, FishPondData data, string preface)
             : base(label)
         {
+            this.Codex = codex;
             this.GameHelper = gameHelper;
             this.Drops = this.GetEntries(currentPopulation, data, gameHelper).ToArray();
             this.HasValue = this.Drops.Any();
             this.Preface = preface;
+            this.LinkTextAreas = [];
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -55,6 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
+            this.LinkTextAreas!.Clear();
             float height = 0;
 
             // draw preface
@@ -122,11 +128,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                     else if (drop.MinDrop > 1)
                         text += $" ({drop.MinDrop})";
-                    Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
+                    Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, disabled ? Color.Gray : Color.Blue);
 
                     // cross out if it's guaranteed not to drop
                     if (isPrevDropGuaranteed)
                         spriteBatch.DrawLine(position.X + innerIndent + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), Color.Gray);
+                    else
+                        this.LinkTextAreas!.Add(new(
+                            new Rectangle((int)(position.X + innerIndent + iconSize.X + 5), (int)(position.Y + height + iconSize.Y / 2), (int)textSize.X, (int)textSize.Y),
+                            () => this.Codex.GetByEntity(drop.SampleItem, null)
+                        ));
 
                     height += textSize.Y + 5;
                 }
