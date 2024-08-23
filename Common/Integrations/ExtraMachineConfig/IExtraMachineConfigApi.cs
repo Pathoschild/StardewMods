@@ -13,4 +13,8 @@ public interface IExtraMachineConfigApi
     /// <summary>Retrieves the extra tag-defined fuels consumed by this recipe.</summary>
     /// <param name="outputData">The output rule to check.</param>
     IList<(string, int)> GetExtraTagsRequirements(MachineItemOutput outputData);
+
+    /// <summary>Retrieves the extra output items produced by this recipe.</summary>
+    /// <param name="outputData">The output rule to check.</param>
+    IList<MachineItemOutput> GetExtraOutputs(MachineItemOutput outputData);
 }

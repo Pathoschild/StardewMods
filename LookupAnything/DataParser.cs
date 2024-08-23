@@ -535,7 +535,9 @@ internal class DataParser
                         ];
                         ingredients.AddRange(additionalConsumedItems);
 
-                        // if there are extra fuels added by the Extra Machine Config mod, add them here
+                        List<MachineItemOutput> allOutputItems = [outputItem];
+
+                        // if there are extra fuels or outputs added by the Extra Machine Config mod, add them here
                         if (extraMachineConfig.IsLoaded)
                         {
                             foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
@@ -543,47 +545,52 @@ internal class DataParser
 
                             foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
                                 ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
+
+                            allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(outputItem));
                         }
 
-                        // add produced item
-                        IList<ItemQueryResult> itemQueryResults;
-                        if (outputItem.ItemId != null || outputItem.RandomItemId != null)
+                        // add produced items
+                        foreach (var outputItemData in allOutputItems)
                         {
-                            ItemQueryContext itemQueryContext = new();
-                            itemQueryResults = ItemQueryResolver.TryResolve(
-                                outputItem,
-                                itemQueryContext,
-                                formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
+                            IList<ItemQueryResult> itemQueryResults;
+                            if (outputItemData.ItemId != null || outputItemData.RandomItemId != null)
+                            {
+                                ItemQueryContext itemQueryContext = new();
+                                itemQueryResults = ItemQueryResolver.TryResolve(
+                                    outputItemData,
+                                    itemQueryContext,
+                                    formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
+                                );
+                            }
+                            else
+                            {
+                                itemQueryResults = [];
+                                someRulesTooComplex = true;
+                            }
+
+                            // add to list
+                            recipes.AddRange(
+                                from result in itemQueryResults
+                                select new RecipeModel(
+                                    key: null,
+                                    type: RecipeType.MachineInput,
+                                    displayType: ItemRegistry.GetDataOrErrorItem(qualifiedMachineId).DisplayName,
+                                    ingredients,
+                                    goldPrice: 0,
+                                    item: _ => ItemRegistry.Create(result.Item.QualifiedItemId),
+                                    isKnown: () => true,
+                                    machineId: qualifiedMachineId,
+                                    //exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
+                                    exceptIngredients: null,
+                                    outputQualifiedItemId: result.Item.QualifiedItemId,
+                                    minOutput: outputItemData.MinStack > 0 ? outputItemData.MinStack : 1,
+                                    maxOutput: outputItemData.MaxStack > 0 ? outputItemData.MaxStack : null, // TODO: Calculate this better
+                                    quality: outputItemData.Quality,
+                                    outputChance: 100 / outputRule.OutputItem.Count / itemQueryResults.Count,
+                                    conditions: conditions?.ToArray()
+                                )
                             );
                         }
-                        else
-                        {
-                            itemQueryResults = [];
-                            someRulesTooComplex = true;
-                        }
-
-                        // add to list
-                        recipes.AddRange(
-                            from result in itemQueryResults
-                            select new RecipeModel(
-                                key: null,
-                                type: RecipeType.MachineInput,
-                                displayType: ItemRegistry.GetDataOrErrorItem(qualifiedMachineId).DisplayName,
-                                ingredients,
-                                goldPrice: 0,
-                                item: _ => ItemRegistry.Create(result.Item.QualifiedItemId),
-                                isKnown: () => true,
-                                machineId: qualifiedMachineId,
-                                //exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
-                                exceptIngredients: null,
-                                outputQualifiedItemId: result.Item.QualifiedItemId,
-                                minOutput: outputItem.MinStack > 0 ? outputItem.MinStack : 1,
-                                maxOutput: outputItem.MaxStack > 0 ? outputItem.MaxStack : null, // TODO: Calculate this better
-                                quality: outputItem.Quality,
-                                outputChance: 100 / outputRule.OutputItem.Count / itemQueryResults.Count,
-                                conditions: conditions?.ToArray()
-                            )
-                        );
                     }
                 }
             }
