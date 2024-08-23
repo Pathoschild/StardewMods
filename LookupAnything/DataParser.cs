@@ -497,67 +497,83 @@ internal class DataParser
                         continue;
 
                     // build output list
-                    foreach (MachineItemOutput? outputItem in outputRule.OutputItem)
+                    foreach (MachineItemOutput? mainOutputItem in outputRule.OutputItem)
                     {
-                        if (outputItem is null)
+                        if (mainOutputItem is null)
                             continue;
 
-                        // get conditions
-                        List<string>? conditions = null;
-                        {
-                            // extract raw conditions
-                            string? rawConditions = null;
-                            if (!string.IsNullOrWhiteSpace(trigger.Condition))
-                                rawConditions = trigger.Condition;
-                            if (!string.IsNullOrWhiteSpace(outputItem.Condition))
-                            {
-                                rawConditions = rawConditions != null
-                                    ? rawConditions + ", " + outputItem.Condition
-                                    : outputItem.Condition;
-                            }
+                        // if there are extra outputs added by the Extra Machine Config mod, add them here
+                        List<MachineItemOutput> allOutputItems = [mainOutputItem];
 
-                            // parse
-                            if (rawConditions != null)
-                                conditions = GameStateQuery.SplitRaw(rawConditions).Distinct().ToList();
-                        }
-
-                        // get ingredient
-                        if (!this.TryGetMostSpecificIngredientIds(trigger.RequiredItemId, trigger.RequiredTags, ref conditions, out string? inputId, out string[] inputContextTags))
-                            continue;
-
-                        // track whether some recipes are too complex to fully display
-                        if (outputItem.OutputMethod != null)
-                            someRulesTooComplex = true;
-
-                        // add ingredients
-                        List<RecipeIngredientModel> ingredients = [
-                            new RecipeIngredientModel(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
-                        ];
-                        ingredients.AddRange(additionalConsumedItems);
-
-                        List<MachineItemOutput> allOutputItems = [outputItem];
-
-                        // if there are extra fuels or outputs added by the Extra Machine Config mod, add them here
                         if (extraMachineConfig.IsLoaded)
                         {
-                            foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
-                                ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
-
-                            foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
-                                ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
-
-                            allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(outputItem));
+                            allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem));
                         }
 
-                        // add produced items
-                        foreach (var outputItemData in allOutputItems)
+                        foreach (var outputItem in allOutputItems)
                         {
+                            // get conditions
+                            List<string>? conditions = null;
+                            {
+                                // extract raw conditions
+                                string? rawConditions = null;
+                                if (!string.IsNullOrWhiteSpace(trigger.Condition))
+                                    rawConditions = trigger.Condition;
+
+                                // add condition of primary output
+                                if (!string.IsNullOrWhiteSpace(mainOutputItem.Condition))
+                                {
+                                    rawConditions = rawConditions != null
+                                        ? rawConditions + ", " + mainOutputItem.Condition
+                                        : mainOutputItem.Condition;
+                                }
+
+                                // add condition of secondary outputs from EMC if any
+                                if (outputItem != mainOutputItem && !string.IsNullOrWhiteSpace(outputItem.Condition))
+                                {
+                                    rawConditions = rawConditions != null
+                                        ? rawConditions + ", " + outputItem.Condition
+                                        : outputItem.Condition;
+                                }
+
+                                // parse
+                                if (rawConditions != null)
+                                    conditions = GameStateQuery.SplitRaw(rawConditions).Distinct().ToList();
+                            }
+
+                            // get ingredient
+                            if (!this.TryGetMostSpecificIngredientIds(trigger.RequiredItemId, trigger.RequiredTags, ref conditions, out string? inputId, out string[] inputContextTags))
+                                continue;
+
+                            // track whether some recipes are too complex to fully display
+                            if (outputItem.OutputMethod != null)
+                                someRulesTooComplex = true;
+
+                            // add ingredients
+                            List<RecipeIngredientModel> ingredients = [
+                                new RecipeIngredientModel(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
+                            ];
+                            ingredients.AddRange(additionalConsumedItems);
+
+                            // if there are extra fuels added by the Extra Machine Config mod, add them here
+                            if (extraMachineConfig.IsLoaded)
+                            {
+                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
+                                    ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
+
+                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
+                                    ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
+
+                                allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(outputItem));
+                            }
+
+                            // add produced item
                             IList<ItemQueryResult> itemQueryResults;
-                            if (outputItemData.ItemId != null || outputItemData.RandomItemId != null)
+                            if (outputItem.ItemId != null || outputItem.RandomItemId != null)
                             {
                                 ItemQueryContext itemQueryContext = new();
                                 itemQueryResults = ItemQueryResolver.TryResolve(
-                                    outputItemData,
+                                    outputItem,
                                     itemQueryContext,
                                     formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
                                 );
@@ -583,9 +599,9 @@ internal class DataParser
                                     //exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
                                     exceptIngredients: null,
                                     outputQualifiedItemId: result.Item.QualifiedItemId,
-                                    minOutput: outputItemData.MinStack > 0 ? outputItemData.MinStack : 1,
-                                    maxOutput: outputItemData.MaxStack > 0 ? outputItemData.MaxStack : null, // TODO: Calculate this better
-                                    quality: outputItemData.Quality,
+                                    minOutput: outputItem.MinStack > 0 ? outputItem.MinStack : 1,
+                                    maxOutput: outputItem.MaxStack > 0 ? outputItem.MaxStack : null, // TODO: Calculate this better
+                                    quality: outputItem.Quality,
                                     outputChance: 100 / outputRule.OutputItem.Count / itemQueryResults.Count,
                                     conditions: conditions?.ToArray()
                                 )
