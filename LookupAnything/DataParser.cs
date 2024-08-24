@@ -504,7 +504,6 @@ internal class DataParser
 
                         // if there are extra outputs added by the Extra Machine Config mod, add them here
                         List<MachineItemOutput> allOutputItems = [mainOutputItem];
-
                         if (extraMachineConfig.IsLoaded)
                         {
                             allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem));
@@ -563,8 +562,6 @@ internal class DataParser
 
                                 foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
                                     ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
-
-                                allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(outputItem));
                             }
 
                             // add produced item
