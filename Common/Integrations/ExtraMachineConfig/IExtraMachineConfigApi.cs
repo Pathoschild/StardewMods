@@ -16,5 +16,5 @@ public interface IExtraMachineConfigApi
 
     /// <summary>Retrieves the extra output items produced by this recipe.</summary>
     /// <param name="outputData">The output rule to check.</param>
-    IList<MachineItemOutput> GetExtraOutputs(MachineItemOutput outputData);
+    IList<MachineItemOutput> GetExtraOutputs(MachineItemOutput outputData, MachineData? machine);
 }
