@@ -151,7 +151,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     // fade recipes which aren't known
                     Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
                     Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
-                    Color linkColor = Color.Blue;
+                    Color linkColor = entry.IsKnown ? Color.Blue : Color.Blue * .5f;
 
                     // reset position for recipe output
                     float recipeLeftMargin = position.X + firstRecipeLeftMargin;
