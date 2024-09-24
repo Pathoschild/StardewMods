@@ -86,6 +86,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Whether to exit the menu on the next update tick.</summary>
         private bool ExitOnNextTick;
 
+        /// <summary>Flag for <see cref="ModEntry.OnMenuChanged"/>, exit without restoring a previous <see cref="LookupMenu"/> if set.</summary>
+        internal bool ExitWithoutRestore = false;
+
 
         /*********
         ** Public methods
@@ -249,7 +252,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             // close menu when clicked outside
             if (!this.isWithinBounds(x, y))
+            {
+                // exit without restoring previous LookupMenu
+                this.ExitWithoutRestore = true;
                 this.exitThisMenu();
+            }
 
             // scroll up or down
             else if (this.ScrollUpButton.containsPoint(x, y))
