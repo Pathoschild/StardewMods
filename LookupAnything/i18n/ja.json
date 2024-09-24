@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", 他{{count}}人に贈っていない",
     "item.needed-for.community-center": "コミュニティーセンター({{bundles}}）",
     "item.needed-for.full-shipment": "実績：満タン出荷箱（一つ出荷）",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "実績：混作農業（{{count}}個出荷）",
     "item.needed-for.full-collection": "実績：コンプリートコレクション（博物館に一つ寄付）",
     "item.needed-for.gourmet-chef": "実績：グルメマスター（{{recipes}}を調理する）",

@@ -16,7 +16,9 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Constants;
 using StardewValley.Extensions;
+using StardewValley.GameData.Crops;
 using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Movies;
 using StardewValley.Locations;
@@ -133,8 +135,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead.Value == true;
-            bool canSell = obj?.canBeShipped() == true || this.Metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
-            bool isMovieTicket = obj?.QualifiedItemId == "(O)809";
+            bool canSell = item.canBeShipped() || this.Metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
+            bool isMovieTicket = item.QualifiedItemId == "(O)809";
 
             // get overrides
             bool showInventoryFields = obj?.IsBreakableStone() != true;
@@ -168,7 +170,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield return field;
 
             // indoor pot crop
-            if (obj is IndoorPot pot)
+            if (item is IndoorPot pot)
             {
                 Crop? potCrop = pot.hoeDirt.Value.crop;
                 Bush? potBush = pot.bush.Value;
@@ -214,7 +216,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                     // sell to
                     List<string> buyers = [];
-                    if (obj?.canBeShipped() == true)
+                    if (item.canBeShipped())
                         buyers.Add(I18n.Item_SellsTo_ShippingBox());
                     buyers.AddRange(
                         from shop in this.Metadata.Shops
@@ -312,8 +314,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // fish spawn rules
-            if (item.Category == SObject.FishCategory)
-                yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), item.ItemId);
+            yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), item.ItemId);
 
             // fish pond data
             // derived from FishPond::doAction
@@ -743,12 +744,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     neededFor.Add(I18n.Item_NeededFor_CommunityCenter(bundles: I18n.List(missingBundles)));
             }
 
-            // polyculture achievement (ship 15 crops)
-            if (this.Constants.PolycultureCrops.Contains(obj.QualifiedItemId))
+            CropData? cropData = this.FromCrop != null
+                ? this.FromCrop.GetData()
+                : GameHelper.GetCropDataByHarvestItem(obj.ItemId);
+
+            if (cropData != null)
             {
-                int needed = this.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ItemId);
-                if (needed > 0)
-                    neededFor.Add(I18n.Item_NeededFor_Polyculture(count: needed));
+                // polyculture achievement (ship 15 of each flagged crop)
+                if (cropData.CountForPolyculture && !Game1.player.achievements.Contains(AchievementIds.Polyculture))
+                {
+                    int needed = this.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ItemId);
+                    if (needed > 0)
+                        neededFor.Add(I18n.Item_NeededFor_Polyculture(count: needed));
+                }
+
+                // monoculture achievement (ship 300 of one crop)
+                if (cropData.CountForMonoculture && !Game1.player.achievements.Contains(AchievementIds.Monoculture))
+                {
+                    int needed = this.Constants.MonocultureCount - this.GameHelper.GetShipped(obj.ItemId);
+                    if (needed > 0)
+                        neededFor.Add(I18n.Item_NeededFor_Monoculture(count: needed));
+                }
             }
 
             // full shipment achievement (ship every item)

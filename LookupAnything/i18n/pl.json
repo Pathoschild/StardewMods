@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": ", oraz {{count}} nieokreślonych mieszkańców",
     "item.needed-for.community-center": "centrum społeczności ({{bundles}})",
     "item.needed-for.full-shipment": "osiągnięcie szybka wysyłka (sprzedaj jeden)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "osiągnięcie polikultura (sprzedaj {{count}} więcej)",
     "item.needed-for.full-collection": "osiągnięcie skończona kolekcja (podaruj jeden do muzeum)",
     "item.needed-for.gourmet-chef": "osiągnięcie smakosz (przyrządź {{recipes}})",

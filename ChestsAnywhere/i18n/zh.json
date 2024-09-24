@@ -59,8 +59,8 @@
     "config.enable-shipping-bin.name": "启用出货箱",
     "config.enable-shipping-bin.desc": "是否能够访问出货箱。",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "启用洒水器附件",
+    "config.enable-sprinkler-attachments.desc": "是否允许使用洒水器附件（如 增益器）。",
 
     "config.add-organize-player-items.name": "添加背包整理按钮",
     "config.add-organize-player-items.desc": "始终显示背包整理按钮",

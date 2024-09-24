@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     days[i] = I18n.Condition_DayOfMonth_Odd();
             }
 
-            return I18n.Condition_DayOfMonth(days: days);
+            return I18n.Condition_DayOfMonth(days: I18n.List(days));
         }
 
         /// <summary>Parse a <see cref="GameStateQuery.DefaultResolvers.ITEM_CONTEXT_TAG"/> query into a human-readable representation, if possible.</summary>

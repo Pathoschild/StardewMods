@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": ", และชาวบ้านอีก {{count}} คนยังไม่เปิดเผย",
     "item.needed-for.community-center": "({{bundles}}) ของศูนย์ชุมชน",
     "item.needed-for.full-shipment": "ความสำเร็จส่งขายครบทุกรายการ (ส่งหนึ่งชิ้น)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "ความสำเร็จพหุวัฒนธรรม (ส่งอีก {{count}} ชิ้น)",
     "item.needed-for.full-collection": "ความสำเร็จเก็บสะสมครบ (บริจาคหนึ่งชิ้นให้พิพิธภัณฑ์)",
     "item.needed-for.gourmet-chef": "ความสำเร็จพ่อครัวหัวป่าก์ (ปรุงอาหาร {{recipes}} เมนู)",

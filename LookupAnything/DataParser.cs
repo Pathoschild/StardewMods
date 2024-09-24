@@ -140,7 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
         {
             foreach (FishPondReward drop in data.ProducedItems)
-                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemId, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemId, drop.MinStack, drop.MaxStack, drop.Chance);
         }
 
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
@@ -149,16 +149,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
         public FishSpawnData? GetFishSpawnRules(string fishID, Metadata metadata)
         {
-            // get raw fish data
-            string[] fishFields;
-            {
-                if (!DataLoader.Fish(Game1.content).TryGetValue(fishID, out string? rawData))
-                    return null;
-                fishFields = rawData.Split('/');
-                if (fishFields.Length < 13)
-                    return null;
-            }
-
             // parse location data
             var locations = new List<FishSpawnLocationData>();
             foreach ((string locationId, LocationData data) in DataLoader.Locations(Game1.content))
@@ -217,21 +207,26 @@ namespace Pathoschild.Stardew.LookupAnything
             bool isUnique = false;
             if (locations.Any()) // ignore default spawn criteria if the fish doesn't spawn naturally; in that case it should be specified explicitly in custom data below (if any)
             {
-                // times of day
-                string[] timeFields = fishFields[5].Split(' ');
-                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                if (DataLoader.Fish(Game1.content).TryGetValue(fishID, out string? rawData))
                 {
-                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
-                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                    string[] fishFields = rawData.Split('/');
+
+                    // times of day
+                    string[] timeFields = ArgUtility.Get(fishFields, 5)?.Split(' ') ?? Array.Empty<string>();
+                    for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                    {
+                        if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
+                            timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                    }
+
+                    // weather
+                    if (!Enum.TryParse(ArgUtility.Get(fishFields, 7), true, out weather))
+                        weather = FishSpawnWeather.Both;
+
+                    // min fishing level
+                    if (!int.TryParse(ArgUtility.Get(fishFields, 12), out minFishingLevel))
+                        minFishingLevel = 0;
                 }
-
-                // weather
-                if (!Enum.TryParse(fishFields[7], true, out weather))
-                    weather = FishSpawnWeather.Both;
-
-                // min fishing level
-                if (!int.TryParse(fishFields[12], out minFishingLevel))
-                    minFishingLevel = 0;
             }
 
             // read custom data

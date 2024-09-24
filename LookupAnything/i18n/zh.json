@@ -51,7 +51,7 @@
     "quality.iridium": "铱星",
 
     // item names shown in recipes
-    "item.wild-seeds": "Wild Seeds (Any)", // TODO
+    "item.wild-seeds": "野生种子 (任意)",
 
     // NPC friendship
     "friendship-status.friendly": "友好的",
@@ -138,9 +138,9 @@
     *********/
     "condition-or-context-tag.negate": "非{{value}}",
 
-    "condition.day-of-month": "on specific days ({{days}})", // TODO
-    "condition.day-of-month.even": "even days", // TODO
-    "condition.day-of-month.odd": "odd days", // TODO
+    "condition.day-of-month": "每季指定日期 ({{days}})",
+    "condition.day-of-month.even": "偶数日",
+    "condition.day-of-month.odd": "奇数日",
 
     "condition.item-type.input": "输入物品",
     "condition.item-type.target": "产物",
@@ -189,7 +189,7 @@
     // labels
     "building.animals": "动物",
     "building.construction": "施工",
-    "building.construction-costs": "Construction costs", // TODO
+    "building.construction-costs": "建筑材料",
     "building.feed-trough": "喂食槽",
     "building.horse": "马",
     "building.horse-location": "马位置",
@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", 和 {{count}} 位没揭露的村民",
     "item.needed-for.community-center": "社区中心（{{bundles}}）",
     "item.needed-for.full-shipment": "全部货物成就（出货一个）",
+    "item.needed-for.monoculture": "单一栽培成就（再出货{{count}}个）",
     "item.needed-for.polyculture": "混合栽培成就（再出货{{count}}个）",
     "item.needed-for.full-collection": "全套收集成就（向博物馆捐赠一个）",
     "item.needed-for.gourmet-chef": "美食大厨成就（烹饪{{recipes}}）",

@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": ", e {{count}} cidadãos não revelados",
     "item.needed-for.community-center": "Centro Comunitário ({{bundles}})",
     "item.needed-for.full-shipment": "conquista do Envio Completo (envie um)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "conquista da Policultura (envie mais {{count}})",
     "item.needed-for.full-collection": "conquista da Coleção Completa (doe um para o museu)",
     "item.needed-for.gourmet-chef": "conquista de Chefe Gourmet (cozinhe {{recipes}})",

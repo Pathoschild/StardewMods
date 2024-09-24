@@ -89,6 +89,14 @@ namespace ContentPatcher.Framework.Patches
                 this.PatchLoader.UnloadPatchesLoadedBy(this);
 
             // load new patches
+            this.AttemptLoad();
+
+            return this.MarkUpdated();
+        }
+
+        /// <summary>Load the patches in the include file, if the patch is ready.</summary>
+        public void AttemptLoad()
+        {
             this.AttemptedDataLoad = this.IsReady && this.Conditions.All(p => p.IsMatch);
             this.IsApplied = false;
             if (this.AttemptedDataLoad)
@@ -99,7 +107,7 @@ namespace ContentPatcher.Framework.Patches
                     if (!this.FromAssetExists())
                     {
                         this.WarnForPatch($"file '{this.FromAsset}' doesn't exist.");
-                        return this.MarkUpdated();
+                        return;
                     }
 
                     // prevent circular reference
@@ -116,7 +124,7 @@ namespace ContentPatcher.Framework.Patches
                                     loopPaths.Add(this.FromAsset);
 
                                     this.WarnForPatch($"patch skipped because it would cause an infinite loop ({string.Join(" > ", loopPaths)}).");
-                                    return this.MarkUpdated();
+                                    return;
                                 }
                             }
                         }
@@ -127,7 +135,7 @@ namespace ContentPatcher.Framework.Patches
                     if (!content.Changes.Any())
                     {
                         this.WarnForPatch($"file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?");
-                        return this.MarkUpdated();
+                        return;
                     }
 
                     // validate fields
@@ -135,7 +143,7 @@ namespace ContentPatcher.Framework.Patches
                     if (invalidFields.Any())
                     {
                         this.WarnForPatch($"file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).");
-                        return this.MarkUpdated();
+                        return;
                     }
 
                     // load patches
@@ -151,11 +159,9 @@ namespace ContentPatcher.Framework.Patches
                 catch (Exception ex)
                 {
                     this.WarnForPatch($"an error occurred.\n{ex}", LogLevel.Error);
-                    return this.MarkUpdated();
+                    return;
                 }
             }
-
-            return this.MarkUpdated();
         }
 
         /// <inheritdoc />

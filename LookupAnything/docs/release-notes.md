@@ -2,12 +2,19 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.6.9.
 * Added buildings to search UI.
+* Added custom skills from SpaceCore to farmer lookups (thanks to Pet-Slime!).
+* Added monoculture achievement to item 'needed for' field (thanks to Mushymato!).
 * Building recipes in item lookups now show the build gold price.
 * Building lookups now show their build cost/materials.
+* Fixed fishing spawn rules not shown for non-fish catches like River Jelly.
 * Fixed support for custom machine rules using `ITEM_ID` and `ITEM_CONTEXT_TAG` game state queries.
+* Fixed support for custom polyculture crops in 'needed for' field (thanks to Mushymato!).
 * Fixed error getting recipes if a mod adds invalid machine data.
 * Fixed error if an old version of Custom Bush is installed.
+* Fixed format for `DAY_OF_MONTH` queries in lookups (thanks to Mushymato!).
+* Improved translations. Thanks to MakinDay (updated Italian) and Mushymato (updated Chinese)!
 
 ## 1.45.3
 Released 07 July 2024 for SMAPI 4.0.7 or later.

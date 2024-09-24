@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", и {{count}} неизвестных жителей",
     "item.needed-for.community-center": "Общественный центр ({{bundles}})",
     "item.needed-for.full-shipment": "Достижение 'Мастер-груз' (Отгрузите 1 шт.)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "Достижение 'Севооборот' (Отгрузите {{count}} шт. или больше)",
     "item.needed-for.full-collection": "Достижение 'Полная коллекция' (Пожертвуйте музею)",
     "item.needed-for.gourmet-chef": "Достижение 'Шеф-повар' (приготовьте рецепт: {{recipes}})",

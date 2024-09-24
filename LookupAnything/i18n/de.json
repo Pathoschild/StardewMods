@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Dorfbewohner",
     "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
     "item.needed-for.full-shipment": "\"Volle Lieferung\" Errungenschaft (liefere einen)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "\"Polykultur\" Errungenschaft (liefere noch {{count}})",
     "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
     "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",

@@ -188,7 +188,7 @@
     // labels
     "building.animals": "Animali",
     "building.construction": "Costruzione",
-    "building.construction-costs": "Construction costs", // TODO
+    "building.construction-costs": "Costi di costruzione",
     "building.feed-trough": "Trogolo per il cibo",
     "building.horse": "Cavallo",
     "building.horse-location": "Posizione cavallo",
@@ -335,10 +335,11 @@
     "item.undiscovered-gift-taste": "{{count}} abitanti non rivelati",
     "item.undiscovered-gift-taste-appended": ", e {{count}} abitanti non rivelati",
     "item.needed-for.community-center": "centro sociale ({{bundles}})",
-    "item.needed-for.full-shipment": "l'achievement 'spedizione completa' (consegnane uno)",
-    "item.needed-for.polyculture": "l'achievement 'policoltura' (consegnane ancora {{count}})",
+    "item.needed-for.full-shipment": "l'achievement 'spedizione completa' (spediscine uno)",
+    "item.needed-for.monoculture": "l'achievement 'monocoltura' (spediscine ancora {{count}})",
+    "item.needed-for.polyculture": "l'achievement 'policoltura' (spediscine ancora {{count}})",
     "item.needed-for.full-collection": "l'achievement 'collezione completa' (donane ancora uno al museo)",
-    "item.needed-for.gourmet-chef": "l'achievement 'chef da gourmet' (cucina {{recipes}})",
+    "item.needed-for.gourmet-chef": "l'achievement 'chef stellato' (cucina {{recipes}})",
     "item.needed-for.craft-master": "l'achievement 'maestro della fabbricazione' (crea {{recipes}})",
     "item.needed-for.quests": "missioni attuali ({{quests}})",
     "item.unknown-recipes": "{{count}} ricette sconosciute",

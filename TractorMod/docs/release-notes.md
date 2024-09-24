@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.6.9.
 * Added more auto-fixes on day start:
-  * invalid or duplicate tractors are removed;
-  * duplicate garage IDs are reassigned.
+  * invalid or duplicate tractors are now removed;
+  * duplicate garage IDs are now reassigned.
 * Fixed able to place unplaceable items using the 'custom attachments' option.
 
 ## 4.19.2

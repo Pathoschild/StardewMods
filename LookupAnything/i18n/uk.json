@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": " та {{count}} незнайомих містян",
     "item.needed-for.community-center": "Громадський клуб ({{bundles}})",
     "item.needed-for.full-shipment": "Досягнення «Майстер-вантаж» (Надішліть на продаж 1 од.)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "Досягнення «Сівозміна» (Надішліть на продаж {{count}} од. або більше)",
     "item.needed-for.full-collection": "Досягнення «Повна колекція» (Пожертвуйте музею артефакт чи мінерал)",
     "item.needed-for.gourmet-chef": "Досягнення «Шеф-кухар» (Приготуйте страву : {{recipes}})",

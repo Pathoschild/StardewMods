@@ -87,9 +87,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /****
         ** Achievements
         ****/
-        /// <summary>The qualified item IDs crops that must be shipped for the polyculture achievement.</summary>
+        /// <summary>The number of a single crop that must be shipped for the monoculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
-        public string[] PolycultureCrops { get; set; } = [];
+        public int MonocultureCount { get; set; }
 
         /// <summary>The number of each crop that must be shipped for the polyculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>

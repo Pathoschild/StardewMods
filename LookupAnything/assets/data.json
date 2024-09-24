@@ -108,37 +108,8 @@ You shouldn't change this file unless you know what you're doing.
         ],
 
         /* achievements */
-        "PolycultureCrops": [
-            "(O)24",
-            "(O)188",
-            "(O)190",
-            "(O)192",
-            "(O)248",
-            "(O)250",
-            "(O)252",
-            "(O)254",
-            "(O)256",
-            "(O)258",
-            "(O)260",
-            "(O)262",
-            "(O)264",
-            "(O)266",
-            "(O)268",
-            "(O)270",
-            "(O)272",
-            "(O)274",
-            "(O)276",
-            "(O)278",
-            "(O)280",
-            "(O)282",
-            "(O)284",
-            "(O)300",
-            "(O)304",
-            "(O)398",
-            "(O)400",
-            "(O)433"
-        ],
-        "PolycultureCount": 15
+        "PolycultureCount": 15,
+        "MonocultureCount": 300
     },
 
     /*********

@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            foreach (ITrackedStack tracker in input.GetItems().Where(p => p.Sample is Object obj && obj.canBeShipped()))
+            foreach (ITrackedStack tracker in input.GetItems().Where(p => p.Sample.canBeShipped()))
             {
                 int prevStack = tracker.Count;
                 this.MiniBin.Store(tracker);

@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": ", és {{count}} ismeretlen falusi",
     "item.needed-for.community-center": "kulturház ({{bundles}})",
     "item.needed-for.full-shipment": "teljes szállítmány teljesítmény (értékesíts egyet)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "polikultúra teljseítmény (értékesíts még ennyit: {{count}})",
     "item.needed-for.full-collection": "teljes gyűjtemény teljesítmény (adományozz egyet a múzeumnak)",
     "item.needed-for.gourmet-chef": "ínyenc szakács teljesítmény (készíts még: {{recipes}})",

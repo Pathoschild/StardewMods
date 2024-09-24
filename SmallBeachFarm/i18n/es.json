@@ -2,13 +2,12 @@
     /*********
     ** Farm info
     *********/
-    "farm.name": "Granja pequeña playera",
+    "farm.name": "Pequeña granja playera",
     "farm.description": "Una pequeña y fértil playa de bolsillo, donde se puede pescar tanto en el río como en el mar.",
 
-    // TODO
-    "farm.fish-areas.river": "River",
-    "farm.fish-areas.estuary": "Estuary",
-    "farm.fish-areas.ocean": "Ocean",
+    "farm.fish-areas.river": "Río",
+    "farm.fish-areas.estuary": "Estuario",
+    "farm.fish-areas.ocean": "Mar",
 
 
     /*********
@@ -17,40 +16,39 @@
     /****
     ** Farm options
     ****/
-    "config.farm-options-section": "Other farm options", // TODO
+    "config.farm-options-section": "Otras opciones de granja",
 
     "config.beach-sounds.name": "Reproducir sonidos de la playa",
     "config.beach-sounds.tooltip": "Reproduce la música de fondo de la playa (por ejemplo, sonidos de las olas) en la granja de la playa.",
 
-    "config.spawn-monsters.name": "Spawn monsters by default", // TODO
-    "config.spawn-monsters.tooltip": "The default value for the 'spawn monsters at night' option when creating a new save. You can still change the option when creating a new save. This has no effect on existing saves.", // TODO
+    "config.spawn-monsters.name": "Generar monstruos por defecto",
+    "config.spawn-monsters.tooltip": "La opción por defecto 'generar monstruos en la noche' estará habilitada para un nuevo guardado. Se puede cambiar la opción cuando se crea un nuevo guardado. Esto no tiene efecto en las partidas guardadas existentes.",
 
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout", // TODO
+    "config.farm-layout-section": "Farm layout",
 
     "config.campfire.name": "Añadir una hoguera",
     "config.campfire.tooltip": "Añade una hoguera funcional delante de la casa de campo.",
 
-    "config.pier.name": "Add fishing pier", // TODO
-    "config.pier.tooltip": "Add a pier where you can fish.", // TODO
+    "config.pier.name": "Añadir muelle de pesca",
+    "config.pier.tooltip": "Añade un muelle donde puedes pescar.",
 
     "config.islands.name": "Añadir islas",
     "config.islands.tooltip": "Añade islas oceánicas con superficie extra.",
 
-    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
-    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position.", // TODO
+    "config.shipping-bin-path.name": "Añadir camino al cubo de entrega",
+    "config.shipping-bin-path.tooltip": "Añade un camino de piedra en frente de la posición predeterminada del cubo de entrega.",
 
     /****
     ** Farm positions
     ****/
-    // TODO
-    "config.farm-positions-section": "Farm positions",
+    "config.farm-positions-section": "Ubicaciones dentro de la granja",
 
-    "config.pier-x.name": "Fishing pier X",
-    "config.pier-x.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically.",
+    "config.pier-x.name": "Muelle de pesca X",
+    "config.pier-x.tooltip": "La posición de la casilla donde debe añadirse el muelle de pesca, si esta opción está activada. Los valores de X e Y se establecen en cero automáticamente.",
 
-    "config.pier-y.name": "Fishing pier Y",
-    "config.pier-y.tooltip": "The tile position where the fishing pier should be added, if enabled. Set both X and Y to zero to position it automatically."
+    "config.pier-y.name": "Muelle de pesca Y",
+    "config.pier-y.tooltip": "La posición de la casilla donde debe añadirse el muelle de pesca, si esta opción está activada. Los valores de X e Y se establecen en cero automáticamente."
 }

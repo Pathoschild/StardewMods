@@ -56,6 +56,7 @@ namespace ContentPatcher.Framework.Commands
                 new ReloadCommand(
                     monitor: monitor,
                     getPatchLoader: () => screenManager.Value.PatchLoader,
+                    getPatchManager: () => screenManager.Value.PatchManager,
                     contentPacks: contentPacks,
                     updateContext: updateContext
                 ),

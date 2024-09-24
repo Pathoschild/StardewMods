@@ -338,6 +338,7 @@
     "item.undiscovered-gift-taste-appended": ", y {{count}} aldeanos sin revelar",
     "item.needed-for.community-center": "Centro comunitario ({{bundles}})",
     "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
     "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
     "item.needed-for.gourmet-chef": "Logro de ''gourmet chef'' (cocina {{recipes}})",

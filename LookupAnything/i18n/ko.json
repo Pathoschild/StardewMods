@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", 그리고 공개되지 않은 사람 {{count}}명",
     "item.needed-for.community-center": "마을 회관 ({{bundles}})",
     "item.needed-for.full-shipment": "도전과제 '완전 판매' (1개 출하)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "도전과제 '복합 재배' ({{count}}개 더 출하)",
     "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",

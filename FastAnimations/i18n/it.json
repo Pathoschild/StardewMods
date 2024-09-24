@@ -115,8 +115,8 @@
     /****
     ** 'Experimental' section
     ****/
-    "config.experimental": "Experimental options", // TODO
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.", // TODO
+    "config.experimental": "Opzioni sperimentali",
+    "config.experimental-warning": "Queste opzioni non sono ancora completamente stabili e possono causare problemi come freeze o crash. L'attivazione di una di queste opzioni non è consigliata.",
 
     "config.event.name": "Filmati degli eventi",
     "config.event.tooltip": "La velocità di riproduzione dei filmati degli eventi. Predefinito {{defaultValue}}x, consigliato {{suggestedValue}}x."

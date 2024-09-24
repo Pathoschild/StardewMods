@@ -340,6 +340,7 @@
     "item.undiscovered-gift-taste-appended": ", et {{count}} goût(s) de villageois non découvert(s)",
     "item.needed-for.community-center": "centre communautaire ({{bundles}})",
     "item.needed-for.full-shipment": "succès de livraison complète (1 à livrer)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "succès polyculture ({{count}} encore à livrer)",
     "item.needed-for.full-collection": "succès collection complète (1 à donner au musée)",
     "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",

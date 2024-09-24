@@ -119,15 +119,24 @@ This is mainly useful if you change conditions through the console (like the dat
 update patches without going to bed.
 
 ### `reload`
-`patch reload` reloads all patches (but not config schema or dynamic tokens) in a content pack's
-`content.json`. That lets you change the `content.json` while the game is running, and see them
-in-game without restarting the game. You specify the content pack using the ID in its
-`manifest.json`.
+`patch reload` reloads patches added by a specific content pack. That lets you change your content pack's JSON files
+while the game is running, and see the changes in-game without restarting the game. Non-patch content (like config
+schema and dynamic tokens) aren't reloaded.
 
 For example:
 
 ```
 > patch reload "LemonEx.HobbitHouse"
+Content pack reloaded.
+```
+
+For content packs which use [`Include` patches](action-include.md), you can optionally only reload patches added by a
+specific `Include` patch by passing the file's relative path as a second argument.
+
+For example:
+
+```
+> patch reload "LemonEx.HobbitHouse" "assets/some-include.json"
 Content pack reloaded.
 ```
 

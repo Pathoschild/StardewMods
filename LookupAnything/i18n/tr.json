@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", ve {{count}} gizli köylüler",
     "item.needed-for.community-center": "halkevi ({{bundles}})",
     "item.needed-for.full-shipment": "tam sevkiyat başarısı (herşeyden bir tane gönder)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
     "item.needed-for.polyculture": "polikültür başarısı (her ekinden {{count}}'den fazla gönder)",
     "item.needed-for.full-collection": "tam koleksiyon başarısı (müze koleksiyonunu tamamla)",
     "item.needed-for.gourmet-chef": "gurme şef başarısı (pişir {{recipes}})",

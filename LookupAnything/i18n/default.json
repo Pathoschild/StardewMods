@@ -337,6 +337,7 @@
     "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers",
     "item.needed-for.community-center": "community center ({{bundles}})",
     "item.needed-for.full-shipment": "full shipment achievement (ship one)",
+    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)",
     "item.needed-for.polyculture": "polyculture achievement (ship {{count}} more)",
     "item.needed-for.full-collection": "full collection achievement (donate one to museum)",
     "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",

@@ -59,8 +59,8 @@
     "config.enable-shipping-bin.name": "Abilita Cassetta delle Spedizioni",
     "config.enable-shipping-bin.desc": "Scegli se abilitare l'accesso alla cassetta delle spedizioni.",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "Abilita accessori per gli irrigatori",
+    "config.enable-sprinkler-attachments.desc": "Scegli se consentire l'accesso agli accessori degli irrigatori, come gli arricchitori.",
 
     "config.add-organize-player-items.name": "Aggiungi il pulsante per organizzare gli elementi del giocatore",
     "config.add-organize-player-items.desc": "Scegli se aggiungere o meno un pulsante 'organizza' nell'IU dei bauli per l'inventario del giocatore.",
