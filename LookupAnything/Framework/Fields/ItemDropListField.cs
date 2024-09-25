@@ -92,6 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 bool isGuaranteed = drop.Probability > .99f;
                 bool shouldFade = this.FadeNonGuaranteed && !isGuaranteed;
                 bool shouldCrossOut = this.CrossOutNonGuaranteed && !isGuaranteed;
+                Color textColor = shouldFade ? Color.Blue * 0.75f : Color.Blue;
 
                 // draw icon
                 spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, shouldFade ? Color.White * 0.5f : Color.White);
@@ -102,16 +103,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Blue);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, textColor);
 
                 // cross out item if it definitely won't drop
                 if (shouldCrossOut)
                     spriteBatch.DrawLine(position.X + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), this.FadeNonGuaranteed ? Color.Gray : Color.Black);
-                else
-                    this.LinkTextAreas!.Add(new(
-                        new Rectangle((int)(position.X + iconSize.X + 5), (int)((int)position.Y + height), (int)textSize.X, (int)textSize.Y),
-                        () => this.Codex.GetByEntity(item, null)
-                    ));
+                this.LinkTextAreas!.Add(new(
+                    new Rectangle((int)(position.X + iconSize.X + 5), (int)((int)position.Y + height), (int)textSize.X, (int)textSize.Y),
+                    () => this.Codex.GetByEntity(item, null)
+                ));
 
                 // draw conditions
                 if (drop.Conditions != null)
