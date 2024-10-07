@@ -173,7 +173,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         }
 
         /// <summary>Update the overlay.</summary>
-        public void Update()
+        public void UpdateDataLayer()
         {
             // move UI if it overlaps pause message
             if (this.WasPaused != Game1.HostPaused)
@@ -253,9 +253,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 int gridSize = this.ShowGrid || this.CurrentLayer.AlwaysShowGrid ? this.GridBorderSize : 0;
                 if (tiles.TryGetValue(tilePos, out TileDrawData? tile))
                 {
+                    Vector2 pixelDrawPosition = tile.DrawOffset != Point.Zero
+                        ? new Vector2(pixelPosition.X + tile.DrawOffset.X, pixelPosition.Y + tile.DrawOffset.Y)
+                        : pixelPosition;
+
                     // draw overlay
                     foreach (Color color in tile.Colors)
-                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelPosition.X, (int)pixelPosition.Y, tileSize, tileSize), color * .3f);
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelDrawPosition.X, (int)pixelDrawPosition.Y, tileSize, tileSize), color * .3f);
 
                     // draw group borders
                     foreach (Color color in tile.BorderColors.Keys)
@@ -267,10 +271,10 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                         int topBorderSize = edges.HasFlag(TileEdge.Top) ? borderSize : gridSize;
                         int bottomBorderSize = edges.HasFlag(TileEdge.Bottom) ? borderSize : gridSize;
 
-                        hasLeftBorder = this.DrawBorder(spriteBatch, pixelPosition, TileEdge.Left, color, leftBorderSize);
-                        hasRightBorder = this.DrawBorder(spriteBatch, pixelPosition, TileEdge.Right, color, rightBorderSize);
-                        hasTopBorder = this.DrawBorder(spriteBatch, pixelPosition, TileEdge.Top, color, topBorderSize);
-                        hasBottomBorder = this.DrawBorder(spriteBatch, pixelPosition, TileEdge.Bottom, color, bottomBorderSize);
+                        hasLeftBorder = this.DrawBorder(spriteBatch, pixelDrawPosition, TileEdge.Left, color, leftBorderSize);
+                        hasRightBorder = this.DrawBorder(spriteBatch, pixelDrawPosition, TileEdge.Right, color, rightBorderSize);
+                        hasTopBorder = this.DrawBorder(spriteBatch, pixelDrawPosition, TileEdge.Top, color, topBorderSize);
+                        hasBottomBorder = this.DrawBorder(spriteBatch, pixelDrawPosition, TileEdge.Bottom, color, bottomBorderSize);
                     }
                 }
 
@@ -371,7 +375,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                     // get tile data
                     Vector2 position = groupTile.TilePosition;
                     if (!tiles.TryGetValue(position, out TileDrawData? data))
-                        data = tiles[position] = new TileDrawData(position);
+                        data = tiles[position] = new TileDrawData(position, groupTile.DrawOffset);
 
                     // update data
                     data.Colors.Add(groupTile.Color);

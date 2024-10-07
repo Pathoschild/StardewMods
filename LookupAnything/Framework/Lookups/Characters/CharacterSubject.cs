@@ -415,8 +415,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, IDictionary<string, bool> ownedItemsCache, GiftTaste taste)
         {
             var field = new CharacterGiftTastesField(label, giftTastes, taste, showUnknown: this.ShowUnknownGiftTastes, highlightUnrevealed: this.HighlightUnrevealedGiftTastes, onlyOwned: !this.ShowUnownedGifts, ownedItemsCache);
-            if (this.CollapseFieldsConfig.Enabled && giftTastes.TryGetValue(taste, out GiftTasteModel[]? tastes) && tastes.Length >= this.CollapseFieldsConfig.NpcGiftTastes)
-                field.CollapseByDefault(I18n.Generic_ShowXResults(tastes.Length));
+            if (this.CollapseFieldsConfig.Enabled)
+                field.CollapseIfLengthExceeds(this.CollapseFieldsConfig.NpcGiftTastes, field.TotalItems);
             return field;
         }
 

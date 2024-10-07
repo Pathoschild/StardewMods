@@ -12,6 +12,10 @@
     "config.grow-crops-out-of-season.name": "Ekinler her mevsim yetişebilir",
     "config.grow-crops-out-of-season.desc": "Ekinlerin herhangi bir mevsimde yetişip yetişemeyeceği. Eğer bu seçenek kapalıysa, ekinler sadece uygun mevsimlerde yetişir. Bu seçenek sadece Ekinler her yerde yetişebilir seçeneği açıksa çalışır.",
 
+    // TODO
+    "config.use-fruit-trees-seasonal-sprites.name": "Seasonal fruit trees sprites",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Whether fruit trees should use their normal seasonal sprite (true) or their summer sprites (false) when 'grow crops in any season' is enabled.",
+
     "config.force-till-dirt.name": "Tüm topraklar çapalanabilir",
     "config.force-till-dirt.desc": "Tüm toprakların normalde çapalanamasa bile çapalanıp çapalanamayacağını belirtir.",
 

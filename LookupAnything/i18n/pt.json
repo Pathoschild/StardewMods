@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "agora",
@@ -728,6 +728,8 @@
     "config.tile-lookups.desc": "Se deve incluir blocos de mapa como alvos de pesquisa.",
     "config.data-mining-fields.name": "Mostrar campos de mineração de dados",
     "config.data-mining-fields.desc": "Se devem ser mostrados dados brutos úteis para mineradores de dados (como campos separados na parte inferior dos resultados da pesquisa). Esse é um recurso avançado não destinado à maioria dos jogadores.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "Redirecionamento de alvo",
     "config.target-redirection.desc": "Em alguns casos, o jogo gera uma entidade temporária para representar outra. Por exemplo, Abigail nas minas é na verdade um NPC temporário com o nome 'AbigailMine', então procurá-la lá em cima não mostrará as informações reais de Abigail. Com esta opção habilitada, Lookup Anything irá procurar a Abigail original.",
     "config.scroll-amount.name": "Quantidade de rolagem",

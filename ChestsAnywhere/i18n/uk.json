@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "Додати кнопку сортування предметів гравця.",
     "config.add-organize-player-items.desc": "Додавання кнопки «Сортувати» в інтерфейсах скриньки для інвентарю гравця.",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
+
     "config.range.name": "Діапазон дії",
     "config.range.desc": "Діапазон, на якому скрині доступні через меню.",
     "config.range.unlimited": "Усі скрині",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "Скрині в поточної локації",
     "config.range.none": "Немає (не можна отримати доступ до скринь віддалено)",
 
+    "config.disable-mines.name": "Вимкнути в шахті та Печері Черепа",
+    "config.disable-mines.desc": "Заборона дистанційного доступу до скринь під час перебування в шахті чи Печері Черепа.",
+
+    "config.disable-custom-names.name": "Вимкнути за назвами локацій",
+    "config.disable-custom-names.desc": "Внутрішні назви локацій (як показано в моді Debug Mode), для яких можна вимкнути дистанційний доступ до скринь. Ви можете перерахувати кілька назв через коми.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "Основне керування",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "Увімкнути інтерфейс користувача",
     "config.toggle-ui-key.desc": "Клавіші, які показують або приховують інтерфейс скрині.",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "Клавіші, які при утриманні дозволяють прокручувати спадний список категорії за допомогою колеса прокрутки миші.",
 
     "config.hold-to-scroll-chests.name": "Утримувати, щоб прокрутити скрині",
-    "config.hold-to-scroll-chests.desc": "Клавіші, які при утриманні дозволяють прокручувати спадний список скринь за допомогою колеса прокрутки миші.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "Вимкнути в локаціях",
-
-    "config.disable-mines.name": "Шахта та Печера Черепа",
-    "config.disable-mines.desc": "Заборона доступу до скринь під час перебування в шахті чи Печері Черепа.",
-
-    "config.disable-custom-names.name": "Користувацькі назви локацій",
-    "config.disable-custom-names.desc": "Внутрішні назви (як показано в моді Debug Mode) для локацій, з яких можна вимкнути доступ до скринь. Ви можете перерахувати кілька комами."
+    "config.hold-to-scroll-chests.desc": "Клавіші, які при утриманні дозволяють прокручувати спадний список скринь за допомогою колеса прокрутки миші."
 }

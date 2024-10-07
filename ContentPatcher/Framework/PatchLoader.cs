@@ -932,18 +932,26 @@ namespace ContentPatcher.Framework
                         break;
 
                     case TextOperationType.RemoveDelimited:
+                    case TextOperationType.ReplaceDelimited:
                         if (string.IsNullOrEmpty(operation.Delimiter))
                             return Fail($"{errorPrefix}: the {nameof(operation.Delimiter)} value must be set for a {operationType} text operation.", out error);
                         if (string.IsNullOrWhiteSpace(search.Raw))
                             return Fail($"{errorPrefix}: the {nameof(operation.Search)} value must be set for a {operationType} text operation.", out error);
 
-                        parsedOperation = new RemoveDelimitedTextOperation(
-                            operation: operationType,
-                            target: target,
-                            search: search,
-                            delimiter: operation.Delimiter,
-                            replaceMode: replaceMode
-                        );
+                        parsedOperation = operationType is TextOperationType.RemoveDelimited
+                            ? new RemoveDelimitedTextOperation(
+                                target: target,
+                                search: search,
+                                delimiter: operation.Delimiter,
+                                replaceMode: replaceMode
+                            )
+                            : new ReplaceDelimitedTextOperation(
+                                target: target,
+                                search: search,
+                                replaceWith: value,
+                                delimiter: operation.Delimiter,
+                                replaceMode: replaceMode
+                            );
                         break;
 
                     default:

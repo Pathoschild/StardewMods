@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.6.9.
-* Improved translations. Thanks to MakinDay (updated Italian)!
+* Improved translations. Thanks to MakinDay (updated Italian) and moonggae (updated Korean)!
 
 ## 1.13.3
 Released 07 July 2024 for SMAPI 4.0.7 or later.

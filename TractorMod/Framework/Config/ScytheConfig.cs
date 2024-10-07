@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to harvest fruit trees.</summary>
         public bool HarvestFruitTrees { get; set; } = true;
 
+        /// <summary>Whether to harvest green rain bushes.</summary>
+        public bool HarvestGreenRainBushes { get; set; } = true;
+
         /// <summary>Whether to harvest tree moss.</summary>
         public bool HarvestTreeMoss { get; set; } = true;
 

@@ -12,6 +12,10 @@
     "config.grow-crops-out-of-season.name": "Coltiva in qualsiasi stagione",
     "config.grow-crops-out-of-season.desc": "Scegli se le colture crescono anche se normalmente sono fuori stagione. Si applica solo se è abilitata anche l'opzione 'Coltiva ovunque'.",
 
+    // TODO
+    "config.use-fruit-trees-seasonal-sprites.name": "Seasonal fruit trees sprites",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Whether fruit trees should use their normal seasonal sprite (true) or their summer sprites (false) when 'grow crops in any season' is enabled.",
+
     "config.force-till-dirt.name": "Zappa qualsiasi terriccio",
     "config.force-till-dirt.desc": "Scegli se tutte le caselle di terriccio possono essere coltivabili con una zappa, anche se normalmente non lo sarebbero.",
 

@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "持ち物の整理ボタンを追加",
     "config.add-organize-player-items.desc": "箱のUIにプレイヤーの持ち物の「整理」ボタンを追加する。",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
+
     "config.range.name": "範囲",
     "config.range.desc": "メニューUIから箱にアクセスできる範囲。",
     "config.range.unlimited": "すべての箱",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "現在エリアの箱",
     "config.range.none": "なし（箱にアクセスしない）",
 
+    "config.disable-mines.name": "鉱山やドクロの洞窟で無効化",
+    "config.disable-mines.desc": "鉱山やドクロの洞窟でリモートで箱へのアクセスを無効にするかどうか。",
+
+    "config.disable-custom-names.name": "ロケーション名で無効化",
+    "config.disable-custom-names.desc": "箱へのリモートアクセスを無効にする場所の内部名称（Debug Mode modなどで確認可能）。カンマで区切って複数列挙することもできる。",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "一般コントロール",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "UIの表示",
     "config.toggle-ui-key.desc": "箱UIを表示・非表示にするキー。",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "このキーを押しながら、マウスのスクロールホイールするとカテゴリのドロップダウンをスクロールできるようになる。",
 
     "config.hold-to-scroll-chests.name": "長押しで箱をスクロール",
-    "config.hold-to-scroll-chests.desc": "このキーを押しながら、マウスのスクロールホイールすると箱のドロップダウンをスクロールできるようになる。",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "無効にする場所",
-
-    "config.disable-mines.name": "鉱山やドクロの洞窟",
-    "config.disable-mines.desc": "鉱山やドクロの洞窟の箱へのアクセスを無効にする。",
-
-    "config.disable-custom-names.name": "カスタムロケーション名",
-    "config.disable-custom-names.desc": "箱へのアクセスを無効にする場所の内部名称(Debug Mode modなどで確認可能)。カンマで区切って複数列挙することもできる。"
+    "config.hold-to-scroll-chests.desc": "このキーを押しながら、マウスのスクロールホイールすると箱のドロップダウンをスクロールできるようになる。"
 }

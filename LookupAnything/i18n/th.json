@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "ขณะนี้",
@@ -732,6 +732,8 @@
     "config.tile-lookups.desc": "จะรวมไทล์แผนที่เป็นเป้าหมายการค้นหาหรือไม่",
     "config.data-mining-fields.name": "แสดงเขตข้อมูลการทำเหมืองข้อมูล",
     "config.data-mining-fields.desc": "จะแสดงข้อมูลดิบที่เป็นประโยชน์สำหรับผู้ขุดข้อมูลหรือไม่ (เป็นฟิลด์แยกต่างหากที่ด้านล่างของผลลัพธ์การค้นหา) นี่เป็นคุณสมบัติขั้นสูงที่ไม่ได้มีไว้สำหรับผู้เล่นส่วนใหญ่",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "เป้าหมายการเปลี่ยนเส้นทาง",
     "config.target-redirection.desc": "ในบางกรณี เกมจะสร้างเอนทิตีชั่วคราวเพื่อเป็นตัวแทนของอีกตัวหนึ่ง ตัวอย่างเช่น Abigail ในเหมืองเป็น NPC ชั่วคราวที่ชื่อ 'AbigailMine' ดังนั้นการมองหาเธอที่นั่นจะไม่ใช่การแสดงข้อมูลที่แท้จริงของ Abigail เมื่อเปิดใช้งานตัวเลือกนี้ Lookup Anything จะค้นหา Abigail เดิมแทน",
     "config.scroll-amount.name": "เลื่อนจำนวน",

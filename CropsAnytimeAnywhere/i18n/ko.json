@@ -1,0 +1,30 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // warnings
+    "config.too-complex": "위치별 설정이 너무 복잡하여 일반 모드 설정 메뉴를 통해 수정할 수 없습니다. 모드의 config.json 파일을 직접 편집하거나 모드 설정을 기본값으로 재설정할 수 있습니다 ('기본값' 버튼과 '저장' 버튼을 클릭한 후 게임을 다시 시작하세요).",
+
+    // options
+    "config.grow-crops.name": "모든 장소에서 작물 재배",
+    "config.grow-crops.desc": "모든 장소에서 작물을 심고 재배할 수 있는지 여부를 설정합니다.",
+
+    "config.grow-crops-out-of-season.name": "모든 계절에 작물 재배",
+    "config.grow-crops-out-of-season.desc": "'모든 장소에서 작물 재배'가 활성화된 경우, 계절에 상관없이 작물이 자랄 수 있도록 설정합니다.",
+
+    // TODO
+    "config.use-fruit-trees-seasonal-sprites.name": "Seasonal fruit trees sprites",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Whether fruit trees should use their normal seasonal sprite (true) or their summer sprites (false) when 'grow crops in any season' is enabled.",
+
+    "config.force-till-dirt.name": "모든 흙에 호미질",
+    "config.force-till-dirt.desc": "일반적으로 호미질할 수 없는 흙 타일도 모두 호미질할 수 있도록 설정합니다.",
+
+    "config.force-till-grass.name": "모든 풀에 호미질",
+    "config.force-till-grass.desc": "일반적으로 호미질할 수 없는 풀 타일도 모두 호미질할 수 있도록 설정합니다.",
+
+    "config.force-till-stone.name": "모든 돌에 호미질",
+    "config.force-till-stone.desc": "일반적으로 호미질할 수 없는 돌 타일도 모두 호미질할 수 있도록 설정합니다.",
+
+    "config.force-till-other.name": "기타 다른 타일에 호미질",
+    "config.force-till-other.desc": "흙, 풀, 돌 외에 일반적으로 호미질할 수 없는 타일도 모두 호미질할 수 있도록 설정합니다."
+}

@@ -487,7 +487,7 @@ namespace Pathoschild.Stardew.TractorMod
             // tractor request from a farmhand
             if (e.Type == this.RequestTractorMessageID && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
             {
-                Farmer player = Game1.getFarmer(e.FromPlayerID);
+                Farmer? player = Game1.GetPlayer(e.FromPlayerID);
                 if (player is { IsMainPlayer: false })
                 {
                     this.Monitor.Log(this.SummonLocalTractorTo(player)
@@ -537,7 +537,7 @@ namespace Pathoschild.Stardew.TractorMod
                     new MeleeSwordAttachment(toolConfig.MeleeSword, modRegistry),
                     new MilkPailAttachment(toolConfig.MilkPail, modRegistry),
                     new PickaxeAttachment(toolConfig.PickAxe, modRegistry, reflection),
-                    new ScytheAttachment(toolConfig.Scythe, modRegistry),
+                    new ScytheAttachment(toolConfig.Scythe, modRegistry, reflection),
                     new SeedAttachment(toolConfig.Seeds, modRegistry, reflection),
                     modRegistry.IsLoaded(SeedBagAttachment.ModId) ? new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry) : null,
                     new ShearsAttachment(toolConfig.Shears, modRegistry),

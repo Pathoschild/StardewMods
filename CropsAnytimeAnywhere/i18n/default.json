@@ -12,6 +12,9 @@
     "config.grow-crops-out-of-season.name": "Grow crops in any season",
     "config.grow-crops-out-of-season.desc": "Whether crops grow even if they'd normally be out of season. This only applies if 'grow crops anywhere' is also enabled.",
 
+    "config.use-fruit-trees-seasonal-sprites.name": "Seasonal fruit trees sprites",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Whether fruit trees should use their normal seasonal sprite (true) or their summer sprites (false) when 'grow crops in any season' is enabled.",
+
     "config.force-till-dirt.name": "Hoe any dirt",
     "config.force-till-dirt.desc": "Whether all dirt tiles should be tillable with a hoe, even if they normally wouldn't be.",
 

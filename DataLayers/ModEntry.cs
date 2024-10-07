@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.DataLayers
             DataLayerOverlay? overlay = this.CurrentOverlay.Value;
             if (overlay != null)
             {
-                overlay.Update();
+                overlay.UpdateDataLayer();
                 this.LastLayerId = overlay.CurrentLayer.Id;
             }
         }

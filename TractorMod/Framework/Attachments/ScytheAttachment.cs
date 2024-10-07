@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -24,8 +25,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly ScytheConfig Config;
 
-        /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest"/>.</summary>
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+        /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest(Crop)"/>.</summary>
         private readonly Dictionary<string, bool> IsFlowerCache = new();
+
+        /// <summary>A temporary axe instance for harvesting green weed bushes.</summary>
+        private readonly Axe Axe = ItemRegistry.Create<Axe>("(T)IridiumAxe");
+
 
 
         /*********
@@ -34,10 +42,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
-        public ScytheAttachment(ScytheConfig config, IModRegistry modRegistry)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public ScytheAttachment(ScytheConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
             : base(modRegistry)
         {
             this.Config = config;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -106,6 +116,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 Bush? bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox().Intersects(tileArea)) as Bush;
                 if (this.TryHarvestBush(bush))
                     return true;
+            }
+
+            // green rain bush
+            if (this.Config.HarvestGreenRainBushes)
+            {
+                if (this.TryGetResourceClumpCoveringTile(location, tile, player, this.Reflection, out ResourceClump? clump, out Func<Tool, bool>? applyTool) && clump.IsGreenRainBush())
+                {
+                    applyTool(this.Axe);
+                    return true;
+                }
             }
 
             return false;

@@ -191,7 +191,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 return this.Target.spouse;
 
             long? spousePlayerID = this.Target.team.GetSpouse(this.Target.UniqueMultiplayerID);
-            SFarmer? spousePlayer = spousePlayerID.HasValue ? Game1.getFarmerMaybeOffline(spousePlayerID.Value) : null;
+            SFarmer? spousePlayer = spousePlayerID.HasValue ? Game1.GetPlayer(spousePlayerID.Value) : null;
 
             return spousePlayer?.displayName ?? Game1.player.getSpouse()?.displayName;
         }

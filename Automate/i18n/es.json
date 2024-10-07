@@ -6,7 +6,7 @@
     "config.title.main-options": "Opciones Principales",
     "config.enabled.name": "Activado",
     "config.enabled.desc": "Esto activa las funciones de automatización. En caso de estar desactivado, las máquinas no estarán automatizadas y el overlay no aparecerá.",
-    "config.automation-interval.name": "Intervalo de automatización",
+    "config.automation-interval.name": "Intérvalo de automatización",
     "config.automation-interval.desc": "Número de ticks entre cada proceso de automatización (60 ticks = 1 segundo, 120 ticks = 2 segundos, etc).",
     "config.min-minutes-for-fairy-dust.name": "Tiempo mínimo para aplicar Polvo de Hadas",
     "config.min-minutes-for-fairy-dust.desc": "Tiempo de procesamiento mínimo para aplicar Polvo de Hada (en minutos). Por ejemplo, configurar esto a 30 minutos significa que el Polvo de Hada no se usará sobre la máquina si esta puede terminar el proceso en 20 minutos por sí misma.",
@@ -17,18 +17,18 @@
 
     // connectors
     "config.title.connectors": "Permitir conectores",
-    "config.connector.desc": "Usa {{itemName}} para conectar maquinas y cofres.",
+    "config.connector.desc": "Usa {{itemName}} para conectar máquinas y cofres.",
     "config.custom-connectors.name": "Personalizar conectores",
     "config.custom-connectors.desc": "Puedes usar el ítem de tu preferencia para conectar maquinas a los cofres, para ello debes escribir los nombres de los items en ingles. Puedes escribir más de un items separandolos con comas. (Ejemplo: Torch, Cristal Floor -> para Antorcha y Suelos de Cristal.)", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Uso de la Cabaña Junimo",
     "config.junimo-hut-gems.name": "Gemas",
-    "config.junimo-hut-gems.desc": "Que debe hacer la Cabaña Junimo con items de Gemas. 'Detectar Automaticamente' para ignorar items.",
+    "config.junimo-hut-gems.desc": "Qué debe hacer la Cabaña Junimo con items de Gemas. 'Detectar Automaticamente' para ignorar items.",
     "config.junimo-hut-fertilizer.name": "Fertilizante",
-    "config.junimo-hut-fertilizer.desc": "Que debe hacer la Cabaña Junimo con items de Fertilizante. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
+    "config.junimo-hut-fertilizer.desc": "Qué debe hacer la Cabaña Junimo con items de Fertilizante. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
     "config.junimo-hut-seeds.name": "Semillas",
-    "config.junimo-hut-seeds.desc": "Que debe hacer la Cabaña Junimo con items de Semillas. 'Auto-detect' Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
+    "config.junimo-hut-seeds.desc": "Qué debe hacer la Cabaña Junimo con items de Semillas. 'Auto-detect' Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
 
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Detectar Automaticamente",
@@ -45,9 +45,9 @@
 
     // machine names
     "config.machines.bush": "Arbusto",
-    "config.machines.fruit-tree": "Arbol (Arbol Frutal)",
+    "config.machines.fruit-tree": "Árbol (Árbol Frutal)",
     "config.machines.trash-can": "Bote de Basura",
-    "config.machines.wild-tree": "Arbol (Arbol Silvestre)",
+    "config.machines.wild-tree": "Árbol (Árbol Silvestre)",
     "config.machines.feed-hopper": "Tolva de alimentación y silo",
 
     // special settings for individual machines

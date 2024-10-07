@@ -40,6 +40,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 
             // add patches
             HarmonyPatcher.Apply(this,
+                new FruitTreePatcher(this.Config),
                 new LocationPatcher(this.Monitor, this.Config, fallbackTileTypes)
             );
         }

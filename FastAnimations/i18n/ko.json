@@ -68,8 +68,8 @@
     "config.casino-slots.name": "카지노 슬롯",
     "config.casino-slots.tooltip": "카지노 슬롯이 회전하는 속도. 기본 값 {{defaultValue}}.",
 
-    "config.fade.name": "Fade", // TODO
-    "config.fade.tooltip": "How fast the screen fades to black and fades back in. Default {{defaultValue}}x.", // TODO
+    "config.fade.name": "화면 전환",
+    "config.fade.tooltip": "다른 맵으로 이동할 때 화면이 전환되는 속도. 기본 값 {{defaultValue}}x.",
 
     "config.fishing-treasure.name": "낚시 보물 상자",
     "config.fishing-treasure.tooltip": "낚시 중 보물 상자 열리는 속도. 기본 값 {{defaultValue}}x.",
@@ -80,14 +80,14 @@
     "config.open-chest.name": "상자 열기",
     "config.open-chest.tooltip": "상자 여는 속도. 기본 값 {{defaultValue}}x.",
 
-    "config.parrot-express.name": "Parrot express", // TODO
-    "config.parrot-express.tooltip": "How fast the parrot express runs. Default {{defaultValue}}x.", // TODO
+    "config.parrot-express.name": "앵무새 익스프레스",
+    "config.parrot-express.tooltip": "앵무새 익스프레스 이동 속도. 기본 값 {{defaultValue}}x.",
 
     "config.prize-ticket-machine.name": "경품 기계",
     "config.prize-ticket-machine.tooltip": "루이스의 경품 기계 사용 시 경품 얻는 속도. 기본 값 {{defaultValue}}x.",
 
-    "config.tailor.name": "Tailor", // TODO
-    "config.tailor.tooltip": "How fast the sewing machine works. Default {{defaultValue}}x.", // TODO
+    "config.tailor.name": "재단",
+    "config.tailor.tooltip": "재봉틀 동작 속도. 기본 값 {{defaultValue}}x.",
 
     "config.tree-fall.name": "나무 쓰러짐",
     "config.tree-fall.tooltip": "나무를 자른 후 나무가 쓰러지는 속도. 기본 값 {{defaultValue}}, 권장 {{suggestedValue}}.",
@@ -100,11 +100,11 @@
     ****/
     "config.ui-speeds": "UI 애니메이션 속도",
 
-    "config.dialogue-typing.name": "Dialogue typing", // TODO
-    "config.dialogue-typing.tooltip": "How fast text appears in dialogue boxes. Default {{defaultValue}}x", // TODO
+    "config.dialogue-typing.name": "대화창 글자",
+    "config.dialogue-typing.tooltip": "대화창에 글자가 나타나느 속도. 기본 값 {{defaultValue}}x",
 
-    "config.open-dialogue-box.name": "Open dialogue box", // TODO
-    "config.open-dialogue-box.tooltip": "How fast dialogue boxes open. Default {{defaultValue}}x.", // TODO
+    "config.open-dialogue-box.name": "대화창 열림",
+    "config.open-dialogue-box.tooltip": "대화창이 열리는 속도. 기본 값 {{defaultValue}}x.",
 
     "config.title-menu.name": "타이틀 메뉴 전환",
     "config.title-menu.tooltip": "타이틀 메뉴 화면 전환 속도. 기본 값 {{defaultValue}}.",
@@ -115,9 +115,9 @@
     /****
     ** 'Experimental' section
     ****/
-    "config.experimental": "Experimental options", // TODO
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.", // TODO
+    "config.experimental": "실험 옵션",
+    "config.experimental-warning": "이 옵션들은 아직 안정적이지 않아 화면이 멈추거나 종료되는 문제를 일으킬 수 있습니다. 활성화 하는 것을 추천하지 않습니다.",
 
-    "config.event.name": "Event cutscene", // TODO
-    "config.event.tooltip": "How fast event cutscenes play. Default {{defaultValue}}x, suggested {{suggestedValue}}x." // TODO
+    "config.event.name": "이벤트 컷신",
+    "config.event.tooltip": "이벤트 컷신 진행 속도. 기본 값 {{defaultValue}}x, 추천 값 {{suggestedValue}}x."
 }

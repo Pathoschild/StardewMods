@@ -18,15 +18,20 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The border colors to draw.</summary>
         public Dictionary<Color, TileEdge> BorderColors { get; } = new();
 
+        /// <summary>The pixel offset at which to draw this tile.</summary>
+        public Point DrawOffset { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="position">The tile position.</param>
-        public TileDrawData(Vector2 position)
+        /// <param name="drawOffset">The pixel offset at which to draw this tile.</param>
+        public TileDrawData(Vector2 position, Point drawOffset)
         {
             this.TilePosition = position;
+            this.DrawOffset = drawOffset;
         }
     }
 }

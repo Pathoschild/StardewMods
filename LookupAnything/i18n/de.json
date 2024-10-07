@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "jetzt",
@@ -726,6 +726,8 @@
     "config.tile-lookups.desc": "Ob Kartenkacheln als Nachschlageziele einbezogen werden sollen.",
     "config.data-mining-fields.name": "Data Mining Felder anzeigen",
     "config.data-mining-fields.desc": "Ob Rohdaten angezeigt werden sollen, die für Data Miner nützlich sind (als separate Felder am Ende der Suchergebnisse). Dies ist eine erweiterte Funktion, die nicht für die meisten Spieler gedacht ist.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "Ziel Umleitung",
     "config.target-redirection.desc": "In manchen Fällen legt das Spiel eine temporäre Entität an, um eine andere zu repräsentieren. Zum Beispiel ist Abigail in den Minen in Wirklichkeit ein temporärer NSC mit dem Namen 'AbigailMine', so dass die Suche nach ihr dort nicht Abigails wirkliche Informationen zeigen wird. Wenn diese Option aktiviert ist, sucht Lookup Anything stattdessen nach der ursprünglichen Abigail.",
     "config.scroll-amount.name": "Scroll Anzahl",

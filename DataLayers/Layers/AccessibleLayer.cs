@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
@@ -66,12 +65,32 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
-            TileData[] passableTiles = tiles.Where(p => p.Type.Id == this.Clear.Id).ToArray();
+            List<TileData> passableTiles = new();
+            List<TileData> warpTiles = new();
+            List<TileData> otherTiles = new();
+
+            foreach (TileData tile in this.GetTiles(location, visibleTiles))
+            {
+                switch (tile.Type.Id)
+                {
+                    case I18n.Keys.Accessible_Clear:
+                        passableTiles.Add(tile);
+                        break;
+
+                    case I18n.Keys.Accessible_Warp:
+                        warpTiles.Add(this.AdjustWarpTileIfOffScreen(tile));
+                        break;
+
+                    default:
+                        otherTiles.Add(tile);
+                        break;
+                }
+            }
 
             return [
                 new TileGroup(passableTiles, outerBorderColor: this.Clear.Color),
-                new TileGroup(tiles.Except(passableTiles))
+                new TileGroup(warpTiles, outerBorderColor: this.Clear.Color),
+                new TileGroup(otherTiles)
             ];
         }
 
@@ -79,6 +98,31 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Private methods
         *********/
+        /// <summary>Get a warp tile with a draw offset applied to keep it visible if it's at an off-screen position.</summary>
+        /// <param name="tile">The tile to adjust.</param>
+        private TileData AdjustWarpTileIfOffScreen(TileData tile)
+        {
+            int offsetAmount = Game1.tileSize / 3;
+
+            Vector2 pixelPos = tile.TilePosition * Game1.tileSize;
+
+            int offsetX = 0;
+            if (pixelPos.X < Game1.viewport.X)
+                offsetX = offsetAmount;
+            else if (pixelPos.X >= Game1.viewport.X + Game1.viewport.Width)
+                offsetX = -offsetAmount;
+
+            int offsetY = 0;
+            if (pixelPos.Y < Game1.viewport.Y)
+                offsetY = offsetAmount;
+            else if (pixelPos.Y >= Game1.viewport.Y + Game1.viewport.Height)
+                offsetY = -offsetAmount;
+
+            return offsetX != 0 || offsetY != 0
+                ? new TileData(tile.TilePosition, tile.Type, tile.Color, new Point(offsetX, offsetY))
+                : tile;
+        }
+
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>

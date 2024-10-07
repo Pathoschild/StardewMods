@@ -164,6 +164,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     set: (config, value) => config.ShowDataMiningFields = value
                 )
                 .AddCheckbox(
+                    name: I18n.Config_ShowInvalidRecipes_Name,
+                    tooltip: I18n.Config_ShowInvalidRecipes_Desc,
+                    get: config => config.ShowInvalidRecipes,
+                    set: (config, value) => config.ShowInvalidRecipes = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_TargetRedirection_Name,
                     tooltip: I18n.Config_TargetRedirection_Desc,
                     get: config => config.EnableTargetRedirection,

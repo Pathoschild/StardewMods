@@ -18,6 +18,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
             ["*"] = new(
                 growCrops: true,
                 growCropsOutOfSeason: true,
+                useFruitTreesSeasonalSprites: false,
                 forceTillable: new(
                     dirt: true,
                     grass: true,

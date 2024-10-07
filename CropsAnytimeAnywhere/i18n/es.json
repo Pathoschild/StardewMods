@@ -1,0 +1,30 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // warnings
+    "config.too-complex": "You have per-location settings, which are too complex to edit through Generic Mod Config Menu. You can edit the mod's config.json file directly, or reset the mod settings to default (by clicking the 'Default' and 'Save' buttons, then reopening the game).",
+
+    // options
+    "config.grow-crops.name": "Cultiva donde sea.",
+    "config.grow-crops.desc": "Define si es posible plantar cultivos donde sea.",
+
+    "config.grow-crops-out-of-season.name": "Cultiva en cualquier estación.",
+    "config.grow-crops-out-of-season.desc": "Define si tus cultivos crecerán incluso si están fuera de estación. Esto solo aplica si 'Cultiva donde sea' está activado también.",
+
+    // TODO
+    "config.use-fruit-trees-seasonal-sprites.name": "Seasonal fruit trees sprites",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Whether fruit trees should use their normal seasonal sprite (true) or their summer sprites (false) when 'grow crops in any season' is enabled.",
+
+    "config.force-till-dirt.name": "Ara cualquier tierra",
+    "config.force-till-dirt.desc": "Define si todos los cuadros de tierra pueden ser arados con una azada, aún y si normalmente no es posible.",
+
+    "config.force-till-grass.name": "Ara cualquier pasto",
+    "config.force-till-grass.desc": "Define si todos los cuadros con pasto pueden ser arados con una azada, aún y si normalmente no es posible.",
+
+    "config.force-till-stone.name": "Ara cualquier piedra",
+    "config.force-till-stone.desc": "Define si todos los cuadros con piedra pueden ser arados con una azada, aún y si normalmente no es posible.",
+
+    "config.force-till-other.name": "Ara cualquier cuadro",
+    "config.force-till-other.desc": "Define si todos los demás cuadrados que no son catalogados como tierra, pasto o piedra pueden ser arados con una azada, aún y si normalmente no es posible."
+}

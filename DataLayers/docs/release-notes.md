@@ -3,7 +3,9 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.6.9.
+* On the _Accessible_ layer, warps that are hidden just off-screen are now drawn along the edge.
 * Added support for Ultimate Fertilizer's multi-fertilizer feature.
+* Improved translations. Thanks to moonggae (updated Korean)!
 
 ## 1.17.2
 Released 29 June 2024 for SMAPI 4.0.7 or later.

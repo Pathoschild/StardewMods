@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Updated for Stardew Valley 1.6.9.
+* Added `ReplaceDelimited` [text operation](author-guide/text-operations.md) (thanks to dmorsecode!).
 * The [`patch reload` command](troubleshooting.md#reload) can now reload patches from a specific `Include` patch (thanks to spacechase0!).
 * Fixed `EditMap` patches with multiple `Target` or `FromFile` values not applying `SetProperties`.
 

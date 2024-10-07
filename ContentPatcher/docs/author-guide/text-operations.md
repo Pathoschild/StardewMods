@@ -13,6 +13,7 @@ They're set using the `TextOperations` field for an [`EditData`](action-editdata
   * [`Append`](#append)
   * [`Prepend`](#prepend)
   * [`RemoveDelimited`](#removedelimited)
+  * [`ReplaceDelimited`](#replacedelimited)
 * [See also](#see-also)
 
 ## Example
@@ -238,6 +239,103 @@ For example, this removes prismatic shard (item 74) from the list of universally
          "Operation": "RemoveDelimited",
          "Target": ["Entries", "Universal_Love"],
          "Search": "74",
+         "Delimiter": " "
+      }
+   ]
+}
+```
+
+### `ReplaceDelimited`
+The `ReplaceDelimited` operation parses the target text into a set of values based on a delimiter,
+then replaces one or more values equal to the given search text with a new value.
+
+This replaces delimited values, _not_ substrings within them.
+
+This expects these fields:
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _[common fields](#common-fields)_ above.
+
+</td>
+</tr>
+<tr>
+<td><code>Search</code></td>
+<td>
+
+The value to replace in the text. This must match the entire delimited value to remove, it won't
+remove substrings within each delimited value.
+
+This field supports [tokens](../author-guide.md#tokens), and capitalization **does** matter.
+
+</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td>
+
+The text with which to replace the value.
+
+This field supports [tokens](../author-guide.md#tokens), and capitalization doesn't matter. Like
+most Content Patcher fields, whitespace is trimmed from the start and end.
+
+
+</td>
+</tr>
+<tr>
+<td><code>Delimiter</code></td>
+<td>
+
+The characters which separate values within the target text.
+
+For example, let's say the target text contains `A a/B/C`. Here's how that would be parsed with
+different delimiters:
+
+delimiter          | value 1 | value 2 | value 3
+------------------ | ------- | ------- | -------
+`"Delimiter": "/"` | `A a`   | `B`     | `C`
+`"Delimiter": " "` | `A`     | `a/B/C` |
+
+</td>
+</tr>
+<tr>
+<td><code>ReplaceMode</code></td>
+<td>
+
+_(Optional)_ Which delimited values should be replaced. The possible options are:
+
+mode    | result
+------- | ------
+`First` | Replace the first value which matches the `Search`, and leave any others as-is.
+`Last`  | Replace the last value which matches the `Search`, and leave any others as-is.
+`All`   | Replace all values which match the `Search`.
+
+Defaults to `All`.
+
+</td>
+</tr>
+</table>
+
+For example, this replaces Rabbit's Foot (item #446) in universal love gift tastes with pufferfish
+(item #128):
+
+```js
+{
+   "Action": "EditData",
+   "Target": "Data/NPCGiftTastes",
+   "TextOperations": [
+      {
+         "Operation": "ReplaceDelimited",
+         "Target": ["Entries", "Universal_Love"],
+         "Search": "446",
+         "Value": "128",
          "Delimiter": " "
       }
    ]

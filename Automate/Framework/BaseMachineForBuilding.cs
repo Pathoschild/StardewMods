@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             long ownerId = this.Machine.owner.Value;
             return ownerId != 0
-                ? Game1.getFarmer(ownerId) ?? mainPlayer
+                ? Game1.GetPlayer(ownerId) ?? mainPlayer
                 : mainPlayer;
         }
     }

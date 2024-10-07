@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "teraz",
@@ -732,6 +732,8 @@
     "config.tile-lookups.desc": "Czy uwzględnić kafelki mapy jako możliwe cele podglądu.",
     "config.data-mining-fields.name": "Pokaż pola data miningu",
     "config.data-mining-fields.desc": "Czy pokazywać surowe dane przydatne dla data minerów (jako oddzielne pola na dole wyników podglądu). Jest to zaawansowana funkcja, która nie jest przeznaczona dla większości graczy.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "Przekieruj docelowo",
     "config.target-redirection.desc": "W niektórych przypadkach gra tworzy tymczasową postać, która reprezentuje inną. Na przykład, Abigail w kopalni jest w rzeczywistości tymczasowym NPC o nazwie 'AbigailMine', więc jej podgląd tam nie pokaże prawdziwych informacji o Abigail. Gdy ta opcja jest włączona, Lookup Anything wyszuka zamiast tego oryginalną Abigail.",
     "config.scroll-amount.name": "Szybkość przewijania",

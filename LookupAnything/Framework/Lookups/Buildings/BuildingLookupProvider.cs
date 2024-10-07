@@ -75,7 +75,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <param name="building">The entity to look up.</param>
         private ISubject BuildSubject(Building building)
         {
-            return new BuildingSubject(this.Codex, this.GameHelper, building, building.getSourceRectForMenu() ?? building.getSourceRect(), this.Config().CollapseLargeFields, this.Config().ShowDataMiningFields);
+            ModConfig config = this.Config();
+            return new BuildingSubject(this.Codex, this.GameHelper, building, building.getSourceRectForMenu() ?? building.getSourceRect(), config.CollapseLargeFields, config.ShowInvalidRecipes);
         }
     }
 }

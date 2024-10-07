@@ -46,12 +46,14 @@
             {
                 "Id": "Estuary_Forest",
                 "ItemId": "LOCATION_FISH Forest BOBBER_X BOBBER_Y WATER_DEPTH",
+                "FishAreaId": "Estuary",
                 "Chance": 0.3,
                 "Precedence": -2
             },
             {
                 "Id": "Estuary_Town",
                 "ItemId": "LOCATION_FISH Town BOBBER_X BOBBER_Y WATER_DEPTH",
+                "FishAreaId": "Estuary",
                 "Precedence": -1
             },
 

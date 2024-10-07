@@ -59,11 +59,16 @@
     "config.enable-shipping-bin.name": "배송 상자 활성화",
     "config.enable-shipping-bin.desc": "배송 상자에 대한 액세스를 활성화할지 여부.",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "스프링클러 아이템 활성화",
+    "config.enable-sprinkler-attachments.desc": "비료 분사기 같은 스프링클러 아이템에 엑세스 할지 여부",
 
     "config.add-organize-player-items.name": "플레이어 아이템 정리 버튼 추가",
     "config.add-organize-player-items.desc": "플레이어 인벤토리의 상자 UI에 '구성' 버튼을 추가할지 여부.",
+
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
 
     "config.range.name": "범위",
     "config.range.desc": "메뉴를 통해 상자에 접근할 수 있는 범위.",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "현재 위치 내의 상자",
     "config.range.none": "없음 (상자에 원격으로 액세스할 수 없음)",
 
+    "config.disable-mines.name": "광산 및 해골 동굴에서 비활성화",
+    "config.disable-mines.desc": "광산 또는 해골 동굴에서 원격으로 상자 액세스를 비활성화할지 여부.",
+
+    "config.disable-custom-names.name": "위치 이름에서 비활성화",
+    "config.disable-custom-names.desc": "상자 액세스를 비활성화할 위치의 내부 이름(디버그 모드에 표시됨). 여러 개를 쉼표로 나열할 수 있습니다.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "일반 제어",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "UI 전환",
     "config.toggle-ui-key.desc": "상자 UI를 보이 거나 숨기는 키.",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "누르고 있으면 마우스 스크롤 휠로 카테고리 드롭다운을 스크롤할 수 있는 키",
 
     "config.hold-to-scroll-chests.name": "상자를 스크롤하려면 길게 누르십시오.",
-    "config.hold-to-scroll-chests.desc": "누르고 있으면 마우스 스크롤 휠로 상자 드롭다운을 스크롤할 수 있는 키.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "위치 비활성화",
-
-    "config.disable-mines.name": "광산과 해골 동굴",
-    "config.disable-mines.desc": "광산 또는 해골 동굴에 있는 동안 상자 액세스를 비활성화할지 여부",
-
-    "config.disable-custom-names.name": "사용자 지정 위치 이름",
-    "config.disable-custom-names.desc": "상자 액세스를 비활성화할 위치의 내부 이름(디버그 모드에 표시됨)입니다. 여러 개를 쉼표로 나열할 수 있습니다."
+    "config.hold-to-scroll-chests.desc": "누르고 있으면 마우스 스크롤 휠로 상자 드롭다운을 스크롤할 수 있는 키."
 }

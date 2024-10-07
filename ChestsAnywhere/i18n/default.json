@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "Add organize player items button",
     "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access",
+
     "config.range.name": "Range",
     "config.range.desc": "The range at which chests are accessible through the menu.",
     "config.range.unlimited": "All chests",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "Chests within the current location",
     "config.range.none": "None (can't access chests remotely)",
 
+    "config.disable-mines.name": "Disable in mines & skull cavern",
+    "config.disable-mines.desc": "Whether to disable accessing chests remotely while in the mines or Skull Cavern.",
+
+    "config.disable-custom-names.name": "Disable in location names",
+    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests remotely. You can list multiple with commas.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "General controls",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI",
 
     "config.toggle-ui-key.name": "Toggle UI",
     "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+
+    "config.reopen-last-chest.name": "Reopen last chest",
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.",
+
+    "config.default-category.name": "Default category",
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.",
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
 
     "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "Disable in locations",
-
-    "config.disable-mines.name": "Mines and Skull Cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
-
-    "config.disable-custom-names.name": "Custom location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel."
 }

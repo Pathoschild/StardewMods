@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": "、", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "、",   // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "今",
@@ -726,6 +726,8 @@
     "config.tile-lookups.desc": "マップタイルを検索対象に含める。",
     "config.data-mining-fields.name": "データマイニングのフィールドを表示",
     "config.data-mining-fields.desc": "データマイニングに役立つライブデータを表示するかどうか（確認結果の下部に別フィールドとして表示される）。これは上級者向けの機能であり、一般的なプレーヤーを対象としたものではありません。",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "ターゲットのリダイレクト",
     "config.target-redirection.desc": "場合によっては、ゲームは別のエンティティを表すために一時的なエンティティを生成する。例えば、鉱山にいるアビゲイルは実際には「AbigailMine」という名前の仮のNPCなので、そこで彼女を調べてもアビゲイルの情報は表示されません。このオプションを有効にすると、Lookup Anythingが代わりにオリジナルのアビゲイルを調べます。",
     "config.scroll-amount.name": "スクロール量",

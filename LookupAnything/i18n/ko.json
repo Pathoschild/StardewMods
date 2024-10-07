@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "지금 수확 가능",
@@ -51,7 +51,7 @@
     "quality.iridium": "이리듐",
 
     // item names shown in recipes
-    "item.wild-seeds": "Wild Seeds (Any)", // TODO
+    "item.wild-seeds": "야생 씨앗 (아무거나)",
 
     // NPC friendship 우정관계
     "friendship-status.friendly": "친근함",
@@ -59,7 +59,7 @@
     "friendship-status.engaged": "약혼함",
     "friendship-status.married": "결혼함",
     "friendship-status.divorced": "이혼함",
-    "friendship-status.kicked-out": "걷어참",
+    "friendship-status.kicked-out": "내쫓음",
 
 
     /*********
@@ -138,15 +138,15 @@
     *********/
     "condition-or-context-tag.negate": "{{value}}가 아님",
 
-    "condition.day-of-month": "on specific days ({{days}})", // TODO
-    "condition.day-of-month.even": "even days", // TODO
-    "condition.day-of-month.odd": "odd days", // TODO
+    "condition.day-of-month": "({{days}})일",
+    "condition.day-of-month.even": "짝수일",
+    "condition.day-of-month.odd": "홀수일",
 
     "condition.item-type.input": "넣는 아이템",
     "condition.item-type.target": "타겟 아이템",
 
-    "condition.raw-context-tag": "context tag \"{{tag}}\"", // TODO
-    "condition.raw-condition": "query \"{{tag}}\"", // TODO
+    "condition.raw-context-tag": "컨텍스트 태그 \"{{tag}}\"",
+    "condition.raw-condition": "특정 조건 \"{{tag}}\"",
 
     "condition.item-context-tag": "{{item}}이 {{tags}} 태그",
     "condition.item-context-tags": "{{item}}이 {{tags}} 태그",
@@ -189,7 +189,7 @@
     // labels
     "building.animals": "동물",
     "building.construction": "건물",
-    "building.construction-costs": "Construction costs", // TODO
+    "building.construction-costs": "건설 비용",
     "building.feed-trough": "여물통",
     "building.horse": "말",
     "building.horse-location": "말의 위치",
@@ -336,9 +336,9 @@
     "item.undiscovered-gift-taste": "공개되지 않은 사람 {{count}}명",
     "item.undiscovered-gift-taste-appended": ", 그리고 공개되지 않은 사람 {{count}}명",
     "item.needed-for.community-center": "마을 회관 ({{bundles}})",
-    "item.needed-for.full-shipment": "도전과제 '완전 판매' (1개 출하)",
-    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
-    "item.needed-for.polyculture": "도전과제 '복합 재배' ({{count}}개 더 출하)",
+    "item.needed-for.full-shipment": "도전과제 '수송품 한가득' ({{count}}개 더 출하)",
+    "item.needed-for.monoculture": "도전과제 '단일 재배' ({{count}}개 더 출하)",
+    "item.needed-for.polyculture": "도전과제 '혼합양식' ({{count}}개 더 출하)",
     "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
@@ -349,7 +349,7 @@
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[넣는 아이템과 동일]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.conditions": "[조건: {{conditions}}]",
-    "item.recipes-for-machine.too-complex": "일부 기계 규칙은 너무 동적이어서 표시할 수 없습니다.",
+    "item.recipes-for-machine.too-complex": "이 기계 규칙은 너무 복잡해서 표시할 수 없습니다.",
     "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유 중.",
     "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
 
@@ -493,7 +493,7 @@
 
     // values
     "npc.can-romance.married": "당신은 이미 결혼했다!", // < turns into a heart (Korean does not support emoji)
-    "npc.can-romance.housemate": "당신의 룸메이트!",
+    "npc.can-romance.housemate": "당신의 하우스메이트!",
     "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 부케 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
@@ -541,7 +541,7 @@
     "player.farm-map": "농장 유형",
     "player.favorite-thing": "좋아하는 것",
     "player.gender": "성별",
-    "player.housemate": "룸메이트",
+    "player.housemate": "하우스메이트",
     "player.spouse": "배우자",
     "player.watched-movie-this-week": "이번 주에 본 영화",
     "player.combat-skill": "전투",
@@ -726,6 +726,8 @@
     "config.tile-lookups.desc": "지도 타일을 조회 대상으로 포함할지 여부",
     "config.data-mining-fields.name": "데이터 마이닝 필드 표시",
     "config.data-mining-fields.desc": "데이터 마이너에 유용한 원시 데이터를 표시할지 여부(검색 결과 하단에 별도의 필드로 표시). 이것은 대부분의 플레이어를 위한 것이 아닌 고급 기능입니다.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "대상 전환",
     "config.target-redirection.desc": "어떤 경우에는 게임이 다른 개체를 나타내는 임시 개체를 생성합니다. 예를 들어 광산에 있는 아비게일은 실제로 '광산 아비게일'이라는 이름의 임시 NPC이기 때문에 그녀를 찾아보면 아비게일의 실제 정보가 표시되지 않습니다. 이 옵션을 활성화하면 Lookup Anything 모드에서 원래 아비게일을 대신 조회합니다.",
     "config.scroll-amount.name": "스크롤 간격",

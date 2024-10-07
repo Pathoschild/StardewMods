@@ -59,6 +59,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
 
+        /// <summary>Whether to show recipes involving error items.</summary>
+        public bool ShowInvalidRecipes { get; set; } = false;
+
 
         /*********
         ** Public methods

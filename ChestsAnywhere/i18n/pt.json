@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "Adicionar botão para organizar itens do jogador",
     "config.add-organize-player-items.desc": "Adicionar botão 'organizar' no inventário do jogador.",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
+
     "config.range.name": "Alcance",
     "config.range.desc": "O alcance em que os baús são acessíveis através do menu.",
     "config.range.unlimited": "Todos os baús",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "Baús dentro da localização atual",
     "config.range.none": "Nenhum (não é possível acessar os baús remotamente)",
 
+    "config.disable-mines.name": "Desabilitar em Minas e Caverna da Caveira",
+    "config.disable-mines.desc": "Se deve desabilitar o acesso remoto aos baús enquanto estiver nas Minas ou na Caverna da Caveira.",
+
+    "config.disable-custom-names.name": "Desabilitar em nomes de locais",
+    "config.disable-custom-names.desc": "Os nomes internos (como mostrado pelo mod Debug Mode) para locais onde desabilitar o acesso remoto aos baús. Você pode listar vários nomes separando-os por vírgulas.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "Controles gerais",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "Alternar interface",
     "config.toggle-ui-key.desc": "As teclas que mostram ou ocultam a interface do baú.",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "As teclas que, quando mantidas pressionadas, permitem rolar a lista suspensa de categoria com a roda de rolagem do mouse.",
 
     "config.hold-to-scroll-chests.name": "Manter pressionado para rolar baú",
-    "config.hold-to-scroll-chests.desc": "As teclas que, quando pressionadas, permitem rolar o menu de baús usando a roda de rolagem do mouse.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "Desativar em locais específicos",
-
-    "config.disable-mines.name": "Mina e Caverna da Caveira",
-    "config.disable-mines.desc": "Se deve desabilitar o acesso aos baús enquanto estiver nas Minas ou na Caverna da Caveira.",
-
-    "config.disable-custom-names.name": "Nomes de locais personalizados",
-    "config.disable-custom-names.desc": "Os nomes internos (como mostrado pelo mod Debug Mode) para locais onde desabilitar o acesso aos baús. Você pode listar vários nomes separando-os por vírgulas."
+    "config.hold-to-scroll-chests.desc": "As teclas que, quando pressionadas, permitem rolar o menu de baús usando a roda de rolagem do mouse."
 }

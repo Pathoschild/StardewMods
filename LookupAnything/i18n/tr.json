@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "şimdi",
@@ -726,6 +726,8 @@
     "config.tile-lookups.desc": "Harita karolarının arama hedefleri olarak dahil edilip edilmeyeceği.",
     "config.data-mining-fields.name": "Veri madenciliği alanlarını göster",
     "config.data-mining-fields.desc": "Veri madencileri için yararlı olan ham verilerin gösterilip gösterilmeyeceği (arama sonuçlarının altında ayrı alanlar olarak). Bu, çoğu oyuncu için tasarlanmayan gelişmiş bir özelliktir.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "Hedef yönlendirme",
     "config.target-redirection.desc": "Bazı durumlarda oyun, bir başkasını temsil etmek için geçici bir varlık yaratır. Örneğin, madendeki Abigail aslında 'AbigailMine' adında geçici bir NPC'dir, bu yüzden ona orada bakmak Abigail'in gerçek bilgilerini göstermez. Bu seçenek etkinleştirildiğinde, Lookup Anything, bunun yerine orijinal Abigail'i arayacaktır.",
     "config.scroll-amount.name": "Kaydırma miktarı",

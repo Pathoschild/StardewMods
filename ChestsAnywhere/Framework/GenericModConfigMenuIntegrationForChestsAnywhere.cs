@@ -45,6 +45,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
             menu.Register();
             menu
+                // general options
                 .AddSectionTitle(I18n.Config_Title_GeneralOptions)
                 .AddCheckbox(
                     name: I18n.Config_ShowHoverTooltips_Name,
@@ -70,6 +71,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     get: config => config.AddOrganizePlayerInventoryButton,
                     set: (config, value) => config.AddOrganizePlayerInventoryButton = value
                 )
+
+                // remote access
+                .AddSectionTitle(I18n.Config_Title_RemoteAccess)
                 .AddDropdown(
                     name: I18n.Config_Range_Name,
                     tooltip: I18n.Config_Range_Desc,
@@ -78,15 +82,55 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     allowedValues: Enum.GetNames<ChestRange>(),
                     formatAllowedValue: name => I18n.GetByKey($"config.range.{name}")
                 )
+                .AddCheckbox(
+                    name: I18n.Config_DisableMines_Name,
+                    tooltip: I18n.Config_DisableMines_Desc,
+                    get: config => config.DisabledInLocations.Contains(MinesName),
+                    set: (config, value) =>
+                    {
+                        if (value)
+                            config.DisabledInLocations.Add(MinesName);
+                        else
+                            config.DisabledInLocations.Remove(MinesName);
+                    }
+                )
+                .AddTextbox(
+                    name: I18n.Config_DisableCustomNames_Name,
+                    tooltip: I18n.Config_DisableCustomNames_Desc,
+                    get: config => string.Join(", ", config.DisabledInLocations.Where(name => !name.Equals(MinesName, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p, StringComparer.OrdinalIgnoreCase)),
+                    set: (config, value) =>
+                    {
+                        MutableInvariantSet parsed = new(value.Split(',').Select(p => p.Trim()).Where(p => p != string.Empty));
+                        if (config.DisabledInLocations.Contains(MinesName))
+                            parsed.Add(MinesName);
 
-                .AddSectionTitle(I18n.Config_Title_GeneralControls)
+                        config.DisabledInLocations.Clear();
+                        config.DisabledInLocations.AddRange(parsed);
+                    }
+                )
+
+                // hotkey to open chest UI
+                .AddSectionTitle(I18n.Config_Title_OpenMenuHotkey)
                 .AddKeyBinding(
                     name: I18n.Config_ToggleUiKey_Name,
                     tooltip: I18n.Config_ToggleUiKey_Desc,
                     get: config => config.Controls.Toggle,
                     set: (config, value) => config.Controls.Toggle = value
                 )
+                .AddCheckbox(
+                    name: I18n.Config_ReopenLastChest_Name,
+                    tooltip: I18n.Config_ReopenLastChest_Desc,
+                    get: config => config.ReopenLastChest,
+                    set: (config, value) => config.ReopenLastChest = value
+                )
+                .AddTextbox(
+                    name: I18n.Config_DefaultCategory_Name,
+                    tooltip: I18n.Config_DefaultCategory_Desc,
+                    get: config => config.DefaultCategory ?? "",
+                    set: (config, value) => config.DefaultCategory = !string.IsNullOrWhiteSpace(value) ? value : null
+                )
 
+                // menu controls
                 .AddSectionTitle(I18n.Config_Title_MenuControls)
                 .AddKeyBinding(
                     name: I18n.Config_EditChest_Name,
@@ -135,34 +179,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     tooltip: I18n.Config_HoldToScrollChests_Desc,
                     get: config => config.Controls.HoldToMouseWheelScrollChests,
                     set: (config, value) => config.Controls.HoldToMouseWheelScrollChests = value
-                )
-
-                .AddSectionTitle(I18n.Config_Title_DisableInLocations)
-                .AddCheckbox(
-                    name: I18n.Config_DisableMines_Name,
-                    tooltip: I18n.Config_DisableMines_Desc,
-                    get: config => config.DisabledInLocations.Contains(MinesName),
-                    set: (config, value) =>
-                    {
-                        if (value)
-                            config.DisabledInLocations.Add(MinesName);
-                        else
-                            config.DisabledInLocations.Remove(MinesName);
-                    }
-                )
-                .AddTextbox(
-                    name: I18n.Config_DisableCustomNames_Name,
-                    tooltip: I18n.Config_DisableCustomNames_Desc,
-                    get: config => string.Join(", ", config.DisabledInLocations.Where(name => !name.Equals(MinesName, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p, StringComparer.OrdinalIgnoreCase)),
-                    set: (config, value) =>
-                    {
-                        MutableInvariantSet parsed = new(value.Split(',').Select(p => p.Trim()).Where(p => p != string.Empty));
-                        if (config.DisabledInLocations.Contains(MinesName))
-                            parsed.Add(MinesName);
-
-                        config.DisabledInLocations.Clear();
-                        config.DisabledInLocations.AddRange(parsed);
-                    }
                 );
         }
     }

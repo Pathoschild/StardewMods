@@ -57,13 +57,19 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
                     name: I18n.Config_GrowCrops_Name,
                     tooltip: I18n.Config_GrowCrops_Desc,
                     get: config => this.GetOption(config, p => p.GrowCrops),
-                    set: (config, value) => this.SetOption(config, p => new PerLocationConfig(value, p.GrowCropsOutOfSeason, new ModConfigForceTillable(p.ForceTillable)))
+                    set: (config, value) => this.SetOption(config, p => new PerLocationConfig(value, p.GrowCropsOutOfSeason, p.UseFruitTreesSeasonalSprites, new ModConfigForceTillable(p.ForceTillable)))
                 )
                 .AddCheckbox(
                     name: I18n.Config_GrowCropsOutOfSeason_Name,
                     tooltip: I18n.Config_GrowCropsOutOfSeason_Desc,
                     get: config => this.GetOption(config, p => p.GrowCropsOutOfSeason),
-                    set: (config, value) => this.SetOption(config, p => new PerLocationConfig(p.GrowCrops, value, new ModConfigForceTillable(p.ForceTillable)))
+                    set: (config, value) => this.SetOption(config, p => new PerLocationConfig(p.GrowCrops, value, p.UseFruitTreesSeasonalSprites, new ModConfigForceTillable(p.ForceTillable)))
+                )
+                .AddCheckbox(
+                    name: I18n.Config_UseFruitTreesSeasonalSprites_Name,
+                    tooltip: I18n.Config_UseFruitTreesSeasonalSprites_Desc,
+                    get: config => this.GetOption(config, p => p.UseFruitTreesSeasonalSprites),
+                    set: (config, value) => this.SetOption(config, p => new PerLocationConfig(p.GrowCrops, p.GrowCropsOutOfSeason, value, new ModConfigForceTillable(p.ForceTillable)))
                 )
                 .AddCheckbox(
                     name: I18n.Config_ForceTillDirt_Name,
@@ -135,7 +141,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         {
             PerLocationConfig section = config.Locations.GetValueOrDefault("*") ?? this.DefaultConfig.Locations["*"];
 
-            config.Locations["*"] = new PerLocationConfig(section.GrowCrops, section.GrowCropsOutOfSeason, createNewConfig(section.ForceTillable));
+            config.Locations["*"] = new PerLocationConfig(section.GrowCrops, section.GrowCropsOutOfSeason, section.UseFruitTreesSeasonalSprites, createNewConfig(section.ForceTillable));
         }
     }
 }

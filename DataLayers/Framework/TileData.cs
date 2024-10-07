@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The overlay color.</summary>
         public Color Color { get; }
 
+        /// <summary>The pixel offset at which to draw this tile.</summary>
+        public Point DrawOffset { get; }
+
 
         /*********
         ** Public methods
@@ -25,11 +28,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="tile">The tile position.</param>
         /// <param name="type">The associated legend entry.</param>
         /// <param name="color">The overlay color.</param>
-        public TileData(Vector2 tile, LegendEntry type, Color color)
+        /// <param name="drawOffset">The pixel offset at which to draw this tile.</param>
+        public TileData(Vector2 tile, LegendEntry type, Color color, Point? drawOffset = null)
         {
             this.TilePosition = tile;
             this.Type = type;
             this.Color = color;
+            this.DrawOffset = drawOffset ?? Point.Zero;
         }
 
         /// <summary>Construct an instance.</summary>

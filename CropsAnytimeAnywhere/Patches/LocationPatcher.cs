@@ -16,7 +16,7 @@ using xTile.Tiles;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
 {
-    /// <summary>Encapsulates Harmony patches for the <see cref="Farm"/> instance.</summary>
+    /// <summary>Encapsulates Harmony patches for <see cref="GameLocation"/> and its subclasses.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
     internal class LocationPatcher : BasePatcher
     {
@@ -285,7 +285,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <typeparam name="TDeclaringType">The type which defines the expected method.</typeparam>
         /// <param name="actualMethod">The actual method to check.</param>
         /// <param name="expectedName">The expected method name.</param>
-        public static bool IsMethod<TDeclaringType>(MethodBase actualMethod, string expectedName)
+        private static bool IsMethod<TDeclaringType>(MethodBase actualMethod, string expectedName)
         {
             // original method
             if (actualMethod.DeclaringType == typeof(TDeclaringType) && actualMethod.Name == expectedName)

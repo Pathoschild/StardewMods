@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "Button Spieler-Gegenstände Organisieren hinzufügen",
     "config.add-organize-player-items.desc": "Ob eine 'Organisieren' Taste in den Truhen UIs für das Spielerinventar hinzugefügt werden soll.",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
+
     "config.range.name": "Reichweite",
     "config.range.desc": "Der Abstand, in dem Truhen über das Menü zugänglich sind.",
     "config.range.unlimited": "Alle Truhen",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "Truhen innerhalb des aktuellen Ortes.",
     "config.range.none": "Keine (kann nicht aus der Entfernung auf Truhen zugreifen)",
 
+    "config.disable-mines.name": "Deaktivieren in Minen & Schädelhöhle",
+    "config.disable-mines.desc": "Ob der Zugriff auf Truhen aus der Ferne in den Minen oder der Schädelhöhle deaktiviert werden soll.",
+
+    "config.disable-custom-names.name": "Deaktivieren bei Standortnamen",
+    "config.disable-custom-names.desc": "Die internen Namen (wie von der Debug Mode Mod angezeigt) für Orte, von denen aus der Zugriff auf Truhen aus der Ferne deaktiviert werden soll. Sie können mehrere mit Kommas getrennt auflisten.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "Allgemeine Steuerung",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "UI umschalten",
     "config.toggle-ui-key.desc": "Die Tasten, die die UI der Truhe anzeigen oder verbergen.",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "Die Tasten, die es ermöglichen, das Dropdown-Menü der Kategorie mit dem Mausrad zu scrollen, wenn sie gehalten werden.",
 
     "config.hold-to-scroll-chests.name": "Halten, um Truhen zu scrollen",
-    "config.hold-to-scroll-chests.desc": "Die Tasten, die es ermöglichen, das Dropdown-Menü der Truhen mit dem Mausrad zu scrollen, wenn sie gehalten werden.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "Deaktivieren an Orten",
-
-    "config.disable-mines.name": "Minen und Schädelhöhle",
-    "config.disable-mines.desc": "Ob der Zugriff auf Truhen in den Minen oder der Schädelhöhle deaktiviert werden soll.",
-
-    "config.disable-custom-names.name": "Benutzerdefinierte Namen von Standorten",
-    "config.disable-custom-names.desc": "Die internen Namen (wie von der Debug Mode Mod angezeigt) für Orte, von denen aus der Zugriff auf Truhen deaktiviert werden soll. Sie können mehrere mit Kommas getrennt auflisten."
+    "config.hold-to-scroll-chests.desc": "Die Tasten, die es ermöglichen, das Dropdown-Menü der Truhen mit dem Mausrad zu scrollen, wenn sie gehalten werden."
 }

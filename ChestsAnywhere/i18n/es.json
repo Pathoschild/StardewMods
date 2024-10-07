@@ -20,7 +20,7 @@
     "label.category": "Categoría",
     "label.order": "Orden",
     "label.hide-chest": "Esconder este cofre",
-    "label.hide-chest-hidden": "Esconder este cofre (¡necesitarás encontrar el cofre para deshacer esto!)",
+    "label.hide-chest-hidden": "Esconder este cofre (¡Necesitarás encontrar el cofre para deshacer esto!)",
     "label.automate-options": "Automático",
     "label.automate-store": "Pon objetos en este cofre",
     "label.automate-store-first": "Pon primero los objetos en este cofre",
@@ -30,10 +30,10 @@
     "label.automate-take-disabled": "Nunca tomes objetos de este cofre",
 
     // button labels
-    "button.edit-chest": "editar cofre",
-    "button.sort-inventory": "ordenar inventario",
-    "button.save": "guardar",
-    "button.reset": "reiniciar",
+    "button.edit-chest": "Editar Cofre",
+    "button.sort-inventory": "Ordenar Inventario",
+    "button.save": "Guardar",
+    "button.reset": "Reiniciar",
 
 
     /**********
@@ -65,6 +65,11 @@
     "config.add-organize-player-items.name": "Añadir el botón de organizar los elementos de los jugadores",
     "config.add-organize-player-items.desc": "Si se añade un botón de 'organizar' en las interfaces de los cofres para el inventario del jugador.",
 
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Remote access", // TODO
+
     "config.range.name": "Rango",
     "config.range.desc": "El rango en el que los cofres son accesibles a través del menú.",
     "config.range.unlimited": "Todos los cofres",
@@ -72,13 +77,25 @@
     "config.range.currentLocation": "Cofres dentro de la ubicación actual",
     "config.range.none": "Ninguno (no se puede acceder a los cofres a distancia)",
 
+    "config.disable-mines.name": "Desactivar en minas y Caverna Calavera",
+    "config.disable-mines.desc": "Si se desactiva el acceso remoto a los cofres mientras se está en las minas o en la Caverna Calavera.",
+
+    "config.disable-custom-names.name": "Desactivar en nombres de lugares",
+    "config.disable-custom-names.desc": "Los nombres internos (tal y como los muestra el mod del Modo Depuración) de las ubicaciones desde las que se desactiva el acceso remoto a los cofres. Puedes listar varios con comas.",
+
     /****
-    ** general controls
+    ** open menu hotkey
     ****/
-    "config.title.general-controls": "Controles generales",
+    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
 
     "config.toggle-ui-key.name": "Activar la interfaz de usuario",
     "config.toggle-ui-key.desc": "Las teclas que muestran u ocultan la interfaz de usuario del cofre.",
+
+    "config.reopen-last-chest.name": "Reopen last chest", // TODO
+    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+
+    "config.default-category.name": "Default category", // TODO
+    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
 
     /****
     ** controls when chest UI is open
@@ -107,16 +124,5 @@
     "config.hold-to-scroll-categories.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de categorías con la rueda de desplazamiento del ratón.",
 
     "config.hold-to-scroll-chests.name": "Mantener para desplazar cofres",
-    "config.hold-to-scroll-chests.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de los cofres con la rueda de desplazamiento del ratón.",
-
-    /****
-    ** disable in locations
-    ****/
-    "config.title.disable-in-locations": "Desactivar en lugares",
-
-    "config.disable-mines.name": "Minas y Caverna Calavera",
-    "config.disable-mines.desc": "Si se desactiva el acceso a los cofres mientras se está en las minas o en la Caverna Calavera.",
-
-    "config.disable-custom-names.name": "Nombres de lugares personalizados",
-    "config.disable-custom-names.desc": "Los nombres internos (tal y como los muestra el mod del Modo Depuración (Debug Mode Mod)) de las ubicaciones desde las que se desactiva el acceso a los cofres. Puedes listar varios con comas."
+    "config.hold-to-scroll-chests.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de los cofres con la rueda de desplazamiento del ratón."
 }

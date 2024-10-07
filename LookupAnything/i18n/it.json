@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "ora",
@@ -725,6 +725,8 @@
     "config.tile-lookups.desc": "Se includere o meno le piastrelle della mappa come target di ricerca.",
     "config.data-mining-fields.name": "Mostra i campi di data mining",
     "config.data-mining-fields.desc": "Scegli se mostrare i dati grezzi utili per i data miner (come campi separati in fondo ai risultati delle ricerche). Si tratta di una funzione avanzata non destinata alla maggior parte dei giocatori.",
+    "config.show-invalid-recipes.name": "Mostra ricette non valide",
+    "config.show-invalid-recipes.desc": "Scegli se mostrare o meno le ricette che richiedono o producono articoli rotti.",
     "config.target-redirection.name": "Reindirizzamento del target",
     "config.target-redirection.desc": "In alcuni casi il gioco genera un'entità temporanea per rappresentarne un'altra. Ad esempio, Abigail nelle miniere è in realtà un PNG temporaneo con il nome di 'AbigailMine', quindi cercarla lì non mostrerà le informazioni reali di Abigail. Con questa opzione attivata, Lookup Anything cercherà invece l'Abigail originale.",
     "config.scroll-amount.name": "Quantità di scorrimento",

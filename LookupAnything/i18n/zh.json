@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": "、", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "、",   // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "现在",
@@ -727,6 +727,8 @@
     "config.tile-lookups.desc": "是否将地图图块变为可查询对象",
     "config.data-mining-fields.name": "显示数据挖掘字段",
     "config.data-mining-fields.desc": "是否显示对数据挖掘者有用的原始数据(作为查询结果底部的单独字段)。这是一个高级功能，不适合大多数玩家。",
+    "config.show-invalid-recipes.name": "显示无效配方",
+    "config.show-invalid-recipes.desc": "是否显示含有错误物品的配方。",
     "config.target-redirection.name": "目标重定向",
     "config.target-redirection.desc": "游戏在某些情况下会生成一个暂时的替身来指代某个目标。比如，矿井中的阿比盖尔实际上只是一个暂时的npc，导致查询时并不会显示阿比盖尔的信息。开启该选项后，才能显示阿比盖尔的真正信息。",
     "config.scroll-amount.name": "滚动值",

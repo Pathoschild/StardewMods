@@ -8,8 +8,8 @@
     "config.enabled.desc": "자동화 기능을 활성화할지 여부. 비활성화하면 기계가 자동화되지 않고 오버레이가 나타나지 않습니다.",
     "config.automation-interval.name": "자동화 간격",
     "config.automation-interval.desc": "각 자동화 공정 사이의 간격 수.(초당 60개, 2초당 120개 등)",
-    "config.min-minutes-for-fairy-dust.name": "Min minutes for fairy dust", // TODO
-    "config.min-minutes-for-fairy-dust.desc": "The minimum machine processing time in minutes for which to apply fairy dust. For example, setting this to 30 minutes means fairy dust won't be applied if the machine would finish in 20 minutes without it.", // TODO
+    "config.min-minutes-for-fairy-dust.name": "요정 가루 최소 적용 시간(분)",
+    "config.min-minutes-for-fairy-dust.desc": "요정 가루를 사용할 기계의 최소 시간을 설정합니다. 예를 들어, 30분으로 설정할 경우 완료까지 20분 남은 기계에는 요정가루를 사용하지 않습니다.",
     "config.toggle-overlay-key.name": "오버레이 키 전환 ",
     "config.toggle-overlay-key.desc": "자동화 오버레이를 토글하는 키.",
     "config.warn-for-missing-bridge-mod.name": "연결 모드 누락 경고",
@@ -44,15 +44,13 @@
     "config.machine-settings-priority.desc": "다른 기계에 비해 {{machineName}} 기계가 처리되어야 하는 우선 순위 순서. 기계들은 기본적으로 0의 우선 순위를 가지며, 더 높은 값이 먼저 처리됩니다.",
 
     // machine names
-    // TODO
-    "config.machines.bush": "Bush",
-    "config.machines.fruit-tree": "Tree (Fruit Tree)",
-    "config.machines.trash-can": "Trash Can",
-    "config.machines.wild-tree": "Tree (Wild Tree)",
+    "config.machines.bush": "덤불",
+    "config.machines.fruit-tree": "나무 (과일 나무)",
+    "config.machines.trash-can": "쓰레기통",
+    "config.machines.wild-tree": "나무 (야생 나무)",
     "config.machines.feed-hopper": "사료 호퍼와 저장고",
 
     // special settings for individual machines
-    // TODO
-    "config.machines.wild-tree.collect-moss.name": "Collect Moss",
-    "config.machines.wild-tree.collect-moss.desc": "Whether to collect moss on trees. For example, keeping moss on trees will boost the quality of mushrooms from nearby mushroom logs."
+    "config.machines.wild-tree.collect-moss.name": "이끼 수집",
+    "config.machines.wild-tree.collect-moss.desc": "나무에 있는 이끼를 수집할지 여부. 나무에 있는 이끼를 그냥 둘 경우 주변 버섯 통나무에서 나오는 버섯 품질이 향상됩니다."
 }

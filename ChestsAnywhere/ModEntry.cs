@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private ChestFactory ChestFactory = null!; // set in Entry
 
         /// <summary>The last selected chest.</summary>
-        private readonly PerScreen<ManagedChest> LastChest = new();
+        private readonly PerScreen<ManagedChest?> LastChest = new();
 
         /// <summary>The menu instance for which the <see cref="CurrentOverlay"/> was created, if any.</summary>
         private readonly PerScreen<IClickableMenu> ForMenuInstance = new();
@@ -261,13 +261,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 return;
             }
 
-            // get chests
+            // get chest
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
-            ManagedChest? selectedChest =
-                ChestFactory.GetBestMatch(chests, this.LastChest.Value)
-                ?? chests.FirstOrDefault(p => object.ReferenceEquals(p.Location, Game1.currentLocation))
-                ?? chests.FirstOrDefault();
+            ManagedChest? selectedChest = this.GetDefaultChest(chests);
 
             // show error
             if (selectedChest == null)
@@ -278,6 +275,40 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // render menu
             selectedChest.OpenMenu();
+        }
+
+        /// <summary>Get the default chest to open when opening the menu.</summary>
+        /// <param name="chests">The chests to search.</param>
+        private ManagedChest? GetDefaultChest(ManagedChest[] chests)
+        {
+            var config = this.Config;
+
+            // reopen last chest
+            if (config.ReopenLastChest && this.LastChest.Value != null)
+            {
+                ManagedChest? chest = ChestFactory.GetBestMatch(chests, this.LastChest.Value);
+                if (chest != null)
+                    return chest;
+            }
+
+            // default category
+            if (config.DefaultCategory != null)
+            {
+                ManagedChest? chest = chests.FirstOrDefault(p => p.DisplayCategory == config.DefaultCategory);
+                if (chest != null)
+                    return chest;
+            }
+
+            // fallback: first chest in current location, or first chest anywhere
+            ManagedChest? fallback = null;
+            foreach (ManagedChest chest in chests)
+            {
+                if (object.ReferenceEquals(chest.Location, Game1.currentLocation))
+                    return chest;
+
+                fallback ??= chest;
+            }
+            return fallback;
         }
 
         /// <summary>Notify Automate that a chest's automation options updated.</summary>

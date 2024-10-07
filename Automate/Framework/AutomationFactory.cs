@@ -83,10 +83,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new TapperMachine(obj, location, tile, tree);
             }
 
-            // crab pot
-            if (obj is CrabPot crabPot)
-                return new CrabPotMachine(crabPot, location, tile, this.Monitor);
-
             // machine by item ID
             switch (obj.QualifiedItemId)
             {
@@ -95,6 +91,11 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 case "(BC)99":
                     return new FeedHopperMachine(location, tile);
+
+                case "(O)710":
+                    if (obj is CrabPot crabPot)
+                        return new CrabPotMachine(crabPot, location, tile, this.Monitor);
+                    break;
             }
 
             // machine in Data/Machines

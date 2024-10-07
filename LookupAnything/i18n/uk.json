@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "зараз",
@@ -729,6 +729,8 @@
     "config.tile-lookups.desc": "Включення фрагменту світу як ціль пошуку.",
     "config.data-mining-fields.name": "Показати поле аналізу даних",
     "config.data-mining-fields.desc": "Показ необроблених даних, корисних для шукачів даних (Як окремі поля внизу результатів пошуку). Це розширена функція, яка не призначена для більшості гравців.",
+    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
     "config.target-redirection.name": "Цільове переспрямування",
     "config.target-redirection.desc": "У деяких випадках гра породжує тимчасову сутність, яка представляє іншу. Наприклад, Абіґейл в шахтах насправді є тимчасовим НП на ім'я «AbigailMine», тому пошук її не покаже справжню інформацію про Абіґейл. Якщо цей параметр увімкнено, Lookup Anything шукатиме оригінальну Абіґейл.",
     "config.scroll-amount.name": "Число прокрутки",

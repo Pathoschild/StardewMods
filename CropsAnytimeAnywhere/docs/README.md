@@ -37,6 +37,7 @@ setting                | default | what it affects
 :--------------------- | :------ | :------------------
 `GrowCrops`            | true    | Whether crops can grow here.
 `GrowCropsOutOfSeason` | true    | Whether out-of-season crops grow here too. This only applies if `GrowCrops` is true.
+`UseFruitTreesSeasonalSprites` | false | Whether fruit trees match the calendar season when drawn, even if they produce fruit per `GrowCropsOutOfSeason`.
 `ForceTillable`        | dirt, grass | The tile types to make tillable beyond those that would normally be. The available types are `dirt`, `grass`, `stone`, and `other`.
 
 The location keys can be one of `*` (all locations), `Indoors`, `Outdoors`, or an internal location

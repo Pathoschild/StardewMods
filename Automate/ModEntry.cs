@@ -356,11 +356,15 @@ namespace Pathoschild.Stardew.Automate
                 var location = message.LocationName != null
                     ? Game1.getLocationFromName(message.LocationName)
                     : null;
-                var player = Game1.getFarmer(e.FromPlayerID);
+                var player = Game1.GetPlayer(e.FromPlayerID);
 
-                string label = player != Game1.MasterPlayer
-                    ? $"{player.Name}/{e.FromModID}"
-                    : e.FromModID;
+                string label;
+                if (player is null)
+                    label = $"unknown player {e.FromPlayerID}/{e.FromModID}";
+                else if (player != Game1.MasterPlayer)
+                    label = $"{player.Name}/{e.FromModID}";
+                else
+                    label = e.FromModID;
 
                 if (location != null)
                 {

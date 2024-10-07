@@ -438,7 +438,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     : I18n.DefaultCategory_UnownedCabin();
             }
 
-            return location.Name;
+            return location.GetDisplayName() ?? location.Name;
         }
 
         /// <summary>Get whether it's safe to show a color picker for the given chest.</summary>

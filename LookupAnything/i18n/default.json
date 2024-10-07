@@ -4,7 +4,7 @@
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": "",     // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "now",
@@ -726,6 +726,8 @@
     "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
     "config.data-mining-fields.name": "Show data mining fields",
     "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
+    "config.show-invalid-recipes.name": "Show invalid recipes",
+    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.",
     "config.target-redirection.name": "Target redirection",
     "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
     "config.scroll-amount.name": "Scroll amount",
