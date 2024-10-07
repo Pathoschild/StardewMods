@@ -663,6 +663,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 DisplayText: text,
                 Quality: quality,
                 IsGoldPrice: false,
+                Item: item,
                 IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId))
             );
         }
