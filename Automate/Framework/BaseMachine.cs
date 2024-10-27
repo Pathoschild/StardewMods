@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
+        /// <inheritdoc/>
+        public virtual object? Instance => null;
+
         /// <summary>A unique ID for the machine type.</summary>
         /// <remarks>This value should be identical for two machines if they have the exact same behavior and input logic. For example, if one machine in a group can't process input due to missing items, Automate will skip any other empty machines of that type in the same group since it assumes they need the same inputs.</remarks>
         public string MachineTypeID { get; protected set; }
@@ -131,6 +134,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>The underlying entity automated by this machine. This is only stored for the machine instance, and can be null if not applicable.</summary>
         protected TMachine Machine { get; }
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc/>
+        public override object? Instance => this.Machine;
 
 
         /*********

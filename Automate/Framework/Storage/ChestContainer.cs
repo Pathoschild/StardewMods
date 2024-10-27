@@ -37,6 +37,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         public ModDataDictionary ModData => this.Chest.modData;
 
         /// <inheritdoc />
+        public object? Instance => this.Chest;
+
+        /// <inheritdoc />
         public bool IsJunimoChest => this.Chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest;
 
         /// <inheritdoc />

@@ -13,7 +13,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A collection of machines and storage which work as one unit.</summary>
-    internal class MachineGroup : IMachineGroup
+    internal class MachineGroup : IMachineGroup, IAutomationGroup
     {
         /*********
         ** Fields
@@ -72,6 +72,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <inheritdoc />
         public virtual bool HasInternalAutomation => this.IsJunimoGroup || (this.Machines.Length > 0 && this.Containers.Any(p => !p.IsJunimoChest));
 
+        /// <inheritdoc />
+        public string Id => this.GetHashCode().ToString();
+
+        /// <inheritdoc />
+        IReadOnlyList<IAutomatable> IAutomationGroup.Containers => this.Containers;
+
+        /// <inheritdoc />
+        IReadOnlyList<IAutomatable> IAutomationGroup.Machines => this.Machines;
+
 
         /*********
         ** Public methods
@@ -101,6 +110,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             return this.LocationKey == locationKey
                 ? this.Tiles
                 : ImmutableHashSet<Vector2>.Empty;
+        }
+
+        /// <inheritdoc />
+        public bool Intersects(string locationKey, Rectangle tileArea)
+        {
+            return locationKey == this.LocationKey && tileArea.GetTiles().Any(this.Tiles.Contains);
         }
 
         /// <inheritdoc />

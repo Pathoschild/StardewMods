@@ -10,6 +10,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
+        /// <inheritdoc/>
+        public virtual object? Instance => this.Machine.Instance;
+
         /// <summary>The wrapped machine instance.</summary>
         public IMachine Machine { get; }
 

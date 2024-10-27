@@ -18,6 +18,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc/>
+        public override object? Instance => this.MiniBin.Instance;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>

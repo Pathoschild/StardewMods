@@ -40,6 +40,25 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.MachineManager.Factory.Add(factory);
         }
 
+        public IEnumerable<IAutomationGroup> GetAutomationGroups(GameLocation location, Rectangle? tileArea = null, bool includeDisabled = false)
+        {
+            var machineData = this.MachineManager.GetMachineDataFor(location);
+            if (machineData is null)
+            {
+                return [];
+            }
+            var foundGroups = machineData.ActiveMachineGroups.AsEnumerable();
+            if (includeDisabled)
+            {
+                foundGroups = foundGroups.Concat(machineData.DisabledMachineGroups);
+            }
+            if (tileArea is not null)
+            {
+                foundGroups = foundGroups.Where(group => group.Intersects(group.LocationKey ?? "", tileArea.Value));
+            }
+            return foundGroups.OfType<IAutomationGroup>();
+        }
+
         /// <summary>Get the status of machines in a tile area. This is a specialized API for Data Layers and similar mods.</summary>
         /// <param name="location">The location for which to display data.</param>
         /// <param name="tileArea">The tile area for which to display data.</param>

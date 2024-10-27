@@ -22,6 +22,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Accessors
         *********/
+        /// <inheritdoc/>
+        public override object? Instance => this.Bin;
+
         /// <summary>Get the unique ID for the shipping bin machine.</summary>
         internal static string ShippingBinId { get; } = BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine));
 

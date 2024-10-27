@@ -36,5 +36,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the tiles covered by this machine group.</summary>
         /// <param name="locationKey">The location key for which to get tiles.</param>
         IReadOnlySet<Vector2> GetTiles(string locationKey);
+
+        /// <summary>Tests if this group intersects with any tiles in the specified area.</summary>
+        /// <param name="locationKey">The location key in which to search for intersecting tiles.</param>
+        /// <param name="tileArea">The tile area in which to search.</param>
+        bool Intersects(string locationKey, Rectangle tileArea);
     }
 }

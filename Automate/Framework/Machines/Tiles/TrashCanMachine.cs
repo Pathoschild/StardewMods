@@ -12,7 +12,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         ** Fields
         *********/
         /// <summary>The trash can ID.</summary>
-        private readonly string TrashCanId;
+        private readonly CustomAutomatableInfo TrashCanInfo;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc/>
+        public override object? Instance => this.TrashCanInfo;
 
 
         /*********
@@ -25,13 +32,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         public TrashCanMachine(GameLocation location, Vector2 tile, string trashCanId)
             : base(location, BaseMachine.GetTileAreaFor(tile))
         {
-            this.TrashCanId = this.GetActualTrashCanId(trashCanId);
+            this.TrashCanInfo = new(this.GetActualTrashCanId(trashCanId), "TrashCan");
         }
 
         /// <inheritdoc />
         public override MachineState GetState()
         {
-            if (Game1.netWorldState.Value.CheckedGarbage.Contains(this.TrashCanId))
+            if (Game1.netWorldState.Value.CheckedGarbage.Contains(this.TrashCanInfo.Id))
                 return MachineState.Processing;
 
             return MachineState.Done;
@@ -41,7 +48,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         public override ITrackedStack? GetOutput()
         {
             // get item
-            this.Location.TryGetGarbageItem(this.TrashCanId, Game1.MasterPlayer.DailyLuck, out Item? item, out _, out _);
+            this.Location.TryGetGarbageItem(this.TrashCanInfo.Id, Game1.MasterPlayer.DailyLuck, out Item? item, out _, out _);
             if (item != null)
                 return new TrackedItem(item, onEmpty: _ => this.MarkChecked());
 
@@ -63,7 +70,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         /// <summary>Reset the machine, so it starts processing the next item.</summary>
         private void MarkChecked()
         {
-            if (Game1.netWorldState.Value.CheckedGarbage.Add(this.TrashCanId))
+            if (Game1.netWorldState.Value.CheckedGarbage.Add(this.TrashCanInfo.Id))
                 Game1.stats.Increment("trashCansChecked");
         }
 
