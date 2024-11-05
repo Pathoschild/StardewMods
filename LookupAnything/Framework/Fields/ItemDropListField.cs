@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -46,7 +49,7 @@ internal class ItemDropListField : GenericField
     /// <param name="crossOutNonGuaranteed">Whether to cross out non-guaranteed drops.</param>
     /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
     /// <param name="preface">The text to display before the list, if any.</param>
-    public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
+    public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null, Func<object, GameLocation?, ISubject?>? getSubjectByEntity = null)
         : base(label)
     {
         this.GameHelper = gameHelper;
@@ -59,6 +62,8 @@ internal class ItemDropListField : GenericField
         this.CrossOutNonGuaranteed = crossOutNonGuaranteed;
         this.Preface = preface;
         this.DefaultText = defaultText;
+        this.LinkTextAreas = [];
+        this.GetSubjectByEntity = getSubjectByEntity;
     }
 
     /// <inheritdoc />
@@ -77,6 +82,7 @@ internal class ItemDropListField : GenericField
         }
 
         // list drops
+        int idx = 0;
         Vector2 iconSize = new(font.MeasureString("ABC").Y);
         foreach ((ItemDropData drop, Item item, SpriteInfo? sprite) in this.Drops)
         {
@@ -84,6 +90,8 @@ internal class ItemDropListField : GenericField
             bool isGuaranteed = drop.Probability > .99f;
             bool shouldFade = this.FadeNonGuaranteed && !isGuaranteed;
             bool shouldCrossOut = this.CrossOutNonGuaranteed && !isGuaranteed;
+            bool shouldLink = this.TryGetOrAddLinkTextArea(item, ref idx, out LinkTextArea? linkTextArea);
+            Color textColor = (shouldLink ? Color.Blue : Color.Black) * (shouldFade ? 0.75f : 1f);
 
             // draw icon
             spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, shouldFade ? Color.White * 0.5f : Color.White);
@@ -94,7 +102,10 @@ internal class ItemDropListField : GenericField
                 text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
             else if (drop.MinDrop > 1)
                 text += $" ({drop.MinDrop})";
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Black);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, textColor);
+
+            if (shouldLink)
+                linkTextArea!.Rect = new Rectangle((int)(position.X + iconSize.X + 5), (int)((int)position.Y + height), (int)textSize.X, (int)textSize.Y);
 
             // cross out item if it definitely won't drop
             if (shouldCrossOut)

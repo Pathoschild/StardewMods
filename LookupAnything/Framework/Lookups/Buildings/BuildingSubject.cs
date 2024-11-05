@@ -181,7 +181,7 @@ internal class BuildingSubject : BaseSubject
 
                         // drops
                         int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                        yield return new FishPondDropsField(this.GameHelper, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()));
+                        yield return new FishPondDropsField(this.GameHelper, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()), getSubjectByEntity: this.Codex.GetByEntity);
 
                         // quests
                         if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
@@ -244,7 +244,7 @@ internal class BuildingSubject : BaseSubject
 
             if (recipes.Length > 0)
             {
-                var field = new ItemRecipesField(this.GameHelper, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showLabelForSingleGroup: false, showInvalidRecipes: this.ShowInvalidRecipes, showOutputLabels: false);
+                var field = new ItemRecipesField(this.GameHelper, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showLabelForSingleGroup: false, showInvalidRecipes: this.ShowInvalidRecipes, showOutputLabels: false, getSubjectByEntity: this.Codex.GetByEntity);
                 if (this.CollapseFieldsConfig.Enabled)
                     field.CollapseIfLengthExceeds(this.CollapseFieldsConfig.BuildingRecipes, recipes.Length);
                 yield return field;

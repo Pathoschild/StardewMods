@@ -25,6 +25,9 @@ internal class BushSubject : BaseSubject
     /// <summary>The underlying target.</summary>
     private readonly Bush Target;
 
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
+
 
     /*********
     ** Public methods
@@ -32,10 +35,11 @@ internal class BushSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="bush">The lookup target.</param>
-    public BushSubject(GameHelper gameHelper, Bush bush)
+    public BushSubject(ISubjectRegistry codex, GameHelper gameHelper, Bush bush)
         : base(gameHelper)
     {
         this.Target = bush;
+        this.Codex = codex;
 
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
             this.Initialize(TokenParser.ParseText(customBush.DisplayName), TokenParser.ParseText(customBush.Description), I18n.Type_Bush());
@@ -90,7 +94,7 @@ internal class BushSubject : BaseSubject
                     ? I18n.Generic_Now()
                     : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
                 if (this.TryGetCustomBushDrops(bush, out IList<ItemDropData>? drops))
-                    yield return new ItemDropListField(this.GameHelper, I18n.Bush_NextHarvest(), drops, preface: nextHarvestStr);
+                    yield return new ItemDropListField(this.GameHelper, I18n.Bush_NextHarvest(), drops, preface: nextHarvestStr, getSubjectByEntity: this.Codex.GetByEntity);
                 else
                 {
                     string harvestSchedule = isTeaBush ? I18n.Bush_Schedule_Tea() : I18n.Bush_Schedule_Berry();

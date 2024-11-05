@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -78,11 +79,17 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Click areas for link fields that open a new subject.</summary>
     private readonly IDictionary<ILinkField, Rectangle> LinkFieldAreas = new Dictionary<ILinkField, Rectangle>();
 
+    /// <summary>Click areas for link text within a field that open a new subject.</summary>
+    private readonly IList<ICustomField> FieldsWithLinkTextArea = [];
+
     /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
     private readonly bool WasHudEnabled;
 
     /// <summary>Whether to exit the menu on the next update tick.</summary>
     private bool ExitOnNextTick;
+
+    /// <summary>Flag for <see cref="ModEntry.OnMenuChanged"/>, exit without restoring a previous <see cref="LookupMenu"/> if set.</summary>
+    internal bool ExitWithoutRestore = false;
 
 
     /*********
@@ -236,7 +243,10 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     {
         // close menu when clicked outside or on close button
         if (!this.isWithinBounds(x, y) || this.upperRightCloseButton.containsPoint(x, y))
+        {
+            this.ExitWithoutRestore = true;
             this.exitThisMenu();
+        }
 
         // scroll up or down
         else if (this.ScrollUpButton.containsPoint(x, y))
@@ -254,7 +264,19 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                     ISubject? subject = link.GetLinkSubject();
                     if (subject != null)
                         this.ShowNewPage(subject);
-                    break;
+                    return;
+                }
+            }
+
+            foreach (ICustomField field in this.FieldsWithLinkTextArea)
+            {
+                foreach (LinkTextArea linkTextArea in field.LinkTextAreas!)
+                {
+                    if (linkTextArea.Rect.Contains(x, y))
+                    {
+                        this.ShowNewPage(linkTextArea.Subject);
+                        return;
+                    }
                 }
             }
         }
@@ -398,6 +420,11 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                                 // track link area
                                 if (field is ILinkField linkField)
                                     this.LinkFieldAreas[linkField] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
+                                // track link text areas
+                                if (field.LinkTextAreas != null)
+                                {
+                                    this.FieldsWithLinkTextArea.Add(field);
+                                }
 
                                 // update offset
                                 topOffset += Math.Max(labelSize.Y, valueSize.Y);

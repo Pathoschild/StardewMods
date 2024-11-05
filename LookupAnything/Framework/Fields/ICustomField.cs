@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -21,6 +23,8 @@ internal interface ICustomField
     /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
     LinkField? ExpandLink { get; }
 
+    /// <summary>List of clickable areas that should open a new page when clicked.</summary>
+    IList<LinkTextArea>? LinkTextAreas { get; }
 
     /*********
     ** Public methods

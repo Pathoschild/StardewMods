@@ -185,8 +185,22 @@ internal class ModEntry : Mod
         // restore the previous menu if it was hidden to show the lookup UI
         this.Monitor.InterceptErrors("restoring the previous menu", () =>
         {
-            if (e.NewMenu == null && (e.OldMenu is LookupMenu or SearchMenu) && this.PreviousMenus.Value.Any())
-                Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
+            if (e.NewMenu == null && (e.OldMenu is LookupMenu or SearchMenu) && this.PreviousMenus.Value.Any()){
+                // Special case for stack of lookup menus from showNewPage calls
+                // Rather than restore previous LookupMenus, exit directly to the first non LookupMenu
+                if (e.OldMenu is LookupMenu lookupMenu && lookupMenu.ExitWithoutRestore)
+                {
+                    while (this.PreviousMenus.Value.Any() && this.PreviousMenus.Value.First() is LookupMenu)
+                    {
+                        // this triggers menu dispose properly, might be better way
+                        Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
+                    }
+                    if (this.PreviousMenus.Value.Any())
+                        Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
+                }
+                else
+                    Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
+            }
         });
     }
 

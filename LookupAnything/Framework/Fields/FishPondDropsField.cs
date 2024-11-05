@@ -7,6 +7,8 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.GameData.FishPonds;
@@ -40,13 +42,15 @@ internal class FishPondDropsField : GenericField
     /// <param name="data">The fish pond data.</param>
     /// <param name="fish">The fish in the fish pond, if any.</param>
     /// <param name="preface">The text to display before the list, if any.</param>
-    public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, SObject? fish, string preface)
+    public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, SObject? fish, string preface, Func<object, GameLocation?, ISubject?>? getSubjectByEntity = null)
         : base(label)
     {
         this.GameHelper = gameHelper;
         this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
+        this.LinkTextAreas = [];
+        this.GetSubjectByEntity = getSubjectByEntity;
     }
 
     /// <inheritdoc />
@@ -72,6 +76,7 @@ internal class FishPondDropsField : GenericField
         Vector2 iconSize = new Vector2(font.MeasureString("ABC").Y);
         int lastGroup = -1;
         bool isPrevDropGuaranteed = false;
+        int idx = 0;
         foreach (FishPondDrop drop in this.Drops)
         {
             bool disabled = !drop.IsUnlocked || isPrevDropGuaranteed;
@@ -110,6 +115,9 @@ internal class FishPondDropsField : GenericField
             // draw drop
             bool isGuaranteed = drop.Probability > .99f;
             {
+                bool shouldLink = this.TryGetOrAddLinkTextArea(drop.SampleItem, ref idx, out LinkTextArea? linkTextArea);
+                Color textColor = (shouldLink ? Color.Blue : Color.Black) * (disabled ? 0.75f : 1f);
+
                 // draw icon
                 spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, Color.White * (disabled ? 0.5f : 1f));
 
@@ -120,7 +128,10 @@ internal class FishPondDropsField : GenericField
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, new Vector2(textIndent, position.Y + height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
+
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, new Vector2(textIndent, position.Y + height + 5), wrapWidth, textColor);
+                if (shouldLink)
+                    linkTextArea!.Rect = new Rectangle((int)(position.X + innerIndent + iconSize.X + 5), (int)(position.Y + height + iconSize.Y / 2), (int)textSize.X, (int)textSize.Y);
 
                 // cross out if it's guaranteed not to drop
                 if (isPrevDropGuaranteed)
