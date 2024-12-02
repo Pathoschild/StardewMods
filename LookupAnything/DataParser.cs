@@ -191,21 +191,27 @@ internal class DataParser
                     }
                     else if (spawn.Condition != null)
                     {
-                        var conditionData = GameStateQuery.Parse(spawn.Condition);
-                        var seasonalConditions = conditionData.Where(condition => GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]));
-                        foreach (GameStateQuery.ParsedGameStateQuery condition in seasonalConditions)
+                        foreach (GameStateQuery.ParsedGameStateQuery condition in GameStateQuery.Parse(spawn.Condition))
                         {
-                            var seasons = new List<string>();
-                            foreach (string season in new[] { "spring", "summer", "fall", "winter" })
-                            {
-                                if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
-                                    seasons.Add(season);
-                            }
-                            curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, seasons.ToArray()));
-                        }
+                            if (condition.Query.Length == 0)
+                                continue;
 
-                        // check if fish is part of Qi's Extended Family quest
-                        isLegendaryFamily = conditionData.Any(condition => !condition.Negated && condition.Query.SequenceEqual(["PLAYER_SPECIAL_ORDER_RULE_ACTIVE", "Current", "LEGENDARY_FAMILY"]));
+                            // season
+                            if (GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]))
+                            {
+                                var seasons = new List<string>();
+                                foreach (string season in new[] { "spring", "summer", "fall", "winter" })
+                                {
+                                    if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
+                                        seasons.Add(season);
+                                }
+                                curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, seasons.ToArray()));
+                            }
+
+                            // Qi's Extended Family quest
+                            else if (!isLegendaryFamily && condition is { Negated: false, Query: ["PLAYER_SPECIAL_ORDER_RULE_ACTIVE", "Current", "LEGENDARY_FAMILY"] })
+                                isLegendaryFamily = true;
+                        }
                     }
                     else
                         curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, new[] { "spring", "summer", "fall", "winter" }));
