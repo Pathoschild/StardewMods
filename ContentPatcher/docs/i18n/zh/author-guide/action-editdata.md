@@ -1,53 +1,49 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
-A patch with **`"Action": "EditData"`** edits fields and entries inside a data asset. Any number of
-content packs can edit the same asset.
+使用 **`"Action": "EditData"`** 可以编辑数据资产中的字段和条目。多个内容包可以编辑同一个资产。
 
-## Contents
-* [Basic concepts](#basic-concepts)
-  * [Data assets](#data-assets)
-  * [Entries and fields](#entries)
-  * [Target fields](#target-fields)
-* [Usage](#usage)
-  * [Overview](#overview)
-  * [Edit a dictionary](#edit-a-dictionary)
-  * [Edit a list](#edit-a-list)
-  * [Edit a model](#edit-a-model)
-  * [Combining operations](#combining-operations)
-* [Target field](#target-field)
-  * [Format](#format)
-  * [Examples](#examples)
-* [See also](#see-also)
+## 目录
+* [基本概念](#basic-concepts)
+  * [数据资产](#data-assets)
+  * [字段和条目](#entries)
+  * [目标字段](#target-fields)
+* [用法](#usage)
+  * [概述](#overview)
+  * [编辑字典](#edit-a-dictionary)
+  * [编辑列表](#edit-a-list)
+  * [编辑模型](#edit-a-model)
+  * [合并](#combining-operations)
+* [目标字段](#target-field)
+  * [格式](#format)
+  * [例子](#examples)
+* [另见](#see-also)
 
-## Basic concepts
-The game has many types of data, which Content Patcher abstracts into a few common concepts.
-The rest of this page will make much more sense once you understand the concepts explained in this
-section, so don't skip it!
+## 基本概念
+游戏中有许多类型的数据，Content Patcher将其转化成一些常用概念。
+只有理解了本页所述的概念，你才能理解其余部分，所以请不要跳过该部分！
 
-### Data assets
-A _data asset_ contains info loaded by the game from a content file: events for a location,
-dialogue for an NPC, etc. For example, `Data/Objects` is an asset which has info for many items in
-the game. The [format for many assets is documented on the wiki](https://stardewvalleywiki.com/Modding:Index#Advanced_topics).
 
-There are three main types of asset:
+### 数据资产
+ _数据资产（data asset）_ 包括从游戏中加载的: 时间地点，角色对话等数据。比如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在[维基](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)上有阐述。
+
+以下是三种主要的数据资产：
 
 <table>
 <tr>
-<th>asset type</th>
-<th>usage</th>
+<th>类型</th>
+<th>用法</th>
 </tr>
 <tr>
-<td>dictionary</td>
+<td>字典</td>
 <td>
 
-A _dictionary_ is a list of key/value pairs, where the key is unique within the list. These are
-surrounded by `{` and `}`.
+ _字典（dictionary）_ 是包含许多键值对的列表。其中的键必须有唯一ID。同一个字典中的键值对必须写在 `{` 和 `}` 之中。
 
-For example, `Data/Boots` is a dictionary of strings:
+比如， `Data/Boots` 就是一个包含了许多键值对的字典：
 
 ```js
 {
-    // format is "key": "value"
+    //格式是 "键": "值" （所有引号必须用英文的半角符号）
     "504": "Sneakers/A little flimsy... but fashionable!/50/1/0/0/Sneakers",
     "505": "Rubber Boots/Protection from the elements./50/0/1/1/Rubber Boots",
     "506": "Leather Boots/The leather is very supple./50/1/1/2/Leather Boots"
@@ -57,13 +53,12 @@ For example, `Data/Boots` is a dictionary of strings:
 </td>
 </tr>
 <tr>
-<td>list</td>
+<td>列表</td>
 <td>
 
-A _list_ is a non-unique set of values which don't have an explicit key. These are surrounded by
-`[` and `]`.
+ _列表（list）_ 是一组没有明确键的非唯一值。列表中的键值对必须写在 `[` 和 `]`之中。
 
-For example, `Data/Concessions` is a list of models:
+比如， `Data/Concessions` 就是一个典型的列表：
 
 ```js
 [
@@ -75,32 +70,28 @@ For example, `Data/Concessions` is a list of models:
        "Price": 50,
        "ItemTags": [ "Sweet", "Candy" ]
     },
-    // other entries omitted for brevity
+    // 篇幅有限，其他数据省略
 ]
 ```
 
-Although lists don't have keys, Content Patcher often assigns one field as a unique identifer which
-can be used as the key (see [_edit a list_](#edit-a-list)).
+虽然列表没有键，但Content Patcher通常会指定一个字段作为唯一标识符（详见[_编辑列表_](#edit-a-list)）。
 
 </td>
 </tr>
 <tr>
-<td>model</td>
+<td>模型</td>
 <td>
 
-A _model_ is a predefined data structure. For content packs, it's identical to a dictionary except
-that you can't add new entries (only edit existing ones).
+ _模型（model）_ 是一种预定义的数据结构。对于内容包来说，它和字典相同，只是你不能添加新字段（只能编辑已有字段）。
 
 </td>
 </tr>
 </table>
 
-### Entries and fields<span id="entries"></span>
-An _entry_ is a top-level block of data in the target data (i.e. a key/value pair in a dictionary
-or a value in a list).
+### 字段和条目<span id="entries"></span>
+ _条目（entry）_ 是目标数据中的顶层数据块（即字典中的键值对或列表中的值）
 
-For example, in this snippet from `Data/Objects`, `"MossSoup": { ...}` and `"PetLicense": { ... }`
-are two separate entries:
+比如， `Data/Objects` 中， `"MossSoup": { ...}` 和 `"PetLicense": { ... }`是两个独立的条目：
 ```js
 {
     "MossSoup": {
@@ -122,166 +113,150 @@ are two separate entries:
 }
 ```
 
-A _field_ is a sub-block of data inside an entry. In the previous example:
-- `"MossSoup": { ... }` is an entry;
-- `"Name": "Moss Soup"` is a field inside the `"MossSoup": { ... }` entry.
+ _字段（field）_ 是条目中的一个子块。在前面的例子中：
+- `"MossSoup": { ... }` 是一个条目；
+- `"Name": "Moss Soup"` 是 `"MossSoup": { ... }`这个条目中的一个字段。
 
-### Target fields
-In the previous section, we said that an entry is "_a top-level block of data in the target data_".
-A target field lets you change what "target data" means.
+### 目标字段
+在上一部分中，我们说“_目标数据中的一个顶层数据块_”。
+目标字段可以让你改变目标条目的含义。
 
-For example, let's say we set the target field to the `ContextTags` field above. Then the data your
-patch sees is this:
+比如，假设我们将目标字段设置为上面的`ContextTags`字段。那么你会看到的数据是这样的：
 ```json
 [ "color_green" ]
 ```
 /
-That means each value in the `ContextTags` is now an entry, so you can add/replace/remove context
-tags without editing the rest of the object data.
+这意味着`ContextTags`中的每一个值都是一个条目，所以你可以添加/替换/删除上下文标记，而无需编辑对象数据的其他部分。
 
-(This is covered in more detail under [_Target field_](#target-field) below.)
+([_目标字段_](#target-field)会详细介绍这一点)
 
 
-## Usage
-### Overview
-An `EditData` patch consists of a model under `Changes` (see examples below) with these fields:
+## 用法
+### 概述
+`EditData`由`Changes`下的模型组成，其中包含（见下面的示例）：
 
 <dl>
-<dt>Required fields:</dt>
+<dt>必填字段</dt>
 <dd>
 
-You must specify both of these fields:
+你必须同时指定这两个字段：
 
-field     | purpose
+字段     | 用途
 --------- | -------
-`Action`  | The kind of change to make. Set to `EditData` for this action type.
-`Target`  | The [game asset name](../author-guide.md#what-is-an-asset) to replace (or multiple comma-delimited asset names), like `Characters/Dialogue/Abigail`. This field supports [tokens](../author-guide.md#tokens), and capitalisation doesn't matter.
+`Action`  | 操作类型。此操作类型设置为`EditData`。
+`Target`  | [游戏资产名](../author-guide.md#what-is-an-asset)替换（由逗号分隔的资产名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
-And at least one of these:
+至少有下列一项：
 
 <table>
 <tr>
-<th>field</th>
-<th>purpose</th>
+<th>字段</th>
+<th>用途</th>
 </tr>
 <tr>
 <td><code>Fields</code></td>
 <td>
 
-The individual fields you want to change for existing entries. This field supports
-[tokens](../author-guide.md#tokens) in field keys and values. The key for each field is the field
-index (starting at zero) for a slash-delimited string, or the field name for an object.
+你要更改的现有条目的单个字段。该字段的键和值都支持
+[tokens](../author-guide.md#tokens)。每个字段的键是以/分隔的字段索引（从0开始），或对象的字段名。
 
 </td>
 </tr>
 <td><code>Entries</code></td>
 <td>
 
-The entries in the data file you want to add/replace/delete, indexed by ID. If you only want to
-change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry,
-just specify a key that doesn't exist; to delete an entry, set the value to `null` (like
-`"some key": null`). This field supports [tokens](../author-guide.md#tokens) in entry keys and
-values.
+你要添加/替换/删除的用ID索引的数据文件中的条目。如果你只想改几个字段，用`Fields`才更能和别的模组兼容。要添加条目，只需要指定一个不存在的键； 要删除条目，可以把它的值设为`null`（比如
+`"some key": null`）。可以在该字段条目的键和值中用[tokens](../author-guide.md#tokens)。
 
-For list values, see also `MoveEntries` below.
+对于列表的值，查看下面的`MoveEntries`。
 
 </td>
 </tr>
 <td><code>MoveEntries</code></td>
 <td>
 
-_(List assets only)_ Change the entry order in a list asset like `Data/MoviesReactions`. (Using
-this with a non-list asset will cause an error, since those have no order.)
+ _只支持列表资产_ 更改列表资产（如`Data/MoviesReactions`）中的条目顺序。（在非列表资产中使用会出错，因为那些资产没有顺序）
 
-See [_moving list entries_](#moving-list-entries) for more info.
+详见[_移动列表条目_](#moving-list-entries)。
 
 </td>
 </tr>
 <td><code>TextOperations</code></td>
 <td>
 
-Change the value of an existing string entry or field; see _[text
-operations](../author-guide.md#text-operations)_ for more info.
+更改现有字符串条目或字段的值；详见 _[文本操作](../author-guide.md#text-operations)_ 。
 
-To change an entry, use the format `["Entries", "entry key"]` and replace `"entry key"` with the
-key you'd specify for `Entries` above. If the entry doesn't exist, it'll be created and the text
-operation will be applied as if it was an empty string.
+要更改条目，请使用格式`["Entries", "条目对应的值"]`并将`"条目对应的值"`替换为上文你想指定的`Entries`。
+如果该条目不存在，它会自动新建。文本操作会把它当做一个空字符串生效。
 
-To change a field, use the format `["Fields", "entry key", "field key"]` and replace `"entry key"`
-and `"field key"` with the keys you'd specify for `Fields` above. If the entry doesn't exist, the
-operation will fail with an error message. If the field doesn't exist, it'll be created if the
-entry is an object, or fail with an error if the entry is a delimited string. Currently you can
-only target top-level fields.
+
+要更改字段，请使用格式`["Fields", "条目对应的值", "字段对应的值"]`并用上文你想为`Fields`指定的键替换`"条目对应的值"`和`"字段对应的值"。
+如果条目不存在，这个文本操作会报错；如果该字段不存在，在条目是一个对象时它会自动新建，条目是一个分隔字符串时会报错。
+目前只能针对顶层字段。
 
 </td>
 </tr>
 </table>
 </dd>
-<dt>Optional fields:</dt>
+<dt>可选条目：</dt>
 <dd>
 
-field         | purpose
+条目         | 用途
 ------------- | -------
-`TargetField` | _(optional)_ When targeting a [list or dictionary](#data-assets), the field within the value to set as the root scope; see [_target field_](#target-field) below. This field supports [tokens](../author-guide.md#tokens).
-`When`        | _(optional)_ Only apply the patch if the given [conditions](../author-guide.md#conditions) match.
-`LogName`     | _(optional)_ A name for this patch to show in log messages. This can be useful for understanding errors. If omitted, it defaults to a name like `EditData Data/Achievements`.
-`Update`      | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
-`LocalTokens` | _(Optional)_ A set of [local tokens](../author-guide/tokens.md#local-tokens) which can be used within this patch's field.
+`TargetField` | _（可选）_ 以[列表或字典](#data-assets)为目标时，值中的字段会被设为根作用域；详见[_目标字段_](#target-field)。该字段支持[tokens](../author-guide.md#tokens)。
+`When`        | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
+`LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，默认名称为`EditData Data/Achievements`。
+`Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[本地tokens](../author-guide/tokens.md#local-tokens) 。
 
 </dd>
-<dt>Advanced fields:</dt>
+<dt>高级字段：</dt>
 <dd>
 
 <table>
   <tr>
-    <td>field</td>
-    <td>purpose</td>
+    <td>字段</td>
+    <td>用途</td>
   </tr>
   <tr>
   <td><code>Priority</code></td>
   <td>
 
-_(optional)_ When multiple patches or mods edit the same asset, the order in which they should be
-applied. The possible values are `Early`, `Default`, and `Late`. The default value is `Default`.
+ _（可选）_ 当多个补丁修改编辑同一数据资产时，他们应用的顺序。可能的值有`Early`（高优先级），`Default`（默认），还有`Late`（低优先级）。默认值为`Default`。
 
-The patches for an asset (across all mods) are applied in this order:
+补丁（包括所有模组）按以下顺序应用：
 
-1. by earliest to latest priority;
-2. then by mod load order (e.g. based on dependencies);
-3. then by the order the patches are listed in your `content.json`.
+1. 优先级从高到低；
+2. 按照模组加载顺序（比如基于依赖关系）；
+3. 按照补丁在`content.json`中列出的顺序。
 
-If you need a more specific order, you can use a simple offset like `"Default + 2"` or `"Late - 10"`.
-The default levels are -1000 (early), 0 (default), and 1000 (late).
+如果需要更具体的顺序，可以使用简单的偏移量，如`"Default + 2"`或者`"Late - 10"`。
+默认值为-1000 （高优先级），0（默认）和1000（低优先级）。
 
-This field does _not_ support tokens, and capitalization doesn't matter.
+此字段 _不_ 支持tokens，不区分大小写。
 
-> [!TIP]
-> Priorities can make your changes harder to follow and troubleshoot. Suggested best practices:
-> * Consider only using very general priorities when possible (like `Late` for a cosmetic overlay
->   meant to be applied over base edits from all mods).
-> * There's no need to set priorities relative to _your own_ patches, since you can just list them
->   in the order they should be applied.
+> [!提示]
+> 优先级会让你的更改更难排除故障。建议最好：
+> * 如果可以的话，考虑使用上述的优先级（比如直接设为`Late`，用于外观覆盖）
+> * 在 _你自己_ 的补丁里不需要用优先级，因为你可以自己在content.json排列好补丁应用的顺序。
 
   </tr>
   <tr>
   <td><code>TargetLocale</code></td>
   <td>
 
-_(optional)_ The locale code to match in the asset name. For example, setting `"TargetLocale": "fr-FR"`
-will only edit the French localized form of the asset (e.g. `Data/Achievements.fr-FR`). This can be
-an empty string to only edit the base unlocalized asset.
+ _（可选）_ 资产名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的资产（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本资产。
 
-If omitted, it's applied to all localized and unlocalized variants of the asset.
+如果省略，它将应用于所有资产，不管有没有本地化。
 
 </td>
 </table>
 </dd>
 </dl>
 
-### Edit a dictionary
-The simplest edit for a [dictionary](#data-assets) is to create or overwrite an entry. For
-example, this [adds a new item](https://stardewvalleywiki.com/Modding:Items) with the ID
-`{{ModId}}_Pufferchick` to `Data/Objects`:
+### 编辑字典
+[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。比如，以下操作会[添加一个新物品](https://stardewvalleywiki.com/Modding:Items)
+ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 
 ```js
 {
@@ -306,11 +281,9 @@ example, this [adds a new item](https://stardewvalleywiki.com/Modding:Items) wit
 }
 ```
 
-You can also edit a field within the entry. When the entry's value is a string, the value is
-assumed to be a slash-delimited list of fields (each assigned a number starting at zero); otherwise
-fields are entries directly within the given entry.
+你还可以编辑条目中的字段。当条目是字符串时，该值会被假定为一个以/分隔的字段列表（每个字段都有一个从0开始的数字），否则字段是给定条目中的直接条目。
 
-For example, this edits the description field for an item:
+比如，这将编辑一个条目的描述字段：
 
 ```js
 {
@@ -320,7 +293,7 @@ For example, this edits the description field for an item:
             "Action": "EditData",
             "Target": "Data/Objects",
             "Fields": {
-                "MossSoup": { // entry with ID 'MossSoup'
+                "MossSoup": { //它的条目是"MossSoup"
                     "Description": "Maybe a pufferchick would like this."
                 }
             }
@@ -329,8 +302,7 @@ For example, this edits the description field for an item:
 }
 ```
 
-You can also delete an entry by setting its value to `null`. For example, this deletes an event to
-recreate it with different conditions:
+你可以用把字段设为`null`的方式把某个条目删除。比如，下列事件会被替换为一个前置条件不同的另一个事件：
 ```js
 {
     "Format": "2.5.0",
@@ -340,25 +312,21 @@ recreate it with different conditions:
             "Target": "Data/Events/Beach",
             "Entries": {
                 "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
-                "733330/f Sam 750/w sunny/t 700 1500/z winter": "event script would go here"
+                "733330/f Sam 750/w sunny/t 700 1500/z winter": "事件脚本"
             }
         }
     ]
 }
 ```
 
-When the value has nested entries, you can use [`TargetField`](#target-field) to edit a specific
-one.
+当一个值有嵌套的条目时，你可以用[`目标字段`](#target-field)来编辑特定的那一个。
 
-### Edit a list
-You can edit a [list](#data-assets) the same way too.
+### 编辑列表
+你可以用同样的方法编辑[列表](#data-assets)。
 
-Lists don't have keys in the original asset, but they still have a 'key' in Content Patcher which
-identifies each entry for features like `Entries` and `MoveEntries`. In other words, the patch to
-edit a list looks just like one to edit a dictionary above.
+在游戏原版的数据资产中，列表没有键，但在Content Patcher中，他们仍有一个键来实现`Entries`和`MoveEntries`。也就是说，编辑列表和编辑字典差不多。
 
-For a list of models (blocks of `{ ... }`), the key is the `Id` field within each model. For
-example, this snippet from `Data\LocationContexts` shows one `Music` entry whose ID is `spring1`:
+对于模型列表（`{ ... }`块），键是每个每个模型的`Id`字段。比如，`Data\LocationContexts`就展示了ID为`spring1`的`Music`条目：
 ```js
 {
     "Default": {
@@ -378,7 +346,7 @@ example, this snippet from `Data\LocationContexts` shows one `Music` entry whose
 }
 ```
 
-To edit that music entry in a content pack, you'd use the ID as the key. For example:
+为了更改那个内容包中的音乐，你必须使用它的ID：
 ```js
 {
     "Format": "2.5.0",
@@ -399,13 +367,10 @@ To edit that music entry in a content pack, you'd use the ID as the key. For exa
 }
 ```
 
-Editing a list of simple strings works exactly the same way, except that the string itself is the
-key. See the [example for editing object context tags](#edit-object-context-tags) below.
+编辑简单字符串列表的方法和上述完全相同，只是字符串本身就是键。详见[编辑对象上下文标签示例](#edit-object-context-tags)。
 
-### Moving list entries
-The order is often important for list assets (e.g. the game will use the first entry in
-`Data\MoviesReactions` that matches the NPC it's checking). You can change the order using the
-`MoveEntries` field. For example, this moves the `Abigail` entry using each possible operation:
+### 移动列表条目
+对于列表来说，顺序很重要（比如，游戏会使用`Data\MoviesReactions`的第一个条件适合的条目来匹配NPC反应。你可以用`MoveEntries`字段来更改顺序。比如，这会移动`Abigail`的每一个条目：
 ```js
 {
     "Format": "2.5.0",
@@ -414,46 +379,41 @@ The order is often important for list assets (e.g. the game will use the first e
             "Action": "EditData",
             "Target": "Data/MoviesReactions",
             "MoveEntries": [
-                { "ID": "Abigail", "BeforeID": "Leah" },     // move entry so it's right before Leah
-                { "ID": "Abigail", "AfterID": "Leah" },      // move entry so it's right after Leah
-                { "ID": "Abigail", "ToPosition": "Top" },    // move entry to the top of the list
-                { "ID": "Abigail", "ToPosition": "Bottom" }, // move entry to the bottom of the list
+                { "ID": "Abigail", "BeforeID": "Leah" },     //移动字段让阿比盖尔在莉亚前面
+                { "ID": "Abigail", "AfterID": "Leah" },      //移动字段让阿比盖尔在莉亚后面
+                { "ID": "Abigail", "ToPosition": "Top" },    //移动字段让它位于最顶层
+                { "ID": "Abigail", "ToPosition": "Bottom" }, //移动字段让它位于最底层
             ]
         },
     ]
 }
 ```
 
-New entries are added at the bottom of the list by default.
+新条目默认增加到列表底部。
 
-### Edit a model
-A _model_ is a predefined data structure. For content packs, it's essentially identical to a
-dictionary except that you can't add new entries (only edit existing ones).
+### 编辑模型
+_模型_ 是一种预定义的数据结构。对于内容包来说，除了不能添加新条目（只能编辑已有条目）以外，它与字典相同。
 
-### Combining operations
-You can perform any number of edit operations within the same patch. For example, you can add a new
-entry and then move it into the right order at the same time. They'll be applied in this order:
-`Entries`, `Fields`, `MoveEntries`, and `TextOperations`.
+### 组合操作
+你可以在同一个补丁中执行任意数量的操作。例如，你可以添加一个新条目，然后同时将其移动到正确的顺序。它们按照`Entries`， `Fields`， `MoveEntries`， `TextOperations`的顺序编辑。
 
-## Target field
-Your changes normally apply to the top-level entries, but `TargetField` lets you choose a sub-block
-of data to edit instead. This affects all of the edit patch options (e.g. `Fields`, `Entries`,
-`TextOperations`, etc).
+## 目标字段
+更改通常适用于顶层条目，但`TargetField`让你可以选择一个字块编辑。这会影响所有编辑补丁（比如`Fields`， `Entries`，
+`TextOperations`等）。
 
-### Format
-`TargetField` is a list of field names to 'drill into' (see examples below). Each value in the list
-is within the previous value, and can be one of these:
+### 格式
+`TargetField`是要“钻取“的字段名列表。列表中的每个值都在前一个值的范围内，可以是其中之一：
 
-type       | effect
+类型       | 作用
 ---------- | ------
-ID         | A [dictionary key](#edit-a-dictionary) or [list key](#edit-a-list) within the data (e.g. `"Goby"` in the example below).
-field name | The name of a field on a data model.
-list value | For a simple list of strings or values, the value to target (see examples below).
-list index | The position of a value within the list (like `#0` for the first value). This must be prefixed with `#`, otherwise it'll be treated as an ID instead. This is fragile since it depends on the list order not changing from what you expect; consider using an ID or field name instead when possible.
+ID         | 数据内的[字典键](#edit-a-dictionary)或者[列表键](#edit-a-list)（比如：下面例子中的`"Goby"`）。
+字段名      | 数据模型中的字段名。
+列表值      | 简单字符串或数值列表的目标值。
+列表索引    | 值在列表中的位置（如`#0`表示第一个值）。前缀必须是`#`，否则会被视为ID。这种用法很容易出错，因为它取决于列表的顺序；最好用ID或者字段名代替。
 
-### Examples
-#### Edit object context tags
-The `Data/Objects` asset has entries like this:
+### 例子
+#### 编辑对象上下文标签示例
+`Data/Objects`中有以下条目：
 ```js
 "Goby": {
     "Name": "Goby",
@@ -463,14 +423,12 @@ The `Data/Objects` asset has entries like this:
 },
 ```
 
-Let's say we want to change the context tags, without redefining the whole item or losing changes
-from other mods. We can do that with `"TargetField": [ "Goby", "ContextTags" ]`, so the patch now
-applies to this data:
+如果我们要更改上下文标签，又不想重新定义整个项目，或者丢失其他模组的更改，可以用`"TargetField": [ "Goby", "ContextTags" ]`：
 ```json
 [ "color_brown", "fish_river", "season_fall", "season_spring", "season_summer" ]
 ```
 
-Then we can add, replace, or remove entries within that list as if it was a data asset:
+然后我们就可以像数据资产一样在列表中添加，替换，删除条目。
 ```js
 {
     "Format": "2.5.0",
@@ -480,20 +438,19 @@ Then we can add, replace, or remove entries within that list as if it was a data
             "Target": "Data/Objects",
             "TargetField": [ "Goby", "ContextTags" ],
             "Entries": {
-                "season_winter": "season_winter", // add a value
-                "season_spring": null,            // remove a value
-                "color_brown": "color_green"      // replace a value
+                "season_winter": "season_winter", //添加值
+                "season_spring": null,            //删除值
+                "color_brown": "color_green"      //替换值
             }
         },
     ]
 }
 ```
 
-#### Edit a deeply nested field
-The above example edited a field at the top of the model, but we can drill down to an arbitrary
-depth.
+#### 编辑深嵌套字段
+上面的示例编辑了模型顶部的字段，但我们可以向下钻取任意深度的字段。
 
-For example, consider this entry in `Data/Objects`:
+例如`Data/Objects`中的条目：
 ```json
 "791": {
     "Name": "Golden Coconut",
@@ -516,8 +473,7 @@ For example, consider this entry in `Data/Objects`:
 }
 ```
 
-Let's say we want to change pineapple seeds to drop 20 instead of 5. Let's look at the hierarchy of
-those fields:
+比如我们想把菠萝种子从5个改成20个，那么这些字段的层次结构是：
 
 * entry: `791`
   * field: `GeodeDrops`
@@ -526,7 +482,7 @@ those fields:
         * list value with ID: `PineappleSeeds`
           * field: `Amount`
 
-So we just need to 'drill down' that hierarchy to edit the field we want:
+我们只需要“深入”这个层次结构，编辑我们需要的字段：
 
 ```json
 {
@@ -544,6 +500,6 @@ So we just need to 'drill down' that hierarchy to edit the field we want:
 }
 ```
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
-* [Documentation for data asset formats](https://stardewvalleywiki.com/Modding:Index#Advanced_topics) on the wiki
+## 另见
+* [模组作者指南](../author-guide.md)
+* 维基上的[数据资产格式文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)
