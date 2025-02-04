@@ -1,92 +1,87 @@
-﻿**Content Patcher** is a [Stardew Valley](http://stardewvalley.net/) mod which loads content packs
-to change the game's data, images, and maps without replacing game files.
+﻿**Content Patcher** 是一款[星露谷物语](http://stardewvalley.net/)模组，用于加载内容包并以不更换游戏原有文件的形式更改游戏数据，贴图，和地图。
 
-## Contents
-* [For players](#for-players)
-  * [Install](#install)
-  * [Compatibility](#compatibility)
-  * [Configure content packs](#configure-content-packs)
-  * [Multiplayer](#multiplayer)
-* [For mod authors](#for-mod-authors)
-* [See also](#see-also)
+## 目录
+* [玩家指南](#for-players)
+  * [安装](#install)
+  * [兼容](#compatibility)v
+  * [内容包配置](#configure-content-packs).
+  * [多人](#multiplayer)
+* [模组作者指南](#for-mod-authors)
+* [配置](#config)
+* [参见](#see-also)
 
-## For players
-### Install
-1. [Install the latest version of SMAPI](https://smapi.io/).
-2. Install [this mod from Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/1915).
-3. Unzip any Content Patcher content packs into `Mods` to install them.
-4. Run the game using SMAPI.
+## 玩家指南
+### 安装
+1. [安装最新版SMAPI](https://smapi.io/)。
+2. 从[Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/1915)安装此模组。
+3. 解压任意Content Patcher内容包并放入`Mods`文件夹中以进行安装。
+4. 使用 SMAPI 运行游戏。
 
-That's it! Content packs unzipped into `Mods` will be loaded and applied automatically.
+完成这些步骤后，`Mods`文件夹中将被自动加载并应用。
 
-### Compatibility
-Content Patcher is compatible with Stardew Valley 1.6+ on Linux/macOS/Windows, both single-player and
-multiplayer.
+### 兼容
+Content Patcher与Linux/macOS/Windows星露谷物语1.6+版本兼容，包括单人游戏和多人游戏。
 
-### Configure content packs
-Many content packs can be configured using a `config.json` file, which Content Patcher will create
-the first time you launch the game with that content pack installed. (If no `config.json` appears,
-the mod probably isn't configurable.)
+### 内容包配置
+许多内容包可以使用 `config.json` 文件进行配置，Content Patcher将在你安装了该内容包后首次启动游戏时创建该文件。（若没有出现 `config.json`，则该模组不提供配置选项。）
 
-If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
-Content Patcher will automatically add configurable content packs to its in-game menu:
+如果你安装了[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)，
+Content Patcher会自动将可配置的内容包添加到其游戏内菜单中：
 
 ![](screenshots/config-with-sections.png)
 
-### Multiplayer
-Content Patcher works fine in multiplayer. It's best if all players have the same content packs,
-but not required. Here are the effects if some players don't have a content pack installed:
+### 多人
+Content Patcher兼容多人游戏。最好所有玩家都拥有相同的内容包，但这不是必须的。
+如果某些玩家没有安装内容包，则会出现以下现象:
 
-patch type | effect
+更改类型    | 现象
 ---------- | ------
-visual     | Only visible to players that have it installed.
-maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
-data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/Objects` and you create a new object, other player will see that object's custom values even if their `Data/Objects` doesn't have those changes.
+贴图        | 只有安装了该内容包的玩家才能看到贴图更改
+地图       | 只有安装了该内容包的玩家才能看到地图更改。没有自定义地图的玩家将会看到原版地图，并且会受到普通界限的限制（例如，他们可能会看到其他玩家穿过墙壁，但他们无法跟随）。
+数据       | 只有安装了该内容包的玩家才会受到影响。例如，当你在某个内容包在`Data/Objects`加入自定义值后生成一个物品, 其他玩家即使`Data/Objects`没有被内容包更改也会看到该物品的自定义值。
 
-## For mod authors
-* To create content packs, see the [author guide](author-guide.md) and its [tokens subpage](author-guide/tokens.md).
-* To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](extensibility.md).
-* To use Content Patcher conditions and token strings in your own SMAPI mod, see the [conditions API](conditions-api.md) and [token string API](token-strings-api.md).
+## 模组作者指南
+* 创建内容包请参阅[模组作者指南](author-guide.md)及其[tokens 子页面](author-guide/tokens.md)。
+* 从SMAPI mod添加自定义Content Patcher tokens，请参阅[扩展性API](extensibility.md)。
+* 从SMAPI mod调用Content Patcher conditions和token strings，请参阅[conditions API](conditions-api.md)和[token string API](token-strings-api.md)。
 
-## Configure
-Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can
-open that file in a text editor to configure the mod.
+## 设置
+Content Patcher在首次启动游戏时创建`config.json`文件。你可以用文本编辑器中打开该文件来配置此模组。
 
-These are the available settings:
+可更改以下配置：
 
 <table>
 <tr>
-  <th>setting</th>
-  <th>what it affects</th>
+  <th>配置</th>
+  <th>效果</th>
 </tr>
 
 <tr>
-  <td><code>EnableDebugFeatures</code></td>
+  <td><code>启用调试功能</code></td>
   <td>
 
-Default `false`. Whether to enable [debug features meant for content pack creators](author-guide/troubleshooting.md#debug-mode).
+默认`false`（否）。是否启用[专为内容包模组作者设计的调试功能](author-guide/troubleshooting.md#debug-mode)。
 
   </td>
 </tr>
 
 <tr>
-  <td><code>Controls</code></td>
+  <td><code>控制</code></td>
   <td>
 
-The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
-The default button bindings are...
+配置的控制器、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)).
+默认绑定为：
 
-* `F3` to show the [debug overlay](author-guide/troubleshooting.md#debug-mode) (if enabled);
-* `LeftControl` and `RightControl` to switch textures in the debug overlay.
+* `F3`显示[调试模式](author-guide/troubleshooting.md#debug-mode) (需启用调试功能);
+* `LeftControl`和`RightControl`切换调试模式中的贴图。
 
-You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
-bindings with plus signs (like `LeftShift + B`).
+可以用逗号分隔绑定键（例如`B,LeftShoulder`，绑定`B`或`LeftShoulder`），也可使用加号设置多键绑定（例如`LeftShift + B`）。
 
   </td>
 </tr>
 </table>
 
-## See also
-* [Release notes](release-notes.md)
+## 参见
+* [版本发布说明](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
-* [Ask for help](https://stardewvalleywiki.com/Modding:Help)
+* [更多帮助](https://stardewvalleywiki.com/Modding:Help)
