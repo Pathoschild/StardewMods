@@ -3,20 +3,20 @@
 使用 **`"Action": "EditData"`** 可以编辑数据资产中的字段和条目。多个内容包可以编辑同一个资产。
 
 ## 目录
-* [基本概念](#basic-concepts)
-  * [数据资产](#data-assets)
-  * [字段和条目](#entries)
-  * [目标字段](#target-fields)
-* [用法](#usage)
-  * [概述](#overview)
-  * [编辑字典](#edit-a-dictionary)
-  * [编辑列表](#edit-a-list)
-  * [编辑模型](#edit-a-model)
-  * [合并](#combining-operations)
-* [目标字段](#target-field)
-  * [格式](#format)
-  * [例子](#examples)
-* [另见](#see-also)
+* [基本概念](#基本概念)
+  * [数据资产](#数据资产)
+  * [字段和条目](#字段和条目)
+  * [目标字段](#目标字段1)
+* [用法](#用法)
+  * [概述](#概述)
+  * [编辑字典](#编辑字典)
+  * [编辑列表](#编辑列表)
+  * [编辑模型](#编辑模型)
+  * [组合操作](#组合操作)
+* [目标字段](#目标字段2)
+  * [格式](#格式)
+  * [例子](#例子)
+* [另见](#另见)
 
 ## 基本概念
 游戏中有许多类型的数据，Content Patcher将其转化成一些常用概念。
@@ -74,7 +74,7 @@
 ]
 ```
 
-虽然列表没有键，但Content Patcher通常会指定一个字段作为唯一标识符（详见[_编辑列表_](#edit-a-list)）。
+虽然列表没有键，但Content Patcher通常会指定一个字段作为唯一标识符（详见[_编辑列表_](#编辑列表)）。
 
 </td>
 </tr>
@@ -88,7 +88,7 @@
 </tr>
 </table>
 
-### 字段和条目<span id="entries"></span>
+### 字段和条目
  _条目（entry）_ 是目标数据中的顶层数据块（即字典中的键值对或列表中的值）
 
 比如， `Data/Objects` 中， `"MossSoup": { ...}` 和 `"PetLicense": { ... }`是两个独立的条目：
@@ -117,7 +117,7 @@
 - `"MossSoup": { ... }` 是一个条目；
 - `"Name": "Moss Soup"` 是 `"MossSoup": { ... }`这个条目中的一个字段。
 
-### 目标字段
+### 目标字段<span id="目标字段1"></span>
 在上一部分中，我们说“_目标数据中的一个顶层数据块_”。
 目标字段可以让你改变目标条目的含义。
 
@@ -128,7 +128,7 @@
 /
 这意味着`ContextTags`中的每一个值都是一个条目，所以你可以添加/替换/删除上下文标记，而无需编辑对象数据的其他部分。
 
-([_目标字段_](#target-field)会详细介绍这一点)
+([_目标字段_](#目标字段2)会详细介绍这一点)
 
 
 ## 用法
@@ -144,7 +144,7 @@
 字段     | 用途
 --------- | -------
 `Action`  | 操作类型。此操作类型设置为`EditData`。
-`Target`  | [游戏资产名](../author-guide.md#what-is-an-asset)替换（由逗号分隔的资产名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | [游戏资产名](../author-guide.md#数据资产是什么)替换（由逗号分隔的资产名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
 至少有下列一项：
 
@@ -177,14 +177,14 @@
 
  _只支持列表资产_ 更改列表资产（如`Data/MoviesReactions`）中的条目顺序。（在非列表资产中使用会出错，因为那些资产没有顺序）
 
-详见[_移动列表条目_](#moving-list-entries)。
+详见[_移动列表条目_](#移动列表条目)。
 
 </td>
 </tr>
 <td><code>TextOperations</code></td>
 <td>
 
-更改现有字符串条目或字段的值；详见 _[文本操作](../author-guide.md#text-operations)_ 。
+更改现有字符串条目或字段的值；详见 _[文本操作](../author-guide.md#文本操作)_ 。
 
 要更改条目，请使用格式`["Entries", "条目对应的值"]`并将`"条目对应的值"`替换为上文你想指定的`Entries`。
 如果该条目不存在，它会自动新建。文本操作会把它当做一个空字符串生效。
@@ -203,11 +203,11 @@
 
 条目         | 用途
 ------------- | -------
-`TargetField` | _（可选）_ 以[列表或字典](#data-assets)为目标时，值中的字段会被设为根作用域；详见[_目标字段_](#target-field)。该字段支持[tokens](../author-guide.md#tokens)。
-`When`        | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
+`TargetField` | _（可选）_ 以[列表或字典](#数据资产)为目标时，值中的字段会被设为根作用域；详见[_目标字段_](#目标字段2)。该字段支持[tokens](../author-guide.md#tokens)。
+`When`        | _（可选）_ 当给定的[条件](../author-guide.md#条件)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，默认名称为`EditData Data/Achievements`。
-`Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[本地tokens](../author-guide/tokens.md#local-tokens) 。
+`Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#更新速率)。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[本地tokens](../author-guide/tokens.md#本地tokens) 。
 
 </dd>
 <dt>高级字段：</dt>
@@ -255,7 +255,7 @@
 </dl>
 
 ### 编辑字典
-[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。比如，以下操作会[添加一个新物品](https://stardewvalleywiki.com/Modding:Items)
+[字典](#数据资产)最简单的编辑方法是创建或覆盖一个条目。比如，以下操作会[添加一个新物品](https://stardewvalleywiki.com/Modding:Items)。
 ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 
 ```js
@@ -319,10 +319,10 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 }
 ```
 
-当一个值有嵌套的条目时，你可以用[`目标字段`](#target-field)来编辑特定的那一个。
+当一个值有嵌套的条目时，你可以用[`目标字段`](#目标字段2)来编辑特定的那一个。
 
 ### 编辑列表
-你可以用同样的方法编辑[列表](#data-assets)。
+你可以用同样的方法编辑[列表](#数据资产)。
 
 在游戏原版的数据资产中，列表没有键，但在Content Patcher中，他们仍有一个键来实现`Entries`和`MoveEntries`。也就是说，编辑列表和编辑字典差不多。
 
@@ -367,7 +367,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 }
 ```
 
-编辑简单字符串列表的方法和上述完全相同，只是字符串本身就是键。详见[编辑对象上下文标签示例](#edit-object-context-tags)。
+编辑简单字符串列表的方法和上述完全相同，只是字符串本身就是键。详见[编辑对象上下文标签示例](#编辑对象上下文标签示例)。
 
 ### 移动列表条目
 对于列表来说，顺序很重要（比如，游戏会使用`Data\MoviesReactions`的第一个条件适合的条目来匹配NPC反应。你可以用`MoveEntries`字段来更改顺序。比如，这会移动`Abigail`的每一个条目：
@@ -397,7 +397,7 @@ _模型_ 是一种预定义的数据结构。对于内容包来说，除了不�
 ### 组合操作
 你可以在同一个补丁中执行任意数量的操作。例如，你可以添加一个新条目，然后同时将其移动到正确的顺序。它们按照`Entries`， `Fields`， `MoveEntries`， `TextOperations`的顺序编辑。
 
-## 目标字段
+## 目标字段 <span id="目标字段2"></span>
 更改通常适用于顶层条目，但`TargetField`让你可以选择一个字块编辑。这会影响所有编辑补丁（比如`Fields`， `Entries`，
 `TextOperations`等）。
 
@@ -406,7 +406,7 @@ _模型_ 是一种预定义的数据结构。对于内容包来说，除了不�
 
 类型       | 作用
 ---------- | ------
-ID         | 数据内的[字典键](#edit-a-dictionary)或者[列表键](#edit-a-list)（比如：下面例子中的`"Goby"`）。
+ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列表)（比如：下面例子中的`"Goby"`）。
 字段名      | 数据模型中的字段名。
 列表值      | 简单字符串或数值列表的目标值。
 列表索引    | 值在列表中的位置（如`#0`表示第一个值）。前缀必须是`#`，否则会被视为ID。这种用法很容易出错，因为它取决于列表的顺序；最好用ID或者字段名代替。
