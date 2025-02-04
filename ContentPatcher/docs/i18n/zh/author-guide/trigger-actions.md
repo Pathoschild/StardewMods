@@ -1,68 +1,65 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
-This page documents the custom [trigger actions](https://stardewvalleywiki.com/Modding:Trigger_actions) added by
-Content Patcher.
+此页记录Content Patcher所添加的自定义[触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
 
 ## Contents
 * [`MigrateIds`](#migrateids)
-* [See also](#see-also)
+* [参见](#参见)
 
 ## `MigrateIds`
-The `Pathoschild.ContentPatcher_MigrateIds` [trigger action](https://stardewvalleywiki.com/Modding:Trigger_actions)
-lets you update existing saves when you change IDs for your events, items, mail, recipes, or songs. For example, this
-can be used to migrate to [unique string IDs](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID).
+`Pathoschild.ContentPatcher_MigrateIds` [触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
+用于更新原有存档的事件，物品，信件，配方，和音频。
 
-The argument format is `<type> [<old id> <new id>]+`:
+此触发动作可帮助旧模组迁移到[唯一字符串ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E5.94.AF.E4.B8.80.E5.AD.97.E7.AC.A6.E4.B8.B2ID).
+
+参数格式为`<类型> [<旧ID> <新ID>]+`：
 
 <table>
 <tr>
-<th>argument</th>
-<th>usage</th>
+<th>参数</th>
+<th>使用</th>
 </tr>
 <tr>
-<td><code>&lt;type&gt;</code></td>
+<td><code>&lt;类型&gt;</code></td>
 <td>
 
-One of `CookingRecipes`, `CraftingRecipes`, `Events`, `Items`, `Mail`, or `Songs`.
+`CookingRecipes`, `CraftingRecipes`, `Events`, `Items`, `Mail`, `Songs`之一
 
 </td>
 </tr>
 <tr>
-<td><code>&lt;old id&gt;</code></td>
+<td><code>&lt;旧ID&gt;</code></td>
 <td>
 
-The former ID to find in the game data.
+原有需迁移的ID。
 
-If this is an item and it was previously defined...
-* In a data asset like `Data/Objects`:  
-  Use the [qualified item ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Item_ID), like `(O)OldId`.
-* In a **non-installed** Json Assets content pack:  
-  Use an ID in the form `"JsonAssets:<type>:<name>"`. The valid types are `big-craftables`, `clothing`, `hats`,
-  `objects`, and `weapons`. For example, a hat named _Puffer Hat_ would be `"JsonAssets:hats:Puffer Hat"`.
-* In an **installed** Json Assets content pack:  
-  Use a [Json Assets token](https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/docs/author-guide.md#integration-with-content-patcher)
-  to get the real item ID, and then use it as a [qualified item ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Item_ID).
-  For example, `(O){{spacechase0.JsonAssets/ObjectId: Puffer Hat}}`.
+如果类型是`Items`，并曾经定义在
+* 数据素材，如`Data/Objects`:  
+  使用[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID), like `(O)OldId`。
+* **未安装**的Json Assets内容包
+  使用`"JsonAssets:<类型>:<名称>"`形式的ID。可使用`big-craftables`，`clothing`，`hats`，`objects`，和`weapons`。例如原名为_Puffer Hat_的ID为`"JsonAssets:hats:Puffer Hat"`。
+* **安装**的Json Assets内容包
+  使用[Json Assets token](https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/docs/author-guide.md#integration-with-content-patcher)
+  获取实际ID，用作[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID)。
+  例如`(O){{spacechase0.JsonAssets/ObjectId: Puffer Hat}}`。
 
 </td>
 </tr>
 <tr>
-<td><code>&lt;new id&gt;</code></td>
+<td><code>&lt;新ID&gt;</code></td>
 <td>
 
-The new ID to change it to.
+迁移后的新ID。
 
-For an item, using a [qualified item ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Item_ID) is
-recommended to avoid ambiguity.
+物品推荐使用[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID)，避免产生歧义。
 
 </td>
 </tr>
 </table>
 
-You can have any number old/new ID pairs.
+你可以使用任意数量的旧ID/新ID配对
 
-For example, this changes the ID for two crafting recipes: `Puffer Plush` renamed to `{{ModId}}_PufferPlush`, and `Puffer
-Sofa` renamed to `{{ModId}}_PufferSofa`:
+以下范例将`Puffer Plush`迁移到`{{ModId}}_PufferPlush`，`Puffer Sofa`迁移到`{{ModId}}_PufferSofa`:
 
 ```js
 {
@@ -73,8 +70,7 @@ Sofa` renamed to `{{ModId}}_PufferSofa`:
             "Id": "{{ModId}}_MigrateIds",
             "Trigger": "DayStarted",
             "Actions": [
-                // Note: use double-quotes around an argument if it contains spaces. This example has single-quotes for
-                // the action itself, so we don't need to escape the double-quotes inside it.
+                // Note: 有空格的参数需使用双引号. 此范例的Action使用单引号，所以不需要转义其中的双引号。
                 'Pathoschild.ContentPatcher_MigrateIds CraftingRecipes "Puffer Plush" {{ModId}}_PufferPlush "Puffer Sofa" {{ModId}}_PufferSofa'
             ],
             "HostOnly": true
@@ -84,10 +80,10 @@ Sofa` renamed to `{{ModId}}_PufferSofa`:
 ```
 
 > [!IMPORTANT]  
-> Content Patcher needs full access to the whole game state to do this. The action will log an error if:
->* it isn't set to `"Trigger": "DayStarted"` and `"HostOnly": true`.
->* or it's not being run from `Data/TriggerActions`.
+> Content Patcher需要访问完整游戏状态才能执行此触发动作。如果出现以下情况，触发动作会报错：
+>* TriggerAction没有设为`"Trigger": "DayStarted"`和`"HostOnly": true`
+>* 触发动作被`Data/TriggerActions`以外的机制触发
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
-* [_Trigger actions_ on the wiki](https://stardewvalleywiki.com/Modding:Trigger_actions) for more info
+## 参见
+* [模组作者指南](../author-guide.md)
+* [触发动作wiki](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)

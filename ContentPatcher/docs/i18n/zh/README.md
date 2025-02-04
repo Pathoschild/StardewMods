@@ -1,21 +1,41 @@
 ﻿**Content Patcher** 是一款[星露谷物语](http://stardewvalley.net/)模组，用于加载内容包并以不更换游戏原有文件的形式更改游戏数据，贴图，和地图。
+<!--
+
+关于此汉化
+
+原版文档更新时：
+cd <repository>
+rsync --update --recursive --exclude 'i18n' ContentPatcher/docs/ ContentPatcher/docs/i18n/zh/
+
+不汉化以下文档：
+release-notes.md - 长，而且内容跟正式文档重复
+author-tokens-guide.md - 已转移到author-guide/tokens.md
+
+不汉化以下名词：
+任何需要写入模组json的词，如"Action"
+token - 令牌/变量
+
+Wiki链接换成中文wiki
+https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95
+
+-->
 
 ## 目录
-* [玩家指南](#for-players)
-  * [安装](#install)
-  * [兼容](#compatibility)v
-  * [内容包配置](#configure-content-packs).
-  * [多人](#multiplayer)
-* [模组作者指南](#for-mod-authors)
-* [配置](#config)
-* [参见](#see-also)
+* [玩家指南](#玩家指南)
+  * [安装](#安装)
+  * [兼容](#兼容)
+  * [内容包配置](#内容包配置)
+  * [多人](#多人)
+* [模组作者指南](#模组作者指南)
+* [配置](#配置)
+* [参见](#参见)
 
 ## 玩家指南
 ### 安装
 1. [安装最新版SMAPI](https://smapi.io/)。
 2. 从[Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/1915)安装此模组。
 3. 解压任意Content Patcher内容包并放入`Mods`文件夹中以进行安装。
-4. 使用 SMAPI 运行游戏。
+4. 使用SMAPI运行游戏。
 
 完成这些步骤后，`Mods`文件夹中将被自动加载并应用。
 
@@ -43,7 +63,7 @@ Content Patcher兼容多人游戏。最好所有玩家都拥有相同的内容�
 ## 模组作者指南
 * 创建内容包请参阅[模组作者指南](author-guide.md)及其[tokens 子页面](author-guide/tokens.md)。
 * 从SMAPI mod添加自定义Content Patcher tokens，请参阅[扩展性API](extensibility.md)。
-* 从SMAPI mod调用Content Patcher conditions和token strings，请参阅[conditions API](conditions-api.md)和[token string API](token-strings-api.md)。
+* 从SMAPI mod调用Content Patcher conditions和token strings，请参阅[条件 API](conditions-api.md)和[token string API](token-strings-api.md)。
 
 ## 设置
 Content Patcher在首次启动游戏时创建`config.json`文件。你可以用文本编辑器中打开该文件来配置此模组。
@@ -57,7 +77,7 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 </tr>
 
 <tr>
-  <td><code>启用调试功能</code></td>
+  <td><code>EnableDebugFeatures</code></td>
   <td>
 
 默认`false`（否）。是否启用[专为内容包模组作者设计的调试功能](author-guide/troubleshooting.md#debug-mode)。
@@ -66,10 +86,10 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 </tr>
 
 <tr>
-  <td><code>控制</code></td>
+  <td><code>Controls</code></td>
   <td>
 
-配置的控制器、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)).
+配置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)).
 默认绑定为：
 
 * `F3`显示[调试模式](author-guide/troubleshooting.md#debug-mode) (需启用调试功能);
@@ -82,6 +102,6 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 </table>
 
 ## 参见
-* [版本发布说明](release-notes.md)
+* [版本发布说明](../../release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
 * [更多帮助](https://stardewvalleywiki.com/Modding:Help)
