@@ -88,7 +88,7 @@
 </tr>
 </table>
 
-### 字段和条目
+### 字段和条目<a name="entries"></a>
  _条目（entry）_ 是目标数据中的顶层数据块（即字典中的键值对或列表中的值）
 
 比如， `Data/Objects` 中， `"MossSoup": { ...}` 和 `"PetLicense": { ... }`是两个独立的条目：
