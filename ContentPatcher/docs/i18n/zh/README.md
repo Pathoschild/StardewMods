@@ -89,7 +89,7 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
   <td><code>Controls</code></td>
   <td>
 
-配置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)).
+配置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)）.
 默认绑定为：
 
 * `F3`显示[调试模式](author-guide/troubleshooting.md#debug-mode) (需启用调试功能);
