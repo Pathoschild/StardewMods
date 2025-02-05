@@ -4,55 +4,53 @@ This document helps mod authors create a content pack for Content Patcher.
 
 **See the [main README](README.md) for other info**.
 
-## Contents
-* [Introduction](#introduction)
-  * [What is Content Patcher?](#what-is-content-patcher)
-  * [What does a content pack look like?](#what-does-a-content-pack-look-like)
-  * [What is an asset?](#what-is-an-asset)
-* [Get started](#get-started)
-  * [Create the content pack](#create-the-content-pack)
-  * [Format version](#format-version)
-  * [Changes](#changes)
-* [Features](#features)
-  * [Actions](#actions)
-  * [Custom locations](#custom-locations)
-  * [Tokens & conditions](#tokens)
-  * [Player config](#player-config)
-  * [Translations](#translations)
-  * [Text operations](#text-operations)
-  * [Trigger actions](#trigger-actions)
-* [Troubleshoot](#troubleshoot)
-* [FAQs](#faqs)
-  * [How often are patch changes applied?](#update-rate)
-  * [Are Content Patcher updates backwards-compatible?](#are-content-patcher-updates-backwards-compatible)
-  * [How do I change assets in another language?](#how-do-i-change-assets-in-another-language)
-  * [How do multiple patches interact?](#how-do-multiple-patches-interact)
-  * [Known limitations](#known-limitations)
-* [See also](#see-also)
+## 内容
+* [介绍](#介绍)
+  * [什么是Content Patcher？](#what-cp-is)
+  * [内容包长什么样？](#what-pack-is)
+  * [什么是数据资产？](#what-asset-is)
+* [开始](#开始)
+  * [创建内容包](#创建内容包)
+  * [格式版本](#格式版本)
+  * [更改](#更改)
+* [特征](#特征)
+  * [操作](#操作)
+  * [自定义地点](#自定义地点)
+  * [Tokens和条件](#tokens)
+  * [玩家设置](#玩家设置)
+  * [翻译](#翻译)
+  * [文本操作](#文本操作)
+  * [触发动作](#触发动作)
+* [故障排除](#故障排除)
+* [常见问题](#常见问题)
+  * [多久应用一次补丁更改？](#when-to-change)
+  * [Content Patcher更新是否与旧版本兼容？](#compatibility)
+  * [如何更改另一种语言的资产？](#change-language)
+  * [多个补丁如何交互？](#how-interact)
+  * [已知限制](#已知限制)
+* [另见](#另见)
 
-## Introduction
-### What is Content Patcher?
-Content Patcher lets you change the game content using only JSON files. JSON is just a text format,
-so no programming experience is needed.
+## 介绍<a name="what-cp-is"></a>
+### 什么是Content Patcher？
+Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一种文本格式，
+因此不需要学会编程也能使用。
 
-You can make a wide range of changes to the game:
+你可以对游戏进行各种修改：
 
-* change images, dialogue, maps, etc;
-* add custom items, fruit trees, locations, etc;
-* change shop inventory;
-* and much more.
+* 更改图像、对话、地图等；
+* 添加自定义项目、果树、地点等；
+* 改变商店库存；
+* 还有很多其他的修改。
 
-You can also make very dynamic changes to the game. For example, raise the price of coffee on
-winter weekend evenings when it's snowing unless the player married Abigail.
+您还可以对游戏进行动态调整。例如，除非玩家娶了阿比盖尔，否则冬天的周末晚上都会下雪。
 
-The [modding documentation on the wiki](https://stardewvalleywiki.com/Modding:Index#Advanced_topics)
-is often written for Content Patcher pack authors, so you can find many specific examples there.
+[维基上的修改文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)是 Content Patcher 的作者编写的，所以你可以在那里找到很多例子。
 
-### What does a content pack look like?
-A content pack is just a folder with two text files in it: `manifest.json` (which has info like
-your mod name) and `content.json` (which tells Content Patcher what you want to change). Your
-folder might also have images or other files, which are usually in an `assets` subfolder by
-convention:
+<a name="what-pack-is"></a>
+
+### 内容包长什么样？
+内容包只是一个文件夹，其中包含两个文本文件： `manifest.json` （里面有很多信息，比如你的模组名）和 `content.json` （里面写着你要修改的内容）。你的
+文件夹中还可能有图像或其他文件，这些文件通常被放在 `assets` 子文件夹中。
 ```
 📁 Mods/
    📁 [CP] YourModName/
@@ -77,8 +75,8 @@ For example, here's a `content.json` which replaces Abigail's portraits with you
 }
 ```
 
-You can do _much_ more with Content Patcher using features like actions, tokens, conditions, and
-more. This guide goes into more detail below.
+通过使用动作、令牌、条件等功能，您可以使用 Content Patcher 做 _更多_ 的事。本文档将在接下来一一介绍：
+<a name="what-asset-is"></a>
 
 ### What is an asset?
 An _asset_ is an image, data model, or map which the game loads from its `Content` folder (or from
@@ -312,23 +310,21 @@ See the [`Action: Include` documentation](author-guide/action-include.md) for mo
 </tr>
 </table>
 
-### Custom locations
-The `CustomLocations` feature lets you add new in-game locations, complete with their own maps and
-warps. Content Patcher automatically handles NPC pathfinding, object persistence, etc.
+### 自定义地点
+`CustomLocations`可让你添加新的游戏地点，并为其配备自己的地图和传送点。 Content Patcher 会自动处理NPC寻路，对象持续时间等问题。
 
-See the [custom location documentation](author-guide/custom-locations.md) for more info.
+详见[自定义地点指南](author-guide/custom-locations.md)。
+<a name="tokens"></a>
 
-### Tokens & conditions<span id="tokens"></span><span id="conditions"></span>
-The previous sections explain how to make static changes, but you can use tokens & conditions to
-make _dynamic_ changes.
+### Tokens和条件
+前面的章节介绍了如何进行静态更改，但你也可以使用tokens和条件来进行 _动态_ 更改。
 
-For example, you can...
-* change patches based on wide range of factors like the season, answered dialogue questions,
-  in-game progress, etc.
-* use randomization, arithmetic, and dynamic queries;
-* and more.
+例如，你可以——
+* 根据季节、回答的对话问题等多种因素更换补丁、游戏进度等。
+* 使用随机、算术和动态查询；
+* 还有更多别的动态更改。
 
-For example, this gives Abigail a different portrait for each season:
+例如，这让阿比盖尔在每个季节都有不同的肖像：
 
 ```js
 {
@@ -447,13 +443,14 @@ cases like updating pre-existing saves for renamed content IDs.
 
 See [Content Patcher's trigger action documentation](author-guide/trigger-actions.md) for more info.
 
-## Troubleshoot
-See the [troubleshooting guide](author-guide/troubleshooting.md) for more info.
+## 故障排除
+详见[故障排除指南](author-guide/troubleshooting.md)。
 
-## FAQs
-## How often are patch changes applied?<span id="update-rate"></span>
-Your patches are **applied to data assets** every time the asset is loaded, but they **update their
-fields** when the day starts by default. For example, let's say you have this patch:
+## 常见问题
+<a name="when-to-change"></a>
+
+### 多久应用一次补丁更改？
+每次加载数据资产时，你的补丁都会**应用数据资产**，但它们会通过不同的条件**更新字段**。例如，假设你有这样一个补丁：
 ```js
 {
     "Action": "EditMap",
@@ -489,8 +486,12 @@ For example, this will update and reapply the patch when the in-game time change
 }
 ```
 
-### Are Content Patcher updates backwards-compatible?
-Yep. See the [author migration guide](author-migration-guide.md) for more info.
+<a name="compatibility"></a>
+
+### Content Patcher更新是否与旧版本兼容？
+兼容。详见[作者迁移指南](author-migration-guide.md)。
+
+<a name="change-language"></a>
 
 ### How do I change assets in another language?
 **Your patches affect every language by default.**
@@ -538,14 +539,15 @@ translation exists:
 },
 ```
 
-### How do multiple patches interact?
-Any number of patches can be applied to the same file. `Action: Load` always happens before other
-action types, but otherwise each patch is applied sequentially. After each patch is done, the next
-patch will see the combined asset as the input.
+<a name="how-interact"></a>
 
-Within one content pack, patches are applied in the order they're listed in `content.json`. When
-you have multiple content packs, each one is applied in the order they're loaded by SMAPI; if you
-need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
+### 多个补丁如何交互？
+同一文件可使用任意数量的补丁。`Action: Load`总是先于其他操作。
+但除此之外，每个补丁都是按顺序应用的。每个补丁完成后，下一个
+补丁会把修改过的数据资产合并并输入。
+
+在一个内容包内，补丁会按照在`content.json`中列出的顺序应用。 
+如果你有多个内容包，每个内容包都会按照 SMAPI 加载的顺序应用；如果你需要依赖另一个内容包，请参阅[manifest中的依赖](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Integrations).
 
 ### Known limitations
 Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
