@@ -17,7 +17,7 @@
 * [目标字段](#target-field)
   * [格式](#format)
   * [示例](#examples)
-* [另见](#see-also)
+* [参见](#see-also)
 
 ## 基本概念<a name="basic-concepts"></a>
 游戏中有许多类型的数据，Content Patcher将其转化成一些常用概念。

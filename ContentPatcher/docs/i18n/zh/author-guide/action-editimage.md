@@ -3,9 +3,9 @@
 一个含有 **`"Action": "EditImage"`** 的补丁会更改游戏已加载的图像的一部分。任意数量的内容包都可以编辑同一资产。你可以用补丁向下延伸图像（Content Patcher将扩展图像以适应新图像）。
 
 ## 目录<a name="contents"></a>
-* [使用](#usage)
+* [用法](#usage)
   * [格式](#format)
-  * [例子](#examples)
+  * [示例](#examples)
 * [参见](#see-also)
 
 ## 使用<a name="usage"></a>
@@ -81,7 +81,7 @@
 </dd>
 </dl>
 
-### 例子<a name="examples"></a>
+### 示例<a name="examples"></a>
 
 这个例子改变某一物品的图标
 
