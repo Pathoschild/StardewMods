@@ -54,6 +54,18 @@ internal class PatchLoader
         nameof(ConditionType.TargetWithoutPath)
     );
 
+    private readonly Dictionary<string, xTile.Map> RawMapCache = [];
+
+    internal xTile.Map? TryGetMapCache(string filename)
+    {        
+        this.RawMapCache.TryGetValue(filename, out var map);
+        return map;
+    }
+    internal void PopulateMapCache(string filename, xTile.Map map)
+    {
+        this.RawMapCache.TryAdd(filename, map);
+    }
+    // TODO: Add clear function for Reload command
 
     /*********
     ** Public methods
@@ -817,7 +829,9 @@ internal class PatchLoader
                             migrator: rawContentPack.Migrator,
                             parentPatch: parentPatch,
                             monitor: this.Monitor,
-                            parseAssetName: this.ParseAssetName
+                            parseAssetName: this.ParseAssetName,
+                            populateMapCache: this.PopulateMapCache,
+                            tryGetMapCache: this.TryGetMapCache
                         );
                     }
                     break;
