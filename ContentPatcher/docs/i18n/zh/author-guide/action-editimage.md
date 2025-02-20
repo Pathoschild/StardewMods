@@ -11,7 +11,7 @@
 ## 使用<a name="usage"></a>
 ### 格式<a name="format"></a>
 
-一个`EditImage`补丁是`Changes`里含有此字段的模型 ([下文有例子](#examples))
+一个`EditImage`补丁是`Changes`下含有此字段的模型 ([下文有例子](#examples))
 
 <dl>
 <dt>必填字段：</dt>
@@ -20,7 +20,8 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`EditImage`。
-`Target`  | 需编辑的[游戏资产名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的资产名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。`FromFile` | 内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/dinosaur.png`），或多个逗号分隔的路径。这可以是`.png`或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏资产名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的资产名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`FromFile` | 内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/dinosaur.png`），或多个逗号分隔的路径。这可以是`.png`或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
 </dd>
 <dt>可选字段：</dt>
@@ -28,8 +29,8 @@
 
 字段         | 用途
 ----------- | -------
-`FromArea`  | <p>源图片中需拷贝到目标的部分，默认整个图片</p><p>此字段是一个对象，含有左上角点的X和Y像素坐标，和区域的像素大小，长（Width）与高（Height）。该对象的字段支持[tokens](../author-guide.md#tokens)。</p>
-`ToArea`    | <p>目标图片中要替换的部分。默认大小与 `FromArea` 相同，位于贴图的左上角。</p><p>此字段是一个对象，含有左上角点的X和Y像素坐标，和区域的像素大小，长（Width）与高（Height）。该对象的字段支持[tokens](../author-guide.md#tokens)。</p><p>如果你指定的区域超出了图像的底部，Content Patcher将自动调整图像大小以适应新图像。</p>
+`FromArea`  | <p>源图片中需拷贝到目标的部分，默认整个源图片</p><p>此字段是一个对象，含有左上角点的X和Y像素坐标，和区域的像素大小，长（Width）与高（Height）。该对象的字段支持[tokens](../author-guide.md#tokens)。</p>
+`ToArea`    | <p>目标图片中要替换的部分。默认大小与 `FromArea` 相同，位于贴图的左上角。</p><p>此字段是一个含有左上角点的X和Y像素坐标区域的长（Width）与高（Height）的对象。该对象的字段支持[tokens](../author-guide.md#tokens)。</p><p>如果你指定的区域超出了图像的底部，Content Patcher将自动调整图像大小以适应新图像。</p>
 `PatchMode` | <p>如何将 `FromArea` 应用于 `ToArea`。默认为 `Replace`。</p> 可使用的值: <ul><li><code>Replace</code>: 用源图像替换目标区域中的每个像素。如果源图像有透明像素，则目标图像将在那里变为透明。</li><li><code>Overlay</code>: 在目标区域上绘制源图像。如果源图像有透明或半透明像素，则目标图像将“显示”这些像素。不透明像素将替换目标像素。</li></ul>例如，假设你的源图像是具有透明背景的河豚，而目标图像是实心绿色正方形。 以下是它们在不同`PatchMode`下的组合：<br />![](../screenshots/patch-mode-examples.png)
 `When`      | _(可选)_ 使此补丁只有在指定[条件](../author-guide.md#conditions)下生效.
 `LogName`   | _(可选)_ 此补丁在日志里显示的名字，有助于理解报错。默认为类似`EditImage Animals/Dinosaur`的名字。
