@@ -9,11 +9,6 @@ namespace Pathoschild.Stardew.DataLayers;
 /// <summary>The API which lets other mods interact with Data Layers.</summary>
 public interface IDataLayersApi
 {
-    /// <summary>Register or override layer color schemes.</summary>
-    /// <param name="schemeData">The color scheme data, in the form color scheme ID → color name → color values.</param>
-    /// <param name="assetName">The name of the asset from which the data was loaded. This is only used to log errors and doesn't affect behavior.</param>
-    void RegisterColorSchemes(Dictionary<string, Dictionary<string, string?>> schemeData, string assetName);
-
     /// <summary>Register a data layer.</summary>
     /// <param name="id">A unique ID for the layer. This only needs to be unique within the layers added by the mod using this API, since the mod ID will be prefixed automatically.</param>
     /// <param name="name">The translated layer name to show in-game.</param>

@@ -13,43 +13,72 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The SMAPI API to read local mod assets.</summary>
+        private readonly IDataHelper DataHelper;
+
         /// <summary>The monitor with which to log error messages.</summary>
         private readonly IMonitor Monitor;
 
         /// <summary>The color schemes available to apply.</summary>
-        private readonly Dictionary<string, ColorScheme> Schemes = new(StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, ColorScheme>? Schemes;
 
 
         /*********
         ** Accessors
         *********/
         /// <summary>The collection of all available scheme IDs.</summary>
-        public IEnumerable<string> SchemeIds => this.Schemes.Keys;
+        public IEnumerable<string> SchemeIds
+        {
+            get
+            {
+                this.InitializeIfNeeded();
+                return this.Schemes.Keys;
+            }
+        }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="dataHelper">The SMAPI API to read local mod assets.</param>
         /// <param name="monitor">The monitor with which to log error messages.</param>
-        public ColorRegistry(IMonitor monitor)
+        public ColorRegistry(IDataHelper dataHelper, IMonitor monitor)
         {
+            this.DataHelper = dataHelper;
             this.Monitor = monitor;
         }
 
-        /// <summary>Load the default color schemes from mod assets.</summary>
-        /// <param name="dataHelper">The SMAPI API to read local mod assets.</param>
-        public void LoadDefaultSchemes(IDataHelper dataHelper)
+        /// <summary>Try to get a color scheme by its ID.</summary>
+        /// <param name="schemeId">The scheme ID.</param>
+        /// <param name="scheme">The matching color scheme, or <c>null</c> if not found.</param>
+        /// <returns>Returns whether a scheme was found.</returns>
+        public bool TryGetScheme(string schemeId, [MaybeNullWhen(false)] out ColorScheme scheme)
         {
-            var rawData = dataHelper.ReadJsonFile<Dictionary<string, Dictionary<string, string?>>>(ColorScheme.AssetName);
-            this.LoadSchemes(rawData);
+            this.InitializeIfNeeded();
+
+            return this.Schemes.TryGetValue(schemeId, out scheme);
         }
 
-        /// <summary>Load color schemes from an alternate source, generally another mod via the API.</summary>
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Load the default color schemes from mod assets.</summary>
+        [MemberNotNull(nameof(ColorRegistry.Schemes))]
+        private void InitializeIfNeeded()
+        {
+            var rawData = this.DataHelper.ReadJsonFile<Dictionary<string, Dictionary<string, string?>>>(ColorScheme.AssetName);
+            this.Schemes = this.ParseSchemes(rawData);
+        }
+
+        /// <summary>Parse color schemes from raw data.</summary>
         /// <param name="schemeData">Raw dictionary data from the color scheme JSON. Each entry is a pair whose key is the scheme ID and whose value is a map of color names to color values for that scheme.</param>
         /// <param name="assetName">Name of the asset used to load the data, if not the default asset. Only used for logging errors and does not affect behavior.</param>
-        public void LoadSchemes(Dictionary<string, Dictionary<string, string?>>? schemeData, string? assetName = null)
+        private Dictionary<string, ColorScheme> ParseSchemes(Dictionary<string, Dictionary<string, string?>>? schemeData, string? assetName = null)
         {
+            var schemes = new Dictionary<string, ColorScheme>();
+
             schemeData = schemeData is not null
                 ? new(schemeData, StringComparer.OrdinalIgnoreCase)
                 : new(StringComparer.OrdinalIgnoreCase);
@@ -70,20 +99,11 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
                     colors[name] = color.Value;
                 }
-                if (this.Schemes.TryGetValue(schemeId, out var registeredColors))
-                    registeredColors.Merge(colors);
-                else
-                    this.Schemes[schemeId] = new ColorScheme(schemeId, colors, this.Monitor);
-            }
-        }
 
-        /// <summary>Try to get a color scheme by its ID.</summary>
-        /// <param name="schemeId">The scheme ID.</param>
-        /// <param name="scheme">The matching color scheme, or <c>null</c> if not found.</param>
-        /// <returns>Returns whether a scheme was found.</returns>
-        public bool TryGetScheme(string schemeId, [MaybeNullWhen(false)] out ColorScheme scheme)
-        {
-            return this.Schemes.TryGetValue(schemeId, out scheme);
+                schemes[schemeId] = new ColorScheme(schemeId, colors, this.Monitor);
+            }
+
+            return schemes;
         }
     }
 }

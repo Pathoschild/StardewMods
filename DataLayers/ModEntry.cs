@@ -60,8 +60,7 @@ internal class ModEntry : Mod
         I18n.Init(helper.Translation);
 
         // load color scheme
-        this.ColorRegistry = new(this.Monitor);
-        this.ColorRegistry.LoadDefaultSchemes(helper.Data);
+        this.ColorRegistry = new(helper.Data, this.Monitor);
         this.Colors = this.LoadColorScheme();
 
         // init layers & API
@@ -83,7 +82,7 @@ internal class ModEntry : Mod
     /// <inheritdoc />
     public override object GetApi(IModInfo mod)
     {
-        return new Api(mod.Manifest.UniqueID, this.ColorRegistry, this.LayerRegistry);
+        return new Api(mod.Manifest.UniqueID, this.LayerRegistry);
     }
 
 
