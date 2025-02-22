@@ -21,6 +21,9 @@ internal class ModLayer : ILayer
     /// <summary>The configuration data for this layer.</summary>
     private readonly LayerConfig Config;
 
+    /// <summary>The current color scheme.</summary>
+    private readonly ColorScheme Colors;
+
     /// <summary>The legend entries by group ID.</summary>
     private LegendEntry[] LegendImpl = [];
 
@@ -67,10 +70,12 @@ internal class ModLayer : ILayer
     /// <summary>Construct an instance.</summary>
     /// <param name="layer"><inheritdoc cref="Layer" path="/summary" /></param>
     /// <param name="config"><inheritdoc cref="Config" path="/summary" /></param>
-    public ModLayer(ApiDataLayer layer, LayerConfig config)
+    /// <param name="colors"><inheritdoc cref="Colors" path="/summary" /></param>
+    public ModLayer(ApiDataLayer layer, LayerConfig config, ColorScheme colors)
     {
         this.Layer = layer;
         this.Config = config;
+        this.Colors = colors;
     }
 
     /// <inheritdoc />
@@ -110,8 +115,14 @@ internal class ModLayer : ILayer
             var tileGroups = new Dictionary<string, TileGroupData>(StringComparer.OrdinalIgnoreCase);
 
             this.Layer.GetTileGroups((id, name, overlayColor, borderColor) =>
-                tileGroups[id] = new TileGroupData(borderColor, new LegendEntry(id, name(), overlayColor))
-            );
+            {
+                Color overlayColorParsed = this.Colors.Get(this.Id, overlayColor);
+                Color? borderColorParsed = borderColor != null
+                    ? this.Colors.Get(this.Id, borderColor)
+                    : null;
+
+                tileGroups[id] = new TileGroupData(borderColorParsed, new LegendEntry(id, name(), overlayColorParsed));
+            });
 
             this.TileGroups = tileGroups;
             this.LegendImpl = tileGroups.Select(p => p.Value.LegendEntry).ToArray();

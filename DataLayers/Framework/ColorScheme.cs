@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Pathoschild.Stardew.DataLayers.Framework;
 
@@ -16,6 +16,14 @@ internal class ColorScheme
 
     /// <summary>The available colors.</summary>
     private readonly Dictionary<string, Color> Colors;
+
+    /// <summary>The names of generic colors that can be used by any layer.</summary>
+    private readonly Dictionary<string, Color> GenericColorDefaults = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Yes"] = Color.Green,
+        ["No"] = Color.Red,
+        ["Highlight"] = Color.Blue
+    };
 
     /// <summary>The monitor with which to log error messages.</summary>
     private readonly IMonitor Monitor;
@@ -42,19 +50,22 @@ internal class ColorScheme
     /// <param name="layerId">The unique ID for the layer getting colors.</param>
     /// <param name="colorName">The color name (without the layer prefix), like <c>Selected</c>.</param>
     /// <param name="defaultColor">The color to use if it's not in the color scheme.</param>
-    public Color Get(string layerId, string colorName, Color defaultColor)
+    public Color Get(string layerId, string colorName, Color? defaultColor = null)
     {
+        // get layer color
         string key = layerId + "_" + colorName;
+        if (this.Colors.TryGetValue(key, out Color color))
+            return color;
 
-        if (!this.Colors.TryGetValue(key, out Color color))
-        {
-            bool isDefaultScheme = ColorScheme.IsDefaultColorScheme(this.Id);
+        // get generic color
+        if (this.Colors.TryGetValue($"Generic_{colorName}", out color))
+            return color;
 
-            this.Monitor.LogOnce($"Layer '{layerId}' expected color '{key}'{(!isDefaultScheme ? $" in color scheme '{this.Id}'" : "")} in {ColorScheme.AssetName}, but it wasn't found. The default color will be used instead.", LogLevel.Warn);
-            color = defaultColor;
-        }
+        // get fallback color
+        bool isDefaultScheme = ColorScheme.IsDefaultColorScheme(this.Id);
+        this.Monitor.LogOnce($"Layer '{layerId}' expected color '{colorName}'{(!isDefaultScheme ? $" in color scheme '{this.Id}'" : "")} in {ColorScheme.AssetName}, but it wasn't found. The default color will be used instead.", LogLevel.Warn);
 
-        return color;
+        return defaultColor ?? this.GenericColorDefaults.GetValueOrDefault(colorName, Color.Red);
     }
 
     /// <summary>Get whether a color scheme ID is the default one.</summary>

@@ -29,9 +29,14 @@ public delegate void GetTileGroupsDelegate(AddTileGroupDelegate addGroup);
 /// <summary>Add a tile group.</summary>
 /// <param name="id">A unique ID for the tile type within this layer.</param>
 /// <param name="name">The translated tile group name to show in-game.</param>
-/// <param name="overlayColor">The overlay color for tiles of this type (unless overridden in the player's color scheme).</param>
-/// <param name="borderColor">The color for the tile group's outer borders, or <c>null</c> for no border.</param>
-public delegate void AddTileGroupDelegate(string id, Func<string> name, Color overlayColor, Color? borderColor = null);
+/// <param name="overlayColor">The overlay color for tiles of this type (unless overridden in the player's color scheme). This can be...
+///   <list type="bullet">
+///     <item>one of these semantic color names which can be configured by the player: <c>yes</c> (e.g. covered/ready/enabled), <c>no</c> (e.g. not covered/ready/enabled), or <c>highlight</c> (e.g. the range for a held object);</item>
+///     <item>or any color value recognized by <see cref="Utility.StringToColor"/>.</item>
+///   </list>
+/// </param>
+/// <param name="borderColor">The color for the tile group's outer borders (using the same format as <paramref name="overlayColor"/>), or <c>null</c> for no border.</param>
+public delegate void AddTileGroupDelegate(string id, Func<string> name, string overlayColor, string? borderColor = null);
 
 /// <summary>Get the tiles to show in the layer when it's drawn.</summary>
 /// <param name="location">The current location.</param>

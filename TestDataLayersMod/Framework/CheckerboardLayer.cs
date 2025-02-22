@@ -15,8 +15,8 @@ internal static class CheckerboardLayer
     /// <inheritdoc cref="GetTileGroupsDelegate" />
     public static void GetTileGroups(AddTileGroupDelegate addGroup)
     {
-        addGroup("even", name: I18n.Example_Layer_Even, overlayColor: Color.Green);
-        addGroup("odd", name: I18n.Example_Layer_Odd, overlayColor: Color.Red);
+        addGroup("even", name: I18n.Example_Layer_Even, overlayColor: "yes");
+        addGroup("odd", name: I18n.Example_Layer_Odd, overlayColor: "no");
     }
 
     /// <inheritdoc cref="UpdateTilesDelegate" />

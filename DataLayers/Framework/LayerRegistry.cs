@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 yield return new TillableLayer(layers.Tillable, colors);
 
             foreach (ApiDataLayer layer in this.CustomLayers.Values)
-                yield return new ModLayer(layer, config.GetModLayerConfig(layer.UniqueId));
+                yield return new ModLayer(layer, config.GetModLayerConfig(layer.UniqueId), colors);
 
             // add separate grid layer if grid isn't enabled for all layers
             if (!config.ShowGrid && layers.TileGrid.IsEnabled())
