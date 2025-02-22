@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags (条件 & 上下文标签)
     *********/
+    "conditions-summary": "[条件: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "非{{value}}",
 
     "condition.day-of-month": "每季指定日期 ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in (例如. 宝石复制机放入的物品和产出的物品一致)
-    "item.recipes-for-machine.conditions": "[条件: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "一些生产规则因太复杂而无法显示",
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
     "item.number-crafted.summary": "你已制造{{count}}个此物",

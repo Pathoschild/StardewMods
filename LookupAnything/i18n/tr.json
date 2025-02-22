@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[Şartlar: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "{{value}} değil",
 
     "condition.day-of-month": "ayın spesifik günlerde ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in 
-    "item.recipes-for-machine.conditions": "[Şartlar: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Bazı makinelerin işlevleri gösterilemeyecek kadar karmaşık",
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
     "item.number-crafted.summary": "bundan {{count}} tane yaptın",

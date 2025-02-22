@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "条件：{{conditions}}", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "（{{value}}以外の）",
 
     "condition.day-of-month": "on specific days ({{days}})", // TODO
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}}（{{count}}個必要）",
     "item.recipes-for-machine.multiple-items": "{{name}} ({{count}})",
     "item.recipes-for-machine.same-as-input": "原料と同じ", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "条件：{{conditions}}",
     "item.recipes-for-machine.too-complex": "情報が多すぎるため表示することができない",
     "item.number-owned.summary": "{{count}}個持っている",
     "item.number-crafted.summary": "{{count}}個作成した",

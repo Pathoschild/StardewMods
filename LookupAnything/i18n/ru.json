@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[условия: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "не {{value}}",
 
     "condition.day-of-month": "on specific days ({{days}})", // TODO
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in 
-    "item.recipes-for-machine.conditions": "[условия: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Функции некоторого оборудования слишком сложны для отображения.",
     "item.number-owned.summary": "У вас есть {{count}} шт.",
     "item.number-crafted.summary": "Вы создали {{count}} шт.",

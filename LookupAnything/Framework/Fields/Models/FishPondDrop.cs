@@ -29,7 +29,7 @@ internal record FishPondDrop : FishPondDropData
     /// <param name="sprite">The sprite icon to draw.</param>
     /// <param name="isUnlocked">Whether the item has been unlocked for the current fish pond.</param>
     public FishPondDrop(FishPondDropData data, Item sampleItem, SpriteInfo? sprite, bool isUnlocked)
-        : base(data.MinPopulation, data.ItemId, data.MinDrop, data.MaxDrop, data.Probability)
+        : base(data.MinPopulation, data.ItemId, data.MinDrop, data.MaxDrop, data.Probability, data.Conditions)
     {
         this.SampleItem = sampleItem;
         this.Sprite = sprite;

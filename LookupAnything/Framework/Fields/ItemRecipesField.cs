@@ -212,7 +212,7 @@ internal class ItemRecipesField : GenericField
 
                 // draw condition
                 if (entry.Conditions != null)
-                    curPos.Y += this.DrawIconText(spriteBatch, font, curPos with { X = curPos.X + this.IconSize + this.IconMargin }, absoluteWrapWidth, I18n.Item_RecipesForMachine_Conditions(conditions: entry.Conditions), textColor).Y;
+                    curPos.Y += this.DrawIconText(spriteBatch, font, curPos with { X = curPos.X + this.IconSize + this.IconMargin }, absoluteWrapWidth, I18n.ConditionsSummary(conditions: entry.Conditions), textColor).Y;
             }
 
             // draw number of unknown recipes

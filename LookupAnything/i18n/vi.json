@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[điều kiện: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "không phải {{value}}",
 
     "condition.day-of-month": "vào những ngày cụ thể ({{days}})",
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (cần {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[giống như đầu vào]",
-    "item.recipes-for-machine.conditions": "[điều kiện: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Một số quy tắc của máy quá phức tạp để hiển thị.",
     "item.number-owned.summary": "Bạn sở hữu {{count}} cái",
     "item.number-crafted.summary": "Bạn đã chế tạo {{count}} cái",

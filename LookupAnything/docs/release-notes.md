@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added map properties to tile lookup.
+* Added dynamic conditions to fish pond output list if any are specified.
 * Overhauled tile lookups so they're much easier to read and show more info.
 * Fixed overlapping text when displayed data contains explicit line breaks (e.g. some custom machine recipes).
 * Fixed lookup error with fish ponds when mods use the new output `RandomItemId` field.

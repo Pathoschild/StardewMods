@@ -157,7 +157,7 @@ internal class DataParser
             foreach (string itemId in itemIds)
             {
                 float chance = drop.Chance * (1f / itemIds.Length);
-                yield return new FishPondDropData(drop.RequiredPopulation, itemId, drop.MinStack, drop.MaxStack, chance);
+                yield return new FishPondDropData(drop.RequiredPopulation, itemId, drop.MinStack, drop.MaxStack, chance, drop.Condition);
             }
         }
     }

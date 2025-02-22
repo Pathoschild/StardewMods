@@ -10,6 +10,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.GameData.FishPonds;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -37,12 +38,13 @@ internal class FishPondDropsField : GenericField
     /// <param name="label">A short field label.</param>
     /// <param name="currentPopulation">The current population for showing unlocked drops.</param>
     /// <param name="data">The fish pond data.</param>
-    /// <param name="preface">>The text to display before the list, if any.</param>
-    public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, string preface)
+    /// <param name="fish">The fish in the fish pond, if any.</param>
+    /// <param name="preface">The text to display before the list, if any.</param>
+    public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, SObject? fish, string preface)
         : base(label)
     {
         this.GameHelper = gameHelper;
-        this.Drops = this.GetEntries(currentPopulation, data, gameHelper).ToArray();
+        this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
     }
@@ -112,16 +114,28 @@ internal class FishPondDropsField : GenericField
                 spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, Color.White * (disabled ? 0.5f : 1f));
 
                 // draw text
+                float textIndent = position.X + innerIndent + iconSize.X + 5;
                 string text = I18n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
                 if (drop.MinDrop != drop.MaxDrop)
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, new Vector2(textIndent, position.Y + height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
 
                 // cross out if it's guaranteed not to drop
                 if (isPrevDropGuaranteed)
                     spriteBatch.DrawLine(position.X + innerIndent + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), Color.Gray);
+
+                // draw conditions
+                if (drop.Conditions != null)
+                {
+                    string conditionText = I18n.ConditionsSummary(conditions: HumanReadableConditionParser.Format(drop.Conditions));
+                    height += textSize.Y + 5;
+                    textSize = spriteBatch.DrawTextBlock(font, conditionText, new Vector2(textIndent, position.Y + height + 5), wrapWidth);
+
+                    if (isPrevDropGuaranteed)
+                        spriteBatch.DrawLine(position.X + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), disabled ? Color.Gray : Color.Black);
+                }
 
                 height += textSize.Y + 5;
             }
@@ -142,16 +156,79 @@ internal class FishPondDropsField : GenericField
     /// <summary>Get a fish pond's possible drops by population.</summary>
     /// <param name="currentPopulation">The current population for showing unlocked drops.</param>
     /// <param name="data">The fish pond data.</param>
+    /// <param name="fish">The fish in the fish pond, if any.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
-    private IEnumerable<FishPondDrop> GetEntries(int currentPopulation, FishPondData data, GameHelper gameHelper)
+    private IEnumerable<FishPondDrop> GetEntries(int currentPopulation, FishPondData data, SObject? fish, GameHelper gameHelper)
     {
-        foreach (FishPondDropData drop in gameHelper.GetFishPondDrops(data))
+        foreach (FishPondDropData rawDrop in gameHelper.GetFishPondDrops(data))
         {
+            // filter conditions
+            FishPondDropData drop = rawDrop;
+            if (fish != null && drop.Conditions != null)
+            {
+                string? conditions = drop.Conditions;
+                if (!this.FilterConditions(fish, ref conditions))
+                    continue; // can never match for this fish
+
+                if (conditions != drop.Conditions)
+                    drop = new FishPondDropData(drop.MinPopulation, drop.ItemId, drop.MinDrop, drop.MaxDrop, drop.Probability, conditions);
+            }
+
+            // build drop record
             bool isUnlocked = currentPopulation >= drop.MinPopulation;
             Item item = ItemRegistry.Create(drop.ItemId);
             SpriteInfo? sprite = gameHelper.GetSprite(item);
             yield return new FishPondDrop(drop, item, sprite, isUnlocked);
         }
+    }
+
+    /// <summary>Get whether the given conditions can ever be true for a fish, and remove immutably true conditions from the query.</summary>
+    /// <param name="fish">The fish for which to filter conditions.</param>
+    /// <param name="gameStateQuery">The game state query to filter.</param>
+    /// <returns>Returns whether the game state query can ever be true.</returns>
+    private bool FilterConditions(SObject fish, ref string? gameStateQuery)
+    {
+        // immutable query
+        if (GameStateQuery.IsImmutablyTrue(gameStateQuery))
+        {
+            gameStateQuery = null;
+            return true;
+        }
+        if (GameStateQuery.IsImmutablyFalse(gameStateQuery))
+            return false;
+
+        // filter conditions in query
+        List<string> conditions = [.. GameStateQuery.SplitRaw(gameStateQuery)];
+        int prevCount = conditions.Count;
+        for (int i = conditions.Count - 1; i >= 0; i--)
+        {
+            GameStateQuery.ParsedGameStateQuery[] parsed = GameStateQuery.Parse(conditions[i]);
+            if (parsed.Length != 1)
+                continue;
+
+            switch (parsed[0].Query[0].ToUpperInvariant())
+            {
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_CATEGORY):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_HAS_EXPLICIT_OBJECT_CATEGORY):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_ID):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_ID_PREFIX):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_NUMERIC_ID):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_OBJECT_TYPE):
+                case nameof(GameStateQuery.DefaultResolvers.ITEM_TYPE):
+                    if (!GameStateQuery.CheckConditions(conditions[i], inputItem: fish))
+                        return false;
+
+                    conditions.RemoveAt(i);
+                    break;
+            }
+        }
+
+        if (conditions.Count == 0)
+            gameStateQuery = null;
+        else if (conditions.Count != prevCount)
+            gameStateQuery = string.Join(", ", conditions);
+
+        return true;
     }
 }

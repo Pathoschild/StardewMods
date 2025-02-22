@@ -325,7 +325,7 @@ internal class ItemSubject : BaseSubject
                 int minChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, 1 / 10f) * 100);
                 int maxChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, FishPond.MAXIMUM_OCCUPANCY / 10f) * 100);
                 string preface = I18n.Building_FishPond_Drops_Preface(chance: I18n.Generic_Range(min: minChanceOfAnyDrop, max: maxChanceOfAnyDrop));
-                yield return new FishPondDropsField(this.GameHelper, I18n.Item_FishPondDrops(), -1, fishPondData, preface);
+                yield return new FishPondDropsField(this.GameHelper, I18n.Item_FishPondDrops(), -1, fishPondData, obj, preface);
             }
         }
 
