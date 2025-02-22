@@ -27,7 +27,8 @@ public class ModEntry : Mod
     [EventPriority(EventPriority.Normal - 1)]
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
-        var dataLayers = this.Helper.ModRegistry.GetApi<IDataLayersApi>("Pathoschild.DataLayers")!;
-        dataLayers.RegisterLayer(this.ModManifest, "checkerboard", new CheckerboardLayer());
+        this.Helper.ModRegistry
+            .GetApi<IDataLayersApi>("Pathoschild.DataLayers")
+            ?.RegisterLayer("checkerboard", I18n.Example_Layer_Title, CheckerboardLayer.GetTileGroups, CheckerboardLayer.UpdateTiles);
     }
 }

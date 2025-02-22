@@ -18,9 +18,6 @@ internal class ModEntry : Mod
     /*********
     ** Fields
     *********/
-    /// <summary>The API for other mods to register their own layers.</summary>
-    private Api Api = null!; // set in Entry
-
     /// <summary>The mod configuration.</summary>
     private ModConfig Config = null!; // set in Entry
 
@@ -68,8 +65,7 @@ internal class ModEntry : Mod
         this.Colors = this.LoadColorScheme();
 
         // init layers & API
-        this.LayerRegistry = new(() => this.Colors, () => this.Config, () => this.Mods, this.Monitor);
-        this.Api = new(this.ColorRegistry, this.LayerRegistry);
+        this.LayerRegistry = new(() => this.Colors, () => this.Config, () => this.Mods);
 
         // hook up events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunchedNormalPriority;
@@ -85,9 +81,9 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc />
-    public override object GetApi()
+    public override object GetApi(IModInfo mod)
     {
-        return this.Api;
+        return new Api(mod.Manifest.UniqueID, this.ColorRegistry, this.LayerRegistry);
     }
 
 

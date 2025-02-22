@@ -99,11 +99,11 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
             this.GetBuiltInSection(config => config.Layers.Tillable, "tillable"),
         ];
 
-        foreach (LayerRegistration layer in this.LayerRegistry.GetCustomLayerData())
+        foreach (ApiDataLayer layer in this.LayerRegistry.GetCustomLayerData())
         {
             configSections.Add(new LayerConfigSection(
                 GetLayer: config => config.GetModLayerConfig(layer.UniqueId),
-                GetTitle: () => I18n.GetByKey("config.section.layer", new { LayerName = layer.Layer.Name })
+                GetTitle: () => I18n.Config_Section_Layer(LayerName: new { LayerName = layer.Name() })
             ));
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers;
 using StardewValley;
@@ -6,37 +7,34 @@ using StardewValley;
 namespace Pathoschild.Stardew.TestDataLayersMod.Framework;
 
 /// <summary>A data layer which shows a checkerboard tile pattern.</summary>
-internal class CheckerboardLayer : IDataLayer
+internal static class CheckerboardLayer
 {
-    /*********
-    ** Accessors
-    *********/
-    /// <inheritdoc />
-    public string Name => I18n.Example_Layer_Title();
-
-
     /*********
     ** Public methods
     *********/
-    /// <inheritdoc />
-    public void Configure(ILegendBuilder legendBuilder)
+    /// <inheritdoc cref="GetTileGroupsDelegate" />
+    public static void GetTileGroups(AddTileGroupDelegate addGroup)
     {
-        legendBuilder
-            .Add("example.layer.even", I18n.Example_Layer_Even(), Color.Green)
-            .Add("example.layer.odd", I18n.Example_Layer_Odd(), Color.Red);
+        addGroup("even", name: I18n.Example_Layer_Even, overlayColor: Color.Green);
+        addGroup("odd", name: I18n.Example_Layer_Odd, overlayColor: Color.Red);
     }
 
-    /// <inheritdoc />
-    public void Update(ILayerBuilder builder, GameLocation location, Rectangle visibleArea, IReadOnlySet<Vector2> visibleTiles, Vector2 cursorTile)
+    /// <inheritdoc cref="UpdateTilesDelegate" />
+    public static ILookup<string, Vector2> UpdateTiles(GameLocation location, Rectangle visibleArea, IReadOnlySet<Vector2> visibleTiles, Vector2 cursorTile)
     {
-        builder.AddTileGroup(
-            "",
-            group => group.AddTiles(
-                visibleTiles,
-                coords => coords.X % 2 == 0 ^ coords.Y % 2 == 0
-                    ? "example.layer.even"
-                    : "example.layer.odd"
-            )
-        );
+        return visibleTiles.ToLookup(CheckerboardLayer.GetLayerId);
+    }
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Get the layer ID for a tile position.</summary>
+    /// <param name="tile">The tile position.</param>
+    private static string GetLayerId(Vector2 tile)
+    {
+        return tile.X % 2 == 0 ^ tile.Y % 2 == 0
+            ? "even"
+            : "odd";
     }
 }

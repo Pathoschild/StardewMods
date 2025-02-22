@@ -5,7 +5,6 @@ using System.Linq;
 using Pathoschild.Stardew.DataLayers.Layers;
 using Pathoschild.Stardew.DataLayers.Layers.Coverage;
 using Pathoschild.Stardew.DataLayers.Layers.Crops;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
@@ -25,14 +24,11 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly Func<ModIntegrations?> Mods;
 
-        /// <summary>Encapsulates monitoring and logging.</summary>
-        private readonly IMonitor Monitor;
-
         /// <summary>The cached data layers.</summary>
         private ILayer[]? Layers;
 
         /// <summary>The data layers registered through the API.</summary>
-        private readonly Dictionary<string, LayerRegistration> CustomLayers = [];
+        private readonly Dictionary<string, ApiDataLayer> CustomLayers = [];
 
         /// <summary>Maps key bindings to the layers they should activate.</summary>
         private readonly IDictionary<KeybindList, ILayer> ShortcutMap = new Dictionary<KeybindList, ILayer>();
@@ -52,13 +48,11 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="colorScheme">The color scheme.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        internal LayerRegistry(Func<ColorScheme> colorScheme, Func<ModConfig> config, Func<ModIntegrations?> mods, IMonitor monitor)
+        internal LayerRegistry(Func<ColorScheme> colorScheme, Func<ModConfig> config, Func<ModIntegrations?> mods)
         {
             this.ColorScheme = colorScheme;
             this.Config = config;
             this.Mods = mods;
-            this.Monitor = monitor;
         }
 
         /// <summary>Get the layers which should be available in-game.</summary>
@@ -71,7 +65,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>Get the data for custom layers registered through the API.</summary>
         /// <remarks>To get the resulting data layers, call <see cref="GetLayers"/> instead.</remarks>
-        public IEnumerable<LayerRegistration> GetCustomLayerData()
+        public IEnumerable<ApiDataLayer> GetCustomLayerData()
         {
             return this.CustomLayers.Values;
         }
@@ -101,7 +95,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>Register or overwrite a layer registered through the mod API.</summary>
         /// <param name="layer">The layer data to register.</param>
-        public void RegisterCustomLayer(LayerRegistration layer)
+        public void RegisterCustomLayer(ApiDataLayer layer)
         {
             this.CustomLayers[layer.UniqueId] = layer;
             this.ResetCache();
@@ -171,8 +165,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             if (layers.Tillable.IsEnabled())
                 yield return new TillableLayer(layers.Tillable, colors);
 
-            foreach (LayerRegistration layer in this.CustomLayers.Values)
-                yield return new ModLayer(layer, config.GetModLayerConfig(layer.UniqueId), colors, this.Monitor);
+            foreach (ApiDataLayer layer in this.CustomLayers.Values)
+                yield return new ModLayer(layer, config.GetModLayerConfig(layer.UniqueId));
 
             // add separate grid layer if grid isn't enabled for all layers
             if (!config.ShowGrid && layers.TileGrid.IsEnabled())

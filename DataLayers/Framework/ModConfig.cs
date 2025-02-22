@@ -45,7 +45,7 @@ internal class ModConfig
     }
 
     /// <summary>Get the configuration for a layer registered through the API, creating one if it doesn't already exist.</summary>
-    /// <param name="id">The unique ID for the layer matching <see cref="LayerRegistration.UniqueId"/>.</param>
+    /// <param name="id">The unique ID for the layer matching <see cref="ApiDataLayer.UniqueId"/>.</param>
     /// <returns>The configuration to use for the layer.</returns>
     public LayerConfig GetModLayerConfig(string id)
     {
