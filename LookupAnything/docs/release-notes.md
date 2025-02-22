@@ -5,6 +5,7 @@
 * Added map properties to tile lookup.
 * Overhauled tile lookups so they're much easier to read and show more info.
 * Fixed overlapping text when displayed data contains explicit line breaks (e.g. some custom machine recipes).
+* Fixed lookup error with fish ponds when mods use the new output `RandomItemId` field.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.48.1
