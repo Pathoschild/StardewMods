@@ -4,7 +4,7 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.DataLayers.Framework;
 
 /// <inheritdoc cref="IDataLayersApi" />
-public class Api : IDataLayersApi, ILayerRegistry
+public class Api : IDataLayersApi
 {
     /*********
     ** Fields
@@ -12,11 +12,8 @@ public class Api : IDataLayersApi, ILayerRegistry
     /// <summary>Manages available color schemes and colors.</summary>
     private readonly ColorRegistry ColorRegistry;
 
-    /// <summary>Encapsulates monitoring and logging.</summary>
-    private readonly IMonitor Monitor;
-
-    /// <summary>The data layers registered through the API.</summary>
-    private readonly Dictionary<string, LayerRegistration> Registrations = [];
+    /// <summary>Manages the data layers that should be available in-game.</summary>
+    private readonly LayerRegistry LayerRegistry;
 
 
     /*********
@@ -24,17 +21,11 @@ public class Api : IDataLayersApi, ILayerRegistry
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="colorRegistry">Manages available color schemes and colors.</param>
-    /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    internal Api(ColorRegistry colorRegistry, IMonitor monitor)
+    /// <param name="layerRegistry">Manages the data layers that should be available in-game.</param>
+    internal Api(ColorRegistry colorRegistry, LayerRegistry layerRegistry)
     {
         this.ColorRegistry = colorRegistry;
-        this.Monitor = monitor;
-    }
-
-    /// <inheritdoc />
-    IEnumerable<LayerRegistration> ILayerRegistry.GetAllRegistrations() // explicit interface implementation to avoid needing to make `ILayerRegistry` public and have Pintail try to pick it up
-    {
-        return this.Registrations.Values;
+        this.LayerRegistry = layerRegistry;
     }
 
     /// <inheritdoc />
@@ -46,10 +37,9 @@ public class Api : IDataLayersApi, ILayerRegistry
     /// <inheritdoc />
     public void RegisterLayer(IManifest mod, string id, IDataLayer layer)
     {
-        string globalId = $"{mod.UniqueID}:{id}";
-        var registration = new LayerRegistration(globalId, id, layer);
+        string globalId = $"{mod.UniqueID}_{id}";
+        var layerData = new LayerRegistration(globalId, id, layer);
 
-        if (!this.Registrations.TryAdd(globalId, registration))
-            this.Monitor.Log($"Couldn't register layer with ID '{id}' for mod '{mod.UniqueID}' because the mod already has another layer with the same ID.", LogLevel.Error);
+        this.LayerRegistry.RegisterCustomLayer(layerData);
     }
 }

@@ -18,17 +18,17 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
     /// <summary>The color registry which manages available schemes and colors.</summary>
     private readonly ColorRegistry ColorRegistry;
 
-    /// <summary>The layers registered by other mods.</summary>
-    private readonly ILayerRegistry LayerRegistry;
+    /// <summary>Manages the data layers that should be available in-game.</summary>
+    private readonly LayerRegistry LayerRegistry;
 
 
     /*********
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
-    /// <param name="layerRegistry">The layers registered by other mods.</param>
+    /// <param name="layerRegistry">Manages the data layers that should be available in-game.</param>
     /// <param name="colorRegistry">The color registry which manages available schemes and colors.</param>
-    public GenericModConfigMenuIntegrationForDataLayers(ILayerRegistry layerRegistry, ColorRegistry colorRegistry)
+    public GenericModConfigMenuIntegrationForDataLayers(LayerRegistry layerRegistry, ColorRegistry colorRegistry)
     {
         this.LayerRegistry = layerRegistry;
         this.ColorRegistry = colorRegistry;
@@ -99,7 +99,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
             this.GetBuiltInSection(config => config.Layers.Tillable, "tillable"),
         ];
 
-        foreach (LayerRegistration layer in this.LayerRegistry.GetAllRegistrations())
+        foreach (LayerRegistration layer in this.LayerRegistry.GetCustomLayerData())
         {
             configSections.Add(new LayerConfigSection(
                 GetLayer: config => config.GetModLayerConfig(layer.UniqueId),
