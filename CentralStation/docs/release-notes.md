@@ -6,6 +6,7 @@
   * Added more tourist spots in the gift shop.
   * Added rare chance for the station to be dark when traveling late.
   * Rare interactions in the Central Station now only happen after you've visited it a number of times.
+  * Improved translations. Thanks to rosearecute_52045 (added Korean)!
 
 * For mod authors:
   * Added `OnlyInAreas` tourist field, which sets which part of the Central Station a tourist can appear in.

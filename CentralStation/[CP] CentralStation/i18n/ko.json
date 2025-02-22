@@ -1,0 +1,155 @@
+﻿//
+// Note for translators:
+// Some lines have a 'note for translators' comment like this one to clarify intent. You generally shouldn't translate
+// the 'note for translators' comments themselves, since they just explain the official intent and aren't shown in-game.
+//
+{
+    /*********
+    ** Destination names
+    *********/
+    // default stops
+    "destinations.central-station": "중앙역",
+    "destinations.stardew-valley": "스타듀밸리",
+
+    // default stops when shown in Central Station menu
+    "destinations.stardew-valley.boat": "스타듀밸리 - 보트 정류장",
+    "destinations.stardew-valley.bus": "스타듀밸리 - 버스 정류장",
+    "destinations.stardew-valley.train": "스타듀밸리 - 기차 정류장",
+
+    // stops from other mods
+    "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name
+
+
+    /*********
+    ** Shop dialogues
+    *********/
+    "food-court.dialogue.1": "여기서 간식거리 좀 가져가세요! 대부분은 멀쩡하게 만들었어요.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "저희 가게가 푸드코트에서 최저가임을 보장합니다!", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "지난 식품 안전 검사를 대부분 통과했습니다!",
+    "food-court.dialogue.4": "오, 손님. 주문하시겠어요?",
+    "food-court.dialogue.5": "신선하고 뜨거운 음식이 있어요! 음, 뜨거울 거예요. 전자레인지에 넣기만 하면요.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+
+    "gift-shop.dialogue.1": "멀리 떠나시나요? 필요한 것이 모두 있는지 확인하세요!",
+    "gift-shop.dialogue.2": "돌아가시나요? 가시는 길에 기념품 좀 챙기시죠!",
+    "gift-shop.dialogue.3": "신기한 셔츠가 다양하게 준비되어 있습니다. (너무 많아요, 좀 사주세요.)",
+    "gift-shop.dialogue.4": "물건이 너무 많아서 어디에 보관해야 할지 모르겠어요. 뭐라도 좀 사주세요!",
+    "gift-shop.dialogue.5": "추운 곳으로 가세요? 여기 방한용품이 있습니다!",
+    "gift-shop.dialogue.6": "이 귀마개를 써보세요. 느껴지시나요? 이거 진짜 캐슬빌리지 벨벳이에요!",
+    "gift-shop.dialogue.7": "이건 보석해를 건너온 희귀한 나무입니다. 찾아보기 어려울 겁니다.",
+
+    "vendor-shop.dialogue.coming-soon": "작은 표지판: \"지역 팝업 스토어가 곧 오픈합니다!\". 내부에서 작업자들이 물건을 준비하는 소리가 들립니다.",
+
+
+    /*********
+    ** Book titles
+    *********/
+    // Note for translators: this section refers to locations mentioned in the base game (like the Ferngill Republic and Zuzu City).
+    // You can find their translations via the language links on the left of the page at https://stardewvalleywiki.com/Setting.
+    // The 'Z.C. Rarecrow Society' is from a letter; see https://stardewvalleywiki.com/Deluxe_Scarecrow and its language links.
+    "books.cooking.1": "'공허 마요네즈와 다른 고블린 별미들'.",
+
+    "books.geography.1": "'펀길 해안과 우리가 그곳에서 찾은 것'.",
+    "books.geography.2": "'그램플턴 산림: VII'.",
+    "books.geography.3": "'주주시티의 야간생활'.",
+    "books.geography.4": "'대초원의 너구리들'.",
+    "books.geography.5": "'스타듀밸리와 다른 기묘한 글자들'.",
+    "books.geography.6": "'펀길 공화국의 꽃들' 샌디 지음.",
+
+    "books.history.1": "'스몰루아누 대백과: 문화, 역사, 고정 관념과 추측'.",
+    "books.history.2": "'마법이란 무엇인가' M. 라스모디우스 지음.",
+    "books.history.3": "'침략자와 그림자: 원소 전쟁의 역사'.",
+    "books.history.4": "'얼어붙은 바다 너머의 툰드라 생명체들'.",
+    "books.history.5": "'제국과 공화국': 펀길 공화국과 고토로 제국 간의 갈등에 대한 심층 분석.",
+    "books.history.6": "'허수아비의 역사에 대한 완벽한 카탈로그' 주주시티 희귀한 허수아비 단체 지음.",
+
+    "books.promotional.1": "'펠리컨 마을의 놀라움', 루이스 시장의 홍보 전단물.",
+
+    "books.religion.1": "'요바를 찾아서', 스타듀밸리에서의 익명 처리된 소책자.",
+
+    "books.science.1": "'펀길 공화국의 주니모들과 다른 종족들'.",
+
+
+    /*********
+    ** Location flavor text
+    *********/
+    // message from the transit area doors
+    "location.transit-area-doors": "여기는 선착장과 플랫폼으로 연결됩니다. 먼저 매표소에서 티켓을 발급받으세요.",
+
+    // messages from exit door
+    "location.exit-door.strange-sounds": "...?",
+
+    // rare messages from ticket counter
+    "location.ticket-counter.1": "(당신은 매표소 내부를 들여다보고자 하지만 코팅된 유리 너머로 실루엣만 희미하게 보입니다.)",
+    "location.ticket-counter.2": "(유리 너머로 이상한 속삭임이 들립니다.)",
+    "location.ticket-counter.3": "(갑자기 코팅된 유리 너머가 보입니다, 잠시 뒤. 다시 떠올려보고자 하자, 당신이 뭘 보았었는지 기억이 나지 않습니다.)",
+
+    // rare messages from ticket machine
+    "location.ticket-machine.1": "(당신은 티켓 카운터에서 막연한 꺼림칙함을 느낍니다. 아니면 그냥 기분 탓일 수도 있습니다.)",
+    "location.ticket-machine.2": "(당신은 티켓 카운터를 건너뛰는 것에 대해 막연한 불안감을 느낍니다.)",
+    "location.ticket-machine.3": "(기계가 당신이 들어본 적도 없는 수십 개의 목적지를 나타냅니다. 당신이 눈을 깜빡이자 원래의 모습으로 돌아왔습니다.)",
+
+    // rare messages from cola machine
+    "location.cola-machine.1": "(이 기계는 조자 콜라만 팔지만 당신이 다가가면 무언가 픽업 트레이에 쿵하는 소리가 납니다.)",
+    "location.cola-machine.2": "(콜라 기계에 접근합니다. 당신이 무언가 하기도 전에, 물건이 쿵하고 떨어집니다.)",
+    "location.cola-machine.3": "(왠지 콜라 기계가 도와주고 싶어하는 것 같습니다.)",
+
+
+    /*********
+    ** Tourist dialogue
+    *********/
+    "tourist.young-boy.1": "안녕.",
+    "tourist.young-boy.2": "전 그냥 엄마를 기다리고 있어요.",
+    "tourist.young-boy.3": "낯선 사람하고 이야기하면 안돼요.",
+
+    "tourist.woman-in-black-dress": "저는 다양한 작은 도시의 축제들을 보러다니는 걸 좋아해요. 사무실을 벗어나 좋은 휴식을 취하는 거죠.",
+
+    "tourist.man-with-drink.1": "여행에서 가장 중요한 건 음식이죠.",
+    "tourist.man-with-drink.2": "푸드코트 가보셨나요? 사실은 거의 먹지는 못했지만, 이것도 경험의 일부죠!",
+
+    "tourist.man-with-sunglasses": "매표소 안을 들여다보셨나요? 누가 거기있는지 알 수가 없어요.#가게 주인들도 고용된 게 아니래요.",
+
+    "tourist.man-with-top-hat.1": "이봐 꼬마. 부자가 되는 비결이 알고 싶니?",
+    "tourist.man-with-top-hat.2": "빠른 부자가 되기. 도박. 카지노가 항상 이기지, 무슨 말 하는지 이해돼? 헤.",
+
+    "tourist.strong-man": "너도 나만큼 강하니? 돌을 내리쳐!#하지만 여긴 돌이 없네. 슬프다.",
+
+    "tourist.desert-racer-man.1": "난 레이싱 경기 보러간다!",
+    "tourist.desert-racer-man.2": "오, 진짜야. 이제 은퇴했으니, 레이싱 경기를 직업 보러 갈 수 있게 되었어.#사막 경주 보러갔었어? 정말 재미있었지.",
+
+    "tourist.desert-scholar-man.1": "반가워, 친구! 주주시티에 새로운 도서관이 열렸어.",
+    "tourist.desert-scholar-man.2": "거기에 내가 찾던 책이 몇 권 있었으면 좋겠네.",
+    "tourist.desert-scholar-man.3": "아니라도, 새로 찾아볼 새로운 책들이 있을 거라 확신해!",
+
+    "tourist.flamingo.1": "...",
+    "tourist.flamingo.2": "...?",
+    "tourist.flamingo.3": "*꽥!*",
+    "tourist.flamingo.4": "(그녀는 열심히 당신을 무시하고 있습니다.)",
+
+    "tourist.shrouded-figure": "돈만 조금 주면 집으로 보내줄 수 있어.#하지만 넌 그냥 버스를 타도 돼지.",
+
+    "tourist.welwick.1": "난 네가 내 오랜 친구 라스모디우스와 이야기했던 걸 알아.",
+    "tourist.welwick.2": "그가 너를 그의 계획에 끌어들이지 않았기를 바랄게, 헤헤.",
+
+    "tourist.cashier-girl.1": "저는 오랜 시간 서서 일해요. 지치고 혼자만의 시간이 거의 없어요.",
+    "tourist.cashier-girl.2": "그냥 집에서 쉬는 것도 좋아하지만, 그래도 모험없는 삶은 있을 수 없죠?!",
+    "tourist.cashier-girl.3": "여긴 무료로 가볼 수 있는 곳이 너무 많아요. 다 가볼 거예요!",
+
+    "tourist.governor.1": "매우 이상하군요. 이 역을 누가 운영하고 있는지 아무도 모르고 있어요.#모든 허가를 다 내어줬는데도 아무도 그걸 기억하지 못하고 있어요.#아 그리고, 이 부분에서 이상한 건 이것뿐만이 아니에요.",
+    "tourist.governor.2": "드디어 기차를 직접 타게 되어 너무 좋군요.#다음번엔 부인을 데려와야겠군.",
+
+    "tourist.lupini.1": "반가워요, 젊은 ${신사분^아가씨^선생님}$. 제 최근 작품을 보셨나요?", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
+    "tourist.lupini.2": "저는 새 갤러리를 열러 갑니다. 원하신다면 따라오셔도 좋아요.",
+
+    "tourist.red-cap-guy.1": "여행의 가장 좋은 점은 다양한 사람들과 그 패션들이에요.",
+    "tourist.red-cap-guy.2": "모두 색다르게 입고 있으면 과하게 입었다고 느끼기 힘들죠!",
+
+    "tourist.shorts-man": "여긴 빌어먹게 춥군.#기념품점에서 방한용품 좀 사와야겠어...",
+
+    "tourist.red-pirate": "(그는 술에 집중하고 있어서 당신을 알아채지 못하고 있습니다.)",
+
+    "tourist.grim-pirate": "저쪽 선로에서의, 오싹한 이야기...#역 깊은 곳에서 안내 방송이 들러오지...#아, 기차 놓쳤네.",
+
+    "tourist.blackgull-pirate.1": "젠장할! 다른 사람들은 어디있지?",
+    "tourist.blackgull-pirate.2": "우리는 곧 탑승할거야..."
+}
