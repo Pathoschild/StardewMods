@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -299,39 +298,6 @@ internal class ModEntry : Mod
             Context.IsPlayerFree // player is free to roam
             || (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.onFarm) // on Robin's or Wizard's build screen
             || (this.Mods!.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
-    }
-
-    /// <summary>Load the color schemes that can be applied.</summary>
-    private Dictionary<string, ColorScheme> LoadColorSchemes()
-    {
-        // load raw data
-        var rawData = this.Helper.Data.ReadJsonFile<Dictionary<string, Dictionary<string, string?>>>(ColorScheme.AssetName);
-        rawData = rawData is not null
-            ? new(rawData, StringComparer.OrdinalIgnoreCase)
-            : new(StringComparer.OrdinalIgnoreCase);
-
-        // load schemes
-        Dictionary<string, ColorScheme> colorSchemes = new(StringComparer.OrdinalIgnoreCase);
-        foreach ((string schemeId, Dictionary<string, string?> rawColors) in rawData)
-        {
-            Dictionary<string, Color> colors = new(StringComparer.OrdinalIgnoreCase);
-
-            foreach ((string name, string? rawColor) in rawColors)
-            {
-                Color? color = Utility.StringToColor(rawColor);
-
-                if (color is null)
-                {
-                    this.Monitor.Log($"Can't load color '{name}' from{(!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) ? $" color scheme '{this.Config.ColorScheme}'" : "")} '{ColorScheme.AssetName}'. The value '{rawColor}' isn't a valid color format.", LogLevel.Warn);
-                    continue;
-                }
-
-                colors[name] = color.Value;
-            }
-
-            colorSchemes[schemeId] = new ColorScheme(schemeId, colors, this.Monitor);
-        }
-        return colorSchemes;
     }
 
     /// <summary>Load the configured color scheme.</summary>

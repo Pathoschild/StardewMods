@@ -8,4 +8,8 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\DataLayers\IDataLayersApi.cs" Link="Framework\IDataLayersApi.cs" />
+  </ItemGroup>
 </Project>
