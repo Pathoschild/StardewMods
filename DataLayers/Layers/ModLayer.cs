@@ -85,8 +85,11 @@ internal class ModLayer : ILayer
 
         // get tiles
         List<TileGroup> tileGroups = [];
-        foreach (IGrouping<string, Vector2> group in this.Layer.UpdateTiles(location, visibleArea, visibleTiles, cursorTile))
+        foreach (IGrouping<string?, Vector2> group in this.Layer.UpdateTiles(location, visibleArea, visibleTiles, cursorTile))
         {
+            if (group.Key is null)
+                continue;
+
             TileGroupData? groupData = this.TileGroups.GetValueOrDefault(group.Key);
             if (groupData is null)
                 continue;
