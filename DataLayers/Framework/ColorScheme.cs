@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
-using Color = Microsoft.Xna.Framework.Color;
 
 namespace Pathoschild.Stardew.DataLayers.Framework;
 
@@ -49,8 +49,8 @@ internal class ColorScheme
     /// <summary>Get a display color.</summary>
     /// <param name="layerId">The unique ID for the layer getting colors.</param>
     /// <param name="colorName">The color name (without the layer prefix), like <c>Selected</c>.</param>
-    /// <param name="defaultColor">The color to use if it's not in the color scheme.</param>
-    public Color Get(string layerId, string colorName, Color? defaultColor = null)
+    /// <param name="defaultColor">The preferred color to use if it's not in the color scheme.</param>
+    public Color Get(string layerId, string colorName, Color? defaultColor)
     {
         // get layer color
         string key = layerId + "_" + colorName;
@@ -73,13 +73,5 @@ internal class ColorScheme
     public static bool IsDefaultColorScheme(string id)
     {
         return string.Equals(id, "Default", StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>Merge the colors from another scheme dictionary into this one.</summary>
-    /// <param name="colors">The colors to merge into this one. If a color exists on both sides, the one in this argument takes priority.</param>
-    public void Merge(Dictionary<string, Color> colors)
-    {
-        foreach ((string name, Color color) in colors)
-            this.Colors[name] = color;
     }
 }

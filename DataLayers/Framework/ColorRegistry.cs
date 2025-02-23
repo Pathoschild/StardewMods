@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="schemeId">The scheme ID.</param>
         /// <param name="scheme">The matching color scheme, or <c>null</c> if not found.</param>
         /// <returns>Returns whether a scheme was found.</returns>
-        public bool TryGetScheme(string schemeId, [MaybeNullWhen(false)] out ColorScheme scheme)
+        public bool TryGetScheme(string schemeId, [NotNullWhen(true)] out ColorScheme? scheme)
         {
             this.InitializeIfNeeded();
 

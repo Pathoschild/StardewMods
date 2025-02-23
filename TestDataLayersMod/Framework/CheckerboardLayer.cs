@@ -15,8 +15,8 @@ internal static class CheckerboardLayer
     /// <inheritdoc cref="GetTileGroupsDelegate" />
     public static void GetTileGroups(AddTileGroupDelegate addGroup)
     {
-        addGroup("even", name: I18n.Example_Layer_Even, overlayColor: "yes");
-        addGroup("odd", name: I18n.Example_Layer_Odd, overlayColor: "no");
+        addGroup(id: "even", name: I18n.Layer_Even, overlayColor: "yes");
+        addGroup(id: "odd", name: I18n.Layer_Odd, overlayColor: "no");
     }
 
     /// <inheritdoc cref="UpdateTilesDelegate" />
@@ -29,11 +29,11 @@ internal static class CheckerboardLayer
     /*********
     ** Private methods
     *********/
-    /// <summary>Get the layer ID for a tile position.</summary>
+    /// <summary>Get the tile group ID for a tile position.</summary>
     /// <param name="tile">The tile position.</param>
     private static string GetLayerId(Vector2 tile)
     {
-        return tile.X % 2 == 0 ^ tile.Y % 2 == 0
+        return (tile.X + tile.Y) % 2 == 0
             ? "even"
             : "odd";
     }

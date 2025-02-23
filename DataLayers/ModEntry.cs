@@ -67,8 +67,7 @@ internal class ModEntry : Mod
         this.LayerRegistry = new(() => this.Colors, () => this.Config, () => this.Mods);
 
         // hook up events
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunchedNormalPriority;
-        helper.Events.GameLoop.GameLaunched += this.OnGameLaunchedLowPriority;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
         helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -90,17 +89,12 @@ internal class ModEntry : Mod
     ** Private methods
     *********/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    private void OnGameLaunchedNormalPriority(object? sender, GameLaunchedEventArgs e)
+    [EventPriority(EventPriority.Low)] // run at low priority so other mods can register layers in their OnGameLaunched handlers.
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // init mod integrations
         this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-    }
 
-    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
-    /// <remarks>Runs at low priority so other mods can register layers in their <c>OnGameLaunched</c> handlers. Any initialization code that depends on having all layers/configs available should run here.</remarks>
-    [EventPriority(EventPriority.Low)]
-    private void OnGameLaunchedLowPriority(object? sender, GameLaunchedEventArgs e)
-    {
         // add config UI
         this.AddGenericModConfigMenu(
             new GenericModConfigMenuIntegrationForDataLayers(this.LayerRegistry, this.ColorRegistry),
@@ -227,8 +221,8 @@ internal class ModEntry : Mod
 
         return
             Context.IsPlayerFree // player is free to roam
-            || (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.onFarm) // on Robin's or Wizard's build screen
-            || (this.Mods!.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
+            || Game1.activeClickableMenu is CarpenterMenu { onFarm: true } // on Robin's or Wizard's build screen
+            || (this.Mods?.PelicanFiber.IsLoaded is true && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
     }
 
     /// <summary>Load the configured color scheme.</summary>

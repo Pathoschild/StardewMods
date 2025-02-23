@@ -116,9 +116,9 @@ internal class ModLayer : ILayer
 
             this.Layer.GetTileGroups((id, name, overlayColor, borderColor) =>
             {
-                Color overlayColorParsed = this.Colors.Get(this.Id, overlayColor);
+                Color overlayColorParsed = this.Colors.Get(this.Id, overlayColor, null);
                 Color? borderColorParsed = borderColor != null
-                    ? this.Colors.Get(this.Id, borderColor)
+                    ? this.Colors.Get(this.Id, borderColor, null)
                     : null;
 
                 tileGroups[id] = new TileGroupData(borderColorParsed, new LegendEntry(id, name(), overlayColorParsed));

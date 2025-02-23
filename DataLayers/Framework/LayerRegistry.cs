@@ -58,9 +58,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Get the layers which should be available in-game.</summary>
         public IReadOnlyList<ILayer> GetLayers()
         {
-            this.InitializeIfNeeded();
-
-            return this.Layers;
+            return this.EnsureInitialized()
+                ? this.Layers
+                : [];
         }
 
         /// <summary>Get the data for custom layers registered through the API.</summary>
@@ -76,15 +76,16 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <returns>Returns whether an activated layer and keybind were found.</returns>
         public bool TryGetLayerByKeybind([NotNullWhen(true)] out ILayer? layer, [NotNullWhen(true)] out KeybindList? keybind)
         {
-            this.InitializeIfNeeded();
-
-            foreach ((KeybindList key, ILayer curLayer) in this.ShortcutMap)
+            if (this.EnsureInitialized())
             {
-                if (key.JustPressed())
+                foreach ((KeybindList key, ILayer curLayer) in this.ShortcutMap)
                 {
-                    layer = curLayer;
-                    keybind = key;
-                    return true;
+                    if (key.JustPressed())
+                    {
+                        layer = curLayer;
+                        keybind = key;
+                        return true;
+                    }
                 }
             }
 
@@ -112,32 +113,40 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Initialize the data layers if they're not already loaded.</summary>
-        [MemberNotNull(nameof(LayerRegistry.Layers))]
-        private void InitializeIfNeeded()
+        /// <summary>Initialize the data layers if they're not already loaded and the mod is ready to load them.</summary>
+        /// <returns>Returns whether the registry is initialized.</returns>
+        [MemberNotNullWhen(true, nameof(LayerRegistry.Layers))]
+        private bool EnsureInitialized()
         {
+            // skip if already initialized
             if (this.Layers is not null)
-                return;
+                return true;
 
-            this.Layers = this.BuildLayersCache().ToArray();
+            // skip if we can't initialize yet
+            ModConfig config = this.Config();
+            ColorScheme colors = this.ColorScheme();
+            ModIntegrations? mods = this.Mods();
+            if (mods is null)
+                return false;
 
+            // build cache
+            this.Layers = this.BuildLayersCache(config, colors, mods).ToArray();
             this.ShortcutMap.Clear();
             foreach (ILayer layer in this.Layers)
             {
                 if (layer.ShortcutKey.IsBound)
                     this.ShortcutMap[layer.ShortcutKey] = layer;
             }
+
+            return true;
         }
 
         /// <summary>Get the enabled data layers.</summary>
-        private IEnumerable<ILayer> BuildLayersCache()
+        /// <param name="config">The mod config.</param>
+        /// <param name="colors">The color scheme to apply.</param>
+        /// <param name="mods">The loaded mod integrations.</param>
+        private IEnumerable<ILayer> BuildLayersCache(ModConfig config, ColorScheme colors, ModIntegrations mods)
         {
-            ModConfig config = this.Config();
-            ColorScheme colors = this.ColorScheme();
-            ModIntegrations? mods = this.Mods();
-            if (mods is null)
-                yield break; // not initialized yet
-
             ModConfigLayers layers = config.Layers;
 
             if (layers.Accessible.IsEnabled())

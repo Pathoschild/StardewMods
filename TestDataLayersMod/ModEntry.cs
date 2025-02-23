@@ -24,11 +24,10 @@ public class ModEntry : Mod
     ** Private methods
     *********/
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched" />
-    [EventPriority(EventPriority.Normal - 1)]
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.Helper.ModRegistry
             .GetApi<IDataLayersApi>("Pathoschild.DataLayers")
-            ?.RegisterLayer("checkerboard", I18n.Example_Layer_Title, CheckerboardLayer.GetTileGroups, CheckerboardLayer.UpdateTiles);
+            ?.RegisterLayer("checkerboard", I18n.Layer_Name, CheckerboardLayer.GetTileGroups, CheckerboardLayer.UpdateTiles);
     }
 }

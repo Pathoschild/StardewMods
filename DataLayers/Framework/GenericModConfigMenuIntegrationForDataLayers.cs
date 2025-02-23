@@ -15,7 +15,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
     /// <summary>The default mod settings.</summary>
     private readonly ModConfig DefaultConfig = new();
 
-    /// <summary>The color registry which manages available schemes and colors.</summary>
+    /// <summary>Manages available color schemes and colors.</summary>
     private readonly ColorRegistry ColorRegistry;
 
     /// <summary>Manages the data layers that should be available in-game.</summary>
@@ -27,7 +27,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="layerRegistry">Manages the data layers that should be available in-game.</param>
-    /// <param name="colorRegistry">The color registry which manages available schemes and colors.</param>
+    /// <param name="colorRegistry">Manages available color schemes and colors.</param>
     public GenericModConfigMenuIntegrationForDataLayers(LayerRegistry layerRegistry, ColorRegistry colorRegistry)
     {
         this.LayerRegistry = layerRegistry;
@@ -102,14 +102,14 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
         foreach (ApiDataLayer layer in this.LayerRegistry.GetCustomLayerData())
         {
             configSections.Add(new LayerConfigSection(
-                GetLayer: config => config.GetModLayerConfig(layer.UniqueId),
-                GetTitle: () => I18n.Config_Section_Layer(LayerName: new { LayerName = layer.Name() })
+                GetConfig: config => config.GetModLayerConfig(layer.UniqueId),
+                GetName: () => layer.Name()
             ));
         }
 
         // sort layers by alphabetical name.
         // This doesn't account for the language changing later, but there's no way to handle that through Generic Mod Config Menu.
-        foreach (LayerConfigSection section in configSections.OrderBy(p => p.GetTitle()))
+        foreach (LayerConfigSection section in configSections.OrderBy(p => p.GetName()))
             this.AddLayerConfigSection(menu, section);
     }
 
@@ -122,7 +122,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
     /// <param name="translationKey">The translation key for this layer.</param>
     private LayerConfigSection GetBuiltInSection(Func<ModConfig, LayerConfig> getLayer, string translationKey)
     {
-        return new LayerConfigSection(getLayer, () => this.GetLayerSectionTitle(translationKey));
+        return new LayerConfigSection(getLayer, () => I18n.GetByKey($"{translationKey}.name"));
     }
 
     /// <summary>Add the config section for a layer.</summary>
@@ -130,48 +130,40 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
     /// <param name="section">Contains the information about this layer/config section.</param>
     private void AddLayerConfigSection(GenericModConfigMenuIntegration<ModConfig> menu, LayerConfigSection section)
     {
-        LayerConfig defaultConfig = section.GetLayer(this.DefaultConfig);
+        LayerConfig defaultConfig = section.GetConfig(this.DefaultConfig);
 
         menu
-            .AddSectionTitle(section.GetTitle)
+            .AddSectionTitle(() => I18n.Config_Section_Layer(section.GetName()))
             .AddCheckbox(
                 name: I18n.Config_LayerEnabled_Name,
                 tooltip: I18n.Config_LayerEnabled_Desc,
-                get: config => section.GetLayer(config).Enabled,
-                set: (config, value) => section.GetLayer(config).Enabled = value
+                get: config => section.GetConfig(config).Enabled,
+                set: (config, value) => section.GetConfig(config).Enabled = value
             )
             .AddCheckbox(
                 name: I18n.Config_LayerUpdateOnViewChange_Name,
                 tooltip: I18n.Config_LayerUpdateOnViewChange_Desc,
-                get: config => section.GetLayer(config).UpdateWhenViewChange,
-                set: (config, value) => section.GetLayer(config).UpdateWhenViewChange = value
+                get: config => section.GetConfig(config).UpdateWhenViewChange,
+                set: (config, value) => section.GetConfig(config).UpdateWhenViewChange = value
             )
             .AddNumberField(
                 name: I18n.Config_LayerUpdatesPerSecond_Name,
                 tooltip: () => I18n.Config_LayerUpdatesPerSecond_Desc(defaultValue: defaultConfig.UpdatesPerSecond),
-                get: config => (float)section.GetLayer(config).UpdatesPerSecond,
-                set: (config, value) => section.GetLayer(config).UpdatesPerSecond = (decimal)value,
+                get: config => (float)section.GetConfig(config).UpdatesPerSecond,
+                set: (config, value) => section.GetConfig(config).UpdatesPerSecond = (decimal)value,
                 min: 0.1f,
                 max: 60f
             )
             .AddKeyBinding(
                 name: I18n.Config_LayerShortcut_Name,
                 tooltip: I18n.Config_LayerShortcut_Desc,
-                get: config => section.GetLayer(config).ShortcutKey,
-                set: (config, value) => section.GetLayer(config).ShortcutKey = value
+                get: config => section.GetConfig(config).ShortcutKey,
+                set: (config, value) => section.GetConfig(config).ShortcutKey = value
             );
     }
 
-    /// <summary>Get the translated section title for a layer.</summary>
-    /// <param name="translationKey">The layer ID.</param>
-    private string GetLayerSectionTitle(string translationKey)
-    {
-        string layerName = I18n.GetByKey($"{translationKey}.name");
-        return I18n.Config_Section_Layer(layerName);
-    }
-
     /// <summary>A data layer's configuration settings.</summary>
-    /// <param name="GetLayer">Get the layer field from a config model.</param>
-    /// <param name="GetTitle">Get the translated section title.</param>
-    private record LayerConfigSection(Func<ModConfig, LayerConfig> GetLayer, Func<string> GetTitle);
+    /// <param name="GetConfig">Get the layer field from a config model.</param>
+    /// <param name="GetName">Get the translated section title.</param>
+    private record LayerConfigSection(Func<ModConfig, LayerConfig> GetConfig, Func<string> GetName);
 }
