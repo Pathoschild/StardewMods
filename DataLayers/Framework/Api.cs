@@ -28,7 +28,7 @@ public class Api : IDataLayersApi
     }
 
     /// <inheritdoc />
-    public void RegisterLayer(string id, Func<string> name, GetTileGroupsDelegate getTileGroups, UpdateTilesDelegate updateTiles)
+    public void RegisterLayer(string id, Func<string> name, GetTileGroupsDelegate getTileGroups, UpdateTilesDelegate updateTiles, decimal? updatesPerSecond = null, bool updateWhenViewChanges = true)
     {
         // validate
         if (string.IsNullOrWhiteSpace(id))
@@ -39,7 +39,7 @@ public class Api : IDataLayersApi
 
         // register layer
         string globalId = $"{this.ModId}_{id}";
-        var layerData = new ApiDataLayer(globalId, id, name, getTileGroups, updateTiles);
+        var layerData = new ApiDataLayer(globalId, id, name, getTileGroups, updateTiles, updatesPerSecond, updateWhenViewChanges);
         this.LayerRegistry.RegisterCustomLayer(layerData);
     }
 }

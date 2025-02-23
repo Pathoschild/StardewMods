@@ -14,7 +14,9 @@ public interface IDataLayersApi
     /// <param name="name">The translated layer name to show in-game.</param>
     /// <param name="getTileGroups">Register the possible tile groups when this layer is loaded.</param>
     /// <param name="updateTiles">Get the tiles to show in the layer when it's drawn. This is called repeatedly while the layer is being drawn to the screen, based on the layer update rate.</param>
-    void RegisterLayer(string id, Func<string> name, GetTileGroupsDelegate getTileGroups, UpdateTilesDelegate updateTiles);
+    /// <param name="updatesPerSecond">The default number of updates needed per second, or <c>null</c> for the default update rate. This can be a decimal value (e.g. 0.5 to update every two seconds).</param>
+    /// <param name="updateWhenViewChanges">Whether to update the layer by default when the player's tile view changes, regardless of the <paramref name="updatesPerSecond"/> value.</param>
+    void RegisterLayer(string id, Func<string> name, GetTileGroupsDelegate getTileGroups, UpdateTilesDelegate updateTiles, decimal? updatesPerSecond = null, bool updateWhenViewChanges = true);
 }
 
 /// <summary>Register the possible tile groups when this layer is loaded.</summary>

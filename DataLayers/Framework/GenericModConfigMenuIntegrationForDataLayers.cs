@@ -102,7 +102,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
         foreach (ApiDataLayer layer in this.LayerRegistry.GetCustomLayerData())
         {
             configSections.Add(new LayerConfigSection(
-                GetConfig: config => config.GetModLayerConfig(layer.UniqueId),
+                GetConfig: config => config.GetModLayerConfig(layer),
                 GetName: () => layer.Name()
             ));
         }

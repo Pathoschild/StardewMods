@@ -44,14 +44,21 @@ internal class ModConfig
         this.Layers ??= new ModConfigLayers();
     }
 
-    /// <summary>Get the configuration for a layer registered through the API, creating one if it doesn't already exist.</summary>
-    /// <param name="id">The unique ID for the layer matching <see cref="ApiDataLayer.UniqueId"/>.</param>
+    /// <summary>Get the configuration entry for a layer registered through the API, creating one if it doesn't already exist.</summary>
+    /// <param name="layer">The layer registered through the API.</param>
     /// <returns>The configuration to use for the layer.</returns>
-    public LayerConfig GetModLayerConfig(string id)
+    public LayerConfig GetModLayerConfig(ApiDataLayer layer)
     {
-        if (!this.ModLayers.TryGetValue(id, out LayerConfig? layer))
-            this.ModLayers[id] = layer = new();
+        string id = layer.UniqueId;
+        if (!this.ModLayers.TryGetValue(id, out LayerConfig? config))
+        {
+            this.ModLayers[id] = config = new()
+            {
+                UpdatesPerSecond = layer.DefaultUpdatesPerSecond ?? LayerConfig.DefaultUpdatesPerSecond,
+                UpdateWhenViewChange = layer.DefaultUpdateWhenViewChanges
+            };
+        }
 
-        return layer;
+        return config;
     }
 }

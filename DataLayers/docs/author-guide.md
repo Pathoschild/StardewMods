@@ -96,6 +96,30 @@ the tile group ID specified via `getTileGroups`.
 
 </td>
 </tr>
+<tr>
+<td><code>updatesPerSecond</code></td>
+<td>
+
+_(Optional)_ The default number of updates needed per second, or `null` for the default rate (currently 60/second).
+This can be a decimal value (e.g. 0.5 to update every two seconds).
+
+This sets the default value for the layer's configuration, so it's ignored for players who already have
+configuration saved for it.
+
+</td>
+</tr>
+<tr>
+<td><code>updateWhenViewChanges</code></td>
+<td>
+
+_(Optional)_ Whether to update the layer by default when the player's tile view changes, regardless of the
+`updatesPerSecond` value.
+
+This sets the default value for the layer's configuration, so it's ignored for players who already have
+configuration saved for it.
+
+</td>
+</tr>
 </table>
 
 ## Color values
