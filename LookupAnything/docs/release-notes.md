@@ -7,7 +7,7 @@
 * Overhauled tile lookups so they're much easier to read and show more info.
 * Fixed overlapping text when displayed data contains explicit line breaks (e.g. some custom machine recipes).
 * Fixed lookup error with fish ponds when mods use the new output `RandomItemId` field.
-* Improved translations. Thanks to MakinDay (updated Italian)!
+* Improved translations. Thanks to MakinDay (updated Italian) and SummerFleur2997 (updated Chinese)!
 
 ## 1.48.1
 Released 11 February 2025 for SMAPI 4.1.10 or later.

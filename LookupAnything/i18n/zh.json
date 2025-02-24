@@ -407,7 +407,7 @@
     // values (数值)
     "item.fish-spawn-rules.min-fishing-level": "最低钓鱼等级：{{level}}",
     "item.fish-spawn-rules.not-caught-yet": "尚未被抓住（只能被抓住一次）",
-    "item.fish-spawn-rules.extended-family-quest-active": "“大家族”任务正在进行", 
+    "item.fish-spawn-rules.extended-family-quest-active": "“大家族”任务正在进行",
     "item.fish-spawn-rules.locations": "地点：{{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "地点：",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
