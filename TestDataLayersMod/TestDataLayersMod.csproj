@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <RootNamespace>Pathoschild.Stardew.TestDataLayersMod</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\DataLayers\IDataLayersApi.cs" Link="Framework\IDataLayersApi.cs" />
+  </ItemGroup>
+</Project>

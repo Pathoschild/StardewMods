@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
@@ -25,6 +26,9 @@ internal class ModConfig
     /// <summary>The generic settings for each layer.</summary>
     public ModConfigLayers Layers { get; set; } = new();
 
+    /// <summary>The generic settings for data layers registered through the API, indexed by mod ID and layer name.</summary>
+    public Dictionary<string, LayerConfig> ModLayers { get; set; } = [];
+
 
     /*********
     ** Public methods
@@ -38,5 +42,23 @@ internal class ModConfig
     {
         this.Controls ??= new ModConfigKeys();
         this.Layers ??= new ModConfigLayers();
+    }
+
+    /// <summary>Get the configuration entry for a layer registered through the API, creating one if it doesn't already exist.</summary>
+    /// <param name="layer">The layer registered through the API.</param>
+    /// <returns>The configuration to use for the layer.</returns>
+    public LayerConfig GetModLayerConfig(ApiDataLayer layer)
+    {
+        string id = layer.UniqueId;
+        if (!this.ModLayers.TryGetValue(id, out LayerConfig? config))
+        {
+            this.ModLayers[id] = config = new()
+            {
+                UpdatesPerSecond = layer.DefaultUpdatesPerSecond ?? LayerConfig.DefaultUpdatesPerSecond,
+                UpdateWhenViewChange = layer.DefaultUpdateWhenViewChanges
+            };
+        }
+
+        return config;
     }
 }

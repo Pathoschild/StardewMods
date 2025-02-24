@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.Commands;
-using Pathoschild.Stardew.DataLayers.Layers;
-using Pathoschild.Stardew.DataLayers.Layers.Coverage;
-using Pathoschild.Stardew.DataLayers.Layers.Crops;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -30,17 +24,14 @@ internal class ModEntry : Mod
     /// <summary>The configured key bindings.</summary>
     private ModConfigKeys Keys => this.Config.Controls;
 
-    /// <summary>The color schemes available to apply.</summary>
-    private Dictionary<string, ColorScheme> ColorSchemes = null!; // loaded in Entry
+    /// <summary>Manages available color schemes and colors.</summary>
+    private ColorRegistry ColorRegistry = null!; // loaded in Entry
 
-    /// <summary>The display colors to use.</summary>
+    /// <summary>The current display colors to use.</summary>
     private ColorScheme Colors = null!; // loaded in Entry
 
-    /// <summary>The available data layers.</summary>
-    private ILayer[] Layers = [];
-
-    /// <summary>Maps key bindings to the layers they should activate.</summary>
-    private readonly IDictionary<KeybindList, ILayer> ShortcutMap = new Dictionary<KeybindList, ILayer>();
+    /// <summary>Manages the data layers that should be available in-game.</summary>
+    private LayerRegistry LayerRegistry = null!; // loaded in Entry
 
     /// <summary>Handles access to the supported mod integrations.</summary>
     private ModIntegrations? Mods;
@@ -60,17 +51,20 @@ internal class ModEntry : Mod
     {
         CommonHelper.RemoveObsoleteFiles(this, "DataLayers.pdb"); // removed in 1.15.8
 
-        // read config
+        // load config
         this.Config = helper.ReadConfig<ModConfig>();
-        this.ColorSchemes = this.LoadColorSchemes();
-        this.Colors = this.LoadColorScheme();
-
-        // validate config
         if (!this.Config.Layers.AnyLayersEnabled())
             this.Monitor.Log("You have all layers disabled in the mod settings, so the mod won't do anything currently.", LogLevel.Warn);
 
-        // init
+        // load translations
         I18n.Init(helper.Translation);
+
+        // load color scheme
+        this.ColorRegistry = new(helper.Data, this.Monitor);
+        this.Colors = this.LoadColorScheme();
+
+        // init layers & API
+        this.LayerRegistry = new(() => this.Colors, () => this.Config, () => this.Mods);
 
         // hook up events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -84,11 +78,18 @@ internal class ModEntry : Mod
         commandHandler.RegisterWith(helper.ConsoleCommands);
     }
 
+    /// <inheritdoc />
+    public override object GetApi(IModInfo mod)
+    {
+        return new Api(mod.Manifest.UniqueID, this.LayerRegistry);
+    }
+
 
     /*********
     ** Private methods
     *********/
-    /// <inheritdoc cref="IGameLoopEvents.GameLaunched" />
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+    [EventPriority(EventPriority.Low)] // run at low priority so other mods can register layers in their OnGameLaunched handlers.
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         // init mod integrations
@@ -96,7 +97,7 @@ internal class ModEntry : Mod
 
         // add config UI
         this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForDataLayers(this.ColorSchemes),
+            new GenericModConfigMenuIntegrationForDataLayers(this.LayerRegistry, this.ColorRegistry),
             get: () => this.Config,
             set: config => this.Config = config,
             onSaved: this.ReapplyConfig
@@ -123,56 +124,19 @@ internal class ModEntry : Mod
         this.ReapplyConfig();
     }
 
-    /// <summary>Get the enabled data layers.</summary>
-    /// <param name="config">The mod configuration.</param>
-    /// <param name="mods">Handles access to the supported mod integrations.</param>
-    private IEnumerable<ILayer> GetLayers(ModConfig config, ModIntegrations mods)
-    {
-        ModConfigLayers layers = config.Layers;
-        var colors = this.Colors;
-
-        if (layers.Accessible.IsEnabled())
-            yield return new AccessibleLayer(layers.Accessible, colors);
-        if (layers.Buildable.IsEnabled())
-            yield return new BuildableLayer(layers.Buildable, colors);
-        if (layers.CoverageForBeeHouses.IsEnabled())
-            yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
-        if (layers.CoverageForScarecrows.IsEnabled())
-            yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
-        if (layers.CoverageForSprinklers.IsEnabled())
-            yield return new SprinklerLayer(layers.CoverageForSprinklers, colors, mods);
-        if (layers.CoverageForJunimoHuts.IsEnabled())
-            yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, colors, mods);
-        if (layers.CropWater.IsEnabled())
-            yield return new CropWaterLayer(layers.CropWater, colors);
-        if (layers.CropPaddyWater.IsEnabled())
-            yield return new CropPaddyWaterLayer(layers.CropPaddyWater, colors);
-        if (layers.CropFertilizer.IsEnabled())
-            yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
-        if (layers.CropHarvest.IsEnabled())
-            yield return new CropHarvestLayer(layers.CropHarvest, colors);
-        if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
-            yield return new MachineLayer(layers.Machines, colors, mods);
-        if (layers.Tillable.IsEnabled())
-            yield return new TillableLayer(layers.Tillable, colors);
-
-        // add separate grid layer if grid isn't enabled for all layers
-        if (!config.ShowGrid && layers.TileGrid.IsEnabled())
-            yield return new GridLayer(layers.TileGrid);
-    }
-
     /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle" />
     private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
     {
         this.CurrentOverlay.Value?.Dispose();
         this.CurrentOverlay.Value = null;
-        this.Layers = [];
+
+        this.LayerRegistry.ResetCache();
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
-        if (this.Layers.Length == 0)
+        if (!this.LayerRegistry.IsReady)
             return;
 
         // perform bound action
@@ -206,17 +170,10 @@ internal class ModEntry : Mod
             // shortcut to layer
             else if (overlayVisible)
             {
-                foreach ((KeybindList key, ILayer layer) in this.ShortcutMap)
+                if (this.LayerRegistry.TryGetLayerByKeybind(out ILayer? layer, out KeybindList? key) && layer != this.CurrentOverlay.Value!.CurrentLayer)
                 {
-                    if (key.JustPressed())
-                    {
-                        if (layer != this.CurrentOverlay.Value!.CurrentLayer)
-                        {
-                            this.CurrentOverlay.Value.SetLayer(layer);
-                            this.Helper.Input.SuppressActiveKeybinds(key);
-                        }
-                        break;
-                    }
+                    this.CurrentOverlay.Value.SetLayer(layer);
+                    this.Helper.Input.SuppressActiveKeybinds(key);
                 }
             }
         });
@@ -236,20 +193,9 @@ internal class ModEntry : Mod
     /// <summary>Reload the mod state to match the current config options.</summary>
     private void ReapplyConfig()
     {
-        // reset color scheme
+        // reset cached data
         this.Colors = this.LoadColorScheme();
-
-        // reset layers
-        if (this.Mods is not null) // skip if we haven't initialized yet
-        {
-            this.Layers = this.GetLayers(this.Config, this.Mods).ToArray();
-            this.ShortcutMap.Clear();
-            foreach (ILayer layer in this.Layers)
-            {
-                if (layer.ShortcutKey.IsBound)
-                    this.ShortcutMap[layer.ShortcutKey] = layer;
-            }
-        }
+        this.LayerRegistry.ResetCache();
     }
 
     /// <summary>Toggle the overlay.</summary>
@@ -262,7 +208,7 @@ internal class ModEntry : Mod
         }
         else
         {
-            this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+            this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.LayerRegistry.GetLayers(), this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
             this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
         }
     }
@@ -275,52 +221,19 @@ internal class ModEntry : Mod
 
         return
             Context.IsPlayerFree // player is free to roam
-            || (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.onFarm) // on Robin's or Wizard's build screen
-            || (this.Mods!.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
-    }
-
-    /// <summary>Load the color schemes that can be applied.</summary>
-    private Dictionary<string, ColorScheme> LoadColorSchemes()
-    {
-        // load raw data
-        var rawData = this.Helper.Data.ReadJsonFile<Dictionary<string, Dictionary<string, string?>>>(ColorScheme.AssetName);
-        rawData = rawData is not null
-            ? new(rawData, StringComparer.OrdinalIgnoreCase)
-            : new(StringComparer.OrdinalIgnoreCase);
-
-        // load schemes
-        Dictionary<string, ColorScheme> colorSchemes = new(StringComparer.OrdinalIgnoreCase);
-        foreach ((string schemeId, Dictionary<string, string?> rawColors) in rawData)
-        {
-            Dictionary<string, Color> colors = new(StringComparer.OrdinalIgnoreCase);
-
-            foreach ((string name, string? rawColor) in rawColors)
-            {
-                Color? color = Utility.StringToColor(rawColor);
-
-                if (color is null)
-                {
-                    this.Monitor.Log($"Can't load color '{name}' from{(!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) ? $" color scheme '{this.Config.ColorScheme}'" : "")} '{ColorScheme.AssetName}'. The value '{rawColor}' isn't a valid color format.", LogLevel.Warn);
-                    continue;
-                }
-
-                colors[name] = color.Value;
-            }
-
-            colorSchemes[schemeId] = new ColorScheme(schemeId, colors, this.Monitor);
-        }
-        return colorSchemes;
+            || Game1.activeClickableMenu is CarpenterMenu { onFarm: true } // on Robin's or Wizard's build screen
+            || (this.Mods?.PelicanFiber.IsLoaded is true && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
     }
 
     /// <summary>Load the configured color scheme.</summary>
     private ColorScheme LoadColorScheme()
     {
         // get requested scheme
-        if (this.ColorSchemes.TryGetValue(this.Config.ColorScheme, out ColorScheme? scheme))
+        if (this.ColorRegistry.TryGetScheme(this.Config.ColorScheme, out ColorScheme? scheme))
             return scheme;
 
         // fallback to default scheme
-        if (!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) && this.ColorSchemes.TryGetValue("Default", out scheme))
+        if (!ColorScheme.IsDefaultColorScheme(this.Config.ColorScheme) && this.ColorRegistry.TryGetScheme("Default", out scheme))
         {
             this.Monitor.Log($"Color scheme '{this.Config.ColorScheme}' not found in '{ColorScheme.AssetName}', reset to default.", LogLevel.Warn);
             this.Config.ColorScheme = "Default";

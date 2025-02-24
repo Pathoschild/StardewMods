@@ -8,6 +8,8 @@ includes data from other mods if applicable.
 * [Configure](#configure)
 * [Compatibility](#compatibility)
 * [Advanced](#advanced)
+  * [Export to JSON](#export-to-json)
+  * [For mod authors](#for-mod-authors)
 * [See also](#see-also)
 
 ## Install
@@ -117,6 +119,9 @@ _custom sprinkers_ | Shows custom sprinkler coverage for any mod using the game'
 You can export a data layer to a JSON file (e.g. to use in another tool). Just go to the location
 in-game you want to export, open a data layer, and enter `data-layers export` in the SMAPI console.
 The layer data will be exported for the entire current location (not just the visible area).
+
+### For mod authors
+See the [author guide](author-guide.md) for more info!
 
 ## See also
 * [Release notes](release-notes.md)
