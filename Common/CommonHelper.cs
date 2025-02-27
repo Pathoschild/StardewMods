@@ -110,7 +110,7 @@ internal static class CommonHelper
                 : "Strings\\StringsFromCSFiles:DayTimeMoneyBox.cs.10371"
             );
 
-            timeStr = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ko
+            timeStr += LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ko
                 ? amOrPm
                 : ' ' + amOrPm;
         }
