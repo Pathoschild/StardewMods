@@ -115,8 +115,8 @@
     /****
     ** 'Experimental' section
     ****/
-    "config.experimental": "Experimental options", // TODO
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.", // TODO
+    "config.experimental": "试验性选项",
+    "config.experimental-warning": "这些选项的功能尚不稳定，可能导致卡死和崩溃等问题。不推荐启用。",
 
     "config.event.name": "事件",
     "config.event.tooltip": "事件的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x."
