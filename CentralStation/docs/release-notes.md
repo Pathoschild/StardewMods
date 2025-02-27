@@ -1,11 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.2.0
+Released 26 February 2025 for SMAPI 4.1.10 or later.
+
 * For players:
   * Added more tourist spots in the gift shop.
   * Added rare chance for the station to be dark when traveling late.
-  * Rare interactions in the Central Station now only happen after you've visited it a number of times.
+  * Rare interactions in the Central Station now only happen after you've visited it a certain number of times.
   * Improved translations. Thanks to rosearecute_52045 (added Korean)!
 
 * For mod authors:

@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Lookup Anything",
     "Author": "Pathoschild",
-    "Version": "1.48.1",
+    "Version": "1.49.0",
     "MinimumApiVersion": "4.1.10",
     "MinimumGameVersion": "1.6.15",
     "Description": "View metadata about anything by pressing a button.",
