@@ -41,5 +41,5 @@ internal interface ILayer
     /// <param name="visibleArea">The tile area currently visible on the screen.</param>
     /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
     /// <param name="cursorTile">The tile position under the cursor.</param>
-    TileGroup[] Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile);
+    IReadOnlyCollection<TileGroup> Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile);
 }

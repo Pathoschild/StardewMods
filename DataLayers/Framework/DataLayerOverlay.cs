@@ -110,7 +110,7 @@ internal class DataLayerOverlay : BaseOverlay
     /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
     /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
     /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
-    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
+    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
         : base(events, inputHelper, reflection, assumeUiMode: true)
     {
         if (!layers.Any())

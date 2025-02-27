@@ -16,4 +16,7 @@ internal class TouristModel
 
     /// <summary>If set, a game state query which indicates whether this tourist can appear in the Central Station today.</summary>
     public string? Condition { get; set; }
+
+    /// <summary>The areas within the central station where the tourist may appear.</summary>
+    public HashSet<string?>? OnlyInAreas { get; set; }
 }

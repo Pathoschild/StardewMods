@@ -89,40 +89,59 @@ internal static class DrawTextHelper
             bool isFirstOfLine = true;
             foreach (string rawWord in rawWords)
             {
-                // split within words if needed (e.g. list separators)
-                bool isStartOfWord = true;
-                foreach (string wordPart in DrawTextHelper.SplitWithinWordForLineWrapping(rawWord))
+                string[] explicitLineBreaks = rawWord.Split('\n');
+                if (explicitLineBreaks.Length > 1)
                 {
-                    // check wrap width
-                    float wordWidth = font.MeasureString(wordPart).X * scale;
-                    float prependSpace = isStartOfWord && !isFirstOfLine
-                        ? spaceWidth
-                        : 0; // no space around soft breaks or start of line
+                    for (int i = 0; i < explicitLineBreaks.Length; i++)
+                        explicitLineBreaks[i] = explicitLineBreaks[i].TrimEnd('\r');
+                }
 
-                    if (wordPart == Environment.NewLine || ((wordWidth + xOffset + prependSpace) > wrapWidth && (int)xOffset != 0))
+                for (int i = 0; i < explicitLineBreaks.Length; i++)
+                {
+                    // apply explicit \n
+                    if (i > 0)
                     {
                         xOffset = 0;
                         yOffset += lineHeight;
                         blockHeight += lineHeight;
                         isFirstOfLine = true;
                     }
-                    if (wordPart == Environment.NewLine)
-                        continue;
 
-                    // draw text
-                    Vector2 wordPosition = new Vector2(position.X + xOffset + prependSpace, position.Y + yOffset);
-                    if (snippet.Bold)
-                        Utility.drawBoldText(batch, wordPart, font, wordPosition, snippet.Color ?? Color.Black, scale);
-                    else
-                        batch.DrawString(font, wordPart, wordPosition, snippet.Color ?? Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+                    // split within words if needed (e.g. list separators)
+                    bool isStartOfWord = true;
+                    foreach (string wordPart in DrawTextHelper.SplitWithinWordForLineWrapping(explicitLineBreaks[i]))
+                    {
+                        // check wrap width
+                        float wordWidth = font.MeasureString(wordPart).X * scale;
+                        float prependSpace = isStartOfWord && !isFirstOfLine
+                            ? spaceWidth
+                            : 0; // no space around soft breaks or start of line
 
-                    // update draw values
-                    if (xOffset + wordWidth + prependSpace > blockWidth)
-                        blockWidth = xOffset + wordWidth + prependSpace;
-                    xOffset += wordWidth + prependSpace;
+                        if (wordPart == Environment.NewLine || ((wordWidth + xOffset + prependSpace) > wrapWidth && (int)xOffset != 0))
+                        {
+                            xOffset = 0;
+                            yOffset += lineHeight;
+                            blockHeight += lineHeight;
+                            isFirstOfLine = true;
+                        }
+                        if (wordPart == Environment.NewLine)
+                            continue;
 
-                    isFirstOfLine = false;
-                    isStartOfWord = false;
+                        // draw text
+                        Vector2 wordPosition = new Vector2(position.X + xOffset + prependSpace, position.Y + yOffset);
+                        if (snippet.Bold)
+                            Utility.drawBoldText(batch, wordPart, font, wordPosition, snippet.Color ?? Color.Black, scale);
+                        else
+                            batch.DrawString(font, wordPart, wordPosition, snippet.Color ?? Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
+
+                        // update draw values
+                        if (xOffset + wordWidth + prependSpace > blockWidth)
+                            blockWidth = xOffset + wordWidth + prependSpace;
+                        xOffset += wordWidth + prependSpace;
+
+                        isFirstOfLine = false;
+                        isStartOfWord = false;
+                    }
                 }
             }
         }

@@ -23,8 +23,6 @@ section below.
   * [Recolors](#recolors)
   * [C# mod API](#c-mod-api)
 * [Lore guide](#lore-guide)
-  * [General guidelines](#general-guidelines)
-  * [Hidden lore](#hidden-lore)
 * [FAQs](#faqs)
 * [See also](#see-also)
 
@@ -314,7 +312,7 @@ blocks](https://stardewvalleywiki.com/Modding:Dialogue#Gender_switch).
 
 Best practices:
 * These should usually be translated into the player's current language using Content Patcher's `i18n` token.
-* If your dialogue mentions the Central Station, see the [lore guide](#lore-guide).
+* If your dialogue mentions the Central Station, see the [lore guide](author-lore-guide.md).
 
 </td>
 </tr>
@@ -335,6 +333,19 @@ _(Optional)_ A [game state query][] which indicates whether a tourist can appear
 
 </td>
 </tr>
+<tr>
+<td><code>OnlyInAreas</code></td>
+<td>
+
+_(Optional)_ The specific areas where this NPC can spawn. The valid values are `Bookshelves`, `FoodCourt`, `GiftShop`,
+`TicketCounter`, and `WaitingArea`. If omitted, the NPC can spawn in any area.
+
+For example, an NPC with this field can only spawn in the food court _or_ gift shop:
+```js
+"Areas": [ "FoodCout", "GiftShop" ]
+```
+
+</td>
 </tr>
 </table>
 
@@ -375,64 +386,10 @@ To add stops through the API:
    ```
 
 ## Lore guide
-The Central Station has a hidden backstory which is mentioned in some default content. If you add custom dialogue which
-mentions Central Station, this optional lore guide can help you keep it consistent.
+If you're just using Central Station's ticket machines, you can ignore this section.
 
-### General guidelines
-This section has light spoilers.
-
-* Central Station can only be reached and left via boat/bus/train transit lines.  
-  _NPCs shouldn't mention reaching it any other way (e.g. walking, driving, or taking their own boat), and shouldn't
-  mention going outside the station._
-* It's connected to regular boat/bus/train lines.  
-  _NPCs and players who transit through the station generally don't know there's anything unusual about it._
-* Who runs and maintains Central Station is never revealed.  
-  _In-game authorities like [the governor](https://stardewvalleywiki.com/Governor) are aware of the station and have
-  permits issued, but don't recall who filed them. Nobody works for the station (e.g. the shop keepers are independent).
-  No company has maintenance contracts with the station (e.g. for upkeep or maintenance)._
-* The backstory is rarely hinted at, and never explicitly stated.  
-  _If you want to hint at the backstory in custom dialogue, see the next section._
-
-
-### Hidden lore
-> [!WARNING]  
-> **This section has heavy spoilers, including details that are never revealed in-game.**
->
-> If you want the intended experience, **do not read this section**. This is only documented so that mod authors adding
-> custom dialogue can hint at the backstory in a way that's consistent with the base mod.
-
-> [!NOTE]  
-> The hidden lore is meant to be a vague background 'feel' to the station, so it should rarely be mentioned and never
-> directly explained. For example, only two default tourists have dialogues which vaguely hint at it.
-
-<details>
-<summary><em>View hidden lore (<strong>contains major spoilers</strong>):</em></summary>
-
-The Central Station is in the spirit world, and it's run by unknown but friendly spirits. You can't reach the station
-through normal means (e.g. driving along the road which the bus takes), and every transit destination seems to be
-reachable (e.g. bus stops on another continent).
-
-This spirit world is more dynamic and changeable than the physical world. The Central Station is kept stable for its
-passengers, but sometimes the spirit world seeps through in a momentary 'flicker'. For players, this is visible as a
-rare chance of strange occurrences (like briefly seeing into the ticket booth).
-
-This is never directly revealed to players or NPCs, and it's not possible to discover who runs the station and remember
-it. For example, there's a rare chance to see this message when you click the ticket counter:
-> _(Suddenly you can see through the tinted glass, just for a moment. When you think back, you can't remember what you
-> saw.)_
-
-The spirits who operate the station are never described in any detail, only indirectly or via their actions. For
-example, other rare messages state:
-> (You try to peer into the ticket booth, but there's just a vague shadow through the tinted glass.)  
-> (You hear strange whispers through the glass.)  
-> (This machine only sells Joja Cola, but something thuds into the pickup tray as you approach.)
-
-Messages which hint at this lore are generally eerie, strange, or otherworldly. However the spirits are always friendly,
-helpful, or playfully mischievous; they are _never_ threatening, scary, malicious, or hurtful.
-
-
-
-</details>
+The Central Station has hidden lore, which players can discover in-game through indirect hints. If you add custom
+dialogue which mentions Central Station, reading the [author lore guide](author-lore-guide.md) is strongly recommended.
 
 ## FAQs
 ### Can I make Central Station optional?
@@ -448,6 +405,11 @@ For example, one simple approach:
 If Central Station is installed, it'll patch its ticket machine over your default warp based on the map property. This
 replaces the `Buildings` and `Front` layers for the patched tiles, so the fallback `Action` will be replaced. If it's
 not installed, your `EditData` patches will just be ignored and players will use your fallback warp.
+
+### Can I edit the map for the Central Station itself?
+That isn't recommended. Due to the [nature of the station](author-lore-guide.md), the layout isn't fixed and may change
+from one visit to the other. Future versions of the mod will also likely make changes to accomodate new features and
+areas.
 
 ## See also
 * [README](README.md) for other info

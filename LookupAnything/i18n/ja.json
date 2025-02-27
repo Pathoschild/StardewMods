@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "条件：{{conditions}}", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "（{{value}}以外の）",
 
     "condition.day-of-month": "on specific days ({{days}})", // TODO
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}}（{{count}}個必要）",
     "item.recipes-for-machine.multiple-items": "{{name}} ({{count}})",
     "item.recipes-for-machine.same-as-input": "原料と同じ", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "条件：{{conditions}}",
     "item.recipes-for-machine.too-complex": "情報が多すぎるため表示することができない",
     "item.number-owned.summary": "{{count}}個持っている",
     "item.number-crafted.summary": "{{count}}個作成した",
@@ -624,19 +625,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
     "tile.game-location": "場所",
     "tile.map-name": "マップ名",
-    "tile.tile": "タイル",
-    "tile.tile-index": "{{layerName}}：タイルインデックス",
-    "tile.tilesheet": "{{layerName}}：タイルシート",
-    "tile.blend-mode": "{{layerName}}：ブレンド方法",
-    "tile.index-property": "{{layerName}}: インデックスプロパティ：{{propertyName}}",
-    "tile.tile-property": "{{layerName}}: プロパティ：{{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "タイル",
 
     // values
-    "tile.tile.none-here": "タイルがありません",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "ブレンド方法: {{value}}",
+    "tile.layer-tile.index-property": "インデックスプロパティ: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "プロパティ: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "タイルがありません",
 
 
     /*********

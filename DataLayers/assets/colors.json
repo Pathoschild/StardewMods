@@ -8,6 +8,14 @@
 {
     "Default": {
         /****
+        ** Generic colors for custom layers
+        ****/
+        "Generic_Yes": "Green", // covered, ready, enabled, etc
+        "Generic_No": "Red", // not covered, not ready, disabled, etc
+        "Generic_Highlight": "Blue", // special color to highlight one group (e.g. to show the range for a selected object)
+
+
+        /****
         ** Coverage
         ****/
         "BeeHouseCoverage_Covered": "Green",

@@ -8,8 +8,10 @@ using Pathoschild.Stardew.CentralStation.Framework.ContentModels;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Extensions;
+using StardewValley.GameData;
 using StardewValley.Locations;
 using StardewValley.TokenizableStrings;
 using xTile;
@@ -24,9 +26,6 @@ internal class ContentManager
     /*********
     ** Fields
     *********/
-    /// <summary>The probability that a tourist will spawn on a given spawn tile, as a value between 0 (never) and 1 (always).</summary>
-    private const float TouristSpawnChance = 0.35f;
-
     /// <summary>The SMAPI API for loading and managing content assets.</summary>
     private readonly IGameContentHelper ContentHelper;
 
@@ -44,6 +43,9 @@ internal class ContentManager
 
     /// <summary>The 'strange occurrence' messages shown in rare cases.</summary>
     private readonly Dictionary<string, LiveMessageQueue> StrangeMessages = new();
+
+    /// <summary>Whether the central station is showing the rare dark form (lighting dimmed, shops closed, etc.).</summary>
+    private readonly PerScreen<bool> StationDark = new();
 
 
     /*********
@@ -70,13 +72,14 @@ internal class ContentManager
         this.TouristDialogues.Clear();
 
         // reapply map edits (e.g. random tourists)
+        this.StationDark.Value = false;
         this.ContentHelper.InvalidateCache($"Maps/{Constant.ModId}");
 
         // add ticket machine if player wakes up in a location
         this.AddTicketMachineForMapProperty(Game1.currentLocation);
     }
 
-    /// <inheritdoc cref="IPlayerEvents.Warped" />
+    /// <inheritdoc cref="IContentEvents.AssetRequested" />
     public void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         // edit vanilla locations
@@ -88,6 +91,42 @@ internal class ContentManager
         // edit Central Station map
         if (e.NameWithoutLocale.IsEquivalentTo($"Maps/{Constant.ModId}"))
             e.Edit(this.EditCentralStationMap, AssetEditPriority.Early);
+    }
+
+    /// <inheritdoc cref="IPlayerEvents.Warped" />
+    public void OnWarped(object? sender, WarpedEventArgs e)
+    {
+        // apply ticket machines
+        this.ConvertPreviousTicketMachines(e.NewLocation);
+        this.AddTicketMachineForMapProperty(e.NewLocation);
+
+        // entered central station
+        if (e.NewLocation.NameOrUniqueName is Constant.CentralStationLocationId)
+        {
+            // increment stat
+            Game1.stats.Increment(Constant.TimesVisitedStatKey);
+
+            // rare dark station
+            if (this.StationDark.Value)
+            {
+                this.StationDark.Value = false;
+                this.ContentHelper.InvalidateCache($"Maps/{Constant.ModId}");
+                e.NewLocation.resetForPlayerEntry();
+            }
+            else if (this.GetStationVisits() >= Constant.DarkStationMinVisits && Game1.timeOfDay >= Constant.DarkStationMinTime && Game1.random.NextBool(Constant.DarkStationChance))
+            {
+                this.StationDark.Value = true;
+                Game1.stopMusicTrack(MusicContext.Default);
+                this.ContentHelper.InvalidateCache($"Maps/{Constant.ModId}");
+                e.NewLocation.resetForPlayerEntry();
+            }
+        }
+    }
+
+    /// <summary>Get the number of times the player has visited the Central Station.</summary>
+    public uint GetStationVisits()
+    {
+        return Game1.stats.Get(Constant.TimesVisitedStatKey);
     }
 
     /// <summary>Get the stops which can be selected from the current location.</summary>
@@ -259,9 +298,12 @@ internal class ContentManager
         Layer? buildingsLayer = map?.GetLayer("Buildings");
         if (buildingsLayer is not null)
         {
-            for (int y = 0, maxY = buildingsLayer.TileHeight; y <= maxY; y++)
+            int layerHeight = buildingsLayer.LayerHeight;
+            int layerWidth = buildingsLayer.LayerWidth;
+
+            for (int y = 0; y < layerHeight; y++)
             {
-                for (int x = 0, maxX = buildingsLayer.TileWidth; x <= maxX; x++)
+                for (int x = 0; x < layerWidth; x++)
                 {
                     if (buildingsLayer.Tiles[x, y]?.Properties?.TryGetValue("Action", out string action) is true && action.StartsWithIgnoreCase(Constant.TicketsAction))
                     {
@@ -294,9 +336,12 @@ internal class ContentManager
         Layer? layer = map?.GetLayer(layerId);
         if (layer is not null)
         {
-            for (int y = 0, maxY = layer.TileHeight; y <= maxY; y++)
+            int layerHeight = layer.LayerHeight;
+            int layerWidth = layer.LayerWidth;
+
+            for (int y = 0; y < layerHeight; y++)
             {
-                for (int x = 0, maxX = layer.TileWidth; x <= maxX; x++)
+                for (int x = 0; x < layerWidth; x++)
                 {
                     var mapTile = layer.Tiles[x, y];
                     if (mapTile?.TileIndex == index && mapTile.TileSheet?.Id == tileSheetId)
@@ -341,9 +386,13 @@ internal class ContentManager
         return true;
     }
 
+
+    /*********
+    ** Private methods
+    *********/
     /// <summary>Add the Central Station action properties for vanilla or legacy ticket machines.</summary>
     /// <param name="location">The location whose map to change.</param>
-    public void ConvertPreviousTicketMachines(GameLocation location)
+    private void ConvertPreviousTicketMachines(GameLocation location)
     {
         // get map info
         Map map = location.Map;
@@ -351,12 +400,15 @@ internal class ContentManager
         if (map is null || layer is null)
             return;
 
+        int layerHeight = layer.LayerHeight;
+        int layerWidth = layer.LayerWidth;
+
         // edit tiles
         bool isBoatTunnel = location is BoatTunnel { Name: "BoatTunnel" };
         bool isBusStop = location is BusStop { Name: "BusStop" };
-        for (int y = 0, maxY = layer.LayerHeight; y <= maxY; y++)
+        for (int y = 0; y < layerHeight; y++)
         {
-            for (int x = 0, maxX = layer.LayerWidth; x <= maxX; x++)
+            for (int x = 0; x < layerWidth; x++)
             {
                 // get tile
                 Tile? tile = layer.Tiles[x, y];
@@ -388,7 +440,7 @@ internal class ContentManager
 
     /// <summary>Add a Central Station ticket machine if the location has a <see cref="Constant.TicketMachineMapProperty"/> map property.</summary>
     /// <param name="location">The location to edit.</param>
-    public void AddTicketMachineForMapProperty(GameLocation location)
+    private void AddTicketMachineForMapProperty(GameLocation location)
     {
         // get property
         if (!location.TryGetMapProperty(Constant.TicketMachineMapProperty, out string? rawProperty))
@@ -406,15 +458,65 @@ internal class ContentManager
         this.TryAddTicketMachine(location.Map, tile.X, tile.Y, networks);
     }
 
-
-    /*********
-    ** Private methods
-    *********/
     /// <summary>Apply edits to the Central Station map when it's loaded.</summary>
     /// <param name="assetData">The asset data.</param>
     private void EditCentralStationMap(IAssetData assetData)
     {
-        this.AddCentralStationTourists(assetData.AsMap());
+        var map = assetData.AsMap().Data;
+
+        if (this.StationDark.Value)
+        {
+            // make it darker
+            map.Properties["AmbientLight"] = "200 200 100";
+
+            // edit map tiles
+            Layer backLayer = map.RequireLayer("Back");
+            Layer buildingsLayer = map.RequireLayer("Buildings");
+            Layer pathsLayer = map.RequireLayer("Paths");
+            Layer frontLayer = map.RequireLayer("Front");
+            const int lightPathIndex = 8;
+
+            int layerHeight = pathsLayer.LayerHeight;
+            int layerWidth = pathsLayer.LayerWidth;
+
+            for (int y = 0; y < layerHeight; y++)
+            {
+                for (int x = 0; x < layerWidth; x++)
+                {
+                    // get tiles
+                    Tile? backTile = backLayer.Tiles[x, y];
+                    Tile? frontTile = frontLayer.Tiles[x, y];
+                    Tile? pathTile = pathsLayer.Tiles[x, y];
+                    Tile? buildingsTile = buildingsLayer.Tiles[x, y];
+
+                    // get action property
+                    if (buildingsTile?.Properties.TryGetValue("Action", out string? action) is not true)
+                        action = null;
+
+                    // remove lighting, but light up ticket booth & machine
+                    if (pathTile?.TileIndex == lightPathIndex)
+                        pathsLayer.Tiles[x, y] = null;
+                    if (action != null && (action.StartsWithIgnoreCase($"{Constant.InternalAction} {MapSubActions.TicketBooth}") || action.StartsWithIgnoreCase($"{Constant.InternalAction} {MapSubActions.TicketMachine}")))
+                        pathsLayer.Tiles[x, y - 1] ??= new StaticTile(pathsLayer, map.GetTileSheet("paths"), BlendMode.Alpha, lightPathIndex);
+
+                    // remove gift shop clerk
+                    if (frontTile?.TileIndex == 1910 && frontTile.TileSheet.Id == GameLocation.DefaultTileSheetId) // gift shop clerk's head
+                        frontLayer.Tiles[x, y] = null;
+                    else if (buildingsTile?.TileIndex == 1942 && buildingsTile.TileSheet.Id == GameLocation.DefaultTileSheetId)
+                        buildingsLayer.Tiles[x, y] = null;
+
+                    // close food court
+                    if (backTile?.TileSheet.Id == "centralStation" && backTile.TileIndex is 152 or 153 or 154 or 155 or 172 or 173 or 174 or 175)
+                        backLayer.Tiles[x, y] = new StaticTile(backTile.Layer, backTile.TileSheet, BlendMode.Alpha, backTile.TileIndex + 4);
+
+                    // remove some interactions
+                    if (action != null && (action.StartsWithIgnoreCase("OpenShop") || action.StartsWithIgnoreCase($"{Constant.InternalAction} {MapSubActions.Bookshelf}") || action.StartsWithIgnoreCase($"{Constant.InternalAction} {MapSubActions.PopUpShop}")))
+                        buildingsTile!.Properties.Remove("Action");
+                }
+            }
+        }
+        else
+            this.AddCentralStationTourists(assetData.AsMap());
     }
 
     /// <summary>Add random tourist NPCs to the Central Station map.</summary>
@@ -422,10 +524,31 @@ internal class ContentManager
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "This is the method that validates the API contract.")]
     private void AddCentralStationTourists(IAssetDataForMap assetData)
     {
-        Random random = Utility.CreateDaySaveRandom(Game1.hash.GetDeterministicHashCode(Constant.ModId));
+        // read tourist areas from map property
+        Dictionary<string, Rectangle> touristAreas = new();
+        {
+            if (!assetData.Data.Properties.TryGetValue(Constant.TouristAreasMapProperty, out string rawProperty))
+                return;
+
+            string[] propertyArgs = ArgUtility.SplitBySpace(rawProperty);
+            for (int i = 0; i < propertyArgs.Length; i += 5)
+            {
+                if (!ArgUtility.TryGet(propertyArgs, i, out string touristAreaId, out string error) || !ArgUtility.TryGetRectangle(propertyArgs, i + 1, out Rectangle touristArea, out error))
+                {
+                    this.Monitor.Log($"Can't add tourists to Central Station: map property '{Constant.TouristAreasMapProperty}' has invalid value '{rawProperty}': {error}", LogLevel.Warn);
+                    return;
+                }
+
+                if (!touristAreas.TryAdd(touristAreaId, touristArea))
+                {
+                    this.Monitor.Log($"Can't add tourists to Central Station: map property '{Constant.TouristAreasMapProperty}' has invalid value '{rawProperty}': area ID '{touristAreaId}' is defined twice.", LogLevel.Warn);
+                    return;
+                }
+            }
+        }
 
         // collect available NPCs
-        List<(string mapId, TouristMapModel map, string touristId, TouristModel tourist)> validTourists = new();
+        List<TouristSpawnOption> validTourists = new();
         foreach ((string mapId, TouristMapModel? touristMapData) in this.ContentHelper.Load<Dictionary<string, TouristMapModel?>>(AssetNames.Tourists))
         {
             // skip empty entry
@@ -464,11 +587,12 @@ internal class ContentManager
 
                 // add to pool is available
                 if (GameStateQuery.CheckConditions(tourist.Condition))
-                    validTourists.Add((mapId, touristMapData, touristId, tourist));
+                    validTourists.Add(new(mapId, touristMapData, touristId, tourist));
             }
         }
 
         // shuffle tourists
+        Random random = Utility.CreateDaySaveRandom(Game1.hash.GetDeterministicHashCode(Constant.ModId));
         Utility.Shuffle(random, validTourists);
 
         // spawn tourists on map
@@ -476,61 +600,76 @@ internal class ContentManager
         Map map = assetData.Data;
         Layer buildingsLayer = map.RequireLayer("Buildings");
         Layer pathsLayer = map.RequireLayer("Paths");
-        for (int y = 0, maxY = pathsLayer.TileHeight; y <= maxY; y++)
+
+        foreach ((string areaId, Rectangle area) in touristAreas)
         {
-            for (int x = 0, maxX = pathsLayer.TileWidth; x <= maxX; x++)
+            for (int y = area.Y, maxY = area.Bottom - 1; y <= maxY; y++)
             {
-                // check preconditions
-                if (pathsLayer.Tiles[x, y]?.TileIndex is not 7) // red circle marks spawn points
-                    continue;
-                if (validTourists.Count is 0)
-                    return; // no further tourists can spawn
-                if (!random.NextBool(ContentManager.TouristSpawnChance))
-                    continue;
-
-                // get tourist data
-                (string mapId, TouristMapModel mapData, string touristId, TouristModel tourist) = validTourists.Last();
-                validTourists.RemoveAt(validTourists.Count - 1);
-
-                // load map
-                Map touristMap;
-                try
+                for (int x = 0, maxX = area.Right - 1; x <= maxX; x++)
                 {
-                    touristMap = contentManager.Load<Map>(mapData.FromMap);
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log($"Ignored tourist '{mapId}' > '{touristId}' because its map could not be loaded.\nTechnical details: {ex}", LogLevel.Warn);
-                    continue;
-                }
+                    // check preconditions
+                    if (pathsLayer.Tiles[x, y]?.TileIndex is not 7) // red circle marks spawn points
+                        continue;
+                    if (validTourists.Count is 0)
+                        return; // no further tourists can spawn
+                    if (!random.NextBool(Constant.TouristSpawnChance))
+                        continue;
 
-                // remove disallowed layers
-                for (int i = touristMap.Layers.Count - 1; i >= 0; i--)
-                {
-                    Layer layer = touristMap.Layers[i];
-                    if (layer.Id is not ("Buildings" or "Front"))
-                        touristMap.RemoveLayer(layer);
-                }
+                    // get tourist to spawn
+                    TouristSpawnOption? spawn = null;
+                    for (int i = validTourists.Count - 1; i >= 0; i--)
+                    {
+                        TouristSpawnOption candidate = validTourists[i];
+                        if (candidate.Tourist.OnlyInAreas?.Count is null or 0 || candidate.Tourist.OnlyInAreas.Any(areaId.EqualsIgnoreCase))
+                        {
+                            spawn = candidate;
+                            validTourists.RemoveAt(i);
+                            break;
+                        }
+                    }
+                    if (spawn is null)
+                        continue;
 
-                // patch into map
-                Rectangle sourceRect = Utility.getSourceRectWithinRectangularRegion(
-                    regionX: 0,
-                    regionY: 0,
-                    regionWidth: touristMap.GetSizeInTiles().Width,
-                    sourceIndex: tourist.Index,
-                    sourceWidth: 1,
-                    sourceHeight: 2
-                );
-                assetData.PatchMap(touristMap, sourceRect, new Rectangle(x, y - 1, 1, 2));
+                    // load map
+                    Map touristMap;
+                    try
+                    {
+                        touristMap = contentManager.Load<Map>(spawn.Map.FromMap);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Monitor.Log($"Ignored tourist '{spawn.MapId}' > '{spawn.TouristId}' because its map could not be loaded.\nTechnical details: {ex}", LogLevel.Warn);
+                        continue;
+                    }
 
-                // add dialogue action
-                if (tourist.Dialogue?.Count > 0)
-                {
-                    Tile? buildingTile = buildingsLayer.Tiles[x, y];
-                    if (buildingTile is null)
-                        buildingsLayer.Tiles[x, y] = buildingTile = new StaticTile(buildingsLayer, map.GetTileSheet(GameLocation.DefaultTileSheetId), BlendMode.Alpha, 0);
+                    // remove disallowed layers
+                    for (int i = touristMap.Layers.Count - 1; i >= 0; i--)
+                    {
+                        Layer layer = touristMap.Layers[i];
+                        if (layer.Id is not ("Buildings" or "Front"))
+                            touristMap.RemoveLayer(layer);
+                    }
 
-                    buildingTile.Properties["Action"] = $"{Constant.InternalAction} {MapSubActions.TouristDialogue} {mapId} {touristId}";
+                    // patch into map
+                    Rectangle sourceRect = Utility.getSourceRectWithinRectangularRegion(
+                        regionX: 0,
+                        regionY: 0,
+                        regionWidth: touristMap.GetSizeInTiles().Width,
+                        sourceIndex: spawn.Tourist.Index,
+                        sourceWidth: 1,
+                        sourceHeight: 2
+                    );
+                    assetData.PatchMap(touristMap, sourceRect, new Rectangle(x, y - 1, 1, 2));
+
+                    // add dialogue action
+                    if (spawn.Tourist.Dialogue?.Count > 0)
+                    {
+                        Tile? buildingTile = buildingsLayer.Tiles[x, y];
+                        if (buildingTile is null)
+                            buildingsLayer.Tiles[x, y] = buildingTile = new StaticTile(buildingsLayer, map.GetTileSheet(GameLocation.DefaultTileSheetId), BlendMode.Alpha, 0);
+
+                        buildingTile.Properties["Action"] = $"{Constant.InternalAction} {MapSubActions.TouristDialogue} {spawn.MapId} {spawn.TouristId}";
+                    }
                 }
             }
         }
@@ -545,9 +684,12 @@ internal class ContentManager
         Layer? layer = asset.Data.GetLayer("Buildings");
         if (layer != null)
         {
-            for (int y = 0, maxY = layer.LayerHeight; y <= maxY; y++)
+            int layerHeight = layer.LayerHeight;
+            int layerWidth = layer.LayerWidth;
+
+            for (int y = 0; y < layerHeight; y++)
             {
-                for (int x = 0, maxX = layer.LayerWidth; x <= maxX; x++)
+                for (int x = 0; x < layerWidth; x++)
                 {
                     // get tile
                     Tile? tile = layer.Tiles[x, y];
@@ -691,4 +833,11 @@ internal class ContentManager
             yield return new LiveMessageQueue.Message(key, text);
         }
     }
+
+    /// <summary>A tourist which may spawn when parsing map data.</summary>
+    /// <param name="MapId">The entry key for the tourist map which adds the tourist.</param>
+    /// <param name="Map">The tourist map data.</param>
+    /// <param name="TouristId">The entry key for the tourist within the map.</param>
+    /// <param name="Tourist">The tourist data.</param>
+    private record TouristSpawnOption(string MapId, TouristMapModel Map, string TouristId, TouristModel Tourist);
 }

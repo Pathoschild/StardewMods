@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Central Station",
     "Author": "Pathoschild",
-    "Version": "1.1.0",
+    "Version": "1.2.0",
     "MinimumApiVersion": "4.1.10",
     "Description": "Lets you travel to other mods' destinations by boat, bus, or train through the Central Station.",
     "UniqueID": "Pathoschild.CentralStation",

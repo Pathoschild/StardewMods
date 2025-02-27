@@ -54,6 +54,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TractorMod", "TractorMod\Tr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentralStation", "CentralStation\CentralStation.csproj", "{DE72EBFD-2E30-47C1-A941-82E8922DED6B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataLayersMod", "TestDataLayersMod\TestDataLayersMod.csproj", "{D1400E42-46B2-40B7-A5AC-43C2B9A39687}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{44366a09-9a49-49b5-9d5f-51dc3f751fcb}*SharedItemsImports = 5
@@ -71,6 +73,7 @@ Global
 		Common\Common.projitems*{81b42938-5567-469b-8b92-56e006df588d}*SharedItemsImports = 5
 		Common\Common.projitems*{9eecb232-2178-4101-9397-cfb885bc25f2}*SharedItemsImports = 5
 		Common\Common.projitems*{b9e9edfc-e98a-4370-994f-40a9f39a0284}*SharedItemsImports = 13
+		Common\Common.projitems*{d1400e42-46b2-40b7-a5ac-43c2b9a39687}*SharedItemsImports = 5
 		Common\Common.projitems*{ddf905ed-320b-48af-91a5-2a5563f256fa}*SharedItemsImports = 5
 		Common\Common.projitems*{de72ebfd-2e30-47c1-a941-82e8922ded6b}*SharedItemsImports = 5
 		Common\Common.projitems*{ef4f1a38-6601-4441-b7b1-e9c26b312192}*SharedItemsImports = 5
@@ -150,6 +153,10 @@ Global
 		{DE72EBFD-2E30-47C1-A941-82E8922DED6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE72EBFD-2E30-47C1-A941-82E8922DED6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE72EBFD-2E30-47C1-A941-82E8922DED6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1400E42-46B2-40B7-A5AC-43C2B9A39687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1400E42-46B2-40B7-A5AC-43C2B9A39687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1400E42-46B2-40B7-A5AC-43C2B9A39687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1400E42-46B2-40B7-A5AC-43C2B9A39687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +165,7 @@ Global
 		{EC5F07FF-A84F-4088-9FA2-DAE66046A093} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{EF4F1A38-6601-4441-B7B1-E9C26B312192} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
+		{D1400E42-46B2-40B7-A5AC-43C2B9A39687} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF4A4878-3839-48F1-B4C1-43D0570BCCB4}

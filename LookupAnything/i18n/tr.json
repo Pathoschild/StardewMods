@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[Şartlar: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "{{value}} değil",
 
     "condition.day-of-month": "ayın spesifik günlerde ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in 
-    "item.recipes-for-machine.conditions": "[Şartlar: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Bazı makinelerin işlevleri gösterilemeyecek kadar karmaşık",
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
     "item.number-crafted.summary": "bundan {{count}} tane yaptın",
@@ -623,19 +624,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.tile": "Karo",
-    "tile.tile-index": "{{layerName}}: karo indeksi",
-    "tile.tilesheet": "{{layerName}}: karo seti",
-    "tile.blend-mode": "{{layerName}}: karışım modu",
-    "tile.index-property": "{{layerName}}: ix destekleri: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: destekler: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Karo",
 
     // values
-    "tile.tile.none-here": "burada karo yok",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "karışım modu: {{value}}",
+    "tile.layer-tile.index-property": "ix destekleri: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "destekler: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "burada karo yok",
 
 
     /*********

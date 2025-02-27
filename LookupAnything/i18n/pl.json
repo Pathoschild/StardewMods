@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[warunki: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "nie {{value}}",
 
     "condition.day-of-month": "w konkretne dni ({{days}})",
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (potrzeba {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[tak samo jak wejście]", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "[warunki: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Wyświetlenie niektórych reguł maszynowych jest zbyt dynamiczne.",
     "item.number-owned.summary": "masz takich {{count}}",
     "item.number-crafted.summary": "zrobiono takich {{count}}",
@@ -624,19 +625,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w konfiguracji włączono podgląd kafelków.",
     "tile.game-location": "Lokacja",
     "tile.map-name": "Nazwa mapy",
-    "tile.tile": "Kafelek",
-    "tile.tile-index": "{{layerName}}: indeks kafelka",
-    "tile.tilesheet": "{{layerName}}: arkusz kafelka",
-    "tile.blend-mode": "{{layerName}}: rodzaj łączenia",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Kafelek",
 
     // values
-    "tile.tile.none-here": "brak tutaj kafelka",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "rodzaj łączenia: {{value}}",
+    "tile.layer-tile.index-property": "index property: {{name}}: {{value}}", // TODO
+    "tile.layer-tile.tile-property": "tile property: {{name}}: {{value}}", // TODO
+    "tile.layer-tile.none-here": "brak tutaj kafelka",
 
 
     /*********

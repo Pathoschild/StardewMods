@@ -103,7 +103,7 @@ internal class ItemDropListField : GenericField
             // draw conditions
             if (drop.Conditions != null)
             {
-                string conditionText = I18n.Item_RecipesForMachine_Conditions(conditions: HumanReadableConditionParser.Format(drop.Conditions));
+                string conditionText = I18n.ConditionsSummary(conditions: HumanReadableConditionParser.Format(drop.Conditions));
                 height += textSize.Y + 5;
                 textSize = spriteBatch.DrawTextBlock(font, conditionText, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth);
 

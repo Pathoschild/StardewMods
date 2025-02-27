@@ -3,6 +3,7 @@
  <properties>
   <property name="DefaultWarpLocation" value="60 13"/>
   <property name="NightTiles" value="Buildings1 11 8 377 Buildings1 12 8 378 Buildings1 13 8 379 Buildings1 11 9 397 Buildings1 12 9 398 Buildings1 13 9 399 Buildings1 11 10 417 Buildings1 12 10 418 Buildings1 13 10 419 Buildings1 55 8 377 Buildings1 56 8 378 Buildings1 57 8 379 Buildings1 55 9 397 Buildings1 56 9 398 Buildings1 57 9 399 Buildings1 55 10 417 Buildings1 56 10 418 Buildings1 57 10 419 Buildings1 67 8 377 Buildings1 68 8 378 Buildings1 69 8 379 Buildings1 67 9 397 Buildings1 68 9 398 Buildings1 69 9 399 Buildings1 67 10 417 Buildings1 68 10 418 Buildings1 69 10 419 Buildings1 24 11 297 Buildings1 25 11 298 Buildings1 26 11 299 Buildings1 24 12 317 Buildings1 25 12 318 Buildings1 26 12 319 Buildings1 24 13 337 Buildings1 25 13 338 Buildings1 26 13 339 Buildings1 48 11 297 Buildings1 49 11 298 Buildings1 50 11 299 Buildings1 48 12 317 Buildings1 49 12 318 Buildings1 50 12 319 Buildings1 48 13 337 Buildings1 49 13 338 Buildings1 50 13 339"/>
+  <property name="Pathoschild.CentralStation_TouristAreas" value="FoodCourt 3 13 19 15 Bookshelves 55 14 15 2 GiftShop 53 20 19 8 TicketCounter 29 8 17 8 WaitingArea 29 21 17 12"/>
  </properties>
  <tileset firstgid="1" name="z_walls_and_floors" tilewidth="16" tileheight="16" tilecount="688" columns="16">
   <image source=".walls_and_floors" width="256" height="688"/>

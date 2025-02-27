@@ -79,6 +79,17 @@ internal class GenericField : ICustomField
         }
     }
 
+    /// <summary>Collapse the field by default, so the user needs to click a link to expand it.</summary>
+    /// <param name="linkText">The link text to show.</param>
+    public void CollapseByDefault(string linkText)
+    {
+        this.ExpandLink = new LinkField(this.Label, linkText, () =>
+        {
+            this.ExpandLink = null;
+            return null;
+        });
+    }
+
 
     /*********
     ** Protected methods
@@ -96,17 +107,6 @@ internal class GenericField : ICustomField
         return !string.IsNullOrWhiteSpace(value)
             ? [new FormattedText(value)]
             : [];
-    }
-
-    /// <summary>Collapse the field by default, so the user needs to click a link to expand it.</summary>
-    /// <param name="linkText">The link text to show.</param>
-    protected void CollapseByDefault(string linkText)
-    {
-        this.ExpandLink = new LinkField(this.Label, linkText, () =>
-        {
-            this.ExpandLink = null;
-            return null;
-        });
     }
 
     /// <summary>Get the display value for sale price data.</summary>

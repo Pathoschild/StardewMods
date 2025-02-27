@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[условия: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "не {{value}}",
 
     "condition.day-of-month": "on specific days ({{days}})", // TODO
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in 
-    "item.recipes-for-machine.conditions": "[условия: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Функции некоторого оборудования слишком сложны для отображения.",
     "item.number-owned.summary": "У вас есть {{count}} шт.",
     "item.number-crafted.summary": "Вы создали {{count}} шт.",
@@ -624,19 +625,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
     "tile.game-location": "Локация",
     "tile.map-name": "Название локации",
-    "tile.tile": "Тайл",
-    "tile.tile-index": "{{layerName}}: индекс тайла",
-    "tile.tilesheet": "{{layerName}}: таблица тайла",
-    "tile.blend-mode": "{{layerName}}: режим перекрытия",
-    "tile.index-property": "{{layerName}}: ix свойства: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: свойства: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Тайл",
 
     // values
-    "tile.tile.none-here": "здесь нет тайла",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "режим перекрытия: {{value}}",
+    "tile.layer-tile.index-property": "ix свойства: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "свойства: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "здесь нет тайла",
 
 
     /*********

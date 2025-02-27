@@ -146,6 +146,8 @@
     ** Conditions & context tags
     *********/
     // TODO
+    "conditions-summary": "[conditions: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "not {{value}}",
 
     "condition.day-of-month": "on specific days ({{days}})",
@@ -358,7 +360,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (precisa de {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
-    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]", // TODO
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "Possui {{count}} desses",
     "item.number-crafted.summary": "Criou {{count}} desses",
@@ -625,19 +626,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "A posição de um bloco no mapa. Isso é exibido porque você ativou as pesquisas de blocos na configuração",
     "tile.game-location": "Localização",
     "tile.map-name": "Nome do mapa",
-    "tile.tile": "Bloco",
-    "tile.tile-index": "{{layerName}}: Índice do bloco",
-    "tile.tilesheet": "{{layerName}}: Planilha",
-    "tile.blend-mode": "{{layerName}}: Modo de mistura",
-    "tile.index-property": "{{layerName}}: Índice da propriedade: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: Propriedade: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Bloco",
 
     // values
-    "tile.tile.none-here": "Sem blocos aqui",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "Modo de mistura: {{value}}",
+    "tile.layer-tile.index-property": "Índice da propriedade: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "Propriedade: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "Sem blocos aqui",
 
 
     /*********

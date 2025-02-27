@@ -21,8 +21,9 @@ internal record FishPondDropData : ItemDropData
     /// <param name="minDrop">The minimum number to drop.</param>
     /// <param name="maxDrop">The maximum number to drop.</param>
     /// <param name="probability">The probability that the item will be dropped.</param>
-    public FishPondDropData(int minPopulation, string itemID, int minDrop, int maxDrop, float probability)
-        : base(itemID, minDrop, maxDrop, probability)
+    /// <param name="conditions">If set, a game state query which indicates when this entry should be applied.</param>
+    public FishPondDropData(int minPopulation, string itemID, int minDrop, int maxDrop, float probability, string? conditions)
+        : base(itemID, minDrop, maxDrop, probability, conditions)
     {
         this.MinPopulation = Math.Max(minPopulation, 1); // rule only applies if the pond has at least one fish, so assume minimum of 1 to avoid player confusion
     }

@@ -1,11 +1,25 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.2.0
+Released 26 February 2025 for SMAPI 4.1.10 or later.
+
+* For players:
+  * Added more tourist spots in the gift shop.
+  * Added rare chance for the station to be dark when traveling late.
+  * Rare interactions in the Central Station now only happen after you've visited it a certain number of times.
+  * Improved translations. Thanks to rosearecute_52045 (added Korean)!
+
+* For mod authors:
+  * Added `OnlyInAreas` tourist field, which sets which part of the Central Station a tourist can appear in.
+  * Added `Pathoschild.CentralStation_TimesVisited` stat to track the number of visits to the Central Station.
+  * Fixed stops with `"Tile": null` ignoring ticket machines past tile position (64, 64) when choosing a default position.
+
 ## 1.1.0
 Released 11 February 2025 for SMAPI 4.1.10 or later.
 
 * For players:
-  * Improved central station's exit door area and added a rare interaction for it.
+  * Improved Central Station's exit door area and added a rare interaction for it.
   * If you see multiple rare messages in a play session, you now always see a different one.
   * Raised juice prices to prevent reselling them for a higher price with the artisan profession.
   * Fixed map layer issue with a gift shop basket.
@@ -27,8 +41,8 @@ Released 07 February 2025 for SMAPI 4.1.10 or later.
 
 - Initial release. This includes:
   - boat, bus, and train networks.
-  - Central station map and custom ticket machine sprite commissioned from [Kisaa](https://next.nexusmods.com/profile/crystalinerose) (thanks!).
-  - food court, gift shop, tourists, interactive bookshelves, and rare interactions in the central station.
+  - Central Station map and custom ticket machine sprite commissioned from [Kisaa](https://next.nexusmods.com/profile/crystalinerose) (thanks!).
+  - food court, gift shop, tourists, interactive bookshelves, and rare interactions in the Central Station.
   - integrations with the Bus Locations, CJB Cheats Menu, and Train Station mods.
   - data assets to register stops, tourists, and bookshelf messages through Content Patcher.
   - C# mod API to register stops.

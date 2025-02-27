@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[Bedingung: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "nicht {{value}}",
 
     "condition.day-of-month": "An bestimmten Tagen ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "[Bedingung: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
     "item.number-owned.summary": "Du besitzt {{count}} davon",
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
@@ -623,19 +624,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
     "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
-    "tile.tile": "Kachel",
-    "tile.tile-index": "{{layerName}}: Kachelindex",
-    "tile.tilesheet": "{{layerName}}: Kachelblatt",
-    "tile.blend-mode": "{{layerName}}: Überblendungsmodus",
-    "tile.index-property": "{{layerName}}: Indexeigenschaften: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Kachel",
 
     // values
-    "tile.tile.none-here": "Keine Kachel hier.",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "Überblendungsmodus: {{value}}",
+    "tile.layer-tile.index-property": "Indexeigenschaften: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "Eigenschaften: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "Keine Kachel hier.",
 
 
     /*********

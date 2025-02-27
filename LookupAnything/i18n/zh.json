@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags (条件 & 上下文标签)
     *********/
+    "conditions-summary": "[条件: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "非{{value}}",
 
     "condition.day-of-month": "每季指定日期 ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in (例如. 宝石复制机放入的物品和产出的物品一致)
-    "item.recipes-for-machine.conditions": "[条件: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "一些生产规则因太复杂而无法显示",
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
     "item.number-crafted.summary": "你已制造{{count}}个此物",
@@ -406,7 +407,7 @@
     // values (数值)
     "item.fish-spawn-rules.min-fishing-level": "最低钓鱼等级：{{level}}",
     "item.fish-spawn-rules.not-caught-yet": "尚未被抓住（只能被抓住一次）",
-    "item.fish-spawn-rules.extended-family-quest-active": "\"Extended Family\" quest active", // TODO
+    "item.fish-spawn-rules.extended-family-quest-active": "“大家族”任务正在进行",
     "item.fish-spawn-rules.locations": "地点：{{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "地点：",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
@@ -623,19 +624,30 @@
     /*********
     ** Tile lookups (图块查询)
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels (标签)
     "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
     "tile.game-location": "位置",
     "tile.map-name": "地图名",
-    "tile.tile": "图块",
-    "tile.tile-index": "{{layerName}}: 图块索引",
-    "tile.tilesheet": "{{layerName}}: 图块集",
-    "tile.blend-mode": "{{layerName}}: 混合模式",
-    "tile.index-property": "{{layerName}}: 索引属性: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: 图块属性: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "图块",
 
     // values (数值)
-    "tile.tile.none-here": "此处无图块",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "混合模式: {{value}}",
+    "tile.layer-tile.index-property": "索引属性: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "图块属性: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "此处无图块",
 
 
     /*********

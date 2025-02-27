@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.0
+Released 26 February 2025 for SMAPI 4.1.10 or later.
+
+- Added [mod API to add custom data layers](author-guide.md) (thanks to collaboration with focustense!).
+
 ## 1.19.1
 Released 11 February 2025 for SMAPI 4.1.10 or later.
 

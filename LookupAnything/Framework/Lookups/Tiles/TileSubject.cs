@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using xTile.Layers;
-using xTile.ObjectModel;
 using xTile.Tiles;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles;
@@ -51,25 +51,46 @@ internal class TileSubject : BaseSubject
             // yield map data
             yield return new GenericField(I18n.Tile_MapName(), this.Location.Name);
 
+            // yield map properties
+            StringBuilder summary = new();
+            if (this.Location.Map.Properties.Count > 0)
+            {
+                foreach ((string key, string value) in this.Location.Map.Properties)
+                    summary.AppendLine(I18n.Tile_MapProperties_Value(name: key, value: value));
+
+                var field = new GenericField(I18n.Tile_MapProperties(), summary.ToString());
+                if (summary.Length > 50)
+                    field.CollapseByDefault(I18n.Generic_ShowXResults(this.Location.Map.Properties.Count));
+
+                yield return field;
+                summary.Clear();
+            }
+
+
             // get tile on each layer
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             if (!tiles.Any())
             {
-                yield return new GenericField(I18n.Tile_Tile(), I18n.Tile_Tile_NoneHere());
+                yield return new GenericField(I18n.Tile_LayerTileNone(), I18n.Tile_LayerTile_NoneHere());
                 yield break;
             }
 
             // fetch tile data
             foreach (Tile tile in tiles)
             {
-                string layerName = tile.Layer.Id;
-                yield return new GenericField(I18n.Tile_TileIndex(layerName: layerName), this.Stringify(tile.TileIndex));
-                yield return new GenericField(I18n.Tile_Tilesheet(layerName: layerName), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
-                yield return new GenericField(I18n.Tile_BlendMode(layerName: layerName), this.Stringify(tile.BlendMode));
-                foreach (KeyValuePair<string, PropertyValue> property in tile.TileIndexProperties)
-                    yield return new GenericField(I18n.Tile_IndexProperty(layerName: layerName, propertyName: property.Key), property.Value);
-                foreach (KeyValuePair<string, PropertyValue> property in tile.Properties)
-                    yield return new GenericField(I18n.Tile_TileProperty(layerName: layerName, propertyName: property.Key), property.Value);
+                summary.AppendLine(I18n.Tile_LayerTile_Appearance(index: this.Stringify(tile.TileIndex), tilesheetId: tile.TileSheet.Id, tilesheetPath: tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": ")));
+                summary.AppendLine();
+
+                if (tile.BlendMode != BlendMode.Alpha)
+                    summary.AppendLine(I18n.Tile_LayerTile_BlendMode(value: this.Stringify(tile.BlendMode)));
+
+                foreach ((string name, string value) in tile.Properties)
+                    summary.AppendLine(I18n.Tile_LayerTile_TileProperty(name: name, value: value));
+                foreach ((string name, string value) in tile.TileIndexProperties)
+                    summary.AppendLine(I18n.Tile_LayerTile_IndexProperty(name: name, value: value));
+
+                yield return new GenericField(I18n.Tile_LayerTile(layer: tile.Layer.Id), summary.ToString().TrimEnd());
+                summary.Clear();
             }
         }
     }

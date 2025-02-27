@@ -145,6 +145,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[điều kiện: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "không phải {{value}}",
 
     "condition.day-of-month": "vào những ngày cụ thể ({{days}})",
@@ -357,7 +359,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (cần {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[giống như đầu vào]",
-    "item.recipes-for-machine.conditions": "[điều kiện: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Một số quy tắc của máy quá phức tạp để hiển thị.",
     "item.number-owned.summary": "Bạn sở hữu {{count}} cái",
     "item.number-crafted.summary": "Bạn đã chế tạo {{count}} cái",
@@ -624,19 +625,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Vị trí 1 ô trên bản đồ. Điều này hiển thị khi bạn đã bật tile lookups trong configuration.",
     "tile.game-location": "Vị trí",
     "tile.map-name": "Tên bản đồ",
-    "tile.tile": "Ô",
-    "tile.tile-index": "{{layerName}}: chỉ số ô",
-    "tile.tilesheet": "{{layerName}}: bảng ô",
-    "tile.blend-mode": "{{layerName}}: chế độ hòa trộn",
-    "tile.index-property": "{{layerName}}: thuộc tính ix: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: thuộc tính: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Ô",
 
     // values
-    "tile.tile.none-here": "không có ô ở đây",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "chế độ hòa trộn: {{value}}",
+    "tile.layer-tile.index-property": "thuộc tính ix: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "thuộc tính: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "không có ô ở đây",
 
 
     /*********

@@ -144,6 +144,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[conditions: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "not {{value}}",
 
     "condition.day-of-month": "on specific days ({{days}})",
@@ -356,7 +358,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (needs {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.",
     "item.number-owned.summary": "you own {{count}} of these",
     "item.number-crafted.summary": "you made {{count}} of these",
@@ -623,19 +624,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
     "tile.game-location": "Location",
     "tile.map-name": "Map name",
-    "tile.tile": "Tile",
-    "tile.tile-index": "{{layerName}}: tile index",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: blend mode",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.map-properties": "Map properties",
+    "tile.layer-tile": "{{layer}} tile",
+    "tile.layer-tile-none": "Tile",
 
     // values
-    "tile.tile.none-here": "no tile here",
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')",
+    "tile.layer-tile.blend-mode": "blend mode: {{value}}",
+    "tile.layer-tile.index-property": "index property: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "tile property: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "no tile here",
 
 
     /*********

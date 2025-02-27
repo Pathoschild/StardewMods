@@ -146,6 +146,8 @@
     ** Conditions & context tags
     *********/
     // TODO
+    "conditions-summary": "[conditions: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "not {{value}}",
 
     "condition.day-of-month": "on specific days ({{days}})",
@@ -358,7 +360,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} (szükséges: {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
-    "item.recipes-for-machine.conditions": "[conditions: {{conditions}}]", // TODO
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "ennyit birtokolsz ebből: {{count}}",
     "item.number-crafted.summary": "ennyit készítettél ebből: {{count}}",
@@ -634,19 +635,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
     "tile.game-location": "Location", // TODO
     "tile.map-name": "Térkép neve",
-    "tile.tile": "Négyzet",
-    "tile.tile-index": "{{layerName}}: négyzetmutató",
-    "tile.tilesheet": "{{layerName}}: négyzet",
-    "tile.blend-mode": "{{layerName}}: keverési mód",
-    "tile.index-property": "{{layerName}}: ix tulajdonságok: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: tulajdonságok: {{propertyName}}",
+    "tile.map-properties": "Map properties", // TODO
+    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.layer-tile-none": "Négyzet",
 
     // values
-    "tile.tile.none-here": "itt nem található négyzet",
+    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
+    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.layer-tile.blend-mode": "keverési mód: {{value}}",
+    "tile.layer-tile.index-property": "ix tulajdonságok: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "tulajdonságok: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "itt nem található négyzet",
 
 
     /*********

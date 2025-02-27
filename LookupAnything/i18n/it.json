@@ -143,6 +143,8 @@
     /*********
     ** Conditions & context tags
     *********/
+    "conditions-summary": "[condizioni: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
     "condition-or-context-tag.negate": "non {{value}}",
 
     "condition.day-of-month": "in giorni specifici ({{days}})",
@@ -355,7 +357,6 @@
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} necessari)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.recipes-for-machine.same-as-input": "[stesso oggetto]", // e.g. crystalarium produces same item that was put in
-    "item.recipes-for-machine.conditions": "[condizioni: {{conditions}}]",
     "item.recipes-for-machine.too-complex": "Alcune regole della macchina sono troppo dinamiche per essere visualizzate.",
     "item.number-owned.summary": "Quantità posseduta: {{count}}",
     "item.number-crafted.summary": "Quantità fabbricata: {{count}}",
@@ -622,19 +623,30 @@
     /*********
     ** Tile lookups
     *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
     // labels
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
     "tile.game-location": "Posizione",
     "tile.map-name": "Nome mappa",
-    "tile.tile": "Tassello della mappa",
-    "tile.tile-index": "{{layerName}}: indice tasselli della mappa",
-    "tile.tilesheet": "{{layerName}}: listatassellimappa",
-    "tile.blend-mode": "{{layerName}}: modalità mimetizzazione",
-    "tile.index-property": "{{layerName}}: oggetti ix: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: oggetti: {{propertyName}}",
+    "tile.map-properties": "Proprietà della mappa",
+    "tile.layer-tile": "Tassello {{layer}}",
+    "tile.layer-tile-none": "Tassello della mappa",
 
     // values
-    "tile.tile.none-here": "nessun tassello della mappa qui",
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "indice {{index}} dal tilesheet '{{tilesheetId}}' (percorso: '{{tilesheetPath}}')",
+    "tile.layer-tile.blend-mode": "modalità mimetizzazione: {{value}}",
+    "tile.layer-tile.index-property": "proprietà indice: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "proprietà tassello: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "nessun tassello della mappa qui",
 
 
     /*********
