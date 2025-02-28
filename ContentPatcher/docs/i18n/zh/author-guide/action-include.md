@@ -28,7 +28,7 @@
 ```
 
 ### 格式<a name="format"></a>
-一个`Include`补丁是一个`Changes`以下的并含有这些字段的模型：
+一个`Include`补丁是一个`Changes`以下含有这些字段的模型：
 
 <dl>
 <dt>必填字段：</dt>
@@ -56,7 +56,7 @@ field     | purpose
 </dd>
 </dl>
 
-### 示例<a name="format"></a>
+### 示例<a name="example"></a>
 最基本的使用方式是用`Include`把你的补丁分类到子文件里：
 
 ```js
