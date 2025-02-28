@@ -117,10 +117,10 @@
     "location.forest.island-tip": "Orman Nehri (büyük adanın güney ucu)",
     "location.forest.lake": "Orman Göleti",
     "location.forest.river": "Orman Nehri",
-    "location.HarveyRoom": "Harvey's Room", // TODO
-    "location.LeoTreeHouse": "Treehouse", // TODO
-    "location.SandyHouse": "Oasis", // TODO
-    "location.SebastianRoom": "Sebastian's Room", // TODO
+    "location.HarveyRoom": "Harvey'in Odası", 
+    "location.LeoTreeHouse": "Ağaç Ev", 
+    "location.SandyHouse": "Vaha", 
+    "location.SebastianRoom": "Sebastiyan'ın Odası", 
     "location.submarine": "Akşam Pazarı Denizaltısı",
     "location.town.northmost-bridge": "Kasaba (en kuzeydeki köprü)",
     "location.undergroundMine": "Maden",
@@ -311,8 +311,8 @@
     "crop.summary.drops-X-to-Y": "{{min}}'den {{max}} taneye kadar düşer ({{percent}}% ekstra mahsul şansı)",
     "crop.summary.harvest-once": "{{daysToFirstHarvest}} gün sonra hasat edilir",
     "crop.summary.harvest-multi": "{{daysToFirstHarvest}} günün ardından her {{daysToNextHarvests}} günde bir hasat edilir",
-    "crop.summary.farming-xp": "gives +{{amount}} farming XP per harvest", // TODO
-    "crop.summary.foraging-xp": "gives +{{amount}} foraging XP per harvest", // TODO
+    "crop.summary.farming-xp": "Hasat başına +{{amount}} çiftçilik tecrübesi kazandırır." ,
+    "crop.summary.foraging-xp": "Hasat başına +{{amount}} toplayıcılık tecrübesi kazandırır.",
     "crop.summary.seasons": "{{seasons}} mevsiminde büyür",
     "crop.summary.sells-for": "{{price}} satılır",
     "crop.harvest.too-late": "sonraki hasat için sezon çok geç (muhtemelen {{date}})",
@@ -500,7 +500,7 @@
     "npc.neutral-gifts": "Nötr hediyeler",
     "npc.dislikes-gifts": "Beğenilmeyen hediyeler",
     "npc.hates-gifts": "Nefret edilen hediyeler",
-    "npc.schedule": "Today's schedule", // TODO
+    "npc.schedule": "Bugünün takvimi",
 
     // values
     "npc.can-romance.married": "Evlisin! <", // < turns into a heart
@@ -510,10 +510,9 @@
     "npc.friendship.need-points": "{{count}} puana gelişir",
     "npc.undiscovered-gift-taste": "{{count}} gizli nesneler",
     "npc.unowned-gift-taste": "{{count}} sahipsiz öğe",
-    "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
-    "npc.schedule.no-entries": "No schedule loaded.", // TODO
-    "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
-
+    "npc.schedule.current-position": "Şu anda şurada: {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.no-entries": "Hiçbir program yüklenmedi.",
+    "npc.schedule.entry": "{{time}}: saatinde şurada olacak {{locationName}} ({{x}}, {{y}}).",
 
     /*********
     ** NPC > child lookups
@@ -637,13 +636,13 @@
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.map-properties": "Map properties", // TODO
-    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.map-properties": "Harita Özellikleri", 
+    "tile.layer-tile": "{{layer}} Karo", 
     "tile.layer-tile-none": "Karo",
 
     // values
-    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
-    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.map-properties.value": "{{name}}: {{value}}", 
+    "tile.layer-tile.appearance": "Döşeme Levhası (Tilesheet) '{{tilesheetId}}' (yol: '{{tilesheetPath}}') içindeki indeks {{index}}",
     "tile.layer-tile.blend-mode": "karışım modu: {{value}}",
     "tile.layer-tile.index-property": "ix destekleri: {{name}}: {{value}}",
     "tile.layer-tile.tile-property": "destekler: {{name}}: {{value}}",
@@ -781,7 +780,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.toggle-search.name": "Lookup Anything",
-    "icon.toggle-search.desc": "Toggle Lookup Anything Search"
+    "icon.toggle-search.name": "Her Şeye Bak",
+    "icon.toggle-search.desc": "Her Şeye Bak aramasını açar"
 }

@@ -251,7 +251,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.summon-tractor.name": "Tractor Mod",
-    "icon.summon-tractor.desc": "Summon Tractor"
+    "icon.summon-tractor.name": "Traktör Modu",
+    "icon.summon-tractor.desc": "Traktörü Çağırır"
 }

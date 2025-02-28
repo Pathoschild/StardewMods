@@ -130,7 +130,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.open-menu.name": "Chests Anywhere",
-    "icon.open-menu.desc": "Open Menu"
+    "icon.open-menu.name": "Her Yerden Ulaşılabilir Sandıklar",
+    "icon.open-menu.desc": "Menüyü Aç"
 }
