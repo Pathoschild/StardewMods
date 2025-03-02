@@ -511,10 +511,10 @@
     "npc.unowned-gift-taste": "{{count}} oggetti non posseduti",
     "npc.schedule.current-position": "Attualmente si trova presso {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Nessun programma caricato.",
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
+    "npc.schedule.not-following-schedule": "Al momento non sta seguendo un programma. Di solit oquesto significa che un PNG sta eseguendo un'attività straordinaria (es. si trova al cinema).",
     "npc.schedule.entry": "{{time}}: cammina verso {{locationName}} ({{x}}, {{y}}).",
-    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
-    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
+    "npc.schedule.farmhand.unknown-position": "Attualmente in una posizione sconosciuta all'host.",
+    "npc.schedule.farmhand.unknown-schedule": "In multigiocatore i PNG sono gestiti dall'host, perciò il loro programma non è disponibile.",
 
 
     /*********
