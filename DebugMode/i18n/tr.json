@@ -8,7 +8,7 @@
     "label.menu": "menü",
     "label.submenu": "alt menü",
     "label.minigame": "mini oyun",
-    "label.dialogue": "dialogue", // TODO
+    "label.dialogue": "diyalog",
     "label.festival-name": "festival",
     "label.event-id": "olay ID",
     "label.event-script": "olay senaryosu",
@@ -34,7 +34,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.toggle-debug-mode.name": "Debug Mode",
-    "icon.toggle-debug-mode.desc": "Toggle Debug Mode"
+    "icon.toggle-debug-mode.name": "Hata Ayıklama Modu",
+    "icon.toggle-debug-mode.desc": "Hata ayıklama modunu aç"
 }

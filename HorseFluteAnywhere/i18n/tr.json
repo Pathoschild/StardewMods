@@ -12,7 +12,6 @@
     /*********
     ** Iconic Framework
     *********/
-    // TODO
-    "icon.summon-horse.name": "Horse Flute Anywhere",
-    "icon.summon-horse.desc": "Summon Horse"
+    "icon.summon-horse.name": "Her Yerde Kullanılabilir At Fülütü",
+    "icon.summon-horse.desc": "Atı çağırır"
 }
