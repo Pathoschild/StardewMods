@@ -513,6 +513,7 @@
     "npc.unowned-gift-taste": "소유하지 않은 품목 {{count}}개",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
 
 

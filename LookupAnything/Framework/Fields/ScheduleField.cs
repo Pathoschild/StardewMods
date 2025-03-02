@@ -29,8 +29,6 @@ internal class ScheduleField : GenericField
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     private static IEnumerable<IFormattedText> GetText(NPC npc, GameHelper gameHelper)
     {
-        ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
-
         // current location
         {
             string locationName = npc.currentLocation is not null
@@ -41,34 +39,45 @@ internal class ScheduleField : GenericField
             yield return new FormattedText(Environment.NewLine + Environment.NewLine);
         }
 
-        // schedule entries
-        if (schedule.Length > 0)
+        // validate schedule
+        ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
+        if (schedule.Length is 0)
         {
-            for (int i = 0; i < schedule.Length; i++)
-            {
-                (int time, SchedulePathDescription entry) = schedule[i];
-
-                string locationName = gameHelper.GetLocationDisplayName(entry.targetLocationName, Game1.getLocationFromName(entry.targetLocationName)?.GetData());
-                bool isStarted = Game1.timeOfDay >= time;
-                bool isFinished = i < schedule.Length - 1 && Game1.timeOfDay >= schedule[i + 1].Time;
-
-                Color textColor = isStarted
-                    ? (isFinished ? Color.Gray : Color.Green)
-                    : Color.Black;
-
-                if (i > 0)
-                    yield return new FormattedText(Environment.NewLine);
-                yield return new FormattedText(I18n.Npc_Schedule_Entry(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y), textColor);
-            }
-        }
-        else
             yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
+            yield break;
+        }
+        if (npc.ignoreScheduleToday || !npc.followSchedule)
+        {
+            yield return new FormattedText(I18n.Npc_Schedule_NotFollowingSchedule());
+            yield break;
+        }
+
+        // show schedule entries
+        for (int i = 0; i < schedule.Length; i++)
+        {
+            (int time, SchedulePathDescription entry) = schedule[i];
+
+            string locationName = gameHelper.GetLocationDisplayName(entry.targetLocationName, Game1.getLocationFromName(entry.targetLocationName)?.GetData());
+            bool isStarted = Game1.timeOfDay >= time;
+            bool isFinished = i < schedule.Length - 1 && Game1.timeOfDay >= schedule[i + 1].Time;
+
+            Color textColor = isStarted
+                ? (isFinished ? Color.Gray : Color.Green)
+                : Color.Black;
+
+            if (i > 0)
+                yield return new FormattedText(Environment.NewLine);
+            yield return new FormattedText(I18n.Npc_Schedule_Entry(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y), textColor);
+        }
     }
 
     /// <summary>Returns a collection of schedule entries sorted by time. Consecutive entries with the same target location are omitted.</summary>
     /// <param name="schedule">The schedule to format.</param>
-    private static IEnumerable<ScheduleEntry> FormatSchedule(Dictionary<int, SchedulePathDescription> schedule)
+    private static IEnumerable<ScheduleEntry> FormatSchedule(Dictionary<int, SchedulePathDescription>? schedule)
     {
+        if (schedule is null)
+            yield break;
+
         List<int> sortedKeys = [.. schedule.Keys.OrderBy(key => key)];
         string prevTargetLocationName = string.Empty;
 

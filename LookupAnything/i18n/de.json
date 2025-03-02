@@ -512,6 +512,7 @@
     "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
     "npc.schedule.current-position": "Derzeit bei {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Kein Zeitplan geladen.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: gehe zu {{locationName}} ({{x}}, {{y}}).",
 
 

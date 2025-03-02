@@ -512,6 +512,7 @@
     "npc.unowned-gift-taste": "{{count}} unowned items",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "No schedule loaded.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).",
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).",
 
 

@@ -511,6 +511,7 @@
     "npc.unowned-gift-taste": "{{count}} oggetti non posseduti",
     "npc.schedule.current-position": "Attualmente si trova presso {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Nessun programma caricato.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: cammina verso {{locationName}} ({{x}}, {{y}}).",
 
 

@@ -512,6 +512,7 @@
     "npc.unowned-gift-taste": "{{count}} 个未拥有的物品",
     "npc.schedule.current-position": "当前位于{{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "未加载日程.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: 步行至{{locationName}} ({{x}}, {{y}}).",
 
 
