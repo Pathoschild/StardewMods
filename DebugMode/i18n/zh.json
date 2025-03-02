@@ -8,7 +8,7 @@
     "label.menu": "菜单",
     "label.submenu": "子菜单",
     "label.minigame": "小游戏",
-    "label.dialogue": "dialogue", // TODO
+    "label.dialogue": "对话",
     "label.festival-name": "节日",
     "label.event-id": "事件ID",
     "label.event-script": "事件脚本",
