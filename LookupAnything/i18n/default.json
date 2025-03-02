@@ -514,6 +514,8 @@
     "npc.schedule.no-entries": "No schedule loaded.",
     "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).",
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.",
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.",
 
 
     /*********

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Pathfinding;
 
@@ -29,45 +30,57 @@ internal class ScheduleField : GenericField
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     private static IEnumerable<IFormattedText> GetText(NPC npc, GameHelper gameHelper)
     {
+        bool isFarmhand = !Context.IsMainPlayer;
+
         // current location
+        GameLocation? location = npc.currentLocation;
+        if (isFarmhand && location?.IsActiveLocation() is not true)
+            yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownPosition());
+        else
         {
-            string locationName = npc.currentLocation is not null
-                ? gameHelper.GetLocationDisplayName(npc.currentLocation.Name, npc.currentLocation.GetData())
+            string locationName = location is not null
+                ? gameHelper.GetLocationDisplayName(location.Name, location.GetData())
                 : "???";
 
             yield return new FormattedText(I18n.Npc_Schedule_CurrentPosition(locationName: locationName, x: npc.TilePoint.X, y: npc.TilePoint.Y));
-            yield return new FormattedText(Environment.NewLine + Environment.NewLine);
         }
+        yield return new FormattedText(Environment.NewLine + Environment.NewLine);
 
-        // validate schedule
-        ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
-        if (schedule.Length is 0)
+        // schedule
+        if (isFarmhand)
+            yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownSchedule());
+        else
         {
-            yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
-            yield break;
-        }
-        if (npc.ignoreScheduleToday || !npc.followSchedule)
-        {
-            yield return new FormattedText(I18n.Npc_Schedule_NotFollowingSchedule());
-            yield break;
-        }
+            // validate schedule
+            ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
+            if (schedule.Length is 0)
+            {
+                yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
+                yield break;
+            }
+            if (npc.ignoreScheduleToday || !npc.followSchedule)
+            {
+                yield return new FormattedText(I18n.Npc_Schedule_NotFollowingSchedule());
+                yield break;
+            }
 
-        // show schedule entries
-        for (int i = 0; i < schedule.Length; i++)
-        {
-            (int time, SchedulePathDescription entry) = schedule[i];
+            // show schedule entries
+            for (int i = 0; i < schedule.Length; i++)
+            {
+                (int time, SchedulePathDescription entry) = schedule[i];
 
-            string locationName = gameHelper.GetLocationDisplayName(entry.targetLocationName, Game1.getLocationFromName(entry.targetLocationName)?.GetData());
-            bool isStarted = Game1.timeOfDay >= time;
-            bool isFinished = i < schedule.Length - 1 && Game1.timeOfDay >= schedule[i + 1].Time;
+                string locationName = gameHelper.GetLocationDisplayName(entry.targetLocationName, Game1.getLocationFromName(entry.targetLocationName)?.GetData());
+                bool isStarted = Game1.timeOfDay >= time;
+                bool isFinished = i < schedule.Length - 1 && Game1.timeOfDay >= schedule[i + 1].Time;
 
-            Color textColor = isStarted
-                ? (isFinished ? Color.Gray : Color.Green)
-                : Color.Black;
+                Color textColor = isStarted
+                    ? (isFinished ? Color.Gray : Color.Green)
+                    : Color.Black;
 
-            if (i > 0)
-                yield return new FormattedText(Environment.NewLine);
-            yield return new FormattedText(I18n.Npc_Schedule_Entry(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y), textColor);
+                if (i > 0)
+                    yield return new FormattedText(Environment.NewLine);
+                yield return new FormattedText(I18n.Npc_Schedule_Entry(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y), textColor);
+            }
         }
     }
 
