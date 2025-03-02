@@ -117,10 +117,10 @@
     "location.forest.island-tip": "Orman Nehri (büyük adanın güney ucu)",
     "location.forest.lake": "Orman Göleti",
     "location.forest.river": "Orman Nehri",
-    "location.HarveyRoom": "Harvey'in Odası", 
-    "location.LeoTreeHouse": "Ağaç Ev", 
-    "location.SandyHouse": "Vaha", 
-    "location.SebastianRoom": "Sebastiyan'ın Odası", 
+    "location.HarveyRoom": "Harvey'in Odası",
+    "location.LeoTreeHouse": "Ağaç Ev",
+    "location.SandyHouse": "Vaha",
+    "location.SebastianRoom": "Sebastiyan'ın Odası",
     "location.submarine": "Akşam Pazarı Denizaltısı",
     "location.town.northmost-bridge": "Kasaba (en kuzeydeki köprü)",
     "location.undergroundMine": "Maden",
@@ -311,7 +311,7 @@
     "crop.summary.drops-X-to-Y": "{{min}}'den {{max}} taneye kadar düşer ({{percent}}% ekstra mahsul şansı)",
     "crop.summary.harvest-once": "{{daysToFirstHarvest}} gün sonra hasat edilir",
     "crop.summary.harvest-multi": "{{daysToFirstHarvest}} günün ardından her {{daysToNextHarvests}} günde bir hasat edilir",
-    "crop.summary.farming-xp": "Hasat başına +{{amount}} çiftçilik tecrübesi kazandırır." ,
+    "crop.summary.farming-xp": "Hasat başına +{{amount}} çiftçilik tecrübesi kazandırır.",
     "crop.summary.foraging-xp": "Hasat başına +{{amount}} toplayıcılık tecrübesi kazandırır.",
     "crop.summary.seasons": "{{seasons}} mevsiminde büyür",
     "crop.summary.sells-for": "{{price}} satılır",
@@ -514,6 +514,7 @@
     "npc.schedule.no-entries": "Hiçbir program yüklenmedi.",
     "npc.schedule.entry": "{{time}}: saatinde şurada olacak {{locationName}} ({{x}}, {{y}}).",
 
+
     /*********
     ** NPC > child lookups
     *********/
@@ -636,12 +637,12 @@
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.map-properties": "Harita Özellikleri", 
-    "tile.layer-tile": "{{layer}} Karo", 
+    "tile.map-properties": "Harita Özellikleri",
+    "tile.layer-tile": "{{layer}} Karo",
     "tile.layer-tile-none": "Karo",
 
     // values
-    "tile.map-properties.value": "{{name}}: {{value}}", 
+    "tile.map-properties.value": "{{name}}: {{value}}",
     "tile.layer-tile.appearance": "Döşeme Levhası (Tilesheet) '{{tilesheetId}}' (yol: '{{tilesheetPath}}') içindeki indeks {{index}}",
     "tile.layer-tile.blend-mode": "karışım modu: {{value}}",
     "tile.layer-tile.index-property": "ix destekleri: {{name}}: {{value}}",
