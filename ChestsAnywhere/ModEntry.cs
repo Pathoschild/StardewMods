@@ -190,7 +190,7 @@ internal class ModEntry : Mod
     {
         if (Game1.activeClickableMenu is GameMenu gameMenu)
             return gameMenu.GetCurrentPage();
-        return this.BetterGameMenu?.ActiveMenu?.CurrentPage;
+        return this.BetterGameMenu?.GetCurrentPage(Game1.activeClickableMenu);
     }
 
     /// <summary>Change the chest UI overlay if needed to match the current menu.</summary>
