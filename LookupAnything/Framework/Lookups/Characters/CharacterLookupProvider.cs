@@ -78,7 +78,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
     /// <inheritdoc />
     public override ISubject? GetSubject(IClickableMenu menu, int cursorX, int cursorY)
     {
-        IClickableMenu targetMenu = (menu as GameMenu)?.GetCurrentPage() ?? menu;
+        IClickableMenu targetMenu = this.GameHelper.GetCurrentMenuPage(menu) ?? menu;
         switch (targetMenu)
         {
             /****
