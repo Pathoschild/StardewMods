@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
 using Pathoschild.Stardew.DebugMode.Framework;
@@ -30,6 +31,9 @@ internal class ModEntry : Mod
 
     /// <summary>Whether to show the debug info overlay.</summary>
     private readonly PerScreen<bool> ShowOverlay = new();
+
+    /// <summary>The Better Game Menu integration.</summary>
+    private BetterGameMenuIntegration? BetterGameMenu;
 
     /// <summary>Whether the built-in debug mode is enabled.</summary>
     private bool GameDebugMode
@@ -111,6 +115,9 @@ internal class ModEntry : Mod
                 this.ToggleDebugMenu
             );
         }
+
+        // add Better Game Menu
+        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />
@@ -310,7 +317,7 @@ internal class ModEntry : Mod
         {
             GameMenu gameMenu => gameMenu.pages[gameMenu.currentTab],
             TitleMenu => TitleMenu.subMenu,
-            _ => null
+            _ => this.BetterGameMenu?.GetCurrentPage(menu)
         };
     }
 }
