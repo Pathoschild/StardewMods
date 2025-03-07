@@ -5,6 +5,7 @@ using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
 using Pathoschild.Stardew.Common.Messages;
@@ -44,6 +45,8 @@ internal class ModEntry : Mod
     /// <summary>The overlay for the current menu, which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
     private readonly PerScreen<IStorageOverlay?> CurrentOverlay = new();
 
+    /// <summary>The Better Game Menu integration.</summary>
+    private BetterGameMenuIntegration? BetterGameMenu;
 
     /*********
     ** Public methods
@@ -108,6 +111,9 @@ internal class ModEntry : Mod
                 this.OpenMenu
             );
         }
+
+        // add Better Game Menu
+        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded" />
@@ -166,9 +172,8 @@ internal class ModEntry : Mod
                 }
 
                 // open from inventory if it's safe to close the inventory screen
-                else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
+                else if (this.GetCurrentMenuPage() is InventoryPage inventoryPage)
                 {
-                    IClickableMenu inventoryPage = gameMenu.pages[GameMenu.inventoryTab];
                     if (inventoryPage.readyToClose())
                         this.OpenMenu();
                 }
@@ -178,6 +183,14 @@ internal class ModEntry : Mod
         {
             this.HandleError(ex, "handling key input");
         }
+    }
+
+    /// <summary>Get the current page of the currently active game menu, or <c>null</c> if no game menu is active.</summary>
+    private IClickableMenu? GetCurrentMenuPage()
+    {
+        if (Game1.activeClickableMenu is GameMenu gameMenu)
+            return gameMenu.GetCurrentPage();
+        return this.BetterGameMenu?.ActiveMenu?.CurrentPage;
     }
 
     /// <summary>Change the chest UI overlay if needed to match the current menu.</summary>
