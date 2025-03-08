@@ -1,3 +1,4 @@
+using System;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -6,7 +7,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles shipping menu transitions.</summary>
-    /// <remarks>See game logic in <see cref="Shipping"/>.</remarks>
+    /// <remarks>See game logic in <see cref="ShippingMenu"/>.</remarks>
     internal class ShippingMenuHandler : BaseAnimationHandler
     {
         /*********
@@ -28,37 +29,34 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             this.Reflection = reflection;
         }
 
-        /// <summary>Get whether the animation is currently active.</summary>
-        /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public override bool IsEnabled(int playerAnimationID)
+        /// <inheritdoc />
+        public override bool TryApply(int playerAnimationId)
         {
             return
-                Game1.activeClickableMenu is ShippingMenu shippingMenu
-                && this.GetIsTransitionField(shippingMenu).GetValue();
-        }
+                this.IsTransitioning(Game1.activeClickableMenu as ShippingMenu)
+                && this.ApplySkipsWhile(() =>
+                {
+                    if (Game1.activeClickableMenu is ShippingMenu menu && this.IsTransitioning(menu))
+                    {
+                        menu.update(Game1.currentGameTime);
+                        return true;
+                    }
 
-        /// <summary>Perform any logic needed on update while the animation is active.</summary>
-        /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public override void Update(int playerAnimationID)
-        {
-            ShippingMenu shippingMenu = (ShippingMenu)Game1.activeClickableMenu;
-            var isTransition = this.GetIsTransitionField(shippingMenu);
-
-            this.ApplySkips(
-                run: () => shippingMenu.update(Game1.currentGameTime),
-                until: () => isTransition.GetValue()
-            );
+                    return false;
+                });
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the private shipping menu field which indicates whether it's currently transitioning.</summary>
+        /// <summary>Get whether the shipping menu is showing a transition animation.</summary>
         /// <param name="menu">The shipping menu.</param>
-        private IReflectedField<bool> GetIsTransitionField(ShippingMenu menu)
+        private bool IsTransitioning(ShippingMenu? menu)
         {
-            return this.Reflection.GetField<bool>(menu, "savedYet");
+            return
+                menu != null
+                && !this.Reflection.GetField<bool>(menu, "savedYet").GetValue();
         }
     }
 }
