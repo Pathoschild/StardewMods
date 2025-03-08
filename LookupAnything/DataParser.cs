@@ -519,7 +519,7 @@ internal class DataParser
                                 if (!string.IsNullOrWhiteSpace(trigger.Condition))
                                     rawConditions = trigger.Condition;
 
-                                // add condition of primary output
+                                // add main output's condition
                                 if (!string.IsNullOrWhiteSpace(mainOutputItem.Condition))
                                 {
                                     rawConditions = rawConditions != null
@@ -527,8 +527,8 @@ internal class DataParser
                                         : mainOutputItem.Condition;
                                 }
 
-                                // add condition of secondary outputs from EMC if any
-                                if (outputItem != mainOutputItem && !string.IsNullOrWhiteSpace(outputItem.Condition))
+                                // add secondary output's condition from Extra Machine Config mod
+                                if (!string.IsNullOrWhiteSpace(outputItem.Condition) && outputItem.Condition != mainOutputItem.Condition)
                                 {
                                     rawConditions = rawConditions != null
                                         ? rawConditions + ", " + outputItem.Condition
