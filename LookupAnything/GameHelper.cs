@@ -653,13 +653,16 @@ internal class GameHelper
         CommonHelper.ShowErrorMessage(message);
     }
 
-    /// <summary>Get the currently active page of the provided game menu, or <c>null</c> if the provided menu is not a game menu.</summary>
-    public IClickableMenu? GetCurrentMenuPage(IClickableMenu menu)
+    /// <summary>Get the current page of an active game menu, if applicable.</summary>
+    /// <param name="menu">The menu to check.</param>
+    public IClickableMenu? GetGameMenuPage(IClickableMenu menu)
     {
         if (menu is GameMenu gameMenu)
             return gameMenu.GetCurrentPage();
+
         return this.BetterGameMenu.GetCurrentPage(menu);
     }
+
 
     /*********
     ** Private methods

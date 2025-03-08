@@ -103,6 +103,9 @@ internal class ModEntry : Mod
             set: config => this.Config = config
         );
 
+        // add Better Game Menu support
+        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
+
         // add Iconic Framework icon
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
         if (iconicFramework.IsLoaded)
@@ -115,9 +118,6 @@ internal class ModEntry : Mod
                 this.ToggleDebugMenu
             );
         }
-
-        // add Better Game Menu
-        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />

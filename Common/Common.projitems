@@ -21,8 +21,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\AutomateIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\IAutomateApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BaseIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)integrations\bettergamemenu\BetterGameMenuIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)integrations\bettergamemenu\IBetterGameMenuApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterGameMenu\BetterGameMenuIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterGameMenu\IBetterGameMenuApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklersPlus\BetterSprinklersPlusIntegration.cs" />
@@ -81,8 +81,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\MutableInvariantSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ObjectReferenceComparer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Integrations\BetterGameMenu\" />
   </ItemGroup>
 </Project>

@@ -99,6 +99,9 @@ internal class ModEntry : Mod
             set: config => this.Config = config
         );
 
+        // add Better Game Menu support
+        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
+
         // add Iconic Framework icon
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
         if (iconicFramework.IsLoaded)
@@ -111,9 +114,6 @@ internal class ModEntry : Mod
                 this.OpenMenu
             );
         }
-
-        // add Better Game Menu
-        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
     }
 
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded" />
@@ -172,7 +172,7 @@ internal class ModEntry : Mod
                 }
 
                 // open from inventory if it's safe to close the inventory screen
-                else if (this.GetCurrentMenuPage() is InventoryPage inventoryPage)
+                else if (this.GetGameMenuPage() is InventoryPage inventoryPage)
                 {
                     if (inventoryPage.readyToClose())
                         this.OpenMenu();
@@ -185,11 +185,12 @@ internal class ModEntry : Mod
         }
     }
 
-    /// <summary>Get the current page of the currently active game menu, or <c>null</c> if no game menu is active.</summary>
-    private IClickableMenu? GetCurrentMenuPage()
+    /// <summary>Get the current page of the open active game menu, if applicable.</summary>
+    private IClickableMenu? GetGameMenuPage()
     {
         if (Game1.activeClickableMenu is GameMenu gameMenu)
             return gameMenu.GetCurrentPage();
+
         return this.BetterGameMenu?.GetCurrentPage(Game1.activeClickableMenu);
     }
 
