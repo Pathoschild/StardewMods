@@ -481,7 +481,7 @@ internal class ModEntry : Mod
 
         if (contentPack is null)
         {
-            this.Monitor.Log("Central Station is missing its content files, so it won't work. Please delete and reinstall the mod to fix this.", LogLevel.Error);
+            this.Monitor.Log("Central Station is installed incorrectly, so it won't work. You're missing the 'Central Station content' content pack. Please delete and reinstall the mod to fix this.", LogLevel.Error);
             return false;
         }
 
