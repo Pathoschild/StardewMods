@@ -106,6 +106,9 @@
     "config.open-dialogue-box.name": "ダイアログボックスを開く",
     "config.open-dialogue-box.tooltip": "ダイアログボックスを開く速さ。標準は{{defaultValue}}x。",
 
+    "config.shipping-menu.name": "Shipping menu transitions", // TODO
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+
     "config.title-menu.name": "タイトルメニューの遷移",
     "config.title-menu.tooltip": "タイトルメニューの画面遷移の速さ。標準は{{defaultValue}}x。",
 
