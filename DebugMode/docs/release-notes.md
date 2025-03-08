@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
 * Improved translations. Thanks to ChopWoodFish (updated Chinese) and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.15.1

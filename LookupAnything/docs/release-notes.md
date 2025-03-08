@@ -6,6 +6,7 @@
   * The current position is now shown even if they have no schedule.
   * Added separate message when the NPC has a schedule but they're set to ignore it.
   * Added separate messages when the data isn't available to farmhands in multiplayer.
+* Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish)!
 
 ## 1.49.0
