@@ -38,7 +38,7 @@ internal class BushSubject : BaseSubject
         this.Target = bush;
 
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
-            this.Initialize(TokenParser.ParseText(customBush.DisplayName), TokenParser.ParseText(customBush.Description), I18n.Type_Bush());
+            this.Initialize(TokenParser.ParseText(customBush.Data.DisplayName), TokenParser.ParseText(customBush.Data.Description), I18n.Type_Bush());
         else if (this.IsBerryBush(bush))
             this.Initialize(I18n.Bush_Name_Berry(), I18n.Bush_Description_Berry(), I18n.Type_Bush());
         else if (this.IsTeaBush(bush))
@@ -89,7 +89,7 @@ internal class BushSubject : BaseSubject
                 string nextHarvestStr = nextHarvest == today
                     ? I18n.Generic_Now()
                     : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
-                if (this.TryGetCustomBushDrops(bush, out IList<ItemDropData>? drops))
+                if (this.TryGetCustomBushDrops(bush, out List<ItemDropData>? drops))
                     yield return new ItemDropListField(this.GameHelper, I18n.Bush_NextHarvest(), drops, preface: nextHarvestStr);
                 else
                 {
@@ -146,15 +146,11 @@ internal class BushSubject : BaseSubject
         Vector2 offset = new Vector2(size.X - targetSize.X, size.Y - targetSize.Y) / 2;
 
         // get texture
-        Texture2D texture;
-        if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
+        Texture2D texture = Bush.texture.Value;
+        if (this.GameHelper.CustomBush.TryGetBush(bush, out ICustomBush? customBush))
         {
-            texture = bush.IsSheltered()
-                ? Game1.content.Load<Texture2D>(customBush.IndoorTexture)
-                : Game1.content.Load<Texture2D>(customBush.Texture);
+            texture = customBush.Texture;
         }
-        else
-            texture = Bush.texture.Value;
 
         // draw portrait
         spriteBatch.Draw(
@@ -194,27 +190,22 @@ internal class BushSubject : BaseSubject
     /// <returns>Returns whether a custom bush was found.</returns>
     private bool TryGetCustomBush(Bush bush, [NotNullWhen(true)] out ICustomBush? customBush)
     {
-        customBush = null;
-        return
-            this.GameHelper.CustomBush.IsLoaded
-            && this.GameHelper.CustomBush.ModApi.TryGetCustomBush(bush, out customBush);
+        return this.GameHelper.CustomBush.TryGetBush(bush, out customBush);
     }
 
     /// <summary>Get bush drops from the Custom Bush mod if applicable.</summary>
     /// <param name="bush">The bush to check.</param>
     /// <param name="drops">The items produced by the custom bush, if applicable.</param>
     /// <returns>Returns whether custom bush drops were found.</returns>
-    private bool TryGetCustomBushDrops(Bush bush, [NotNullWhen(true)] out IList<ItemDropData>? drops)
+    private bool TryGetCustomBushDrops(Bush bush, [NotNullWhen(true)] out List<ItemDropData>? drops)
     {
-        CustomBushIntegration customBush = this.GameHelper.CustomBush;
-
-        if (customBush.IsLoaded && customBush.ModApi.TryGetCustomBush(bush, out _, out string? id) && customBush.ModApi.TryGetDrops(id, out IList<ICustomBushDrop>? rawDrops))
+        if (this.GameHelper.CustomBush.TryGetBush(bush, out ICustomBush? customBush))
         {
-            drops = new List<ItemDropData>(rawDrops.Count);
-
-            foreach (ICustomBushDrop drop in rawDrops)
-                drops.Add(new ItemDropData(drop.ItemId, drop.MinStack, drop.MaxStack, drop.Chance, drop.Condition));
-
+            drops = new List<ItemDropData>(customBush.Stage.ItemsProduced.Count);
+            foreach (var drop in customBush.Stage.ItemsProduced)
+            {
+                drops.Add(new ItemDropData(drop.ItemId, drop.MinStack, drop.MaxStack, drop.GetChance(), drop.Condition));
+            }
             return true;
         }
 
@@ -256,7 +247,7 @@ internal class BushSubject : BaseSubject
         SDate date = this.GetDatePlanted(bush);
 
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
-            date = date.AddDays(customBush.AgeToProduce);
+            date = date.AddDays(customBush.Data.GetAgeToMature());
         else if (this.IsTeaBush(bush))
             date = date.AddDays(Bush.daysToMatureGreenTeaBush);
 
@@ -268,7 +259,9 @@ internal class BushSubject : BaseSubject
     private int GetDayToBeginProducing(Bush bush)
     {
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
-            return customBush.DayToBeginProducing;
+            return customBush.Stage.ItemsProduced.Any()
+                ? customBush.Stage.ItemsProduced.Min(drop => drop.GetDay())
+                : -1;
 
         if (this.IsTeaBush(bush))
             return 22; // tea bushes produce on day 22+ of season
@@ -281,7 +274,7 @@ internal class BushSubject : BaseSubject
     private List<Season> GetProducingSeasons(Bush bush)
     {
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
-            return customBush.Seasons;
+            return customBush.Data.GetSeasons();
 
         if (this.IsTeaBush(bush))
             return [Season.Spring, Season.Summer, Season.Fall];

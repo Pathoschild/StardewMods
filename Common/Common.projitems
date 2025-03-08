@@ -30,9 +30,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BushBloomMod\BushBloomModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BushBloomMod\IBushBloomModApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\CustomBushIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\CustomBushType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\ICustomBush.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\ICustomBushApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\ICustomBushDrop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushDrops.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushProgressRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushProgressRules.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)integrations\custombush\ICustomBushStages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\ExtraMachineConfigIntegration.cs" />
