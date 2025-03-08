@@ -184,11 +184,11 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
   ![](../screenshots/map-patch-mode-overlay.png)
 
 * **`ReplaceByLayer`** _(default)_  
-  替换所有瓦片，限于存在于源地图的图层。
+  替换所有图块，限于存在于源地图的图层。
   ![](../screenshots/map-patch-mode-replace-by-layer.png)
 
 * **`Replace`**  
-  替换所有瓦片。
+  替换所有图块。
   ![](../screenshots/map-patch-mode-replace.png)
 
 </td>
