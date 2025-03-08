@@ -503,13 +503,11 @@ internal class DataParser
                             continue;
 
                         // if there are extra outputs added by the Extra Machine Config mod, add them here
-                        List<MachineItemOutput> allOutputItems = [mainOutputItem];
-                        if (extraMachineConfig.IsLoaded)
-                        {
-                            allOutputItems.AddRange(extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem, machineData));
-                        }
+                        MachineItemOutput[] allOutputItems = extraMachineConfig.IsLoaded
+                            ? [mainOutputItem, .. extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem, machineData)]
+                            : [mainOutputItem];
 
-                        foreach (var outputItem in allOutputItems)
+                        foreach (MachineItemOutput outputItem in allOutputItems)
                         {
                             // get conditions
                             List<string>? conditions = null;
