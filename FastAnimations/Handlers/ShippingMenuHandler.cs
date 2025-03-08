@@ -1,4 +1,3 @@
-using System;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -55,8 +54,19 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         private bool IsTransitioning(ShippingMenu? menu)
         {
             return
-                menu != null
-                && !this.Reflection.GetField<bool>(menu, "savedYet").GetValue();
+                menu is not null
+
+                // is transitioning
+                && (
+                    this.Reflection.GetField<bool>(menu, "outro").GetValue()
+                    || this.Reflection.GetField<int>(menu, "introTimer").GetValue() > 0
+                )
+
+                // not saving
+                && (
+                    this.Reflection.GetField<object?>(menu, "saveGameMenu").GetValue() is null
+                    || this.Reflection.GetField<bool>(menu, "savedYet").GetValue()
+                );
         }
     }
 }
