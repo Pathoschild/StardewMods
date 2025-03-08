@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.BushBloomMod;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
@@ -77,6 +78,9 @@ internal class GameHelper
     /// <summary>Provides metadata that's not available from the game data directly.</summary>
     public Metadata Metadata { get; }
 
+    /// <summary>The Better Game Menu integration.</summary>
+    public BetterGameMenuIntegration BetterGameMenu { get; }
+
     /// <summary>The Bush Bloom Mod integration.</summary>
     public BushBloomModIntegration BushBloomMod { get; }
 
@@ -108,6 +112,7 @@ internal class GameHelper
         this.ModRegistry = modRegistry;
         this.WorldItemScanner = new WorldItemScanner(reflection);
 
+        this.BetterGameMenu = new BetterGameMenuIntegration(modRegistry, monitor);
         this.BushBloomMod = new BushBloomModIntegration(modRegistry, monitor);
         this.CustomBush = new CustomBushIntegration(modRegistry, monitor);
         this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, monitor);
@@ -646,6 +651,16 @@ internal class GameHelper
     public void ShowErrorMessage(string message)
     {
         CommonHelper.ShowErrorMessage(message);
+    }
+
+    /// <summary>Get the current page of an active game menu, if applicable.</summary>
+    /// <param name="menu">The menu to check.</param>
+    public IClickableMenu? GetGameMenuPage(IClickableMenu menu)
+    {
+        if (menu is GameMenu gameMenu)
+            return gameMenu.GetCurrentPage();
+
+        return this.BetterGameMenu.GetCurrentPage(menu);
     }
 
 
