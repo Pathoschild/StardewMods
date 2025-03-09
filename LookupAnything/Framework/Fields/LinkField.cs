@@ -1,17 +1,24 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
 /// <summary>A metadata field containing clickable links.</summary>
-internal class LinkField : GenericField, ILinkField
+internal class LinkField : GenericField
 {
     /*********
     ** Fields
     *********/
     /// <summary>Gets the subject the link points to, or <c>null</c> to stay on the current subject.</summary>
     private readonly Func<ISubject?> Subject;
+
+    /*********
+    ** Accessors
+    *********/
+    /// <inheritdoc />
+    public override bool MayHaveLinks => true;
 
 
     /*********
@@ -28,8 +35,12 @@ internal class LinkField : GenericField, ILinkField
     }
 
     /// <inheritdoc />
-    public ISubject? GetLinkSubject()
+    public override bool TryGetLinkAt(int x, int y, [NotNullWhen(true)] out ISubject? subject)
     {
-        return this.Subject();
+        if (base.TryGetLinkAt(x, y, out subject))
+            return true;
+
+        subject = this.Subject();
+        return subject != null;
     }
 }

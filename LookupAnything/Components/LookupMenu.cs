@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
-using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -76,11 +76,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether the game's draw mode has been validated for compatibility.</summary>
     private bool ValidatedDrawMode;
 
-    /// <summary>Click areas for link fields that open a new subject.</summary>
-    private readonly IDictionary<ILinkField, Rectangle> LinkFieldAreas = new Dictionary<ILinkField, Rectangle>();
-
-    /// <summary>Click areas for link text within a field that open a new subject.</summary>
-    private readonly IList<ICustomField> FieldsWithLinkTextArea = [];
+    /// <summary>The pixel areas containing a field which may have clickable links.</summary>
+    private readonly Dictionary<ICustomField, Rectangle> LinkableFieldAreas = new(new ObjectReferenceComparer<ICustomField>());
 
     /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
     private readonly bool WasHudEnabled;
@@ -248,29 +245,15 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         else if (this.ScrollDownButton.containsPoint(x, y))
             this.ScrollDown();
 
-        // custom link fields
+        // subject links
         else
         {
-            foreach ((ILinkField link, Rectangle area) in this.LinkFieldAreas)
+            foreach ((ICustomField field, Rectangle fieldArea) in this.LinkableFieldAreas)
             {
-                if (area.Contains(x, y))
+                if (fieldArea.Contains(x, y) && field.TryGetLinkAt(x, y, out ISubject? subject))
                 {
-                    ISubject? subject = link.GetLinkSubject();
-                    if (subject != null)
-                        this.ShowNewPage(subject);
-                    return;
-                }
-            }
-
-            foreach (ICustomField field in this.FieldsWithLinkTextArea)
-            {
-                foreach (LinkTextArea linkTextArea in field.LinkTextAreas!)
-                {
-                    if (linkTextArea.Rect.Contains(x, y))
-                    {
-                        this.ShowNewPage(linkTextArea.Subject);
-                        return;
-                    }
+                    this.ShowNewPage(subject);
+                    break;
                 }
             }
         }
@@ -281,6 +264,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     {
         this.Monitor.InterceptErrors("drawing the lookup info", () =>
         {
+            this.LinkableFieldAreas.Clear();
+
             ISubject subject = this.Subject;
 
             // disable when game is using immediate sprite sorting
@@ -391,10 +376,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                                 Vector2 valuePosition = new Vector2(x + leftOffset + labelWidth + cellPadding * 3, y + topOffset + cellPadding);
                                 Vector2 valueSize;
                                 if (field.ExpandLink is not null)
-                                {
                                     valueSize = contentBatch.DrawTextBlock(font, field.ExpandLink.Value, valuePosition, valueWidth);
-                                    this.LinkFieldAreas[field.ExpandLink] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
-                                }
                                 else
                                 {
                                     valueSize =
@@ -412,13 +394,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                                 contentBatch.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(tableBorderWidth, rowSize.Y), lineColor); // right
 
                                 // track link area
-                                if (field is ILinkField linkField)
-                                    this.LinkFieldAreas[linkField] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
-                                // track link text areas
-                                if (field.LinkTextAreas != null)
-                                {
-                                    this.FieldsWithLinkTextArea.Add(field);
-                                }
+                                if (field is { MayHaveLinks: true, HasValue: true })
+                                    this.LinkableFieldAreas[field] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
 
                                 // update offset
                                 topOffset += Math.Max(labelSize.Y, valueSize.Y);

@@ -62,7 +62,6 @@ internal class ItemDropListField : GenericField
         this.CrossOutNonGuaranteed = crossOutNonGuaranteed;
         this.Preface = preface;
         this.DefaultText = defaultText;
-        this.LinkTextAreas = [];
         this.GetSubjectByEntity = getSubjectByEntity;
     }
 

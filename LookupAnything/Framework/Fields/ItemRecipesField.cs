@@ -9,7 +9,6 @@ using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.ItemTypeDefinitions;
 using SObject = StardewValley.Object;
 
@@ -49,7 +48,7 @@ internal class ItemRecipesField : GenericField
     private float IconSize => this.LineHeight;
 
     /// <summary>The <see cref="Item"/> that owns this field, for preventing circular links.</summary>
-    private readonly Item? Target = null;
+    private readonly Item? Target;
 
 
     /*********
@@ -64,7 +63,6 @@ internal class ItemRecipesField : GenericField
     /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
     /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
     /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-    /// <param name="target">The item that owns this field, for preventing circular links.</param>
     /// <param name="getSubjectByEntity">Callback to obtain an <see cref="ISubject"/> for link text.</param>
     public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true, Func<object, GameLocation?, ISubject?>? getSubjectByEntity = null)
         : base(label, true)
@@ -77,7 +75,6 @@ internal class ItemRecipesField : GenericField
         this.ShowOutputLabels = showOutputLabels;
         this.Target = ingredient;
         this.GetSubjectByEntity = getSubjectByEntity;
-        this.LinkTextAreas = [];
     }
 
     /// <summary>
@@ -219,7 +216,7 @@ internal class ItemRecipesField : GenericField
                             y: curPos.Y + lineHeight + otherRecipeTopMargin
                         );
                     }
-                    
+
                     Color actualTextColor = shouldLink ? Color.Blue : textColor;
 
                     // draw input item (icon + name + count)

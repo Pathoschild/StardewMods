@@ -49,7 +49,6 @@ internal class FishPondDropsField : GenericField
         this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
-        this.LinkTextAreas = [];
         this.GetSubjectByEntity = getSubjectByEntity;
     }
 
