@@ -6,8 +6,10 @@
   * The current position is now shown even if they have no schedule.
   * Added separate message when the NPC has a schedule but they're set to ignore it.
   * Added separate messages when the data isn't available to farmhands in multiplayer.
+* Added item links in item recipe, fish pond drop, and item drop fields (thanks to Mushmato!).
 * Added support for Extra Machine Config mod's multiple output items (thanks to zombifier!).
 * Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
+* Optimized performance when some lookups are open.
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish)!
 
 ## 1.49.0
