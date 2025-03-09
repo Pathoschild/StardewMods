@@ -190,7 +190,7 @@ internal abstract class Patch : IPatch
         {
             foreach ((string key, IManagedTokenString value) in this.LocalTokens)
             {
-                changed |= value.UpdateContext(context);
+                changed |= value.UpdateContext(this.InheritedLocalTokensContext);
                 this.CustomLocalTokensContext.SetLocalValue(key, value, value.IsReady);
             }
 

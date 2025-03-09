@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed support for defining a local token using an inherited local token.
+
 ## 2.5.3
 Released 08 February 2025 for SMAPI 4.1.10 or later.
 
