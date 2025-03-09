@@ -88,9 +88,6 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether to exit the menu on the next update tick.</summary>
     private bool ExitOnNextTick;
 
-    /// <summary>Flag for <see cref="ModEntry.OnMenuChanged"/>, exit without restoring a previous <see cref="LookupMenu"/> if set.</summary>
-    internal bool ExitWithoutRestore = false;
-
 
     /*********
     ** Public methods
@@ -243,10 +240,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     {
         // close menu when clicked outside or on close button
         if (!this.isWithinBounds(x, y) || this.upperRightCloseButton.containsPoint(x, y))
-        {
-            this.ExitWithoutRestore = true;
             this.exitThisMenu();
-        }
 
         // scroll up or down
         else if (this.ScrollUpButton.containsPoint(x, y))
