@@ -82,6 +82,9 @@ internal abstract class Patch : IPatch
     /// <summary>The local token values defined on this patch (excluding inherited local tokens), in addition to the pre-existing tokens.</summary>
     protected InvariantDictionary<IManagedTokenString>? LocalTokens { get; }
 
+    /// <summary>The local tokens available on this patch, including those inherited from a parent patch.</summary>
+    protected InvariantDictionary<IManagedTokenString>? LocalTokensIncludingInherited { get; }
+
     /// <summary>Whether this patch has any <see cref="LocalTokens"/> defined.</summary>
     [MemberNotNullWhen(true, nameof(Patch.LocalTokens), nameof(Patch.CustomLocalTokensContext), nameof(Patch.InheritedLocalTokensContext))]
     protected bool HasLocalTokens { get; }
@@ -326,6 +329,7 @@ internal abstract class Patch : IPatch
         if (localTokens != null || inheritedLocalTokens != null)
         {
             this.LocalTokens = localTokens ?? new();
+            this.LocalTokensIncludingInherited = new InvariantDictionary<IManagedTokenString>(this.LocalTokens);
 
             this.CustomLocalTokensContext = new LocalContext(scope: contentPack.Manifest.UniqueID);
             this.InheritedLocalTokensContext = new LocalContext(scope: contentPack.Manifest.UniqueID);
@@ -345,6 +349,7 @@ internal abstract class Patch : IPatch
             {
                 foreach ((string key, IManagedTokenString value) in inheritedLocalTokens)
                 {
+                    this.LocalTokensIncludingInherited.TryAdd(key, value);
                     this.InheritedLocalTokensContext.SetLocalValue(key, value, value.IsReady);
                     this.Contextuals.Add(value);
                     this.ManuallyUpdatedTokens.Add(value);
