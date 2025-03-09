@@ -10,7 +10,7 @@
 * Added support for Extra Machine Config mod's multiple output items (thanks to zombifier!).
 * Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
 * Optimized performance when some lookups are open.
-* Improved translations. Thanks to mehmetgorkemarslan (updated Turkish)!
+* Improved translations. Thanks to MakinDay (updated Italian) and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.49.0
 Released 26 February 2025 for SMAPI 4.1.10 or later.

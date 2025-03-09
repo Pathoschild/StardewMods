@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for shipping menu animations (thanks to Adnan Shoukfeh!).
-* Improved translations. Thanks to ChopWoodFish (updated Chinese)!
+* Improved translations. Thanks to ChopWoodFish (updated Chinese) and MakinDay (updated Italian)!
 
 ## 1.13.8
 Released 11 February 2025 for SMAPI 4.1.10 or later.
