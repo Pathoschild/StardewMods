@@ -21,6 +21,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\AutomateIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\IAutomateApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BaseIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterGameMenu\BetterGameMenuIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterGameMenu\IBetterGameMenuApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklersPlus\BetterSprinklersPlusIntegration.cs" />

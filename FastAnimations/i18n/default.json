@@ -106,6 +106,9 @@
     "config.open-dialogue-box.name": "Open dialogue box",
     "config.open-dialogue-box.tooltip": "How fast dialogue boxes open. Default {{defaultValue}}x.",
 
+    "config.shipping-menu.name": "Shipping menu transitions",
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
+
     "config.title-menu.name": "Title menu transitions",
     "config.title-menu.tooltip": "How fast the title menu transitions between screens. Default {{defaultValue}}x.",
 

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for shipping menu animations (thanks to Adnan Shoukfeh!).
 * Improved translations. Thanks to ChopWoodFish (updated Chinese)!
 
 ## 1.13.8

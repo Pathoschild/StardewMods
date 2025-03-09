@@ -1,6 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* For players:
+  * Improved error message when the content pack isn't installed to be clearer.
+
 ## 1.2.0
 Released 26 February 2025 for SMAPI 4.1.10 or later.
 

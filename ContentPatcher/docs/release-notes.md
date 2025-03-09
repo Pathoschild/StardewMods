@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed some cases where a local token on an `Include` patch wasn't available in the included patches.
+
 ## 2.5.3
 Released 08 February 2025 for SMAPI 4.1.10 or later.
 

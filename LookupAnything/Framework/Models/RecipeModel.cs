@@ -159,7 +159,8 @@ internal class RecipeModel
             DisplayText: TokenParser.ParseText(building.GetData()?.Name) ?? building.buildingType.Value,
             Quality: null,
             IsGoldPrice: false,
-            IsValid: true
+            IsValid: true,
+            Entity: building
         );
     }
 

@@ -106,6 +106,9 @@
     "config.open-dialogue-box.name": "대화창 열림",
     "config.open-dialogue-box.tooltip": "대화창이 열리는 속도. 기본 값 {{defaultValue}}x.",
 
+    "config.shipping-menu.name": "Shipping menu transitions", // TODO
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+
     "config.title-menu.name": "타이틀 메뉴 전환",
     "config.title-menu.tooltip": "타이틀 메뉴 화면 전환 속도. 기본 값 {{defaultValue}}.",
 
