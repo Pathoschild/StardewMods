@@ -1,4 +1,4 @@
-﻿{
+{
     /*********
     ** Generic Mod Config Menu UI
     *********/
@@ -106,8 +106,8 @@
     "config.open-dialogue-box.name": "Apertura delle finestre di dialogo",
     "config.open-dialogue-box.tooltip": "La velocità di apertura delle finestre di dialogo. Predefinito {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    "config.shipping-menu.name": "Transizione del menu spedizioni",
+    "config.shipping-menu.tooltip": "La velocità delle transizioni del menu spedizioni da una schermata all'altra. Predefinito {{defaultValue}}x.",
 
     "config.title-menu.name": "Transizioni del menu principale",
     "config.title-menu.tooltip": "La velocità di transizione del menu principale tra le schermate. Predefinito {{defaultValue}}x.",
