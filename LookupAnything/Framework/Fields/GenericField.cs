@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -7,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
-using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -19,9 +17,6 @@ internal class GenericField : ICustomField
     *********/
     /// <summary>The clickable areas that should open a new page when clicked.</summary>
     protected readonly List<LinkTextArea> LinkTextAreas = [];
-
-    /// <inheritdoc cref="ISubjectRegistry.GetByEntity"/>
-    protected Func<object, GameLocation?, ISubject?>? GetSubjectByEntity { get; init; }
 
 
     /*********
@@ -95,7 +90,7 @@ internal class GenericField : ICustomField
         // else check text links
         foreach (LinkTextArea linkTextArea in this.LinkTextAreas)
         {
-            if (linkTextArea.Rect.Contains(x, y))
+            if (linkTextArea.PixelArea.Contains(x, y))
             {
                 subject = linkTextArea.Subject;
                 return true;
@@ -185,28 +180,5 @@ internal class GenericField : ICustomField
                 break;
         }
         return I18n.List(priceStrings);
-    }
-
-    /// <summary>
-    /// Check if item should be added to link text areas, if added/updated, increment the index.
-    /// Make assumption that the linkable items in the field will not change over lifetime of menu, and that each item
-    /// will be processed by <see cref="DrawValue"/> in the same order on every draw cycle.
-    /// </summary>
-    /// <param name="entity">Entity to try to get subject and link to</param>
-    /// <param name="idx">Index of the link in <see cref="this.LinkTextAreas"/></param>
-    protected virtual bool TryGetOrAddLinkTextArea(object? entity, ref int idx, [NotNullWhen(true)] out LinkTextArea? linkTextArea)
-    {
-        linkTextArea = null;
-        if (this.GetSubjectByEntity == null || this.LinkTextAreas.Count == 0 || entity == null)
-            return false;
-        if (this.GetSubjectByEntity(entity, null) is not ISubject subject)
-            return false;
-        if (this.LinkTextAreas.Count == idx)
-            this.LinkTextAreas.Add(new(subject));
-        else if (this.LinkTextAreas.Count < idx) // misalignment in index and LinkTextAreas, abort
-            return false;
-        linkTextArea = this.LinkTextAreas[idx];
-        idx++;
-        return true;
     }
 }

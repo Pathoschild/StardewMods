@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +24,9 @@ internal class ItemRecipesField : GenericField
 
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private readonly GameHelper GameHelper;
+
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
 
     /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>
     private readonly bool ShowUnknownRecipes;
@@ -56,6 +58,7 @@ internal class ItemRecipesField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="codex">Provides subject entries.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="ingredient">The ingredient item.</param>
     /// <param name="recipes">The recipes to list.</param>
@@ -63,36 +66,17 @@ internal class ItemRecipesField : GenericField
     /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
     /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
     /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-    /// <param name="getSubjectByEntity">Callback to obtain an <see cref="ISubject"/> for link text.</param>
-    public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true, Func<object, GameLocation?, ISubject?>? getSubjectByEntity = null)
+    public ItemRecipesField(GameHelper gameHelper, ISubjectRegistry codex, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
         : base(label, true)
     {
         this.GameHelper = gameHelper;
+        this.Codex = codex;
         this.RecipesByType = this.BuildRecipeGroups(ingredient, recipes).ToArray();
         this.ShowUnknownRecipes = showUnknownRecipes;
         this.ShowInvalidRecipes = showInvalidRecipes;
         this.ShowLabelForSingleGroup = showLabelForSingleGroup;
         this.ShowOutputLabels = showOutputLabels;
         this.Target = ingredient;
-        this.GetSubjectByEntity = getSubjectByEntity;
-    }
-
-    /// <summary>
-    /// Check if item should be added to link text areas, if added/updated, increment the index.
-    /// Make assumption that the linkable items in the field will not change over lifetime of menu, and that each item
-    /// will be processed by <see cref="DrawValue"/> in the same order on every draw cycle.
-    /// </summary>
-    /// <param name="entity">Entity to try to get subject and link to</param>
-    /// <param name="idx">Index of the link in <see cref="this.LinkTextAreas"/></param>
-    /// <returns></returns>
-    protected override bool TryGetOrAddLinkTextArea(object? entity, ref int idx, [NotNullWhen(true)] out LinkTextArea? linkTextArea)
-    {
-        linkTextArea = null;
-        if (entity is Item item && (
-            item.ItemId == DataParser.ComplexRecipeId ||
-            item.QualifiedItemId == this.Target?.QualifiedItemId))
-            return false;
-        return base.TryGetOrAddLinkTextArea(entity, ref idx, out linkTextArea);
     }
 
     /// <summary>Get the number of displayed recipes.</summary>
@@ -115,6 +99,9 @@ internal class ItemRecipesField : GenericField
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
+        // reset
+        this.LinkTextAreas.Clear();
+
         // get margins
         const int groupVerticalMargin = 6;
         const int groupLeftMargin = 0;
@@ -135,9 +122,6 @@ internal class ItemRecipesField : GenericField
 
         // draw recipes
         curPos.Y += groupVerticalMargin;
-        int idx = 0;
-        LinkTextArea? linkTextArea;
-        bool shouldLink;
         foreach (RecipeByTypeGroup group in this.RecipesByType)
         {
             // check if we can align columns
@@ -178,15 +162,19 @@ internal class ItemRecipesField : GenericField
                 float inputLeft = 0;
                 if (this.ShowOutputLabels)
                 {
-                    shouldLink = this.TryGetOrAddLinkTextArea(entry.Output.Entity, ref idx, out linkTextArea);
+                    ISubject? subject = this.GetSubject(entry.Output.Entity);
+                    Color color = subject is not null ? Color.Blue : textColor;
 
-                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, shouldLink ? Color.Blue : textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
+                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, color, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                     float outputWidth = alignColumns
                         ? group.ColumnWidths[0]
                         : outputSize.X;
 
-                    if (shouldLink)
-                        linkTextArea!.Rect = new Rectangle((int)curPos.X, (int)curPos.Y, (int)outputWidth, (int)lineHeight);
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)outputWidth, (int)lineHeight);
+                        this.LinkTextAreas.Add(new(subject, pixelArea));
+                    }
 
                     inputLeft = curPos.X + outputWidth + itemSpacer;
                     curPos.X = inputLeft;
@@ -196,7 +184,7 @@ internal class ItemRecipesField : GenericField
                 for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                 {
                     RecipeItemEntry input = entry.Inputs[i];
-                    shouldLink = this.TryGetOrAddLinkTextArea(input.Entity, ref idx, out linkTextArea);
+                    ISubject? subject = this.GetSubject(input.Entity);
 
                     // get icon size
                     Vector2 curIconSize = iconSize;
@@ -217,13 +205,16 @@ internal class ItemRecipesField : GenericField
                         );
                     }
 
-                    Color actualTextColor = shouldLink ? Color.Blue : textColor;
+                    Color actualTextColor = subject is not null ? Color.Blue : textColor;
 
                     // draw input item (icon + name + count)
                     this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, actualTextColor, input.Sprite, curIconSize, iconColor, input.Quality);
 
-                    if (shouldLink)
-                        linkTextArea!.Rect = new Rectangle((int)curPos.X, (int)curPos.Y, (int)inputSize.X, (int)lineHeight);
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)inputSize.X, (int)lineHeight);
+                        this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+                    }
 
                     curPos = new Vector2(
                         x: curPos.X + inputSize.X,
@@ -453,6 +444,19 @@ internal class ItemRecipesField : GenericField
                 ColumnWidths: columnWidths.ToArray()
             );
         }
+    }
+
+    /// <summary>Get the lookup subject for an entity.</summary>
+    /// <param name="entity">The entity to check.</param>
+    private ISubject? GetSubject(object? entity)
+    {
+        if (entity is null)
+            return null;
+
+        if (entity is Item item && (item.ItemId == DataParser.ComplexRecipeId || item.QualifiedItemId == this.Target?.QualifiedItemId))
+            return null;
+
+        return this.Codex.GetByEntity(entity, null);
     }
 
     /// <summary>Draw text with an icon.</summary>
