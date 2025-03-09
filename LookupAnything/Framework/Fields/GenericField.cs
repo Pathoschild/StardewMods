@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -10,10 +13,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 internal class GenericField : ICustomField
 {
     /*********
+    ** Fields
+    *********/
+    /// <summary>The clickable areas that should open a new page when clicked.</summary>
+    protected readonly List<LinkTextArea> LinkTextAreas = [];
+
+
+    /*********
     ** Accessors
     *********/
     /// <inheritdoc />
     public string Label { get; protected set; }
+
+    /// <inheritdoc />
+    public virtual bool MayHaveLinks => this.ExpandLink != null || this.LinkTextAreas.Count != 0;
 
     /// <inheritdoc />
     public LinkField? ExpandLink { get; protected set; }
@@ -57,15 +70,35 @@ internal class GenericField : ICustomField
         this.HasValue = hasValue ?? this.Value?.Any() == true;
     }
 
-    /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>
-    /// <param name="spriteBatch">The sprite batch being drawn.</param>
-    /// <param name="font">The recommended font.</param>
-    /// <param name="position">The position at which to draw.</param>
-    /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
-    /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="Value"/> using the default format.</returns>
+    /// <inheritdoc />
     public virtual Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
         return null;
+    }
+
+    /// <inheritdoc />
+    public virtual bool TryGetLinkAt(int x, int y, [NotNullWhen(true)] out ISubject? subject)
+    {
+        // player clicked expand link
+        if (this.ExpandLink is not null)
+        {
+            this.ExpandLink = null;
+            subject = null;
+            return false;
+        }
+
+        // else check text links
+        foreach (LinkTextArea linkTextArea in this.LinkTextAreas)
+        {
+            if (linkTextArea.PixelArea.Contains(x, y))
+            {
+                subject = linkTextArea.Subject;
+                return true;
+            }
+        }
+
+        subject = null;
+        return false;
     }
 
     /// <summary>Collapse the field content into an expandable link if it contains at least the given number of results.</summary>
@@ -83,11 +116,7 @@ internal class GenericField : ICustomField
     /// <param name="linkText">The link text to show.</param>
     public void CollapseByDefault(string linkText)
     {
-        this.ExpandLink = new LinkField(this.Label, linkText, () =>
-        {
-            this.ExpandLink = null;
-            return null;
-        });
+        this.ExpandLink = new LinkField(this.Label, linkText, () => null); // handled in TryGetLinkAt
     }
 
 

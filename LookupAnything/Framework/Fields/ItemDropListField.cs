@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -17,6 +19,9 @@ internal class ItemDropListField : GenericField
     *********/
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     protected GameHelper GameHelper;
+
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
 
     /// <summary>The possible drops.</summary>
     private readonly Tuple<ItemDropData, Item, SpriteInfo?>[] Drops;
@@ -39,6 +44,7 @@ internal class ItemDropListField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="codex">Provides subject entries.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="drops">The possible drops.</param>
     /// <param name="sort">Whether to sort the resulting list by probability and name.</param>
@@ -46,10 +52,12 @@ internal class ItemDropListField : GenericField
     /// <param name="crossOutNonGuaranteed">Whether to cross out non-guaranteed drops.</param>
     /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
     /// <param name="preface">The text to display before the list, if any.</param>
-    public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
+    public ItemDropListField(GameHelper gameHelper, ISubjectRegistry codex, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
         : base(label)
     {
         this.GameHelper = gameHelper;
+        this.Codex = codex;
+
         this.Drops = this.GetEntries(drops, gameHelper).ToArray();
         if (sort)
             this.Drops = [.. this.Drops.OrderByDescending(p => p.Item1.Probability).ThenBy(p => p.Item2.DisplayName)];
@@ -67,6 +75,7 @@ internal class ItemDropListField : GenericField
         if (!this.Drops.Any())
             return spriteBatch.DrawTextBlock(font, this.DefaultText, position, wrapWidth);
 
+        this.LinkTextAreas.Clear();
         float height = 0;
 
         // draw preface
@@ -84,6 +93,8 @@ internal class ItemDropListField : GenericField
             bool isGuaranteed = drop.Probability > .99f;
             bool shouldFade = this.FadeNonGuaranteed && !isGuaranteed;
             bool shouldCrossOut = this.CrossOutNonGuaranteed && !isGuaranteed;
+            ISubject? subject = this.Codex.GetByEntity(item, null);
+            Color textColor = (subject is not null ? Color.Blue : Color.Black) * (shouldFade ? 0.75f : 1f);
 
             // draw icon
             spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, shouldFade ? Color.White * 0.5f : Color.White);
@@ -94,7 +105,14 @@ internal class ItemDropListField : GenericField
                 text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
             else if (drop.MinDrop > 1)
                 text += $" ({drop.MinDrop})";
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Black);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, textColor);
+
+            // track clickable link
+            if (subject is not null)
+            {
+                Rectangle pixelArea = new((int)(position.X + iconSize.X + 5), (int)((int)position.Y + height), (int)textSize.X, (int)textSize.Y);
+                this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+            }
 
             // cross out item if it definitely won't drop
             if (shouldCrossOut)

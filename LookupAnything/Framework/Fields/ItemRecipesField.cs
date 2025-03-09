@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -23,6 +24,9 @@ internal class ItemRecipesField : GenericField
 
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private readonly GameHelper GameHelper;
+
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
 
     /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>
     private readonly bool ShowUnknownRecipes;
@@ -45,12 +49,16 @@ internal class ItemRecipesField : GenericField
     /// <summary>The width and height of an item icon.</summary>
     private float IconSize => this.LineHeight;
 
+    /// <summary>The ingredient for which recipes are being displayed, if applicable.</summary>
+    private readonly Item? Ingredient;
+
 
     /*********
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="codex">Provides subject entries.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="ingredient">The ingredient item.</param>
     /// <param name="recipes">The recipes to list.</param>
@@ -58,15 +66,17 @@ internal class ItemRecipesField : GenericField
     /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
     /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
     /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-    public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
+    public ItemRecipesField(GameHelper gameHelper, ISubjectRegistry codex, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
         : base(label, true)
     {
         this.GameHelper = gameHelper;
+        this.Codex = codex;
         this.RecipesByType = this.BuildRecipeGroups(ingredient, recipes).ToArray();
         this.ShowUnknownRecipes = showUnknownRecipes;
         this.ShowInvalidRecipes = showInvalidRecipes;
         this.ShowLabelForSingleGroup = showLabelForSingleGroup;
         this.ShowOutputLabels = showOutputLabels;
+        this.Ingredient = ingredient;
     }
 
     /// <summary>Get the number of displayed recipes.</summary>
@@ -89,6 +99,17 @@ internal class ItemRecipesField : GenericField
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
+        // reset
+        this.LinkTextAreas.Clear();
+
+        // color constants
+        Color knownIconColor = Color.White;
+        Color knownTextColor = Color.Black;
+        Color knownLinkColor = Color.Blue;
+        Color unknownIconColor = knownIconColor * 0.5f;
+        Color unknownTextColor = Color.Gray;
+        Color unknownLinkColor = knownLinkColor * 0.65f; // fade links a bit less, since they're hard to distinguish from gray text at 50%
+
         // get margins
         const int groupVerticalMargin = 6;
         const int groupLeftMargin = 0;
@@ -135,8 +156,8 @@ internal class ItemRecipesField : GenericField
                 }
 
                 // fade recipes which aren't known
-                Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
+                Color iconColor = entry.IsKnown ? knownIconColor : unknownIconColor;
+                Color textColor = entry.IsKnown ? knownTextColor : unknownTextColor;
 
                 // reset position for recipe output
                 float recipeLeftMargin = position.X + firstRecipeLeftMargin;
@@ -149,10 +170,21 @@ internal class ItemRecipesField : GenericField
                 float inputLeft = 0;
                 if (this.ShowOutputLabels)
                 {
-                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
+                    ISubject? subject = this.GetSubject(entry.Output.Entity);
+                    Color actualTextColor = subject is not null
+                        ? (entry.IsKnown ? knownLinkColor : unknownLinkColor)
+                        : textColor;
+
+                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, actualTextColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                     float outputWidth = alignColumns
                         ? group.ColumnWidths[0]
                         : outputSize.X;
+
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)outputWidth, (int)lineHeight);
+                        this.LinkTextAreas.Add(new(subject, pixelArea));
+                    }
 
                     inputLeft = curPos.X + outputWidth + itemSpacer;
                     curPos.X = inputLeft;
@@ -162,6 +194,7 @@ internal class ItemRecipesField : GenericField
                 for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                 {
                     RecipeItemEntry input = entry.Inputs[i];
+                    ISubject? subject = this.GetSubject(input.Entity);
 
                     // get icon size
                     Vector2 curIconSize = iconSize;
@@ -181,8 +214,19 @@ internal class ItemRecipesField : GenericField
                         );
                     }
 
+                    Color actualTextColor = subject is not null
+                        ? (entry.IsKnown ? knownLinkColor : unknownLinkColor)
+                        : textColor;
+
                     // draw input item (icon + name + count)
-                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, curIconSize, iconColor, input.Quality);
+                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, actualTextColor, input.Sprite, curIconSize, iconColor, input.Quality);
+
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)inputSize.X, (int)lineHeight);
+                        this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+                    }
+
                     curPos = new Vector2(
                         x: curPos.X + inputSize.X,
                         y: curPos.Y
@@ -324,7 +368,8 @@ internal class ItemRecipesField : GenericField
                         chance: recipe.OutputChance,
                         quality: recipe.Quality,
                         hasInputAndOutput: true,
-                        isValid: recipe.SpecialOutput?.IsValid
+                        isValid: recipe.SpecialOutput?.IsValid,
+                        entity: recipe.SpecialOutput?.Entity
                     );
                 }
 
@@ -410,6 +455,19 @@ internal class ItemRecipesField : GenericField
                 ColumnWidths: columnWidths.ToArray()
             );
         }
+    }
+
+    /// <summary>Get the lookup subject for an entity.</summary>
+    /// <param name="entity">The entity to check.</param>
+    private ISubject? GetSubject(object? entity)
+    {
+        if (entity is null)
+            return null;
+
+        if (entity is Item item && (item.ItemId == DataParser.ComplexRecipeId || item.QualifiedItemId == this.Ingredient?.QualifiedItemId))
+            return null;
+
+        return this.Codex.GetByEntity(entity, null);
     }
 
     /// <summary>Draw text with an icon.</summary>
@@ -587,7 +645,8 @@ internal class ItemRecipesField : GenericField
     /// <param name="quality">The item quality that will be produced, if applicable.</param>
     /// <param name="hasInputAndOutput">Whether the item has both input and output ingredients.</param>
     /// <param name="isValid">Whether this recipe is valid, or <c>null</c> to determine it based on whether the output item exists.</param>
-    private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool? isValid = null)
+    /// <param name="entity">The entity to which to link the entry (e.g. for lookup links), if different from <paramref name="item"/>.</param>
+    private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool? isValid = null, object? entity = null)
     {
         // get display text
         string text;
@@ -614,7 +673,8 @@ internal class ItemRecipesField : GenericField
             DisplayText: text,
             Quality: quality,
             IsGoldPrice: false,
-            IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId))
+            IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId)),
+            Entity: entity ?? item
         );
     }
 }

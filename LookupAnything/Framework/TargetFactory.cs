@@ -22,11 +22,20 @@ internal class TargetFactory : ISubjectRegistry
     /*********
     ** Fields
     *********/
+    /// <summary>The subject cache duration in ticks.</summary>
+    private const int SubjectCacheDuration = 5 * 60; // five seconds
+
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private readonly GameHelper GameHelper;
 
     /// <summary>The instances which provides lookup data for in-game entities.</summary>
     private readonly ILookupProvider[] LookupProviders;
+
+    /// <summary>The cached lookups by entity.</summary>
+    private readonly Dictionary<(object, GameLocation?), ISubject?> SubjectCache = new();
+
+    /// <summary>The <see cref="Game1.ticks">game tick</see> when the <see cref="SubjectCache"/> should be reset.</summary>
+    private int SubjectCacheUntil;
 
 
     /*********
@@ -47,10 +56,10 @@ internal class TargetFactory : ISubjectRegistry
         ISubjectRegistry codex = this;
         this.LookupProviders = [
             new BuildingLookupProvider(reflection, gameHelper, config, codex),
-                new CharacterLookupProvider(reflection, gameHelper, config, codex),
-                new ItemLookupProvider(reflection, gameHelper, config, codex),
-                new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
-                new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
+            new CharacterLookupProvider(reflection, gameHelper, config, codex),
+            new ItemLookupProvider(reflection, gameHelper, config, codex),
+            new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
+            new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
         ];
     }
 
@@ -169,7 +178,19 @@ internal class TargetFactory : ISubjectRegistry
     /// <param name="location">The location containing the entity, if applicable.</param>
     public ISubject? GetByEntity(object entity, GameLocation? location)
     {
-        return this.LookupProviders
+        var cacheKey = (entity, location);
+
+        // get from cache
+        if (this.SubjectCacheUntil < Game1.ticks)
+        {
+            this.SubjectCache.Clear();
+            this.SubjectCacheUntil = Game1.ticks + TargetFactory.SubjectCacheDuration - 1;
+        }
+        else if (this.SubjectCache.TryGetValue(cacheKey, out ISubject? subject))
+            return subject;
+
+        // else search providers
+        return this.SubjectCache[cacheKey] = this.LookupProviders
             .Select(p => p.GetSubjectFor(entity, location))
             .FirstOrDefault(p => p != null);
     }

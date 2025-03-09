@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -7,7 +8,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
 /// <summary>A metadata field which shows an item icon.</summary>
-internal class ItemIconField : GenericField, ILinkField
+internal class ItemIconField : GenericField
 {
     /*********
     ** Fields
@@ -17,6 +18,13 @@ internal class ItemIconField : GenericField, ILinkField
 
     /// <summary>Gets the subject the link points to, if applicable.</summary>
     private readonly ISubject? LinkSubject;
+
+
+    /*********
+    ** Accessors
+    *********/
+    /// <inheritdoc />
+    public override bool MayHaveLinks => this.LinkSubject is not null || base.MayHaveLinks;
 
 
     /*********
@@ -59,8 +67,12 @@ internal class ItemIconField : GenericField, ILinkField
     }
 
     /// <inheritdoc />
-    public ISubject? GetLinkSubject()
+    public override bool TryGetLinkAt(int x, int y, [NotNullWhen(true)] out ISubject? subject)
     {
-        return this.LinkSubject;
+        if (base.TryGetLinkAt(x, y, out subject))
+            return true;
+
+        subject = this.LinkSubject;
+        return subject != null;
     }
 }
