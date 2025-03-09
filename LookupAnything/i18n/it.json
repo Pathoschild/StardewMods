@@ -513,7 +513,7 @@
     "npc.schedule.no-entries": "Nessun programma caricato.",
     "npc.schedule.not-following-schedule": "Al momento non sta seguendo un programma. Di solito questo significa che un PNG sta eseguendo un'attività straordinaria (es. si trova al cinema).",
     "npc.schedule.entry": "{{time}}: cammina verso {{locationName}} ({{x}}, {{y}}).",
-    "npc.schedule.farmhand.unknown-position": "Attualmente in una posizione sconosciuta all'host.",
+    "npc.schedule.farmhand.unknown-position": "Attualmente in una posizione sconosciuta sull'host.",
     "npc.schedule.farmhand.unknown-schedule": "In multigiocatore i PNG sono gestiti dall'host, perciò il loro programma non è disponibile.",
 
 
