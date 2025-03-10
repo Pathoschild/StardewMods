@@ -1,6 +1,7 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
-A patch with **`"Action": "Load"`** replaces an entire asset with your own version.
+一个含有**`"Action": "Load"`**的补丁用你提供的文件替换整个资产。
+
 
 ## Contents
 * [注意事项](#caveats)
@@ -132,7 +133,6 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 }
 ```
 
-You can use `Priority` to have an optional load (e.g. if it'll still work when another mod loads it first):
 你可以用`Priority`实现非必需的`Load`（例如，当另一个模块首先加载它时你的内容包仍然可以正常运行）。
 ```js
 {

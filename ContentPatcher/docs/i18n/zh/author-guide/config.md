@@ -1,45 +1,43 @@
 ﻿← [author guide](../author-guide.md)
 
-The config feature lets you make dynamic changes in your content pack that depends on settings
-selected by the player.
+设置选项功能让你向玩家提供可更改的设置，并基于设置实现动态。
 
 ## Contents
-* [Basic config](#basic-config)
-  * [Overview](#overview)
-  * [Define your config](#define-your-config)
-  * [Examples](#examples)
-* [Config UI](#config-ui)
-  * [Display options](#display-options)
-  * [Sections](#sections)
-  * [Translations](#translations)
-* [See also](#see-also)
+* [基本设置](#basic-config)
+  * [概述](#overview)
+  * [设置定义](#define-your-config)
+  * [示例](#examples)
+* [设置菜单](#config-ui)
+  * [显示选项](#display-options)
+  * [分段](#sections)
+  * [翻译](#translations)
+* [参见](#see-also)
 
-## Basic config
-## Overview
-You can define your content pack's settings using the `ConfigSchema` field, then Content Patcher
-will automatically add a `config.json` file and [in-game config UI](#config-ui) to let players edit
-your options.
+## 基本设置<a name="basic-config"></a>
+## 概述<a name="overview"></a>
 
-In your content pack code, you can then use config options as [tokens &
-conditions](../author-guide.md#tokens) to make dynamic changes.
+你可以使用`ConfigSchema`字段定义内容包的设置选项。Content Patcher将自动添加`config.json`文件和[游戏内设置菜单](#config-ui)并允许玩家更改你提供的设置。
 
-### Define your config
-First you need to describe your config options for Content Patcher. You do that by adding a
-`ConfigSchema` field (outside the `Changes` field which has your patches). Each config option has
-a key used as the token name, and a data model containing these fields:
+在内容包内你可以把设置选项当作[Tokens和条件](#../author-guide.md#tokens)使用，从而实现动态改变。
 
-field               | meaning
+### 设置定义<a name="define-your-config"></a>
+
+使用设置选项的第一步用`ConfigSchema`字段来描述你的内容包所提供的选项。`ConfigSchema`是与`Format`和`Changes`同级的字段。每一个设置选项有一个作为token的键，和一个包含一下字段的模型：
+
+一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。
+
+类型                 | 作用
 ------------------- | -------
-`AllowValues`       | _(optional)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in the [config UI](#config-ui)).
-`AllowBlank`        | _(optional)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
-`AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
-`Default`           | _(optional unless `AllowBlank` is false)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
+`AllowValues`       | _（可选）_ 一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。<br />**Tip:** 当你用`"true, false"`定义可启用/禁用的选项时，Content Patcher会认出它是布尔(并在[设置菜单](#config-ui)以复选框显示此设置).
+`AllowBlank`        | _（可选）_ 该字段是否可以留空。如果false或省略，则将用默认值（`Default`）替换空白字段。
+`AllowMultiple`     | _（可选）_ 玩家是否可以指定多个以逗号分隔的值。默认false。
+`Default`           | _(可选，除非`AllowBlank`为false)_ 此设置的默认值。如果`AllowMultiple`为true的，则可以包含多个以逗号分隔的值。如果省略，默认值为空白。
 
-Config names and fields are not case-sensitive.
+设置选项的名称和字段不区分大小写。
 
-### Examples
-This `content.json` defines a `BillboardMaterial` config field and uses it to change which patch is
-applied:
+### 示例<a name="examples"></a>
+
+此`content.json`定义了一个名为`BillboardMaterial`的设置，并使用此设置token控制补丁效果。
 
 ```js
 {
@@ -51,14 +49,14 @@ applied:
       }
    },
    "Changes": [
-      // as a token
+      // 作为token
       {
          "Action": "Load",
          "Target": "LooseSprites/Billboard",
          "FromFile": "assets/material_{{Material}}.png"
       },
 
-      // as a condition
+      // 作为条件
       {
          "Action": "Load",
          "Target": "LooseSprites/Billboard",
@@ -71,7 +69,7 @@ applied:
 }
 ```
 
-When you run the game, a `config.json` file will appear automatically with text like this:
+当你运行游戏时，Content Patcher会自动生成一个`config.json`文件：
 
 ```js
 {
@@ -79,23 +77,20 @@ When you run the game, a `config.json` file will appear automatically with text 
 }
 ```
 
-Players can edit that file to configure your content pack, or use the in-game
-[config UI](#config-ui).
+玩家可以编辑此`config.json`文件来改变设置，或使用游戏内设置[设置菜单](#config-ui)。
 
-## Config UI
-Content Patcher will automatically add an in-game UI to let players edit your settings, currently
-using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098). You can
-optionally provide extra info to improve the config UI.
+## 设置菜单<a name="config-ui"></a>
+当你的内容包有设置选项时，Content Patcher会为你的内容包自动添加一个游戏内的设置菜单（现在基于[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)）。你可以为此设置菜单提供一些可选的字段来进一步优化它。
 
-### Display options
-There's two extra fields to customize how config UIs are rendered:
+### 显示选项<a name="display-options"></a>
+现有两个控制设置菜单的字段：
 
-field         | meaning
+类型           | 作用
 ------------- | -------
-`Description` | _(optional)_ An explanation of the config option for the player, usually shown in the config UI as a tooltip.
-`Section`     | _(optional)_ A section title to group related sections. See [_sections_](#sections) below.
+`Description` | _（可选）_ 配置选项的说明，在配置UI中显示为提示框。
+`Section`     | _（可选）_ 一个分段的标题。 详见[_分段_](#sections) below.
 
-### Sections
+### 分段<a name="sections"></a>
 You can group your options into sections using the `Section` field. Options with no section are
 always listed first, followed by sections in the order they first appeared in `ConfigSchema`.
 
@@ -132,7 +127,7 @@ Which would look something like this in-game:
 
 ![](../screenshots/config-with-sections.png)
 
-### Translations
+### 翻译<a name="translations"></a>
 By default your config options are shown as-is in the config UI, with no display names or tooltips
 or translations:
 
@@ -178,5 +173,5 @@ And now the config UI would look something like this for a French player:
 
 See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
+## 参见<a name="see-also"></a>
+* 其他操作和选项请参考[模组作者指南](../author-guide.md)

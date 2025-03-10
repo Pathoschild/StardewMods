@@ -1,8 +1,8 @@
 ﻿← [README](README.md)
 
-This document helps mod authors create a content pack for Content Patcher.
+此文档描述如何创建一个Content Patcher的内容包。
 
-**See the [main README](README.md) for other info**.
+**其他信息请参见[主README](README.md)**.
 
 ## 内容
 * [介绍](#introduction)
@@ -58,7 +58,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
          🗎 example.png
 ```
 
-For example, here's a `content.json` which replaces Abigail's portraits with your own image:
+例如，这个`content.json`替代阿比盖尔的肖像：
 
 ```js
 {
@@ -347,10 +347,10 @@ Or this gives her different seasonal portraits if you're married to her:
 详见[tokens和条件指南](author-guide/tokens.md)。
 
 ### 玩家设置<a name="player-config"></a>
-你可以让玩家使用`config.json`文件配置你的模组。如果玩家有[通用模组配置菜单GMCM](https://www.nexusmods.com/stardewvalley/mods/5098)，玩家还能
-通过游戏内的选项菜单配置不同的更改。
+你可以让玩家使用`config.json`文件设置你的模组。如果玩家有[通用模组设置菜单GMCM](https://www.nexusmods.com/stardewvalley/mods/5098)，玩家还能
+通过游戏内的选项菜单设置不同的更改。
 
-例如，你可以将配置值用作[Tokens和条件](#tokens):
+例如，你可以将设置值用作[Tokens和条件](#tokens):
 
 ```js
 {

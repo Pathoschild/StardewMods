@@ -1,4 +1,4 @@
-﻿← [README](README.md)
+﻿← [模组作者指南](../author-guide.md)
 
 一个含有**`"Action": "Include"`**的补丁会从另外一个JSON文件里加载更多补丁。
 
@@ -46,7 +46,7 @@
 <dt>可选字段：</dt>
 <dd>
 
-field     | purpose
+类型       | 作用
 --------- | -------
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
@@ -94,7 +94,7 @@ field     | purpose
 
 你不可以循环`Include`（例如文件A引用文件B，而文件B也引用文件A）。
 
-### 我可以使用Include加载非补丁吗?<a name="can-i-load-non-patches-using-include"></a>
+### 我可以使用Include加载`Changes`以外的内容吗?<a name="can-i-load-non-patches-using-include"></a>
 不可以。`Include`的文件只能有一个`Changes`字节。如果你试图使用`ConfigSchema`，`CustomLocations`，`DynamicTokens`，Content Patcher会报错。
 
 ## 参见<a name="see-also"></a>
