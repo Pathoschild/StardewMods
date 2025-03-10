@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -51,11 +52,13 @@ internal class IslandMermaidPuzzleSubject : TileSubject
                 int songIndex = location.songIndex;
 
                 var checkboxes = sequence
-                    .Select((pitch, i) => CheckboxListField.Checkbox(text: this.Stringify(pitch), value: complete || songIndex >= i))
+                    .Select((pitch, i) => new CheckboxList.Checkbox(text: this.Stringify(pitch), isChecked: complete || songIndex >= i))
                     .ToArray();
 
-                yield return new CheckboxListField(I18n.Puzzle_Solution(), checkboxes)
-                    .AddIntro(complete ? I18n.Puzzle_Solution_Solved() : I18n.Puzzle_IslandMermaid_Solution_Intro());
+                CheckboxList checkboxList = new(checkboxes);
+                checkboxList.AddIntro(complete ? I18n.Puzzle_Solution_Solved() : I18n.Puzzle_IslandMermaid_Solution_Intro());
+
+                yield return new CheckboxListField(I18n.Puzzle_Solution(), checkboxList);
             }
         }
 

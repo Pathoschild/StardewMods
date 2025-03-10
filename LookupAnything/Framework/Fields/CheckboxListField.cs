@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -15,10 +14,7 @@ internal class CheckboxListField : GenericField
     ** Fields
     *********/
     /// <summary>The checkbox values to display.</summary>
-    protected KeyValuePair<IFormattedText[], bool>[] Checkboxes;
-
-    /// <summary>The intro text to show before the checkboxes.</summary>
-    protected IFormattedText[]? Intro;
+    protected CheckboxList CheckboxList;
 
 
     /*********
@@ -26,20 +22,11 @@ internal class CheckboxListField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A short field label.</param>
-    /// <param name="checkboxes">The checkbox labels and values to display.</param>
-    public CheckboxListField(string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
+    /// <param name="checkboxList">The checkbox labels and values to display.</param>
+    public CheckboxListField(string label, CheckboxList checkboxList)
         : this(label)
     {
-        this.Checkboxes = checkboxes.ToArray();
-    }
-
-    /// <summary>Construct an instance.</summary>
-    /// <param name="label">A short field label.</param>
-    /// <param name="checkboxes">The checkbox labels and values to display.</param>
-    public CheckboxListField(string label, params KeyValuePair<IFormattedText[], bool>[] checkboxes)
-        : this(label)
-    {
-        this.Checkboxes = checkboxes;
+        this.CheckboxList = checkboxList;
     }
 
     /// <inheritdoc />
@@ -50,10 +37,10 @@ internal class CheckboxListField : GenericField
         float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
         float checkboxOffset = (lineHeight - checkboxSize) / 2;
 
-        if (this.Intro != null)
-            topOffset += spriteBatch.DrawTextBlock(font, this.Intro, position, wrapWidth).Y;
+        if (this.CheckboxList.Intro != null)
+            topOffset += spriteBatch.DrawTextBlock(font, this.CheckboxList.Intro, position, wrapWidth).Y;
 
-        foreach ((IFormattedText[] label, bool isChecked) in this.Checkboxes)
+        foreach ((bool isChecked, IFormattedText[] label) in this.CheckboxList.Checkboxes)
         {
             // draw icon
             spriteBatch.Draw(
@@ -78,39 +65,6 @@ internal class CheckboxListField : GenericField
         return new Vector2(wrapWidth, topOffset);
     }
 
-    /// <summary>Add intro text before the checkboxes.</summary>
-    /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxListField AddIntro(params IFormattedText[] text)
-    {
-        this.Intro = text;
-        return this;
-    }
-
-    /// <summary>Add intro text before the checkboxes.</summary>
-    /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxListField AddIntro(params string[] text)
-    {
-        return this.AddIntro(
-            text.Select(p => (IFormattedText)new FormattedText(p)).ToArray()
-        );
-    }
-
-    /// <summary>Build a checkbox entry.</summary>
-    /// <param name="value">Whether the value is enabled.</param>
-    /// <param name="text">The checkbox text to display.</param>
-    public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, params IFormattedText[] text)
-    {
-        return new KeyValuePair<IFormattedText[], bool>(text, value);
-    }
-
-    /// <summary>Build a checkbox entry.</summary>
-    /// <param name="value">Whether the value is enabled.</param>
-    /// <param name="text">The checkbox text to display.</param>
-    public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, string text)
-    {
-        return CheckboxListField.Checkbox(value, new FormattedText(text));
-    }
-
 
     /*********
     ** Protected methods
@@ -120,6 +74,6 @@ internal class CheckboxListField : GenericField
     protected CheckboxListField(string label)
         : base(label, hasValue: true)
     {
-        this.Checkboxes = [];
+        this.CheckboxList = new CheckboxList();
     }
 }
