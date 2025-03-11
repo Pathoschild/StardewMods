@@ -7,14 +7,20 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
-/// <summary>A metadata field which shows a list of checkbox values.</summary>
+/// <summary>A metadata field which shows one or more lists of checkbox values.</summary>
 internal class CheckboxListField : GenericField
 {
     /*********
     ** Fields
     *********/
     /// <summary>The checkbox values to display.</summary>
-    protected CheckboxList CheckboxList;
+    protected CheckboxList[] CheckboxLists;
+
+    /// <summary>The size of each checkbox to draw.</summary>
+    protected readonly float CheckboxSize;
+
+    /// <summary>The height of one line of the checkbox list.</summary>
+    protected readonly float LineHeight;
 
 
     /*********
@@ -22,47 +28,24 @@ internal class CheckboxListField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A short field label.</param>
-    /// <param name="checkboxList">The checkbox labels and values to display.</param>
-    public CheckboxListField(string label, CheckboxList checkboxList)
+    /// <param name="checkboxLists">The checkbox lists to display.</param>
+    public CheckboxListField(string label, params CheckboxList[] checkboxLists)
         : this(label)
     {
-        this.CheckboxList = checkboxList;
+        this.CheckboxLists = checkboxLists;
     }
 
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
         float topOffset = 0;
-        float checkboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
-        float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
-        float checkboxOffset = (lineHeight - checkboxSize) / 2;
 
-        if (this.CheckboxList.Intro != null)
-            topOffset += spriteBatch.DrawTextBlock(font, this.CheckboxList.Intro, position, wrapWidth).Y;
-
-        foreach ((bool isChecked, IFormattedText[] label) in this.CheckboxList.Checkboxes)
+        foreach (CheckboxList checkboxList in this.CheckboxLists)
         {
-            // draw icon
-            spriteBatch.Draw(
-                texture: CommonSprites.Icons.Sheet,
-                position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
-                sourceRectangle: isChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
-                color: Color.White,
-                rotation: 0,
-                origin: Vector2.Zero,
-                scale: checkboxSize / CommonSprites.Icons.FilledCheckbox.Width,
-                effects: SpriteEffects.None,
-                layerDepth: 1f
-            );
-
-            // draw text
-            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, label, new Vector2(position.X + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
-
-            // update offset
-            topOffset += Math.Max(checkboxSize, textSize.Y);
+            topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
         }
 
-        return new Vector2(wrapWidth, topOffset);
+        return new Vector2(wrapWidth, topOffset - this.LineHeight);
     }
 
 
@@ -74,6 +57,41 @@ internal class CheckboxListField : GenericField
     protected CheckboxListField(string label)
         : base(label, hasValue: true)
     {
-        this.CheckboxList = new CheckboxList();
+        this.CheckboxLists = [];
+        this.CheckboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
+        this.LineHeight = Math.Max(this.CheckboxSize, Game1.smallFont.MeasureString("ABC").Y);
+    }
+
+    protected Vector2 DrawCheckboxList(CheckboxList checkboxList, SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    {
+        float topOffset = 0;
+        float checkboxOffset = (this.LineHeight - this.CheckboxSize) / 2;
+
+        if (checkboxList.Intro != null)
+            topOffset += spriteBatch.DrawTextBlock(font, checkboxList.Intro, position, wrapWidth).Y;
+
+        foreach (CheckboxList.Checkbox checkbox in checkboxList.Checkboxes)
+        {
+            // draw icon
+            spriteBatch.Draw(
+                texture: CommonSprites.Icons.Sheet,
+                position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
+                sourceRectangle: checkbox.IsChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
+                color: Color.White,
+                rotation: 0,
+                origin: Vector2.Zero,
+                scale: this.CheckboxSize / CommonSprites.Icons.FilledCheckbox.Width,
+                effects: SpriteEffects.None,
+                layerDepth: 1f
+            );
+
+            // draw text
+            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, checkbox.Text, new Vector2(position.X + this.CheckboxSize + 7, position.Y + topOffset), wrapWidth - this.CheckboxSize - 7);
+
+            // update offset for next checkbox
+            topOffset += Math.Max(this.CheckboxSize, textSize.Y);
+        }
+
+        return new Vector2(position.X, topOffset + this.LineHeight);
     }
 }

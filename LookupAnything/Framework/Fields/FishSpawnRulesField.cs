@@ -30,8 +30,8 @@ internal class FishSpawnRulesField : CheckboxListField
     public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
         : base(label)
     {
-        this.CheckboxList = new CheckboxList(this.GetConditions(gameHelper, fish));
-        this.HasValue = this.CheckboxList.Checkboxes.Any();
+        this.CheckboxLists = [ new CheckboxList(this.GetConditions(gameHelper, fish)) ];
+        this.HasValue = this.CheckboxLists.Any();
     }
 
 
