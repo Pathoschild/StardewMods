@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 
@@ -13,8 +14,8 @@ internal class CheckboxList(CheckboxList.Checkbox[] checkboxes)
     /// <summary>The checkbox values to display.</summary>
     public Checkbox[] Checkboxes = checkboxes;
 
-    /// <summary>The intro text to show before the checkboxes.</summary>
-    public IFormattedText[]? Intro;
+    /// <summary>The intro text and icon to show before the checkboxes.</summary>
+    public IntroData? Intro;
 
     /*********
     ** Public methods
@@ -32,19 +33,10 @@ internal class CheckboxList(CheckboxList.Checkbox[] checkboxes)
 
     /// <summary>Add intro text before the checkboxes.</summary>
     /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxList AddIntro(params IFormattedText[] text)
+    public CheckboxList AddIntro(string text, SpriteInfo? icon = null)
     {
-        this.Intro = text;
+        this.Intro = new(text, icon);
         return this;
-    }
-
-    /// <summary>Add intro text before the checkboxes.</summary>
-    /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxList AddIntro(params string[] text)
-    {
-        return this.AddIntro(
-            text.Select(p => (IFormattedText)new FormattedText(p)).ToArray()
-        );
     }
 
     /// <summary>A checkbox with a label.</summary>
@@ -59,4 +51,9 @@ internal class CheckboxList(CheckboxList.Checkbox[] checkboxes)
         {
         }
     }
+
+    /// <summary>The text and icon to display above a checkbox list.</summary>
+    /// <param name="Text">The text to display above the checkbox list.</param>
+    /// <param name="Icon">The icon to display above the checkbox list.</param>
+    internal record IntroData(string Text, SpriteInfo? Icon);
 }

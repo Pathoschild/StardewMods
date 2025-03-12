@@ -68,7 +68,7 @@ internal class CheckboxListField : GenericField
         float checkboxOffset = (this.LineHeight - this.CheckboxSize) / 2;
 
         if (checkboxList.Intro != null)
-            topOffset += spriteBatch.DrawTextBlock(font, checkboxList.Intro, position, wrapWidth).Y;
+            topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Icon, new Vector2(this.LineHeight)).Y;
 
         foreach (CheckboxList.Checkbox checkbox in checkboxList.Checkboxes)
         {
