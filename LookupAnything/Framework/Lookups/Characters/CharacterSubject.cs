@@ -251,14 +251,14 @@ internal class CharacterSubject : BaseSubject
         // show items wanted
         if (questsDone <= maxQuests)
         {
-            var checkboxes = new List<CheckboxList.Checkbox>();
+            var checkboxes = new List<Checkbox>();
             for (int i = 0; i < maxQuests; i++)
             {
                 string wantedKey = cave.IndexForRequest(i);
                 if (!CommonHelper.IsItemId(wantedKey))
                     continue;
 
-                checkboxes.Add(new CheckboxList.Checkbox(text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName, isChecked: questsDone > i));
+                checkboxes.Add(new Checkbox(text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName, isChecked: questsDone > i));
             }
 
             if (checkboxes.Any())
@@ -292,7 +292,7 @@ internal class CharacterSubject : BaseSubject
 
             int kills = questData.Targets.Sum(Game1.stats.getMonstersKilled);
             string goalName = TokenParser.ParseText(questData.DisplayName);
-            var checkbox = new CheckboxList.Checkbox(
+            var checkbox = new Checkbox(
                 text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: questData.Count),
                 isChecked: kills >= questData.Count
             );

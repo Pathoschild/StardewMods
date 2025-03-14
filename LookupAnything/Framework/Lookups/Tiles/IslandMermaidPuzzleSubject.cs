@@ -52,7 +52,7 @@ internal class IslandMermaidPuzzleSubject : TileSubject
                 int songIndex = location.songIndex;
 
                 var checkboxes = sequence
-                    .Select((pitch, i) => new CheckboxList.Checkbox(text: this.Stringify(pitch), isChecked: complete || songIndex >= i))
+                    .Select((pitch, i) => new Checkbox(text: this.Stringify(pitch), isChecked: complete || songIndex >= i))
                     .ToArray();
 
                 CheckboxList checkboxList = new(checkboxes);

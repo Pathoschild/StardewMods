@@ -48,19 +48,19 @@ internal class IslandShrinePuzzleSubject : TileSubject
             else
             {
                 CheckboxList checkboxList = new([
-                    new CheckboxList.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_North(shrine.northPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.northPedestal.match.Value
                     ),
-                    new CheckboxList.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_East(shrine.eastPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.eastPedestal.match.Value
                     ),
-                    new CheckboxList.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_South(shrine.southPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.southPedestal.match.Value
                     ),
-                    new CheckboxList.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_West(shrine.westPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.westPedestal.match.Value
                     )

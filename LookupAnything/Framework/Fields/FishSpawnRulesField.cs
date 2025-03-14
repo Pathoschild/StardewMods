@@ -41,7 +41,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Get the formatted checkbox conditions to display.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="fish">The fish item data.</param>
-    private IEnumerable<CheckboxList.Checkbox> GetConditions(GameHelper gameHelper, ParsedItemData fish)
+    private IEnumerable<Checkbox> GetConditions(GameHelper gameHelper, ParsedItemData fish)
     {
         // get spawn data
         FishSpawnData spawnRules = gameHelper.GetFishSpawnRules(fish);
@@ -140,17 +140,17 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private CheckboxList.Checkbox GetCondition(string label, bool isMet)
+    private Checkbox GetCondition(string label, bool isMet)
     {
-        return new CheckboxList.Checkbox(text: label, isChecked: isMet);
+        return new Checkbox(text: label, isChecked: isMet);
     }
 
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private CheckboxList.Checkbox GetCondition(IEnumerable<IFormattedText> label, bool isMet)
+    private Checkbox GetCondition(IEnumerable<IFormattedText> label, bool isMet)
     {
-        return new CheckboxList.Checkbox(Text: label.ToArray(), IsChecked: isMet);
+        return new Checkbox(Text: label.ToArray(), IsChecked: isMet);
     }
 
     /// <summary>Get whether all locations specify the same seasons.</summary>

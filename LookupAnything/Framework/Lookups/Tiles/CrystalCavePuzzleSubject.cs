@@ -68,7 +68,7 @@ internal class CrystalCavePuzzleSubject : TileSubject
                     var checkboxes = cave
                         .currentCrystalSequence
                         .Select((id, index) =>
-                            new CheckboxList.Checkbox(
+                            new Checkbox(
                                 text: this.Stringify(id + 1),
                                 isChecked: cave.currentCrystalSequenceIndex.Value > index
                             )

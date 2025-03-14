@@ -70,7 +70,7 @@ internal class CheckboxListField : GenericField
         if (checkboxList.Intro != null)
             topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Icon, new Vector2(this.LineHeight)).Y;
 
-        foreach (CheckboxList.Checkbox checkbox in checkboxList.Checkboxes)
+        foreach (Checkbox checkbox in checkboxList.Checkboxes)
         {
             // draw icon
             spriteBatch.Draw(
