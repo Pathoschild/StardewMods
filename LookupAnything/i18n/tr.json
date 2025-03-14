@@ -36,6 +36,7 @@
     // types
     "type.building": "Bina",
     "type.bush": "Çalı",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Meyve Ağacı",
     "type.map-tile": "Harita karosu",
     "type.monster": "Canavar",

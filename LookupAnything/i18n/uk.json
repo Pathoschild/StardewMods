@@ -36,6 +36,7 @@
     // types
     "type.building": "Будівля",
     "type.bush": "Кущ",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Фруктове дерево",
     "type.map-tile": "Об'єкт",
     "type.monster": "Монстр",

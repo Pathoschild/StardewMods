@@ -68,6 +68,9 @@ internal class TileLookupProvider : BaseLookupProvider
         if (this.IsIslandShrinePuzzle(location, tile))
             return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ShowPuzzleSolutions);
 
+        if (IsFishingArea(location, tile))
+            return new FishingAreaSubject(this.GameHelper, location, tile, showRaw);
+
         if (showRaw)
             return new TileSubject(this.GameHelper, location, tile, true);
 
@@ -165,5 +168,14 @@ internal class TileLookupProvider : BaseLookupProvider
     {
         value = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, name, layer);
         return value != null;
+    }
+
+    /// <summary>Gets whether the tile is fishable.</summary>
+    /// <param name="location">The game location.</param>
+    /// <param name="tile">The tile position.</param>
+    /// <param name="fishAreaId">The fish area ID which applies, if any.</param>
+    private static bool IsFishingArea(GameLocation location, Vector2 tile)
+    {
+        return location.isTileFishable((int)tile.X, (int)tile.Y);
     }
 }

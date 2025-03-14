@@ -36,6 +36,7 @@
     // types
     "type.building": "Tòa nhà",
     "type.bush": "Bụi cây",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Cây ăn quả",
     "type.map-tile": "Ô bản đồ",
     "type.monster": "Quái vật",

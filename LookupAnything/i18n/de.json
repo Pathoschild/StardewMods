@@ -36,6 +36,7 @@
     // types
     "type.building": "Gebäude",
     "type.bush": "Busch",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Obstbaum",
     "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",

@@ -36,6 +36,7 @@
     // types
     "type.building": "建物",
     "type.bush": "茂み",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "果樹",
     "type.map-tile": "マップタイル",
     "type.monster": "モンスター",

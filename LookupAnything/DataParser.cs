@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.ExtraMachineConfig;
@@ -38,6 +39,8 @@ internal class DataParser
     /// <summary>The placeholder item ID for a recipe which can't be parsed due to its complexity.</summary>
     public const string ComplexRecipeId = "__COMPLEX_RECIPE__";
 
+    /// <summary>A regex pattern matching the UndergroundMine location with an optional mine level.</summary>
+    private static readonly Regex MineLevelPattern = new(@"UndergroundMine(\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /*********
     ** Public methods
@@ -295,6 +298,59 @@ internal class DataParser
         );
     }
 
+    /// <summary>Read parsed data about the spawn rules for fish in a specific location.</summary>
+    /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
+    /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId, Metadata metadata)
+    {
+        HashSet<string> seenFishIDs = [];
+
+        // parse game data
+        foreach (SpawnFishData fishData in location.GetData().Fish)
+        {
+            if (fishData.ItemId == null)
+                continue;
+
+            seenFishIDs.Add(fishData.ItemId);
+
+            // skip if fish can't spawn in this body of water
+            if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                continue;
+
+            // skip if bobber isn't in proper position
+            if (fishData.BobberPosition.HasValue && !fishData.BobberPosition.GetValueOrDefault().Contains((int)tile.X, (int)tile.Y))
+                continue;
+
+            // skip if player isn't in proper position
+            if (fishData.PlayerPosition.HasValue && !fishData.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
+                continue;
+
+            // skip if data isn't for a fish or jelly (e.g., furniture)
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+            if (fish.ObjectType != "Fish")
+                continue;
+
+            yield return this.GetFishSpawnRules(fish, metadata);
+        }
+
+        // parse metadata
+        foreach ((string fishID, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
+        {
+            // skip if we already checked this fish, even if we skipped it (e.g., due to spawning only in a certain fishing area in a location)
+            if (seenFishIDs.Contains(fishID))
+                continue;
+
+            // skip if spawn location doesn't match
+            if (spawnData.Locations == null || !spawnData.Locations.Any(loc => loc.MatchesLocation(location.Name)))
+                continue;
+
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishID);
+            yield return this.GetFishSpawnRules(fish, metadata);
+        }
+    }
+
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
     /// <param name="player">The player.</param>
     /// <param name="npc">The NPC.</param>
@@ -355,6 +411,44 @@ internal class DataParser
 
         // else default to ID
         return id;
+    }
+
+    /// <summary>Get the translated display name for a location and optional fish area.</summary>
+    /// <param name="id">The location's internal name.</param>
+    /// <param name="data">The location data, if available.</param>
+    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
+    public string GetLocationDisplayName(string id, LocationData? data, string? fishAreaId)
+    {
+        // special cases
+        {
+            // special case: mine level
+            Match mineLevel = MineLevelPattern.Match(id);
+            if (mineLevel.Success)
+            {
+                // sometimes the mine level is provided as the fish area id; other times it's included in the location id
+                string level = fishAreaId ?? mineLevel.Groups[1].Value;
+
+                return string.IsNullOrWhiteSpace(level) ? this.GetLocationDisplayName(id, data) : I18n.Location_UndergroundMine_Level(level);
+            }
+
+            // skip: no area set
+            if (string.IsNullOrWhiteSpace(fishAreaId))
+                return this.GetLocationDisplayName(id, data);
+        }
+
+        // get base data
+        string locationName = this.GetLocationDisplayName(id, data);
+        string areaName = TokenParser.ParseText(data?.FishAreas?.GetValueOrDefault(fishAreaId)?.DisplayName);
+
+        // build translation
+        string displayName = I18n.GetByKey($"location.{id}.{fishAreaId}", new { locationName }).UsePlaceholder(false); // predefined translation
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            displayName = !string.IsNullOrWhiteSpace(areaName)
+                ? I18n.Location_FishArea(locationName: locationName, areaName: areaName)
+                : I18n.Location_UnknownFishArea(locationName: locationName, id: fishAreaId);
+        }
+        return displayName;
     }
 
     /// <summary>Parse monster data.</summary>
@@ -722,38 +816,6 @@ internal class DataParser
     /*********
     ** Private methods
     *********/
-    /// <summary>Get the translated display name for a location and optional fish area.</summary>
-    /// <param name="id">The location's internal name.</param>
-    /// <param name="data">The location data, if available.</param>
-    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
-    private string GetLocationDisplayName(string id, LocationData? data, string? fishAreaId)
-    {
-        // special cases
-        {
-            // skip: no area set
-            if (string.IsNullOrWhiteSpace(fishAreaId))
-                return this.GetLocationDisplayName(id, data);
-
-            // special case: mine level
-            if (string.Equals(id, "UndergroundMine", StringComparison.OrdinalIgnoreCase))
-                return I18n.Location_UndergroundMine_Level(level: fishAreaId);
-        }
-
-        // get base data
-        string locationName = this.GetLocationDisplayName(id, data);
-        string areaName = TokenParser.ParseText(data?.FishAreas?.GetValueOrDefault(fishAreaId)?.DisplayName);
-
-        // build translation
-        string displayName = I18n.GetByKey($"location.{id}.{fishAreaId}", new { locationName }).UsePlaceholder(false); // predefined translation
-        if (string.IsNullOrWhiteSpace(displayName))
-        {
-            displayName = !string.IsNullOrWhiteSpace(areaName)
-                ? I18n.Location_FishArea(locationName: locationName, areaName: areaName)
-                : I18n.Location_UnknownFishArea(locationName: locationName, id: fishAreaId);
-        }
-        return displayName;
-    }
-
     /// <summary>Normalize raw ingredient ID and context tags from a machine recipe into the most specific item ID and context tags possible.</summary>
     /// <param name="fromItemId">The ingredient's raw item ID from the machine data.</param>
     /// <param name="fromContextTags">The ingredient's raw context tags from the machine data.</param>

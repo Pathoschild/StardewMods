@@ -36,6 +36,7 @@
     // types
     "type.building": "สิ่งก่อสร้าง",
     "type.bush": "พุ่มไม้",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "ต้นผลไม้",
     "type.map-tile": "Map tile",
     "type.monster": "มอนสเตอร์",

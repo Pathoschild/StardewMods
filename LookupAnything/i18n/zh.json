@@ -36,6 +36,7 @@
     // types (类别)
     "type.building": "建筑",
     "type.bush": "灌木丛",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "果树",
     "type.map-tile": "图块",
     "type.monster": "怪物",

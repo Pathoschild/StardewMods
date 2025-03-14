@@ -36,6 +36,7 @@
     // types 유형
     "type.building": "건물",
     "type.bush": "덤불",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "과일 나무",
     "type.map-tile": "맵 타일",
     "type.monster": "몬스터",

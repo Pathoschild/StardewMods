@@ -36,6 +36,7 @@
     // types
     "type.building": "Construção",
     "type.bush": "Arbusto",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Árvore Frutífera",
     "type.map-tile": "Bloco",
     "type.monster": "Monstro",

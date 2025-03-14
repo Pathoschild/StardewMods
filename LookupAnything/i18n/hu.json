@@ -36,6 +36,7 @@
     // types
     "type.building": "Építmény",
     "type.bush": "Bokor",
+    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Gyümölcsfa",
     "type.map-tile": "Térkép Elem",
     "type.monster": "Szörny",
