@@ -4,6 +4,7 @@
 ## Upcoming release
 * For players:
   * Improved error message when the content pack isn't installed to be clearer.
+  * Fixed edge case where a ticket machine could disappear if a mod reloaded its location's map while you were there.
 
 ## 1.2.0
 Released 26 February 2025 for SMAPI 4.1.10 or later.

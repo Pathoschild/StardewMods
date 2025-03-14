@@ -82,15 +82,30 @@ internal class ContentManager
     /// <inheritdoc cref="IContentEvents.AssetRequested" />
     public void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        // edit vanilla locations
-        if (e.NameWithoutLocale.IsEquivalentTo("Maps/BusStop"))
-            e.Edit(asset => this.EditBusStopMap(asset.AsMap()), AssetEditPriority.Late);
-        if (e.NameWithoutLocale.IsEquivalentTo("Maps/Railroad"))
-            e.Edit(asset => this.EditRailroadMap(asset.AsMap()), AssetEditPriority.Late);
+        if (e.NameWithoutLocale.IsDirectlyUnderPath("Maps"))
+        {
+            // edit vanilla locations
+            if (e.NameWithoutLocale.IsEquivalentTo("Maps/BusStop"))
+                e.Edit(asset => this.EditBusStopMap(asset.AsMap()), AssetEditPriority.Late);
+            else if (e.NameWithoutLocale.IsEquivalentTo("Maps/Railroad"))
+                e.Edit(asset => this.EditRailroadMap(asset.AsMap()), AssetEditPriority.Late);
 
-        // edit Central Station map
-        if (e.NameWithoutLocale.IsEquivalentTo($"Maps/{Constant.ModId}"))
-            e.Edit(this.EditCentralStationMap, AssetEditPriority.Early);
+            // edit Central Station map
+            else if (e.NameWithoutLocale.IsEquivalentTo($"Maps/{Constant.ModId}"))
+                e.Edit(this.EditCentralStationMap, AssetEditPriority.Early);
+        }
+    }
+
+    /// <inheritdoc cref="IContentEvents.AssetReady" />
+    public void OnAssetReady(object? sender, AssetReadyEventArgs e)
+    {
+        // re-edit current location's map if it's reloaded
+        GameLocation location = Game1.currentLocation;
+        if (location?.map != null && e.NameWithoutLocale.IsEquivalentTo(location.mapPath.Value))
+        {
+            this.ConvertPreviousTicketMachines(location);
+            this.AddTicketMachineForMapProperty(location);
+        }
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped" />

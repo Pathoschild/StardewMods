@@ -59,6 +59,7 @@ internal class ModEntry : Mod
         // hook events
         helper.Events.GameLoop.DayStarted += this.ContentManager.OnDayStarted;
         helper.Events.Content.AssetRequested += this.ContentManager.OnAssetRequested;
+        helper.Events.Content.AssetReady += this.ContentManager.OnAssetReady;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Player.Warped += this.OnWarped;
 
