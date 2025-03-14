@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -29,8 +30,8 @@ internal class FishSpawnRulesField : CheckboxListField
     public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
         : base(label)
     {
-        this.Checkboxes = this.GetConditions(gameHelper, fish).ToArray();
-        this.HasValue = this.Checkboxes.Any();
+        this.CheckboxLists = [new CheckboxList(this.GetConditions(gameHelper, fish))];
+        this.HasValue = this.CheckboxLists.Any();
     }
 
 
@@ -40,7 +41,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Get the formatted checkbox conditions to display.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="fish">The fish item data.</param>
-    private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, ParsedItemData fish)
+    private IEnumerable<Checkbox> GetConditions(GameHelper gameHelper, ParsedItemData fish)
     {
         // get spawn data
         FishSpawnData spawnRules = gameHelper.GetFishSpawnRules(fish);
@@ -139,17 +140,17 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(string label, bool isMet)
+    private Checkbox GetCondition(string label, bool isMet)
     {
-        return CheckboxListField.Checkbox(text: label, value: isMet);
+        return new Checkbox(isMet, label);
     }
 
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(IEnumerable<IFormattedText> label, bool isMet)
+    private Checkbox GetCondition(IEnumerable<IFormattedText> label, bool isMet)
     {
-        return CheckboxListField.Checkbox(text: label.ToArray(), value: isMet);
+        return new Checkbox(isMet, label.ToArray());
     }
 
     /// <summary>Get whether all locations specify the same seasons.</summary>

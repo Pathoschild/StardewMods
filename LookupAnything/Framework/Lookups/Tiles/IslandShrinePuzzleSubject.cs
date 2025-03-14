@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -46,31 +47,31 @@ internal class IslandShrinePuzzleSubject : TileSubject
                 yield return new GenericField(I18n.Puzzle_Solution(), new FormattedText(I18n.Puzzle_Solution_Hidden(), Color.Gray));
             else
             {
-                var field = new CheckboxListField(I18n.Puzzle_Solution(),
-                    CheckboxListField.Checkbox(
+                CheckboxList checkboxList = new(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_North(shrine.northPedestal.requiredItem.Value.DisplayName),
-                        value: complete || shrine.northPedestal.match.Value
+                        isChecked: complete || shrine.northPedestal.match.Value
                     ),
-                    CheckboxListField.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_East(shrine.eastPedestal.requiredItem.Value.DisplayName),
-                        value: complete || shrine.eastPedestal.match.Value
+                        isChecked: complete || shrine.eastPedestal.match.Value
                     ),
-                    CheckboxListField.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_South(shrine.southPedestal.requiredItem.Value.DisplayName),
-                        value: complete || shrine.southPedestal.match.Value
+                        isChecked: complete || shrine.southPedestal.match.Value
                     ),
-                    CheckboxListField.Checkbox(
+                    new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_West(shrine.westPedestal.requiredItem.Value.DisplayName),
-                        value: complete || shrine.westPedestal.match.Value
+                        isChecked: complete || shrine.westPedestal.match.Value
                     )
                 );
 
-                field.AddIntro(complete
+                checkboxList.AddIntro(complete
                     ? I18n.Puzzle_Solution_Solved()
                     : I18n.Puzzle_IslandShrine_Solution()
                 );
 
-                yield return field;
+                yield return new CheckboxListField(I18n.Puzzle_Solution(), checkboxList);
             }
         }
 

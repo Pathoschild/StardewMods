@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -67,15 +68,17 @@ internal class CrystalCavePuzzleSubject : TileSubject
                     var checkboxes = cave
                         .currentCrystalSequence
                         .Select((id, index) =>
-                            CheckboxListField.Checkbox(
+                            new Checkbox(
                                 text: this.Stringify(id + 1),
-                                value: cave.currentCrystalSequenceIndex.Value > index
+                                isChecked: cave.currentCrystalSequenceIndex.Value > index
                             )
                         )
                         .ToArray();
 
-                    yield return new CheckboxListField(label, checkboxes)
-                        .AddIntro(I18n.Puzzle_IslandCrystalCave_Solution_Activated());
+                    CheckboxList checkboxList = new(checkboxes);
+                    checkboxList.AddIntro(I18n.Puzzle_IslandCrystalCave_Solution_Activated());
+
+                    yield return new CheckboxListField(label, checkboxList);
                 }
             }
         }

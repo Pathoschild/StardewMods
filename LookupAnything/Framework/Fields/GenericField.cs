@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -17,6 +21,9 @@ internal class GenericField : ICustomField
     *********/
     /// <summary>The clickable areas that should open a new page when clicked.</summary>
     protected readonly List<LinkTextArea> LinkTextAreas = [];
+
+    /// <summary>The number of pixels between an item's icon and text.</summary>
+    protected readonly int IconMargin = 5;
 
 
     /*********
@@ -180,5 +187,58 @@ internal class GenericField : ICustomField
                 break;
         }
         return I18n.List(priceStrings);
+    }
+
+    /// <summary>Draw text with an icon.</summary>
+    /// <param name="batch">The sprite batch.</param>
+    /// <param name="font">The sprite font.</param>
+    /// <param name="position">The position at which to draw the text.</param>
+    /// <param name="absoluteWrapWidth">The width at which to wrap the text.</param>
+    /// <param name="text">The block of text to write.</param>
+    /// <param name="textColor">The text color.</param>
+    /// <param name="icon">The sprite to draw.</param>
+    /// <param name="iconSize">The size to draw.</param>
+    /// <param name="iconColor">The color to tint the sprite.</param>
+    /// <param name="qualityIcon">The quality for which to draw an icon over the sprite.</param>
+    /// <param name="probe">Whether to calculate the positions without actually drawing anything to the screen.</param>
+    /// <returns>Returns the drawn size.</returns>
+    protected Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo? icon = null, Vector2? iconSize = null, Color? iconColor = null, int? qualityIcon = null, bool probe = false)
+    {
+        // draw icon
+        int textOffset = 0;
+        if (icon != null && iconSize.HasValue)
+        {
+            if (!probe)
+                batch.DrawSpriteWithin(icon, position.X, position.Y, iconSize.Value, iconColor);
+            textOffset = this.IconMargin;
+        }
+        else
+            iconSize = Vector2.Zero;
+
+        // draw quality icon overlay
+        if (qualityIcon > 0 && iconSize is { X: > 0, Y: > 0 })
+        {
+            Rectangle qualityRect = qualityIcon < SObject.bestQuality ? new(338 + (qualityIcon.Value - 1) * 8, 400, 8, 8) : new(346, 392, 8, 8); // from Item.DrawMenuIcons
+            Texture2D qualitySprite = Game1.mouseCursors;
+
+            Vector2 qualitySize = iconSize.Value / 2;
+            Vector2 qualityPos = new Vector2(
+                position.X + iconSize.Value.X - qualitySize.X,
+                position.Y + iconSize.Value.Y - qualitySize.Y
+            );
+
+            batch.DrawSpriteWithin(qualitySprite, qualityRect, qualityPos.X, qualityPos.Y, qualitySize, iconColor);
+        }
+
+        // draw text
+        Vector2 textSize = probe
+            ? font.MeasureString(text)
+            : batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X + textOffset, 0), absoluteWrapWidth - position.X, textColor);
+
+        // get drawn size
+        return new Vector2(
+            x: iconSize.Value.X + textSize.X,
+            y: Math.Max(iconSize.Value.Y, textSize.Y)
+        );
     }
 }
