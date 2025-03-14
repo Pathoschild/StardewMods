@@ -47,7 +47,7 @@ internal class IslandShrinePuzzleSubject : TileSubject
                 yield return new GenericField(I18n.Puzzle_Solution(), new FormattedText(I18n.Puzzle_Solution_Hidden(), Color.Gray));
             else
             {
-                CheckboxList checkboxList = new([
+                CheckboxList checkboxList = new(
                     new Checkbox(
                         text: I18n.Puzzle_IslandShrine_Solution_North(shrine.northPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.northPedestal.match.Value
@@ -64,7 +64,7 @@ internal class IslandShrinePuzzleSubject : TileSubject
                         text: I18n.Puzzle_IslandShrine_Solution_West(shrine.westPedestal.requiredItem.Value.DisplayName),
                         isChecked: complete || shrine.westPedestal.match.Value
                     )
-                ]);
+                );
 
                 checkboxList.AddIntro(complete
                     ? I18n.Puzzle_Solution_Solved()

@@ -258,7 +258,10 @@ internal class CharacterSubject : BaseSubject
                 if (!CommonHelper.IsItemId(wantedKey))
                     continue;
 
-                checkboxes.Add(new Checkbox(text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName, isChecked: questsDone > i));
+                checkboxes.Add(new Checkbox(
+                    text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
+                    isChecked: questsDone > i
+                ));
             }
 
             if (checkboxes.Any())
@@ -296,7 +299,7 @@ internal class CharacterSubject : BaseSubject
                 text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: questData.Count),
                 isChecked: kills >= questData.Count
             );
-            yield return new CheckboxListField(I18n.Monster_AdventureGuild(), new CheckboxList([checkbox]));
+            yield return new CheckboxListField(I18n.Monster_AdventureGuild(), new CheckboxList(checkbox));
         }
     }
 

@@ -25,6 +25,7 @@ internal class GenericField : ICustomField
     /// <summary>The number of pixels between an item's icon and text.</summary>
     protected readonly int IconMargin = 5;
 
+
     /*********
     ** Accessors
     *********/
@@ -228,7 +229,6 @@ internal class GenericField : ICustomField
 
             batch.DrawSpriteWithin(qualitySprite, qualityRect, qualityPos.X, qualityPos.Y, qualitySize, iconColor);
         }
-
 
         // draw text
         Vector2 textSize = probe

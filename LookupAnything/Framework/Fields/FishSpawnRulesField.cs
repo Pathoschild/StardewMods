@@ -30,7 +30,7 @@ internal class FishSpawnRulesField : CheckboxListField
     public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
         : base(label)
     {
-        this.CheckboxLists = [ new CheckboxList(this.GetConditions(gameHelper, fish)) ];
+        this.CheckboxLists = [new CheckboxList(this.GetConditions(gameHelper, fish))];
         this.HasValue = this.CheckboxLists.Any();
     }
 
@@ -142,7 +142,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="isMet">Whether the condition is met.</param>
     private Checkbox GetCondition(string label, bool isMet)
     {
-        return new Checkbox(text: label, isChecked: isMet);
+        return new Checkbox(isMet, label);
     }
 
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
@@ -150,7 +150,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="isMet">Whether the condition is met.</param>
     private Checkbox GetCondition(IEnumerable<IFormattedText> label, bool isMet)
     {
-        return new Checkbox(Text: label.ToArray(), IsChecked: isMet);
+        return new Checkbox(isMet, label.ToArray());
     }
 
     /// <summary>Get whether all locations specify the same seasons.</summary>
