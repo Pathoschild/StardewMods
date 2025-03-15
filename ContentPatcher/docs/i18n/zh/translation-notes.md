@@ -8,9 +8,9 @@ __内容包__: Content Pack
 
 内容包是给框架模组提供数据的子模组。文档里提到的“内容包”特指Content Patcher的内容包。
 
-__数据资产__: Data Assets
+__数据素材__: Data Assets
 
-资产是游戏数据的组织单位。每一个资产对应一个目标（Target）。
+素材是游戏数据的组织单位。每一个素材对应一个目标（Target）。
 
 __列表__: List
 

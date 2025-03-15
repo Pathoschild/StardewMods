@@ -1,10 +1,10 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-使用 **`"Action": "EditData"`** 可以编辑数据资产中的字段和条目。多个内容包可以编辑同一个资产。
+使用 **`"Action": "EditData"`** 可以编辑数据素材中的字段和条目。多个内容包可以编辑同一个素材。
 
 ## 目录
 * [基本概念](#basic-concepts)
-  * [数据资产](#data-assets)
+  * [数据素材](#data-assets)
   * [字段和条目](#entries)
   * [目标字段](#target-fields)
 * [用法](#usage)
@@ -24,10 +24,10 @@
 只有理解了本页所述的概念，你才能理解其余部分，所以请不要跳过该部分！
 
 
-### 数据资产<a name="data-assets"></a>
- _数据资产（data asset）_ 包括从游戏中加载的: 时间地点，角色对话等数据。比如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在[维基](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)上有阐述。
+### 数据素材<a name="data-assets"></a>
+ _数据素材（data asset）_ 包括从游戏中加载的: 时间地点，角色对话等数据。比如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在[维基](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)上有阐述。
 
-以下是三种主要的数据资产：
+以下是三种主要的数据素材：
 
 <table>
 <tr>
@@ -145,7 +145,7 @@
 字段     | 用途
 --------- | -------
 `Action`  | 操作类型。此操作类型设置为`EditData`。
-`Target`  | 需编辑的[游戏资产名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的资产名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
 至少有下列一项：
 
@@ -176,7 +176,7 @@
 <td><code>MoveEntries</code></td>
 <td>
 
- _只支持列表资产_ 更改列表资产（如`Data/MoviesReactions`）中的条目顺序。（在非列表资产中使用会出错，因为那些资产没有顺序）
+ _只支持列表素材_ 更改列表素材（如`Data/MoviesReactions`）中的条目顺序。（在非列表素材中使用会出错，因为那些素材没有顺序）
 
 详见[_移动列表条目_](#移动列表条目)。
 
@@ -223,7 +223,7 @@
   <td><code>Priority</code></td>
   <td>
 
- _（可选）_ 当多个补丁编辑同一数据资产时，此字段控制它们应用的顺序。可用的值有`Early`（更早），`Default`（默认），还有`Late`（更晚）。默认值为`Default`。
+ _（可选）_ 当多个补丁编辑同一数据素材时，此字段控制它们应用的顺序。可用的值有`Early`（更早），`Default`（默认），还有`Late`（更晚）。默认值为`Default`。
 
 补丁（包括所有模组）按以下顺序生效：
 
@@ -246,9 +246,9 @@
   <td><code>TargetLocale</code></td>
   <td>
 
- _（可选）_ 资产名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的资产（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本资产。
+ _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
-如果省略，它将应用于所有资产，不管有没有本地化。
+如果省略，它将应用于所有素材，不管有没有本地化。
 
 </td>
 </table>
@@ -325,7 +325,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 ### 编辑列表<a name="edit-a-list"></a>
 你可以用同样的方法编辑[列表](#data-assets)。
 
-在游戏原版的数据资产中，列表没有键，但在Content Patcher中，他们仍有一个键来实现`Entries`和`MoveEntries`。也就是说，编辑列表和编辑字典差不多。
+在游戏原版的数据素材中，列表没有键，但在Content Patcher中，他们仍有一个键来实现`Entries`和`MoveEntries`。也就是说，编辑列表和编辑字典差不多。
 
 对于模型列表（`{ ... }`块），键是每个模型的`Id`字段。比如，`Data\LocationContexts`就展示了ID为`spring1`的`Music`条目：
 ```js
@@ -429,7 +429,7 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 [ "color_brown", "fish_river", "season_fall", "season_spring", "season_summer" ]
 ```
 
-然后我们就可以像数据资产一样在列表中添加，替换，删除条目。
+然后我们就可以像数据素材一样在列表中添加，替换，删除条目。
 ```js
 {
     "Format": "2.5.0",
@@ -503,4 +503,4 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 
 ## 参见<a name="see-also"></a>
 * [模组作者指南](../author-guide.md)
-* 维基上的[数据资产格式文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)
+* 维基上的[数据素材格式文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)

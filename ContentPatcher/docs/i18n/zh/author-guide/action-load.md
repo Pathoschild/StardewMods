@@ -1,6 +1,6 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-一个含有**`"Action": "Load"`**的补丁用你提供的文件替换整个资产。
+一个含有**`"Action": "Load"`**的补丁用你提供的文件替换整个素材。
 
 
 ## Contents
@@ -11,9 +11,9 @@
 * [See also](#see-also)
 
 ## 注意事项<a name="caveats"></a>
-`Load`的功能很简单明了，但是每个资产只能被一个补丁替换。一个使用`Load`的内容包将不兼容另一个含有同`Target`的`Load`的内容包。而只使用`Edit`的内容包不会有这个问题。
+`Load`的功能很简单明了，但是每个素材只能被一个补丁替换。一个使用`Load`的内容包将不兼容另一个含有同`Target`的`Load`的内容包。而只使用`Edit`的内容包不会有这个问题。
 
-有需求时（如加载新资产）可以使用，但是有可能的话优先考虑[其他action](../author-guide.md#actions)。
+有需求时（如加载新素材）可以使用，但是有可能的话优先考虑[其他action](../author-guide.md#actions)。
 
 ## 用法<a name="usage"></a>
 ### 格式<a name="format"></a>
@@ -26,7 +26,7 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`Load`。
-`Target`  | 需编辑的[游戏资产名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的资产名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 `FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。这可以是`.json`（数据），`.png`（图片），`.tbin`或`.tmx`（地图），或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
 </dd>
@@ -53,7 +53,7 @@ field     | purpose
   <td><code>Priority</code></td>
     <td>
 
-_（可选）_ 当多个补丁编辑同一数据资产时，此字段控制它们应用的顺序。默认值为`Exclusive`。
+_（可选）_ 当多个补丁编辑同一数据素材时，此字段控制它们应用的顺序。默认值为`Exclusive`。
 
 _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 
@@ -74,9 +74,9 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
   <td><code>TargetLocale</code></td>
   <td>
 
- _（可选）_ 资产名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的资产（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本资产。
+ _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
-如果省略，它将应用于所有资产，不管有没有本地化。
+如果省略，它将应用于所有素材，不管有没有本地化。
 
 </td>
 </table>

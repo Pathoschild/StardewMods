@@ -8,7 +8,7 @@
 * [介绍](#introduction)
   * [什么是Content Patcher？](#what-is-content-patcher)
   * [内容包长什么样？](#what-does-a-content-pack-look-like)
-  * [什么是数据资产？](#what-is-an-asset)
+  * [什么是数据素材？](#what-is-an-asset)
 * [开始](#get-started)
   * [创建内容包](#create-the-content-pack)
   * [格式版本](#format-version)
@@ -25,7 +25,7 @@
 * [常见问题](#faqs)
   * [多久应用一次补丁更改？](#update-rate)
   * [Content Patcher更新是否与旧版本兼容？](#are-content-patcher-updates-backwards-compatible)
-  * [如何更改另一种语言的资产？](#how-do-i-change-assets-in-another-language)
+  * [如何更改另一种语言的素材？](#how-do-i-change-assets-in-another-language)
   * [多个补丁如何交互？](#how-do-multiple-patches-interact)
   * [已知限制](#known-limitations)
 * [参见](#see-also)
@@ -75,10 +75,10 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 
 通过使用动作、令牌、条件等功能，你可以使用 Content Patcher 做 _更多_ 的事。本文档将在接下来一一介绍：
 
-### 什么是数据资产？<a name="what-is-an-asset"></a>
- _资产(assets)_ 是指游戏从`Content`内容文件夹（或者从其他模组文件夹）中加载的图像、数据模型或地图。这些都是 Content Patcher 可以更改的内容。
+### 什么是数据素材？<a name="what-is-an-asset"></a>
+ _素材(assets)_ 是指游戏从`Content`内容文件夹（或者从其他模组文件夹）中加载的图像、数据模型或地图。这些都是 Content Patcher 可以更改的内容。
 
-资产名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`资产。
+素材名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
 
 You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:Editing_XNB_files#unpacking)
 to see what they contain. Here's what `Portraits/Abigail` contains:
@@ -431,7 +431,7 @@ See [Content Patcher's trigger action documentation](author-guide/trigger-action
 ## 常见问题<a name="faqs"></a>
 
 ### 多久应用一次补丁更改？<a name="update-rate"></a>
-每次加载数据资产时，你的补丁都会**应用数据资产**，但它们会通过不同的条件**更新字段**。例如，假设你有这样一个补丁：
+每次加载数据素材时，你的补丁都会**应用数据素材**，但它们会通过不同的条件**更新字段**。例如，假设你有这样一个补丁：
 ```js
 {
     "Action": "EditMap",
@@ -472,7 +472,7 @@ For example, this will update and reapply the patch when the in-game time change
 兼容。详见[作者迁移指南](author-migration-guide.md)。
 
 
-### 如何更改另一种语言的资产？<a name="how-do-i-change-assets-in-another-language"></a>
+### 如何更改另一种语言的素材？<a name="how-do-i-change-assets-in-another-language"></a>
 **默认影响所有语言**
 
 The asset name in the `Target` field doesn't include the language. For example,
@@ -522,20 +522,20 @@ translation exists:
 ### 多个补丁如何交互？<a name="how-do-multiple-patches-interact"></a>
 同一文件可使用任意数量的补丁。`Action: Load`总是先于其他操作。
 但除此之外，每个补丁都是按顺序应用的。每个补丁完成后，下一个
-补丁会把修改过的数据资产合并并输入。
+补丁会把修改过的数据素材合并并输入。
 
 在一个内容包内，补丁会按照在`content.json`中列出的顺序应用。 
 如果你有多个内容包，每个内容包都会按照 SMAPI 加载的顺序应用；如果你需要依赖另一个内容包，请参阅[manifest中的依赖](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Integrations).
 
 ### 已知限制<a name="known-limitations"></a>
-某些游戏资产具有特殊逻辑。这不是Content Patcher特有的限制，但为了保险起见故在此列出这些限制。
+某些游戏素材具有特殊逻辑。这不是Content Patcher特有的限制，但为了保险起见故在此列出这些限制。
 
 asset | notes
 ----- | -----
 `Characters/Dialogue/*` | 对话是在一天开始时设置的，因此设置[自定义更新速度](#update-rate)不会影响一天开始后的对话。（不过你可以用[特定位置对话键](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%AF%B9%E8%AF%9D#%E5%9C%B0%E7%82%B9%E5%AF%B9%E8%AF%9D)来规避这个问题）。
 `Characters/Farmer/accessories` | 附件的数量是硬编码，因此自定义附件需要替换现有附件。
 `Characters/Farmer/skinColors` | 皮肤颜色的数量是硬编码，因此自定义颜色需要替换现有颜色。
-`Data/SpecialOrders` | 游戏会在 _保存之前_ 缓存该资产的副本，并在首次打开会话的特殊订单板时加载单独的副本。有条件地添加/删除特殊命令时要非常小心，因为当玩家试图从新列表中接受缓存列表中不存在的特殊订单命令时，可能会导致游戏崩溃。
+`Data/SpecialOrders` | 游戏会在 _保存之前_ 缓存该素材的副本，并在首次打开会话的特殊订单板时加载单独的副本。有条件地添加/删除特殊命令时要非常小心，因为当玩家试图从新列表中接受缓存列表中不存在的特殊订单命令时，可能会导致游戏崩溃。
 `Maps/*` | 参见维基上的[地图编辑中的潜在问题](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE#%E6%BD%9C%E5%9C%A8%E9%97%AE%E9%A2%98)。
 
 ## 参见<a name="see-also"></a>

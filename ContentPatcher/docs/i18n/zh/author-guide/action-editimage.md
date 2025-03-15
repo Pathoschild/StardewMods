@@ -1,6 +1,6 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-一个含有 **`"Action": "EditImage"`** 的补丁会更改游戏已加载的图像的一部分。任意数量的内容包都可以编辑同一资产。你可以用补丁向下延伸图像（Content Patcher将扩展图像以适应新图像）。
+一个含有 **`"Action": "EditImage"`** 的补丁会更改游戏已加载的图像的一部分。任意数量的内容包都可以编辑同一素材。你可以用补丁向下延伸图像（Content Patcher将扩展图像以适应新图像）。
 
 ## 目录<a name="contents"></a>
 * [用法](#usage)
@@ -20,7 +20,7 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`EditImage`。
-`Target`  | 需编辑的[游戏资产名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的资产名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 `FromFile` | 内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/dinosaur.png`），或多个逗号分隔的路径。这可以是`.png`或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
 
 </dd>
@@ -50,7 +50,7 @@
   <td><code>Priority</code></td>
   <td>
 
- _（可选）_ 当多个补丁编辑同一数据资产时，此字段控制它们应用的顺序。可用的值有`Early`（更早），`Default`（默认），还有`Late`（更晚）。默认值为`Default`。
+ _（可选）_ 当多个补丁编辑同一数据素材时，此字段控制它们应用的顺序。可用的值有`Early`（更早），`Default`（默认），还有`Late`（更晚）。默认值为`Default`。
 
 补丁（包括所有模组）按以下顺序生效：
 
@@ -73,9 +73,9 @@
   <td><code>TargetLocale</code></td>
   <td>
 
- _（可选）_ 资产名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的资产（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本资产。
+ _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
-如果省略，它将应用于所有资产，不管有没有本地化。
+如果省略，它将应用于所有素材，不管有没有本地化。
 
 </td>
 </table>
