@@ -81,19 +81,18 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 素材名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
 
 You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:Editing_XNB_files#unpacking)
-to see what they contain. Here's what `Portraits/Abigail` contains:
+你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BC%96%E8%BE%91_XNB_%E6%96%87%E4%BB%B6#.E8.A7.A3.E5.8C.85.E6.B8.B8.E6.88.8F.E6.96.87.E4.BB.B6)并查看内容。以下是`Portraits/Abigail`包含的内容：
 
 ![](screenshots/sample-asset.png)
 
-因此，如果你想更改阿比盖尔的肖像，可以使用Content Patcher加载或编辑`Portraits/Abigail`然后像前面的示例代码一样更改该图片。
+因此，如果你想更改阿比盖尔的肖像，你可以使用Content Patcher加载或编辑`Portraits/Abigail`然后像前面的示例代码一样更改该图片。
 
 ## 开始<a name="get-started"></a>
 ### 创建内容包<a name="create-the-content-pack"></a>
 1. 安装[SMAPI](https://www.nexusmods.com/stardewvalley/mods/2400)和[Content
    Patcher](https://www.nexusmods.com/stardewvalley/mods/1915).
-2. Create an empty folder in your `Mods` folder, and name it `[CP] YourModName`. Replace
-   `YourModName` with a unique name for your mod.
-3. Create a `manifest.json` file with this content:
+2. 在`Mods`文件夹以下创建一个新文件夹，并命名为`[CP] YourModName` （把`YourModName`替换成你的模组名字）。
+3. 创建一个新`manifest.json`文件，包含以下内容：
    ```js
    {
        "Name": "Your Mod Name",
@@ -107,9 +106,8 @@ to see what they contain. Here's what `Portraits/Abigail` contains:
        }
    }
    ```
-4. Change the `Name`, `Author`, `Description`, and `UniqueID` values to describe your mod. (Don't
-   change the `UniqueID` under `ContentPackFor`!)
-5. Create a `content.json` file with this content:
+4. 把`Name`, `Author`, `Description`, 和`UniqueID` 改成对应你的模组的值. (不要改`ContentPackFor`下的`UniqueID`！)
+5. 创建一个新`content.json`文件，包含以下内容：
    ```js
    {
        "Format": "2.5.0",
@@ -119,7 +117,7 @@ to see what they contain. Here's what `Portraits/Abigail` contains:
    }
    ```
 
-好了，你现在已经创建了一个可以用的 Content Patcher 包，虽然它目前什么都做不到。
+好了，你现在已经创建了一个可以用的Content Patcher内容包，虽然它目前什么都做不到。
 
 ### 格式版本<a name="format-version"></a>
 `Format`字段是内容包用的 Content Patcher 版本号。用来保持内容包的版本兼容。
@@ -139,18 +137,16 @@ to see what they contain. Here's what `Portraits/Abigail` contains:
 
 <table>
 <tr>
-<th>action</th>
-<th>overview</th>
+<th>操作</th>
+<th>概述</th>
 </tr>
 <tr>
 <td><code>Load</code></td>
 <td>
 
-`Load` replaces an entire asset with a version you provide.
+`Load`操作替换一整个素材。
 
-For example, if you have an `assets/abigail.png` image with custom portraits for Abigail, this
-would change her portraits in-game:
-
+此例子将阿比盖尔原有的肖像替换成你提供的你提供的`assets/abigail.png`图像：
 ```js
 {
    "Format": "2.5.0",
@@ -164,9 +160,9 @@ would change her portraits in-game:
 }
 ```
 
-This isn't recommended if you can use one of the `Edit*` actions instead.
+出于兼容性考虑，能使用`Edit*`操作时不推荐使用`Load`。
 
-See the [`Action: Load` documentation](author-guide/action-load.md) for more info.
+详见[`Action: Load`文档](author-guide/action-load.md)。
 
 </td>
 </tr>
@@ -174,16 +170,14 @@ See the [`Action: Load` documentation](author-guide/action-load.md) for more inf
 <td><code>EditData</code></td>
 <td>
 
-`EditData` changes the data read from a data asset. This supports simple lookup assets like
-`Data/Achievements`, or full data model assets like `Data/Objects`. Any number of content packs
-can edit the same asset.
+`EditData` 编辑数据素材中的字段和条目。这支持简单字符串到字符串形的素材，如`Data/Achievements`，也支持模型类素材，如`Data/Objects`. 多个内容包可以编辑同一个素材。
 
-This lets you...
-* add, edit, or delete entries;
-* reorder entries in a list;
-* or edit individual fields within an entry.
+你可以：
+* 添加，编辑或删除条目；
+* 在列表中重新排序条目；
+* 或在条目中编辑单个字段。
 
-For example, this doubles the price of moss soup (see [object fields](https://stardewvalleywiki.com/Modding:Object_data)):
+此例子把苔藓汤的价格改到80（详见[物体字段](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%89%A9%E4%BD%93)。
 
 ```js
 {
@@ -202,8 +196,8 @@ For example, this doubles the price of moss soup (see [object fields](https://st
 }
 ```
 
-You can do much more using `EditData`, including add completely custom items, fruit trees, etc.
-See the [`Action: EditData` documentation](author-guide/action-editdata.md) for more info.
+`EditData`可实现的效果还有很多，包括添加完全自定义的物品，果树等。
+详见[`Action: EditData`文档](author-guide/action-editdata.md)。
 
 </td>
 </tr>
@@ -211,16 +205,14 @@ See the [`Action: EditData` documentation](author-guide/action-editdata.md) for 
 <td><code>EditImage</code></td>
 <td>
 
-`EditImage` edits one of the game's image assets. Any number of content packs can edit the same
-image.
+`EditImage` 更改游戏中的图像素材。多个内容包可以编辑同一个素材。
 
-This lets you...
-* edit or replace any portion of the image;
-* overlay a new image onto the existing one with transparency support;
-* or extend the image size (e.g. to add more sprites to a spritesheet).
+你可以：
+* 编辑或替换图像的任何部分；
+* 将新图像叠加到现有图像上，支持透明度；
+* 或扩展图像大小（例如，将更多的贴图添加到贴图集）。
 
-For example, if your content pack has an `assets/tuna.png` image with a custom
-[tuna](https://stardewvalleywiki.com/Tuna) sprite, this would replace tuna sprites in-game:
+此例子把原版[吞拿鱼](https://zh.stardewvalleywiki.com/%E9%87%91%E6%9E%AA%E9%B1%BC)替换成你提供的`assets/tuna.png`图片。
 
 ```js
 {
@@ -236,7 +228,7 @@ For example, if your content pack has an `assets/tuna.png` image with a custom
 }
 ```
 
-See the [`Action: EditImage` documentation](author-guide/action-editimage.md) for more info.
+详见[`Action: EditImage`文档](author-guide/action-editimage.md)。
 
 </td>
 </tr>
@@ -267,7 +259,7 @@ See the [`Action: EditImage` documentation](author-guide/action-editimage.md) fo
 }
 ```
 
-See the [`Action: EditMap` documentation](author-guide/action-editmap.md) for more info.
+详见[`Action: EditMap`文档](author-guide/action-editmap.md)。
 
 </td>
 </tr>
@@ -275,9 +267,7 @@ See the [`Action: EditMap` documentation](author-guide/action-editmap.md) for mo
 <td><code>Include</code></td>
 <td>
 
-`Include` adds patches from another file. This is just a way to organize your content pack into
-multiple files, instead of having everything in one `content.json`. The included patches work
-exactly as if they were directly in `content.json`.
+`Include`从另外一个JSON文件里加载更多补丁。这只是将内容包组织到子文件的方式，而不是将所有内容都放在一个`content.json`中。被引用的补丁和`content.json`里的补丁功能一致。
 
 例如，你可以将其与[Tokens和条件](#tokens)结合起来加载动态文件：
 ```js
@@ -292,7 +282,7 @@ exactly as if they were directly in `content.json`.
 }
 ```
 
-See the [`Action: Include` documentation](author-guide/action-include.md) for more info.
+详见[`Action: Include`文档](author-guide/action-include.md)。
 
 </td>
 </tr>
@@ -326,7 +316,7 @@ See the [`Action: Include` documentation](author-guide/action-include.md) for mo
 }
 ```
 
-Or this gives her different seasonal portraits if you're married to her:
+这让阿比盖尔结婚跟你结婚后使用不同的肖像
 
 ```js
 {
@@ -442,20 +432,18 @@ See [Content Patcher's trigger action documentation](author-guide/trigger-action
 }
 ```
 
-When the day starts, Content Patcher updates the patch so it contains `"CurrentTime": "600"`. It
-doesn't matter if you reload the map it's applied to later in the day, the patch still contains
-`"CurrentTime": "600"` until its fields are updated.
+当游戏中的一天开始时，Content Patcher会将此补丁更新为`"CurrentTime": "600"`。如果此补丁在当天晚些时候重新生效，它依然是`"CurrentTime": "600"`。
 
-You can add the `Update` field to update more often if needed. The possible values are:
+你可以使用`Update`字段实现更频繁的更新。
 
 更新频率            | 作用
 ------------------ | ------
-`OnDayStart`       | _(default)_ Update when the in-game day starts. This is always enabled even if you omit it.
-`OnLocationChange` | update when the player warps to a new location.
-`OnTimeChange`     | Update when the in-game clock changes.
-_multiple_         | You can specify multiple values separated by commas, like `"Update": "OnLocationChange, OnTimeChange"`.
+`OnDayStart`       | _(default)_ 游戏中的一天开始时更新。没有`Update`字段的补丁将默认使用此更新频率。
+`OnLocationChange` | 玩家传送到另一地图时更新。
+`OnTimeChange`     | 时间变换时更新（如6:10到6:20）。
+_多种更新频率_         | 您可以指定由逗号分隔的多个值，如`"Update": "OnLocationChange, OnTimeChange"`。
 
-For example, this will update and reapply the patch when the in-game time changes:
+此例子在游戏内时间变换时把补丁中`CurrentTime`的值更新为现在时间，然后重新生效。
 ```js
 {
     "Action": "EditMap",
@@ -480,7 +468,11 @@ The asset name in the `Target` field doesn't include the language. For example,
 `Content/Dialogue/Abigail.de-DE.xnb` (the file path) when playing in German. If you want
 to make the same change in every language, you don't need to do anything else.
 
-To target a specific language, you can add a language condition:
+
+`Target`字段里的素材名称不包含语言。如果你使用`"Target": "Dialogue/Abigail"`并把游戏语言设为德语，`Content/Dialogue/Abigail.de-DE.xnb`的内容将会被编辑。如果你希望某个更改在所有语言中生效，你不需要做任何特殊处理。
+
+
+如果你想编辑特定语言，你可以加一个语言条件，如下：
 ```js
 {
    "Action": "EditImage",
@@ -495,9 +487,10 @@ To target a specific language, you can add a language condition:
 You can also load the translated version automatically if it exists. That way you can just add
 translated files to your content pack, and it'll default to the untranslated version if no
 translation exists:
+你也可以在某语言有翻译版文档存在时自动加载它，这样可以在有翻译版时自动使用翻译版，无翻译版时默认使用原语言版。
 
 ```js
-// use translated version if it exists in the content pack
+// 如果它存在于内容包中，使用翻译版图片
 {
    "Action": "EditImage",
    "Target": "LooseSprites/Cursors",
@@ -507,7 +500,7 @@ translation exists:
    }
 },
 
-// otherwise use untranslated version
+// 默认使用未翻译的版本
 {
    "Action": "EditImage",
    "Target": "LooseSprites/Cursors",

@@ -87,20 +87,20 @@
 
 类型           | 作用
 ------------- | -------
-`Description` | _（可选）_ 配置选项的说明，在配置UI中显示为提示框。
+`Description` | _（可选）_ 配置选项的说明，在配置UI中显示为工具提示。
 `Section`     | _（可选）_ 一个分段的标题。 详见[_分段_](#sections) below.
 
 ### 分段<a name="sections"></a>
-You can group your options into sections using the `Section` field. Options with no section are
-always listed first, followed by sections in the order they first appeared in `ConfigSchema`.
 
-For example, this adds two sections:
+你可以用`Section`字段把你的设置选项分段。没有分段的选项会先显示，之后以`ConfigSchema`中出现顺序显示有分段的选项。
+
+例如，这些选项分到两个分段下：
 
 ```js
 {
     "Format": "2.5.0",
     "ConfigSchema": {
-        // appearance section
+        // 外观分段
         "Material": {
             "AllowValues": "Wood, Metal",
             "Default": "Wood",
@@ -112,7 +112,7 @@ For example, this adds two sections:
             "Section": "Appearance"
         },
 
-        // behavior section
+        // 行为分段
         "Enabled": {
             "AllowValues": "true, false",
             "Default": "true",
@@ -123,34 +123,35 @@ For example, this adds two sections:
 }
 ```
 
-Which would look something like this in-game:
+游戏内显示如下：
 
 ![](../screenshots/config-with-sections.png)
 
 ### 翻译<a name="translations"></a>
-By default your config options are shown as-is in the config UI, with no display names or tooltips
-or translations:
+默认情况下，你的配置选项会显示为内置名，没有工具提示或翻译。
 
 ![](../screenshots/config-plain.png)
 
 You can add [translation files](https://stardewvalleywiki.com/Modding:Translations) for your config
-to have a more user-friendly UI. To do that, create an `i18n/default.json` for your default text.
+to have a more . To do that, create an `i18n/default.json` for your default text.
 For each field, add any combination of these translation keys:
 
-key format                             | description
+你可以为设置添加[翻译文档]，从而实现更用户友好的UI。当你创建一个`i18n/default.json`后你可以给每一个设置提供这些翻译键（任何组合）：
+
+键格式                             | 描述
 :------------------------------------- | :----------
-`config.<name>.name`                   | The field name.
-`config.<name>.description`            | The field description (usually shown as a tooltip).
-`config.<name>.values.<value>`         | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
-`config.section.<section>.name`        | The [section](#sections) name.
-`config.section.<section>.description` | The [section](#sections) description (usually shown as a tooltip).
+`config.<name>.name`                   | 设置选项名。
+`config.<name>.description`            | 设置选项描述，一般在工具提示中显示。
+`config.<name>.values.<value>`         | 对应每一个`AllowValues`的描述，显示于下拉列表或复选框列表中。
+`config.section.<section>.name`        | [分段](#sections)名称。
+`config.section.<section>.description` | [分段](#sections)描述，一般在工具提示中显示。
 
-All translation keys are optional, and they're not case-sensitive.
+所有翻译键都是可选的，不区分大小写。
 
-For example, let's add some translations for the previous screenshot:
+这个例子为以上的设置添加法语翻译：
 
 ```js
-// in i18n/default.json
+// i18n/default.json（英文）
 {
     "config.Material.name": "Material",
     "config.Material.description": "The material style for the billboard background.",
@@ -158,7 +159,7 @@ For example, let's add some translations for the previous screenshot:
     "config.Material.values.Metal": "metal"
 }
 
-// in i18n/fr.json
+// i18n/fr.json（法语）
 {
     "config.Material.name": "Matériel",
     "config.Material.description": "Le style du matériel pour l'arrière-plan du panneau d'affichage.",
@@ -167,11 +168,11 @@ For example, let's add some translations for the previous screenshot:
 }
 ```
 
-And now the config UI would look something like this for a French player:
+添加后法语玩家会看到以下界面：
 
 ![](../screenshots/config-with-translations.png)
 
-See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
+详见[维基上的_翻译模组_页](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BF%BB%E8%AF%91%E6%A8%A1%E7%BB%84)。
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
