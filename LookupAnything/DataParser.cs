@@ -303,29 +303,26 @@ internal class DataParser
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
     public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId, Metadata metadata)
     {
-        HashSet<string> seenFishIDs = [];
-
-        // parse game data
+        // get fish from game data
+        HashSet<string> seenFishIds = [];
         foreach (SpawnFishData fishData in location.GetData().Fish)
         {
-            if (fishData.ItemId == null)
+            if (fishData.ItemId is null)
                 continue;
 
-            seenFishIDs.Add(fishData.ItemId);
+            seenFishIds.Add(fishData.ItemId);
 
             // skip if fish can't spawn in this body of water
             if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
                 continue;
 
-            // skip if bobber isn't in proper position
-            if (fishData.BobberPosition.HasValue && !fishData.BobberPosition.GetValueOrDefault().Contains((int)tile.X, (int)tile.Y))
+            // skip if position doesn't match
+            if (fishData.BobberPosition?.Contains(tile) is false)
+                continue;
+            if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
                 continue;
 
-            // skip if player isn't in proper position
-            if (fishData.PlayerPosition.HasValue && !fishData.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
-                continue;
-
-            // skip if data isn't for a fish or jelly (e.g., furniture)
+            // skip if data isn't for a fish or jelly (e.g. furniture)
             ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
             if (fish.ObjectType != "Fish")
                 continue;
@@ -333,18 +330,18 @@ internal class DataParser
             yield return this.GetFishSpawnRules(fish, metadata);
         }
 
-        // parse metadata
-        foreach ((string fishID, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
+        // get fish from custom metadata
+        foreach ((string fishId, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
         {
-            // skip if we already checked this fish, even if we skipped it (e.g., due to spawning only in a certain fishing area in a location)
-            if (seenFishIDs.Contains(fishID))
+            // skip if we already checked this fish, even if we skipped it (e.g. due to spawning only in a certain fishing area in a location)
+            if (seenFishIds.Contains(fishId))
                 continue;
 
             // skip if spawn location doesn't match
-            if (spawnData.Locations == null || !spawnData.Locations.Any(loc => loc.MatchesLocation(location.Name)))
+            if (!spawnData.MatchesLocation(location.Name))
                 continue;
 
-            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishID);
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishId);
             yield return this.GetFishSpawnRules(fish, metadata);
         }
     }
@@ -419,18 +416,17 @@ internal class DataParser
     {
         // special cases
         {
-            // special case: mine level
+            // mine level
             if (MineShaft.IsGeneratedLevel(id, out int mineLevel))
             {
-                // sometimes the mine level is provided as the fish area id; other times it's included in the location id
-                string level = fishAreaId ?? mineLevel.ToString();
+                string level = fishAreaId ?? mineLevel.ToString(); // sometimes the mine level is provided as the fish area ID, other times it's included in the location name
 
-                return string.IsNullOrWhiteSpace(level)
-                    ? this.GetLocationDisplayName(id, data)
-                    : I18n.Location_UndergroundMine_Level(level);
+                return !string.IsNullOrWhiteSpace(level)
+                    ? I18n.Location_UndergroundMine_Level(level)
+                    : this.GetLocationDisplayName(id, data);
             }
 
-            // skip: no area set
+            // no area set
             if (string.IsNullOrWhiteSpace(fishAreaId))
                 return this.GetLocationDisplayName(id, data);
         }
