@@ -37,7 +37,6 @@
     "type.building": "건물",
     "type.bush": "덤불",
     "type.fruit-tree": "과일 나무",
-    "type.map-tile": "맵 타일",
     "type.monster": "몬스터",
     "type.player": "플레이어",
     "type.tree": "나무",
@@ -638,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "맵 타일 ({{x}}, {{y}})",
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
     "tile.game-location": "위치",
     "tile.map-name": "맵 이름",

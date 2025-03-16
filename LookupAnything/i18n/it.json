@@ -37,7 +37,6 @@
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
-    "type.map-tile": "Tassello della mappa",
     "type.monster": "Mostro",
     "type.player": "Giocatore",
     "type.tree": "Albero",
@@ -636,6 +635,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Tassello della mappa ({{x}}, {{y}})",
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
     "tile.game-location": "Posizione",
     "tile.map-name": "Nome mappa",

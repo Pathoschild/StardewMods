@@ -37,7 +37,6 @@
     "type.building": "Bâtiment",
     "type.bush": "arbuste",
     "type.fruit-tree": "Arbre fruitier",
-    "type.map-tile": "Case de carte",
     "type.monster": "Monstre",
     "type.player": "Joueur",
     "type.tree": "Arbre",
@@ -641,6 +640,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Case de carte ({{x}}, {{y}})",
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
     "tile.game-location": "Zone",
     "tile.map-name": "Nom de la carte",

@@ -37,7 +37,6 @@
     "type.building": "Építmény",
     "type.bush": "Bokor",
     "type.fruit-tree": "Gyümölcsfa",
-    "type.map-tile": "Térkép Elem",
     "type.monster": "Szörny",
     "type.player": "Játékos",
     "type.tree": "Fa",
@@ -648,6 +647,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Térkép Elem ({{x}}, {{y}})",
     "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
     "tile.game-location": "Location", // TODO
     "tile.map-name": "Térkép neve",

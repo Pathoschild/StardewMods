@@ -75,7 +75,7 @@ internal abstract class BaseSubject : ISubject
     /// <param name="name">The display name.</param>
     /// <param name="description">The object description (if applicable).</param>
     /// <param name="type">The object type.</param>
-    protected BaseSubject(GameHelper gameHelper, string name, string? description, string type)
+    protected BaseSubject(GameHelper gameHelper, string name, string? description, string? type)
         : this(gameHelper)
     {
         this.Initialize(name, description, type);
@@ -85,8 +85,8 @@ internal abstract class BaseSubject : ISubject
     /// <param name="name">The display name.</param>
     /// <param name="description">The object description (if applicable).</param>
     /// <param name="type">The object type.</param>
-    [MemberNotNull(nameof(BaseSubject.Name), nameof(BaseSubject.Type))]
-    protected void Initialize(string name, string? description, string type)
+    [MemberNotNull(nameof(BaseSubject.Name))]
+    protected void Initialize(string name, string? description, string? type)
     {
         this.Name = name;
         this.Description = description;
@@ -182,7 +182,7 @@ internal abstract class BaseSubject : ISubject
     /// <summary>Get a human-readable value for a debug value.</summary>
     /// <param name="obj">The object whose values to read.</param>
     /// <param name="field">The field to read.</param>
-    private string? GetDebugValue(object obj, FieldInfo field)
+    private string GetDebugValue(object obj, FieldInfo field)
     {
         try
         {
@@ -197,7 +197,7 @@ internal abstract class BaseSubject : ISubject
     /// <summary>Get a human-readable value for a debug value.</summary>
     /// <param name="obj">The object whose values to read.</param>
     /// <param name="property">The property to read.</param>
-    private string? GetDebugValue(object obj, PropertyInfo property)
+    private string GetDebugValue(object obj, PropertyInfo property)
     {
         try
         {

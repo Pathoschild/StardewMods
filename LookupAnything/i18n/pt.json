@@ -37,7 +37,6 @@
     "type.building": "Construção",
     "type.bush": "Arbusto",
     "type.fruit-tree": "Árvore Frutífera",
-    "type.map-tile": "Bloco",
     "type.monster": "Monstro",
     "type.player": "Jogador",
     "type.tree": "Árvore",
@@ -639,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Bloco ({{x}}, {{y}})",
     "tile.description": "A posição de um bloco no mapa. Isso é exibido porque você ativou as pesquisas de blocos na configuração",
     "tile.game-location": "Localização",
     "tile.map-name": "Nome do mapa",

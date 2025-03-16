@@ -37,7 +37,6 @@
     "type.building": "Gebäude",
     "type.bush": "Busch",
     "type.fruit-tree": "Obstbaum",
-    "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",
     "type.player": "Spieler",
     "type.tree": "Baum",
@@ -637,6 +636,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Kartenkachel ({{x}}, {{y}})",
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
     "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",

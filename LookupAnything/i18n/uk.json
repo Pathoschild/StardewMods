@@ -37,7 +37,6 @@
     "type.building": "Будівля",
     "type.bush": "Кущ",
     "type.fruit-tree": "Фруктове дерево",
-    "type.map-tile": "Об'єкт",
     "type.monster": "Монстр",
     "type.player": "Гравець",
     "type.tree": "Дерево",
@@ -639,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Об'єкт ({{x}}, {{y}})",
     "tile.description": "Позиція клітини на мапі. Це відображається, бо ви ввімкнули перегляд клітин у файлі сурисування моду.",
     "tile.game-location": "Назва локації",
     "tile.map-name": "Назва мапи",

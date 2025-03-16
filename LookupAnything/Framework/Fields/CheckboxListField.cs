@@ -71,17 +71,21 @@ internal class CheckboxListField : GenericField
     {
         float topOffset = 0;
         float checkboxSize = this.CheckboxSize;
-        float checkboxOffset = (this.LineHeight - checkboxSize) / 2;
+        float leftOffset = 0;
+        float checkboxOffsetY = (this.LineHeight - checkboxSize) / 2;
 
         if (checkboxList.Intro != null)
+        {
             topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Icon, new Vector2(this.LineHeight)).Y;
+            leftOffset = 14;
+        }
 
         foreach (Checkbox checkbox in checkboxList.Checkboxes)
         {
             // draw icon
             spriteBatch.Draw(
                 texture: CommonSprites.Icons.Sheet,
-                position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
+                position: new Vector2(position.X + leftOffset, position.Y + topOffset + checkboxOffsetY),
                 sourceRectangle: checkbox.IsChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
                 color: Color.White,
                 rotation: 0,
@@ -92,7 +96,7 @@ internal class CheckboxListField : GenericField
             );
 
             // draw text
-            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, checkbox.Text, new Vector2(position.X + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
+            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, checkbox.Text, new Vector2(position.X + leftOffset + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
 
             // update offset for next checkbox
             topOffset += Math.Max(checkboxSize, textSize.Y);
