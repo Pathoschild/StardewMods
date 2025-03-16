@@ -36,9 +36,7 @@
     // types
     "type.building": "Edificio",
     "type.bush": "Arbusto",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Árbol frutal",
-    "type.map-tile": "Casilla del mapa",
     "type.monster": "Monstruo",
     "type.player": "Jugador",
     "type.tree": "Árbol",
@@ -640,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Casilla del mapa ({{x}}, {{y}})",
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
     "tile.game-location": "Locación",
     "tile.map-name": "Nombre del mapa",

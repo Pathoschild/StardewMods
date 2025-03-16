@@ -36,9 +36,7 @@
     // types
     "type.building": "สิ่งก่อสร้าง",
     "type.bush": "พุ่มไม้",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "ต้นผลไม้",
-    "type.map-tile": "Map tile",
     "type.monster": "มอนสเตอร์",
     "type.player": "ผู้เล่น",
     "type.tree": "ต้นไม้",
@@ -642,6 +640,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Map tile ({{x}}, {{y}})",
     "tile.description": "ตำแหน่งไทล์บนแผนที่ สิ่งนี้แสดงขึ้นเนื่องจากคุณเปิดใช้งานการค้นหาไทล์ในการกำหนดค่า",
     "tile.game-location": "ตำแหน่งที่ตั้ง",
     "tile.map-name": "ชื่อแผนที่",

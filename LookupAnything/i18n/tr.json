@@ -36,9 +36,7 @@
     // types
     "type.building": "Bina",
     "type.bush": "Çalı",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Meyve Ağacı",
-    "type.map-tile": "Harita karosu",
     "type.monster": "Canavar",
     "type.player": "Oyuncu",
     "type.tree": "Ağaç",
@@ -638,6 +636,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Harita karosu ({{x}}, {{y}})",
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",

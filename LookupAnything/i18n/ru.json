@@ -36,9 +36,7 @@
     // types
     "type.building": "Постройка",
     "type.bush": "Куст",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Фруктовое дерево",
-    "type.map-tile": "Объект",
     "type.monster": "Монстр",
     "type.player": "Игрок",
     "type.tree": "Дерево",
@@ -639,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Объект ({{x}}, {{y}})",
     "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
     "tile.game-location": "Локация",
     "tile.map-name": "Название локации",

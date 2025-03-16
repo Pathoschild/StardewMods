@@ -36,9 +36,7 @@
     // types
     "type.building": "Tòa nhà",
     "type.bush": "Bụi cây",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Cây ăn quả",
-    "type.map-tile": "Ô bản đồ",
     "type.monster": "Quái vật",
     "type.player": "Người chơi",
     "type.tree": "Cây",
@@ -639,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Ô bản đồ ({{x}}, {{y}})",
     "tile.description": "Vị trí 1 ô trên bản đồ. Điều này hiển thị khi bạn đã bật tile lookups trong configuration.",
     "tile.game-location": "Vị trí",
     "tile.map-name": "Tên bản đồ",

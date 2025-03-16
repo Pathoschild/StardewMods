@@ -36,9 +36,7 @@
     // types
     "type.building": "Building",
     "type.bush": "Bush",
-    "type.fishing-area": "Fishing area",
     "type.fruit-tree": "Fruit tree",
-    "type.map-tile": "Map tile",
     "type.monster": "Monster",
     "type.player": "Player",
     "type.tree": "Tree",
@@ -638,6 +636,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Map tile ({{x}}, {{y}})",
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
     "tile.game-location": "Location",
     "tile.map-name": "Map name",

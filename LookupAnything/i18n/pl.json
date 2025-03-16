@@ -36,9 +36,7 @@
     // types
     "type.building": "Budowla",
     "type.bush": "Krzak",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "Drzewo Owocowe",
-    "type.map-tile": "Kafelek Mapy",
     "type.monster": "Potwór",
     "type.player": "Gracz",
     "type.tree": "Drzewo",
@@ -639,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Kafelek Mapy ({{x}}, {{y}})",
     "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w konfiguracji włączono podgląd kafelków.",
     "tile.game-location": "Lokacja",
     "tile.map-name": "Nazwa mapy",

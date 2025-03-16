@@ -36,9 +36,7 @@
     // types
     "type.building": "建物",
     "type.bush": "茂み",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "果樹",
-    "type.map-tile": "マップタイル",
     "type.monster": "モンスター",
     "type.player": "プレイヤー",
     "type.tree": "樹木",
@@ -639,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "マップタイル ({{x}}, {{y}})",
     "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
     "tile.game-location": "場所",
     "tile.map-name": "マップ名",

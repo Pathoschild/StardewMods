@@ -36,9 +36,7 @@
     // types (类别)
     "type.building": "建筑",
     "type.bush": "灌木丛",
-    "type.fishing-area": "Fishing area", // TODO
     "type.fruit-tree": "果树",
-    "type.map-tile": "图块",
     "type.monster": "怪物",
     "type.player": "玩家",
     "type.tree": "树",
@@ -638,6 +636,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels (标签)
+    "tile.title": "图块 ({{x}}, {{y}})",
     "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
     "tile.game-location": "位置",
     "tile.map-name": "地图名",
