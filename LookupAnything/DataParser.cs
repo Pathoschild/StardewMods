@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.ExtraMachineConfig;
@@ -22,6 +21,7 @@ using StardewValley.GameData.Locations;
 using StardewValley.GameData.Machines;
 using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TokenizableStrings;
@@ -39,8 +39,6 @@ internal class DataParser
     /// <summary>The placeholder item ID for a recipe which can't be parsed due to its complexity.</summary>
     public const string ComplexRecipeId = "__COMPLEX_RECIPE__";
 
-    /// <summary>A regex pattern matching the UndergroundMine location with an optional mine level.</summary>
-    private static readonly Regex MineLevelPattern = new(@"UndergroundMine(\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /*********
     ** Public methods
@@ -422,13 +420,14 @@ internal class DataParser
         // special cases
         {
             // special case: mine level
-            Match mineLevel = MineLevelPattern.Match(id);
-            if (mineLevel.Success)
+            if (MineShaft.IsGeneratedLevel(id, out int mineLevel))
             {
                 // sometimes the mine level is provided as the fish area id; other times it's included in the location id
-                string level = fishAreaId ?? mineLevel.Groups[1].Value;
+                string level = fishAreaId ?? mineLevel.ToString();
 
-                return string.IsNullOrWhiteSpace(level) ? this.GetLocationDisplayName(id, data) : I18n.Location_UndergroundMine_Level(level);
+                return string.IsNullOrWhiteSpace(level)
+                    ? this.GetLocationDisplayName(id, data)
+                    : I18n.Location_UndergroundMine_Level(level);
             }
 
             // skip: no area set
