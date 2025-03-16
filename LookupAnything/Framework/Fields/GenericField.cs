@@ -233,7 +233,7 @@ internal class GenericField : ICustomField
         // draw text
         Vector2 textSize = probe
             ? font.MeasureString(text)
-            : batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X + textOffset, 0), absoluteWrapWidth - position.X, textColor);
+            : batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X + textOffset, 0), absoluteWrapWidth - textOffset, textColor);
 
         // get drawn size
         return new Vector2(
