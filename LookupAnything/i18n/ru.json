@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "время суток: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "погода: солнечно",
     "item.fish-spawn-rules.weather-rainy": "погода: дождь",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -709,6 +710,9 @@
 
     // progression mode
     "config.title.progression": "Режим прохождения без спойлеров",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Показывать неизвестные предпочтения подарков",
     "config.progression.show-unknown-gift-tastes.desc": "Показывать ли предпочтения подарков, о которых вы еще не узнали в игре (например, из текста диалога или экспериментируя)",

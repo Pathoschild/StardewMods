@@ -97,7 +97,7 @@ internal class TileSubject : BaseSubject
         if (TileSubject.IsFishingArea(this.Location, this.Position))
         {
             this.Location.TryGetFishAreaForTile(this.Position, out string fishAreaId, out _);
-            var field = new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location, this.Position, fishAreaId);
+            var field = new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location, this.Position, fishAreaId, this.Config.ShowUncaughtFishSpawnRules);
             if (field.HasValue) // don't yield empty field, so TryCreate can check if there's any data
                 yield return field;
         }

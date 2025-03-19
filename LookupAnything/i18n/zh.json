@@ -415,6 +415,7 @@
     "item.fish-spawn-rules.time": "一天中出现时间： {{times}}",
     "item.fish-spawn-rules.weather-sunny": "天气：晴天",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -708,6 +709,9 @@
 
     // progression mode (进度模式)
     "config.title.progression": "进度模式",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "显示未知的礼物品味",
     "config.progression.show-unknown-gift-tastes.desc": "是否显示游戏中不知道的礼物品味（例如，从对话或实际送礼中）。",

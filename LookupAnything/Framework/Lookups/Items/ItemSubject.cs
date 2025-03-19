@@ -58,6 +58,9 @@ internal class ItemSubject : BaseSubject
     /// <summary>The location containing the item, if applicable.</summary>
     private readonly GameLocation? Location;
 
+    /// <summary>Whether to show spawn conditions of uncaught fish.</summary>
+    public bool ShowUncaughtFishSpawnRules;
+
     /// <summary>Whether to show gift tastes which the player hasn't learned about in-game yet</summary>
     private readonly bool ShowUnknownGiftTastes;
 
@@ -89,6 +92,7 @@ internal class ItemSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="codex">Provides subject entries</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions of uncaught fish.</param>
     /// <param name="showUnknownGiftTastes">Whether to show gift tastes which the player hasn't learned about in-game yet</param>
     /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
     /// <param name="showGiftTastes">Which gift taste levels to show.</param>
@@ -102,10 +106,11 @@ internal class ItemSubject : BaseSubject
     /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
     /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
     /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
+    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUncaughtFishSpawnRules, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
         : base(gameHelper)
     {
         this.Codex = codex;
+        this.ShowUncaughtFishSpawnRules = showUncaughtFishSpawnRules;
         this.ShowUnknownGiftTastes = showUnknownGiftTastes;
         this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
         this.ShowGiftTastes = showGiftTastes;
@@ -313,7 +318,7 @@ internal class ItemSubject : BaseSubject
         }
 
         // fish spawn rules
-        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), itemData);
+        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), itemData, this.ShowUncaughtFishSpawnRules);
 
         // fish pond data
         // derived from FishPond::doAction
