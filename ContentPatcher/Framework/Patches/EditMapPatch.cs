@@ -46,6 +46,9 @@ internal class EditMapPatch : Patch
     /// <summary>The map tiles to change when editing a map.</summary>
     private readonly EditMapPatchTile[] MapTiles;
 
+    /// <summary>The NPC-only warps that should be added to the location.</summary>
+    public readonly IManagedTokenString[] AddNpcWarps;
+
     /// <summary>The warps that should be added to the location.</summary>
     public readonly IManagedTokenString[] AddWarps;
 
@@ -56,7 +59,7 @@ internal class EditMapPatch : Patch
     private bool AppliesMapPatch => this.RawFromAsset != null;
 
     /// <summary>Whether the patch makes changes to individual tiles.</summary>
-    private bool AppliesTilePatches => this.MapTiles.Any();
+    private bool AppliesTilePatches => this.MapTiles.Length > 0;
 
 
     /*********
@@ -75,6 +78,7 @@ internal class EditMapPatch : Patch
     /// <param name="patchMode">Indicates how the map should be patched.</param>
     /// <param name="mapProperties">The map properties to change when editing a map, if any.</param>
     /// <param name="mapTiles">The map tiles to change when editing a map.</param>
+    /// <param name="addNpcWarps">The NPC-only warps to add to the location.</param>
     /// <param name="addWarps">The warps to add to the location.</param>
     /// <param name="textOperations">The text operations to apply to existing values.</param>
     /// <param name="updateRate">When the patch should be updated.</param>
@@ -85,7 +89,7 @@ internal class EditMapPatch : Patch
     /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="parseAssetName">Parse an asset name.</param>
-    public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString? assetLocale, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, InvariantDictionary<IManagedTokenString>? inheritedLocalTokens, InvariantDictionary<IManagedTokenString>? localTokens, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
+    public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString? assetLocale, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addNpcWarps, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, InvariantDictionary<IManagedTokenString>? inheritedLocalTokens, InvariantDictionary<IManagedTokenString>? localTokens, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
         : base(
             indexPath: indexPath,
             path: path,
@@ -109,7 +113,8 @@ internal class EditMapPatch : Patch
         this.PatchMode = patchMode;
         this.MapProperties = mapProperties?.ToArray() ?? [];
         this.MapTiles = mapTiles?.ToArray() ?? [];
-        this.AddWarps = addWarps?.Reverse().ToArray() ?? []; // reversing the warps allows later ones to 'overwrite' earlier ones, since the game checks them in the listed order
+        this.AddNpcWarps = addNpcWarps?.Reverse().ToArray() ?? []; // reversing the warps allows later ones to 'overwrite' earlier ones, since the game checks them in the listed order
+        this.AddWarps = addWarps?.Reverse().ToArray() ?? [];
         this.TextOperations = textOperations?.ToArray() ?? [];
         this.Monitor = monitor;
 
@@ -118,6 +123,7 @@ internal class EditMapPatch : Patch
             .Add(this.ToArea)
             .Add(this.MapProperties)
             .Add(this.MapTiles)
+            .Add(this.AddNpcWarps)
             .Add(this.AddWarps)
             .Add(this.TextOperations);
     }
@@ -173,10 +179,18 @@ internal class EditMapPatch : Patch
                 target.Properties[key] = value;
         }
 
-        // apply map warps
-        if (this.AddWarps.Any())
+        // apply map NPC-only warps
+        if (this.AddNpcWarps.Length > 0)
         {
-            this.ApplyWarps(target, out IDictionary<string, string> errors);
+            this.ApplyWarps(target, this.AddNpcWarps, out IDictionary<string, string> errors, "NPCWarp");
+            foreach ((string warp, string error) in errors)
+                this.WarnForPatch($"{nameof(PatchConfig.AddNpcWarps)} > warp '{warp}' couldn't be applied: {error}");
+        }
+
+        // apply map warps
+        if (this.AddWarps.Length > 0)
+        {
+            this.ApplyWarps(target, this.AddWarps, out IDictionary<string, string> errors, "Warp");
             foreach ((string warp, string error) in errors)
                 this.WarnForPatch($"{nameof(PatchConfig.AddWarps)} > warp '{warp}' couldn't be applied: {error}");
         }
@@ -195,10 +209,10 @@ internal class EditMapPatch : Patch
         if (this.AppliesMapPatch || this.AppliesTilePatches)
             yield return "patched map tiles";
 
-        if (this.MapProperties.Any() || this.AddWarps.Any())
+        if (this.MapProperties.Length > 0 || this.AddNpcWarps.Length > 0 || this.AddWarps.Length > 0)
             yield return "changed map properties";
 
-        if (this.TextOperations.Any())
+        if (this.TextOperations.Length > 0)
             yield return "applied text operations";
     }
 
@@ -250,7 +264,7 @@ internal class EditMapPatch : Patch
         // parse tile data
         if (!this.TryReadTile(tilePatch, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out IDictionary<string, string?> setProperties, out bool removeTile, out error))
             return this.Fail(error, out error);
-        bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Any();
+        bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Count > 0;
 
         // get layer
         Layer? layer = map.GetLayer(layerName);
@@ -278,7 +292,7 @@ internal class EditMapPatch : Patch
         // apply new tile
         if (removeTile)
             layer.Tiles[position] = null;
-        if (setTilesheet != null || setIndex != null || setProperties.Any())
+        if (setTilesheet != null || setIndex != null || setProperties.Count > 0)
         {
             var tile = new StaticTile(layer, setTilesheet ?? original!.TileSheet, original?.BlendMode ?? BlendMode.Alpha, setIndex ?? original!.TileIndex);
 
@@ -305,14 +319,16 @@ internal class EditMapPatch : Patch
 
     /// <summary>Add warps to the map.</summary>
     /// <param name="target">The target map to change.</param>
+    /// <param name="addWarps">The warps to add.</param>
     /// <param name="errors">The errors indexed by warp string/</param>
-    private void ApplyWarps(Map target, out IDictionary<string, string> errors)
+    /// <param name="propertyName">The map property to edit.</param>
+    private void ApplyWarps(Map target, IManagedTokenString[] addWarps, out IDictionary<string, string> errors, string propertyName)
     {
         errors = new InvariantDictionary<string>();
 
         // build new warp string
-        List<string> validWarps = new List<string>(this.AddWarps.Length);
-        foreach (string? warp in this.AddWarps.Select(p => p.Value))
+        List<string> validWarps = new List<string>(addWarps.Length);
+        foreach (string? warp in addWarps.Select(p => p.Value))
         {
             if (!this.ValidateWarp(warp, out string? error))
             {
@@ -324,14 +340,14 @@ internal class EditMapPatch : Patch
         }
 
         // prepend to map property
-        if (validWarps.Any())
+        if (validWarps.Count > 0)
         {
-            string prevWarps = target.Properties.TryGetValue("Warp", out string? rawWarps)
+            string prevWarps = target.Properties.TryGetValue(propertyName, out string? rawWarps)
                 ? rawWarps
                 : "";
             string newWarps = string.Join(" ", validWarps);
 
-            target.Properties["Warp"] = $"{newWarps} {prevWarps}".Trim(); // prepend so warps added later 'overwrite' in case of conflict
+            target.Properties[propertyName] = $"{newWarps} {prevWarps}".Trim(); // prepend so warps added later 'overwrite' in case of conflict
         }
     }
 
