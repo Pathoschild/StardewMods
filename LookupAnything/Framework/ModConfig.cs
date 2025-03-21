@@ -19,7 +19,7 @@ internal class ModConfig
     /// <summary>Whether to show gift tastes which the player hasn't learned about in-game yet (e.g. from dialogue text or experimenting).</summary>
     public bool ShowUnknownGiftTastes { get; set; } = true;
 
-    /// <summary>Whether to show spawn conditions of uncaught fish.</summary>
+    /// <summary>Whether to show spawn conditions for uncaught fish.</summary>
     public bool ShowUncaughtFishSpawnRules { get; set; } = true;
 
     /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>

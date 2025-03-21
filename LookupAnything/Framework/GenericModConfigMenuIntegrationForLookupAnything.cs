@@ -24,10 +24,10 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
             // progression mode
             .AddSectionTitle(I18n.Config_Title_Progression)
             .AddCheckbox(
-                    name: I18n.Config_Progression_ShowUncaughtFishSpawnRules_Name,
-                    tooltip: I18n.Config_Progression_ShowUncaughtFishSpawnRules_Desc,
-                    get: config => config.ShowUncaughtFishSpawnRules,
-                    set: (config, value) => config.ShowUncaughtFishSpawnRules = value
+                name: I18n.Config_Progression_ShowUncaughtFishSpawnRules_Name,
+                tooltip: I18n.Config_Progression_ShowUncaughtFishSpawnRules_Desc,
+                get: config => config.ShowUncaughtFishSpawnRules,
+                set: (config, value) => config.ShowUncaughtFishSpawnRules = value
             )
             .AddCheckbox(
                 name: I18n.Config_Progression_ShowUnknownGiftTastes_Name,

@@ -58,7 +58,7 @@ internal class ItemSubject : BaseSubject
     /// <summary>The location containing the item, if applicable.</summary>
     private readonly GameLocation? Location;
 
-    /// <summary>Whether to show spawn conditions of uncaught fish.</summary>
+    /// <summary>Whether to show spawn conditions for uncaught fish.</summary>
     public bool ShowUncaughtFishSpawnRules;
 
     /// <summary>Whether to show gift tastes which the player hasn't learned about in-game yet</summary>
@@ -92,7 +92,7 @@ internal class ItemSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="codex">Provides subject entries</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions of uncaught fish.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     /// <param name="showUnknownGiftTastes">Whether to show gift tastes which the player hasn't learned about in-game yet</param>
     /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
     /// <param name="showGiftTastes">Which gift taste levels to show.</param>

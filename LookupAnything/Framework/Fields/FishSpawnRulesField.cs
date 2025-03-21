@@ -28,7 +28,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="fish">The fish item data.</param>
-    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions of uncaught fish.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish, bool showUncaughtFishSpawnRules)
         : this(label, new CheckboxList(FishSpawnRulesField.GetConditions(gameHelper, fish), isHidden: !showUncaughtFishSpawnRules && !FishSpawnRulesField.HasPlayerCaughtFish(fish))) { }
 
@@ -38,7 +38,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="location">The location whose fish spawn conditions to get.</param>
     /// <param name="tile">The tile for which to get the spawn rules.</param>
     /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
-    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions of uncaught fish.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     public FishSpawnRulesField(GameHelper gameHelper, string label, GameLocation location, Vector2 tile, string fishAreaId, bool showUncaughtFishSpawnRules)
         : this(label, FishSpawnRulesField.GetConditions(gameHelper, location, tile, fishAreaId, showUncaughtFishSpawnRules).ToArray()) { }
 
@@ -48,18 +48,18 @@ internal class FishSpawnRulesField : CheckboxListField
         float topOffset = 0;
         int hiddenSpawnRulesCount = 0;
 
+        // draw checkbox lists
         foreach (CheckboxList checkboxList in this.CheckboxLists)
         {
             if (checkboxList.IsHidden)
-                // skip drawing
                 hiddenSpawnRulesCount++;
             else
                 // draw checkbox list
                 topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
         }
 
+        // draw 'X uncaught fish' message
         if (hiddenSpawnRulesCount > 0)
-            // draw number of hidden spawn rules
             topOffset += this.LineHeight + this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, I18n.Item_UncaughtFish(hiddenSpawnRulesCount), Color.Gray).Y;
 
         return new Vector2(wrapWidth, topOffset - this.LineHeight);
@@ -84,7 +84,7 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="location">The location whose fish spawn conditions to get.</param>
     /// <param name="tile">The tile for which to get the spawn rules.</param>
     /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
-    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions of uncaught fish.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     private static IEnumerable<CheckboxList> GetConditions(GameHelper gameHelper, GameLocation location, Vector2 tile, string fishAreaId, bool showUncaughtFishSpawnRules)
     {
         foreach (FishSpawnData spawnRules in gameHelper.GetFishSpawnRules(location, tile, fishAreaId))

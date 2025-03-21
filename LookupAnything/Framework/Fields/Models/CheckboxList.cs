@@ -17,7 +17,7 @@ internal class CheckboxList
     /// <summary>The intro text and icon to show before the checkboxes.</summary>
     public IntroData? Intro;
 
-    /// <summary>Whether to hide the list when drawing (e.g. when using progression mode)</summary>
+    /// <summary>Whether to hide the list when drawing (e.g. when using progression mode).</summary>
     public bool IsHidden;
 
 
@@ -26,7 +26,7 @@ internal class CheckboxList
     *********/
     /// <summary>A list of checkboxes with labels and an optional intro line.</summary>
     /// <param name="checkboxes">The checkbox values to display.</param>
-    /// <param name="isHidden">Whether to hide the list when drawing (e.g. when using progression mode)</param>
+    /// <param name="isHidden">Whether to hide the list when drawing (e.g. when using progression mode).</param>
     public CheckboxList(Checkbox[] checkboxes, bool isHidden = false)
     {
         this.Checkboxes = checkboxes;
@@ -35,7 +35,7 @@ internal class CheckboxList
 
     /// <summary>Construct an instance.</summary>
     /// <param name="checkboxes">The checkbox values to display.</param>
-    /// <param name="isHidden">Whether to hide the list when drawing (e.g. when using progression mode)</param>
+    /// <param name="isHidden">Whether to hide the list when drawing (e.g. when using progression mode).</param>
     public CheckboxList(IEnumerable<Checkbox> checkboxes, bool isHidden = false)
         : this(checkboxes.ToArray(), isHidden) { }
 
