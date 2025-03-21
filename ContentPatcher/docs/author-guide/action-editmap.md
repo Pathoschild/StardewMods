@@ -291,7 +291,7 @@ later win.
 </td>
 <td>
 
-The `TextOperations` field lets you change the value for an existing map property (see _[text
+The `TextOperations` field lets you add or change the value for an existing map property (see _[text
 operations](../author-guide.md#text-operations)_ for more info).
 
 The only valid path format is `["MapProperties", "PropertyName"]` where `PropertyName` is the

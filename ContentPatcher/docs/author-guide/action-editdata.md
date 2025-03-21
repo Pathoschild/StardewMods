@@ -200,7 +200,7 @@ See [_moving list entries_](#moving-list-entries) for more info.
 <td><code>TextOperations</code></td>
 <td>
 
-Change the value of an existing string entry or field; see _[text
+Add or change the value of an existing string entry or field; see _[text
 operations](../author-guide.md#text-operations)_ for more info.
 
 To change an entry, use the format `["Entries", "entry key"]` and replace `"entry key"` with the
