@@ -8,6 +8,7 @@ This document lists the tokens available in Content Patcher packs.
 * [Introduction](#introduction)
   * [Overview](#overview)
   * [Token types](#token-types)
+  * [Set theory](#set-theory)
 * [Global tokens](#global-tokens)
   * [Date and weather](#date-and-weather)
   * [Player](#player)
@@ -104,6 +105,13 @@ The token types are (in order of most to least commonly used):
   are mainly used to avoid repetition for a set of values.
 * _(Advanced)_ [Mod-provided tokens](#mod-provided-tokens) are provided by other mods installed by
   the player.
+
+### Set theory
+Internally, tokens are [_sets_ in the mathematical sense](https://en.wikipedia.org/wiki/Set_(abstract_data_type)).
+In practical terms, that just means that they...
+- can't have duplicate values (i.e. each distinct value will appear once in the set);
+- are usually non-sorted;
+- are very efficient when comparing values.
 
 ## Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
