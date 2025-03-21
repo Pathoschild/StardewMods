@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "시간: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "날씨: 맑은 날",
     "item.fish-spawn-rules.weather-rainy": "날씨: 비 오는 날",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -709,6 +710,9 @@
 
     // progression mode
     "config.title.progression": "진행 모드",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "모르는 선물 취향 보기",
     "config.progression.show-unknown-gift-tastes.desc": "게임 내에서 아직 알지 못한 선물 취향을 표시할지 여부(예: 대화 텍스트 또는 실험을 통해).",

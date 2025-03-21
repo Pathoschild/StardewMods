@@ -18,6 +18,9 @@ internal class TileSubject : BaseSubject
     /*********
     ** Fields
     *********/
+    /// <summary>The mod configuration.</summary>
+    protected readonly ModConfig Config;
+
     /// <summary>The game location.</summary>
     protected readonly GameLocation Location;
 
@@ -33,12 +36,14 @@ internal class TileSubject : BaseSubject
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="config">The mod configuration.</param>
     /// <param name="location">The game location.</param>
     /// <param name="position">The tile position.</param>
     /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-    public TileSubject(GameHelper gameHelper, GameLocation location, Vector2 position, bool showRawTileInfo)
+    public TileSubject(GameHelper gameHelper, ModConfig config, GameLocation location, Vector2 position, bool showRawTileInfo)
         : base(gameHelper, I18n.Tile_Title(x: position.X, y: position.Y), showRawTileInfo ? I18n.Tile_Description() : null, null)
     {
+        this.Config = config;
         this.Location = location;
         this.Position = position;
         this.ShowRawTileInfo = showRawTileInfo;
@@ -46,14 +51,15 @@ internal class TileSubject : BaseSubject
 
     /// <summary>Create an instance of there's data to show.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="config">The mod configuration.</param>
     /// <param name="location">The game location.</param>
     /// <param name="position">The tile position.</param>
     /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
     /// <param name="tileSubject">The tile subject to display, if applicable.</param>
     /// <returns>Returns whether a tile subject was successfully created.</returns>
-    public static bool TryCreate(GameHelper gameHelper, GameLocation location, Vector2 position, bool showRawTileInfo, [NotNullWhen(true)] out TileSubject? tileSubject)
+    public static bool TryCreate(GameHelper gameHelper, ModConfig config, GameLocation location, Vector2 position, bool showRawTileInfo, [NotNullWhen(true)] out TileSubject? tileSubject)
     {
-        tileSubject = new TileSubject(gameHelper, location, position, showRawTileInfo);
+        tileSubject = new TileSubject(gameHelper, config, location, position, showRawTileInfo);
         if (tileSubject.GetData().Any())
             return true;
 
@@ -91,7 +97,7 @@ internal class TileSubject : BaseSubject
         if (TileSubject.IsFishingArea(this.Location, this.Position))
         {
             this.Location.TryGetFishAreaForTile(this.Position, out string fishAreaId, out _);
-            var field = new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location, this.Position, fishAreaId);
+            var field = new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location, this.Position, fishAreaId, this.Config.ShowUncaughtFishSpawnRules);
             if (field.HasValue) // don't yield empty field, so TryCreate can check if there's any data
                 yield return field;
         }

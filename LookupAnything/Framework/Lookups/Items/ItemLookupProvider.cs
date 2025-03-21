@@ -356,6 +356,7 @@ internal class ItemLookupProvider : BaseLookupProvider
         return new ItemSubject(
             codex: this.Codex,
             gameHelper: this.GameHelper,
+            showUncaughtFishSpawnRules: config.ShowUncaughtFishSpawnRules,
             showUnknownGiftTastes: config.ShowUnknownGiftTastes,
             showUnknownRecipes: config.ShowUnknownRecipes,
             showInvalidRecipes: config.ShowInvalidRecipes,
@@ -389,6 +390,7 @@ internal class ItemLookupProvider : BaseLookupProvider
         return new ItemSubject(
             codex: this.Codex,
             gameHelper: this.GameHelper,
+            showUncaughtFishSpawnRules: config.ShowUncaughtFishSpawnRules,
             showUnknownGiftTastes: config.ShowUnknownGiftTastes,
             showUnknownRecipes: config.ShowUnknownRecipes,
             showInvalidRecipes: config.ShowInvalidRecipes,

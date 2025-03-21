@@ -14,9 +14,6 @@ internal class CrystalCavePuzzleSubject : TileSubject
     /*********
     ** Fields
     *********/
-    /// <summary>Whether to show puzzle solutions.</summary>
-    private readonly bool ShowPuzzleSolutions;
-
     /// <summary>The ID of the crystal being looked up, if any.</summary>
     private readonly int? CrystalId;
 
@@ -26,18 +23,17 @@ internal class CrystalCavePuzzleSubject : TileSubject
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="config">The mod configuration.</param>
     /// <param name="location">The game location.</param>
     /// <param name="position">The tile position.</param>
     /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-    /// <param name="showPuzzleSolutions">Whether to show puzzle solutions.</param>
     /// <param name="crystalId">The ID of the crystal being looked up, if any.</param>
-    public CrystalCavePuzzleSubject(GameHelper gameHelper, GameLocation location, Vector2 position, bool showRawTileInfo, bool showPuzzleSolutions, int? crystalId)
-        : base(gameHelper, location, position, showRawTileInfo)
+    public CrystalCavePuzzleSubject(GameHelper gameHelper, ModConfig config, GameLocation location, Vector2 position, bool showRawTileInfo, int? crystalId)
+        : base(gameHelper, config, location, position, showRawTileInfo)
     {
         this.Name = I18n.Puzzle_IslandCrystalCave_Title();
         this.Description = null;
         this.Type = null;
-        this.ShowPuzzleSolutions = showPuzzleSolutions;
         this.CrystalId = crystalId;
     }
 
@@ -49,7 +45,7 @@ internal class CrystalCavePuzzleSubject : TileSubject
             var cave = (IslandWestCave1)this.Location;
 
             // crystal ID
-            if (this.CrystalId.HasValue && this.ShowPuzzleSolutions)
+            if (this.CrystalId.HasValue && this.Config.ShowPuzzleSolutions)
                 yield return new GenericField(I18n.Puzzle_IslandCrystalCave_CrystalId(), this.Stringify(this.CrystalId.Value));
 
             // sequence
@@ -57,7 +53,7 @@ internal class CrystalCavePuzzleSubject : TileSubject
                 string label = I18n.Puzzle_Solution();
                 if (cave.completed.Value)
                     yield return new GenericField(label, I18n.Puzzle_Solution_Solved());
-                else if (!this.ShowPuzzleSolutions)
+                else if (!this.Config.ShowPuzzleSolutions)
                     yield return new GenericField(label, new FormattedText(I18n.Puzzle_Solution_Hidden(), Color.Gray));
                 else if (!cave.isActivated.Value)
                     yield return new GenericField(label, I18n.Puzzle_IslandCrystalCave_Solution_NotActivated());

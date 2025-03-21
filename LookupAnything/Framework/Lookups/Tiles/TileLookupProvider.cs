@@ -60,15 +60,15 @@ internal class TileLookupProvider : BaseLookupProvider
         ModConfig config = this.Config();
 
         if (this.IsCrystalCavePuzzle(location, tile, out int? crystalId))
-            return new CrystalCavePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ShowPuzzleSolutions, crystalId);
+            return new CrystalCavePuzzleSubject(this.GameHelper, config, location, tile, showRaw, crystalId);
 
         if (this.GetIsIslandMermaidPuzzle(location, tile))
-            return new IslandMermaidPuzzleSubject(this.GameHelper, location, tile, showRaw, config.ShowPuzzleSolutions);
+            return new IslandMermaidPuzzleSubject(this.GameHelper, config, location, tile, showRaw);
 
         if (this.IsIslandShrinePuzzle(location, tile))
-            return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ShowPuzzleSolutions);
+            return new IslandShrinePuzzleSubject(this.GameHelper, config, location, tile, showRaw);
 
-        if (TileSubject.TryCreate(this.GameHelper, location, tile, showRaw, out TileSubject? tileSubject))
+        if (TileSubject.TryCreate(this.GameHelper, config, location, tile, showRaw, out TileSubject? tileSubject))
             return tileSubject;
 
         return null;

@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "釣れる時間：{{times}}",
     "item.fish-spawn-rules.weather-sunny": "天気：晴れ",
     "item.fish-spawn-rules.weather-rainy": "天気：雨",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -709,6 +710,9 @@
 
     // progression mode
     "config.title.progression": "プログレッションモード",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "未知の贈り物の好みを表示",
     "config.progression.show-unknown-gift-tastes.desc": "ゲーム内でまだ知らない贈り物の好みを表示する。",

@@ -415,6 +415,7 @@
     "item.fish-spawn-rules.time": "günün saati: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "hava: güneşli",
     "item.fish-spawn-rules.weather-rainy": "hava: yağmurlu",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -708,6 +709,9 @@
 
     // progression mode
     "config.title.progression": "İlerleme modu",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Bilinmeyen hediye zevklerini göster",
     "config.progression.show-unknown-gift-tastes.desc": "NPC'lerin hediye zevklerini gösterirken bilinmeyenleri gösterip göstermeyeceği. Etkinleştirildiğinde, bilinmeyen hediye zevkleri gösterilecek.",

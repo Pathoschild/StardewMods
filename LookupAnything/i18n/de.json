@@ -415,6 +415,7 @@
     "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
     "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -708,6 +709,9 @@
 
     // progression mode
     "config.title.progression": "Fortschrittsmodus",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Unbekannte Geschenke Vorlieben anzeigen",
     "config.progression.show-unknown-gift-tastes.desc": "Ob Geschenk Vorlieben gezeigt werden sollen, die du im Spiel noch nicht kennengelernt hast (z. B. aus Dialogtexten oder beim Experimentieren).",
