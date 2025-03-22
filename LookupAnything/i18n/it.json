@@ -414,7 +414,7 @@
     "item.fish-spawn-rules.time": "orario: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "meteo: soleggiato",
     "item.fish-spawn-rules.weather-rainy": "meteo: pioggia",
-    "item.uncaught-fish": "{{count}} pesci non catturati",
+    "item.uncaught-fish": "{{count}} pesci non pescati",
 
 
     /*********
@@ -709,8 +709,8 @@
     // progression mode
     "config.title.progression": "Modalità progressione",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Mostra regole di spawn dei pesci non catturati",
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Scegli se mostrare le condizioni di spawn dei pesci che ancora non hai catturato.",
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Mostra regole di spawn dei pesci non pescati",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Scegli se mostrare le condizioni di spawn dei pesci che ancora non hai pescato.",
 
     "config.progression.show-unknown-gift-tastes.name": "Mostra gusti dei regali sconosciuti",
     "config.progression.show-unknown-gift-tastes.desc": "Scegli se mostrare i gusti dei regali che non si sono ancora appresi nel gioco (ad esempio dal testo del dialogo o sperimentando).",
