@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Internal cleanup.
+* Fixed crash if an automated berry bush is chopped down.
 * Improved translations. Thanks to Naciux1088 (added Polish)!
 
 ## 2.3.3
