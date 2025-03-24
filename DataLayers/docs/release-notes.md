@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Internal cleanup.
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish)!
 
 ## 1.20.0

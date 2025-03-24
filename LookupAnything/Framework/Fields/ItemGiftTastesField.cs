@@ -32,13 +32,13 @@ internal class ItemGiftTastesField : GenericField
     /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
     private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool showUnknown, bool highlightUnrevealed)
     {
-        if (!giftTastes.ContainsKey(showTaste))
+        if (!giftTastes.TryGetValue(showTaste, out GiftTasteModel[]? allEntries))
             yield break;
 
         // get data
         GiftTasteModel[] visibleEntries =
             (
-                from entry in giftTastes[showTaste]
+                from entry in allEntries
                 orderby entry.Villager.displayName ascending
                 where showUnknown || entry.IsRevealed
                 select entry

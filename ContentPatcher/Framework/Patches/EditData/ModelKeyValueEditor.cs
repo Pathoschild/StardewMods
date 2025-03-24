@@ -15,7 +15,7 @@ internal class ModelKeyValueEditor : BaseDataEditor
     private readonly object Data;
 
     /// <summary>Maps entry names to the associated field or property.</summary>
-    private readonly Lazy<IDictionary<string, MemberInfo>> FieldMap;
+    private readonly Lazy<Dictionary<string, MemberInfo>> FieldMap;
 
 
     /*********
@@ -93,7 +93,7 @@ internal class ModelKeyValueEditor : BaseDataEditor
     ** Private methods
     *********/
     /// <summary>Get a map of field/property names to class members.</summary>
-    private IDictionary<string, MemberInfo> GetFieldMap()
+    private Dictionary<string, MemberInfo> GetFieldMap()
     {
         Type type = this.Data.GetType();
         var map = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
@@ -121,8 +121,6 @@ internal class ModelKeyValueEditor : BaseDataEditor
     /// <param name="name">The field or property name.</param>
     private MemberInfo? GetMember(string name)
     {
-        return this.FieldMap.Value.TryGetValue(name, out MemberInfo? member)
-            ? member
-            : default;
+        return this.FieldMap.Value.GetValueOrDefault(name);
     }
 }

@@ -191,9 +191,7 @@ internal class ModTokenContext : IContext
     /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
     public string ResolveAlias(string tokenName)
     {
-        return this.AliasTokenNames.TryGetValue(tokenName, out string? targetName)
-            ? targetName
-            : tokenName;
+        return this.AliasTokenNames.GetValueOrDefault(tokenName, tokenName);
     }
 
     /// <summary>Update the current context.</summary>

@@ -380,8 +380,8 @@ internal class DataLayerOverlay : BaseOverlay
 
                 // update data
                 data.Colors.Add(groupTile.Color);
-                if (group.OuterBorderColor.HasValue && !data.BorderColors.ContainsKey(group.OuterBorderColor.Value))
-                    data.BorderColors[group.OuterBorderColor.Value] = TileEdge.None; // we'll detect combined borders next
+                if (group.OuterBorderColor.HasValue)
+                    data.BorderColors.TryAdd(group.OuterBorderColor.Value, TileEdge.None); // we'll detect combined borders next
 
                 // detect borders (if not combined)
                 if (!combineOverlappingBorders && group.OuterBorderColor.HasValue)

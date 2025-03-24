@@ -26,10 +26,10 @@ internal class MovieTastesField : GenericField
     /// <param name="showTaste">The gift taste to show.</param>
     private static string? GetText(IDictionary<GiftTaste, string[]> giftTastes, GiftTaste showTaste)
     {
-        if (!giftTastes.ContainsKey(showTaste))
+        if (!giftTastes.TryGetValue(showTaste, out string[]? names))
             return null;
 
-        string[] names = giftTastes[showTaste].OrderBy(p => p).ToArray();
+        names = names.OrderBy(p => p).ToArray();
         return I18n.List(names);
     }
 }
