@@ -10,7 +10,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Added `AddNpcWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/author-guide.md#editmap).
+* Added `AddNpcWarps` field in [`EditMap` patches](author-guide.md#editmap).
+* Added `defaultKeys` option for [the `i18n` token](author-guide/translations.md).
 * Fixed some cases where a local token on an `Include` patch wasn't available in the included patches.
 
 ## 2.5.3

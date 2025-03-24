@@ -66,9 +66,28 @@ internal class TranslationValueProvider : BaseValueProvider
         Translation translation = this.TranslationHelper
             .Get(key, tokens)
             .ApplyGenderSwitchBlocks(false); // preprocessing gender switch blocks doesn't work with patch update rates (e.g. NPCs won't update their dialogue once the save is loaded)
+        bool hasValue = translation.HasValue();
+
+        // apply fallback keys
+        if (!hasValue && input.NamedArgs.TryGetValue("defaultKeys", out IInputArgumentValue? defaultKeys))
+        {
+            foreach (string defaultKey in defaultKeys.Parsed)
+            {
+                Translation newTranslation = this.TranslationHelper
+                    .Get(defaultKey, tokens)
+                    .ApplyGenderSwitchBlocks(false);
+
+                if (newTranslation.HasValue())
+                {
+                    translation = newTranslation;
+                    hasValue = true;
+                    break;
+                }
+            }
+        }
 
         // add default value
-        if (input.NamedArgs.TryGetValue("default", out IInputArgumentValue? defaultValue))
+        if (!hasValue && input.NamedArgs.TryGetValue("default", out IInputArgumentValue? defaultValue))
         {
             translation = translation
                 .Default(this.Stringify(defaultValue))

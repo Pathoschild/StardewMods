@@ -35,16 +35,33 @@ specify these arguments to `i18n`:
 <td><code>default</code></td>
 <td>
 
-If a translation doesn't exist (in both the current language _and_ `default.json`), the token will
-return text like "missing translation: key". You can provide a different default value using the
-`default` argument:
+If the translation doesn't exist (in both the current language _and_ `default.json`), the text to
+return instead of "_missing translation: key_".
+
+For example:
 ```js
 "{{i18n:some-key |default=default text to display}}"
 ```
 
-You can use tokens in the default text, so you can also default to a different translation:
+You can also use tokens in the default text:
 ```js
-"{{i18n:some-key |default={{i18n:another-key}} }}"
+"{{i18n:some-key |default=Hi {{PlayerName}}! }}"
+```
+
+</td>
+</tr>
+<tr>
+<td><code>defaultKeys</code></td>
+<td>
+
+If the translation doesn't exist (in both the current language _and_ `default.json`), the
+translation keys to use instead. The first key which exists in the translation files is used.
+The other arguments (like `default`) are applied to the selected translation key.
+
+For example, let's say your translation files only contain a `valid-key` translation. This code
+would return that translation:
+```js
+"{{i18n: missing-key |defaultKeys=missing-key-2, valid-key}}"
 ```
 
 </td>
@@ -59,7 +76,7 @@ _any other_
 
 Any other arguments provide values for translation tokens (not case-sensitive). For example, if you
 have a translation like this:
-```json
+```js
 {
    "dialogue": "Hi {{name}}, it's a beautiful {{day}} morning!"
 }
@@ -147,10 +164,8 @@ which edits every festival in the game to add dynamic dialogue based on the tran
             "Target": "Data/Festivals/spring13, Data/Festivals/spring24, Data/Festivals/summer11, Data/Festivals/summer28, Data/Festivals/fall16, Data/Festivals/fall27, Data/Festivals/winter8, Data/Festivals/winter25",
             "Entries": {
                 "Alexia": "
-                    {{i18n:festival-{{TargetWithoutPath}}.{{Relationship:Alexia}} |default=
-                        {{i18n:festival-{{TargetWithoutPath}} |default=
-                            {{i18n:festival-default}}
-                        }}
+                    {{i18n:festival-{{TargetWithoutPath}}.{{Relationship:Alexia}}
+                       |defaultKeys=festival-{{TargetWithoutPath}}, festival-default
                     }}
                 "
             }
