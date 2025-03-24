@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Internal cleanup.
 * Improved translations. Thanks to Naciux1088 (added Polish)!
 
 ## 2.3.3

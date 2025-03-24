@@ -429,7 +429,7 @@ internal class SummaryCommand : BaseCommand
                         output.Append($"  // {errorReason}");
 
                     // log common issues if not applied
-                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
+                    if (errorReason == null && patch is { IsLoaded: true, IsApplied: false } && patch.ParsedTargetAsset.IsMeaningful())
                     {
                         string assetName = patch.ParsedTargetAsset.Value!;
 

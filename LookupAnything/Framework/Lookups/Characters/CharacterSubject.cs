@@ -362,7 +362,7 @@ internal class CharacterSubject : BaseSubject
     {
         // special case: Abigail in the mines is a temporary instance with the name
         // 'AbigailMine', so the info shown will be incorrect.
-        if (this.EnableTargetRedirection && npc.Name == "AbigailMine" && npc.currentLocation?.Name == "UndergroundMine20")
+        if (this.EnableTargetRedirection && npc is { Name: "AbigailMine", currentLocation.Name: "UndergroundMine20" })
             npc = Game1.getCharacterFromName("Abigail") ?? npc;
 
         // social fields (birthday, friendship, gifting, etc)
@@ -389,7 +389,7 @@ internal class CharacterSubject : BaseSubject
                     yield return new GenericField(friendship.IsSpouse ? I18n.Npc_KissedToday() : I18n.Npc_HuggedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
 
                 // gifted this week
-                if (!friendship.IsSpouse && !friendship.IsHousemate)
+                if (friendship is { IsSpouse: false, IsHousemate: false })
                     yield return new GenericField(I18n.Npc_GiftedThisWeek(), I18n.Generic_Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
             }
             else

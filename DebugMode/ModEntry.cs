@@ -73,7 +73,7 @@ internal class ModEntry : Mod
         // init
         I18n.Init(helper.Translation);
         this.Config = helper.ReadConfig<ModConfig>();
-        this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
+        this.Config.AllowDangerousCommands = this.Config is { AllowGameDebug: true, AllowDangerousCommands: true }; // normalize for convenience
 
         // hook events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -300,7 +300,7 @@ internal class ModEntry : Mod
 
             yield return $"{I18n.Label_EventId()}: {curEvent.id}";
 
-            if (!curEvent.isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < curEvent.eventCommands.Length)
+            if (curEvent is { isFestival: false, CurrentCommand: >= 0 } && curEvent.CurrentCommand < curEvent.eventCommands.Length)
                 yield return $"{I18n.Label_EventScript()}: {curEvent.GetCurrentCommand()} ({(int)(progress * 100)}%)";
         }
 

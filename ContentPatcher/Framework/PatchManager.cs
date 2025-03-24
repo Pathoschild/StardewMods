@@ -358,7 +358,7 @@ internal class PatchManager
             return;
 
         // mark asset to reload
-        if (patch.IsApplied && patch.TargetAsset != null)
+        if (patch is { IsApplied: true, TargetAsset: not null })
             this.AssetsWithRemovedPatches.Add(patch.TargetAsset);
 
         // update indexes

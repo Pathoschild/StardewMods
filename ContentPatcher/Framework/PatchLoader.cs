@@ -1258,7 +1258,7 @@ internal class PatchLoader
             return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
         // validate token keys & values
-        if (!values.IsMutable && values.IsReady && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
+        if (values is { IsMutable: false, IsReady: true } && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
             return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
         // create condition
@@ -1267,7 +1267,7 @@ internal class PatchLoader
             return Fail(error, out error, out condition);
 
         // extract HasMod required IDs if immutable
-        if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
+        if (condition is { IsReady: true, IsMutable: false } && condition.Is(ConditionType.HasMod))
         {
             // contains
             if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue? contains))

@@ -321,7 +321,7 @@ internal class ModEntry : Mod
     private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
     {
         // update automation if chest options changed
-        if (Context.IsMainPlayer && e.FromModID == "Pathoschild.ChestsAnywhere" && e.Type == nameof(AutomateUpdateChestMessage))
+        if (Context.IsMainPlayer && e is { FromModID: "Pathoschild.ChestsAnywhere", Type: nameof(AutomateUpdateChestMessage) })
         {
             var message = e.ReadAs<AutomateUpdateChestMessage>();
             var location = message.LocationName != null

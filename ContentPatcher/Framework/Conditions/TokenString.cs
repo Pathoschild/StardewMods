@@ -220,7 +220,7 @@ internal class TokenString : IManagedTokenString
         this.State.Reset();
 
         // update value
-        if (this.Parts.Length == 1 && this.Parts[0].LexToken is LexTokenLiteral literal)
+        if (this.Parts is [{ LexToken: LexTokenLiteral literal }])
             this.Value = literal.Text;
         else
         {
