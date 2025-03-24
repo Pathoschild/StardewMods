@@ -60,7 +60,7 @@ internal class CharacterGiftTastesField : GenericField
     private ItemRecord[] GetGiftTasteRecords(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, IDictionary<string, bool> ownedItemsCache)
     {
         if (!giftTastes.TryGetValue(showTaste, out GiftTasteModel[]? entries))
-            return Array.Empty<ItemRecord>();
+            return [];
 
         // get data
         return

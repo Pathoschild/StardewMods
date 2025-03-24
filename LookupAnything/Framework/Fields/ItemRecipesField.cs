@@ -380,15 +380,14 @@ internal class ItemRecipesField : GenericField
 
                 if (recipe.GoldPrice > 0)
                 {
-                    inputs = inputs.Concat(new[]
-                    {
+                    inputs = inputs.Concat([
                         new RecipeItemEntry(
                             new SpriteInfo(Game1.debrisSpriteSheet, new Rectangle(5, 69, 6, 6)),
                             Utility.getNumberWithCommas(recipe.GoldPrice),
                             null,
                             IsGoldPrice: true
                         )
-                    });
+                    ]);
                 }
 
                 // build recipe

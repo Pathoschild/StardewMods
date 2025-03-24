@@ -341,8 +341,8 @@ class ConstraintSetTests
         // arrange
         ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
         ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
-        left.AddBound(new[] { "A", "B", "C", "D" });
-        right.AddBound(new[] { "C", "D" });
+        left.AddBound(["A", "B", "C", "D"]);
+        right.AddBound(["C", "D"]);
         left.Exclude("C");
         right.Exclude("C");
 
@@ -362,8 +362,8 @@ class ConstraintSetTests
         // arrange
         ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
         ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
-        left.AddBound(new[] { "A", "B", "C" });
-        right.AddBound(new[] { "C" });
+        left.AddBound(["A", "B", "C"]);
+        right.AddBound(["C"]);
         left.Exclude("C");
         right.Exclude("C");
 
@@ -403,7 +403,7 @@ class ConstraintSetTests
         ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
         ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
         left.Exclude("C");
-        right.AddBound(new[] { "A", "B", "C" });
+        right.AddBound(["A", "B", "C"]);
 
         // act
         bool leftIntersects = left.Intersects(right);
@@ -421,8 +421,8 @@ class ConstraintSetTests
         // arrange
         ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
         ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
-        left.Exclude(new[] { "A", "B", "C" });
-        right.AddBound(new[] { "A", "B", "C" });
+        left.Exclude(["A", "B", "C"]);
+        right.AddBound(["A", "B", "C"]);
 
         // act
         bool leftIntersects = left.Intersects(right);

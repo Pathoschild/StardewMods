@@ -64,7 +64,7 @@ internal class GenericField : ICustomField
     /// <param name="value">The field value.</param>
     /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public GenericField(string label, IFormattedText value, bool? hasValue = null)
-        : this(label, new[] { value }, hasValue) { }
+        : this(label, [value], hasValue) { }
 
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A short field label.</param>

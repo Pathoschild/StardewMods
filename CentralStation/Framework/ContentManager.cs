@@ -563,7 +563,7 @@ internal class ContentManager
         }
 
         // collect available NPCs
-        List<TouristSpawnOption> validTourists = new();
+        List<TouristSpawnOption> validTourists = [];
         foreach ((string mapId, TouristMapModel? touristMapData) in this.ContentHelper.Load<Dictionary<string, TouristMapModel?>>(AssetNames.Tourists))
         {
             // skip empty entry

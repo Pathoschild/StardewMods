@@ -53,10 +53,10 @@ internal class DataLayerOverlay : BaseOverlay
     private readonly bool CombineOverlappingBorders;
 
     /// <summary>The visible tiles.</summary>
-    private readonly HashSet<Vector2> VisibleTiles = new();
+    private readonly HashSet<Vector2> VisibleTiles = [];
 
     /// <summary>The tile layer data to render.</summary>
-    private readonly List<TileGroup> TileGroups = new();
+    private readonly List<TileGroup> TileGroups = [];
 
     /// <summary>The tick countdown until the next layer update.</summary>
     private int UpdateCountdown;

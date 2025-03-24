@@ -77,7 +77,7 @@ internal class CropPaddyWaterLayer : BaseLayer
     /// <remarks>Derived from <see cref="HoeDirt.paddyWaterCheck"/>.</remarks>
     private HashSet<Vector2> GetTilesInRange(GameLocation location, IReadOnlySet<Vector2> visibleTiles)
     {
-        HashSet<Vector2> tiles = new();
+        HashSet<Vector2> tiles = [];
 
         foreach (Vector2 tile in visibleTiles)
         {

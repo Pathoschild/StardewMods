@@ -361,12 +361,11 @@ internal class ItemSubject : BaseSubject
             else
             {
                 // movie this week
-                yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), new IFormattedText[]
-                {
+                yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), [
                     new FormattedText(TokenParser.ParseText(movie.Title), bold: true),
                     new FormattedText(Environment.NewLine),
                     new FormattedText(TokenParser.ParseText(movie.Description))
-                });
+                ]);
 
                 // movie tastes
                 const GiftTaste rejectKey = (GiftTaste)(-1);
