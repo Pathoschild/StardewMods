@@ -112,10 +112,16 @@ internal class TreeMachine : BaseMachine<Tree>
     /// <param name="tree">The tree to automate.</param>
     public static bool CanAutomate(Tree tree)
     {
+        // skip: stumps will never produce anything
+        if (tree.stump.Value)
+            return false;
+
+        // skip: no data to automate
         WildTreeData? data = tree.GetData();
         if (data is null)
             return false;
 
+        // check data
         return
             data.GrowsMoss
             || (

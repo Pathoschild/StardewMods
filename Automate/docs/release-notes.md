@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Tree stumps are no longer automated, since they'll never produce anything.
 * Fixed crash if an automated berry bush is chopped down.
 * Improved translations. Thanks to Naciux1088 (added Polish)!
 
