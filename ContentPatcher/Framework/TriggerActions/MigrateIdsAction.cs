@@ -20,7 +20,7 @@ internal class MigrateIdsAction
     ** Fields
     *********/
     /// <summary>The Json Assets mapped ID types, with their corresponding <see cref="ItemRegistry"/> data types.</summary>
-    private readonly Dictionary<string, string[]> JsonAssetsTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+    private readonly Dictionary<string, string[]> JsonAssetsTypes = new(StringComparer.OrdinalIgnoreCase)
     {
         ["big-craftables"] = [ItemRegistry.type_bigCraftable],
         ["clothing"] = [ItemRegistry.type_pants, ItemRegistry.type_shirt],

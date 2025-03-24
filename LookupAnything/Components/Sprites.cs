@@ -19,7 +19,7 @@ internal static class Sprites
         public static Texture2D Sheet => Game1.content.Load<Texture2D>("LooseSprites\\letterBG");
 
         /// <summary>The letter background (including edges and corners).</summary>
-        public static readonly Rectangle Sprite = new Rectangle(0, 0, 320, 180);
+        public static readonly Rectangle Sprite = new(0, 0, 320, 180);
     }
 
     /// <summary>Sprites used to draw a textbox.</summary>

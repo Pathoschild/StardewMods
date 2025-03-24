@@ -637,7 +637,7 @@ internal class DataParser
 
                             // add ingredients
                             List<RecipeIngredientModel> ingredients = [
-                                new RecipeIngredientModel(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
+                                new(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
                             ];
                             ingredients.AddRange(additionalConsumedItems);
 
@@ -749,7 +749,7 @@ internal class DataParser
                     if (!this.TryGetMostSpecificIngredientIds(null, rule.RequiredTags, ref ruleConditions, out string? ingredientId, out string[] ingredientContextTags))
                         continue;
 
-                    RecipeIngredientModel[] ingredients = [new RecipeIngredientModel(RecipeType.BuildingInput, ingredientId, rule.RequiredCount, ingredientContextTags)];
+                    RecipeIngredientModel[] ingredients = [new(RecipeType.BuildingInput, ingredientId, rule.RequiredCount, ingredientContextTags)];
 
                     foreach (GenericSpawnItemDataWithCondition? outputItem in rule.ProducedItems)
                     {

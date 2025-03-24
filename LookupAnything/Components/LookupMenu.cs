@@ -35,7 +35,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     private readonly ICustomField[] Fields;
 
     /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+    private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
 
     /// <summary>Simplifies access to private game code.</summary>
     private readonly IReflectionHelper Reflection;

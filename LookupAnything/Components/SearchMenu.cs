@@ -352,7 +352,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     private void ReceiveSearchTextboxChanged(string? search)
     {
         // get search words
-        string[] words = (search ?? "").Split([' '], StringSplitOptions.RemoveEmptyEntries);
+        string[] words = (search ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (!words.Any())
         {
             this.SearchResults = [];

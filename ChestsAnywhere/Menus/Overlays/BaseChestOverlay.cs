@@ -43,7 +43,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     protected bool IsInitialized => this.DrawCount > 1;
 
     /// <summary>The backing field for <see cref="ActiveElement"/>; shouldn't be edited directly.</summary>
-    private Element _activeElement;
+    private Element ActiveElementImpl;
 
     /// <summary>The unique chest categories.</summary>
     private readonly string[] Categories;
@@ -128,10 +128,10 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <inheritdoc />
     public Element ActiveElement
     {
-        get => this._activeElement;
+        get => this.ActiveElementImpl;
         protected set
         {
-            this._activeElement = value;
+            this.ActiveElementImpl = value;
             this.OnActiveElementChanged(value);
         }
     }
