@@ -360,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[giống như đầu vào]",
     "item.recipes-for-machine.too-complex": "Một số quy tắc của máy quá phức tạp để hiển thị.",
     "item.number-owned.summary": "Bạn sở hữu {{count}} cái",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Bạn đã chế tạo {{count}} cái",
 
 

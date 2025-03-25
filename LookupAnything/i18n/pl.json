@@ -360,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[tak samo jak wejście]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Wyświetlenie niektórych reguł maszynowych jest zbyt dynamiczne.",
     "item.number-owned.summary": "masz takich {{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "zrobiono takich {{count}}",
 
 

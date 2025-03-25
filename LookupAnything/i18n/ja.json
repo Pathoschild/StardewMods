@@ -360,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "原料と同じ", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "情報が多すぎるため表示することができない",
     "item.number-owned.summary": "{{count}}個持っている",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "{{count}}個作成した",
 
 

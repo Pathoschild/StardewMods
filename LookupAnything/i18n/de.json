@@ -359,6 +359,7 @@
     "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
     "item.number-owned.summary": "Du besitzt {{count}} davon",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 
 

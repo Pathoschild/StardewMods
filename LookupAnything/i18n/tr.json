@@ -359,6 +359,7 @@
     "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in 
     "item.recipes-for-machine.too-complex": "Bazı makinelerin işlevleri gösterilemeyecek kadar karmaşık",
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "bundan {{count}} tane yaptın",
 
 

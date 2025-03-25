@@ -6,6 +6,7 @@
 * Added item links in item recipe, fish pond drop, and item drop fields (thanks to Mushmato!).
 * Added support for Extra Machine Config mod's multiple output items (thanks to zombifier!).
 * Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
+* When you look up a flavored item like Sunflower Honey, the 'owned' field now also shows how many you own with the same flavor.
 * Improved schedule data in NPC lookups:
   * The current position is now shown even if they have no schedule.
   * Added separate message when the NPC has a schedule but they're set to ignore it.

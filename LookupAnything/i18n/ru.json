@@ -360,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in 
     "item.recipes-for-machine.too-complex": "Функции некоторого оборудования слишком сложны для отображения.",
     "item.number-owned.summary": "У вас есть {{count}} шт.",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Вы создали {{count}} шт.",
 
 

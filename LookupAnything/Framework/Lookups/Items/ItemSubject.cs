@@ -388,7 +388,7 @@ internal class ItemSubject : BaseSubject
         if (showInventoryFields && !isCrop)
         {
             // owned
-            yield return new GenericField(I18n.Item_NumberOwned(), I18n.Item_NumberOwned_Summary(count: this.GameHelper.CountOwnedItems(item)));
+            yield return new GenericField(I18n.Item_NumberOwned(), this.GetNumberOwnedText(item));
 
             // times crafted
             RecipeModel[] recipes = this.GameHelper
@@ -900,6 +900,28 @@ internal class ItemSubject : BaseSubject
                     yield return bundle;
             }
         }
+    }
+
+    /// <summary>Get a text summary of the number of an item owned by the player.</summary>
+    /// <param name="item">The item to count in the world.</param>
+    private string GetNumberOwnedText(Item item)
+    {
+        // get counts
+        int baseCount = this.GameHelper.CountOwnedItems(item, flavorSpecific: false);
+        int flavoredCount = item is SObject
+            ? this.GameHelper.CountOwnedItems(item, flavorSpecific: true)
+            : baseCount;
+
+        // show flavored + base count
+        if (baseCount != flavoredCount)
+        {
+            ParsedItemData? baseData = ItemRegistry.GetData(item.QualifiedItemId);
+            if (baseData != null)
+                return I18n.Item_NumberOwnedFlavored_Summary(name: item.Name, count: flavoredCount, baseName: baseData.DisplayName, baseCount: baseCount);
+        }
+
+        // show flavored count only
+        return I18n.Item_NumberOwned_Summary(count: flavoredCount);
     }
 
     /// <summary>Get the translated name for a bundle's area.</summary>
