@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.14.0
+Released 26 March 2025 for SMAPI 4.2.0 or later.
+
 * Added support for shipping menu animations (thanks to Adnan Shoukfeh!).
 * Improved translations. Thanks to ChopWoodFish (updated Chinese) and MakinDay (updated Italian)!
 

@@ -1,14 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.50.0
+Released 26 March 2025 for SMAPI 4.1.10 or later.
+
 * Added water lookups to see the fish that can spawn there (thanks to b3nk3lly!).
 * Added item links in item recipe, fish pond drop, and item drop fields (thanks to Mushmato!).
 * Added support for Extra Machine Config mod's multiple output items (thanks to zombifier!).
-* Added support for the upcoming Better Game Menu mod (thanks to KhloeLeclair!).
+* Added integration with Better Game Menu (thanks to KhloeLeclair!).
 * When you look up a flavored item like Sunflower Honey, the 'owned' field now also shows how many you own with the same flavor.
 * Improved schedule data in NPC lookups:
-  * The current position is now shown even if they have no schedule.
+  * Their current location is now shown even if they have no schedule.
   * Added separate message when the NPC has a schedule but they're set to ignore it.
   * Added separate messages when the data isn't available to farmhands in multiplayer.
 * Optimized performance when some lookups are open.

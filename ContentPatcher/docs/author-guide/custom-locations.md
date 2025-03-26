@@ -125,7 +125,7 @@ Here's how you'd do that:
 
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
 
    "CustomLocations": [
       // add the in-game location
@@ -187,7 +187,7 @@ For example:
 
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
    "CustomLocations": [
       {
          "Name": "{{ModId}}_AbigailCloset",

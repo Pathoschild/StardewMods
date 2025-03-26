@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.1
+Released 26 March 2025 for SMAPI 4.1.10 or later.
+
 * Internal cleanup.
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish)!
 

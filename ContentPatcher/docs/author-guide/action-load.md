@@ -96,7 +96,7 @@ If omitted, it's applied to all localized and unlocalized variants of the asset.
 This replaces Abigail's portraits with your own image (see [NPC modding](https://stardewvalleywiki.com/Modding:NPC_data)):
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -111,7 +111,7 @@ You can list any number of load patches, as long as each asset is only loaded by
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -132,7 +132,7 @@ files at once:
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -146,7 +146,7 @@ files at once:
 You can use `Priority` to have an optional load (e.g. if it'll still work when another mod loads it first):
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",

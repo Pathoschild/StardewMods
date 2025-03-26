@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 2.6.0
+Released 26 March 2025 for SMAPI 4.1.10 or later. See [release highlights](https://www.patreon.com/posts/125098195).
+
 * Added `AddNpcWarps` field in [`EditMap` patches](author-guide.md#editmap).
 * Added `defaultKeys` option for [the `i18n` token](author-guide/translations.md).
 * Fixed some cases where a local token on an `Include` patch wasn't available in the included patches.
