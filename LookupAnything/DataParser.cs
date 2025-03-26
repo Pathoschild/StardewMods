@@ -21,6 +21,7 @@ using StardewValley.GameData.Locations;
 using StardewValley.GameData.Machines;
 using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TokenizableStrings;
@@ -295,6 +296,56 @@ internal class DataParser
         );
     }
 
+    /// <summary>Read parsed data about the spawn rules for fish in a specific location.</summary>
+    /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
+    /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId, Metadata metadata)
+    {
+        // get fish from game data
+        HashSet<string> seenFishIds = [];
+        foreach (SpawnFishData fishData in location.GetData().Fish)
+        {
+            if (fishData.ItemId is null)
+                continue;
+
+            seenFishIds.Add(fishData.ItemId);
+
+            // skip if fish can't spawn in this body of water
+            if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                continue;
+
+            // skip if position doesn't match
+            if (fishData.BobberPosition?.Contains(tile) is false)
+                continue;
+            if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
+                continue;
+
+            // skip if data isn't for a fish or jelly (e.g. furniture)
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+            if (fish.ObjectType != "Fish")
+                continue;
+
+            yield return this.GetFishSpawnRules(fish, metadata);
+        }
+
+        // get fish from custom metadata
+        foreach ((string fishId, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
+        {
+            // skip if we already checked this fish, even if we skipped it (e.g. due to spawning only in a certain fishing area in a location)
+            if (seenFishIds.Contains(fishId))
+                continue;
+
+            // skip if spawn location doesn't match
+            if (!spawnData.MatchesLocation(location.Name))
+                continue;
+
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishId);
+            yield return this.GetFishSpawnRules(fish, metadata);
+        }
+    }
+
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
     /// <param name="player">The player.</param>
     /// <param name="npc">The NPC.</param>
@@ -355,6 +406,44 @@ internal class DataParser
 
         // else default to ID
         return id;
+    }
+
+    /// <summary>Get the translated display name for a location and optional fish area.</summary>
+    /// <param name="id">The location's internal name.</param>
+    /// <param name="data">The location data, if available.</param>
+    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
+    public string GetLocationDisplayName(string id, LocationData? data, string? fishAreaId)
+    {
+        // special cases
+        {
+            // mine level
+            if (MineShaft.IsGeneratedLevel(id, out int mineLevel))
+            {
+                string level = fishAreaId ?? mineLevel.ToString(); // sometimes the mine level is provided as the fish area ID, other times it's included in the location name
+
+                return !string.IsNullOrWhiteSpace(level)
+                    ? I18n.Location_UndergroundMine_Level(level)
+                    : this.GetLocationDisplayName(id, data);
+            }
+
+            // no area set
+            if (string.IsNullOrWhiteSpace(fishAreaId))
+                return this.GetLocationDisplayName(id, data);
+        }
+
+        // get base data
+        string locationName = this.GetLocationDisplayName(id, data);
+        string areaName = TokenParser.ParseText(data?.FishAreas?.GetValueOrDefault(fishAreaId)?.DisplayName);
+
+        // build translation
+        string displayName = I18n.GetByKey($"location.{id}.{fishAreaId}", new { locationName }).UsePlaceholder(false); // predefined translation
+        if (string.IsNullOrWhiteSpace(displayName))
+        {
+            displayName = !string.IsNullOrWhiteSpace(areaName)
+                ? I18n.Location_FishArea(locationName: locationName, areaName: areaName)
+                : I18n.Location_UnknownFishArea(locationName: locationName, id: fishAreaId);
+        }
+        return displayName;
     }
 
     /// <summary>Parse monster data.</summary>
@@ -497,93 +586,111 @@ internal class DataParser
                         continue;
 
                     // build output list
-                    foreach (MachineItemOutput? outputItem in outputRule.OutputItem)
+                    foreach (MachineItemOutput? mainOutputItem in outputRule.OutputItem)
                     {
-                        if (outputItem is null)
+                        if (mainOutputItem is null)
                             continue;
 
-                        // get conditions
-                        List<string>? conditions = null;
+                        // if there are extra outputs added by the Extra Machine Config mod, add them here
+                        MachineItemOutput[] allOutputItems = extraMachineConfig.IsLoaded
+                            ? [mainOutputItem, .. extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem, machineData)]
+                            : [mainOutputItem];
+
+                        foreach (MachineItemOutput outputItem in allOutputItems)
                         {
-                            // extract raw conditions
-                            string? rawConditions = null;
-                            if (!string.IsNullOrWhiteSpace(trigger.Condition))
-                                rawConditions = trigger.Condition;
-                            if (!string.IsNullOrWhiteSpace(outputItem.Condition))
+                            // get conditions
+                            List<string>? conditions = null;
                             {
-                                rawConditions = rawConditions != null
-                                    ? rawConditions + ", " + outputItem.Condition
-                                    : outputItem.Condition;
+                                // extract raw conditions
+                                string? rawConditions = null;
+                                if (!string.IsNullOrWhiteSpace(trigger.Condition))
+                                    rawConditions = trigger.Condition;
+
+                                // add main output's condition
+                                if (!string.IsNullOrWhiteSpace(mainOutputItem.Condition))
+                                {
+                                    rawConditions = rawConditions != null
+                                        ? rawConditions + ", " + mainOutputItem.Condition
+                                        : mainOutputItem.Condition;
+                                }
+
+                                // add secondary output's condition from Extra Machine Config mod
+                                if (!string.IsNullOrWhiteSpace(outputItem.Condition) && outputItem.Condition != mainOutputItem.Condition)
+                                {
+                                    rawConditions = rawConditions != null
+                                        ? rawConditions + ", " + outputItem.Condition
+                                        : outputItem.Condition;
+                                }
+
+                                // parse
+                                if (rawConditions != null)
+                                    conditions = GameStateQuery.SplitRaw(rawConditions).Distinct().ToList();
                             }
 
-                            // parse
-                            if (rawConditions != null)
-                                conditions = GameStateQuery.SplitRaw(rawConditions).Distinct().ToList();
-                        }
+                            // get ingredient
+                            if (!this.TryGetMostSpecificIngredientIds(trigger.RequiredItemId, trigger.RequiredTags, ref conditions, out string? inputId, out string[] inputContextTags))
+                                continue;
 
-                        // get ingredient
-                        if (!this.TryGetMostSpecificIngredientIds(trigger.RequiredItemId, trigger.RequiredTags, ref conditions, out string? inputId, out string[] inputContextTags))
-                            continue;
+                            // track whether some recipes are too complex to fully display
+                            if (outputItem.OutputMethod != null)
+                                someRulesTooComplex = true;
 
-                        // track whether some recipes are too complex to fully display
-                        if (outputItem.OutputMethod != null)
-                            someRulesTooComplex = true;
+                            // add ingredients
+                            List<RecipeIngredientModel> ingredients = [
+                                new(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
+                            ];
+                            ingredients.AddRange(additionalConsumedItems);
 
-                        // add ingredients
-                        List<RecipeIngredientModel> ingredients = [
-                            new RecipeIngredientModel(RecipeType.MachineInput, inputId, trigger.RequiredCount, inputContextTags)
-                        ];
-                        ingredients.AddRange(additionalConsumedItems);
+                            // if there are extra fuels added by the Extra Machine Config mod, add them here
+                            if (extraMachineConfig.IsLoaded)
+                            {
+                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
+                                    ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
 
-                        // if there are extra fuels added by the Extra Machine Config mod, add them here
-                        if (extraMachineConfig.IsLoaded)
-                        {
-                            foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
-                                ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
+                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
+                                    ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
+                            }
 
-                            foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
-                                ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
-                        }
+                            // add produced item
+                            IList<ItemQueryResult> itemQueryResults;
+                            if (outputItem.ItemId != null || outputItem.RandomItemId != null)
+                            {
+                                ItemQueryContext itemQueryContext = new();
+                                itemQueryResults = ItemQueryResolver.TryResolve(
+                                    outputItem,
+                                    itemQueryContext,
+                                    formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
+                                );
+                            }
+                            else
+                            {
+                                itemQueryResults = [];
+                                someRulesTooComplex = true;
+                            }
 
-                        // add produced item
-                        IList<ItemQueryResult> itemQueryResults;
-                        if (outputItem.ItemId != null || outputItem.RandomItemId != null)
-                        {
-                            ItemQueryContext itemQueryContext = new();
-                            itemQueryResults = ItemQueryResolver.TryResolve(
-                                outputItem,
-                                itemQueryContext,
-                                formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
+                            // add to list
+                            recipes.AddRange(
+                                from result in itemQueryResults
+                                select new RecipeModel(
+                                    key: null,
+                                    type: RecipeType.MachineInput,
+                                    displayType: ItemRegistry.GetDataOrErrorItem(qualifiedMachineId).DisplayName,
+                                    ingredients,
+                                    goldPrice: 0,
+                                    item: _ => ItemRegistry.Create(result.Item.QualifiedItemId),
+                                    isKnown: () => true,
+                                    machineId: qualifiedMachineId,
+                                    //exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
+                                    exceptIngredients: null,
+                                    outputQualifiedItemId: result.Item.QualifiedItemId,
+                                    minOutput: outputItem.MinStack > 0 ? outputItem.MinStack : 1,
+                                    maxOutput: outputItem.MaxStack > 0 ? outputItem.MaxStack : null, // TODO: Calculate this better
+                                    quality: outputItem.Quality,
+                                    outputChance: 100 / outputRule.OutputItem.Count / itemQueryResults.Count,
+                                    conditions: conditions?.ToArray()
+                                )
                             );
                         }
-                        else
-                        {
-                            itemQueryResults = [];
-                            someRulesTooComplex = true;
-                        }
-
-                        // add to list
-                        recipes.AddRange(
-                            from result in itemQueryResults
-                            select new RecipeModel(
-                                key: null,
-                                type: RecipeType.MachineInput,
-                                displayType: ItemRegistry.GetDataOrErrorItem(qualifiedMachineId).DisplayName,
-                                ingredients,
-                                goldPrice: 0,
-                                item: _ => ItemRegistry.Create(result.Item.QualifiedItemId),
-                                isKnown: () => true,
-                                machineId: qualifiedMachineId,
-                                //exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
-                                exceptIngredients: null,
-                                outputQualifiedItemId: result.Item.QualifiedItemId,
-                                minOutput: outputItem.MinStack > 0 ? outputItem.MinStack : 1,
-                                maxOutput: outputItem.MaxStack > 0 ? outputItem.MaxStack : null, // TODO: Calculate this better
-                                quality: outputItem.Quality,
-                                outputChance: 100 / outputRule.OutputItem.Count / itemQueryResults.Count,
-                                conditions: conditions?.ToArray()
-                            )
-                        );
                     }
                 }
             }
@@ -642,7 +749,7 @@ internal class DataParser
                     if (!this.TryGetMostSpecificIngredientIds(null, rule.RequiredTags, ref ruleConditions, out string? ingredientId, out string[] ingredientContextTags))
                         continue;
 
-                    RecipeIngredientModel[] ingredients = [new RecipeIngredientModel(RecipeType.BuildingInput, ingredientId, rule.RequiredCount, ingredientContextTags)];
+                    RecipeIngredientModel[] ingredients = [new(RecipeType.BuildingInput, ingredientId, rule.RequiredCount, ingredientContextTags)];
 
                     foreach (GenericSpawnItemDataWithCondition? outputItem in rule.ProducedItems)
                     {
@@ -704,38 +811,6 @@ internal class DataParser
     /*********
     ** Private methods
     *********/
-    /// <summary>Get the translated display name for a location and optional fish area.</summary>
-    /// <param name="id">The location's internal name.</param>
-    /// <param name="data">The location data, if available.</param>
-    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
-    private string GetLocationDisplayName(string id, LocationData? data, string? fishAreaId)
-    {
-        // special cases
-        {
-            // skip: no area set
-            if (string.IsNullOrWhiteSpace(fishAreaId))
-                return this.GetLocationDisplayName(id, data);
-
-            // special case: mine level
-            if (string.Equals(id, "UndergroundMine", StringComparison.OrdinalIgnoreCase))
-                return I18n.Location_UndergroundMine_Level(level: fishAreaId);
-        }
-
-        // get base data
-        string locationName = this.GetLocationDisplayName(id, data);
-        string areaName = TokenParser.ParseText(data?.FishAreas?.GetValueOrDefault(fishAreaId)?.DisplayName);
-
-        // build translation
-        string displayName = I18n.GetByKey($"location.{id}.{fishAreaId}", new { locationName }).UsePlaceholder(false); // predefined translation
-        if (string.IsNullOrWhiteSpace(displayName))
-        {
-            displayName = !string.IsNullOrWhiteSpace(areaName)
-                ? I18n.Location_FishArea(locationName: locationName, areaName: areaName)
-                : I18n.Location_UnknownFishArea(locationName: locationName, id: fishAreaId);
-        }
-        return displayName;
-    }
-
     /// <summary>Normalize raw ingredient ID and context tags from a machine recipe into the most specific item ID and context tags possible.</summary>
     /// <param name="fromItemId">The ingredient's raw item ID from the machine data.</param>
     /// <param name="fromContextTags">The ingredient's raw context tags from the machine data.</param>

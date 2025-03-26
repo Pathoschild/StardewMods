@@ -91,8 +91,7 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
 
                 machine.OutputMachine(machineData, outputRule, machine.lastInputItem.Value, null, machine.Location, false);
 
-                if (machine.heldObject.Value == null)
-                    machine.heldObject.Value = prevOutput;
+                machine.heldObject.Value ??= prevOutput;
             }
         }
 

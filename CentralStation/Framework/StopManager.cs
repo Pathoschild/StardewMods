@@ -79,7 +79,7 @@ internal class StopManager
     {
         if (this.CustomStopProviders is null)
         {
-            this.CustomStopProviders = new();
+            this.CustomStopProviders = [];
 
             BusLocationsStopProvider busLocations = new(this.ModRegistry, this.Monitor, this.ContentManager.GetTranslation);
             if (busLocations.IsNeeded())

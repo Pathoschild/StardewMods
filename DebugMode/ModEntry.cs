@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
 using Pathoschild.Stardew.DebugMode.Framework;
@@ -30,6 +31,9 @@ internal class ModEntry : Mod
 
     /// <summary>Whether to show the debug info overlay.</summary>
     private readonly PerScreen<bool> ShowOverlay = new();
+
+    /// <summary>The Better Game Menu integration.</summary>
+    private BetterGameMenuIntegration? BetterGameMenu;
 
     /// <summary>Whether the built-in debug mode is enabled.</summary>
     private bool GameDebugMode
@@ -69,7 +73,7 @@ internal class ModEntry : Mod
         // init
         I18n.Init(helper.Translation);
         this.Config = helper.ReadConfig<ModConfig>();
-        this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
+        this.Config.AllowDangerousCommands = this.Config is { AllowGameDebug: true, AllowDangerousCommands: true }; // normalize for convenience
 
         // hook events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -98,6 +102,9 @@ internal class ModEntry : Mod
             get: () => this.Config,
             set: config => this.Config = config
         );
+
+        // add Better Game Menu support
+        this.BetterGameMenu = new(this.Helper.ModRegistry, this.Monitor);
 
         // add Iconic Framework icon
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
@@ -293,7 +300,7 @@ internal class ModEntry : Mod
 
             yield return $"{I18n.Label_EventId()}: {curEvent.id}";
 
-            if (!curEvent.isFestival && curEvent.CurrentCommand >= 0 && curEvent.CurrentCommand < curEvent.eventCommands.Length)
+            if (curEvent is { isFestival: false, CurrentCommand: >= 0 } && curEvent.CurrentCommand < curEvent.eventCommands.Length)
                 yield return $"{I18n.Label_EventScript()}: {curEvent.GetCurrentCommand()} ({(int)(progress * 100)}%)";
         }
 
@@ -310,7 +317,7 @@ internal class ModEntry : Mod
         {
             GameMenu gameMenu => gameMenu.pages[gameMenu.currentTab],
             TitleMenu => TitleMenu.subMenu,
-            _ => null
+            _ => this.BetterGameMenu?.GetCurrentPage(menu)
         };
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Pathfinding;
 
@@ -29,21 +30,41 @@ internal class ScheduleField : GenericField
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     private static IEnumerable<IFormattedText> GetText(NPC npc, GameHelper gameHelper)
     {
-        ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
+        bool isFarmhand = !Context.IsMainPlayer;
 
         // current location
+        GameLocation? location = npc.currentLocation;
+        if (isFarmhand && location?.IsActiveLocation() is not true)
+            yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownPosition());
+        else
         {
-            string locationName = npc.currentLocation is not null
-                ? gameHelper.GetLocationDisplayName(npc.currentLocation.Name, npc.currentLocation.GetData())
+            string locationName = location is not null
+                ? gameHelper.GetLocationDisplayName(location.Name, location.GetData())
                 : "???";
 
             yield return new FormattedText(I18n.Npc_Schedule_CurrentPosition(locationName: locationName, x: npc.TilePoint.X, y: npc.TilePoint.Y));
-            yield return new FormattedText(Environment.NewLine + Environment.NewLine);
         }
+        yield return new FormattedText(Environment.NewLine + Environment.NewLine);
 
-        // schedule entries
-        if (schedule.Length > 0)
+        // schedule
+        if (isFarmhand)
+            yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownSchedule());
+        else
         {
+            // validate schedule
+            ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
+            if (schedule.Length is 0)
+            {
+                yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
+                yield break;
+            }
+            if (npc.ignoreScheduleToday || !npc.followSchedule)
+            {
+                yield return new FormattedText(I18n.Npc_Schedule_NotFollowingSchedule());
+                yield break;
+            }
+
+            // show schedule entries
             for (int i = 0; i < schedule.Length; i++)
             {
                 (int time, SchedulePathDescription entry) = schedule[i];
@@ -61,14 +82,15 @@ internal class ScheduleField : GenericField
                 yield return new FormattedText(I18n.Npc_Schedule_Entry(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y), textColor);
             }
         }
-        else
-            yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
     }
 
     /// <summary>Returns a collection of schedule entries sorted by time. Consecutive entries with the same target location are omitted.</summary>
     /// <param name="schedule">The schedule to format.</param>
-    private static IEnumerable<ScheduleEntry> FormatSchedule(Dictionary<int, SchedulePathDescription> schedule)
+    private static IEnumerable<ScheduleEntry> FormatSchedule(Dictionary<int, SchedulePathDescription>? schedule)
     {
+        if (schedule is null)
+            yield break;
+
         List<int> sortedKeys = [.. schedule.Keys.OrderBy(key => key)];
         string prevTargetLocationName = string.Empty;
 

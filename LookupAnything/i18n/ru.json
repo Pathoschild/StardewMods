@@ -37,7 +37,6 @@
     "type.building": "Постройка",
     "type.bush": "Куст",
     "type.fruit-tree": "Фруктовое дерево",
-    "type.map-tile": "Объект",
     "type.monster": "Монстр",
     "type.player": "Игрок",
     "type.tree": "Дерево",
@@ -361,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in 
     "item.recipes-for-machine.too-complex": "Функции некоторого оборудования слишком сложны для отображения.",
     "item.number-owned.summary": "У вас есть {{count}} шт.",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Вы создали {{count}} шт.",
 
 
@@ -417,6 +417,7 @@
     "item.fish-spawn-rules.time": "время суток: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "погода: солнечно",
     "item.fish-spawn-rules.weather-rainy": "погода: дождь",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -513,7 +514,10 @@
     "npc.unowned-gift-taste": "{{count}} бесхозных предметов",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -635,6 +639,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Объект ({{x}}, {{y}})",
     "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
     "tile.game-location": "Локация",
     "tile.map-name": "Название локации",
@@ -706,6 +711,9 @@
 
     // progression mode
     "config.title.progression": "Режим прохождения без спойлеров",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Показывать неизвестные предпочтения подарков",
     "config.progression.show-unknown-gift-tastes.desc": "Показывать ли предпочтения подарков, о которых вы еще не узнали в игре (например, из текста диалога или экспериментируя)",

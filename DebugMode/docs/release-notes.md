@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.16.0
+Released 26 March 2025 for SMAPI 4.1.10 or later.
+
+* Added integration with Better Game Menu (thanks to KhloeLeclair!).
+* Improved translations. Thanks to ChopWoodFish (updated Chinese) and mehmetgorkemarslan (updated Turkish)!
+
 ## 1.15.1
 Released 11 February 2025 for SMAPI 4.1.10 or later.
 

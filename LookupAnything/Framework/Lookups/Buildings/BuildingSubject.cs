@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -145,7 +146,7 @@ internal class BuildingSubject : BaseSubject
         {
             var upgradeLevelSummary = this.GetUpgradeLevelSummary(building, upgradeLevel).ToArray();
             if (upgradeLevelSummary.Any())
-                yield return new CheckboxListField(I18n.Building_Upgrades(), upgradeLevelSummary);
+                yield return new CheckboxListField(I18n.Building_Upgrades(), new CheckboxList(upgradeLevelSummary));
         }
 
         // specific buildings
@@ -181,11 +182,11 @@ internal class BuildingSubject : BaseSubject
 
                         // drops
                         int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                        yield return new FishPondDropsField(this.GameHelper, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()));
+                        yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()));
 
                         // quests
                         if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
-                            yield return new CheckboxListField(I18n.Building_FishPond_Quests(), this.GetPopulationGates(pond, pondData));
+                            yield return new CheckboxListField(I18n.Building_FishPond_Quests(), new CheckboxList(this.GetPopulationGates(pond, pondData)));
                     }
                     break;
 
@@ -203,7 +204,7 @@ internal class BuildingSubject : BaseSubject
                     if (recipes.Length > 0)
                     {
                         // return recipes
-                        var field = new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes); // building recipes don't need to be learned
+                        var field = new ItemRecipesField(this.GameHelper, this.Codex, I18n.Item_Recipes(), null, recipes, showUnknownRecipes: true, showInvalidRecipes: this.ShowInvalidRecipes); // building recipes don't need to be learned
                         if (this.CollapseFieldsConfig.Enabled)
                             field.CollapseIfLengthExceeds(this.CollapseFieldsConfig.BuildingRecipes, recipes.Length);
                         yield return field;
@@ -244,7 +245,7 @@ internal class BuildingSubject : BaseSubject
 
             if (recipes.Length > 0)
             {
-                var field = new ItemRecipesField(this.GameHelper, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showLabelForSingleGroup: false, showInvalidRecipes: this.ShowInvalidRecipes, showOutputLabels: false);
+                var field = new ItemRecipesField(this.GameHelper, this.Codex, I18n.Building_ConstructionCosts(), null, recipes, showUnknownRecipes: true, showLabelForSingleGroup: false, showInvalidRecipes: this.ShowInvalidRecipes, showOutputLabels: false);
                 if (this.CollapseFieldsConfig.Enabled)
                     field.CollapseIfLengthExceeds(this.CollapseFieldsConfig.BuildingRecipes, recipes.Length);
                 yield return field;
@@ -360,39 +361,39 @@ internal class BuildingSubject : BaseSubject
     /// <summary>Get the upgrade levels for a building, for use with a checkbox field.</summary>
     /// <param name="building">The building to check.</param>
     /// <param name="upgradeLevel">The current upgrade level, if applicable.</param>
-    private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetUpgradeLevelSummary(Building building, int? upgradeLevel)
+    private IEnumerable<Checkbox> GetUpgradeLevelSummary(Building building, int? upgradeLevel)
     {
         // TODO: animal buildings were de-hardcoded in Stardew Valley 1.6, so we should generate this info from Data/Buildings instead.
 
         // barn
         if (this.IsBarn(building))
         {
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_0(), value: true);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_1(), value: upgradeLevel >= 1);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_2(), value: upgradeLevel >= 2);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Barn_0(), isChecked: true);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Barn_1(), isChecked: upgradeLevel >= 1);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Barn_2(), isChecked: upgradeLevel >= 2);
         }
 
         // cabin
         else if (building.GetIndoors() is Cabin)
         {
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_0(), value: true);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_1(), value: upgradeLevel >= 1);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_2(), value: upgradeLevel >= 2);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_0(), isChecked: true);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_1(), isChecked: upgradeLevel >= 1);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_2(), isChecked: upgradeLevel >= 2);
         }
 
         // coop
         else if (this.IsCoop(building))
         {
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_0(), value: true);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_1(), value: upgradeLevel >= 1);
-            yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_2(), value: upgradeLevel >= 2);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Coop_0(), isChecked: true);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Coop_1(), isChecked: upgradeLevel >= 1);
+            yield return new Checkbox(text: I18n.Building_Upgrades_Coop_2(), isChecked: upgradeLevel >= 2);
         }
     }
 
     /// <summary>Get a fish pond's population gates for display.</summary>
     /// <param name="pond">The fish pond.</param>
     /// <param name="data">The fish pond data.</param>
-    private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetPopulationGates(FishPond pond, FishPondData data)
+    private IEnumerable<Checkbox> GetPopulationGates(FishPond pond, FishPondData data)
     {
         bool foundNextQuest = false;
         foreach (FishPondPopulationGateData gate in this.GameHelper.GetFishPondPopulationGates(data))
@@ -402,7 +403,7 @@ internal class BuildingSubject : BaseSubject
             // done
             if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
             {
-                yield return CheckboxListField.Checkbox(text: I18n.Building_FishPond_Quests_Done(count: newPopulation), value: true);
+                yield return new Checkbox(text: I18n.Building_FishPond_Quests_Done(count: newPopulation), isChecked: true);
                 continue;
             }
 
@@ -437,7 +438,7 @@ internal class BuildingSubject : BaseSubject
                     - pond.daysSinceSpawn.Value;
                 result += $"; {I18n.Building_FishPond_Quests_Available(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
             }
-            yield return CheckboxListField.Checkbox(text: result, value: false);
+            yield return new Checkbox(text: result, isChecked: false);
         }
     }
 }

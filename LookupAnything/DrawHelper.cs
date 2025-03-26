@@ -19,7 +19,7 @@ internal static class DrawTextHelper
     private static string? LastLanguage;
 
     /// <summary>The characters after which we can line-wrap text, but which are still included in the string.</summary>
-    private static readonly HashSet<char> SoftBreakCharacters = new();
+    private static readonly HashSet<char> SoftBreakCharacters = [];
 
 
     /*********
@@ -179,7 +179,7 @@ internal static class DrawTextHelper
         string newLine = Environment.NewLine;
 
         // handle soft breaks within word
-        List<string> words = new List<string>();
+        List<string> words = [];
         int start = 0;
         for (int i = 0; i < text.Length; i++)
         {

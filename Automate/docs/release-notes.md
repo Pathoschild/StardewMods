@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.3.4
+Released 26 March 2025 for SMAPI 4.1.10 or later.
+
+* Tree stumps are no longer automated, since they'll never produce anything.
+* Fixed crash if an automated berry bush is chopped down.
+* Improved translations. Thanks to Naciux1088 (added Polish)!
+
 ## 2.3.3
 Released 07 February 2025 for SMAPI 4.1.10 or later.
 

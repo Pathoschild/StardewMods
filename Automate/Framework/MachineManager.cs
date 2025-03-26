@@ -127,9 +127,7 @@ internal class MachineManager
     {
         string locationKey = this.Factory.GetLocationKey(location);
 
-        return this.MachineData.TryGetValue(locationKey, out MachineDataForLocation? data)
-            ? data
-            : null;
+        return this.MachineData.GetValueOrDefault(locationKey);
     }
 
     /****

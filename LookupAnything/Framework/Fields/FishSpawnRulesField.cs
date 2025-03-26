@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -16,31 +18,91 @@ internal class FishSpawnRulesField : CheckboxListField
     ** Fields
     *********/
     /// <summary>The valid seasons.</summary>
-    private readonly string[] Seasons = ["spring", "summer", "fall", "winter"];
+    private static readonly string[] Seasons = ["spring", "summer", "fall", "winter"];
 
 
     /*********
     ** Public methods
     *********/
-    /// <summary>Construct an instance.</summary>
+    /// <summary>Construct an instance for a single fish.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="fish">The fish item data.</param>
-    public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
-        : base(label)
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
+    public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish, bool showUncaughtFishSpawnRules)
+        : this(label, new CheckboxList(FishSpawnRulesField.GetConditions(gameHelper, fish), isHidden: !showUncaughtFishSpawnRules && !FishSpawnRulesField.HasPlayerCaughtFish(fish))) { }
+
+    /// <summary>Construct an instance for all fish in a body of water.</summary>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="label">A short field label.</param>
+    /// <param name="location">The location whose fish spawn conditions to get.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
+    public FishSpawnRulesField(GameHelper gameHelper, string label, GameLocation location, Vector2 tile, string fishAreaId, bool showUncaughtFishSpawnRules)
+        : this(label, FishSpawnRulesField.GetConditions(gameHelper, location, tile, fishAreaId, showUncaughtFishSpawnRules).ToArray()) { }
+
+    /// <inheritdoc/>
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
-        this.Checkboxes = this.GetConditions(gameHelper, fish).ToArray();
-        this.HasValue = this.Checkboxes.Any();
+        float topOffset = 0;
+        int hiddenSpawnRulesCount = 0;
+
+        // draw checkbox lists
+        foreach (CheckboxList checkboxList in this.CheckboxLists)
+        {
+            if (checkboxList.IsHidden)
+                hiddenSpawnRulesCount++;
+            else
+                // draw checkbox list
+                topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
+        }
+
+        // draw 'X uncaught fish' message
+        if (hiddenSpawnRulesCount > 0)
+            topOffset += this.LineHeight + this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, I18n.Item_UncaughtFish(hiddenSpawnRulesCount), Color.Gray).Y;
+
+        return new Vector2(wrapWidth, topOffset - this.LineHeight);
     }
 
 
     /*********
     ** Private methods
     *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="label">A short field label.</param>
+    /// <param name="spawnConditions">Array of lists of fish spawn conditions.</param>
+    private FishSpawnRulesField(string label, params CheckboxList[] spawnConditions)
+        : base(label)
+    {
+        this.CheckboxLists = spawnConditions;
+        this.HasValue = this.CheckboxLists.Any();
+    }
+
+    /// <summary>Get the formatted checkbox conditions for all fish in a location.</summary>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="location">The location whose fish spawn conditions to get.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
+    private static IEnumerable<CheckboxList> GetConditions(GameHelper gameHelper, GameLocation location, Vector2 tile, string fishAreaId, bool showUncaughtFishSpawnRules)
+    {
+        foreach (FishSpawnData spawnRules in gameHelper.GetFishSpawnRules(location, tile, fishAreaId))
+        {
+            ParsedItemData fishItemData = ItemRegistry.GetDataOrErrorItem(spawnRules.FishItem.QualifiedItemId);
+            bool isCheckboxListHidden = !showUncaughtFishSpawnRules && !FishSpawnRulesField.HasPlayerCaughtFish(fishItemData);
+
+            CheckboxList checkboxList = new(FishSpawnRulesField.GetConditions(gameHelper, fishItemData), isCheckboxListHidden);
+            checkboxList.AddIntro(fishItemData.DisplayName, new SpriteInfo(fishItemData.GetTexture(), fishItemData.GetSourceRect()));
+
+            yield return checkboxList;
+        }
+    }
+
     /// <summary>Get the formatted checkbox conditions to display.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="fish">The fish item data.</param>
-    private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, ParsedItemData fish)
+    private static IEnumerable<Checkbox> GetConditions(GameHelper gameHelper, ParsedItemData fish)
     {
         // get spawn data
         FishSpawnData spawnRules = gameHelper.GetFishSpawnRules(fish);
@@ -49,26 +111,26 @@ internal class FishSpawnRulesField : CheckboxListField
 
         // not caught uet
         if (spawnRules.IsUnique)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fish.QualifiedItemId));
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !FishSpawnRulesField.HasPlayerCaughtFish(fish));
 
         // fishing level
         if (spawnRules.MinFishingLevel > 0)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
 
         // extended family quest
         if (spawnRules.IsLegendaryFamily)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_ExtendedFamilyQuestActive(), Game1.player.team.SpecialOrderRuleActive("LEGENDARY_FAMILY"));
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_ExtendedFamilyQuestActive(), Game1.player.team.SpecialOrderRuleActive("LEGENDARY_FAMILY"));
 
         // weather
         if (spawnRules.Weather == FishSpawnWeather.Sunny)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
         else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
 
         // time of day
         if (spawnRules.TimesOfDay?.Any() == true)
         {
-            yield return this.GetCondition(
+            yield return FishSpawnRulesField.GetCondition(
                 label: I18n.Item_FishSpawnRules_Time(
                     times: I18n.List(
                         spawnRules.TimesOfDay.Select(p => I18n.Generic_Range(CommonHelper.FormatTime(p.MinTime), CommonHelper.FormatTime(p.MaxTime)).ToString())
@@ -79,16 +141,16 @@ internal class FishSpawnRulesField : CheckboxListField
         }
 
         // locations & seasons
-        if (this.HaveSameSeasons(spawnRules.Locations))
+        if (FishSpawnRulesField.HaveSameSeasons(spawnRules.Locations))
         {
             var firstLocation = spawnRules.Locations[0];
 
             // seasons
             if (firstLocation.Seasons.Count == 4)
-                yield return this.GetCondition(I18n.Item_FishSpawnRules_SeasonAny(), true);
+                yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_SeasonAny(), true);
             else
             {
-                yield return this.GetCondition(
+                yield return FishSpawnRulesField.GetCondition(
                     label: I18n.Item_FishSpawnRules_SeasonList(
                         seasons: I18n.List(
                             firstLocation.Seasons.Select(gameHelper.TranslateSeason)
@@ -99,7 +161,7 @@ internal class FishSpawnRulesField : CheckboxListField
             }
 
             // locations
-            yield return this.GetCondition(
+            yield return FishSpawnRulesField.GetCondition(
                 label: I18n.Item_FishSpawnRules_Locations(
                     locations: I18n.List(
                         spawnRules.Locations.Select(gameHelper.GetLocationDisplayName).OrderBy(p => p)
@@ -120,7 +182,7 @@ internal class FishSpawnRulesField : CheckboxListField
                 .ToDictionary(p => p.Key, p => p.ToArray(), StringComparer.OrdinalIgnoreCase);
 
             var summary = new List<IFormattedText> { new FormattedText(I18n.Item_FishSpawnRules_LocationsBySeason_Label()) };
-            foreach (string season in this.Seasons)
+            foreach (string season in FishSpawnRulesField.Seasons)
             {
                 if (locationsBySeason.TryGetValue(season, out string[]? locationNames))
                 {
@@ -132,29 +194,29 @@ internal class FishSpawnRulesField : CheckboxListField
             }
 
             bool hasMatch = spawnRules.Locations.Any(p => p.LocationId == Game1.currentLocation.Name && p.Seasons.Contains(Game1.currentSeason));
-            yield return this.GetCondition(summary, hasMatch);
+            yield return FishSpawnRulesField.GetCondition(summary, hasMatch);
         }
     }
 
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(string label, bool isMet)
+    private static Checkbox GetCondition(string label, bool isMet)
     {
-        return CheckboxListField.Checkbox(text: label, value: isMet);
+        return new Checkbox(isMet, label);
     }
 
     /// <summary>Get a condition formatted for checkbox rendering.</summary>
     /// <param name="label">The display text for the condition.</param>
     /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(IEnumerable<IFormattedText> label, bool isMet)
+    private static Checkbox GetCondition(IEnumerable<IFormattedText> label, bool isMet)
     {
-        return CheckboxListField.Checkbox(text: label.ToArray(), value: isMet);
+        return new Checkbox(isMet, label.ToArray());
     }
 
     /// <summary>Get whether all locations specify the same seasons.</summary>
     /// <param name="locations">The locations to check.</param>
-    private bool HaveSameSeasons(IEnumerable<FishSpawnLocationData> locations)
+    private static bool HaveSameSeasons(IEnumerable<FishSpawnLocationData> locations)
     {
         ISet<string>? seasons = null;
         foreach (FishSpawnLocationData location in locations)
@@ -166,5 +228,12 @@ internal class FishSpawnRulesField : CheckboxListField
         }
 
         return true;
+    }
+
+    /// <summary>Gets whether the player has caught a given fish.</summary>
+    /// <param name="fish">The fish item data.</param>
+    private static bool HasPlayerCaughtFish(ParsedItemData fish)
+    {
+        return Game1.player.fishCaught.ContainsKey(fish.QualifiedItemId);
     }
 }

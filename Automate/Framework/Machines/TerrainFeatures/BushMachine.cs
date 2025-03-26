@@ -68,7 +68,7 @@ internal class BushMachine : BaseMachine<Bush>
     /// <inheritdoc />
     public override MachineState GetState()
     {
-        if (!this.IsInSeason.Value)
+        if (this.Machine.Location is null || !this.IsInSeason.Value)
             return MachineState.Disabled;
 
         return this.Machine.tileSheetOffset.Value == 1

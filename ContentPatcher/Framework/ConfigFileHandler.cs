@@ -206,7 +206,7 @@ internal class ConfigFileHandler
             ConfigField field = config[key];
 
             // validate allow-multiple
-            if (!field.AllowMultiple && field.Value.Count > 1)
+            if (field is { AllowMultiple: false, Value.Count: > 1 })
             {
                 logWarning(key, "field only allows a single value.");
                 field.SetValue(field.DefaultValues);

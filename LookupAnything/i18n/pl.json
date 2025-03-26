@@ -37,7 +37,6 @@
     "type.building": "Budowla",
     "type.bush": "Krzak",
     "type.fruit-tree": "Drzewo Owocowe",
-    "type.map-tile": "Kafelek Mapy",
     "type.monster": "Potwór",
     "type.player": "Gracz",
     "type.tree": "Drzewo",
@@ -361,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[tak samo jak wejście]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Wyświetlenie niektórych reguł maszynowych jest zbyt dynamiczne.",
     "item.number-owned.summary": "masz takich {{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "zrobiono takich {{count}}",
 
 
@@ -417,6 +417,7 @@
     "item.fish-spawn-rules.time": "pora dnia: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "pogoda: słonecznie",
     "item.fish-spawn-rules.weather-rainy": "pogoda: deszczowo",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -513,7 +514,10 @@
     "npc.unowned-gift-taste": "{{count}} nieposiadanych przedmiotów",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -635,6 +639,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Kafelek Mapy ({{x}}, {{y}})",
     "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w konfiguracji włączono podgląd kafelków.",
     "tile.game-location": "Lokacja",
     "tile.map-name": "Nazwa mapy",
@@ -706,6 +711,9 @@
 
     // progression mode
     "config.title.progression": "Tryb progresji",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Pokaż nieznane upodobania prezentowe",
     "config.progression.show-unknown-gift-tastes.desc": "Czy pokazywać upodobania prezentowe, których jeszcze nie ${nauczyłeś¦nauczyłaś}$ się w grze (np. z tekstu dialogowego lub eksperymentując).",

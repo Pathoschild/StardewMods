@@ -19,10 +19,10 @@ public class TrackedItemCollection : ITrackedStack
     ** Accessors
     *********/
     /// <inheritdoc />
-    public Item Sample { get; private set; }
+    public Item Sample { get; }
 
     /// <inheritdoc />
-    public string Type { get; private set; }
+    public string Type { get; }
 
     /// <inheritdoc />
     public int Count => this.Stacks.Sum(p => p.Count);

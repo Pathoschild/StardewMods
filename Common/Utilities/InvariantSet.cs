@@ -12,7 +12,7 @@ internal class InvariantSet : IInvariantSet
     ** Fields
     *********/
     /// <summary>A singleton instance of an empty underlying set.</summary>
-    private static readonly HashSet<string> EmptyHashSet = new(capacity: 0);
+    private static readonly HashSet<string> EmptyHashSet = [];
 
     /// <summary>The underlying hash set.</summary>
     private readonly HashSet<string> Set;

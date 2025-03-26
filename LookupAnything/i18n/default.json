@@ -37,7 +37,6 @@
     "type.building": "Building",
     "type.bush": "Bush",
     "type.fruit-tree": "Fruit tree",
-    "type.map-tile": "Map tile",
     "type.monster": "Monster",
     "type.player": "Player",
     "type.tree": "Tree",
@@ -360,6 +359,7 @@
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.",
     "item.number-owned.summary": "you own {{count}} of these",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "you made {{count}} of these",
 
 
@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "time of day: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "weather: sunny",
     "item.fish-spawn-rules.weather-rainy": "weather: raining",
+    "item.uncaught-fish": "{{count}} uncaught fish",
 
 
     /*********
@@ -512,7 +513,10 @@
     "npc.unowned-gift-taste": "{{count}} unowned items",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "No schedule loaded.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).",
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.",
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.",
 
 
     /*********
@@ -634,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Map tile ({{x}}, {{y}})",
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
     "tile.game-location": "Location",
     "tile.map-name": "Map name",
@@ -705,6 +710,9 @@
 
     // progression mode
     "config.title.progression": "Progression mode",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Show unknown gift tastes",
     "config.progression.show-unknown-gift-tastes.desc": "Whether to show gift tastes you haven't learned about in-game yet (e.g. from dialogue text or experimenting).",

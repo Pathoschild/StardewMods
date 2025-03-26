@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -250,23 +251,21 @@ internal class CharacterSubject : BaseSubject
         // show items wanted
         if (questsDone <= maxQuests)
         {
-            var checkboxes = new List<KeyValuePair<IFormattedText[], bool>>();
+            var checkboxes = new List<Checkbox>();
             for (int i = 0; i < maxQuests; i++)
             {
                 string wantedKey = cave.IndexForRequest(i);
                 if (!CommonHelper.IsItemId(wantedKey))
                     continue;
 
-                checkboxes.Add(
-                    CheckboxListField.Checkbox(
-                        text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
-                        value: questsDone > i
-                    )
-                );
+                checkboxes.Add(new Checkbox(
+                    text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
+                    isChecked: questsDone > i
+                ));
             }
 
             if (checkboxes.Any())
-                yield return new CheckboxListField(I18n.TrashBearOrGourmand_ItemWanted(), checkboxes);
+                yield return new CheckboxListField(I18n.TrashBearOrGourmand_ItemWanted(), new CheckboxList(checkboxes));
         }
 
         // show progress
@@ -283,7 +282,7 @@ internal class CharacterSubject : BaseSubject
 
         yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: monster.invincibleCountdown), hasValue: monster.isInvincible());
         yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
-        yield return new ItemDropListField(this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
+        yield return new ItemDropListField(this.GameHelper, this.Codex, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
         yield return new GenericField(I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
         yield return new GenericField(I18n.Monster_Defense(), this.Stringify(monster.resilience.Value));
         yield return new GenericField(I18n.Monster_Attack(), this.Stringify(monster.DamageToFarmer));
@@ -296,11 +295,11 @@ internal class CharacterSubject : BaseSubject
 
             int kills = questData.Targets.Sum(Game1.stats.getMonstersKilled);
             string goalName = TokenParser.ParseText(questData.DisplayName);
-            var checkbox = CheckboxListField.Checkbox(
+            var checkbox = new Checkbox(
                 text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: questData.Count),
-                value: kills >= questData.Count
+                isChecked: kills >= questData.Count
             );
-            yield return new CheckboxListField(I18n.Monster_AdventureGuild(), checkbox);
+            yield return new CheckboxListField(I18n.Monster_AdventureGuild(), new CheckboxList([checkbox]));
         }
     }
 
@@ -363,7 +362,7 @@ internal class CharacterSubject : BaseSubject
     {
         // special case: Abigail in the mines is a temporary instance with the name
         // 'AbigailMine', so the info shown will be incorrect.
-        if (this.EnableTargetRedirection && npc.Name == "AbigailMine" && npc.currentLocation?.Name == "UndergroundMine20")
+        if (this.EnableTargetRedirection && npc is { Name: "AbigailMine", currentLocation.Name: "UndergroundMine20" })
             npc = Game1.getCharacterFromName("Abigail") ?? npc;
 
         // social fields (birthday, friendship, gifting, etc)
@@ -390,7 +389,7 @@ internal class CharacterSubject : BaseSubject
                     yield return new GenericField(friendship.IsSpouse ? I18n.Npc_KissedToday() : I18n.Npc_HuggedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
 
                 // gifted this week
-                if (!friendship.IsSpouse && !friendship.IsHousemate)
+                if (friendship is { IsSpouse: false, IsHousemate: false })
                     yield return new GenericField(I18n.Npc_GiftedThisWeek(), I18n.Generic_Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
             }
             else
@@ -414,8 +413,7 @@ internal class CharacterSubject : BaseSubject
             }
 
             // schedule
-            if (npc is { Schedule: not null, ignoreScheduleToday: false, followSchedule: true })
-                yield return new ScheduleField(npc, this.GameHelper);
+            yield return new ScheduleField(npc, this.GameHelper);
         }
     }
 

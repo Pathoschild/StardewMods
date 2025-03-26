@@ -59,6 +59,7 @@ internal class ModEntry : Mod
         // hook events
         helper.Events.GameLoop.DayStarted += this.ContentManager.OnDayStarted;
         helper.Events.Content.AssetRequested += this.ContentManager.OnAssetRequested;
+        helper.Events.Content.AssetReady += this.ContentManager.OnAssetReady;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Player.Warped += this.OnWarped;
 
@@ -481,7 +482,7 @@ internal class ModEntry : Mod
 
         if (contentPack is null)
         {
-            this.Monitor.Log("Central Station is missing its content files, so it won't work. Please delete and reinstall the mod to fix this.", LogLevel.Error);
+            this.Monitor.Log("Central Station is installed incorrectly, so it won't work. You're missing the 'Central Station content' content pack. Please delete and reinstall the mod to fix this.", LogLevel.Error);
             return false;
         }
 

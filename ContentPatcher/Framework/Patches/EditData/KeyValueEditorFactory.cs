@@ -100,7 +100,7 @@ internal class KeyValueEditorFactory
         }
 
         // data model
-        if (!type.IsValueType && !type.IsGenericType && type != typeof(string))
+        if (type is { IsValueType: false, IsGenericType: false } && type != typeof(string))
         {
             getEditor = data => new ModelKeyValueEditor(data);
             return true;

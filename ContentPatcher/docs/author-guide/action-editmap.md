@@ -33,7 +33,7 @@ or change map tiles.
 
 These are documented in separate sections below since they're distinct, but you can combine them
 in the same patch. In that case the fields are applied in this order: `FromFile`, `MapTiles`,
-`MapProperties`, `AddWarps`, and `TextOperations`.
+`MapProperties`, `AddNpcWarps`, `AddWarps`, and `TextOperations`.
 
 ### Common fields
 An `EditMap` patch consists of a model under `Changes` (see examples below). These fields are
@@ -222,7 +222,7 @@ Here's how that would be merged with each patch mode (black areas are the empty 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -271,14 +271,17 @@ values.
 <tr>
 <td>
 
+`AddNpcWarps`  
 `AddWarps`
 
 </td>
 <td>
 
-Add warps to the map's `Warp` property, creating it if needed. This field supports
-[tokens](../author-guide.md#tokens). If there are multiple warps from the same tile, the ones added
-later win.
+Add warps to the [`NPCWarp` or `Warp` map property](https://stardewvalleywiki.com/Modding:Maps#Warps_.26_map_positions),
+creating it if needed. Each entry in the list must be valid syntax for a single warp. If there are multiple warps from
+the same tile, the ones added later win.
+
+This field supports [tokens](../author-guide.md#tokens).
 
 </td>
 </tr>
@@ -291,7 +294,7 @@ later win.
 </td>
 <td>
 
-The `TextOperations` field lets you change the value for an existing map property (see _[text
+The `TextOperations` field lets you add or change the value for an existing map property (see _[text
 operations](../author-guide.md#text-operations)_ for more info).
 
 The only valid path format is `["MapProperties", "PropertyName"]` where `PropertyName` is the
@@ -305,7 +308,7 @@ For example, this changes the `Outdoors` tile for the farm cave and adds a warp 
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -366,7 +369,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -387,7 +390,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditMap",

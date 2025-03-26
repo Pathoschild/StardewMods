@@ -1,0 +1,56 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI (Interfejs Menu Konfiguracji Modu)
+    *********/
+    // main options (główne opcje)
+    "config.title.main-options": "Główne opcje",
+    "config.enabled.name": "Włączone",
+    "config.enabled.desc": "Określa, czy funkcje Automate są włączone. Jeśli ta opcja jest wyłączona, maszyny nie będą automatyzowane, a nakładka nie będzie się pojawiać.",
+    "config.automation-interval.name": "Interwał automatyzacji",
+    "config.automation-interval.desc": "Liczba ticków między każdym procesem automatyzacji (60 to raz na sekundę, 120 to co dwie sekundy itp.).",
+    "config.min-minutes-for-fairy-dust.name": "Minimalny czas dla pyłku wróżki",
+    "config.min-minutes-for-fairy-dust.desc": "Minimalny czas przetwarzania maszyny w minutach, po którym należy zastosować pyłek wróżki. Na przykład ustawienie tej wartości na 30 minut oznacza, że pyłek wróżki nie zostanie zastosowany, jeśli maszyna zakończy proces w 20 minut.",
+    "config.toggle-overlay-key.name": "Przełącz klawisz nakładki",
+    "config.toggle-overlay-key.desc": "Klawisze, które przełączają nakładkę automatyzacji.",
+    "config.warn-for-missing-bridge-mod.name": "Ostrzeżenie o brakującym modzie mostu",
+    "config.warn-for-missing-bridge-mod.desc": "Określa, czy wyświetlić ostrzeżenie przy starcie, jeśli zainstalowałeś mod maszynowy wymagający osobnej łatki kompatybilności, której nie ma.",
+
+    // connectors (łączniki)
+    "config.title.connectors": "Włączone łączniki",
+    "config.connector.desc": "Określa, czy {{itemName}} łączy maszyny i skrzynie.",
+    "config.custom-connectors.name": "Niestandardowe łączniki",
+    "config.custom-connectors.desc": "Dokładne angielskie nazwy przedmiotów, które łączą sąsiednie maszyny. Można podać wiele przedmiotów oddzielonych przecinkami.",
+
+    // Junimo hut options (opcje chatki Junimo)
+    "config.title.junimo-huts": "Zachowanie chatki Junimo",
+    "config.junimo-hut-gems.name": "Kamienie szlachetne",
+    "config.junimo-hut-gems.desc": "Co chatki Junimo mają robić z przedmiotami kamieni szlachetnych. 'Auto-detekcja' je zignoruje.",
+    "config.junimo-hut-fertilizer.name": "Nawóz",
+    "config.junimo-hut-fertilizer.desc": "Co chatki Junimo mają robić z przedmiotami nawozu. 'Auto-detekcja' je zignoruje, jeśli zainstalowany jest mod Better Junimos, w przeciwnym razie przeniesie je z chatki do połączonych skrzyń.",
+    "config.junimo-hut-seeds.name": "Nasiona",
+    "config.junimo-hut-seeds.desc": "Co chatki Junimo mają robić z przedmiotami nasion. 'Auto-detekcja' je zignoruje, jeśli zainstalowany jest mod Better Junimos, w przeciwnym razie przeniesie je z chatki do połączonych skrzyń.",
+
+    // Junimo hut dropdown values (rozwijane wartości chatki Junimo)
+    "config.junimo-huts.auto-detect": "Auto-detekcja",
+    "config.junimo-huts.ignore": "Zignoruj je",
+    "config.junimo-huts.move-into-chests": "Przenieś z chatki do skrzyń",
+    "config.junimo-huts.move-into-huts": "Przenieś ze skrzyń do chatki",
+
+    // per-machine settings (ustawienia dla maszyn)
+    "config.title.machine-settings": "Ustawienia {{machineName}}",
+    "config.machine-settings-enabled.Name": "Włączone",
+    "config.machine-settings-enabled.desc": "Określa, czy automatyzacja {{machineName}} jest włączona.",
+    "config.machine-settings-priority.name": "Priorytet",
+    "config.machine-settings-priority.desc": "Kolejność przetwarzania maszyn {{machineName}} w stosunku do innych maszyn. Maszyny mają domyślny priorytet 0, wyższe wartości są przetwarzane jako pierwsze.",
+
+    // machine names (nazwy maszyn)
+    "config.machines.bush": "Krzak",
+    "config.machines.fruit-tree": "Drzewo (Owocowe)",
+    "config.machines.trash-can": "Kosz na śmieci",
+    "config.machines.wild-tree": "Drzewo (Dziki)",
+    "config.machines.feed-hopper": "Silos i podajnik siana",
+
+    // specjalne ustawienia dla poszczególnych maszyn
+    "config.machines.wild-tree.collect-moss.name": "Zbieraj mech",
+    "config.machines.wild-tree.collect-moss.desc": "Określa, czy zbierać mech z drzew. Na przykład pozostawienie mchu na drzewach zwiększy jakość grzybów z pobliskich kłód grzybowych."
+}

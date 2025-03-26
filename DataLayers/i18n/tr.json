@@ -120,7 +120,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.toggle-data-layers.name": "Data Layers",
-    "icon.toggle-data-layers.desc": "Toggle Data Layers"
+    "icon.toggle-data-layers.name": "Veri Katmanları",
+    "icon.toggle-data-layers.desc": "Veri katmanlarını aç"
 }

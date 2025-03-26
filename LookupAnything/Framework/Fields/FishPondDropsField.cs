@@ -7,6 +7,8 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.GameData.FishPonds;
@@ -23,6 +25,9 @@ internal class FishPondDropsField : GenericField
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     protected GameHelper GameHelper;
 
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
+
     /// <summary>The possible drops.</summary>
     private readonly FishPondDrop[] Drops;
 
@@ -35,15 +40,17 @@ internal class FishPondDropsField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="codex">Provides subject entries.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="currentPopulation">The current population for showing unlocked drops.</param>
     /// <param name="data">The fish pond data.</param>
     /// <param name="fish">The fish in the fish pond, if any.</param>
     /// <param name="preface">The text to display before the list, if any.</param>
-    public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, SObject? fish, string preface)
+    public FishPondDropsField(GameHelper gameHelper, ISubjectRegistry codex, string label, int currentPopulation, FishPondData data, SObject? fish, string preface)
         : base(label)
     {
         this.GameHelper = gameHelper;
+        this.Codex = codex;
         this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
@@ -52,6 +59,7 @@ internal class FishPondDropsField : GenericField
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
+        this.LinkTextAreas.Clear();
         float height = 0;
 
         // draw preface
@@ -110,6 +118,9 @@ internal class FishPondDropsField : GenericField
             // draw drop
             bool isGuaranteed = drop.Probability > .99f;
             {
+                ISubject? subject = this.Codex.GetByEntity(drop.SampleItem, null);
+                Color textColor = (subject is not null ? Color.Blue : Color.Black) * (disabled ? 0.75f : 1f);
+
                 // draw icon
                 spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, Color.White * (disabled ? 0.5f : 1f));
 
@@ -120,7 +131,14 @@ internal class FishPondDropsField : GenericField
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, new Vector2(textIndent, position.Y + height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, text, new Vector2(textIndent, position.Y + height + 5), wrapWidth, textColor);
+
+                // track clickable link
+                if (subject is not null)
+                {
+                    Rectangle pixelArea = new((int)(position.X + innerIndent + iconSize.X + 5), (int)(position.Y + height + iconSize.Y / 2), (int)textSize.X, (int)textSize.Y);
+                    this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+                }
 
                 // cross out if it's guaranteed not to drop
                 if (isPrevDropGuaranteed)

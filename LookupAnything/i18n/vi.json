@@ -37,7 +37,6 @@
     "type.building": "Tòa nhà",
     "type.bush": "Bụi cây",
     "type.fruit-tree": "Cây ăn quả",
-    "type.map-tile": "Ô bản đồ",
     "type.monster": "Quái vật",
     "type.player": "Người chơi",
     "type.tree": "Cây",
@@ -361,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[giống như đầu vào]",
     "item.recipes-for-machine.too-complex": "Một số quy tắc của máy quá phức tạp để hiển thị.",
     "item.number-owned.summary": "Bạn sở hữu {{count}} cái",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Bạn đã chế tạo {{count}} cái",
 
 
@@ -417,6 +417,7 @@
     "item.fish-spawn-rules.time": "thời gian trong ngày: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "thời tiết: nắng",
     "item.fish-spawn-rules.weather-rainy": "thời tiết: mưa",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -513,7 +514,10 @@
     "npc.unowned-gift-taste": "{{count}} vật phẩm chưa biết",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -635,6 +639,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Ô bản đồ ({{x}}, {{y}})",
     "tile.description": "Vị trí 1 ô trên bản đồ. Điều này hiển thị khi bạn đã bật tile lookups trong configuration.",
     "tile.game-location": "Vị trí",
     "tile.map-name": "Tên bản đồ",
@@ -706,6 +711,9 @@
 
     // progression mode
     "config.title.progression": "Chế độ tiến trình",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Hiển thị sở thích quà tặng chưa biết",
     "config.progression.show-unknown-gift-tastes.desc": "Có hiển thị những sở thích quà tặng mà bạn chưa tìm hiểu trong trò chơi hay không (ví dụ: từ văn bản đối thoại hoặc thử nghiệm).",

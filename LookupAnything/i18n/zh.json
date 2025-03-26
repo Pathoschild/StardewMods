@@ -37,7 +37,6 @@
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
-    "type.map-tile": "图块",
     "type.monster": "怪物",
     "type.player": "玩家",
     "type.tree": "树",
@@ -360,6 +359,7 @@
     "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in (例如. 宝石复制机放入的物品和产出的物品一致)
     "item.recipes-for-machine.too-complex": "一些生产规则因太复杂而无法显示",
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "你已制造{{count}}个此物",
 
 
@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "一天中出现时间： {{times}}",
     "item.fish-spawn-rules.weather-sunny": "天气：晴天",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -512,7 +513,10 @@
     "npc.unowned-gift-taste": "{{count}} 个未拥有的物品",
     "npc.schedule.current-position": "当前位于{{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "未加载日程.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: 步行至{{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -634,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels (标签)
+    "tile.title": "图块 ({{x}}, {{y}})",
     "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
     "tile.game-location": "位置",
     "tile.map-name": "地图名",
@@ -705,6 +710,9 @@
 
     // progression mode (进度模式)
     "config.title.progression": "进度模式",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "显示未知的礼物品味",
     "config.progression.show-unknown-gift-tastes.desc": "是否显示游戏中不知道的礼物品味（例如，从对话或实际送礼中）。",

@@ -1,24 +1,26 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
-/// <summary>A metadata field which shows a list of checkbox values.</summary>
+/// <summary>A metadata field which lists checkbox values.</summary>
 internal class CheckboxListField : GenericField
 {
     /*********
     ** Fields
     *********/
     /// <summary>The checkbox values to display.</summary>
-    protected KeyValuePair<IFormattedText[], bool>[] Checkboxes;
+    protected CheckboxList[] CheckboxLists;
 
-    /// <summary>The intro text to show before the checkboxes.</summary>
-    protected IFormattedText[]? Intro;
+    /// <summary>The size of each checkbox to draw.</summary>
+    protected readonly float CheckboxSize;
+
+    /// <summary>The height of one line of the checkbox list.</summary>
+    protected readonly float LineHeight;
 
 
     /*********
@@ -26,89 +28,22 @@ internal class CheckboxListField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A short field label.</param>
-    /// <param name="checkboxes">The checkbox labels and values to display.</param>
-    public CheckboxListField(string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
+    /// <param name="checkboxLists">The checkbox lists to display.</param>
+    public CheckboxListField(string label, params CheckboxList[] checkboxLists)
         : this(label)
     {
-        this.Checkboxes = checkboxes.ToArray();
-    }
-
-    /// <summary>Construct an instance.</summary>
-    /// <param name="label">A short field label.</param>
-    /// <param name="checkboxes">The checkbox labels and values to display.</param>
-    public CheckboxListField(string label, params KeyValuePair<IFormattedText[], bool>[] checkboxes)
-        : this(label)
-    {
-        this.Checkboxes = checkboxes;
+        this.CheckboxLists = checkboxLists;
     }
 
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
         float topOffset = 0;
-        float checkboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
-        float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
-        float checkboxOffset = (lineHeight - checkboxSize) / 2;
 
-        if (this.Intro != null)
-            topOffset += spriteBatch.DrawTextBlock(font, this.Intro, position, wrapWidth).Y;
+        foreach (CheckboxList checkboxList in this.CheckboxLists)
+            topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
 
-        foreach ((IFormattedText[] label, bool isChecked) in this.Checkboxes)
-        {
-            // draw icon
-            spriteBatch.Draw(
-                texture: CommonSprites.Icons.Sheet,
-                position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
-                sourceRectangle: isChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
-                color: Color.White,
-                rotation: 0,
-                origin: Vector2.Zero,
-                scale: checkboxSize / CommonSprites.Icons.FilledCheckbox.Width,
-                effects: SpriteEffects.None,
-                layerDepth: 1f
-            );
-
-            // draw text
-            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, label, new Vector2(position.X + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
-
-            // update offset
-            topOffset += Math.Max(checkboxSize, textSize.Y);
-        }
-
-        return new Vector2(wrapWidth, topOffset);
-    }
-
-    /// <summary>Add intro text before the checkboxes.</summary>
-    /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxListField AddIntro(params IFormattedText[] text)
-    {
-        this.Intro = text;
-        return this;
-    }
-
-    /// <summary>Add intro text before the checkboxes.</summary>
-    /// <param name="text">The text to show before the checkboxes.</param>
-    public CheckboxListField AddIntro(params string[] text)
-    {
-        return this.AddIntro(
-            text.Select(p => (IFormattedText)new FormattedText(p)).ToArray()
-        );
-    }
-
-    /// <summary>Build a checkbox entry.</summary>
-    /// <param name="value">Whether the value is enabled.</param>
-    /// <param name="text">The checkbox text to display.</param>
-    public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, params IFormattedText[] text)
-    {
-        return new KeyValuePair<IFormattedText[], bool>(text, value);
-    }
-
-    /// <summary>Build a checkbox entry.</summary>
-    /// <param name="value">Whether the value is enabled.</param>
-    /// <param name="text">The checkbox text to display.</param>
-    public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, string text)
-    {
-        return CheckboxListField.Checkbox(value, new FormattedText(text));
+        return new Vector2(wrapWidth, topOffset - this.LineHeight);
     }
 
 
@@ -120,6 +55,53 @@ internal class CheckboxListField : GenericField
     protected CheckboxListField(string label)
         : base(label, hasValue: true)
     {
-        this.Checkboxes = [];
+        this.CheckboxLists = [];
+        this.CheckboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
+        this.LineHeight = Math.Max(this.CheckboxSize, Game1.smallFont.MeasureString("ABC").Y);
+    }
+
+    /// <summary>Draw a checkbox list.</summary>
+    /// <param name="checkboxList">The checkbox list info to render.</param>
+    /// <param name="spriteBatch">The sprite batch being drawn.</param>
+    /// <param name="font">The recommended font.</param>
+    /// <param name="position">The position at which to draw.</param>
+    /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
+    /// <returns>Returns the drawn dimensions.</returns>
+    protected Vector2 DrawCheckboxList(CheckboxList checkboxList, SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    {
+        float topOffset = 0;
+        float checkboxSize = this.CheckboxSize;
+        float leftOffset = 0;
+        float checkboxOffsetY = (this.LineHeight - checkboxSize) / 2;
+
+        if (checkboxList.Intro != null)
+        {
+            topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Icon, new Vector2(this.LineHeight)).Y;
+            leftOffset = 14;
+        }
+
+        foreach (Checkbox checkbox in checkboxList.Checkboxes)
+        {
+            // draw icon
+            spriteBatch.Draw(
+                texture: CommonSprites.Icons.Sheet,
+                position: new Vector2(position.X + leftOffset, position.Y + topOffset + checkboxOffsetY),
+                sourceRectangle: checkbox.IsChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
+                color: Color.White,
+                rotation: 0,
+                origin: Vector2.Zero,
+                scale: checkboxSize / CommonSprites.Icons.FilledCheckbox.Width,
+                effects: SpriteEffects.None,
+                layerDepth: 1f
+            );
+
+            // draw text
+            Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, checkbox.Text, new Vector2(position.X + leftOffset + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
+
+            // update offset for next checkbox
+            topOffset += Math.Max(checkboxSize, textSize.Y);
+        }
+
+        return new Vector2(position.X, topOffset + this.LineHeight);
     }
 }

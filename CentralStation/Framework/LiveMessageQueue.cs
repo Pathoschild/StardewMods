@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.CentralStation.Framework
         ** Fields
         *********/
         /// <summary>The messages returned since the last loop reset.</summary>
-        private readonly PerScreen<HashSet<string>> SeenMessages = new(() => new());
+        private readonly PerScreen<HashSet<string>> SeenMessages = new(() => []);
 
         /// <summary>Whether to restart once all messages have been seen.</summary>
         private readonly bool Loop;

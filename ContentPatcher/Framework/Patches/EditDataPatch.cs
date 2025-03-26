@@ -274,7 +274,7 @@ internal class EditDataPatch : Patch
     /// <returns>Returns whether parsing succeeded.</returns>
     private bool TryLoadFile(ITokenString fromFile, IContext context, [NotNullWhen(true)] out List<EditDataPatchRecord>? entries, [NotNullWhen(true)] out List<EditDataPatchField>? fields, [NotNullWhen(true)] out List<EditDataPatchMoveRecord>? moveEntries, [NotNullWhen(false)] out string? error)
     {
-        if (fromFile.IsMutable && !fromFile.IsReady)
+        if (fromFile is { IsMutable: true, IsReady: false })
         {
             error = $"the {nameof(fromFile)} contains tokens which aren't available yet"; // this shouldn't happen, since the patch should check before calling this method
             entries = null;

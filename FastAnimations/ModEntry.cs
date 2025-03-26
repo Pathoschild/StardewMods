@@ -188,6 +188,8 @@ internal class ModEntry : Mod
         // UI animations
         if (config.DialogueTypeSpeed > 1)
             yield return new DialogueTypingHandler(config.DialogueTypeSpeed);
+        if (config.ShippingMenuTransitionSpeed > 1)
+            yield return new ShippingMenuHandler(config.ShippingMenuTransitionSpeed, this.Helper.Reflection);
         if (config.TitleMenuTransitionSpeed > 1)
             yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed);
         if (config.LoadGameBlinkSpeed > 1)

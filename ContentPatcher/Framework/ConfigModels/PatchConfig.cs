@@ -93,6 +93,10 @@ internal class PatchConfig
     [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
     public InvariantDictionary<string?> MapProperties { get; } = new();
 
+    /// <summary>The NPC-only warps to add to the location.</summary>
+    [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+    public List<string?> AddNpcWarps { get; } = [];
+
     /// <summary>The warps to add to the location.</summary>
     [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
     public List<string?> AddWarps { get; } = [];
@@ -142,6 +146,7 @@ internal class PatchConfig
 
         // EditMap
         this.MapProperties = other.MapProperties.Clone();
+        this.AddNpcWarps = other.AddNpcWarps.ToList();
         this.AddWarps = other.AddWarps.ToList();
         this.MapTiles = other.MapTiles.Select(p => p != null ? new PatchMapTileConfig(p) : null).ToList();
     }

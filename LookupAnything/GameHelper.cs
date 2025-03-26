@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.BushBloomMod;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
@@ -77,6 +78,9 @@ internal class GameHelper
     /// <summary>Provides metadata that's not available from the game data directly.</summary>
     public Metadata Metadata { get; }
 
+    /// <summary>The Better Game Menu integration.</summary>
+    public BetterGameMenuIntegration BetterGameMenu { get; }
+
     /// <summary>The Bush Bloom Mod integration.</summary>
     public BushBloomModIntegration BushBloomMod { get; }
 
@@ -108,6 +112,7 @@ internal class GameHelper
         this.ModRegistry = modRegistry;
         this.WorldItemScanner = new WorldItemScanner(reflection);
 
+        this.BetterGameMenu = new BetterGameMenuIntegration(modRegistry, monitor);
         this.BushBloomMod = new BushBloomModIntegration(modRegistry, monitor);
         this.CustomBush = new CustomBushIntegration(modRegistry, monitor);
         this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, monitor);
@@ -235,12 +240,13 @@ internal class GameHelper
 
     /// <summary>Count how many of an item the player owns.</summary>
     /// <param name="item">The item to count.</param>
-    public int CountOwnedItems(Item item)
+    /// <param name="flavorSpecific">If the item has a preserved item, whether to only include items with the same preserved item.</param>
+    public int CountOwnedItems(Item item, bool flavorSpecific)
     {
         return (
             from found in this.GetAllOwnedItems()
             let foundItem = found.Item
-            where this.AreEquivalent(foundItem, item)
+            where this.AreEquivalent(foundItem, item, flavorSpecific)
             let canStack = foundItem.canStackWith(foundItem)
             select canStack ? found.GetCount() : 1
         ).Sum();
@@ -338,10 +344,18 @@ internal class GameHelper
 
     /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
     /// <param name="fish">The fish item.</param>
-    /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
     public FishSpawnData GetFishSpawnRules(ParsedItemData fish)
     {
         return this.DataParser.GetFishSpawnRules(fish, this.Metadata);
+    }
+
+    /// <summary>Read parsed data about the fish spawn rules for a specific location.</summary>
+    /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId)
+    {
+        return this.DataParser.GetFishSpawnRules(location, tile, fishAreaId, this.Metadata);
     }
 
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -374,6 +388,14 @@ internal class GameHelper
     public string GetLocationDisplayName(FishSpawnLocationData fishSpawnData)
     {
         return this.DataParser.GetLocationDisplayName(fishSpawnData);
+    }
+
+    /// <summary>Get the translated display name for a location and optional fish area.</summary>
+    /// <param name="location">The location for which to get the name.</param>
+    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
+    public string GetLocationDisplayName(GameLocation location, string? fishAreaId)
+    {
+        return this.DataParser.GetLocationDisplayName(location.Name, location.GetData(), fishAreaId);
     }
 
     /// <summary>Get the translated display name for a location.</summary>
@@ -442,7 +464,7 @@ internal class GameHelper
     {
         return this
             .GetRecipes()
-            .Where(recipe => this.AreEquivalent(item, recipe.TryCreateItem(item)));
+            .Where(recipe => this.AreEquivalent(item, recipe.TryCreateItem(item), flavorSpecific: false));
     }
 
     /// <summary>Get the recipes for a given machine.</summary>
@@ -648,6 +670,16 @@ internal class GameHelper
         CommonHelper.ShowErrorMessage(message);
     }
 
+    /// <summary>Get the current page of an active game menu, if applicable.</summary>
+    /// <param name="menu">The menu to check.</param>
+    public IClickableMenu? GetGameMenuPage(IClickableMenu menu)
+    {
+        if (menu is GameMenu gameMenu)
+            return gameMenu.GetCurrentPage();
+
+        return this.BetterGameMenu.GetCurrentPage(menu);
+    }
+
 
     /*********
     ** Private methods
@@ -655,13 +687,18 @@ internal class GameHelper
     /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
     /// <param name="a">The first item to compare.</param>
     /// <param name="b">The second item to compare.</param>
-    private bool AreEquivalent(Item? a, Item? b)
+    /// <param name="flavorSpecific">Whether to only match items with the same preserved item.</param>
+    private bool AreEquivalent(Item? a, Item? b, bool flavorSpecific)
     {
         return
             a != null
             && b != null
             && a.QualifiedItemId == b.QualifiedItemId
-            && (a as Chest)?.fridge.Value == (b as Chest)?.fridge.Value;
+            && (a as Chest)?.fridge.Value == (b as Chest)?.fridge.Value
+            && (
+                !flavorSpecific
+                || (a as SObject)?.GetPreservedItemId() == (b as SObject)?.GetPreservedItemId()
+            );
     }
 
     /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>

@@ -37,7 +37,6 @@
     "type.building": "Gebäude",
     "type.bush": "Busch",
     "type.fruit-tree": "Obstbaum",
-    "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",
     "type.player": "Spieler",
     "type.tree": "Baum",
@@ -360,6 +359,7 @@
     "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
     "item.number-owned.summary": "Du besitzt {{count}} davon",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 
 
@@ -416,6 +416,7 @@
     "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
     "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -512,7 +513,10 @@
     "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
     "npc.schedule.current-position": "Derzeit bei {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Kein Zeitplan geladen.",
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: gehe zu {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -634,6 +638,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Kartenkachel ({{x}}, {{y}})",
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
     "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
@@ -705,6 +710,9 @@
 
     // progression mode
     "config.title.progression": "Fortschrittsmodus",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Unbekannte Geschenke Vorlieben anzeigen",
     "config.progression.show-unknown-gift-tastes.desc": "Ob Geschenk Vorlieben gezeigt werden sollen, die du im Spiel noch nicht kennengelernt hast (z. B. aus Dialogtexten oder beim Experimentieren).",

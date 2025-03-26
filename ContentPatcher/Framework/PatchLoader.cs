@@ -763,14 +763,10 @@ internal class PatchLoader
                         }
 
                         // parse warps
-                        var addWarps = new List<IManagedTokenString>();
-                        for (int i = 0; i < entry.AddWarps.Count; i++)
-                        {
-                            LogPathBuilder localPath = path.With(nameof(entry.AddWarps), i.ToString());
-                            if (!tokenParser.TryParseString(entry.AddWarps[i], immutableRequiredModIDs, localPath, out string? warpError, out IManagedTokenString? parsed))
-                                return TrackSkip($"{nameof(PatchConfig.AddWarps)} > '{entry.AddWarps[i]}' is invalid: {warpError}");
-                            addWarps.Add(parsed);
-                        }
+                        if (!this.TryParseWarps(entry.AddNpcWarps, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.AddNpcWarps)), out List<IManagedTokenString> addNpcWarps, out string? warpError))
+                            return TrackSkip($"{nameof(entry.AddNpcWarps)} is invalid: {warpError}");
+                        if (!this.TryParseWarps(entry.AddWarps, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.AddWarps)), out List<IManagedTokenString> addWarps, out warpError))
+                            return TrackSkip($"{nameof(entry.AddWarps)} is invalid: {warpError}");
 
                         // parse text operations
                         if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
@@ -790,8 +786,8 @@ internal class PatchLoader
                             return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMapMode)))}]");
 
                         // validate
-                        if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !addWarps.Any() && !textOperations.Any())
-                            return TrackSkip($"must specify at least one of {nameof(entry.AddWarps)}, {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
+                        if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !addWarps.Any() && !addNpcWarps.Any() && !textOperations.Any())
+                            return TrackSkip($"must specify at least one of {nameof(entry.AddNpcWarps)}, {nameof(entry.AddWarps)}, {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
 
                         // parse priority
                         if (!this.TryParsePriority(entry, AssetEditPriority.Default, out AssetEditPriority priority, out error))
@@ -811,6 +807,7 @@ internal class PatchLoader
                             patchMode: patchMode,
                             mapProperties: mapProperties,
                             mapTiles: mapTiles,
+                            addNpcWarps: addNpcWarps,
                             addWarps: addWarps,
                             textOperations: textOperations,
                             updateRate: updateRate,
@@ -1046,6 +1043,43 @@ internal class PatchLoader
         return true;
     }
 
+    /// <summary>Parse a warp field for an <see cref="PatchType.EditMap"/> patch.</summary>
+    /// <param name="rawWarps">The raw warps to parse.</param>
+    /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+    /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+    /// <param name="path">The path to the value from the root content file.</param>
+    /// <param name="warps">The parsed warps.</param>
+    /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+    /// <returns>Returns whether parsing succeeded.</returns>
+    private bool TryParseWarps(List<string?> rawWarps, TokenParser tokenParser, IInvariantSet assumeModIds, LogPathBuilder path, out List<IManagedTokenString> warps, [NotNullWhen(false)] out string? error)
+    {
+        // skip if nothing to parse
+        if (rawWarps.Count is 0)
+        {
+            warps = [];
+            error = null;
+            return true;
+        }
+
+        // parse warps
+        warps = new List<IManagedTokenString>(rawWarps.Count);
+        for (int i = 0; i < rawWarps.Count; i++)
+        {
+            LogPathBuilder localPath = path.With(i.ToString());
+            if (!tokenParser.TryParseString(rawWarps[i], assumeModIds, localPath, out string? warpError, out IManagedTokenString? parsed))
+            {
+                warps.Clear();
+                error = $"'{rawWarps[i]}' is invalid: {warpError}";
+                return false;
+            }
+
+            warps.Add(parsed);
+        }
+
+        error = null;
+        return true;
+    }
+
     /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
     /// <param name="entry">The change to load.</param>
     /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
@@ -1224,7 +1258,7 @@ internal class PatchLoader
             return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
         // validate token keys & values
-        if (!values.IsMutable && values.IsReady && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
+        if (values is { IsMutable: false, IsReady: true } && token != null && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
             return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
         // create condition
@@ -1233,7 +1267,7 @@ internal class PatchLoader
             return Fail(error, out error, out condition);
 
         // extract HasMod required IDs if immutable
-        if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
+        if (condition is { IsReady: true, IsMutable: false } && condition.Is(ConditionType.HasMod))
         {
             // contains
             if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue? contains))

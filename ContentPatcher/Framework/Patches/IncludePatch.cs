@@ -155,7 +155,7 @@ internal class IncludePatch : Patch
                 this.PatchesJustLoaded = this.PatchLoader.LoadPatches(
                     contentPack: this.RawContentPack,
                     rawPatches: content.Changes,
-                    inheritLocalTokens: this.LocalTokens,
+                    inheritLocalTokens: this.LocalTokensIncludingInherited,
                     rootIndexPath: this.IndexPath,
                     path: this.GetIncludedLogPath(this.FromAsset),
                     parentPatch: this

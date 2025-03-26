@@ -87,7 +87,7 @@ internal class BusLocationsStopProvider : ICustomStopProvider
             }
 
             // load stops
-            List<Stop> stops = new();
+            List<Stop> stops = [];
             foreach (object location in locations)
             {
                 if (location is null)

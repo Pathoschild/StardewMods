@@ -67,6 +67,14 @@ internal class BuildingLookupProvider : BaseLookupProvider
         }
     }
 
+    /// <inheritdoc />
+    public override ISubject? GetSubjectFor(object entity, GameLocation? location)
+    {
+        return entity is Building building
+            ? this.BuildSubject(building)
+            : null;
+    }
+
 
     /*********
     ** Private methods

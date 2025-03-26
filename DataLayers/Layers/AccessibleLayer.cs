@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -62,9 +61,9 @@ internal class AccessibleLayer : BaseLayer
     /// <inheritdoc />
     public override TileGroup[] Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile)
     {
-        List<TileData> passableTiles = new();
-        List<TileData> warpTiles = new();
-        List<TileData> otherTiles = new();
+        List<TileData> passableTiles = [];
+        List<TileData> warpTiles = [];
+        List<TileData> otherTiles = [];
 
         foreach (TileData tile in this.GetTiles(location, visibleTiles))
         {

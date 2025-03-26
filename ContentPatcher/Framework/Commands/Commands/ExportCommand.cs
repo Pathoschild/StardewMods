@@ -29,7 +29,7 @@ internal class ExportCommand : BaseCommand
     private readonly IGameContentHelper ContentHelper;
 
     /// <summary>The settings to use when writing data to a JSON file.</summary>
-    private readonly Lazy<JsonSerializerSettings> JsonSettings = new Lazy<JsonSerializerSettings>(JsonHelper.CreateDefaultSettings);
+    private readonly Lazy<JsonSerializerSettings> JsonSettings = new(JsonHelper.CreateDefaultSettings);
 
 
     /*********

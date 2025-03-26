@@ -58,6 +58,9 @@ internal class ItemSubject : BaseSubject
     /// <summary>The location containing the item, if applicable.</summary>
     private readonly GameLocation? Location;
 
+    /// <summary>Whether to show spawn conditions for uncaught fish.</summary>
+    public bool ShowUncaughtFishSpawnRules;
+
     /// <summary>Whether to show gift tastes which the player hasn't learned about in-game yet</summary>
     private readonly bool ShowUnknownGiftTastes;
 
@@ -89,6 +92,7 @@ internal class ItemSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="codex">Provides subject entries</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     /// <param name="showUnknownGiftTastes">Whether to show gift tastes which the player hasn't learned about in-game yet</param>
     /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
     /// <param name="showGiftTastes">Which gift taste levels to show.</param>
@@ -102,10 +106,11 @@ internal class ItemSubject : BaseSubject
     /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
     /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
     /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
+    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUncaughtFishSpawnRules, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
         : base(gameHelper)
     {
         this.Codex = codex;
+        this.ShowUncaughtFishSpawnRules = showUncaughtFishSpawnRules;
         this.ShowUnknownGiftTastes = showUnknownGiftTastes;
         this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
         this.ShowGiftTastes = showGiftTastes;
@@ -305,7 +310,7 @@ internal class ItemSubject : BaseSubject
 
             if (recipes.Length > 0)
             {
-                var field = new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes, this.ShowUnknownRecipes, this.ShowInvalidRecipes);
+                var field = new ItemRecipesField(this.GameHelper, this.Codex, I18n.Item_Recipes(), item, recipes, this.ShowUnknownRecipes, this.ShowInvalidRecipes);
                 if (this.CollapseFieldsConfig.Enabled)
                     field.CollapseIfLengthExceeds(this.CollapseFieldsConfig.ItemRecipes, recipes.Length);
                 yield return field;
@@ -313,7 +318,7 @@ internal class ItemSubject : BaseSubject
         }
 
         // fish spawn rules
-        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), itemData);
+        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), itemData, this.ShowUncaughtFishSpawnRules);
 
         // fish pond data
         // derived from FishPond::doAction
@@ -325,7 +330,7 @@ internal class ItemSubject : BaseSubject
                 int minChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, 1 / 10f) * 100);
                 int maxChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, FishPond.MAXIMUM_OCCUPANCY / 10f) * 100);
                 string preface = I18n.Building_FishPond_Drops_Preface(chance: I18n.Generic_Range(min: minChanceOfAnyDrop, max: maxChanceOfAnyDrop));
-                yield return new FishPondDropsField(this.GameHelper, I18n.Item_FishPondDrops(), -1, fishPondData, obj, preface);
+                yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Item_FishPondDrops(), -1, fishPondData, obj, preface);
             }
         }
 
@@ -356,12 +361,11 @@ internal class ItemSubject : BaseSubject
             else
             {
                 // movie this week
-                yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), new IFormattedText[]
-                {
+                yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), [
                     new FormattedText(TokenParser.ParseText(movie.Title), bold: true),
                     new FormattedText(Environment.NewLine),
                     new FormattedText(TokenParser.ParseText(movie.Description))
-                });
+                ]);
 
                 // movie tastes
                 const GiftTaste rejectKey = (GiftTaste)(-1);
@@ -384,7 +388,7 @@ internal class ItemSubject : BaseSubject
         if (showInventoryFields && !isCrop)
         {
             // owned
-            yield return new GenericField(I18n.Item_NumberOwned(), I18n.Item_NumberOwned_Summary(count: this.GameHelper.CountOwnedItems(item)));
+            yield return new GenericField(I18n.Item_NumberOwned(), this.GetNumberOwnedText(item));
 
             // times crafted
             RecipeModel[] recipes = this.GameHelper
@@ -896,6 +900,28 @@ internal class ItemSubject : BaseSubject
                     yield return bundle;
             }
         }
+    }
+
+    /// <summary>Get a text summary of the number of an item owned by the player.</summary>
+    /// <param name="item">The item to count in the world.</param>
+    private string GetNumberOwnedText(Item item)
+    {
+        // get counts
+        int baseCount = this.GameHelper.CountOwnedItems(item, flavorSpecific: false);
+        int flavoredCount = item is SObject
+            ? this.GameHelper.CountOwnedItems(item, flavorSpecific: true)
+            : baseCount;
+
+        // show flavored + base count
+        if (baseCount != flavoredCount)
+        {
+            ParsedItemData? baseData = ItemRegistry.GetData(item.QualifiedItemId);
+            if (baseData != null)
+                return I18n.Item_NumberOwnedFlavored_Summary(name: item.Name, count: flavoredCount, baseName: baseData.DisplayName, baseCount: baseCount);
+        }
+
+        // show flavored count only
+        return I18n.Item_NumberOwned_Summary(count: flavoredCount);
     }
 
     /// <summary>Get the translated name for a bundle's area.</summary>

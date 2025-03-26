@@ -76,7 +76,7 @@ internal class TokenParser
         if (lexTokens?.Length is null or 0)
             return null;
 
-        if (lexTokens.Length == 1 && lexTokens[0] is LexTokenLiteral literal)
+        if (lexTokens is [LexTokenLiteral literal])
         {
             return string.IsNullOrWhiteSpace(literal.Text)
                 ? null

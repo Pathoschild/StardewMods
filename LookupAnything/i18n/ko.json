@@ -37,7 +37,6 @@
     "type.building": "건물",
     "type.bush": "덤불",
     "type.fruit-tree": "과일 나무",
-    "type.map-tile": "맵 타일",
     "type.monster": "몬스터",
     "type.player": "플레이어",
     "type.tree": "나무",
@@ -361,6 +360,7 @@
     "item.recipes-for-machine.same-as-input": "[넣는 아이템과 동일]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "이 기계 규칙은 너무 복잡해서 표시할 수 없습니다.",
     "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유 중.",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
 
 
@@ -417,6 +417,7 @@
     "item.fish-spawn-rules.time": "시간: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "날씨: 맑은 날",
     "item.fish-spawn-rules.weather-rainy": "날씨: 비 오는 날",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -513,7 +514,10 @@
     "npc.unowned-gift-taste": "소유하지 않은 품목 {{count}}개",
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -635,6 +639,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "맵 타일 ({{x}}, {{y}})",
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
     "tile.game-location": "위치",
     "tile.map-name": "맵 이름",
@@ -706,6 +711,9 @@
 
     // progression mode
     "config.title.progression": "진행 모드",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "모르는 선물 취향 보기",
     "config.progression.show-unknown-gift-tastes.desc": "게임 내에서 아직 알지 못한 선물 취향을 표시할지 여부(예: 대화 텍스트 또는 실험을 통해).",

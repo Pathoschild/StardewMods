@@ -37,7 +37,6 @@
     "type.building": "Bâtiment",
     "type.bush": "arbuste",
     "type.fruit-tree": "Arbre fruitier",
-    "type.map-tile": "Case de carte",
     "type.monster": "Monstre",
     "type.player": "Joueur",
     "type.tree": "Arbre",
@@ -364,6 +363,7 @@
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "vous en possédez {{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "vous en avez fabriqué {{count}}",
 
 
@@ -420,6 +420,7 @@
     "item.fish-spawn-rules.time": "heure : {{times}}",
     "item.fish-spawn-rules.weather-sunny": "temps : ensoleillé",
     "item.fish-spawn-rules.weather-rainy": "temps : pluvieux",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -516,7 +517,10 @@
     "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -638,6 +642,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Case de carte ({{x}}, {{y}})",
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
     "tile.game-location": "Zone",
     "tile.map-name": "Nom de la carte",
@@ -710,6 +715,9 @@
     // progression mode
     // TODO
     "config.title.progression": "Mode de progression",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Show unknown gift tastes",
     "config.progression.show-unknown-gift-tastes.desc": "Whether to show gift tastes you haven't learned about in-game yet (e.g. from dialogue text or experimenting).",

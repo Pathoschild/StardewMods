@@ -37,7 +37,6 @@
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
-    "type.map-tile": "Tassello della mappa",
     "type.monster": "Mostro",
     "type.player": "Giocatore",
     "type.tree": "Albero",
@@ -359,6 +358,7 @@
     "item.recipes-for-machine.same-as-input": "[stesso oggetto]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Alcune regole della macchina sono troppo dinamiche per essere visualizzate.",
     "item.number-owned.summary": "Quantità posseduta: {{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Quantità fabbricata: {{count}}",
 
 
@@ -413,8 +413,9 @@
     "item.fish-spawn-rules.season-any": "tutte le stagioni",
     "item.fish-spawn-rules.season-list": "stagioni: {{seasons}}",
     "item.fish-spawn-rules.time": "orario: {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "tempo meteo: soleggiato",
-    "item.fish-spawn-rules.weather-rainy": "tempo meteo: pioggia",
+    "item.fish-spawn-rules.weather-sunny": "meteo: soleggiato",
+    "item.fish-spawn-rules.weather-rainy": "meteo: pioggia",
+    "item.uncaught-fish": "{{count}} pesci non pescati",
 
 
     /*********
@@ -511,7 +512,10 @@
     "npc.unowned-gift-taste": "{{count}} oggetti non posseduti",
     "npc.schedule.current-position": "Attualmente si trova presso {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Nessun programma caricato.",
+    "npc.schedule.not-following-schedule": "Al momento non sta seguendo un programma. Di solito questo significa che un PNG sta eseguendo un'attività straordinaria (es. si trova al cinema).",
     "npc.schedule.entry": "{{time}}: cammina verso {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Attualmente in una posizione sconosciuta sull'host.",
+    "npc.schedule.farmhand.unknown-schedule": "In multigiocatore i PNG sono gestiti dall'host, perciò il loro programma non è disponibile.",
 
 
     /*********
@@ -633,6 +637,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Tassello della mappa ({{x}}, {{y}})",
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
     "tile.game-location": "Posizione",
     "tile.map-name": "Nome mappa",
@@ -704,6 +709,9 @@
 
     // progression mode
     "config.title.progression": "Modalità progressione",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Mostra regole di spawn dei pesci non pescati",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Scegli se mostrare le condizioni di spawn dei pesci che ancora non hai pescato.",
 
     "config.progression.show-unknown-gift-tastes.name": "Mostra gusti dei regali sconosciuti",
     "config.progression.show-unknown-gift-tastes.desc": "Scegli se mostrare i gusti dei regali che non si sono ancora appresi nel gioco (ad esempio dal testo del dialogo o sperimentando).",

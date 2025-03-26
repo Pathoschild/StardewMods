@@ -37,7 +37,6 @@
     "type.building": "Építmény",
     "type.bush": "Bokor",
     "type.fruit-tree": "Gyümölcsfa",
-    "type.map-tile": "Térkép Elem",
     "type.monster": "Szörny",
     "type.player": "Játékos",
     "type.tree": "Fa",
@@ -362,6 +361,7 @@
     "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "ennyit birtokolsz ebből: {{count}}",
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "ennyit készítettél ebből: {{count}}",
 
 
@@ -418,6 +418,7 @@
     "item.fish-spawn-rules.time": "napszak: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "időjárás: napos",
     "item.fish-spawn-rules.weather-rainy": "időjárás: esős",
+    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
 
 
     /*********
@@ -516,7 +517,10 @@
     "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
+    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
+    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
 
 
     /*********
@@ -645,6 +649,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
+    "tile.title": "Térkép Elem ({{x}}, {{y}})",
     "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
     "tile.game-location": "Location", // TODO
     "tile.map-name": "Térkép neve",
@@ -718,6 +723,9 @@
     // progression mode
     // TODO
     "config.title.progression": "Progression mode",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-unknown-gift-tastes.name": "Show unknown gift tastes",
     "config.progression.show-unknown-gift-tastes.desc": "Whether to show gift tastes you haven't learned about in-game yet (e.g. from dialogue text or experimenting).",

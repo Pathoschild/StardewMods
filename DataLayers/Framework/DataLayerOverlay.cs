@@ -53,10 +53,10 @@ internal class DataLayerOverlay : BaseOverlay
     private readonly bool CombineOverlappingBorders;
 
     /// <summary>The visible tiles.</summary>
-    private readonly HashSet<Vector2> VisibleTiles = new();
+    private readonly HashSet<Vector2> VisibleTiles = [];
 
     /// <summary>The tile layer data to render.</summary>
-    private readonly List<TileGroup> TileGroups = new();
+    private readonly List<TileGroup> TileGroups = [];
 
     /// <summary>The tick countdown until the next layer update.</summary>
     private int UpdateCountdown;
@@ -380,8 +380,8 @@ internal class DataLayerOverlay : BaseOverlay
 
                 // update data
                 data.Colors.Add(groupTile.Color);
-                if (group.OuterBorderColor.HasValue && !data.BorderColors.ContainsKey(group.OuterBorderColor.Value))
-                    data.BorderColors[group.OuterBorderColor.Value] = TileEdge.None; // we'll detect combined borders next
+                if (group.OuterBorderColor.HasValue)
+                    data.BorderColors.TryAdd(group.OuterBorderColor.Value, TileEdge.None); // we'll detect combined borders next
 
                 // detect borders (if not combined)
                 if (!combineOverlappingBorders && group.OuterBorderColor.HasValue)

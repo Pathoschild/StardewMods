@@ -1,5 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
@@ -18,6 +20,9 @@ internal interface ICustomField
     /// <summary>Whether the field should be displayed.</summary>
     bool HasValue { get; }
 
+    /// <summary>Whether the field may have a clickable link returned by <see cref="TryGetLinkAt"/>.</summary>
+    bool MayHaveLinks { get; }
+
     /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
     LinkField? ExpandLink { get; }
 
@@ -32,4 +37,11 @@ internal interface ICustomField
     /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
     /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="Value"/> using the default format.</returns>
     Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth);
+
+    /// <summary>Get the subject that should be opened when the player clicks a position within the field, if any.</summary>
+    /// <param name="x">The X pixel position to check.</param>
+    /// <param name="y">The Y pixel position to check.</param>
+    /// <param name="subject">The subject linked from the given position.</param>
+    /// <returns>Returns whether a subject was found at the given position.</returns>
+    bool TryGetLinkAt(int x, int y, [NotNullWhen(true)] out ISubject? subject);
 }

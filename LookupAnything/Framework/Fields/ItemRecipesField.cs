@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -24,6 +25,9 @@ internal class ItemRecipesField : GenericField
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private readonly GameHelper GameHelper;
 
+    /// <summary>Provides subject entries.</summary>
+    private readonly ISubjectRegistry Codex;
+
     /// <summary>Whether to show recipes the player hasn't learned in-game yet.</summary>
     private readonly bool ShowUnknownRecipes;
 
@@ -36,14 +40,14 @@ internal class ItemRecipesField : GenericField
     /// <summary>Whether to show the output item for recipes.</summary>
     private readonly bool ShowOutputLabels;
 
-    /// <summary>The number of pixels between an item's icon and text.</summary>
-    private readonly int IconMargin = 5;
-
     /// <summary>The height of a recipe line.</summary>
     private readonly float LineHeight = Game1.smallFont.MeasureString("ABC").Y;
 
     /// <summary>The width and height of an item icon.</summary>
     private float IconSize => this.LineHeight;
+
+    /// <summary>The ingredient for which recipes are being displayed, if applicable.</summary>
+    private readonly Item? Ingredient;
 
 
     /*********
@@ -51,6 +55,7 @@ internal class ItemRecipesField : GenericField
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="codex">Provides subject entries.</param>
     /// <param name="label">A short field label.</param>
     /// <param name="ingredient">The ingredient item.</param>
     /// <param name="recipes">The recipes to list.</param>
@@ -58,15 +63,17 @@ internal class ItemRecipesField : GenericField
     /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
     /// <param name="showLabelForSingleGroup">Whether to show the recipe group labels even if there's only one group.</param>
     /// <param name="showOutputLabels">Whether to show the output item for recipes.</param>
-    public ItemRecipesField(GameHelper gameHelper, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
+    public ItemRecipesField(GameHelper gameHelper, ISubjectRegistry codex, string label, Item? ingredient, RecipeModel[] recipes, bool showUnknownRecipes, bool showInvalidRecipes, bool showLabelForSingleGroup = true, bool showOutputLabels = true)
         : base(label, true)
     {
         this.GameHelper = gameHelper;
+        this.Codex = codex;
         this.RecipesByType = this.BuildRecipeGroups(ingredient, recipes).ToArray();
         this.ShowUnknownRecipes = showUnknownRecipes;
         this.ShowInvalidRecipes = showInvalidRecipes;
         this.ShowLabelForSingleGroup = showLabelForSingleGroup;
         this.ShowOutputLabels = showOutputLabels;
+        this.Ingredient = ingredient;
     }
 
     /// <summary>Get the number of displayed recipes.</summary>
@@ -89,6 +96,17 @@ internal class ItemRecipesField : GenericField
     /// <inheritdoc />
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
     {
+        // reset
+        this.LinkTextAreas.Clear();
+
+        // color constants
+        Color knownIconColor = Color.White;
+        Color knownTextColor = Color.Black;
+        Color knownLinkColor = Color.Blue;
+        Color unknownIconColor = knownIconColor * 0.5f;
+        Color unknownTextColor = Color.Gray;
+        Color unknownLinkColor = knownLinkColor * 0.65f; // fade links a bit less, since they're hard to distinguish from gray text at 50%
+
         // get margins
         const int groupVerticalMargin = 6;
         const int groupLeftMargin = 0;
@@ -135,8 +153,8 @@ internal class ItemRecipesField : GenericField
                 }
 
                 // fade recipes which aren't known
-                Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
+                Color iconColor = entry.IsKnown ? knownIconColor : unknownIconColor;
+                Color textColor = entry.IsKnown ? knownTextColor : unknownTextColor;
 
                 // reset position for recipe output
                 float recipeLeftMargin = position.X + firstRecipeLeftMargin;
@@ -149,10 +167,21 @@ internal class ItemRecipesField : GenericField
                 float inputLeft = 0;
                 if (this.ShowOutputLabels)
                 {
-                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, textColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
+                    ISubject? subject = this.GetSubject(entry.Output.Entity);
+                    Color actualTextColor = subject is not null
+                        ? (entry.IsKnown ? knownLinkColor : unknownLinkColor)
+                        : textColor;
+
+                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, actualTextColor, entry.Output.Sprite, iconSize, iconColor, qualityIcon: entry.Output.Quality);
                     float outputWidth = alignColumns
                         ? group.ColumnWidths[0]
                         : outputSize.X;
+
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)outputWidth, (int)lineHeight);
+                        this.LinkTextAreas.Add(new(subject, pixelArea));
+                    }
 
                     inputLeft = curPos.X + outputWidth + itemSpacer;
                     curPos.X = inputLeft;
@@ -162,6 +191,7 @@ internal class ItemRecipesField : GenericField
                 for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                 {
                     RecipeItemEntry input = entry.Inputs[i];
+                    ISubject? subject = this.GetSubject(input.Entity);
 
                     // get icon size
                     Vector2 curIconSize = iconSize;
@@ -181,8 +211,19 @@ internal class ItemRecipesField : GenericField
                         );
                     }
 
+                    Color actualTextColor = subject is not null
+                        ? (entry.IsKnown ? knownLinkColor : unknownLinkColor)
+                        : textColor;
+
                     // draw input item (icon + name + count)
-                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, curIconSize, iconColor, input.Quality);
+                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, actualTextColor, input.Sprite, curIconSize, iconColor, input.Quality);
+
+                    if (subject is not null)
+                    {
+                        Rectangle pixelArea = new((int)curPos.X, (int)curPos.Y, (int)inputSize.X, (int)lineHeight);
+                        this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+                    }
+
                     curPos = new Vector2(
                         x: curPos.X + inputSize.X,
                         y: curPos.Y
@@ -324,7 +365,8 @@ internal class ItemRecipesField : GenericField
                         chance: recipe.OutputChance,
                         quality: recipe.Quality,
                         hasInputAndOutput: true,
-                        isValid: recipe.SpecialOutput?.IsValid
+                        isValid: recipe.SpecialOutput?.IsValid,
+                        entity: recipe.SpecialOutput?.Entity
                     );
                 }
 
@@ -338,15 +380,14 @@ internal class ItemRecipesField : GenericField
 
                 if (recipe.GoldPrice > 0)
                 {
-                    inputs = inputs.Concat(new[]
-                    {
+                    inputs = inputs.Concat([
                         new RecipeItemEntry(
                             new SpriteInfo(Game1.debrisSpriteSheet, new Rectangle(5, 69, 6, 6)),
                             Utility.getNumberWithCommas(recipe.GoldPrice),
                             null,
                             IsGoldPrice: true
                         )
-                    });
+                    ]);
                 }
 
                 // build recipe
@@ -412,58 +453,17 @@ internal class ItemRecipesField : GenericField
         }
     }
 
-    /// <summary>Draw text with an icon.</summary>
-    /// <param name="batch">The sprite batch.</param>
-    /// <param name="font">The sprite font.</param>
-    /// <param name="position">The position at which to draw the text.</param>
-    /// <param name="absoluteWrapWidth">The width at which to wrap the text.</param>
-    /// <param name="text">The block of text to write.</param>
-    /// <param name="textColor">The text color.</param>
-    /// <param name="icon">The sprite to draw.</param>
-    /// <param name="iconSize">The size to draw.</param>
-    /// <param name="iconColor">The color to tint the sprite.</param>
-    /// <param name="qualityIcon">The quality for which to draw an icon over the sprite.</param>
-    /// <param name="probe">Whether to calculate the positions without actually drawing anything to the screen.</param>
-    /// <returns>Returns the drawn size.</returns>
-    private Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo? icon = null, Vector2? iconSize = null, Color? iconColor = null, int? qualityIcon = null, bool probe = false)
+    /// <summary>Get the lookup subject for an entity.</summary>
+    /// <param name="entity">The entity to check.</param>
+    private ISubject? GetSubject(object? entity)
     {
-        // draw icon
-        int textOffset = 0;
-        if (icon != null && iconSize.HasValue)
-        {
-            if (!probe)
-                batch.DrawSpriteWithin(icon, position.X, position.Y, iconSize.Value, iconColor);
-            textOffset = this.IconMargin;
-        }
-        else
-            iconSize = Vector2.Zero;
+        if (entity is null)
+            return null;
 
-        // draw quality icon overlay
-        if (qualityIcon > 0 && iconSize is { X: > 0, Y: > 0 })
-        {
-            Rectangle qualityRect = qualityIcon < SObject.bestQuality ? new(338 + (qualityIcon.Value - 1) * 8, 400, 8, 8) : new(346, 392, 8, 8); // from Item.DrawMenuIcons
-            Texture2D qualitySprite = Game1.mouseCursors;
+        if (entity is Item item && (item.ItemId == DataParser.ComplexRecipeId || item.QualifiedItemId == this.Ingredient?.QualifiedItemId))
+            return null;
 
-            Vector2 qualitySize = iconSize.Value / 2;
-            Vector2 qualityPos = new Vector2(
-                position.X + iconSize.Value.X - qualitySize.X,
-                position.Y + iconSize.Value.Y - qualitySize.Y
-            );
-
-            batch.DrawSpriteWithin(qualitySprite, qualityRect, qualityPos.X, qualityPos.Y, qualitySize, iconColor);
-        }
-
-
-        // draw text
-        Vector2 textSize = probe
-            ? font.MeasureString(text)
-            : batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X + textOffset, 0), absoluteWrapWidth - position.X, textColor);
-
-        // get drawn size
-        return new Vector2(
-            x: iconSize.Value.X + textSize.X,
-            y: Math.Max(iconSize.Value.Y, textSize.Y)
-        );
+        return this.Codex.GetByEntity(entity, null);
     }
 
     /// <summary>Create a recipe item model.</summary>
@@ -587,7 +587,8 @@ internal class ItemRecipesField : GenericField
     /// <param name="quality">The item quality that will be produced, if applicable.</param>
     /// <param name="hasInputAndOutput">Whether the item has both input and output ingredients.</param>
     /// <param name="isValid">Whether this recipe is valid, or <c>null</c> to determine it based on whether the output item exists.</param>
-    private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool? isValid = null)
+    /// <param name="entity">The entity to which to link the entry (e.g. for lookup links), if different from <paramref name="item"/>.</param>
+    private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, int? quality = null, bool hasInputAndOutput = false, bool? isValid = null, object? entity = null)
     {
         // get display text
         string text;
@@ -614,7 +615,8 @@ internal class ItemRecipesField : GenericField
             DisplayText: text,
             Quality: quality,
             IsGoldPrice: false,
-            IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId))
+            IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId)),
+            Entity: entity ?? item
         );
     }
 }
