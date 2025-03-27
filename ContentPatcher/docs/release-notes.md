@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 2.6.1
+Released 27 March 2025 for SMAPI 4.1.10 or later.
+
 * Fixed 'unsupported format version 2.6.0' error when mods set `"Format": "2.6.0"`.
 
 ## 2.6.0
