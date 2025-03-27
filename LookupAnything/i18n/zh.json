@@ -433,12 +433,12 @@
     "item.melee-weapon.speed": "攻速（速度）",
 
     // values (数值)
-    "item.melee-weapon.critical-damage.label": "{{multiplier}} 倍正常伤害(未计算玩家加成)",
-    "item.melee-weapon.defense.label": "{{amount}} (装备时)",
-    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} 倍正常距离)",
+    "item.melee-weapon.critical-damage.label": "{{multiplier}} 倍正常伤害（未计算玩家加成）",
+    "item.melee-weapon.defense.label": "{{amount}}（装备时）",
+    "item.melee-weapon.knockback.label": "{{amount}}（{{multiplier}} 倍正常距离）",
     "item.melee-weapon.reach.label": "{{amount}} 像素",
     "item.melee-weapon.speed.shown-vs-actual": "显示: {{shownSpeed}}{{lineBreak}} 实际: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{speed}} (攻击动画 {{milliseconds}} 毫秒，未计算玩家加成)",
+    "item.melee-weapon.speed.summary": "{{speed}}（攻击动画 {{milliseconds}} 毫秒，未计算玩家加成）",
 
 
     /*********
@@ -511,10 +511,10 @@
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
     "npc.undiscovered-gift-taste": "{{count}} 个未揭露的物品",
     "npc.unowned-gift-taste": "{{count}} 个未拥有的物品",
-    "npc.schedule.current-position": "当前位于{{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.current-position": "当前位于{{locationName}} ({{x}}, {{y}})。",
     "npc.schedule.no-entries": "未加载日程.",
     "npc.schedule.not-following-schedule": "目前没有日程。通常意味着NPC在做着某项特别活动（比如在看电影）。",
-    "npc.schedule.entry": "{{time}}: 步行至{{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.entry": "{{time}}: 步行至{{locationName}} ({{x}}, {{y}})。",
     "npc.schedule.farmhand.unknown-position": "当前位于一个房主可见的未知位置。",
     "npc.schedule.farmhand.unknown-schedule": "日程无法显示（在多人游戏中，NPC的日程由房主管理）",
 
@@ -626,7 +626,7 @@
 
 
     /*********
-    ** Tile lookups (图块查询)
+    ** Tile lookups (贴图查询)
     *********/
     // Note for translators:
     // The translations in this section are a bit more technical. Quick summary:
@@ -638,21 +638,21 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels (标签)
-    "tile.title": "图块 ({{x}}, {{y}})",
-    "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
+    "tile.title": "贴图 ({{x}}, {{y}})",
+    "tile.description": "地图上此位置的贴图。显示此信息是因为你在设置中启用了贴图查询功能。",
     "tile.game-location": "位置",
     "tile.map-name": "地图名",
     "tile.map-properties": "地图属性",
-    "tile.layer-tile": "{{layer}}图块", // note: this still doesn't work perfectly since the layer name remains untranslated in zh
-    "tile.layer-tile-none": "图块",
+    "tile.layer-tile": "{{layer}}贴图", // note: this still doesn't work perfectly since the layer name remains untranslated in zh
+    "tile.layer-tile-none": "贴图",
 
     // values (数值)
     "tile.map-properties.value": "地图属性{{name}}的值为：{{value}}", // 例如，Outdoors: T  -> 地图属性Outdoors的值为：T
-    "tile.layer-tile.appearance": "图块表'{{tilesheetId}}'，索引编号：{{index}}（路径：'{{tilesheetPath}}'）",
+    "tile.layer-tile.appearance": "贴图表'{{tilesheetId}}'，索引编号：{{index}}（路径：'{{tilesheetPath}}'）",
     "tile.layer-tile.blend-mode": "混合模式: {{value}}",
     "tile.layer-tile.index-property": "索引属性: {{name}}: {{value}}",
-    "tile.layer-tile.tile-property": "图块属性: {{name}}: {{value}}",
-    "tile.layer-tile.none-here": "此处无图块",
+    "tile.layer-tile.tile-property": "贴图属性: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "此处无贴图",
 
 
     /*********
@@ -755,10 +755,10 @@
 
     // advanced options (高级选项)
     "config.title.advanced-options": "高级",
-    "config.tile-lookups.name": "图块查询",
-    "config.tile-lookups.desc": "是否将地图图块变为可查询对象",
+    "config.tile-lookups.name": "贴图查询",
+    "config.tile-lookups.desc": "是否将地图贴图变为可查询对象",
     "config.data-mining-fields.name": "显示数据挖掘字段",
-    "config.data-mining-fields.desc": "是否显示对数据挖掘者有用的原始数据(作为查询结果底部的单独字段)。这是一个高级功能，不适合大多数玩家。",
+    "config.data-mining-fields.desc": "是否显示对数据挖掘者有用的原始数据（作为查询结果底部的单独字段）。这是一个高级功能，不适合大多数玩家。",
     "config.show-invalid-recipes.name": "显示无效配方",
     "config.show-invalid-recipes.desc": "是否显示含有错误物品的配方。",
     "config.target-redirection.name": "目标重定向",
