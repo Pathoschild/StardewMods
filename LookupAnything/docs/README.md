@@ -170,6 +170,17 @@ Enable tile lookups to see information about map tiles:
 ## Compatibility
 Lookup Anything is compatible with Stardew Valley 1.6+ on Linux/macOS/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
+> When playing with splitscreen multiplayer, it can be helpful to edit `"ToggleLookup"` and `"ToggleSearch"` in the config.json in the mod folder to include multiple keys or gamepad buttons seperated by comma.
+>
+> For example, the follwing configuraton allows gamepad players to press down on their left thumb stick to look up the most relevant object on their screen, while the keyboard player can still use F1 key for lookups on their screen.
+>```json
+>{
+>  "Controls": {
+>    "ToggleLookup": "LeftStick, F1",
+>    // other configurations...
+>  },
+>}
+>```
 
 ## Extensibility for modders
 ### Nested items
