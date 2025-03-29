@@ -25,7 +25,7 @@
     "config.harvest.tooltip": "采集作物或觅食的速度。默认{{defaultValue}}x。",
 
     "config.hold-up-item.name": "举起物品",
-    "config.hold-up-item.tooltip": "举起物品的速度。默认{{defaultValue}}x.",
+    "config.hold-up-item.tooltip": "举起物品的速度。默认{{defaultValue}}x。",
 
     "config.horse-flute.name": "马笛",
     "config.horse-flute.tooltip": "演奏马笛的速度。默认{{defaultValue}}x。",
@@ -37,7 +37,7 @@
     "config.mount.tooltip": "上/下马的速度，这里的马包括魔改后的马，比如拖拉机。默认{{defaultValue}}x。",
 
     "config.read-book.name": "读书",
-    "config.read-book.tooltip": "读书的速度。默认{{defaultValue}}x.",
+    "config.read-book.tooltip": "读书的速度。默认{{defaultValue}}x。",
 
     "config.shear.name": "剪毛",
     "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}x。",
@@ -49,7 +49,7 @@
     "config.tool.tooltip": "使用工具（除去武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 
     "config.use-totem.name": "图腾",
-    "config.use-totem.tooltip": "使用图腾的速度。默认{{defaultValue}}x.",
+    "config.use-totem.tooltip": "使用图腾的速度。默认{{defaultValue}}x。",
 
     "config.weapon.name": "武器",
     "config.weapon.tooltip": "使用武器的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
@@ -69,31 +69,31 @@
     "config.casino-slots.tooltip": "赌场老虎机的转速。默认{{defaultValue}}x。",
 
     "config.fade.name": "淡入淡出",
-    "config.fade.tooltip": "屏幕淡入淡出黑色的速度。默认{{defaultValue}}x.",
+    "config.fade.tooltip": "屏幕淡入淡出黑色的速度。默认{{defaultValue}}x。",
 
     "config.fishing-treasure.name": "钓鱼宝箱",
-    "config.fishing-treasure.tooltip": "钓鱼宝箱打开的速度。默认{{defaultValue}}x.",
+    "config.fishing-treasure.tooltip": "钓鱼宝箱打开的速度。默认{{defaultValue}}x。",
 
     "config.forge.name": "锻造",
-    "config.forge.tooltip": "锻造的速度。默认{{defaultValue}}x.",
+    "config.forge.tooltip": "锻造的速度。默认{{defaultValue}}x。",
 
     "config.open-chest.name": "宝箱打开",
-    "config.open-chest.tooltip": "宝箱打开的速度。默认{{defaultValue}}x.",
+    "config.open-chest.tooltip": "宝箱打开的速度。默认{{defaultValue}}x。",
 
     "config.parrot-express.name": "鹦鹉特快",
-    "config.parrot-express.tooltip": "鹦鹉特快的速度。默认{{defaultValue}}x.",
+    "config.parrot-express.tooltip": "鹦鹉特快的速度。默认{{defaultValue}}x。",
 
     "config.prize-ticket-machine.name": "兑奖机",
-    "config.prize-ticket-machine.tooltip": "兑奖机兑奖的速度。默认{{defaultValue}}x.",
+    "config.prize-ticket-machine.tooltip": "兑奖机兑奖的速度。默认{{defaultValue}}x。",
 
     "config.tailor.name": "裁缝",
-    "config.tailor.tooltip": "裁缝的速度。默认{{defaultValue}}x.",
+    "config.tailor.tooltip": "裁缝的速度。默认{{defaultValue}}x。",
 
     "config.tree-fall.name": "树倒下",
     "config.tree-fall.tooltip": "树被砍倒的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
 
     "config.wheel-spin.name": "转轮盘",
-    "config.wheel-spin.tooltip": "轮盘旋转的速度。默认{{defaultValue}}x.",
+    "config.wheel-spin.tooltip": "轮盘旋转的速度。默认{{defaultValue}}x。",
 
     /****
     ** 'UI Animation Speeds' section
@@ -101,13 +101,13 @@
     "config.ui-speeds": "UI动画速度",
 
     "config.dialogue-typing.name": "对话速度",
-    "config.dialogue-typing.tooltip": "对话的速度。默认{{defaultValue}}x",
+    "config.dialogue-typing.tooltip": "对话的速度。默认{{defaultValue}}x。",
 
     "config.open-dialogue-box.name": "对话框打开",
-    "config.open-dialogue-box.tooltip": "对话框打开的速度。默认{{defaultValue}}x.",
+    "config.open-dialogue-box.tooltip": "对话框打开的速度。默认{{defaultValue}}x。",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    "config.shipping-menu.name": "结算界面的转场效果",
+    "config.shipping-menu.tooltip": "结算界面的转场速度。默认{{defaultValue}}x。",
 
     "config.title-menu.name": "标题菜单的转场效果",
     "config.title-menu.tooltip": "标题菜单的转场速度，即新建、加载存档时屏幕切换的速度。默认{{defaultValue}}x。",
@@ -122,5 +122,5 @@
     "config.experimental-warning": "这些选项的功能尚不稳定，可能导致卡死和崩溃等问题。不推荐启用。",
 
     "config.event.name": "事件",
-    "config.event.tooltip": "事件的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x."
+    "config.event.tooltip": "事件的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。"
 }
