@@ -20,8 +20,8 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`EditImage`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
-`FromFile` | 内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/dinosaur.png`），或多个逗号分隔的路径。这可以是`.png`或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+`FromFile` | 内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/dinosaur.png`），或多个逗号分隔的路径。这可以是`.png`或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
 <dt>可选字段：</dt>

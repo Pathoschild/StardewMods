@@ -3,12 +3,12 @@
 一个含有**`"Action": "Load"`**的补丁用你提供的文件替换整个素材。
 
 
-## Contents
+## 内容
 * [注意事项](#caveats)
 * [用法](#usage)
   * [格式](#format)
-  * [Examples](#examples)
-* [See also](#see-also)
+  * [示例](#examples)
+* [参见](#see-also)
 
 ## 注意事项<a name="caveats"></a>
 `Load`的功能很简单明了，但是每个素材只能被一个补丁替换。一个使用`Load`的内容包将不兼容另一个含有同`Target`的`Load`的内容包。而只使用`Edit`的内容包不会有这个问题。
@@ -26,8 +26,8 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`Load`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
-`FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。这可以是`.json`（数据），`.png`（图片），`.tbin`或`.tmx`（地图），或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+`FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。这可以是`.json`（数据），`.png`（图片），`.tbin`或`.tmx`（地图），或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
 <dt>可选字段：</dt>
@@ -83,7 +83,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 </dd>
 </dl>
 
-### 示例<a name="example"></a>
+### 示例<a name="examples"></a>
 此补丁将阿比盖尔的肖像替换为你提供的图片（详见[NPC模组](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:NPC%E6%95%B0%E6%8D%AE)）：
 ```js
 {

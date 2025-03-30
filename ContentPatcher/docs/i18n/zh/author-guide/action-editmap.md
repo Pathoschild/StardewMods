@@ -37,7 +37,7 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`EditMap`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Maps/Town`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Maps/Town`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
 <dt>可选字段：</dt>
@@ -125,7 +125,7 @@
 </td>
 <td>
 
-内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/town.tmx`），或多个逗号分隔的路径。这可以是`.tbin`，`.tmx`，或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/town.tmx`），或多个逗号分隔的路径。这可以是`.tbin`，`.tmx`，或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
 
 Content Patcher会如下处理`FromFile`地图内引用的图块表：
 * 若图块表没有被目标地图引用，Content Patcher会帮你添加此图块（并自动添加`z_` ID 前缀，以避免与硬编码的游戏逻辑冲突）。如果源地图具有已引用的图块表的自定义版本，则它将被添加为仅供你的图块使用的单独图块表。

@@ -1,8 +1,8 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
 设置选项功能让你向玩家提供可更改的设置，并基于设置实现动态。
 
-## Contents
+## 内容
 * [基本设置](#basic-config)
   * [概述](#overview)
   * [设置定义](#define-your-config)

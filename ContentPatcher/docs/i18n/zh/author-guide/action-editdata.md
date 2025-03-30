@@ -145,7 +145,7 @@
 字段     | 用途
 --------- | -------
 `Action`  | 操作类型。此操作类型设置为`EditData`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不用区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
 
 至少有下列一项：
 
