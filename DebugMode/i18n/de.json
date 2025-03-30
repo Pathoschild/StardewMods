@@ -9,9 +9,10 @@
     "label.submenu": "Untermenü",
     "label.minigame": "Minispiel",
     "label.dialogue": "Dialog",
-    "label.festival-name": "Fest",
     "label.event-id": "Event-ID",
     "label.event-script": "Event-Skript",
+    "label.festival-name": "Fest",
+    "label.shop-id": "shop ID", // TODO
     "label.song": "Lied",
 
 

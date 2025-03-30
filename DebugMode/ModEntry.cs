@@ -273,12 +273,22 @@ internal class ModEntry : Mod
             if (submenuType != null)
                 yield return $"{I18n.Label_Submenu()}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
 
-            if (menu is DialogueBox dialogue)
+            switch (menu)
             {
-                string? dialogueKey = dialogue.characterDialogue?.TranslationKey;
-                if (!string.IsNullOrWhiteSpace(dialogueKey))
-                    yield return $"{I18n.Label_Dialogue()}: {dialogueKey}";
+                case DialogueBox dialogue:
+                    {
+                        string? dialogueKey = dialogue.characterDialogue?.TranslationKey;
+                        if (!string.IsNullOrWhiteSpace(dialogueKey))
+                            yield return $"{I18n.Label_Dialogue()}: {dialogueKey}";
+                    }
+                    break;
+
+                case ShopMenu shopMenu:
+                    if (!string.IsNullOrWhiteSpace(shopMenu.ShopId))
+                        yield return $"{I18n.Label_ShopId()}: {shopMenu.ShopId}";
+                    break;
             }
+
         }
 
         // minigame

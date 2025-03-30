@@ -9,9 +9,10 @@
     "label.submenu": "하위메뉴",
     "label.minigame": "미니게임",
     "label.dialogue": "dialogue", // TODO
-    "label.festival-name": "축제",
     "label.event-id": "이벤트 ID",
     "label.event-script": "이벤트 스크립트",
+    "label.festival-name": "축제",
+    "label.shop-id": "shop ID", // TODO
     "label.song": "음악",
 
 

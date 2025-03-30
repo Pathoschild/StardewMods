@@ -9,9 +9,10 @@
     "label.submenu": "子菜单",
     "label.minigame": "小游戏",
     "label.dialogue": "对话",
-    "label.festival-name": "节日",
     "label.event-id": "事件ID",
     "label.event-script": "事件脚本",
+    "label.festival-name": "节日",
+    "label.shop-id": "shop ID", // TODO
     "label.song": "音乐",
 
 

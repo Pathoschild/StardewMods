@@ -9,9 +9,10 @@
     "label.submenu": "Almenü",
     "label.minigame": "Minijáték",
     "label.dialogue": "dialogue", // TODO
-    "label.festival-name": "Fesztivál",
     "label.event-id": "Esemény azonosító",
     "label.event-script": "Esemény szkript",
+    "label.festival-name": "Fesztivál",
+    "label.shop-id": "shop ID", // TODO
     "label.song": "Dal",
 
 
