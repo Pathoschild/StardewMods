@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added shop ID when viewing a shop menu.
+* Fixed info drawn behind menu overlays.
 
 ## 1.16.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.

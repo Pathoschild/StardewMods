@@ -14,6 +14,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Minigames;
+using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.DebugMode;
 
@@ -78,7 +79,7 @@ internal class ModEntry : Mod
         // hook events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
-        helper.Events.Display.Rendered += this.OnRendered;
+        helper.Events.Display.RenderedStep += this.OnRenderedStep;
         helper.Events.Player.Warped += this.OnWarped;
 
         // validate translations
@@ -148,9 +149,9 @@ internal class ModEntry : Mod
     }
 
     /// <inheritdoc cref="IDisplayEvents.Rendered" />
-    public void OnRendered(object? sender, RenderedEventArgs e)
+    public void OnRenderedStep(object? sender, RenderedStepEventArgs e)
     {
-        if (this.ShowOverlay.Value)
+        if (this.ShowOverlay.Value && e.Step is RenderSteps.Overlays)
             this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
     }
 
