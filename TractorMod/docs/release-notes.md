@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed "your pickaxe isn't strong enough" message shown near quarry boulder with a low-level pickaxe.
+
 ## 4.22.2
 Released 26 March 2025 for SMAPI 4.1.10 or later.
 

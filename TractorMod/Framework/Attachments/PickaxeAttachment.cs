@@ -26,6 +26,7 @@ internal class PickaxeAttachment : BaseAttachment
     /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
     private readonly IDictionary<int, int> ResourceUpgradeLevelsNeeded = new Dictionary<int, int>
     {
+        [ResourceClump.quarryBoulderIndex] = Tool.gold,
         [ResourceClump.meteoriteIndex] = Tool.gold,
         [ResourceClump.boulderIndex] = Tool.steel
     };
