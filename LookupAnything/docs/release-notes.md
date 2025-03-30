@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed controller snapping enabled for the lookup and search menus.
+
 ## 1.50.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.
 
