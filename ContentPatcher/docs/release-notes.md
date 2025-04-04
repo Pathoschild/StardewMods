@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed error editing a data model asset using Windows-only type formats on Android/Linux/macOS. They're now converted automatically.
+
 ## 2.6.1
 Released 27 March 2025 for SMAPI 4.1.10 or later.
 
