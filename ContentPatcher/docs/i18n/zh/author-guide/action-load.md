@@ -38,7 +38,7 @@ field     | purpose
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[本地tokens](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些tokens。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部tokens](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些tokens。
 
 </dd>
 <dt>进阶字段：</dt>

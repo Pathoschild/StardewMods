@@ -1,54 +1,52 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
-This document lists the tokens available in Content Patcher packs.
+此文档描述Content Patcher里可使用tokens.
 
 **See the [main README](../README.md) for other info**.
 
-## Contents
-* [Introduction](#introduction)
-  * [Overview](#overview)
-  * [Token types](#token-types)
-* [Global tokens](#global-tokens)
-  * [Date and weather](#date-and-weather)
-  * [Player](#player)
-  * [Relationships](#relationships)
-  * [World](#world)
-  * [Number manipulation](#number-manipulation)
-  * [String manipulation](#string-manipulation)
-  * [Metadata](#metadata)
-  * [Field references](#field-references)
-  * [Specialized](#specialized)
-* [Config tokens](#config-tokens)
-* [Dynamic tokens](#dynamic-tokens)
-* [Local tokens](#local-tokens)
-* [Input arguments](#input-arguments)
-  * [Overview](#overview-1)
-  * [Global input arguments](#global-input-arguments)
-  * [Custom input value separator](#custom-input-value-separator)
-* [Randomization](#randomization)
-* [Advanced](#advanced)
-  * [Query expressions](#query-expressions)
-  * [Mod-provided tokens](#mod-provided-tokens)
-  * [Aliases](#aliases)
-* [Common values](#common-values)
-* [See also](#see-also)
+## 内容
+* [介绍](#introduction)
+  * [概述](#overview)
+  * [Token类型](#token-types)
+* [全局tokens](#global-tokens)
+  * [日期和天气](#date-and-weather)
+  * [玩家](#player)
+  * [关系](#relationships)
+  * [世界](#world)
+  * [数字操纵](#number-manipulation)
+  * [字符串操纵](#string-manipulation)
+  * [元数据](#metadata)
+  * [字段引用](#field-references)
+  * [特定场合](#specialized)
+* [设置tokens](#config-tokens)
+* [动态tokens](#dynamic-tokens)
+* [局部tokens](#local-tokens)
+* [输入参数](#input-arguments)
+  * [概述](#overview-1)
+  * [全局输入参数](#global-input-arguments)
+  * [自定义参数分割符号](#custom-input-value-separator)
+* [随机](#randomization)
+* [进阶](#advanced)
+  * [查询表达式](#query-expressions)
+  * [模组提供tokens](#mod-provided-tokens)
+  * [别名](#aliases)
+* [共同值](#common-values)
+* [参见](#see-also)
 
-## Introduction
-### Overview
-A **token** is just a named set of values. For example, the `season` token would contain the value
-`summer` during the in-game summer.
+## 介绍 <a name="introduction"></a>
+### 概述 <a name="overview"></a>
 
-There are two main ways to use tokens:
+一个**token**是有名字的一组值。比如说，名为`season`的token在游戏季节为夏天时的值为`"summer"`.
 
-#### Placeholders
-You can use tokens in text by putting two curly brackets around the token name, which will be
-replaced with the actual value automatically.
+token主要有两种使用方法：
 
-Token placeholders can be used in most fields (the documentation for each field will specify), and
-they're not case-sensitive (so `{{season}}` and `{{SEASON}}` are the same thing). Patches will be
-disabled automatically if a token they use isn't currently available.
+#### 占位符 <a name="placeholders"></a>
 
-For example, this gives the farmhouse a different appearance in each season:
+在文本中把token名称放入两层大括號即可调用token的值，运行时会自动将token占位符替换成对应的token值。
+
+大部分字段都可以可使用token占位符（每个字段的文档会注释可否使用token），不区分大小写（`{{season}}`和`{{SEASON}}`是同一个token）。一个含有当前不可用的补丁将不生效。
+
+此例子让农舍在每个季节都更改外观。
 
 ```js
 {
@@ -58,19 +56,18 @@ For example, this gives the farmhouse a different appearance in each season:
 }
 ```
 
-Tokens which return a single value (like `{{season}}`) are most useful in placeholders, but
-multi-value tokens will work too (they'll show a comma-delimited list).
+只有一个值的tokens最适合以占位符形式使用，但多值的token也可以用（显示为以逗号分割的列表）。
 
-#### Conditions
-You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition has...
-* A key containing a [token](#introduction) without the outer curly braces, like
-  `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
-* A value containing the comma-separated values to match, like `spring, summer`. If the key token
-  returns any of these values, the condition matches. This field supports
-  [tokens](#introduction) and is not case-sensitive.
+#### 条件 <a name="conditions"></a>
 
-For example, this changes the house texture only in spring or summer in the first year:
+你可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
+
+每个条件里含有：
+* 一个含有[token](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
+* 一个含有以逗号分割的列表的值，如`spring, summer`。若键里的token等于列表中任意值，此条件成立。值本身也支持[tokens](#introduction)，不区分大小写。
+
+
+此例子让农舍在第一年的春天（spring）和夏天（素描木耳）更改外观。
 
 ```js
 {
@@ -84,31 +81,26 @@ For example, this changes the house texture only in spring or summer in the firs
 }
 ```
 
-Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
-conditions match.
+一个条件里值只要有一个值对应token那整个条件成立。而一个补丁只有在`When`里所有的条件都成立时才会生效。
 
-### Token types
-There are several types of tokens, but they're all used exactly the same way.
+### Token类型 <a name="token-types"></a>
 
-You don't need to learn all of these. They each serve a different purpose, and most content packs
-will only use one or two types at most.
+tokens有很多类型，但使用方式都一样。
 
-The token types are (in order of most to least commonly used):
-* [Global tokens](#global-tokens) contain common values like the season, weather, friendships, etc.
-  These are provided by Content Patcher itself.
-* [Config tokens](#config-tokens) contain mod options you define, which the player can choose from.
-* [Dynamic tokens](#dynamic-tokens) contain arbitrary values you define. These let you reuse values
-  without redefining them each time, or build complex values from simpler ones.
-* _(Advanced)_ [Local tokens](#local-tokens) are just like dynamic tokens, but limited to one patch
-  (or all the patches loaded through an `Include` patch) instead of the whole content pack. These
-  are mainly used to avoid repetition for a set of values.
-* _(Advanced)_ [Mod-provided tokens](#mod-provided-tokens) are provided by other mods installed by
+你不需要学会所有token。每一种token有不同的目的，大部分内容包只用一两种token。
+
+Token类型包括（从最常用到最罕见）：
+* [全局tokens](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的token。
+* [设置tokens](#config-tokens)是玩家在模组设置选项中可选的值。
+* [动态tokens](#dynamic-tokens)是你定义的值，用来重复利用某些值或利用多个简单tokens构造复杂的token。
+* _(Advanced)_ [局部tokens](#local-tokens)和动态tokens类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
+* _(Advanced)_ [模组提供tokens](#mod-provided-tokens) are provided by other mods installed by
   the player.
 
-## Global tokens
+## 全局tokens <a name="global-tokens"></a>
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
 
-### Date and weather
+### 日期和天气 <a name="date-and-weather"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -222,7 +214,7 @@ The year number (like `1` or `2`).
 </tr>
 </table>
 
-### Player
+### 玩家 <a name="player"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -572,7 +564,7 @@ and `Mining`.
 </tr>
 </table>
 
-### Relationships
+### 关系 <a name="relationships"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -664,7 +656,7 @@ name regardless of translations).
 </tr>
 </table>
 
-### World
+### 世界 <a name="world"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -785,7 +777,7 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 </tr>
 </table>
 
-### Number manipulation
+### 数字操纵 <a name="number-manipulation"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -880,7 +872,7 @@ parsed input matches one of the above forms.
 </tr>
 </table>
 
-### String manipulation
+### 字符串操纵 <a name="string-manipulation"></a>
 <table>
 <tr>
 <th>condition</th>
@@ -1015,7 +1007,7 @@ these two entries are equivalent:
 </tr>
 </table>
 
-### Metadata
+### 元数据 <a name="metadata"></a>
 These tokens provide meta info about tokens, content pack files, installed mods, and the game state.
 
 <table>
@@ -1158,7 +1150,7 @@ For example:
 </tr>
 </table>
 
-### Field references
+### 字段引用 <a name="field-references"></a>
 These tokens contain field values for the current patch. For example, `{{FromFile}}` is the current
 value of the `FromFile` patch field.
 
@@ -1229,7 +1221,7 @@ See also [`PathPart`](#PathPart) for more advanced scenarios.
 </tr>
 </table>
 
-### Specialized
+### 特定场合 <a name="specialized"></a>
 These are advanced tokens meant to support some specific situations.
 
 <table>
@@ -1333,7 +1325,7 @@ convention is strongly recommended to avoid conflicts. For example:
 </tr>
 </table>
 
-### Config tokens
+### 设置tokens <a name="config-tokens"></a>
 You can let players configure your mod using a `config.json` file. If the player has [Generic Mod
 Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed, they'll also be able to
 configure the mod through an in-game options menu.
@@ -1363,7 +1355,7 @@ For example, you can use config values as tokens and conditions:
 
 See the [player config documentation](config.md) for more info.
 
-### Dynamic tokens
+### 动态tokens <a name="dynamic-tokens"></a>
 Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
 Each block in this section defines the value for a token using these fields:
 
@@ -1412,7 +1404,7 @@ crop sprites depending on the weather:
 }
 ```
 
-### Local tokens
+### 局部tokens <a name="local-tokens"></a>
 Local tokens are defined for a specific patch via its `LocalTokens` field, and can be used in its
 other fields. The token names must be a plain string, but the values can contain tokens.
 
@@ -1494,8 +1486,8 @@ And then add an `assets/add-hat.json` file like this:
 }
 ```
 
-## Input arguments
-### Overview
+## 输入参数 <a name="input-arguments"></a>
+### 概述 <a name="overview-1"></a>
 An **input argument** is a value you give to the token within the `{{...}}` braces. Input can be
 _positional_ (an unnamed list of values) or _named_. Argument values are comma-separated, and named
 arguments are pipe-separated.
@@ -1512,7 +1504,7 @@ sections. For example, the `Uppercase` token makes its input uppercase:
 }
 ```
 
-### Global input arguments
+### 全局输入参数 <a name="global-input-arguments"></a>
 Global input arguments are handled by Content Patcher itself, so they work with
 all tokens (including mod-provided tokens). If you use multiple input arguments, they're applied
 sequentially in left-to-right order.
@@ -1628,7 +1620,7 @@ the last item. For example:
   </tr>
 </table>
 
-### Custom input value separator
+### 自定义参数分割符号 <a name="custom-input-value-separator"></a>
 By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
 input values. You can use the `inputSeparator` argument to use a different separator (which can be
 one or multiple characters).
@@ -1644,7 +1636,7 @@ For example, this can allow commas in random dialogue:
 The behavior when separators conflict with token syntax depends on implementation details that may
 change from one Content Patcher version to the next.
 
-## Randomization
+## 随机 <a name="randomization"></a>
 ### Overview
 You can randomize values using the `Random` token:
 ```js
@@ -1815,8 +1807,8 @@ choose the same value (since same index = different value):
 </dd>
 </dl>
 
-## Advanced
-## Query expressions
+## 进阶 <a name="advanced"></a>
+## 查询表达式 <a name="query-expressions"></a>
 A _query expression_ is an arbitrary set of arithmetic and logical expressions which can be
 evaluated into a number, `true`/`false` value, or text.
 
@@ -1944,7 +1936,7 @@ The supported operators are listed below.
   "Query: '{{spouse}}' LIKE 'Abig*'": true
   ```
 
-### Mod-provided tokens
+### 模组提供tokens <a name="mod-provided-tokens"></a>
 SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](../extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
@@ -1986,7 +1978,7 @@ To use a mod-provided token, at least one of these must be true:
   }
   ```
 
-### Aliases
+### 别名 <a name="aliases"></a>
 An _alias_ adds an optional alternate name for an existing token. This only affects your content
 pack, and you can use both the alias name and the original token name. This is mostly useful for
 custom tokens provided by other mods, which often have longer names.
@@ -2041,7 +2033,7 @@ token](#dynamic-tokens):
 }
 ```
 
-## Common values
+## 共同值 <a name="aliases"></a>
 These are predefined values used in tokens, linked from the token documentation above as needed.
 
 ### Location context
@@ -2083,5 +2075,5 @@ value | meaning
 `anyPlayer` | The combined values for all players, regardless of whether they're online.
 _player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
+## 参见 <a name="see-also"></a>
+* 其他操作和选项请参考[模组作者指南](../author-guide.md)
