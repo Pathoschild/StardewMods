@@ -87,7 +87,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 此补丁将阿比盖尔的肖像替换为你提供的图片（详见[NPC模组](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:NPC%E6%95%B0%E6%8D%AE)）：
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -102,7 +102,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -122,7 +122,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",
@@ -136,7 +136,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 你可以用`Priority`实现非必需的`Load`（例如，当另一个模块首先加载它时你的内容包仍然可以正常运行）。
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "Load",

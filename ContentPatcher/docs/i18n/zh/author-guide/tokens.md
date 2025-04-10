@@ -87,7 +87,7 @@ token主要有两种使用方法：
 
 tokens有很多类型，但使用方式都一样。
 
-你不需要学会所有token。每一种token有不同的目的，大部分内容包只用一两种token。
+你不需要学会所有token。每一种token有不同的目的，而大部分内容包只用一两种token。
 
 Token类型包括（从最常用到最罕见）：
 * [全局tokens](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的token。
@@ -97,10 +97,16 @@ Token类型包括（从最常用到最罕见）：
 * _(Advanced)_ [模组提供tokens](#mod-provided-tokens) are provided by other mods installed by
   the player.
 
+## 集理论
+Content Patcher里的token是[集合](https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88_(%E6%95%B0%E5%AD%A6)),在实践层面上这意味它们：
+- 不能有重复值（每个独特的值只会出现一次）
+- 大部分时候无排列
+- 执行值对比的效率很高
+
 ## 全局tokens <a name="global-tokens"></a>
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
 
-### 日期和天气 <a name="date-and-weather"></a>
+### Date and weather
 <table>
 <tr>
 <th>condition</th>
@@ -214,7 +220,7 @@ The year number (like `1` or `2`).
 </tr>
 </table>
 
-### 玩家 <a name="player"></a>
+### Player
 <table>
 <tr>
 <th>condition</th>
@@ -564,7 +570,7 @@ and `Mining`.
 </tr>
 </table>
 
-### 关系 <a name="relationships"></a>
+### Relationships
 <table>
 <tr>
 <th>condition</th>
@@ -656,7 +662,7 @@ name regardless of translations).
 </tr>
 </table>
 
-### 世界 <a name="world"></a>
+### World
 <table>
 <tr>
 <th>condition</th>
@@ -777,7 +783,7 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 </tr>
 </table>
 
-### 数字操纵 <a name="number-manipulation"></a>
+### Number manipulation
 <table>
 <tr>
 <th>condition</th>
@@ -872,7 +878,7 @@ parsed input matches one of the above forms.
 </tr>
 </table>
 
-### 字符串操纵 <a name="string-manipulation"></a>
+### String manipulation
 <table>
 <tr>
 <th>condition</th>
@@ -1007,7 +1013,7 @@ these two entries are equivalent:
 </tr>
 </table>
 
-### 元数据 <a name="metadata"></a>
+### Metadata
 These tokens provide meta info about tokens, content pack files, installed mods, and the game state.
 
 <table>
@@ -1150,7 +1156,7 @@ For example:
 </tr>
 </table>
 
-### 字段引用 <a name="field-references"></a>
+### Field references
 These tokens contain field values for the current patch. For example, `{{FromFile}}` is the current
 value of the `FromFile` patch field.
 
@@ -1221,7 +1227,7 @@ See also [`PathPart`](#PathPart) for more advanced scenarios.
 </tr>
 </table>
 
-### 特定场合 <a name="specialized"></a>
+### Specialized
 These are advanced tokens meant to support some specific situations.
 
 <table>
@@ -1276,7 +1282,7 @@ For example, you can use this to provide the textures for a custom farm type:
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1299,7 +1305,7 @@ ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_
 convention is strongly recommended to avoid conflicts. For example:
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1334,7 +1340,7 @@ For example, you can use config values as tokens and conditions:
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1380,7 +1386,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1817,7 +1823,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1942,7 +1948,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1962,7 +1968,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "2.5.0",
+     "Format": "2.6.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1988,7 +1994,7 @@ alternate name and the value is the original token name. For example:
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -2014,7 +2020,7 @@ token](#dynamic-tokens):
 
 ```js
 {
-    "Format": "2.5.0",
+    "Format": "2.6.0",
     "DynamicTokens": [
         {
             "Name": "PufferchickId",

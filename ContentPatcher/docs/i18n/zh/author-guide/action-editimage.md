@@ -88,7 +88,7 @@
 
 ```js
 {
-   "Format": "2.5.0",
+   "Format": "2.6.0",
    "Changes": [
       {
          "Action": "EditImage",

@@ -35,3 +35,9 @@ __字段__: Field
 __补丁__: Patch
 
 一个补丁是`"Changes"`以下的一个条目，类别以`"Action"`字条为准。
+
+__翻译键__: Translation Key/Translation Token
+
+翻译系统的tokens和Content Patcher的tokens不是同一个概念，它指的是翻译文档里左手边的键。
+
+英文文档里有混合使用Translation Key和Translation Token，中文翻译统一使用翻译键。
