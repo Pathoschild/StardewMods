@@ -222,6 +222,23 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
             // edit button
             this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+
+            // total sell value
+            {
+                int totalSellPrice = this.Chest.Container.Inventory
+                    .Where(item => item != null)
+                    .Sum(item => Utility.getSellToStorePriceOfItem(item));
+                batch.DrawTextBlock(
+                    Game1.smallFont,
+                    totalSellPrice.ToString(),
+                    new Vector2(
+                        this.EditButton.bounds.X + this.EditButton.bounds.Width,
+                        this.ChestDropdown.bounds.Y
+                    ),
+                    bounds.Width,
+                    Color.White * navOpacity
+                );
+            }
         }
 
         // edit mode
