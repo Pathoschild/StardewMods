@@ -114,11 +114,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-<<<<<<< HEAD
-   "Format": "2.5.0",
-=======
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "Changes": [
       {
          "Action": "EditData",
@@ -323,11 +319,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-<<<<<<< HEAD
-   "Format": "2.5.0",
-=======
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "Changes": [
       {
          "Action": "EditData",

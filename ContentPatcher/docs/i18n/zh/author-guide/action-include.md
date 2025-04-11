@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-﻿← [author guide](../author-guide.md)
-
-A patch with **`"Action": "Include"`** lets you load patches from another JSON file.
-
-## Contents
-* [Usage](#usage)
-  * [Overview](#overview)
-  * [Format](#format)
-  * [Examples](#examples)
-* [FAQs](#faqs)
-  * [Are there limits to the files I can include?](#are-there-limits-to-the-files-i-can-include)
-  * [Can I load non-patches using `Include`?](#can-i-load-non-patches-using-include)
-* [See also](#see-also)
-
-## Usage
-### Overview
-Instead of defining all your patches in one `content.json` file, `Include` lets you define them
-in another file. The included patches work exactly as if you'd pasted them into the `Include`
-patch's position yourself. For example, they can use all of the same features  available in your
-`content.json` (like [tokens and conditions](../author-guide.md#tokens)), and any local file paths
-are still relative from your `content.json`.
-
-The included file must be a `.json` file which only contains a `Changes` field:
-```js
-{
-    "Changes": [
-        /* patches defined here like usual */
-=======
 ﻿← [模组作者指南](../author-guide.md)
 
 一个含有**`"Action": "Include"`**的补丁会从另外一个JSON文件里加载更多补丁。
@@ -52,24 +23,10 @@ The included file must be a `.json` file which only contains a `Changes` field:
    // 不能有Format
     "Changes": [
         /* 补丁放这里 */
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
     ]
 }
 ```
 
-<<<<<<< HEAD
-### Format
-An `Include` patch consists of a model under `Changes` (see examples below) with these fields:
-
-<dl>
-<dt>Required fields:</dt>
-<dd>
-
-field     | purpose
---------- | -------
-`Action`  | The kind of change to make. Set to `Include` for this action type.
-`FromFile` | The relative path to the `.json` file containing patches in your content pack folder, or multiple comma-delimited paths to load. This path is always relative from your `content.json` (even when an include file includes another file).
-=======
 ### 格式<a name="format"></a>
 一个`Include`补丁是一个`Changes`以下含有这些字段的模型：
 
@@ -81,23 +38,11 @@ field     | purpose
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`Include`。
 `FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。此路径相对于你的`content.json`，即使你的`Include`是另一个`Include`里的补丁。
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 </td>
 </tr>
 
 </dd>
-<<<<<<< HEAD
-<dt>Optional fields:</dt>
-<dd>
-
-field     | purpose
---------- | -------
-`When`    | _(optional)_ Only apply the patch if the given [conditions](../author-guide.md#conditions) match.
-`LogName` | _(optional)_ A name for this patch to show in log messages. This is useful for understanding errors; if not specified, it'll default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
-`Update`  | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
-`LocalTokens` | _(Optional)_ A set of [local tokens](../author-guide/tokens.md#local-tokens) which can be used within this patch's field. These are inherited by all the patches loaded through the `Include` patch.
-=======
 <dt>可选字段：</dt>
 <dd>
 
@@ -107,26 +52,16 @@ field     | purpose
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
 `LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部tokens](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些tokens。
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 </dd>
 </dl>
 
-<<<<<<< HEAD
-### Examples
-In the simplest case, you can use this to organize your patches into subfiles:
-
-```js
-{
-   "Format": "2.5.0",
-=======
 ### 示例<a name="example"></a>
 最基本的使用方式是用`Include`把你的补丁分类到子文件里：
 
 ```js
 {
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "Changes": [
       {
          "Action": "Include",
@@ -136,19 +71,11 @@ In the simplest case, you can use this to organize your patches into subfiles:
 }
 ```
 
-<<<<<<< HEAD
-You can combine this with tokens and conditions to load files dynamically:
-
-```js
-{
-   "Format": "2.5.0",
-=======
 你可以将其与令牌和条件结合起来，选择性加载某一组补丁：
 
 ```js
 {
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "Changes": [
       {
          "Action": "Include",
@@ -161,22 +88,6 @@ You can combine this with tokens and conditions to load files dynamically:
 }
 ```
 
-<<<<<<< HEAD
-## FAQs
-### Are there limits to the files I can include?
-Nope. You can `Include` patches from any number of files, those files can use `Include` to load
-_other_ files, and you can even include the same file multiple times. In each case it works exactly
-as if you'd pasted all the patches into that position in `content.json`.
-
-The only restriction is that you can't have a circular loop (e.g. file A loads B which loads A).
-
-### Can I load non-patches using `Include`?
-No. The included file can only contain a `Changes` field. Trying to add a different field like
-`ConfigSchema`, `CustomLocations`, or `DynamicTokens` will result in an error message.
-
-## See also
-* [Author guide](../author-guide.md) for other actions and options
-=======
 ## 常见问题<a name="faqs"></a>
 ### 我可以Include的文件是否有限制?<a name="are-there-limits-to-the-files-i-can-include"></a>
 没有。你可以`Include`的文件里可以有任意数量的补丁，这些补丁里可以有更多`Include`补丁来加载其他文件，而且你可以多次`Include`同一个文件。在每种情况下，它的工作原理都和你将所有补丁粘贴到“content.json”中的该位置一样。
@@ -188,4 +99,3 @@ No. The included file can only contain a `Changes` field. Trying to add a differ
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05

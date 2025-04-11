@@ -31,11 +31,7 @@ To access the API:
 1. Add Content Patcher as [a **required** dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-<<<<<<< HEAD
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.5.0" }
-=======
       { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.6.0" }
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    ]
    ```
 2. Add a reference to the Content Patcher DLL in your mod's `.csproj` file. Make sure you set
@@ -69,11 +65,7 @@ Now that you have access to the API, you can parse token strings.
    var tokenString = api.ParseTokenString(
       manifest: this.ModManifest,
       rawValue: rawTokenString,
-<<<<<<< HEAD
-      formatVersion: new SemanticVersion("2.5.0")
-=======
       formatVersion: new SemanticVersion("2.6.0")
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    );
    ```
 3. Get the parsed string from the `Value` property. For example:
@@ -89,11 +81,7 @@ required dependencies in your mod's `manifest.json`.
 var tokenString = api.ParseTokenString(
    manifest: this.ModManifest,
    rawValue: rawTokenString,
-<<<<<<< HEAD
-   formatVersion: new SemanticVersion("2.5.0"),
-=======
    formatVersion: new SemanticVersion("2.6.0"),
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    assumeModIds: new[] { "spacechase0.JsonAssets" }
 );
 ```

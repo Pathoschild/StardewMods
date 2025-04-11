@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-﻿← [author guide](../author-guide.md)
-
-**This feature is deprecated. See [Modding:Location data](https://stardewvalleywiki.com/Modding:Location_data) for help
-adding/editing locations through the built-in feature in Stardew Valley 1.6 and later.**
-=======
 ﻿← [模组作者指南](../author-guide.md)
 
 **此功能已弃用，1.6的新模组应该使用游戏内置的`Data/Locations`来添加自定义地点，详见[模组:地点数据](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E7%82%B9%E6%95%B0%E6%8D%AE)。**
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 ----
 
@@ -131,11 +124,7 @@ Here's how you'd do that:
 
 ```js
 {
-<<<<<<< HEAD
-   "Format": "2.5.0",
-=======
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
    "CustomLocations": [
       // add the in-game location
@@ -197,11 +186,7 @@ For example:
 
 ```js
 {
-<<<<<<< HEAD
-   "Format": "2.5.0",
-=======
    "Format": "2.6.0",
->>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "CustomLocations": [
       {
          "Name": "{{ModId}}_AbigailCloset",
