@@ -1,3 +1,51 @@
+<<<<<<< HEAD
+﻿← [author guide](../author-guide.md)
+
+The config feature lets you make dynamic changes in your content pack that depends on settings
+selected by the player.
+
+## Contents
+* [Basic config](#basic-config)
+  * [Overview](#overview)
+  * [Define your config](#define-your-config)
+  * [Examples](#examples)
+* [Config UI](#config-ui)
+  * [Display options](#display-options)
+  * [Sections](#sections)
+  * [Translations](#translations)
+* [See also](#see-also)
+
+## Basic config
+## Overview
+You can define your content pack's settings using the `ConfigSchema` field, then Content Patcher
+will automatically add a `config.json` file and [in-game config UI](#config-ui) to let players edit
+your options.
+
+In your content pack code, you can then use config options as [tokens &
+conditions](../author-guide.md#tokens) to make dynamic changes.
+
+### Define your config
+First you need to describe your config options for Content Patcher. You do that by adding a
+`ConfigSchema` field (outside the `Changes` field which has your patches). Each config option has
+a key used as the token name, and a data model containing these fields:
+
+field               | meaning
+------------------- | -------
+`AllowValues`       | _(optional)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in the [config UI](#config-ui)).
+`AllowBlank`        | _(optional)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
+`AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
+`Default`           | _(optional unless `AllowBlank` is false)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
+
+Config names and fields are not case-sensitive.
+
+### Examples
+This `content.json` defines a `BillboardMaterial` config field and uses it to change which patch is
+applied:
+
+```js
+{
+   "Format": "2.5.0",
+=======
 ﻿← [模组作者指南](../author-guide.md)
 
 设置选项功能让你向玩家提供可更改的设置，并基于设置实现动态。
@@ -42,6 +90,7 @@
 ```js
 {
    "Format": "2.6.0",
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -49,14 +98,22 @@
       }
    },
    "Changes": [
+<<<<<<< HEAD
+      // as a token
+=======
       // 作为token
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
       {
          "Action": "Load",
          "Target": "LooseSprites/Billboard",
          "FromFile": "assets/material_{{Material}}.png"
       },
 
+<<<<<<< HEAD
+      // as a condition
+=======
       // 作为条件
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
       {
          "Action": "Load",
          "Target": "LooseSprites/Billboard",
@@ -69,7 +126,11 @@
 }
 ```
 
+<<<<<<< HEAD
+When you run the game, a `config.json` file will appear automatically with text like this:
+=======
 当你运行游戏时，Content Patcher会自动生成一个`config.json`文件：
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 ```js
 {
@@ -77,6 +138,35 @@
 }
 ```
 
+<<<<<<< HEAD
+Players can edit that file to configure your content pack, or use the in-game
+[config UI](#config-ui).
+
+## Config UI
+Content Patcher will automatically add an in-game UI to let players edit your settings, currently
+using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098). You can
+optionally provide extra info to improve the config UI.
+
+### Display options
+There's two extra fields to customize how config UIs are rendered:
+
+field         | meaning
+------------- | -------
+`Description` | _(optional)_ An explanation of the config option for the player, usually shown in the config UI as a tooltip.
+`Section`     | _(optional)_ A section title to group related sections. See [_sections_](#sections) below.
+
+### Sections
+You can group your options into sections using the `Section` field. Options with no section are
+always listed first, followed by sections in the order they first appeared in `ConfigSchema`.
+
+For example, this adds two sections:
+
+```js
+{
+    "Format": "2.5.0",
+    "ConfigSchema": {
+        // appearance section
+=======
 玩家可以编辑此`config.json`文件来改变设置，或使用游戏内设置[设置菜单](#config-ui)。
 
 ## 设置菜单<a name="config-ui"></a>
@@ -101,6 +191,7 @@
     "Format": "2.6.0",
     "ConfigSchema": {
         // 外观分段
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
         "Material": {
             "AllowValues": "Wood, Metal",
             "Default": "Wood",
@@ -112,7 +203,11 @@
             "Section": "Appearance"
         },
 
+<<<<<<< HEAD
+        // behavior section
+=======
         // 行为分段
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
         "Enabled": {
             "AllowValues": "true, false",
             "Default": "true",
@@ -123,16 +218,45 @@
 }
 ```
 
+<<<<<<< HEAD
+Which would look something like this in-game:
+
+![](../screenshots/config-with-sections.png)
+
+### Translations
+By default your config options are shown as-is in the config UI, with no display names or tooltips
+or translations:
+=======
 游戏内显示如下：
 
 ![](../screenshots/config-with-sections.png)
 
 ### 翻译<a name="translations"></a>
 默认情况下，你的配置选项会显示为内置名，没有工具提示或翻译。
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 ![](../screenshots/config-plain.png)
 
 You can add [translation files](https://stardewvalleywiki.com/Modding:Translations) for your config
+<<<<<<< HEAD
+to have a more user-friendly UI. To do that, create an `i18n/default.json` for your default text.
+For each field, add any combination of these translation keys:
+
+key format                             | description
+:------------------------------------- | :----------
+`config.<name>.name`                   | The field name.
+`config.<name>.description`            | The field description (usually shown as a tooltip).
+`config.<name>.values.<value>`         | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
+`config.section.<section>.name`        | The [section](#sections) name.
+`config.section.<section>.description` | The [section](#sections) description (usually shown as a tooltip).
+
+All translation keys are optional, and they're not case-sensitive.
+
+For example, let's add some translations for the previous screenshot:
+
+```js
+// in i18n/default.json
+=======
 to have a more . To do that, create an `i18n/default.json` for your default text.
 For each field, add any combination of these translation keys:
 
@@ -152,6 +276,7 @@ For each field, add any combination of these translation keys:
 
 ```js
 // i18n/default.json（英文）
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 {
     "config.Material.name": "Material",
     "config.Material.description": "The material style for the billboard background.",
@@ -159,7 +284,11 @@ For each field, add any combination of these translation keys:
     "config.Material.values.Metal": "metal"
 }
 
+<<<<<<< HEAD
+// in i18n/fr.json
+=======
 // i18n/fr.json（法语）
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 {
     "config.Material.name": "Matériel",
     "config.Material.description": "Le style du matériel pour l'arrière-plan du panneau d'affichage.",
@@ -168,6 +297,16 @@ For each field, add any combination of these translation keys:
 }
 ```
 
+<<<<<<< HEAD
+And now the config UI would look something like this for a French player:
+
+![](../screenshots/config-with-translations.png)
+
+See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
+
+## See also
+* [Author guide](../author-guide.md) for other actions and options
+=======
 添加后法语玩家会看到以下界面：
 
 ![](../screenshots/config-with-translations.png)
@@ -176,3 +315,4 @@ For each field, add any combination of these translation keys:
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05

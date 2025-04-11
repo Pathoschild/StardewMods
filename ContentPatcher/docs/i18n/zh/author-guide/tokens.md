@@ -1,14 +1,14 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-此文档描述Content Patcher里可使用tokens.
+此文档描述Content Patcher里可使用的令牌。
 
-**See the [main README](../README.md) for other info**.
+**详见[README](../README.md)**。
 
 ## 内容
 * [介绍](#introduction)
   * [概述](#overview)
-  * [Token类型](#token-types)
-* [全局tokens](#global-tokens)
+  * [令牌类型](#token-types)
+* [全局令牌](#global-tokens)
   * [日期和天气](#date-and-weather)
   * [玩家](#player)
   * [关系](#relationships)
@@ -18,9 +18,9 @@
   * [元数据](#metadata)
   * [字段引用](#field-references)
   * [特定场合](#specialized)
-* [设置tokens](#config-tokens)
-* [动态tokens](#dynamic-tokens)
-* [局部tokens](#local-tokens)
+* [设置令牌](#config-tokens)
+* [动态令牌](#dynamic-tokens)
+* [局部令牌](#local-tokens)
 * [输入参数](#input-arguments)
   * [概述](#overview-1)
   * [全局输入参数](#global-input-arguments)
@@ -28,23 +28,28 @@
 * [随机](#randomization)
 * [进阶](#advanced)
   * [查询表达式](#query-expressions)
-  * [模组提供tokens](#mod-provided-tokens)
+  * [模组提供令牌](#mod-provided-tokens)
   * [别名](#aliases)
 * [共同值](#common-values)
 * [参见](#see-also)
 
-## 介绍 <a name="introduction"></a>
-### 概述 <a name="overview"></a>
+<a name="introduction"></a>
 
-一个**token**是有名字的一组值。比如说，名为`season`的token在游戏季节为夏天时的值为`"summer"`.
+## 介绍 
+<a name="overview"></a>
 
-token主要有两种使用方法：
+### 概述 
 
-#### 占位符 <a name="placeholders"></a>
+一个**令牌**（token）是有名字的一组值。比如说，名为`season`的令牌在游戏季节为夏天时的值为`"summer"`.
 
-在文本中把token名称放入两层大括號即可调用token的值，运行时会自动将token占位符替换成对应的token值。
+令牌主要有两种使用方法：
+<a name="placeholders"></a>
 
-大部分字段都可以可使用token占位符（每个字段的文档会注释可否使用token），不区分大小写（`{{season}}`和`{{SEASON}}`是同一个token）。一个含有当前不可用的补丁将不生效。
+#### 占位符 
+
+在文本中把令牌名称放入两层大括號即可调用令牌的值，运行时会自动将令牌占位符替换成对应的令牌值。
+
+大部分字段都可以可使用令牌占位符（每个字段的文档会注释可否使用令牌），不区分大小写（`{{season}}`和`{{SEASON}}`是同一个令牌）。一个含有当前不可用的补丁将不生效。
 
 此例子让农舍在每个季节都更改外观。
 
@@ -52,22 +57,23 @@ token主要有两种使用方法：
 {
     "Action": "EditImage",
     "Target": "Buildings/houses",
-    "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
+    "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, 诸如此类。
 }
 ```
 
-只有一个值的tokens最适合以占位符形式使用，但多值的token也可以用（显示为以逗号分割的列表）。
+只有一个值的令牌最适合以占位符形式使用，但多值的令牌也可以用（显示为以逗号分割的列表）。
+<a name="conditions"></a>
 
-#### 条件 <a name="conditions"></a>
+#### 条件 
 
 你可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
 
 每个条件里含有：
-* 一个含有[token](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
-* 一个含有以逗号分割的列表的值，如`spring, summer`。若键里的token等于列表中任意值，此条件成立。值本身也支持[tokens](#introduction)，不区分大小写。
+* 一个含有[令牌](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
+* 一个含有以逗号分割的列表的值，如`spring, summer`。若键里的令牌等于列表中任意值，此条件成立。值本身也支持[令牌](#introduction)，不区分大小写。
 
 
-此例子让农舍在第一年的春天（spring）和夏天（素描木耳）更改外观。
+此例子让农舍在第一年的春天（spring）和夏天（summer）更改外观。
 
 ```js
 {
@@ -81,42 +87,44 @@ token主要有两种使用方法：
 }
 ```
 
-一个条件里值只要有一个值对应token那整个条件成立。而一个补丁只有在`When`里所有的条件都成立时才会生效。
+一个条件里值只要有一个值对应令牌那整个条件成立。而一个补丁只有在`When`里所有的条件都成立时才会生效。
+<a name="token-types"></a>
 
-### Token类型 <a name="token-types"></a>
+### 令牌类型 
 
-tokens有很多类型，但使用方式都一样。
+令牌有很多类型，但使用方式都一样。
 
-你不需要学会所有token。每一种token有不同的目的，而大部分内容包只用一两种token。
+你不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
 
-Token类型包括（从最常用到最罕见）：
-* [全局tokens](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的token。
-* [设置tokens](#config-tokens)是玩家在模组设置选项中可选的值。
-* [动态tokens](#dynamic-tokens)是你定义的值，用来重复利用某些值或利用多个简单tokens构造复杂的token。
-* _(Advanced)_ [局部tokens](#local-tokens)和动态tokens类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
-* _(Advanced)_ [模组提供tokens](#mod-provided-tokens) are provided by other mods installed by
-  the player.
+令牌类型包括（从最常用到最罕见）：
+* [全局令牌](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的令牌。
+* [设置令牌](#config-tokens)是玩家在模组设置选项中可选的值。
+* [动态令牌](#dynamic-tokens)是你定义的值，用来重复利用某些值或利用多个简单令牌构造复杂的令牌。
+* _(高级)_ [局部令牌](#local-tokens)和动态令牌类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
+* _(高级)_ [模组提供令牌](#mod-provided-tokens)由玩家安装的其他模组提供。
 
 ## 集理论
-Content Patcher里的token是[集合](https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88_(%E6%95%B0%E5%AD%A6)),在实践层面上这意味它们：
+Content Patcher里的令牌是[集合](https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88_(%E6%95%B0%E5%AD%A6))，在实践层面上这意味它们：
 - 不能有重复值（每个独特的值只会出现一次）
 - 大部分时候无排列
 - 执行值对比的效率很高
+<a name="global-tokens"></a>
 
-## 全局tokens <a name="global-tokens"></a>
-Global token values are defined by Content Patcher, so you can use them without doing anything else.
+## 全局令牌 
+全局令牌的值由Content Patcher定义，因此无需额外操作即可直接使用。
+<a name="date-and-weather"></a>
 
-### Date and weather
+### 日期与天气 
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用法</th>
 <th>&nbsp;</th>
 </tr>
 
 <tr valign="top" id="Day">
 <td>Day</td>
-<td>The day of month. Possible values: any integer from 1 through 28.</td>
+<td>当前月份中的日期，值为1至28之间的整数。</td>
 <td><a href="#Day">#</a></td>
 </tr>
 
@@ -124,17 +132,17 @@ Global token values are defined by Content Patcher, so you can use them without 
 <td>DayEvent</td>
 <td>
 
-The festival or wedding happening today. Possible values:
-* `wedding` (current player is getting married);
-* `dance of the moonlight jellies`;
-* `egg festival`;
-* `feast of the winter star`;
-* `festival of ice`;
-* `flower dance`;
-* `luau`;
-* `stardew valley fair`;
-* `spirit's eve`;
-* a custom festival name.
+今天会发生的节日或者婚礼， 可取值为：
+* `wedding` (当前玩家结婚事件)；
+* `dance of the moonlight jellies`（月光水母节）；
+* `egg festival`（复活节）；
+* `feast of the winter star`（冬日星盛宴）
+* `festival of ice`（冰雪节）；
+* `flower dance`（花舞节）；
+* `luau`（夏威夷宴会）；
+* `stardew valley fair`（星露谷展览会）；
+* `spirit's eve`（万灵节）；
+* 其他自定义节日名称。
 
 </td>
 <td><a href="#DayEvent">#</a></td>
@@ -144,8 +152,8 @@ The festival or wedding happening today. Possible values:
 <td>DayOfWeek</td>
 <td>
 
-The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`,
-`Saturday`, and `Sunday`.
+一周中的一天. 可取值为： `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`,
+`Saturday`, 和 `Sunday`。
 
 </td>
 <td><a href="#DayOfWeek">#</a></td>
@@ -153,7 +161,7 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 
 <tr valign="top" id="DaysPlayed">
 <td>DaysPlayed</td>
-<td>The total number of in-game days played for the current save (starting from one when the first day starts).</td>
+<td>当前保存的游戏内总天数（从第一天的第一刻开始）。</td>
 <td><a href="#DaysPlayed">#</a></td>
 </tr>
 
@@ -161,7 +169,7 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 <td>Season</td>
 <td>
 
-The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
+季节名称。可取值为： `Spring`, `Summer`, `Fall`, 和`Winter`。
 
 </td>
 <td><a href="#Season">#</a></td>
@@ -171,15 +179,15 @@ The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 <td>Time</td>
 <td>
 
-The in-game time of day, as a numeric value between `0600` (6am) and `2600` (2am before sleeping).
-This can also be used with range tokens:
+游戏中一天的时间, 作为一个处于 `0600`（早上六点）和 `2600`（凌晨两点）的数值。
+这也可以用于表示一定范围的令牌：
 ```js
 "When": {
    "Time": "{{Range: 0600, 2600}}"
 }
 ```
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
+ℹ 在使用这个令牌前请参见 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#Time">#</a></td>
@@ -189,21 +197,20 @@ This can also be used with range tokens:
 <td>Weather</td>
 <td>
 
-The weather type in the current world area (or the area specified with a
-[`LocationContext`](#location-context) argument). Possible values:
+当前世界范围（或是一部分特殊地区的[`地点上下文`](#location-context)参数）的天气类型
+ 可取值为：
 
-value       | meaning
+值       | 含义
 ----------- | -------
-`Sun`       | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
-`Rain`      | Normal rain is falling, but without lightning.
-`Storm`     | Normal rain is falling with lightning.
-`GreenRain` | [Green rain](https://stardewvalleywiki.com/Weather#Green_Rain) is falling.
-`Snow`      | Snow is falling.
-`Wind`      | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
-_custom_    | For custom weathers defined by a mod, the weather ID.
+`Sun`       | 晴天 (包括节日或者婚礼)。 如果没有指定其它值，这将是默认天气。
+`Rain`      | 没有雷电的雨天。
+`Storm`     | 有雷电的雨天。
+`GreenRain` | [苔雨天](https://zh.stardewvalleywiki.com/%E5%A4%A9%E6%B0%94#%E8%8B%94%E9%9B%A8)。
+`Snow`      | 下雪。
+`Wind`      | 起风了，参杂着可见碎片（比如：春天的樱花和秋天的枯叶）。
+_自定义天气_    | 模组自定义的天气，需使用ID表示。
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token without specifying a
-location context.
+ℹ 在未指定地点上下文时请参见 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#Weather">#</a></td>
@@ -213,18 +220,19 @@ location context.
 <td>Year</td>
 <td>
 
-The year number (like `1` or `2`).
+年份编号（例如`1`或者`2`）。
 
 </td>
 <td><a href="#Year">#</a></td>
 </tr>
 </table>
+<a name="player"></a>
 
-### Player
+### 玩家
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用法</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -232,16 +240,15 @@ The year number (like `1` or `2`).
 <td>DailyLuck</td>
 <td>
 
-The [daily luck](https://stardewvalleywiki.com/Luck) for the [current or specified
-player](#target-player).
+这个[运气](https://zh.stardewvalleywiki.com/%E8%BF%90%E6%B0%94)需指定[当前或特定玩家](#target-player)。
 
-This is a decimal value usually between -0.1 and 0.1. This **cannot** be compared using the
-`{{Range}}` token, which produces a range of integer values. The value can only be safely compared
-using [query expressions](#query-expressions). For example:
+这是一个处于-0.1和0.1之间的小数值。它**不能**用
+`{{Range}}`令牌比较，它会产生一系列整数值。这个数值只能在使用
+[查询表达式](#query-expressions)时被稳定地比较。例如：
 
 ```js
 "When": {
-   "Query: {{DailyLuck}} < 0": true // spirits unhappy today
+   "Query: {{DailyLuck}} < 0": true //精灵今天十分不满。
 }
 ```
 
@@ -253,9 +260,7 @@ using [query expressions](#query-expressions). For example:
 <td>FarmhouseUpgrade</td>
 <td>
 
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the [current or
-specified player](#target-player). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2
-(add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+[农舍等级](https://zh.stardewvalleywiki.com/%E5%86%9C%E8%88%8D#%E5%8D%87%E7%BA%A7)需指定[当前或特定玩家](#target-player)。正常值为0（初始农舍），1（增加厨房），2（增加婴儿房），和3（增加地窖）。其他模组可能会增加超过这个级别的等级。
 
 </td>
 <td><a href="#FarmhouseUpgrade">#</a></td>
@@ -265,9 +270,8 @@ specified player](#target-player). The normal values are 0 (initial farmhouse), 
 <td>HasActiveQuest</td>
 <td>
 
-The active quest IDs in the [current or specified player](#target-player)'s quest list. See
-[Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data) on the wiki for valid quest
-IDs.
+[当前或特定玩家](#target-player)的任务列表中的任务ID。
+参见[任务数据](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E4%BB%BB%E5%8A%A1%E6%95%B0%E6%8D%AE)获取有效的任务ID。
 
 </td>
 <td><a href="#HasActiveQuest">#</a></td>
@@ -277,8 +281,8 @@ IDs.
 <td>HasCaughtFish</td>
 <td>
 
-The fish IDs caught by the [current or specified player](#target-player). See [object
-IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
+[当前或特定玩家](#target-player)钓到的鱼的ID。
+另见[物品ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%89%A9%E4%BD%93)
 
 </td>
 <td><a href="#HasCaughtFish">#</a></td>
@@ -288,8 +292,8 @@ IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
 <td>HasConversationTopic</td>
 <td>
 
-The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
-for the [current or specified player](#target-player).
+[当前或特定玩家](#target-player)正在进行的[对话主题](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
+。
 
 </td>
 <td><a href="#HasConversationTopic">#</a></td>
@@ -299,8 +303,7 @@ for the [current or specified player](#target-player).
 <td>HasCookingRecipe</td>
 <td>
 
-The [cooking recipes](https://stardewvalleywiki.com/Cooking) known by the [current or specified
-player](#target-player).
+[当前或特定玩家](#target-player)学过的[菜谱](https://zh.stardewvalleywiki.com/%E7%83%B9%E9%A5%AA)。
 
 </td>
 <td><a href="#HasCookingRecipe">#</a></td>
@@ -310,8 +313,7 @@ player](#target-player).
 <td>HasCraftingRecipe</td>
 <td>
 
-The [crafting recipes](https://stardewvalleywiki.com/Crafting) known by the [current or specified
-player](#target-player).
+[当前或特定玩家](#target-player)学过的[合成制造品](https://zh.stardewvalleywiki.com/%E6%89%93%E9%80%A0)。
 
 </td>
 <td><a href="#HasCraftingRecipe">#</a></td>
@@ -321,8 +323,7 @@ player](#target-player).
 <td>HasDialogueAnswer</td>
 <td>
 
-The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for answers to
-question dialogues by the [current or specified player](#target-player).
+[当前或特定玩家](#target-player)在问题中选过的[回答ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%AF%B9%E8%AF%9D#%E5%9B%9E%E7%AD%94ID)。
 
 </td>
 <td><a href="#HasDialogueAnswer">#</a></td>
@@ -332,13 +333,13 @@ question dialogues by the [current or specified player](#target-player).
 <td>HasFlag</td>
 <td>
 
-The flags set for the [current or specified player](#target-player). That includes...
+[当前或特定玩家](#target-player)有过的各种ID。包括：
 
-* letter IDs sent to the player (including letters they haven't read, or those added to the mailbox for tomorrow);
-* non-letter mail flags (used to track game info);
-* world state IDs.
+* 发送给玩家的信件ID（包括未读或明天将到邮箱的信件）；
+* 非信件邮件ID（用于追踪游戏信息的）；
+* 世界状态ID。
 
-See [useful flags on the wiki](https://stardewvalleywiki.com/Modding:Mail_data#List).
+另见[维基上的可用ID列表](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E4%BF%A1%E4%BB%B6%E6%95%B0%E6%8D%AE#%E5%88%97%E8%A1%A8)。
 
 </td>
 <td><a href="#HasFlag">#</a></td>
@@ -348,18 +349,17 @@ See [useful flags on the wiki](https://stardewvalleywiki.com/Modding:Mail_data#L
 <td>HasProfession</td>
 <td>
 
-The [professions](https://stardewvalleywiki.com/Skills) learned by the [current or specified
-player](#target-player).
+[当前或特定玩家](#target-player)学过的[技能](https://zh.stardewvalleywiki.com/%E6%8A%80%E8%83%BD)。
 
-Possible values:
+可能的值有：
 
-* Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
-* Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
-* Fishing skill: `Angler`, `Fisher`, `Mariner`, `Pirate`, `Luremaster`, `Trapper`.
-* Foraging skill: `Botanist`, `Forester`, `Gatherer`, `Lumberjack`, `Tapper`, `Tracker`.
-* Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
+* 战斗技能： `Acrobat`（野蛮人）， `Brute`（特技者）， `Defender`（防御者）， `Desperado`（亡命徒）， `Fighter`（战士）， `Scout`（侦查员）。
+* 耕种技能： `Agriculturist`（农业学家）， `Artisan`（工匠）， `Coopmaster`（鸡舍大师）， `Rancher`（畜牧人）， `Shepherd`（牧羊人）， `Tiller`（农耕人）。
+* 钓鱼技能： `Angler`（垂钓者）， `Fisher`（渔夫）， `Mariner`（水手）， `Pirate`（海盗）， `Luremaster`（诱饵大师）， `Trapper`（捕猎者）。
+* 采集技能： `Botanist`（植物学家）， `Forester`（护林人）， `Gatherer`（收集者）， `Lumberjack`（伐木工人）， `Tapper`（萃取者）， `Tracker`（追踪者）。
+* 挖矿技能： `Blacksmith`（铁匠）， `Excavator`（挖掘者）， `Gemologist`（宝石专家）， `Geologist`（地质学家）， `Miner`（矿工）， `Prospector`（勘探者）。
 
-Custom professions added by a mod are represented by their integer profession ID.
+模组添加的自定义职业需用它们的整型ID表示。
 
 </td>
 <td><a href="#HasProfession">#</a></td>
@@ -369,8 +369,7 @@ Custom professions added by a mod are represented by their integer profession ID
 <td>HasReadLetter</td>
 <td>
 
-The letter IDs opened by the [current or specified player](#target-player). A letter is considered
-'opened' if the letter UI was shown.
+[当前或特定玩家](#target-player)打开过的信件ID。邮箱页面一旦出现，这封信就已经被看作已读了。
 
 </td>
 <td><a href="#HasReadLetter">#</a></td>
@@ -380,10 +379,9 @@ The letter IDs opened by the [current or specified player](#target-player). A le
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs seen by the [current or specified player](#target-player), matching IDs in the
-`Data/Events` files.
+[当前或特定玩家](#target-player)看过的事件的ID。与 `Data/Events` 里事件的ID匹配。
 
-You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
+你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)来查看游戏里的事件ID。
 
 </td>
 <td><a href="#HasSeenEvent">#</a></td>
@@ -393,11 +391,9 @@ You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to se
 <td>HasVisitedLocation</td>
 <td>
 
-The location internal names which the [current or specified player](#target-player) have previously
-visited, matching IDs in the `Data/Locations` file.
+[当前或特定玩家](#target-player)去过的地点的内部ID，与 `Data/Locations` 里的地点ID匹配。
 
-You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see location names
-in-game.
+你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)查看更多地点ID。
 
 </td>
 <td><a href="#HasVisitedLocation">#</a></td>
@@ -407,23 +403,23 @@ in-game.
 <td>HasWalletItem</td>
 <td>
 
-The [special wallet items](https://stardewvalleywiki.com/Wallet) for the current player.
+当前玩家的[钱包里的特殊物品](https://zh.stardewvalleywiki.com/%E7%89%B9%E6%AE%8A%E7%89%A9%E5%93%81%E4%B8%8E%E8%83%BD%E5%8A%9B)。
 
-Possible values:
+可能的值为：
 
-flag                       | meaning
+标志                       | 含义
 -------------------------- | -------
-`DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
-`RustyKey`                 | Unlocks the sewers.
-`ClubCard`                 | Unlocks the desert casino.
-`KeyToTheTown`             | Allows access to all buildings in town, at any time of day.
-`SpecialCharm`             | Permanently increases daily luck.
-`SkullKey`                 | Unlocks the [Skull Cavern](https://stardewvalleywiki.com/Skull_Cavern) and the Saloon's Junimo Kart machine.
-`MagnifyingGlass`          | Unlocks the ability to find secret notes.
-`DarkTalisman`             | Unlocks the Witch's Swamp.
-`MagicInk`                 | Unlocks [magical buildings](https://stardewvalleywiki.com/Wizard%27s_Tower#Buildings) and [dark shrines](https://stardewvalleywiki.com/Witch%27s_Hut).
-`BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
-`SpringOnionMastery`       | Increases sell price of spring onions.
+`DwarvishTranslationGuide`（矮人语教程） | 可以与矿洞中的矮人和火山地牢商店的矮人交流。
+`RustyKey`（生锈的钥匙）                 | 解锁下水道。
+`ClubCard`（会员卡）                | 解锁沙漠赌场。
+`KeyToTheTown` （小镇钥匙）            | 允许玩家在绝大多数时间内无视建筑物开关门时间段进入小镇上的任何建筑物。
+`SpecialCharm` （特殊的魅力）            | 永久提升每天的运气。
+`SkullKey` （头骨钥匙）                | 解锁[骷髅洞穴](https://zh.stardewvalleywiki.com/%E9%AA%B7%E9%AB%85%E6%B4%9E%E7%A9%B4)和星之果实餐吧里的祝尼魔赛车游戏机。
+`MagnifyingGlass` （放大镜）         | 获得找到秘密纸条的能力。
+`DarkTalisman` （黑暗护身符）            | 解锁巫婆沼泽。
+`MagicInk` （魔法墨水）                | 解锁[魔法建筑](https://zh.stardewvalleywiki.com/%E6%B3%95%E5%B8%88%E5%A1%94#%E5%BB%BA%E7%AD%91)和[黑暗神龛](https://zh.stardewvalleywiki.com/%E5%A5%B3%E5%B7%AB%E5%B0%8F%E5%B1%8B#%E7%A5%9E%E9%BE%9B)。
+`BearsKnowledge` （熊的知识）          | 提升美洲大树莓及黑莓3倍的售出价格。
+`SpringOnionMastery` （青葱技术）      | 提升大葱5倍的售出价格。
 
 </td>
 <td><a href="#HasWalletItem">#</a></td>
@@ -433,8 +429,9 @@ flag                       | meaning
 <td>IsMainPlayer</td>
 <td>
 
-Whether the [current or specified player](#target-player) is the main player. Possible values:
-`true`, `false`.
+[当前或特定玩家](#target-player)是否是房主。
+可取值：
+`true`，`false`。
 
 </td>
 <td><a href="#IsMainPlayer">#</a></td>
@@ -444,10 +441,11 @@ Whether the [current or specified player](#target-player) is the main player. Po
 <td>IsOutdoors</td>
 <td>
 
-Whether the [current or specified player](#target-player) is outdoors. Possible values: `true`,
-`false`.
+[当前或特定玩家](#target-player)是否在户外。
+可取值：`true`，
+`false`。
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
+ℹ 使用此令牌前请参考 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#IsOutdoors">#</a></td>
@@ -457,17 +455,16 @@ Whether the [current or specified player](#target-player) is outdoors. Possible 
 <td>LocationContext</td>
 <td>
 
-The general world area recognized by the game containing the [current or specified
-player](#target-player).
+[当前或特定玩家](#target-player)所在位置的内部名称。
 
-Possible values:
+可能的值有：
 
-* `Default` (in the valley);
-* `Desert` (in the [desert](https://stardewvalleywiki.com/Desert));
-* `Island` (on [Ginger Island](https://stardewvalleywiki.com/Ginger_Island));
-* or the ID of a custom context [in `Data/LocationContexts`](https://stardewvalleywiki.com/Modding:Migrate_to_Stardew_Valley_1.6#Custom_location_contexts).
+* `Default` （就在小镇里）；
+* `Desert` （在[沙漠](https://zh.stardewvalleywiki.com/%E6%B2%99%E6%BC%A0)）；
+* `Island` （在[姜岛](https://zh.stardewvalleywiki.com/%E5%A7%9C%E5%B2%9B)）；
+* 或者 `Data/LocationContexts` 里的[自定义地点ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%BF%81%E7%A7%BB%E8%87%B3%E6%B8%B8%E6%88%8F%E6%9C%AC%E4%BD%931.6#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9C%B0%E7%82%B9)。
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
+ℹ 使用这个令牌前请参考 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#LocationContext">#</a></td>
@@ -477,19 +474,15 @@ Possible values:
 <td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
-The internal name of the [current or specified player](#target-player)'s current location, like
-`FarmHouse` or `Town`. You can see the name for the current location using
-[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or [`patch
-summary`](../author-guide.md#patch-summary).
+[当前或特定玩家](#target-player)所在地点的内部ID，比如 `FarmHouse` 或者 `Town`。你可以用
+[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)或者[`patch
+summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 
-Notes:
-* Temporary festival maps always have the location name "Temp".
-* `LocationName` and `LocationUniqueName` are identical except inside constructed buildings, cabins,
-  and farmhand cellars. For example, a coop might have `LocationName` "Deluxe Coop" and
-  `LocationUniqueName` "Coop7379e3db-1c12-4963-bb93-23a1323a25f7". The `LocationUniqueName` can be
-  used as the target location for warp properties.
+注意：
+* 所有临时节日地点都叫“Temp”。
+* `LocationName` 和 `LocationUniqueName` 一般都是相同的，除了可移动的建筑，小屋，酒窖。比如鸡舍的 `LocationName` 是"Deluxe Coop" 但是`LocationUniqueName` 是"Coop7379e3db-1c12-4963-bb93-23a1323a25f7"。`LocationUniqueName` 可以用作传送时的目标地点。
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
+ℹ 使用此令牌前请参考 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#LocationName">#</a></td>
@@ -499,22 +492,21 @@ Notes:
 <td>LocationOwnerId</td>
 <td>
 
-The [unique ID of the player](#target-player) who owns the [current or specified player](#target-player)'s
-location, if applicable.
+[当前或特定玩家](#target-player)所处地点的所有者的[唯一ID](#target-player)。
 
-This works for these locations:
+只在下列地点生效：
 
-location      | owner
+地点      | 所有者
 :------------ | :----
-farmhouse     | main player
-island house  | main player
-cabin         | linked farmhand
-cellar        | same as the cabin/farmhouse it's linked to
-farm building | player who constructed it
+农舍     | 房主
+姜岛农舍  | 房主
+联机小屋         | 其他联机玩家
+酒窖        | 和这个酒窖所在农舍或联机小屋的所有者一样
+农场建筑 | 建造它的玩家
 
-This can be used to get other info for the owner, like `{{PlayerName: {{LocationOwnerId}}}}`.
+这个令牌也能用于获取所有者的其他信息，如`{{PlayerName: {{LocationOwnerId}}}}`。
 
-ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
+ℹ 使用此令牌前请参考 _[更新速率](../author-guide.md#update-rate)_ 。
 
 </td>
 <td><a href="#LocationOwnerId">#</a></td>
@@ -524,7 +516,7 @@ This can be used to get other info for the owner, like `{{PlayerName: {{Location
 <td>PlayerGender</td>
 <td>
 
-The [current or specified player](#target-player)'s gender. Possible values: `Female`, `Male`.
+[当前或特定玩家](#target-player)的性别。可取值为： `Female`， `Male`。
 
 </td>
 <td><a href="#PlayerGender">#</a></td>
@@ -534,7 +526,7 @@ The [current or specified player](#target-player)'s gender. Possible values: `Fe
 <td>PlayerName</td>
 <td>
 
-The [current or specified player](#target-player)'s name.
+[当前或特定玩家](#target-player)的名字。
 
 </td>
 <td><a href="#PlayerName">#</a></td>
@@ -544,7 +536,7 @@ The [current or specified player](#target-player)'s name.
 <td>PreferredPet</td>
 <td>
 
-The current player's preferred pet. Possible values: `Cat`, `Dog`.
+当前玩家偏爱的宠物类型，可取值：`Cat`， `Dog`。
 
 </td>
 <td><a href="#PreferredPet">#</a></td>
@@ -554,27 +546,29 @@ The current player's preferred pet. Possible values: `Cat`, `Dog`.
 <td>SkillLevel</td>
 <td>
 
-The current player's skill levels. You can specify the skill level as an input argument like this:
+当前玩家的技能等级。
+可指定技能作为输入参数，例如：
 
 ```js
 "When": {
-   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
+   "SkillLevel:Combat": "1, 2, 3" // 战斗技能等级1, 2, 或者 3
 }
 ```
 
-The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game),
-and `Mining`.
+有效的取值：`Combat`（战斗）， `Farming`（耕种）， `Fishing`（钓鱼）， `Foraging`（采集）， `Luck` （幸运等级，游戏中未实装）
+和`Mining`（挖矿）。
 
 </td>
 <td><a href="#SkillLevel">#</a></td>
 </tr>
 </table>
+<a name="relationships"></a>
 
-### Relationships
+### 人际关系 
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -582,12 +576,10 @@ and `Mining`.
 <td id="ChildGenders">ChildNames<br />ChildGenders</td>
 <td>
 
-The names and genders (`Female` or `Male`) for the [current or specified player](#target-player)'s
-children.
+[当前或特定玩家](#target-player)孩子的名字和性别（`Female` 或者 `Male`）。
 
-These are listed in order of birth for use with the [`valueAt` argument](#valueAt). For example,
-`{{ChildNames |valueAt=0}}` and `{{ChildGenders |valueAt=0}}` is the name and gender of the oldest
-child.
+按出生顺序排列，可用[`valueAt` 参数](#valueAt)指定。比如 
+`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是你最年长的孩子的名字和性别。
 
 </td>
 <td><a href="#ChildNames">#</a></td>
@@ -597,8 +589,8 @@ child.
 <td>Hearts</td>
 <td>
 
-The player's heart level with a given NPC. You can specify the character name as an input argument
-(using their English name regardless of translations), like this:
+玩家与指定角色的心数。可将角色名称作为输入参数
+（只能使用角色的英文名）。比如：
 
 ```js
 "When": {
@@ -614,8 +606,7 @@ The player's heart level with a given NPC. You can specify the character name as
 <td>Relationship</td>
 <td>
 
-The player's relationship with a given NPC or player. You can specify the character name as part
-of the key (using their English name regardless of translations), like this:
+玩家与指定角色或玩家的关系。可将角色名称作为输入参数（只能使用角色的英文名），例如：
 
 ```js
 "When": {
@@ -623,16 +614,16 @@ of the key (using their English name regardless of translations), like this:
 }
 ```
 
-The valid relationship types are...
+有效的关系类型有：
 
-value    | meaning
+值    | 含义
 -------- | -------
-Unmet    | The player hasn't talked to the NPC yet.
-Friendly | The player talked to the NPC at least once, but hasn't reached one of the other stages yet.
-Dating   | The player gave them a bouquet.
-Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
-Married  | The player married them.
-Divorced | The player married and then divorced them.
+Unmet    | 玩家尚未与该角色对话过。
+Friendly | 玩家至少与该角色对话过，但仅此而已。
+Dating   | 玩家给了角色花束。
+Engaged  | 玩家给了角色美人鱼吊坠，但婚礼还没到。
+Married  | 玩家已和角色结婚。
+Divorced | 玩家和角色结婚然后又离了。
 
 </td>
 <td><a href="#Relationship">#</a></td>
@@ -642,8 +633,7 @@ Divorced | The player married and then divorced them.
 <td>Roommate</td>
 <td>
 
-The name of the [current or specified player](#target-player)'s NPC roommate (using their English
-name regardless of translations).
+[当前或特定玩家](#target-player)的室友（只能用英文名）。
 
 </td>
 <td><a href="#Roommate">#</a></td>
@@ -654,19 +644,19 @@ name regardless of translations).
 <td>Spouse</td>
 <td>
 
-The name of the [current or specified player](#target-player)'s NPC spouse (using their English
-name regardless of translations).
+[当前或特定玩家](#target-player)的配偶（只能用英文名）。
 
 </td>
 <td><a href="#Spouse">#</a></td>
 </tr>
 </table>
+<a name="world"></a>
 
-### World
+### 世界
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -674,8 +664,8 @@ name regardless of translations).
 <td>FarmCave</td>
 <td>
 
-The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`,
-`Mushrooms`.
+[农场洞穴](https://stardewvalleywiki.com/The_Cave)的类型。可取值：`None`（无）， `Bats`（蝙蝠洞），
+`Mushrooms`（蘑菇洞）。
 
 </td>
 <td><a href="#FarmCave">#</a></td>
@@ -685,22 +675,22 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 <td>FarmMapAsset</td>
 <td>
 
-The farm type's map asset name relative to the game's `Content/Maps` folder.
+`Content/Maps` 文件夹中展示的农场类型。
 
-This is usually one of:
+一般只有以下取值：
 
-farm type    | value
+农场类型    | 值
 ------------ | -----
-Standard     | `Farm`
-Beach        | `Farm_Island`
-Forest       | `Farm_Foraging`
-Four Corners | `Farm_FourCorners`
-Hill-top     | `Farm_Mining`
-Meadowlands  | `Farm_Ranching`
-Riverland    | `Farm_Fishing`
-Wilderness   | `Farm_Combat`
-_custom type_  | The `MapName` value in `Data/AdditionalFarms`.
-_invalid type_ | `Farm`
+标准农场     | `Farm`
+沙滩农场     | `Farm_Island`
+森林农场     | `Farm_Foraging`
+四角农场     | `Farm_FourCorners`
+山顶农场     | `Farm_Mining`
+草原农场     | `Farm_Ranching`
+河边农场     | `Farm_Fishing`
+荒野农场     | `Farm_Combat`
+_自定义类型_  | `Data/AdditionalFarms` 文件夹里的 `MapName`字段。
+_无效类型_ | `Farm`
 
 </td>
 <td><a href="#FarmMapAsset">#</a></td>
@@ -708,7 +698,7 @@ _invalid type_ | `Farm`
 
 <tr valign="top" id="FarmName">
 <td>FarmName</td>
-<td>The name of the current farm.</td>
+<td>当前农场的名字。</td>
 <td><a href="#FarmName">#</a></td>
 </tr>
 
@@ -716,13 +706,13 @@ _invalid type_ | `Farm`
 <td>FarmType</td>
 <td>
 
-The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). This will be one of...
+[农场类型](https://stardewvalleywiki.com/The_Farm#Farm_Maps)。有以下取值：
 
-value | description
+值 | 描述
 ----- | -----------
-`Standard`<br />`Beach`<br />`FourCorners`<br />`Forest`<br />`Hilltop`<br />`Riverland`<br />`Wilderness` | A farm type from the base game.
-_custom farm ID_ | A custom farm type, using the `ID` value from the mod's farm data.
-`Custom` | _(rare)_ A custom farm type from mods using an old approach for custom farm types.
+`Standard`<br />`Beach`<br />`FourCorners`<br />`Forest`<br />`Hilltop`<br />`Riverland`<br />`Wilderness` | 原游戏的农场类型。
+_自定义农场ID_ | 模组里自定义农场类型的`ID`。
+`Custom` | _（很少见）_ 用过时的方法创建自定义农场类型的模组。
 
 </td>
 <td><a href="#FarmType">#</a></td>
@@ -732,7 +722,7 @@ _custom farm ID_ | A custom farm type, using the `ID` value from the mod's farm 
 <td>IsCommunityCenterComplete</td>
 <td>
 
-Whether all bundles in the community center are completed. Possible values: `true`, `false`.
+是否完成献祭路线。可取值：`true` 或者 `false`。
 
 </td>
 <td><a href="#IsCommunityCenterComplete">#</a></td>
@@ -742,8 +732,7 @@ Whether all bundles in the community center are completed. Possible values: `tru
 <td>IsJojaMartComplete</td>
 <td>
 
-Whether the player bought a Joja membership and completed all Joja bundles. Possible values: `true`
- `false`.
+是否完成JOJA路线。可取值：`true` 或者 `false`。
 
 </td>
 <td><a href="#IsJojaMartComplete">#</a></td>
@@ -753,9 +742,7 @@ Whether the player bought a Joja membership and completed all Joja bundles. Poss
 <td>HavingChild</td>
 <td>
 
-The names of players and NPCs whose relationship has an active pregnancy or adoption. Player names
-are prefixed with `@` to avoid ambiguity with NPC names. For example, to check if the current
-player is having a child:
+正在怀孕或领养孩子的玩家和NPC的姓名。玩家姓名用`@`做前缀避免与NPC重名。例如，检查当前玩家是否在生育孩子：
 
 ```js
 "When": {
@@ -763,9 +750,9 @@ player is having a child:
 }
 ```
 
-Usage notes:
-* `"HavingChild": "@{{playerName}}"` and `"HavingChild": "{{spouse}}"` are equivalent for this token.
-* See also the `Pregnant` token.
+注意：
+* `"HavingChild": "@{{playerName}}"`和`"HavingChild": "{{spouse}}"`等效。
+* 另见 `Pregnant` 令牌。
 
 </td>
 <td><a href="#HavingChild">#</a></td>
@@ -775,19 +762,19 @@ Usage notes:
 <td>Pregnant</td>
 <td>
 
-The players or NPCs who are currently pregnant. This is a subset of `HavingChild` that only applies
-to the female partner in heterosexual relationships. (Same-sex partners adopt a child instead.)
+当前怀孕的玩家或NPC。这是 `HavingChild` 的子集，仅适用于异性关系中的女性伴侣（因为同性伴侣只能收养不能怀孕）。
 
 </td>
 <td><a href="#Pregnant">#</a></td>
 </tr>
 </table>
+<a name="number-manipulation"></a>
 
-### Number manipulation
+### 数字操纵
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -795,8 +782,7 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <td>Count</td>
 <td>
 
-Get the number of values currently contained by a token. For example, `{{Count:{{HasActiveQuest}}}}`
-is the number of currently active quests.
+获取令牌当前包含的值的数量。例如，`{{Count:{{HasActiveQuest}}}}`是任务列表里接取但未完成的任务数。
 
 </td>
 <td><a href="#Count">#</a></td>
@@ -806,8 +792,7 @@ is the number of currently active quests.
 <td>Query</td>
 <td>
 
-Evaluate arbitrary arithmetic and logical operations; see [_query expressions_](#query-expressions)
-for more info.
+进行任意算术和逻辑运算，详见 [_查询表达式_](#query-expressions)。
 
 </td>
 <td><a href="#Query">#</a></td>
@@ -817,20 +802,18 @@ for more info.
 <td>Range</td>
 <td>
 
-A list of integers between the specified min/max integers (inclusive). This is mainly meant for
-comparing values; for example:
+最小值和最大值之间的所有整数（闭区间）。主要是用于比较数值，例如：
 
 ```js
 "When": {
-   "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
+   "Hearts:Abigail": "{{Range: 6, 14}}" //等同于"6, 7, 8, 9, 10, 11, 12, 13, 14"
 }
 ```
 
-You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
-`{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
+可在单个数值上使用令牌（比如`{{Range:6, {{MaxHearts}}}}`）或者一整个都用令牌（比如
+`{{Range:{{FriendshipRange}}}})`）只要符合`最小值, 最大值`的格式。
 
-To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
-smaller if possible.
+为减少卡顿，不能超过5000个数字，应尽可能更少。
 
 </td>
 <td><a href="#Range">#</a></td>
@@ -840,22 +823,20 @@ smaller if possible.
 <td>Round</td>
 <td>
 
-An approximation of the input number with fewer fractional digits.
+将输入数值近似为更少的小数位。
 
-In its default form, this just rounds to the nearest whole number. For example,
-`{{Round: 2.1 }}` results in `2`, and `{{Round: 2.5555 }}` results in `3`.
+默认情况下，四舍五入到最接近的整数。例如，
+`{{Round: 2.1 }}`结果是`2`，`{{Round: 2.5555 }}`结果是`3`。
 
-The token takes optional arguments to change the rounding logic:
+该令牌可以改变近似位数：
 
-usage | result | description
+用法 | 结果 | 含义
 ----- | ------ | -----------
-`Round(2.5555)` | `3` | Round to the nearest whole number.
-`Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
-`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` (defaults to [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) if not specified).
+`Round(2.5555)` | `3` | 近似为整数。
+`Round(2.5555, 2)` | `2.56` | 近似为两位小数。
+`Round(2.5555, 2, down)` | `2.55` | `up`向上取整，或者`down`向下取整。（不指定就默认[四舍五入](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even)）。
 
-This is mainly useful in combination with [query expressions](#query-expressions). For example,
-monster HP must be a whole number, so this rounds the result of a calculation to the nearest whole
-number:
+主要为了匹配[查询表达式](#query-expressions)。例如，怪物生命值必须为整数，因此将计算结果四舍五入到最近的整数：
 
 ```js
 {
@@ -869,20 +850,20 @@ number:
 }
 ```
 
-You can use tokens in the individual fields (like `{{Round: {{value}}, 2}}`) or for multiple fields
-at once (like `{{Round: {{Settings}}}}` where `{{Settings}}` = `2.5, 3, up`), as long as the final
-parsed input matches one of the above forms.
+可以在单个数值上用令牌（比如`{{Round: {{value}}, 2}}`）或同时用一整个令牌（比如`{{Round: {{Settings}}}}`，其中`{{Settings}}` = `2.5, 3, up`），只要最终输入符合上述形式。
 
 </td>
 <td><a href="#Round">#</a></td>
 </tr>
 </table>
 
-### String manipulation
+<a name="string-manipulation"></a>
+
+### 字符串操纵
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -890,19 +871,19 @@ parsed input matches one of the above forms.
 <td id="Uppercase">Lowercase<br />Uppercase</td>
 <td>
 
-Convert the input text to a different letter case:
+转换输入文本的大小写：
 
 <dl>
 <dt>Lowercase</dt>
 <dd>
 
-Change to all small letters.<br />Example: `{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`
+转为全小写。<br />例如：`{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`
 
 </dd>
 <dt>Uppercase</dt>
 <dd>
 
-Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`
+转为全大写：<br />例如： `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`
 
 </dd>
 </dl>
@@ -914,8 +895,8 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 <td>Merge</td>
 <td>
 
-Combine any number of input values into one token. This can be used to search multiple tokens in a
-`When` block:
+合并任意数量的输入值为一个令牌。可用于在
+`When`块中搜索多个令牌：
 
 ```js
 "When": {
@@ -923,13 +904,13 @@ Combine any number of input values into one token. This can be used to search mu
 }
 ```
 
-Or combined with [`valueAt`](#valueat) to get the first non-empty value from a list of tokens:
+或与[`valueAt`](#valueat)结合获取列表中的第一个非空值：
 
 ```js
 "{{Merge: {{TokenA}}, {{TokenB}}, {{TokenC}} |valueAt=0 }}"
 ```
 
-Note that you can also add literal values to the list, like `{{Merge: {{Roommate}}, Krobus, Abigail }}`.
+注意可添加令牌，如 `{{Merge: {{Roommate}}, Krobus, Abigail }}`。
 
 </td>
 <td><a href="#Merge">#</a></td>
@@ -939,47 +920,45 @@ Note that you can also add literal values to the list, like `{{Merge: {{Roommate
 <td>PathPart</td>
 <td>
 
-Get part of a file/asset path, in the form `{{PathPart: <path>, <part to get>}}`. For
-example:
+获取文件路径的某个部分，格式为 `{{PathPart: 路径, 需获取的部分}}`。例如：
 
 ```js
 {
    "Action": "Load",
    "Target": "Portraits/Abigail",
-   "FromFile": "assets/{{PathPart: {{Target}}, Filename}}.png" // assets/Abigail.png
+   "FromFile": "assets/{{PathPart: {{Target}}, Filename}}.png" // 结果是 assets/Abigail.png
 }
 ```
 
-Given the path `assets/portraits/Abigail.png`, you can specify...
+给定路径`assets/portraits/Abigail.png`，可指定……
 
-* A fragment type:
+* 片段类型：
 
-  part value      | description | example
+  值      | 描述 | 例子
   --------------- | ----------- | ------
-  `DirectoryPath` | The path without the file name. | `assets/portraits`
-  `FileName`      | The file name (including the extension, if any). | `Abigail.png`
-  `FileNameWithoutExtension` | The file name (excluding the extension). | `Abigail`
+  `DirectoryPath` | 不含文件名的路径。 | `assets/portraits`
+  `FileName`      | 文件名（含扩展名）。 | `Abigail.png`
+  `FileNameWithoutExtension` | 文件名（不含扩展名）。 | `Abigail`
 
-* Or an index position from the left:
+* 或从左开始的索引位置：
 
-  part value | example
+  值 | 例子
   ---------- | -------
   `0`        | `assets`
   `1`        | `portraits`
   `2`        | `Abigail.png`
-  `3`        | _empty value_
+  `3`        | _空值_
 
-* Or a negative index to search from the right:
+* 或从右开始的负索引：
 
-  part value | example
+  值 | 例子
   ---------- | -------
   `-1`       | `Abigail.png`
   `-2`       | `portraits`
   `-3`       | `assets`
-  `-4`       | _empty value_
+  `-4`       | _空值_
 
-See also [`TargetPathOnly`](#TargetPathOnly) and [`TargetWithoutPath`](#TargetWithoutPath), which
-simplify a very common version of this.
+另见[`TargetPathOnly`](#TargetPathOnly)和[`TargetWithoutPath`](#TargetWithoutPath)，简化后的更常见用法。
 
 </td>
 <td><a href="#PathPart">#</a></td>
@@ -989,8 +968,7 @@ simplify a very common version of this.
 <td>Render</td>
 <td>
 
-Get the string representation of the input argument. This is mainly useful in `When` blocks to
-compare the rendered value directly (instead of comparing token set values):
+获取输入参数的字符串表示。主要用于`When`块直接比较渲染后的值（而非比较令牌集合值）：
 
 ```js
 "When": {
@@ -998,8 +976,7 @@ compare the rendered value directly (instead of comparing token set values):
 }
 ```
 
-This isn't needed in other contexts, where you can use token placeholders directly. For example,
-these two entries are equivalent:
+除When以外，其他上下文中无需使用，可直接使用令牌。例如以下两项是等效的：
 
 ```js
 "Entries": {
@@ -1013,13 +990,15 @@ these two entries are equivalent:
 </tr>
 </table>
 
-### Metadata
-These tokens provide meta info about tokens, content pack files, installed mods, and the game state.
+<a name="metadata"></a>
+
+### 元数据
+这些令牌提供有关令牌、内容包文件、安装模组和游戏状态的信息。
 
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -1027,15 +1006,14 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <td>FirstValidFile</td>
 <td>
 
-Get the first path which matches a file in the content pack folder, given a list of file paths. You
-can specify any number of files.
+获取内容包文件夹中存在的第一个文件路径，给定文件路径列表。可指定任意数量的文件。
 
-Each file path must be relative to the content pack's main folder, and can't contain `../`.
+每个文件路径必须相对于内容包主文件夹，且不能包含`../`（也就是只能读取你这个模组文件夹里面的东西）。
 
-For example:
+例如：
 
 ```js
-// from `assets/<language>.json` if it exists, otherwise `assets/default.json`
+// 存在则使用`assets/<language>.json`，否则使用`assets/default.json`
 "FromFile": "{{FirstValidFile: assets/{{language}}.json, assets/default.json }}"
 ```
 
@@ -1047,7 +1025,7 @@ For example:
 <td>HasMod</td>
 <td>
 
-The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+已安装模组的ID（`manifest.json`里的的`UniqueID`字段）。
 
 </td>
 <td><a href="#HasMod">#</a></td>
@@ -1057,11 +1035,11 @@ The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 <td>HasFile</td>
 <td>
 
-Whether a file exists in the content pack folder given its path. Returns `true` or `false`.
+内容包文件夹中是否存在指定路径的文件。返回`true`或者`false`。
 
-The file path must be relative to the content pack's main folder, and can't contain `../`.
+文件路径必须相对于内容包主文件夹，且不能包含`../`。
 
-For example:
+例如：
 
 ```js
 "When": {
@@ -1069,7 +1047,7 @@ For example:
 }
 ```
 
-If the input has commas like `HasFile: a, b.png`, they're treated as part of the filename.
+若输入包含逗号，如`HasFile: a, b.png`，逗号会视为文件名的一部分。
 
 </td>
 <td><a href="#HasFile">#</a></td>
@@ -1079,7 +1057,7 @@ If the input has commas like `HasFile: a, b.png`, they're treated as part of the
 <td>HasValue</td>
 <td>
 
-Whether the input argument is non-blank. For example, to check if the player is married to anyone:
+输入参数是否非空。例如，检查玩家是否已婚：
 
 ```js
 "When": {
@@ -1087,8 +1065,7 @@ Whether the input argument is non-blank. For example, to check if the player is 
 }
 ```
 
-This isn't limited to a single token. You can pass in any tokenized string, and `HasValue` will
-return true if the resulting string is non-blank:
+不仅限于单个令牌。可传入任意令牌化字符串，`HasValue`在结果字符串非空时返回`true`：
 
 ```js
 "When": {
@@ -1104,8 +1081,7 @@ return true if the resulting string is non-blank:
 <td>i18n</td>
 <td>
 
-Get text from the content pack's `i18n` translation files. See the [translation
-documentation](translations.md) for more info.
+从内容包的`i18n`翻译文件获取文本。详见[翻译文档](translations.md)。
 
 </td>
 <td><a href="#I18n">#</a></td>
@@ -1115,25 +1091,25 @@ documentation](translations.md) for more info.
 <td>Language</td>
 <td>
 
-The game's current language. Possible values:
+游戏当前语言。可取值：
 
-code | meaning
+代码 | 含义
 ---- | -------
-`de` | German
-`en` | English
-`es` | Spanish
-`fr` | French
-`hu` | Hungarian
-`it` | Italian
-`ja` | Japanese
-`ko` | Korean
-`pt` | Portuguese
-`ru` | Russian
-`tr` | Turkish
-`zh` | Chinese
+`de` | 德语
+`en` | 英语
+`es` | 西班牙语
+`fr` | 法语
+`hu` | 匈牙利语
+`it` | 意大利语
+`ja` | 日语
+`ko` | 韩语
+`pt` | 葡萄牙语
+`ru` | 俄语
+`tr` | 土耳其语
+`zh` | 中文
 
-For custom languages added via `Data/AdditionalLanguages`, the token will contain their
-`LanguageCode` value.
+通过`Data/AdditionalLanguages`添加的自定义语言，令牌将包含其
+`LanguageCode`值。
 
 </td>
 <td><a href="#Language">#</a></td>
@@ -1143,10 +1119,10 @@ For custom languages added via `Data/AdditionalLanguages`, the token will contai
 <td>ModId</td>
 <td>
 
-The current content pack's unique ID (from the `UniqueID` field in its `manifest.json`).
+当前内容包的唯一ID（`manifest.json`的`UniqueID`字段）。
 
-This is typically used to build [unique string IDs](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID).
-For example:
+通常用于构建[唯一字符串ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID)。
+例如：
 ```json
 "Id": "{{ModId}}_ExampleItem"
 ```
@@ -1156,21 +1132,20 @@ For example:
 </tr>
 </table>
 
-### Field references
-These tokens contain field values for the current patch. For example, `{{FromFile}}` is the current
-value of the `FromFile` patch field.
+<a name="field-references"></a>
 
-These have some restrictions:
-* They're only available in a patch block directly (e.g. they won't work in dynamic tokens).
-* They can't be used in their source field. For example, you can't use `{{Target}}` in the `Target`
-  field.
-* You can't create circular references. For example, you can use `{{FromFile}}` in the `Target`
-  field and `{{Target}}` in the `FromFile` field, but not both at once.
+### 字段引用
+这些令牌包含当前补丁的字段值。例如，`{{FromFile}}`为当前`FromFile`字段的值。
+
+限制：
+* 仅能在补丁块中可用（如不可在动态令牌中使用）。
+* 不可用于其源字段。例如，`Target`字段中不可使用`{{Target}}`。
+* 不可创建循环引用。例如，`Target`字段可用`{{FromFile}}`，`FromFile`字段可用`{{Target}}`，但不能同时用。
 
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -1178,8 +1153,8 @@ These have some restrictions:
 <td>FromFile</td>
 <td>
 
-The patch's `FromFile` field value for the current asset. Path separators are normalized for the OS.
-This is mainly useful for checking if the path exists:
+当前素材的补丁`FromFile`字段值。路径分隔符按操作系统规范化。
+主要用于检查路径是否存在：
 
 ```js
 {
@@ -1200,40 +1175,42 @@ This is mainly useful for checking if the path exists:
 <td id="TargetPathOnly">Target<br />TargetPathOnly<br />TargetWithoutPath</td>
 <td id="TargetWithoutPath">
 
-The patch's `Target` field value for the current asset. Path separators are normalized for the OS.
-This is mainly useful for patches which specify multiple targets:
+当前素材的补丁`Target`字段值。路径分隔符按操作系统规范化。
+主要用于指定多个目标的补丁：
 
 ```js
 {
    "Action": "EditImage",
    "Target": "Characters/Abigail, Characters/Sam",
-   "FromFile": "assets/{{TargetWithoutPath}}.png" // assets/Abigail.png *or* assets/Sam.png
+   "FromFile": "assets/{{TargetWithoutPath}}.png" // assets/Abigail.png *或者* assets/Sam.png
 }
 ```
 
-The difference between the three tokens is the part they return. For example, given the target value
-`Characters/Dialogue/Abigail`:
+三者区别在于返回的部分不同。例如，目标值是
+`Characters/Dialogue/Abigail`的情况下：
 
-token               | part returned | example
+令牌               | 返回部分 | 示例
 ------------------- | ------------- | ------
-`Target`            | The full path. | `Characters/Dialogue/Abigail`
-`TargetPathOnly`    | The part before the last separator. | `Characters/Dialogue`
-`TargetWithoutPath` | The part after the last separator. | `Abigail`
+`Target`            | 完整路径。 | `Characters/Dialogue/Abigail`
+`TargetPathOnly`    | 最后一个分隔符前的部分。 | `Characters/Dialogue`
+`TargetWithoutPath` | 最后一个分隔符后的部分。 | `Abigail`
 
-See also [`PathPart`](#PathPart) for more advanced scenarios.
+另见[`PathPart`](#PathPart)以处理更高级的场景。
 
 </td>
 <td><a href="#Target">#</a></td>
 </tr>
 </table>
 
-### Specialized
-These are advanced tokens meant to support some specific situations.
+<a name="specialized"></a>
+
+### 特定场合
+这些是高级令牌，用于支持特定场景。
 
 <table>
 <tr>
-<th>condition</th>
-<th>purpose</th>
+<th>条件</th>
+<th>用途</th>
 <th>&nbsp;</th>
 </tr>
 
@@ -1241,12 +1218,9 @@ These are advanced tokens meant to support some specific situations.
 <td>AbsoluteFilePath</td>
 <td>
 
-Get the absolute path for a file in your content pack's folder, given its path relative to the
-content pack's main folder (which can't contain `../`).
+获取内容包文件夹中文件的绝对路径，给定相对于内容包主文件夹的路径（不能包含`../`）。
 
-For example, for a player with a default Windows Steam install, `{{AbsoluteFilePath: assets/portraits.png}}`
-will return a value similar to
-`C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\[CP] YourMod\assets\portraits.png`.
+例如，在默认Windows的Steam安装下，`{{AbsoluteFilePath: assets/portraits.png}}`会返回类似`C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\[CP] YourMod\assets\portraits.png`的值。
 
 </td>
 <td><a href="#AbsoluteFilePath">#</a></td>
@@ -1256,16 +1230,16 @@ will return a value similar to
 <td>FormatAssetName</td>
 <td>
 
-Normalize an asset name into the form expected by the game. For example,
-`{{FormatAssetName: Data/\\///Achievements/}}` returns a value like `Data/Achievements`.
+将素材名称规范化为游戏预期的形式。例如，
+`{{FormatAssetName: Data/\\///Achievements/}}`返回类似`Data/Achievements`的值。
 
-This has one optional argument:
+可选参数：
 
-argument    | effect
+参数    | 效果
 ----------- | ------
-`separator` | The folder separator to use in the asset name instead of the default `/`. This is only needed when adding the path to a `/`-delimited field, like `{{FormatAssetName: {{assetKey}} |separator=\\}}`.
+`separator` | 替换默认`/`的文件夹分隔符。仅在将路径添加到以`/`分隔的字段时需使用，如`{{FormatAssetName: {{assetKey}} |separator=\\}}`。
 
-There's no need to use this in `Target` fields, which are normalized automatically.
+无需在`Target`字段使用，该字段自动规范化。
 
 </td>
 <td><a href="#FormatAssetName">#</a></td>
@@ -1275,10 +1249,9 @@ There's no need to use this in `Target` fields, which are normalized automatical
 <td>InternalAssetKey</td>
 <td>
 
-Get a special asset key which lets the game load a file directly from your content pack, without
-needing to `Load` it into a new `Content` asset.
+获取特殊素材键，允许游戏直接从内容包加载文件，无需将其`Load`到新`Content`素材里。
 
-For example, you can use this to provide the textures for a custom farm type:
+例如，用于自定义农场类型的纹理：
 
 ```js
 {
@@ -1298,11 +1271,7 @@ For example, you can use this to provide the textures for a custom farm type:
 }
 ```
 
-Note that other content packs can't target an internal asset key (which is why it's internal). If
-you need to let other content packs edit it, you can use [`Action: Load`](action-load.md) to create
-a new asset for it, then use that asset name instead. When doing this, using the [unique string
-ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID)
-convention is strongly recommended to avoid conflicts. For example:
+注意其他内容包无法定位内部素材键（因此称为内部）。若需允许其他内容包编辑，可使用[`Action: Load`](action-load.md)创建新素材，并使用该素材名。强烈建议使用[唯一字符串ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6%E4%B8%B2ID)以避免冲突：
 ```js
 {
     "Format": "2.6.0",
@@ -1330,13 +1299,12 @@ convention is strongly recommended to avoid conflicts. For example:
 <td><a href="#InternalAssetKey">#</a></td>
 </tr>
 </table>
+<a name="config-tokens"></a>
 
-### 设置tokens <a name="config-tokens"></a>
-You can let players configure your mod using a `config.json` file. If the player has [Generic Mod
-Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed, they'll also be able to
-configure the mod through an in-game options menu.
+### 设置令牌 
+可通过`config.json`文件让玩家配置模组。若玩家安装[通用模组设置菜单](https://www.nexusmods.com/stardewvalley/mods/5098)，可通过游戏内的菜单设置不同的值。
 
-For example, you can use config values as tokens and conditions:
+例如，使用配置值作为令牌和条件：
 
 ```js
 {
@@ -1359,30 +1327,26 @@ For example, you can use config values as tokens and conditions:
 }
 ```
 
-See the [player config documentation](config.md) for more info.
+详见[玩家配置文档](config.md)。
+<a name="dynamic-tokens"></a>
 
-### 动态tokens <a name="dynamic-tokens"></a>
-Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
-Each block in this section defines the value for a token using these fields:
+### 动态令牌 
+动态令牌在`content.json`的`DynamicTokens`部分定义。每块定义使用以下字段：
 
-field   | purpose
+字段   | 用途
 ------- | -------
-`Name`  | The name of the token to use for [tokens & condition](#introduction).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. This field supports [tokens](#introduction), including dynamic tokens defined before this entry.
-`When`  | _(optional)_ Only set the value if the given [conditions](#introduction) match. If not specified, always matches.
+`Name`  | 用于[令牌和条件](#introduction)的令牌名称。
+`Value` | 设置的值（多个值用逗号分隔）。此字段支持[令牌](#introduction)，包括之前定义的动态token。
+`When`  | _(可选)_ 仅当给定[条件](#introduction)匹配时设置值。未指定则始终匹配。
 
-Some usage notes:
-* You can list any number of dynamic token blocks.
-* If you list multiple blocks for the same token name, the last one whose conditions match will be
-  used.
-* You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
-  defined earlier in the list (in which case the last applicable value _defined before this block_
-  will be used). Using a token in the value implicitly adds a `When` condition (so the block is
-  skipped if the token is unavailable, like `{{season}}` when a save isn't loaded).
-* Dynamic tokens can't have the same name as an existing global token or player config field.
+注意：
+* 可列出任意数量的动态令牌。
+* 同一名称的多个块中，最后一个匹配条件的块生效。
+* 在`Value`和`When`字段可使用令牌。若使用 _之前定义的动态令牌_
+  ，则使用之前块的最新有效值。使用令牌隐式添加`When`条件（若令牌不可用。如`{{season}}`则跳过块）。
+* 动态令牌不可与全局令牌或玩家设置字段同名。
 
-For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
-crop sprites depending on the weather:
+例如，`content.json`定义自定义`{{style}}`令牌，并根据天气加载不同作物贴图：
 
 ```js
 {
@@ -1409,19 +1373,17 @@ crop sprites depending on the weather:
    ]
 }
 ```
+<a name="local-tokens"></a>
 
-### 局部tokens <a name="local-tokens"></a>
-Local tokens are defined for a specific patch via its `LocalTokens` field, and can be used in its
-other fields. The token names must be a plain string, but the values can contain tokens.
+### 局部令牌 
+局部令牌通过补丁的`LocalTokens`字段定义。令牌名称必须为纯字符串，但值可包含其他令牌。
 
-**These have two important restrictions:**
-* Local tokens defined directly on a patch can't be used in the `FromFile` and `Target` fields
-  (since they can use `{{FromFile}}` and `{{Target}}`). However, local tokens inherited from a
-  parent `Include` patch can be used in those fields too.
-* Local tokens are always considered dynamic text, so they can't be used in data model fields that
-  _only_ allow booleans or numbers. This will be improved in upcoming iterations of the feature.
+**重要限制：**
+* 直接在补丁定义的局部令牌不可用于`FromFile`和`Target`字段（因这些字段可使用`{{FromFile}}`和`{{Target}}`）。但通过父`Include`补丁继承的局部令牌可用于这些字段。
+* 局部令牌始终视为动态文本，因此不可用于
+  _仅_ 允许布尔值或数值的数据模型字段。该限制将在未来版本改进。
 
-For example:
+例如：
 ```json
 {
    "Action": "EditData",
@@ -1439,10 +1401,9 @@ For example:
 }
 ```
 
-When set on an `Include` patch, local tokens are inherited by all patches loaded through it. This
-can be used to implement template behavior, where a set of patches is applied for each set of values.
+在`Include`补丁上设置时，局部令牌由所有加载的补丁继承。可用于实现模板化行为，为一组值应用补丁集。
 
-For example, you can do this in `content.json`:
+例如，在`content.json`中：
 ```json
 {
    "Action": "Include",
@@ -1456,18 +1417,18 @@ For example, you can do this in `content.json`:
 }
 ```
 
-And then add an `assets/add-hat.json` file like this:
+添加`assets/add-hat.json`文件：
 ```json
 {
    /*
-   This file is loaded once per hat, with these tokens:
-      {{IdSuffix}}: the unique portion of the item ID, like "DeerAntlers".
-      {{DisplayName}}: the translated display name for the hat item.
-      {{Description}}: the translated description for the hat item.
-      {{Price}}: the sell price for the hat item.
+   此文件每顶帽子加载一次，使用以下令牌：
+      {{IdSuffix}}: 物品的唯一ID，如"DeerAntlers"。
+      {{DisplayName}}: 帽子的翻译显示名称。
+      {{Description}}: 帽子的翻译描述。
+      {{Price}}: 帽子的售价。
    */
    "Changes": [
-      // add hat data
+      // 添加帽子数据
       {
          "Action": "EditData",
          "Target": "Data/hats",
@@ -1476,7 +1437,7 @@ And then add an `assets/add-hat.json` file like this:
          }
       },
 
-      // add to shop
+      // 添加到商店里
       {
          "Action": "EditData",
          "Target": "Data/Shops",
@@ -1491,56 +1452,53 @@ And then add an `assets/add-hat.json` file like this:
    ]
 }
 ```
+<a name="input-arguments"></a>
 
-## 输入参数 <a name="input-arguments"></a>
-### 概述 <a name="overview-1"></a>
-An **input argument** is a value you give to the token within the `{{...}}` braces. Input can be
-_positional_ (an unnamed list of values) or _named_. Argument values are comma-separated, and named
-arguments are pipe-separated.
+## 输入参数 
+<a name="overview-1"></a>
 
-For example, `{{Random: a, b, c |key=some, value |example }}` has five arguments: three positional
-values `a`, `b`, `c`; a named `key` argument with values `some` and `value`; and a named `example`
-argument with an empty value.
+### 概述 
+**输入参数**是在`{{...}}`大括号内传递给令牌的值。输入可以是
+_位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分隔，命名参数以竖线分隔。
 
-Some tokens recognise input arguments to change their output, which are documented in their own
-sections. For example, the `Uppercase` token makes its input uppercase:
+例如，`{{Random: a, b, c |key=some, value |example }}`有五个参数：三个位置参数`a`，`b`，`c`；命名参数`key`值为`some` 和 `value`；命名参数`example`值为空。
+
+部分令牌识别输入参数以改变输出，具体见各令牌文档。例如，`Uppercase`将输入转为大写：
 ```js
 "Entries": {
-   "fri": "It's a beautiful {{uppercase: {{season}}}} day!" // It's a beautiful SPRING day!
+   "fri": "It's a beautiful {{uppercase: {{season}}}} day!" // 结果是It's a beautiful SPRING day!
 }
 ```
 
-### 全局输入参数 <a name="global-input-arguments"></a>
-Global input arguments are handled by Content Patcher itself, so they work with
-all tokens (including mod-provided tokens). If you use multiple input arguments, they're applied
-sequentially in left-to-right order.
+<a name="global-input-arguments"></a>
+
+### 全局输入参数 
+全局输入参数由Content Patcher处理，适用于所有令牌（包括模组提供的令牌）。多个参数按从左到右顺序应用。
 
 #### `contains`
-`contains` lets you search a token's values. It works with any token, regardless of its source.
+`contains`用于搜索令牌的值。适用于任何令牌。
 
-It returns `true` or `false` depending on whether the token contains any of the given values. This
-is mainly useful for logic in [conditions](#conditions):
+根据令牌是否包含给定值返回`true`或者`false`。主要用于[条件](#conditions)：
 
 ```js
-// player has blacksmith OR gemologist
+// 玩家有铁匠或宝石学家职业
 "When": {
    "HasProfession": "Blacksmith, Gemologist"
 }
 
-// player has blacksmith AND gemologist
+// 玩家同时有铁匠和宝石学家职业
 "When": {
    "HasProfession |contains=Blacksmith": "true",
    "HasProfession |contains=Gemologist": "true"
 }
 
-// NOT year 1
+// 非第一年
 "When": {
    "Year |contains=1": "false"
 }
 ```
 
-This can also be used in placeholders. For example, this will load a different file depending on
-whether the player has the `Gemologist` profession:
+也可用于占位符。例如，根据玩家是否有`Gemologist`宝石学家职业加载不同文件：
 ```js
 {
     "Action": "EditImage",
@@ -1549,34 +1507,30 @@ whether the player has the `Gemologist` profession:
 }
 ```
 
-You can specify multiple values, in which case it returns whether _any_ of them match:
+可指定多个值，返回是否有 _任意值_ 匹配： 
 ```js
-// player has blacksmith OR gemologist
+// 玩家有铁匠或宝石学家职业
 "When": {
    "HasProfession |contains=Blacksmith, Gemologist": "true"
 }
 
-// player has neither blacksmith NOR gemologist
+// 玩家既无铁匠也无宝石学家职业
 "When": {
    "HasProfession |contains=Blacksmith, Gemologist": "false"
 }
 ```
 
 #### `valueAt`
-The `valueAt` argument gets one value from a token at the given position (starting at zero for the
-first value). If the index is outside the list, this returns an empty list.
+`valueAt`参数获取令牌中指定位置的值（首项为0）。若索引超出范围，返回空列表。
 
-This depends on the token's order, which you can check with the [`patch summary unsorted` console
-command](troubleshooting.md#summary). Some tokens like `ChildNames` have a consistent order (which
-will be documented in the info for each token); most others like `HasFlag` are listed in the order
-they're defined in the game data, which may change from one save to the next.
+顺序取决于令牌，可通过[`patch summary unsorted`命令](troubleshooting.md#summary)查看。如`ChildNames`有固定顺序，大多数如`HasFlag`按游戏数据顺序排列，可能随存档变化。
 
-For example:
+例如
 
 <table>
   <tr>
-    <th>token</th>
-    <th>value</th>
+    <th>令牌</th>
+    <th>值</th>
   </tr>
   <tr>
     <td><code>{{ChildNames}}</code></td>
@@ -1596,17 +1550,16 @@ For example:
   </tr>
   <tr>
     <td><code>{{ChildNames |valueAt=3}}</code></td>
-    <td><em>empty list</em></td>
+    <td><em>空列表</em></td>
   </tr>
 </table>
 
-You can use a negative index to get a value starting from the _end_ of the list, where -1 is
-the last item. For example:
+负索引从列表末尾开始，-1为最后一项：
 
 <table>
   <tr>
-    <th>token</th>
-    <th>value</th>
+    <th>令牌</th>
+    <th>值</th>
   </tr>
   <tr>
     <td><code>{{ChildNames}}</code></td>
@@ -1622,29 +1575,29 @@ the last item. For example:
     <td><code>Angus</code></td>
   </tr>
     <td><code>{{ChildNames |valueAt=-4}}</code></td>
-    <td><em>empty list</em></td>
+    <td><em>空列表</em></td>
   </tr>
 </table>
 
-### 自定义参数分割符号 <a name="custom-input-value-separator"></a>
-By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
-input values. You can use the `inputSeparator` argument to use a different separator (which can be
-one or multiple characters).
+<a name="custom-input-value-separator"></a>
 
-For example, this can allow commas in random dialogue:
+### 自定义参数分割符号 
+默认输入参数以逗号分隔，但有时需允许逗号出现在值中。可使用`inputSeparator`参数指定不同分隔符（可为一个或多个字符）。
+
+例如，允许随机对话中的分隔符不为逗号：
 
 ```json
 "Entries": {
    "fri": "{{Random: Hey, how are you? @@ Hey, what's up? |inputSeparator=@@}}"
+}
 ```
 
-**Note:** you should avoid the `{}|=:` characters in separators, even if they're technically valid.
-The behavior when separators conflict with token syntax depends on implementation details that may
-change from one Content Patcher version to the next.
+**注意：** 应避免在分隔符中使用`{}|=:`，即使理论上技术有效。分隔符可能与令牌语法冲突，可能随Content Patcher版本改进。
+<a name="randomization"></a>
 
-## 随机 <a name="randomization"></a>
-### Overview
-You can randomize values using the `Random` token:
+## 随机 
+### 概述
+可使用`Random`令牌来随机化：
 ```js
 {
    "Action": "Load",
@@ -1653,8 +1606,7 @@ You can randomize values using the `Random` token:
 }
 ```
 
-And you can optionally use pinned keys to keep multiple `Random` tokens in sync (see below for more
-info):
+可使用固定键保持多个`Random`令牌同步（详见下文）：
 ```js
 {
    "Action": "Load",
@@ -1666,33 +1618,29 @@ info):
 }
 ```
 
-This token is dynamic and may behave in unexpected ways; see below to avoid surprises.
+此令牌是动态的，可能有意外冲突，详见下文。
 
-### Unique properties
-`Random` tokens are...
+### 独特属性
+`Random`令牌是……
 
 <ol>
 <li>
 
-**Dynamic.** Random tokens rechoose when they're evaluated, generally when a new day starts. The
-randomness is seeded with the game seed + in-game date + input string, so reloading the save won't
-change which choices were made.
+**动态的。** Random令牌在每次加载补丁时重新选择，通常在新一天开始时。随机更新速率基于游戏+游戏内日期+输入字符串，因此重载存档不会改变已选随机值。
 
 </li>
 <li>
 
-**Independent**. Each `Random` token changes separately. In particular:
+**独立的。**每个`Random`变化是独立的。例如：
 
-* If a patch has multiple `Target` values, `Random` may have a different value for each target.
-* If a `FromFile` field has a `Random` token, you can't just copy its value into a `HasFile` field
-  to check if the file exists, since `Random` may return a different choice in each field.
+* 若补丁有多个`Target`，每个目标可能得到不同的`Random`值。
+* 若`FromFile`字段的`Random`令牌在`HasFile`字段中使用，可能因不同选择导致文件加载失败。
 
-To keep multiple `Random` tokens in sync, see _pinned keys_ below.
+需同步多个`Random`时，使用 _固定键_ 。
 </li>
 <li>
 
-**Fair**. Each option has an equal chance of being chosen. To load the dice, just specify a value multiple
-times. For example, 'red' is twice as likely as 'blue' in this patch:
+**公平的。**每个选项概率相等。可通过重复值调整概率。例如，'red'出现概率是'blue'的两倍：
 ```js
 {
    "Action": "Load",
@@ -1704,38 +1652,32 @@ times. For example, 'red' is twice as likely as 'blue' in this patch:
 </li>
 <li>
 
-**Bounded** if the choices don't contain tokens. For example, you can use it in true/false contexts
-if all the choices are 'true' or 'false', or numeric contexts if all the choices are numbers.
+**有界的。** 选项不含令牌。例如，若所有选项为'true'或'false'，可在布尔类型的条目中使用；若为数字，可在数值类型的条目中使用。
 
 </li>
 </ul>
 
-### Update rate
-A `Random` token changes its choices on day start by default. If you want randomization to change
-within a day, you need to make two changes:
+### 更新频率
+默认`Random`在每天开始时变化。若需在一天内变化，需：
 
-* Specify a [patch update rate](../author-guide.md#update-rate) so the patch itself updates more often.
-* Use a [pinned key](#pinned-keys) to set the seed to a value which changes more often. For example,
-  this would change every time the in-game time changes:
+* 指定[补丁更新频率](../author-guide.md#update-rate)使补丁更频繁更新。
+* 使用[固定键](#pinned-keys)设置随更频繁变化的值作为固定键。例如，随时间变化：
   ```
   {{Random: a, b, c |key={{Time}} }}
   ```
-  Note that `{{Random}}` tokens with the same key will synchronize their values. You can make the
-  key unique to avoid that:
+  注意相同键的`{{Random}}`会同步值。可设置唯一值避免：
   ```
   {{Random: a, b, c |key=Abigail portraits {{Time}} }}
   ```
 
-### Pinned keys
+### 固定键
 <dl>
-<dt>Basic pinned keys:</dt>
+<dt>基础固定键：</dt>
 <dd>
 
-If you need multiple `Random` tokens to make the same choices (e.g. to keep an NPC's portrait and
-sprite in sync), you can specify a 'pinned key'. This is like a name for the random; every `Random`
-token with the same pinned key will make the same choice. (Note that list order does matter.)
+若需多个`Random`同步选择（如保持角色肖像与像素小人贴图一致），可指定'固定键'。相同固定键的`Random`会做出相同选择（注意列表顺序需一致）。
 
-For example, this keeps Abigail's sprite and portrait in sync using `abigail-outfit` as the pinned
+例如，使用`abigail-outfit`固定键同步阿比盖尔的贴图和肖像：
 key:
 ```js
 {
@@ -1745,7 +1687,7 @@ key:
 }
 ```
 
-You can use tokens in a pinned key. For example, this synchronizes values separately for each NPC:
+可在固定键中使用令牌。例如，为每个角色单独同步：
 ```js
 {
    "Action": "Load",
@@ -1754,14 +1696,12 @@ You can use tokens in a pinned key. For example, this synchronizes values separa
 }
 ```
 
-<dt>Advanced pinned keys:</dt>
+<dt>高级固定键：</dt>
 <dd>
 
-The pinned key affects the internal random number used to make a choice, not the choice itself. You
-can use it with `Random` tokens containing different values (even different numbers of values) for
-more interesting features.
+固定键影响内部随机数，而非选择本身。可配合不同值（甚至不同数量）实现更有趣的功能。
 
-For example, this gives Abigail and Haley random outfits but ensures they never wear the same one:
+例如，确保阿比盖尔和海莉的服装不同：
 ```js
 {
    "Action": "Load",
@@ -1777,50 +1717,48 @@ For example, this gives Abigail and Haley random outfits but ensures they never 
 
 </dd>
 
-<dt>Okay, I'm confused. What the heck are pinned keys?</dt>
+<dt>固定键到底是什么？</dt>
 <dd>
 
-Without pinned keys, each token will randomly choose its own value:
+无固定键时，每个令牌独立选择：
 ```txt
 {{Random: hood, jacket, raincoat}} = raincoat
 {{Random: hood, jacket, raincoat}} = hood
 {{Random: hood, jacket, raincoat}} = jacket
 ```
 
-If they have the same pinned key, they'll always be in sync:
+相同固定键时，保持同步：
 ```txt
 {{Random: hood, jacket, raincoat |key=outfit}} = hood
 {{Random: hood, jacket, raincoat |key=outfit}} = hood
 {{Random: hood, jacket, raincoat |key=outfit}} = hood
 ```
 
-For basic cases, you just need to know that same options + same key = same value.
+固定键同步内部随机数，相同选项+相同键=相同值。
 
-If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
-key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
 ```txt
 {{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 {{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 {{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 ```
 
-You can use that in interesting ways. For example, shifting the values guarantees they'll never
-choose the same value (since same index = different value):
+若选项顺序不同，相同索引对应不同值：
 ```txt
 {{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 {{Random: jacket, raincoat, hood |key=outfit}} = 217437 modulo 3 choices = index 0 = jacket
 ```
 </dd>
 </dl>
+<a name="advanced"></a>
 
-## 进阶 <a name="advanced"></a>
-## 查询表达式 <a name="query-expressions"></a>
-A _query expression_ is an arbitrary set of arithmetic and logical expressions which can be
-evaluated into a number, `true`/`false` value, or text.
+## 进阶 
+<a name="query-expressions"></a>
 
-### Usage
-Query expressions are evaluated using the `Query` token. It can be used as a placeholder or condition,
-and can include nested tokens. Here's an example which includes all of those:
+## 查询表达式 
+_查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术和逻辑表达式。
+
+### 用法
+使用`Query`执行查询表达式。可用作占位符或条件，可包含嵌套令牌：
 ```js
 {
    "Format": "2.6.0",
@@ -1839,34 +1777,30 @@ and can include nested tokens. Here's an example which includes all of those:
 }
 ```
 
-You can use text values in expressions if they're single-quoted (including tokens which return text):
+文本值需用单引号包裹（包括返回文本的令牌）：
 ```js
 "Query: '{{Season}}' = 'spring'": true
 ```
 
-Expressions are case-insensitive, including when comparing text values.
+表达式不区分大小写，包括文本比较。
 
-### Caveats
-Query expressions are very powerful, but you should be aware of the caveats:
+### 注意事项
+查询表达式功能强大，但需注意：
 
-* Query expressions have **very little validation**. An invalid expression generally won't show
-  warnings ahead of time, it'll just fail when the patch is applied. Make sure to carefully test
-  any content pack features which use expressions, and check new or edited expressions with
-  [`patch parse`](troubleshooting.md#parse).
-* Query expressions **evaluate the expanded text**. For example, if the player name contains a
-  single-quote like `D'Artagnan`, then this expression will fail due to a syntax error:
+* 查询表达式**很难验证**无效表达式通常不会预先警告，仅在应用补丁时失败。需仔细测试表达式的功能，可以用[`patch parse`](troubleshooting.md#parse)检查新表达式。
+* 查询表达式**可能错误读取文本**例如，玩家名含单引号`D'Artagnan`，时，以下表达式会因语法错误失败：
   ```js
   "Query: '{{PlayerName}}' LIKE 'D*'": true // 'D'Artagnan' LIKE 'D*'
   ```
-* Query expressions may return obscure or technical error messages when invalid.
-* Query expressions may make your content pack harder to read and understand.
+* 可能返回技术性错误信息。
+* 可能降低内容包可读性。
 
-Consider using non-expression features instead where possible. For example:
+尽可能使用非表达式功能。例如：
 
 <table>
 <tr>
-<th>With query expression</th>
-<th>Without query expression</th>
+<th>使用查询表达式</th>
+<th>不使用查询表达式</th>
 </tr>
 <tr>
 <td>
@@ -1890,62 +1824,61 @@ Consider using non-expression features instead where possible. For example:
 </tr>
 </table>
 
-### Operators
-The supported operators are listed below.
+### 运算符
+支持的运算符如下：
 
-* Perform arithmetic on numeric values (like `5 + 5`):
+* 算术运算（如`5 + 5`）：
 
-  operator | effect
+  运算符 | 效果
   -------- | ---------
-  \+       | addition
-  \-       | subtraction
-  \*       | multiplication
-  /        | division
-  %        | modulus
-  ()       | grouping
+  \+       | 加
+  \-       | 减
+  \*       | 乘
+  /        | 除
+  %        | 取模
+  ()       | 组合
 
-* Compare two values (like `5 < 10`):
+* 比较值（如`5 < 10`）：
 
-  operator | effect
+  运算符 | 效果
   -------- | ---------
-  `<`      | less than
-  `<=`     | less than or equal
-  `>`      | more than
-  `>=`     | more than or equal
-  `=`      | equal
-  `<>`     | not equal
+  `<`      | 小于
+  `<=`     | 小于等于
+  `>`      | 大于
+  `>=`     | 大于等于
+  `=`      | 等于
+  `<>`     | 不等于
 
-* Combine expressions using logical operators:
+* 逻辑运算符：
 
-  operator | effect
+  运算符 | 效果
   -------- | ------
-  `AND`    | both expressions are true, like `{{Time}} >= 0600 AND {{Time}} <= 1200`.
-  `OR`     | one or both expressions are true, like `{{Time}} <= 1200 OR {{Time}} >= 2400`.
-  `NOT`    | negate the following expression, like `NOT {{Time}} > 1200`.
+  `AND`    | 与，两者都为真，如`{{Time}} >= 0600 AND {{Time}} <= 1200`。
+  `OR`     | 或，至少一者为真，如`{{Time}} <= 1200 OR {{Time}} >= 2400`。
+  `NOT`    | 非，取反，如`NOT {{Time}} > 1200`。
 
-* Group sub-expressions using `()` to avoid an ambiguous order of operations:
+* 使用`()`组合运算避免歧义：
 
   ```js
   "Query: ({{Time}} >= 0600 AND {{Time}} <= 1200) OR {{Time}} > 2400": true
   ```
 
-* Check whether a value is `IN` or `NOT IN` a list:
+* 检查值是否`IN`或`NOT IN`列表中：
 
   ```js
   "Query: '{{spouse}}' IN ('Abigail', 'Leah', 'Maru')": true
   ```
 
-* Check text against a prefix/postfix using the `LIKE` or `NOT LIKE` operator. The wildcard `*` can
-  only be at the start/end of the string, and it can only be used with quoted text (e.g. `LIKE '1'` will work but `LIKE 1` will return an error).
+* 使用`LIKE`或`NOT LIKE`检查文本前缀/后缀。通配符`*`只能在字符串开始/结尾，且仅用于引号文本（例如 `LIKE '1'`会生效，但`LIKE 1`会报错）。
 
   ```js
   "Query: '{{spouse}}' LIKE 'Abig*'": true
   ```
 
-### 模组提供tokens <a name="mod-provided-tokens"></a>
-SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](../extensibility.md)),
-which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
-Assets:
+<a name="mod-provided-tokens"></a>
+
+### 模组提供令牌 
+SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../extensibility.md)），用法与Content Patcher的令牌相同。例如，使用Json Assets的令牌：
 ```js
 {
    "Format": "2.6.0",
@@ -1961,11 +1894,9 @@ Assets:
 }
 ```
 
-To use a mod-provided token, at least one of these must be true:
-* The mod which provides the token is a [required dependency](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies)
-  of your content pack.
-* Or the patch using the token has an immutable (i.e. not using any tokens) `HasMod` condition
-  which lists the mod:
+使用模组提供的令牌需满足以下至少一项：
+* 提供令牌的模组是你的内容包的[必需依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies)。
+* 或使用令牌的补丁有不可变的`HasMod`条件列出该模组：
   ```js
   {
      "Format": "2.6.0",
@@ -1984,13 +1915,12 @@ To use a mod-provided token, at least one of these must be true:
   }
   ```
 
-### 别名 <a name="aliases"></a>
-An _alias_ adds an optional alternate name for an existing token. This only affects your content
-pack, and you can use both the alias name and the original token name. This is mostly useful for
-custom tokens provided by other mods, which often have longer names.
+<a name="aliases"></a>
 
-Aliases are defined by the `AliasTokenNames` field in `content.json`, where each key is the
-alternate name and the value is the original token name. For example:
+### 别名 
+_别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使用别名和原名。主要用于其他模组提供的长名令牌。
+
+在`content.json`的`AliasTokenNames`字段定义别名，键为别名，值为原名：
 
 ```js
 {
@@ -2011,12 +1941,11 @@ alternate name and the value is the original token name. For example:
 }
 ```
 
-When using `Include` patches, aliases automatically work in the included files too.
+`Include`补丁中的文件自动继承别名。
 
-The alias name can't match a global token or config token.
+别名不可与全局令牌或设置令牌重名。
 
-**Note:** this aliases the token _name_, but you can alias the token _value_ by using a [dynamic
-token](#dynamic-tokens):
+**注意：** 你也可以使用[动态令牌](#dynamic-tokens)给别的令牌取别名：
 
 ```js
 {
@@ -2038,48 +1967,49 @@ token](#dynamic-tokens):
     ]
 }
 ```
+<a name="common-values"></a>
 
-## 共同值 <a name="aliases"></a>
-These are predefined values used in tokens, linked from the token documentation above as needed.
+## 共同值 
+这些是令牌中使用的预定义值，根据令牌文档的需要引用。
 
-### Location context
-Some tokens let you choose which world area to get info for using an [input
-argument](#input-arguments) like this:
+### 位置上下文
+部分令牌允许通过[输入参数](#input-arguments)选择世界区域：
 
-example | meaning
+例子 | 含义
 ------- | -------
-`{{Weather}}`<br />`{{Weather: current}}` | Get weather for the current location.
-`{{Weather: island}}` | Get the weather on Ginger Island.
-`{{Weather: valley}}` | Get the weather in the valley.
+`{{Weather}}`<br />`{{Weather: current}}` | 当前区域的天气。
+`{{Weather: island}}` | 姜岛的天气。
+`{{Weather: valley}}` | 鹈鹕镇的天气。
 
-The possible contexts are:
+可能的上下文是：
 
-value     | meaning
+值     | 含义
 --------- | -------
-`current` | The context the current player is in. This is the default and doesn't need to be specified.
-`island`  | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
-`valley`  | Any other location.
+`current` | 当前玩家所在区域，默认，无需指定。
+`island`  | [姜岛](https://zh.stardewvalleywiki.com/%E5%A7%9C%E5%B2%9B).
+`valley`  | 其他区域。
 
-### Target player
-Some tokens let you choose which player's info to get using an [input argument](#input-arguments)
-like this:
+### 目标玩家
+部分令牌允许通过[输入参数](#input-arguments)选择玩家信息：
 
-example                                  | meaning
+例子                                  | 含义
 ---------------------------------------- | -------
-`{{HasFlag}}`<br />`{{HasFlag: currentPlayer}}` | Get flags for the current player.
-`{{HasFlag: hostPlayer}}`                | Get flags for the host player.
-`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
-`{{HasFlag: anyPlayer}}`                 | Get flags which any one or more players have.
-`{{HasFlag: 3864039824286870457}}`       | Get flags for the player with the unique multiplayer ID `3864039824286870457`.
+`{{HasFlag}}`<br />`{{HasFlag: currentPlayer}}` | 当前玩家的标志。
+`{{HasFlag: hostPlayer}}`                | 房主玩家的标志。
+`{{HasFlag: currentPlayer, hostPlayer}}` | 当前玩家 _和_ 主玩家的标志。
+`{{HasFlag: anyPlayer}}`                 | 任意玩家的标志。
+`{{HasFlag: 3864039824286870457}}`       | 指定ID的玩家的标志（该例子的ID是`3864039824286870457`）。
 
-The possible player types are:
+可能玩家类型：
 
-value | meaning
+值 | 含义
 ----- | -------
-`currentPlayer` | The current player who has the mod installed.
-`hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
-`anyPlayer` | The combined values for all players, regardless of whether they're online.
-_player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
+`currentPlayer` | 当前安装模组的玩家。
+`hostPlayer` | 多人游戏主机玩家，单机或当前玩家为主机时同`currentPlayer`。
+`anyPlayer` | 所有玩家的组合值，无论是否在线。
+_玩家ID_ | 指定玩家的唯一多人ID，如`3864039824286870457`.
 
-## 参见 <a name="see-also"></a>
+<a name="see-also"></a>
+
+## 另见 
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)

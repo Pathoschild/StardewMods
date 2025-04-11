@@ -24,10 +24,17 @@ https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95
 * [玩家指南](#for-players)
   * [安装](#install)
   * [兼容](#compatibility)
+<<<<<<< HEAD
+  * [内容包配置](#configure-content-packs)
+  * [多人](#multiplayer)
+* [模组作者指南](#for-mod-authors)
+* [配置](#configure)
+=======
   * [内容包设置](#configure-content-packs)
   * [多人](#multiplayer)
 * [模组作者指南](#for-mod-authors)
 * [设置](#configure)
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 * [参见](#see-also)
 
 ## 玩家指南<a name="for-players"></a>
@@ -42,11 +49,19 @@ https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95
 ### 兼容<a name="compatibility"></a>
 Content Patcher与Linux/macOS/Windows星露谷物语1.6+版本兼容，包括单人游戏和多人游戏。
 
+<<<<<<< HEAD
+### 内容包配置<a name="configure-content-packs"></a>
+许多内容包可以使用 `config.json` 文件进行配置，Content Patcher将在你安装了该内容包后首次启动游戏时创建该文件。（若没有出现 `config.json`，则该模组不提供配置选项。）
+
+如果你安装了[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)，
+Content Patcher会自动将可配置的内容包添加到其游戏内菜单中：
+=======
 ### 内容包设置<a name="configure-content-packs"></a>
 许多内容包可以使用 `config.json` 文件进行设置，Content Patcher将在你安装了该内容包后首次启动游戏时创建该文件。（若没有出现 `config.json`，则该模组不提供设置选项。）
 
 如果你安装了[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)，
 Content Patcher会自动将可设置的内容包添加到其游戏内菜单中：
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 
 ![](screenshots/config-with-sections.png)
 
@@ -65,6 +80,16 @@ Content Patcher兼容多人游戏。最好所有玩家都拥有相同的内容�
 * 从SMAPI mod添加自定义Content Patcher tokens，请参阅[扩展性API](extensibility.md)。
 * 从SMAPI mod调用Content Patcher conditions和token strings，请参阅[条件 API](conditions-api.md)和[token string API](token-strings-api.md)。
 
+<<<<<<< HEAD
+## 配置<a name="configure"></a>
+Content Patcher在首次启动游戏时创建`config.json`文件。你可以用文本编辑器中打开该文件来配置此模组。
+
+可更改以下配置：
+
+<table>
+<tr>
+  <th>配置</th>
+=======
 ## 设置<a name="configure"></a>
 Content Patcher在首次启动游戏时创建`config.json`文件。你可以用文本编辑器中打开该文件来设置此模组。
 
@@ -73,6 +98,7 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 <table>
 <tr>
   <th>设置</th>
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
   <th>效果</th>
 </tr>
 
@@ -89,7 +115,11 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
   <td><code>Controls</code></td>
   <td>
 
+<<<<<<< HEAD
+配置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)）.
+=======
 设置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)）.
+>>>>>>> c036414e8861adc25a9c6a2a7c1fac76501d9f05
 默认绑定为：
 
 * `F3`显示[调试模式](author-guide/troubleshooting.md#debug-mode) (需启用调试功能);
