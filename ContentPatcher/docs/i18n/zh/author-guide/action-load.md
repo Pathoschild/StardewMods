@@ -26,8 +26,8 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`Load`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
-`FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。这可以是`.json`（数据），`.png`（图片），`.tbin`或`.tmx`（地图），或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Portraits/Abigail`。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
+`FromFile` | 内容包文件夹中需引用的`.json`文件的相对路径，或多个用逗号分割的的相对路径。这可以是`.json`（数据），`.png`（图片），`.tbin`或`.tmx`（地图），或`.xnb`文件。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
 <dt>可选字段：</dt>
@@ -38,7 +38,7 @@ field     | purpose
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部tokens](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些tokens。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部令牌](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些令牌。
 
 </dd>
 <dt>进阶字段：</dt>
@@ -67,7 +67,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 如果需要更具体的顺序，可以使用简单的偏移量，如`"High + 2"`或`"Medium - 10"`。
 默认值为-1000 （`Low`），0（`Medium`）和1000（`High`）。通常不需要分这么细，因为同一优先级的补丁会按`Changes`顺序生效。
 
-此字段 _不_ 支持tokens，不区分大小写。
+此字段 _不_ 支持令牌，不区分大小写。
 
   </tr>
   <tr>
@@ -118,7 +118,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 }
 ```
 
-你可以用[tokens](../author-guide.md#tokens)，如`{{TargetWithoutPath}}`，来同时`Load`多个文件。
+你可以用[令牌](../author-guide.md#tokens)，如`{{TargetWithoutPath}}`，来同时`Load`多个文件。
 
 ```js
 {

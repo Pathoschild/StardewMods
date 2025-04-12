@@ -7,18 +7,18 @@
   * [格式](#format)
   * [示例](#examples)
 * [常见问题](#faqs)
-  * [我可以在`i18n`文件里用token吗？](#can-i-use-content-patcher-tokens-in-i18n-files)
+  * [我可以在`i18n`文件里用令牌吗？](#can-i-use-content-patcher-tokens-in-i18n-files)
   * [翻译还可以用来干什么？](#what-else-can-i-do-with-translations)
 * [参见](#see-also)
 
 ## 用法<a name="usage"></a>
 ### 格式<a name="format"></a>
 
-你可以将翻译存在名为`i18n`的子目录，然后用`i18n` token来调用翻译文本。当某个语言没有翻译时，Content Patcher会自动使用默认翻译文本。
+你可以将翻译存在名为`i18n`的子目录，然后用`i18n` 令牌来调用翻译文本。当某个语言没有翻译时，Content Patcher会自动使用默认翻译文本。
 
 翻译文件的格式详见维基上[_i18n_文件夹](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation#i18n_.E6.96.87.E4.BB.B6.E5.A4.B9)的文档。文件里的翻译键必须逐字提供给`i18n`代币。（请参阅以下）。
 
-补丁里可以用`{{i18n: <键>}}`token，把`<键>`替换成`i18n`文档里需调用的翻译键。你可以给`i18n`提供以下参数：
+补丁里可以用`{{i18n: <键>}}`令牌，把`<键>`替换成`i18n`文档里需调用的翻译键。你可以给`i18n`提供以下参数：
 
 <table>
 <tr>
@@ -29,12 +29,12 @@
 <td><code>default</code></td>
 <td>
 
-如果一个翻译键不存在于现有语言和`default.json`，此token会显示类似`"missing translation: key"`的默认值。你可以用`default`提供自定义的默认值：
+如果一个翻译键不存在于现有语言和`default.json`，此令牌会显示类似`"missing translation: key"`的默认值。你可以用`default`提供自定义的默认值：
 ```js
 "{{i18n:some-key |default=此为默认文本}}"
 ```
 
-默认文本里可以使用tokens:
+默认文本里可以使用令牌:
 ```js
 "{{i18n:some-key |default=你好{{PlayerName}}! }}"
 ```
@@ -98,7 +98,7 @@ _其他_
 }
 ```
 
-你可以用`i18n`[token](../author-guide.md#tokens)在补丁里引用翻译文本，不需要重复任何无翻译数据：
+你可以用`i18n`[令牌](../author-guide.md#tokens)在补丁里引用翻译文本，不需要重复任何无翻译数据：
 
 ```js
 {
@@ -122,9 +122,9 @@ _其他_
 * [性别切换](https://stardewvalleywiki.com/Modding:Dialogue#Gender_switch)只有特定场合（如对话）可用。
 
 ## 常见问题<a name="faqs"></a>
-### 我可以在`i18n`文件里用token吗?<a name="can-i-use-content-patcher-tokens-in-i18n-files"></a>
+### 我可以在`i18n`文件里用令牌吗?<a name="can-i-use-content-patcher-tokens-in-i18n-files"></a>
 
-可以。不过因为翻译是SMAPI的系统，所以不直接支持tokens。你必须用参数将token替换到翻译文本里。
+可以。不过因为翻译是SMAPI的系统，所以不直接支持令牌。你必须用参数将令牌替换到翻译文本里。
 
 例如你的翻译如下：
 ```js
@@ -134,12 +134,12 @@ _其他_
 ```
 
 假设你直接用`{{i18n: today}}`那文本会显示为`"_今天是{{DayOfWeek}}_"`；
-你可以像这样把token传入：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后文本会显示为`"_今天是Monday_"`。
+你可以像这样把令牌传入：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后文本会显示为`"_今天是Monday_"`。
 
 ### 翻译还可以用来干什么？<a name="what-else-can-i-do-with-translations"></a>
 此功能可以理解为一个文本存储系统，有很多使用方法。
 
-这个例子是一个在制作NPC时很方便的技巧，利用tokens来动态加载季节对话对应的翻译键。
+这个例子是一个在制作NPC时很方便的技巧，利用令牌来动态加载季节对话对应的翻译键。
 
 ```js
 {

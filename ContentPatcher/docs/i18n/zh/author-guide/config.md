@@ -18,11 +18,11 @@
 
 你可以使用`ConfigSchema`字段定义内容包的设置选项。Content Patcher将自动添加`config.json`文件和[游戏内设置菜单](#config-ui)并允许玩家更改你提供的设置。
 
-在内容包内你可以把设置选项当作[Tokens和条件](#../author-guide.md#tokens)使用，从而实现动态改变。
+在内容包内你可以把设置选项当作[令牌和条件](#../author-guide.md#tokens)使用，从而实现动态改变。
 
 ### 设置定义<a name="define-your-config"></a>
 
-使用设置选项的第一步用`ConfigSchema`字段来描述你的内容包所提供的选项。`ConfigSchema`是与`Format`和`Changes`同级的字段。每一个设置选项有一个作为token的键，和一个包含一下字段的模型：
+使用设置选项的第一步用`ConfigSchema`字段来描述你的内容包所提供的选项。`ConfigSchema`是与`Format`和`Changes`同级的字段。每一个设置选项有一个作为令牌的键，和一个包含一下字段的模型：
 
 一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。
 
@@ -37,7 +37,7 @@
 
 ### 示例<a name="examples"></a>
 
-此`content.json`定义了一个名为`BillboardMaterial`的设置，并使用此设置token控制补丁效果。
+此`content.json`定义了一个名为`BillboardMaterial`的设置，并使用此设置令牌控制补丁效果。
 
 ```js
 {
@@ -49,7 +49,7 @@
       }
    },
    "Changes": [
-      // 作为token
+      // 作为令牌
       {
          "Action": "Load",
          "Target": "LooseSprites/Billboard",

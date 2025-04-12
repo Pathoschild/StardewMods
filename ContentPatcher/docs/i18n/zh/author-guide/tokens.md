@@ -161,7 +161,7 @@ Content Patcher里的令牌是[集合](https://zh.wikipedia.org/wiki/%E9%9B%86%E
 
 <tr valign="top" id="DaysPlayed">
 <td>DaysPlayed</td>
-<td>当前保存的游戏内总天数（从第一天的第一刻开始）。</td>
+<td>当前保存的游戏内总天数（存档开始的第一天为1）。</td>
 <td><a href="#DaysPlayed">#</a></td>
 </tr>
 
@@ -1336,7 +1336,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 字段   | 用途
 ------- | -------
 `Name`  | 用于[令牌和条件](#introduction)的令牌名称。
-`Value` | 设置的值（多个值用逗号分隔）。此字段支持[令牌](#introduction)，包括之前定义的动态token。
+`Value` | 设置的值（多个值用逗号分隔）。此字段支持[令牌](#introduction)，包括之前定义的动态令牌。
 `When`  | _(可选)_ 仅当给定[条件](#introduction)匹配时设置值。未指定则始终匹配。
 
 注意：

@@ -74,7 +74,7 @@
 
 每一个路径值代表要导航到的一个字段。可使用的字段根据补丁类型会变化，详见[`EditData`](action-editdata.md)和[`EditMap`](action-editmap.md)的文档。
 
-该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 </td>
 </tr>
@@ -104,7 +104,7 @@
 
 需新增的文本。和大部分Content Patcher的字段一样，开头和末尾的空格字符会被删除；如果你需要在原有值和新增值之间添加空格，请用`Delimiter`字段。
 
-该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 
 </td>
@@ -182,7 +182,7 @@ _未填写_    | `A/B/C`
 
 需从原文本中剔除的值。这必须等于整个分割后的值，不会替换部分值。
 
-该字段支持[tokens](../author-guide.md#tokens)，**区分大小写**。
+该字段支持[令牌](../author-guide.md#tokens)，**区分大小写**。
 
 </td>
 </tr>
@@ -263,7 +263,7 @@ _(可选)_ 指定需剔除的值，可填写：
 
 需从原文本中替换掉的值。这必须等于整个分割后的值，不会替换部分值。
 
-该字段支持[tokens](../author-guide.md#tokens)，**区分大小写**。
+该字段支持[令牌](../author-guide.md#tokens)，**区分大小写**。
 
 </td>
 </tr>
@@ -273,7 +273,7 @@ _(可选)_ 指定需剔除的值，可填写：
 
 需替换到文本里的值。
 
-该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。和大部分Content Patcher的字段一样，开头和末尾的空格字符会被删除。
+该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。和大部分Content Patcher的字段一样，开头和末尾的空格字符会被删除。
 
 </td>
 </tr>

@@ -1,6 +1,8 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-**此功能已弃用，1.6的新模组应该使用游戏内置的`Data/Locations`来添加自定义地点，详见[模组:地点数据](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E7%82%B9%E6%95%B0%E6%8D%AE)。**
+> [!WARNING]  
+> **此功能已弃用，不应该使用于新内容包。**  
+> 1.6的新模组应该使用游戏内置的`Data/Locations`来添加自定义地点，详见[模组:地点数据](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E7%82%B9%E6%95%B0%E6%8D%AE)。
 
 ----
 
@@ -84,7 +86,7 @@ The name:
   If the player ignores the warning and saves anyway at that point, anything in the location will be
   permanently lost.
 
-This field can't contain [tokens](../author-guide.md#tokens).
+This field can't contain [令牌](../author-guide.md#tokens).
 
 </td>
 </tr>
@@ -94,7 +96,7 @@ This field can't contain [tokens](../author-guide.md#tokens).
 
 The relative path to the location's map file in your content pack folder (`.tmx`, `.tbin`, or `.xnb`).
 
-This field can't contain [tokens](../author-guide.md#tokens), but you can make conditional changes
+This field can't contain [令牌](../author-guide.md#tokens), but you can make conditional changes
 using [`EditMap`](action-editmap.md) after it's loaded (see examples below).
 
 </td>
@@ -107,7 +109,7 @@ given by `Name`. This field can't contain tokens. This is only meant to allow mi
 added through a different mod, and shouldn't be used in most cases. See [_Can I rename a
 location?_](#can-i-rename-a-location) for more info.
 
-This field can't contain [tokens](../author-guide.md#tokens).
+This field can't contain [令牌](../author-guide.md#tokens).
 
 </td>
 </tr>

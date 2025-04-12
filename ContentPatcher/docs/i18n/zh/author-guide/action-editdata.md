@@ -145,7 +145,7 @@
 字段     | 用途
 --------- | -------
 `Action`  | 操作类型。此操作类型设置为`EditData`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Characters/Dialogue/Abigail`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Characters/Dialogue/Abigail`。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 至少有下列一项：
 
@@ -159,7 +159,7 @@
 <td>
 
 你要更改的现有条目的单个字段。该字段的键和值都支持
-[tokens](../author-guide.md#tokens)。每个字段的键是以/分隔的字符串索引（从0开始），或对象的字段名。
+[令牌](../author-guide.md#tokens)。每个字段的键是以/分隔的字符串索引（从0开始），或对象的字段名。
 
 </td>
 </tr>
@@ -167,7 +167,7 @@
 <td>
 
 你要添加/替换/删除的用ID索引的数据文件中的条目。如果你只想改某些字段，用`Fields`才更能和别的模组兼容。要添加条目，只需要指定一个不存在的键； 要删除条目，可以把它的值设为`null`（比如
-`"some key": null`）。可以在该字段条目的键和值中用[tokens](../author-guide.md#tokens)。
+`"some key": null`）。可以在该字段条目的键和值中用[令牌](../author-guide.md#tokens)。
 
 对于列表的值，查看下面的`MoveEntries`。
 
@@ -204,11 +204,11 @@
 
 条目         | 用途
 ------------- | -------
-`TargetField` | _（可选）_ 以[列表或字典](#data-assets)为目标时，值中的字段会被设为根作用域；详见[_目标字段_](#target-field)。该字段支持[tokens](../author-guide.md#tokens)。
+`TargetField` | _（可选）_ 以[列表或字典](#data-assets)为目标时，值中的字段会被设为根作用域；详见[_目标字段_](#target-field)。该字段支持[令牌](../author-guide.md#tokens)。
 `When`        | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`EditData Data/Achievements`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部tokens](../author-guide/tokens.md#local-tokens) 。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部令牌](../author-guide/tokens.md#local-tokens) 。
 
 </dd>
 <dt>高级字段：</dt>
@@ -234,7 +234,7 @@
 如果需要更具体的顺序，可以使用简单的偏移量，如`"Default + 2"`或者`"Late - 10"`。
 默认值为-1000 （`Early`），0（`Default`）和1000（`Late`）。
 
-此字段 _不_ 支持tokens，不区分大小写。
+此字段 _不_ 支持令牌，不区分大小写。
 
 > [!TIP]
 > 优先级会让你的更改难以排除故障。推荐做法：

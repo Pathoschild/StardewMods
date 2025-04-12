@@ -14,7 +14,7 @@
 
 ## 用法<a name="usage"></a>
 ### 概述<a name="overview"></a>
-如果你不想在`content.json`定义模组中的所有的补丁，你可以在其他文件里定义补丁然后在`content.json`里用`Include`引用其他文件的补丁。功能上来说，这些引用的补丁等于把这些补丁拷贝到`Include`的位置。所有在`content.json`可使用的功能，如[Tokens和条件](#../author-guide.md#tokens)），均可在这些`Include`的补丁里使用。任何相对本地文件路径仍然以`content.json`为准。
+如果你不想在`content.json`定义模组中的所有的补丁，你可以在其他文件里定义补丁然后在`content.json`里用`Include`引用其他文件的补丁。功能上来说，这些引用的补丁等于把这些补丁拷贝到`Include`的位置。所有在`content.json`可使用的功能，如[令牌和条件](#../author-guide.md#tokens)），均可在这些`Include`的补丁里使用。任何相对本地文件路径仍然以`content.json`为准。
 
 
 被引用的文件必须是只有`"Changes"`字段的`.json`文件
@@ -51,7 +51,7 @@
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部tokens](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些tokens。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部令牌](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些令牌。
 
 </dd>
 </dl>

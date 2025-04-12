@@ -37,7 +37,7 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为`EditMap`。
-`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Maps/Town`。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+`Target`  | 需编辑的[游戏素材名](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），比如`Maps/Town`。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
 <dt>可选字段：</dt>
@@ -48,7 +48,7 @@
 `When`      | _(可选)_ 使此补丁只有在指定[条件](../author-guide.md#conditions)下生效.
 `LogName`   | _(可选)_ 此补丁在日志里显示的名字，有助于理解报错。默认为类似`EditImage Maps/Town`的名字。
 `Update`    | _(可选)_ 此补丁字条的更新频率，详见[update rate](../author-guide.md#update-rate)。
-`LocalTokens` | _(可选)_ 一组仅在此补丁中生效的[本地token](../author-guide/tokens.md#local-tokens)。
+`LocalTokens` | _(可选)_ 一组仅在此补丁中生效的[局部令牌](../author-guide/tokens.md#local-tokens)。
 
 
 </dd>
@@ -75,7 +75,7 @@
 如果需要更具体的顺序，可以使用简单的偏移量，如`"Default + 2"`或者`"Late - 10"`。
 默认值为-1000 （`Early`），0（`Default`）和1000（`Late`）。
 
-此字段 _不_ 支持tokens，不区分大小写。
+此字段 _不_ 支持令牌，不区分大小写。
 
 > [!TIP]
 > 优先级会让你的更改难以排除故障。推荐做法：
@@ -125,7 +125,7 @@
 </td>
 <td>
 
-内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/town.tmx`），或多个逗号分隔的路径。这可以是`.tbin`，`.tmx`，或`.xnb`文件。该字段支持[tokens](../author-guide.md#tokens)，不区分大小写。
+内容包文件夹中要修补到目标中的图像的相对路径（例如`assets/town.tmx`），或多个逗号分隔的路径。这可以是`.tbin`，`.tmx`，或`.xnb`文件。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 Content Patcher会如下处理`FromFile`地图内引用的图块表：
 * 若图块表没有被目标地图引用，Content Patcher会帮你添加此图块（并自动添加`z_` ID 前缀，以避免与硬编码的游戏逻辑冲突）。如果源地图具有已引用的图块表的自定义版本，则它将被添加为仅供你的图块使用的单独图块表。
@@ -143,7 +143,7 @@ Content Patcher会如下处理`FromFile`地图内引用的图块表：
 
 _（可选）_源地图中需拷贝到目标的部分，默认整个源地图
 
-此字段是一个含有左上角点的X和Y像素坐标区域的长（`Width`）与高（`Height`）的对象。该对象的字段支持[tokens](../author-guide.md#tokens)。
+此字段是一个含有左上角点的X和Y像素坐标区域的长（`Width`）与高（`Height`）的对象。该对象的字段支持[令牌](../author-guide.md#tokens)。
 
 </td>
 </tr>
@@ -157,7 +157,7 @@ _（可选）_源地图中需拷贝到目标的部分，默认整个源地图
 
 _（可选）_ 目标地图中要替换的部分。默认大小与 `FromArea` 相同，位于地图的左上角。
 
-此字段是一个含有左上角点的X和Y像素坐标区域的长（Width）与高（Height）的对象。该对象的字段支持[tokens](../author-guide.md#tokens)。
+此字段是一个含有左上角点的X和Y像素坐标区域的长（Width）与高（Height）的对象。该对象的字段支持[令牌](../author-guide.md#tokens)。
 
 果你指定的区域超出了地图的底部或右部，Content Patcher将自动调整地图大小以适应新地图。
 
@@ -236,7 +236,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 </td>
 <td>
 
-需新增，替换，或移除的地图属性（和图块属性不一样）。要添加属性，只需指定不存在的键；要删除条目，将值设置为 `null`（如 `"some key": null`）。此字段的属性键和值均支持[tokens](../author-guide.md#tokens)。
+需新增，替换，或移除的地图属性（和图块属性不一样）。要添加属性，只需指定不存在的键；要删除条目，将值设置为 `null`（如 `"some key": null`）。此字段的属性键和值均支持[令牌](../author-guide.md#tokens)。
 
 </td>
 </tr>
@@ -250,7 +250,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 </td>
 <td>
 
-在[`NPCWarp`或`Warp`地图属性](https://stardewvalleywiki.com/Modding:Maps#Warps_.26_map_positions)里添加新的传送（Warp），有需要时创建此条目。此字段支持[tokens](../author-guide.md#tokens)。如果多个传送出现在同一图块上，最晚添加的传送将会生效。
+在[`NPCWarp`或`Warp`地图属性](https://stardewvalleywiki.com/Modding:Maps#Warps_.26_map_positions)里添加新的传送（Warp），有需要时创建此条目。此字段支持[令牌](../author-guide.md#tokens)。如果多个传送出现在同一图块上，最晚添加的传送将会生效。
 
 </td>
 </tr>
@@ -315,7 +315,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 </td>
 <td>
 
-需新增，编辑，或移除的图块。所有子字段支持[tokens](../author-guide.md#tokens)。
+需新增，编辑，或移除的图块。所有子字段支持[令牌](../author-guide.md#tokens)。
 
 此字段是一个含有多个模型的列表。每一个模型对应一个图块，并含有一下字段。
 
@@ -352,7 +352,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 }
 ```
 
-`MapTiles`的所有子字段都支持[tokens](../author-guide.md#tokens)。例如，此补丁在出货箱前新增一个每天都会随机选择目的地的传送。
+`MapTiles`的所有子字段都支持[令牌](../author-guide.md#tokens)。例如，此补丁在出货箱前新增一个每天都会随机选择目的地的传送。
 ```js
 {
     "Format": "2.6.0",
