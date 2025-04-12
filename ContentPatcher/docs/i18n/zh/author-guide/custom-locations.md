@@ -6,87 +6,75 @@
 
 ----
 
-The `CustomLocations` feature lets you add new in-game locations, complete with their own maps and
-warps. Content Patcher automatically handles NPC pathfinding, object persistence, etc.
+`CustomLocations`功能允许你添加新地点，并配有自己的地图和传送点。Content Patcher会自动处理NPC探索，对象持久性等。
 
-**This is only needed to add a new location.** To edit an existing one, use
-[`EditMap`](action-editmap.md) instead.
+**只有新增地点时才需要此功能。**编辑原有地点用[`EditMap`](action-editmap.md)即可。
 
 ## Contents
-* [Introduction](#introduction)
-  * [Maps vs locations](#maps-vs-locations)
-* [Usage](#usage)
-  * [Format](#format)
-  * [Examples](#examples)
-* [FAQs](#faqs)
-  * [How do I get to my location in-game?](#how-do-i-get-to-my-location-in-game)
-  * [Can I make the location conditional?](#can-i-make-the-location-conditional)
-  * [Can I rename a location?](#can-i-rename-a-location)
-* [See also](#see-also)
+* [介绍](#introduction)
+  * [地图和地点](#maps-vs-locations)
+* [用法](#usage)
+  * [格式](#format)
+  * [示例](#examples)
+* [常见问题](#faqs)
+  * [游戏中如何抵达我的自定义地点？](#how-do-i-get-to-my-location-in-game)
+  * [地点可以添加条件吗?](#can-i-make-the-location-conditional)
+  * [地点可重命名吗?](#can-i-rename-a-location)
+* [参见](#see-also)
 
-## Introduction
-### Maps vs locations
-Although players use them interchangeably, at a code level _maps_ and _locations_ are two different
-things. The distinction is crucial to understanding how this feature works:
+## 介绍<a name="introduction"></a>
+### 地图和地点<a name="maps-vs-locations"></a>
 
-* A [**map**](https://stardewvalleywiki.com/Modding:Maps) is an asset which describes the tile
-  layout, tilesheets, and map/tile properties for the in-game area. The map is reloaded each time
-  you load a save, and each time a mod changes the map.
-* A [**location**](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#GameLocation_et_al)
-  is part of the game code and manages the in-game area and everything inside it (including non-map
-  entities like players). The location is read/written to the save file, and is only loaded when
-  loading the save file.
+虽然地图和地点经常互换使用，代码里的“地图（map）”和“地点（location）”是两个不同的概念。区别对于理解此功能的工作方式至关重要：
 
-In other words, a _location_ (part of the game code) contains the _map_ (loaded from the `Content`
-folder):
+* [**地图**](https://stardewvalleywiki.com/Modding:Maps)是一个种素材，描述图块，分布，图块表，和地图/图块属性。每当你加载游戏和每次模组更改地图时，整个地图会重新加载。
+* [**地点**](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#GameLocation_et_al)是游戏中管理某区域的代码（包括非地图实体，如玩家）。地点会保存到存档文件中，并只在加载存档时加载一次。
+
+换句话说，_地点_(游戏代码) 包含 _地图_（从`Content`加载的素材）：
 
 ```
 ┌─────────────────────────────────┐
-│ Location                        │
-│   - objects                     │
-│   - furniture                   │
-│   - crops                       │
-│   - bushes and trees            │
-│   - NPCs and players            │
-│   - etc                         │
+│ 地点                             │
+│   - 物品                         │
+│   - 家具                         │
+│   - 农作物                       │
+│   - 灌木和树木                    │
+│   - NPC和玩家                    │
+│   - 其他                         │
 │                                 │
 │   ┌─────────────────────────┐   │
-│   │ Map asset               │   │
-│   │   - tile layout         │   │
-│   │   - map/tile properties │   │
-│   │   - tilesheets          │   │
+│   │ 地图资产                  │   │
+│   │   - 图块排列              │   │
+│   │   - 地图/图块属性         │   │
+│   │   - 图块表               │   │
 │   └─────────────────────────┘   │
 └─────────────────────────────────┘
 ```
 
-## Usage
-### Format
-Custom locations are added using a separate `CustomLocations` field in your `content.json` file
-(outside the `Changes` field which contains your patches). This consists of a list of models with
-these fields:
+## 用法<a name="usage"></a>
+### 格式<a name="format"></a>
+
+自定义地点使用`content.json`里的`CustomLocations`字段添加（在`Changes`字段以外）。这是一个模型列表，有一下字段：
 
 <table>
 <tr>
-<th>field</th>
-<th>purpose</th>
+<th>字段</th>
+<th>用途</th>
 </tr>
 <tr>
 <td><code>Name</code></td>
 <td>
 
-The location's unique internal name.
+地点的独有内置名。
 
 The name:
-* Must only contain alphanumeric or underscore characters.
-* Must begin with [your mod's manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest)
-  (like `Your.ModId_`), to avoid name conflicts. For legacy reasons, you can also start it with
-  `Custom_` instead but this isn't recommended.
-* Must be **globally unique**, so prefixing it with your mod ID is strongly recommended. If
-  two content packs add a location with the same name, both will be rejected with an error message.
-  If the player ignores the warning and saves anyway at that point, anything in the location will be
-  permanently lost.
+此名字：
+* 必须仅包含字母数字或下划线字符。
+* 必须以[你模组的manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest)作为开头
+  (like `Your.ModId_`)，防止冲突。 出于旧版支持原因，你也可以用`Custom_`作为开头，但这不推荐。
+* 必须**全局独特**，所以强烈推荐使用模组ID作为前缀。如果两个内容包添加了名称重复的地点，两个地点都不生效。如果玩家此时保存游戏，地点内的东西将会永久丢失。
 
-This field can't contain [令牌](../author-guide.md#tokens).
+此字段不能用[令牌](../author-guide.md#tokens).
 
 </td>
 </tr>
@@ -94,42 +82,38 @@ This field can't contain [令牌](../author-guide.md#tokens).
 <td><code>FromMapFile</code></td>
 <td>
 
-The relative path to the location's map file in your content pack folder (`.tmx`, `.tbin`, or `.xnb`).
+地图素材在内容包文件夹里的相对路径(`.tmx`, `.tbin`, 或 `.xnb`)。
 
-This field can't contain [令牌](../author-guide.md#tokens), but you can make conditional changes
-using [`EditMap`](action-editmap.md) after it's loaded (see examples below).
+此字段不能用[令牌](../author-guide.md#tokens)，但加载后可以用[`EditMap`](action-editmap.md)进行更改。
 
 </td>
 </tr>
 <td><code>MigrateLegacyNames</code></td>
 <td>
 
-_(optional)_ A list of former location names that may appear in the save file instead of the one
-given by `Name`. This field can't contain tokens. This is only meant to allow migrating locations
-added through a different mod, and shouldn't be used in most cases. See [_Can I rename a
-location?_](#can-i-rename-a-location) for more info.
+_(可选)_ 原来使用过并可能出现在存档里的的地点名，对应`Name`。这只是帮助迁移其他模组添加的地点的功能，平常不应该使用。详见[_地点可重命名吗?_](#can-i-rename-a-location)
 
-This field can't contain [令牌](../author-guide.md#tokens).
+此字段不能用[令牌](../author-guide.md#tokens)。
 
 </td>
 </tr>
 </table>
 
-### Examples
-Let's say you want to give Abigail a walk-in closet. This example makes three changes:
+### 示例<a name="examples"></a>
 
-1. add the in-game location with the base map;
-2. add a simple warp from Abigail's room;
-3. add a conditional map edit (optional).
+假设你想给阿比盖尔一个步入式壁橱。这个例子实现三个更改：
 
-Here's how you'd do that:
+1. 添加新地点和基本地图；
+2. 从阿比盖尔房间里加一个传送；
+3. 特定条件下编辑地图 (可选).
+
 
 ```js
 {
    "Format": "2.6.0",
 
    "CustomLocations": [
-      // add the in-game location
+      // 添加新地点；
       {
          "Name": "{{ModId}}_AbigailCloset",
          "FromMapFile": "assets/abigail-closet.tmx"
@@ -137,7 +121,7 @@ Here's how you'd do that:
    ],
 
    "Changes": [
-      // add a warp to the new location from Abigail's room
+      // 从阿比盖尔房间里加一个传送；
       {
          "Action": "EditMap",
          "Target": "Maps/SeedShop",
@@ -146,43 +130,43 @@ Here's how you'd do that:
          ]
       },
 
-      // conditionally edit the map if needed
+      // 特定条件下编辑地图
       {
          "Action": "EditMap",
          "Target": "Maps/{{ModId}}_AbigailCloset",
          "FromFile": "assets/abigail-closet-clean.tmx",
          "When": {
-            "HasFlag": "AbigailClosetClean" // example custom mail flag
+            "HasFlag": "AbigailClosetClean" // 示例mailflag
          }
       }
    ]
 }
 ```
 
-## FAQs
-### How do I get to my location in-game?
-`CustomLocations` only adds the location to the game. Don't forget to give players some way to
-reach it, usually by adding warps from another map using [`EditMap`](action-editmap.md) (like the
-example above). For a quick test, you can also run the `debug warp <location name>` [console
-command](https://stardewvalleywiki.com/Modding:Console_commands#Console_commands) to warp directly
-into it.
+## 常见问题<a name="faqs"></a>
+### 游戏中如何抵达我的自定义地点？<a name="how-do-i-get-to-my-location-in-game"></a>
 
-### Can I make the location conditional?
-No, since removing the location will permanently delete everything inside it. That's just like the
-base game, which adds every location even if the player doesn't have access to them yet.
+`CustomLocations`仅添加地点。不要忘记给玩家进入地点的方法，如用[`EditMap`](action-editmap.md)添加传送。测试时可用`debug warp <location name>` [console
+command](https://stardewvalleywiki.com/Modding:Console_commands#Console_commands)
 
-There's many ways you can decide when players have access. For example, you can use
-[`EditMap`](action-editmap.md) to add warps conditionally or to add some form of roadblock that
-must be cleared (e.g. a landslide).
+### 地点可以添加条件吗?<a name="can-i-make-the-location-conditional"></a>
 
-### Can I rename a location?
+不能，移除地点会将里面所有东西都删除。原版游戏也会不管玩家可否进入都加载所有地点。
+
+有很多控制玩家可否进入的功能，如有条件的用[`EditMap`](action-editmap.md)添加传送，或添加障碍。
+
+### 地点可重命名吗?<a name="can-i-rename-a-location"></a>
 **Renaming a location will permanently lose player changes made for the old name if you're not
 careful.**
+
+**重命名地点可能会导致玩家永久丢失里面的东西，请小心**
 
 Content Patcher lets you define "legacy" names to avoid that. When loading a save file, if it
 doesn't have a location for `Name` but it does have one with a legacy name, the legacy location's
 data will be loaded into the custom location. When the player saves, the previous location will be
 permanently renamed to match the `Name`.
+
+Content Patcher允许你定义原有地点名。当加载存档时，如果某地点没有对应`Name`但有旧版名，旧版名的数据会被加载到新地点中。当玩家保存游戏时，旧地点会永久重命名为新地点。
 
 For example:
 
@@ -199,11 +183,10 @@ For example:
 }
 ```
 
-Legacy names can have any format, but they're subject to two restrictions:
+旧版名可以有任意格式，但是有两个限制：
 
-* They must be **globally** unique. They can't match the `Name` or `MigrateLegacyNames` for any
-  other custom location, including those added by another mod installed by the player.
-* They can't match a vanilla location name.
+* 必须**全局独特**，不能和任意其他`Name`或`MigrateLegacyNames`重叠，包括玩家所有安装过的模组。
+* 不能和原版游戏的地点名一样。
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
+## 参见<a name="see-also"></a>
+* [模组作者指南](../author-guide.md)

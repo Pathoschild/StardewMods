@@ -13,7 +13,6 @@ author-tokens-guide.md - 已转移到author-guide/tokens.md
 
 不汉化以下名词：
 任何需要写入模组json的词，如"Action"
-token - 令牌/变量
 
 Wiki链接换成中文wiki
 https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95

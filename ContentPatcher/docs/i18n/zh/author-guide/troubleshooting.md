@@ -1,10 +1,10 @@
-﻿← [author guide](../author-guide.md)
+﻿← [模组作者指南](../author-guide.md)
 
-This page documents various tools available to track down issues with your content pack.
+此页描述各种帮助你排查内容包问题的工具。
 
 ## Contents
-* [Schema validator](#schema-validator)
-* [Patch commands](#patch-commands)
+* [JSON模式验证](#schema-validator)
+* [补丁(patch)命令](#patch-commands)
   * [`summary`](#summary)
   * [`update`](#update)
   * [`reload`](#reload)
@@ -12,57 +12,66 @@ This page documents various tools available to track down issues with your conte
   * [`parse`](#parse)
   * [`dump`](#dump)
   * [`invalidate`](#invalidate)
-* [Debug mode](#debug-mode)
-* [Verbose log](#verbose-log)
-* [See also](#see-also)
+* [调试模式](#debug-mode)
+* [详细日志](#verbose-log)
+* [参见](#see-also)
 
-## Schema validator
-You can validate your `content.json` and `manifest.json` automatically to detect some common issues.
-(You should still test your content pack in-game before releasing it, since the validator won't
-detect all issues.)
+## JSON模式验证<a name="schema-validator"></a>
+你可以验证你的`content.json`和`manifest.json`，并提前发现一些常见问题。
+（但是你还是应该在游戏内测试你的内容包，验证不能发现所有问题）
 
-To validate online:
-1. Go to [smapi.io/json](https://smapi.io/json).
-2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
-3. Drag & drop the JSON file onto the textbox, or paste in the text.
-4. Click the button to view the validation summary. You can optionally share the URL to let someone
-   else see the result.
+网页上验证JSON：
+1. 上[smapi.io/json](https://smapi.io/json)。
+2. 将format（格式）设为'Manifest'（用于`manifest.json`）或'Content Patcher'（用于`content.json`）。
+3. 将JSON文件拖放到文本框里，或将其粘贴到文本框里。
+4. 点'save & validate file'查看验证结果。如果想给其他人看，你可以分享此结果页面的URL。
 
-To validate in a text editor that supports JSON Schema, see
-[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
-in the JSON validator documentation.
+你可以在支持JSON模式的文本编辑软件里直接使用SMAPI提供的JSON模式，例如：
+```
+{
+   "$schema": "https://smapi.io/schemas/manifest.json",
+   "Name": "Some mod",
+   ...
+}
+```
+可的JSON模式包括：
 
-Tips:
-* You should update your content pack to the latest format version whenever you update it, for best
-  futureproofing.
-* If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
-  line mentioned (or the one above it) for a missing comma, bracket, etc.
-* If you need help figuring out an error, see [_see also_ in the main readme](../README.md#see-also)
-* for some links to places you can ask.
+格式 | JSON模式URL
+------ | ----------
+[SMAPI: `manifest.json`](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Manifest) | https://smapi.io/schemas/manifest.json
+[SMAPI: 翻译 (`i18n` 文件夹)](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation) | https://smapi.io/schemas/i18n.json
+[Content Patcher: `content.json`](../README.md) | https://smapi.io/schemas/content-patcher.json
 
-## Patch commands
-Content Patcher adds several console commands for testing and troubleshooting. Enter `patch help`
-directly into the SMAPI console for more info.
+译：以上内容改编自[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+
+提示
+* 每次更新模组时，你应该将你内容包的Format字段更新到最新版本，方便未来兼容。
+* 如果你的内容包有`Unexpected character`的报错，这意味你的JSON语法有误。检查一下报错提到的行（或之前一行），看有没有缺少逗号，括号，等。
+* 如果你需要帮助，请查看[主README的 _参见_](../README.md#see-also)所提供的连接。
+
+## 补丁(patch)命令<a name="patch-commands"></a>
+Content Patcher提供一系列助于测试和故障排除的控制台命令。在SMAPI控制台里输入`patch help`可查看帮助文档。
+
+译：这些控制台命令反馈的信息均为英文，此文档会注释例子中的词汇意义，但实际使用时不会显示。
 
 ### `summary`
-`patch summary` provides a comprehensive overview of what your content packs are doing. That
-includes...
 
-* global token values;
-* local token values for each pack;
-* custom locations added by each pack;
-* and patches loaded from each pack along with their current values, what they changed, and
-  (if applicable) the reasons they weren't applied.
+`patch summary` 提供内容包的全面概述，这包括：
 
-For example:
+* 全局令牌值；
+* 每个内容包的专属令牌值；
+* 每个内容包的`CustomLocations`；
+* 和所有补丁，显示其现有值，更改对象，和（当未生效时）为何未生效。
+
+例如
 
 ```
 =====================
-==  Global tokens  ==
+==  Global tokens （全局令牌）  ==
 =====================
    Content Patcher:
 
-      token name       | value
+      token name（令牌名）| value （值）
       ---------------- | -----
       Day              | [X] 5
       DayEvent         | [X]
@@ -73,67 +82,66 @@ For example:
       FarmName         | [X] River Coop
       FarmType         | [X] Riverland
 
-      [snipped for simplicity]
+      [省略]
 
 =====================
-== Content patches ==
+== Content 补丁 ==
 =====================
 The following patches were loaded. For each patch:
+以下补丁已加载，每一个补丁会显示：
   - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).
+  - 'loaded' 显示补丁是否生效（若未生效请查看详细原因）
   - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.
+  - 'conditions' 显示补丁是否符合当下条件（若不符合请查看详细原因）。如果这意外为“否”请检查(a)以上条件(b)你的Where字段
   - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.
+  - 'applied' 显示目标素材有没有被加载并修改，如果你认为素材应该已经被加载了但在这里显示为否，请检查游戏是否真的加载了此素材，和你的Target字段是否正确。
 
 
 Example Content Pack:
 ------------------------------
 
-   Local tokens:
-      token name        | value
+   Local tokens（专属令牌）:
+      token name（令牌名）| value （值）
       ----------------- | -----
       WeatherVariant    | [X] Wet
 
-   Patches:
+   Patches （补丁）:
       loaded  | conditions | applied | name + details
       ------- | ---------- | ------- | --------------
       [X]     | [ ]        | [ ]     | Dry Palm Trees // conditions don't match: WeatherVariant
       [X]     | [X]        | [X]     | Wet Palm Trees
 
-   Current changes:
-      asset name                | changes
+   Current changes（现有更改）:
+      asset name （素材名）       | changes（现有更改）
       ------------------------- | -------
       TerrainFeatures/tree_palm | edited image
 ```
 
-You can specify these arguments in any order (e.g. `patch summary "LemonEx.HobbitHouse" "Another.Content.Pack" full`):
+你可以提供一下参数，任意排列（如`patch summary "LemonEx.HobbitHouse" "Another.Content.Pack" full`）：
 
-argument              | effect
+参数              | 效果
 :-------------------- | :-----
-`"<content pack ID>"` | One or more content pack IDs for which to show data. If omitted, all content packs will be shown.
-`asset "<asset>"`     | Only list changes to a given asset. This filters by base asset name, so `Data/furniture` would also show edits to `Data/furniture.fr-FR`. You can list multiple assets by repeating the flag (e.g. `asset Data/Crops asset Data/Objects`).
-`full`                | Don't truncate very long token values.
-`unsorted`            | Don't sort the values for display. This is mainly useful for checking the real order for `valueAt`.
+`"<内容包ID>"` | 一个或多个可以显示数据的内容包ID。如果省略，将显示所有内容包。
+`asset "<素材>"`     | 只显示对应某素材的更改。 这依据无语言后缀素材名称过滤，所以`Data/furniture`也会显示针对`Data/furniture.fr-FR`的素材名。 You can list multiple assets by repeating the flag (e.g. `asset Data/Crops asset Data/Objects`).
+`full`                | 不截断很长的令牌值。
+`unsorted`            | 不要对显示令牌值排序。这主要用于检查令牌值的实际排列，对应`valueAt`。
 
 ### `update`
-`patch update` immediately updates Content Patcher's condition context and rechecks all patches.
-This is mainly useful if you change conditions through the console (like the date), and want to
-update patches without going to bed.
+`patch update`立马更新Content Patcher的条件上下文并重新检查所有补丁。当你更改某些条件时（如更改日期），你可以用这个命令来代替睡觉。
 
 ### `reload`
-`patch reload` reloads patches added by a specific content pack. That lets you change your content pack's JSON files
-while the game is running, and see the changes in-game without restarting the game. Non-patch content (like config
-schema and dynamic tokens) aren't reloaded.
+`patch reload`重新加载某一个内容包的补丁。使用此命令让你可以在游戏运行时更改内容包的JSON文件并加载这些更改。非补丁内容不会被更新，这包括设置菜单和动态令牌。
 
-For example:
+例如：
 
 ```
 > patch reload "LemonEx.HobbitHouse"
 Content pack reloaded.
 ```
 
-For content packs which use [`Include` patches](action-include.md), you can optionally only reload patches added by a
-specific `Include` patch by passing the file's relative path as a second argument.
+有[`Include`补丁](action-include.md)的内容包可以用第二个参数提供相对路径，从而只重加载某一个`Include`。
 
-For example:
+例如：
 
 ```
 > patch reload "LemonEx.HobbitHouse" "assets/some-include.json"
@@ -141,10 +149,10 @@ Content pack reloaded.
 ```
 
 ### `export`
-`patch export` saves a copy of a given asset to your game folder, which lets you see what it looks
-like with all changes applied. This currently works for image and data assets.
 
-For example:
+`patch export`将某一素材保存到你的游戏文件夹啊里，你可以通过这个功能查看素材在补丁生效后的状态。此功能可使用在图像，数据，和地图类型的素材。
+
+例如：
 
 ```
 > patch export "Maps/springobjects"
@@ -152,38 +160,36 @@ Exported asset 'Maps/springobjects' to 'C:\Program Files (x86)\Steam\steamapps\c
 ```
 
 ### `parse`
-`patch parse` parses a tokenizable string and shows the resulting metadata, using the current
-Content Patcher context (the same values used when applying patches).
+`patch parse`用当前的Content Patcher上下文解析一个可含有令牌的字符串，然后显示对应的元数据。
 
-This recognizes global tokens by default. You can use tokens for a specific content pack (including
-dynamic tokens and config values) by giving the content pack ID from its `manifest.json` in the
-optional second argument.
+全局令牌默认可解析，而专属令牌值则需要用第二个参数提供模组ID才可解析。
 
-For example:
+例如：
 
 ```
 > patch parse "assets/{{Variant}}.{{Language}}.png" "Pathoschild.ExampleContentPack"
 
-Metadata
+Metadata （元数据）
 ----------------
-   raw value:   assets/{{Variant}}.{{Language}}.png
-   ready:       True
-   mutable:     True
-   has tokens:  True
-   tokens used: Language, Variant
+   raw value（原始值）:   assets/{{Variant}}.{{Language}}.png
+   ready（可用）:       True
+   mutable（可变）:     True
+   has tokens（包含令牌）:  True
+   tokens used（令牌）: Language, Variant
 
-Diagnostic state
+Diagnostic state（诊断状态）
 ----------------
-   valid:    True
-   in scope: True
-   ready:    True
+   valid（有效的）:    True
+   in scope（范围内）: True
+   ready（可用）:    True
 
-Result
+Result （结果）
 ----------------
    The token string is valid and ready. Parsed value: "assets/wood.en.png"
+   令牌字符串有效且可用，解析为: "assets/wood.en.png"
 ```
 
-This can also be used to troubleshoot token syntax:
+这可以用来排查令牌语法错误：
 
 ```
 > patch parse "assets/{{Season}.png"
@@ -191,21 +197,17 @@ This can also be used to troubleshoot token syntax:
 ```
 
 ### `dump`
-`patch dump` provides specialized reports about the internal Content Patcher state. These are meant
-for technical troubleshooting; in most cases you should use `patch summary` instead.
+`patch dump`提供Content Patcher的内在状态报告。这个主要用于排查技术问题；大部分时候使用`patch summary`更方便。
 
-Available reports:
+可使用的报告有：
 
-* `patch dump order` shows the global definition order for all loaded patches.
-* `patch dump applied` shows all active patches grouped by target in their apply order, including
-  whether each patch is applied.
+* `patch dump order` 显示所有补丁的定义顺序。
+* `patch dump applied` 显示所有补丁，以目标分类，并显示补丁是否已生效。
 
 ### `invalidate`
-`patch invalidate` immediately removes a named asset from the game/SMAPI content cache. If it's an
-asset handled by SMAPI, the asset will be reloaded immediately and Content Patcher will reapply its
-changes to it. Otherwise the next code which loads the same asset will get a new instance.
+`patch invalidate` 立即将某个素材从游戏/SMAPI的缓存移除。如果这个素材是由SMAPI管理，那它会马上被重加载并得到修改。其他情况下一行加载此素材的代码会得到新的版本。
 
-For example:
+例如：
 
 ```
 > patch invalidate "Buildings/houses"
@@ -216,36 +218,29 @@ For example:
 [Content Patcher] Invalidated asset 'Portraits/Abigail'.
 ```
 
-## Debug mode
-Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any
-current changes. To enable it, open the mod's `config.json` file in a text editor and enable
-`EnableDebugFeatures`.
+## 调试模式<a name="patch-commands"></a>
+Content Patcher有一个“调试模式”，允许你在游戏内查看任何已加载的图像。你可以通过编辑`config.json`把`EnableDebugFeatures`设为`true`来开启此功能。
 
-Once enabled, press `F3` to display textures and left/right `CTRL` to cycle textures. Close and
-reopen the debug UI to refresh the texture list.
+启用以后按`F3`显示图像，左右`ctrl`循环查看图像。更新图像和图像列表需要关闭再开启调试UI。
+
 > ![](../screenshots/debug-mode.png)
 
-## Verbose log
-Content Patcher doesn't log much info. You can change that by opening SMAPI's
-`smapi-internal/StardewModdingAPI.config.json` in a text editor and enabling `VerboseLogging`.
-**This may significantly slow down loading, and should normally be left disabled unless you need it.**
+## 详细日志<a name="patch-commands"></a>
+Content Patcher没有很多日志内容。你在`smapi-internal/StardewModdingAPI.config.json`里开启`VerboseLogging`来获得更多日志。
+**这可能会大大减慢加载，不需要时不推荐启用**
 
-Once enabled, it will log significantly more information at three points:
-1. when loading patches (e.g. whether each patch was enabled and which files were preloaded);
-2. when SMAPI checks if Content Patcher can load/edit an asset;
-3. and when the context changes (anytime the conditions change: different day, season, weather, etc).
+启用后，日志会在以下三点显示更多内容：
+1. 加载补丁时 (比如是否启用了每个补丁以及预加载哪些文件);
+2. 当SMAPI检查Content Patcher是否可以加载/编辑资产时；
+3. 当上下文变更时（任何可能影响条件的改变：不同天，季节，天气，等）。
 
-If your changes aren't appearing in game, make sure you set a `LogName` field (see the [action
-docs](../author-guide.md#actions)) and then search the SMAPI log file for that name. Particular
-questions to ask:
-* Did Content Patcher load the patch?  
-  _If it doesn't appear, check that your `content.json` is correct. If it says 'skipped', check
-  your `Enabled` value or `config.json`._
-* When the context is updated, is the box ticked next to the patch name?  
-  _If not, checked your `When` field._
-* When SMAPI checks if it can load/edit the asset name, is the box ticked?  
-  _If not, check your `When` and `Target` fields._
+如果你的补丁更改没有出现在游戏中，确保你有设`LogName`字段（详见[Action文档](../author-guide.md#actions)）然后在日志里搜索你设置的日志名。请在意以下问题：
+* 补丁有被Content Patcher加载吗？
+  _如果没有出现在日志里，检查你的`content.json`是否有效。如果日志里提到'skipped'，检查你的`Enabled`值或`config.json`。_
+* 当上下文更新时，补丁名旁边的框框有没有勾号？
+  _如果没有，检查你的`When`字段_
+* 当SMAPI检查是否可加载内容时，旁边的框框有没有勾号？
+  _如果没有，检查你的`When`和`Target`字段_
 
-## See also
-* [Author guide](../author-guide.md) for other actions and options
-* [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info
+## 参见<a name="patch-commands"></a>
+* 其他操作和选项请参考[模组作者指南](../author-guide.md)

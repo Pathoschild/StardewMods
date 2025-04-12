@@ -41,3 +41,9 @@ __翻译键__: Translation Key/Translation Token
 翻译系统的tokens和Content Patcher的tokens不是同一个概念，它指的是翻译文档里左手边的键。
 
 英文文档里有混合使用Translation Key和Translation Token，中文翻译统一使用翻译键。
+
+__"local token"__: 局部令牌，专属令牌
+
+Content Patcher有两个不同的local tokens概念，翻译中为了区分选了两个不同的词
+* `LocalTokens`字段里出现的令牌是“局部令牌”，仅生效于此补丁或Include的补丁。
+* 每个内容包会有不同值的令牌是“专属令牌”，如`{{ModId}}`，`{{i18n}}`等。
