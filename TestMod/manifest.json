@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Test Mod",
     "Author": "Pathoschild",
-    "Version": "1.0.0",
+    "Version": "%ProjectVersion%",
     "MinimumApiVersion": "3.14.0",
     "Description": "A dev mod used for testing and troubleshooting.",
     "UniqueID": "Pathoschild.TestMod",
