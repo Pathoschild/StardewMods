@@ -53,16 +53,10 @@ internal class EditDataPatch : Patch
     private readonly TryParseFieldsDelegate TryParseFields;
 
     /// <summary>The cached JSON serializer used to apply JSON structures to a model.</summary>
-    private readonly Lazy<JsonSerializer> Serializer = new(() => new()
-    {
-        ObjectCreationHandling = ObjectCreationHandling.Replace
-    });
+    private static readonly Lazy<JsonSerializer> JsonSerializer = new(EditDataPatch.CreateJsonSerializer);
 
     /// <summary>Whether the file specified by <see cref="Patch.FromAsset"/> has been loaded at least once for this patch.</summary>
     private bool HasEverLoadedFromFile;
-
-    /// <summary>The JSON serializer to use when converting raw JSON tokens to a data model field.</summary>
-    private static readonly Lazy<JsonSerializer> JsonSerializer = new(EditDataPatch.CreateJsonSerializer);
 
 
     /*********
@@ -463,7 +457,7 @@ internal class EditDataPatch : Patch
                 foreach (EditDataPatchField field in recordGroup)
                     obj[field.FieldKey.Value!] = field.Value?.Value;
                 using JsonReader reader = obj.CreateReader();
-                this.Serializer.Value.Populate(reader, editor.GetEntry(key)!);
+                EditDataPatch.JsonSerializer.Value.Populate(reader, editor.GetEntry(key)!);
             }
         }
     }
