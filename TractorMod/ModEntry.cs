@@ -99,7 +99,8 @@ internal class ModEntry : Mod
         this.TextureManager = new(
             directoryPath: this.Helper.DirectoryPath,
             publicAssetBasePath: this.PublicAssetBasePath,
-            contentHelper: helper.ModContent,
+            gameContentHelper: helper.GameContent,
+            modContentHelper: helper.ModContent,
             monitor: this.Monitor
         );
         this.TractorManagerImpl = new(() =>

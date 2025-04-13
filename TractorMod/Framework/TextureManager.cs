@@ -30,14 +30,20 @@ internal class TextureManager : IDisposable
     /// <summary>The asset name for the buff icon spritesheet in the game's content pipeline.</summary>
     private readonly string BuffIconAssetName;
 
+    /// <summary>The content helper with which to invalidate loaded assets.</summary>
+    private readonly IGameContentHelper GameContentHelper;
+
     /// <summary>The content helper from which to load assets.</summary>
-    private readonly IModContentHelper ContentHelper;
+    private readonly IModContentHelper ModContentHelper;
 
     /// <summary>The monitor with which to log errors.</summary>
     private readonly IMonitor Monitor;
 
     /// <summary>A case-insensitive list of files in the <c>assets</c> folder.</summary>
     private readonly IDictionary<string, string> AssetMap;
+
+    /// <summary>The last season for which we updated textures.</summary>
+    private Season? LastSeason = null;
 
 
     /*********
@@ -56,12 +62,14 @@ internal class TextureManager : IDisposable
     /// <summary>Construct an instance.</summary>
     /// <param name="directoryPath">The absolute path to the Tractor Mod folder.</param>
     /// <param name="publicAssetBasePath">The base path for assets loaded through the game's content pipeline so other mods can edit them.</param>
-    /// <param name="contentHelper">The content helper from which to load assets.</param>
+    /// <param name="gameContentHelper">The content helper with which to invalidate loaded assets.</param>
+    /// <param name="modContentHelper">The content helper from which to load assets.</param>
     /// <param name="monitor">The monitor with which to log errors.</param>
-    public TextureManager(string directoryPath, string publicAssetBasePath, IModContentHelper contentHelper, IMonitor monitor)
+    public TextureManager(string directoryPath, string publicAssetBasePath, IGameContentHelper gameContentHelper, IModContentHelper modContentHelper, IMonitor monitor)
     {
         this.DirectoryPath = directoryPath;
-        this.ContentHelper = contentHelper;
+        this.GameContentHelper = gameContentHelper;
+        this.ModContentHelper = modContentHelper;
         this.Monitor = monitor;
 
         this.TractorAssetName = $"{publicAssetBasePath}/Tractor";
@@ -85,6 +93,15 @@ internal class TextureManager : IDisposable
             this.BuffIconTexture = texture;
         else
             this.Monitor.Log(error, LogLevel.Error);
+
+        // reset seasonal textures
+        if (this.LastSeason != Game1.season)
+        {
+            this.LastSeason = Game1.season;
+
+            this.GameContentHelper.InvalidateCache(this.GarageAssetName);
+            this.GameContentHelper.InvalidateCache(this.TractorAssetName);
+        }
     }
 
     /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
@@ -155,7 +172,7 @@ internal class TextureManager : IDisposable
     private bool TryLoadFromFile(string spritesheet, [NotNullWhen(true)] out Texture2D? texture, [NotNullWhen(false)] out string? error)
     {
         texture = this.TryGetTextureKey(spritesheet, out string? key, out error)
-            ? this.ContentHelper.Load<Texture2D>(key)
+            ? this.ModContentHelper.Load<Texture2D>(key)
             : null;
 
         return texture != null;
