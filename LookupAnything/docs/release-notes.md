@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed controller snapping enabled for the lookup and search menus.
+* Improved translations. Thanks to gab-umich (updated Chinese) and MakinDay (updated Italian)!
 
 ## 1.50.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.
