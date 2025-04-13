@@ -257,7 +257,7 @@ internal class ModEntry : Mod
         // location
         if (Game1.currentLocation is { } location)
         {
-            Vector2 tile = Game1.currentCursorTile;
+            Vector2 tile = TileHelper.GetTileFromCursor();
 
             yield return $"{I18n.Label_Tile()}: {tile.X}, {tile.Y}";
             yield return $"{I18n.Label_Location()}: {location.Name}";
