@@ -156,19 +156,12 @@ command](https://stardewvalleywiki.com/Modding:Console_commands#Console_commands
 有很多控制玩家可否进入的功能，如有条件的用[`EditMap`](action-editmap.md)添加传送，或添加障碍。
 
 ### 地点可重命名吗?<a name="can-i-rename-a-location"></a>
-**Renaming a location will permanently lose player changes made for the old name if you're not
-careful.**
 
 **重命名地点可能会导致玩家永久丢失里面的东西，请小心**
 
-Content Patcher lets you define "legacy" names to avoid that. When loading a save file, if it
-doesn't have a location for `Name` but it does have one with a legacy name, the legacy location's
-data will be loaded into the custom location. When the player saves, the previous location will be
-permanently renamed to match the `Name`.
-
 Content Patcher允许你定义原有地点名。当加载存档时，如果某地点没有对应`Name`但有旧版名，旧版名的数据会被加载到新地点中。当玩家保存游戏时，旧地点会永久重命名为新地点。
 
-For example:
+例如：
 
 ```js
 {
