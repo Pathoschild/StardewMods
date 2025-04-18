@@ -2,7 +2,7 @@
 
 此文档描述如何创建一个Content Patcher的内容包。
 
-**其他信息请参见[主README](README.md)**.
+**其他信息请参见[主README](README.md)**。
 
 ## 内容
 * [介绍](#introduction)
@@ -125,7 +125,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 你应该使用最新的格式版本（现在是`2.5.0`）来启用最新功能，避免某些被弃用的代码，减少加载模组的时间。
 
 ### 更改<a name="changes"></a>
-`Changes`字段描述了你想更改的内容，每个条目都被称为**补丁**，并说明要执行的具体操作：编辑图片、更改对话等。
+`Changes`字段描述了你想更改的内容，每个条目都被称为 **补丁**，并说明要执行的具体操作：编辑图片、更改对话等。
 你可以列出任意数量的补丁，也可以对同一文件应用多个补丁（它们将按照所列顺序一个个使用）。
 
 ## 特征<a name="features"></a>
@@ -421,7 +421,7 @@ See [Content Patcher's trigger action documentation](author-guide/trigger-action
 ## 常见问题<a name="faqs"></a>
 
 ### 多久应用一次补丁更改？<a name="update-rate"></a>
-每次加载数据素材时，你的补丁都会**应用数据素材**，但它们会通过不同的条件**更新字段**。例如，假设你有这样一个补丁：
+每次加载数据素材时，你的补丁都会 **应用数据素材** ，但它们会通过不同的条件 **更新字段** 。例如，假设你有这样一个补丁：
 ```js
 {
     "Action": "EditMap",

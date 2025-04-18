@@ -16,7 +16,7 @@
 
 你可以将翻译存在名为`i18n`的子目录，然后用`i18n` 令牌来调用翻译文本。当某个语言没有翻译时，Content Patcher会自动使用默认翻译文本。
 
-翻译文件的格式详见维基上[_i18n_文件夹](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation#i18n_.E6.96.87.E4.BB.B6.E5.A4.B9)的文档。文件里的翻译键必须逐字提供给`i18n`代币。（请参阅以下）。
+翻译文件的格式详见维基上[_i18n_ 文件夹](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation#i18n_.E6.96.87.E4.BB.B6.E5.A4.B9)的文档。文件里的翻译键必须逐字提供给`i18n`代币。（请参阅以下）。
 
 补丁里可以用`{{i18n: <键>}}`令牌，把`<键>`替换成`i18n`文档里需调用的翻译键。你可以给`i18n`提供以下参数：
 
@@ -133,8 +133,8 @@ _其他_
 }
 ```
 
-假设你直接用`{{i18n: today}}`那文本会显示为`"_今天是{{DayOfWeek}}_"`；
-你可以像这样把令牌传入：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后文本会显示为`"_今天是Monday_"`。
+假设你直接用`{{i18n: today}}`那文本会显示为`"今天是{{DayOfWeek}}"`；
+你可以像这样把令牌传入：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后文本会显示为`"今天是Monday"`。
 
 ### 翻译还可以用来干什么？<a name="what-else-can-i-do-with-translations"></a>
 此功能可以理解为一个文本存储系统，有很多使用方法。

@@ -37,7 +37,7 @@
 * 数据素材，如`Data/Objects`:  
   使用[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID), like `(O)OldId`。
 * **未安装**的Json Assets内容包
-  使用`"JsonAssets:<类型>:<名称>"`形式的ID。可使用`big-craftables`，`clothing`，`hats`，`objects`，和`weapons`。例如原名为_Puffer Hat_的ID为`"JsonAssets:hats:Puffer Hat"`。
+  使用`"JsonAssets:<类型>:<名称>"`形式的ID。可使用`big-craftables`，`clothing`，`hats`，`objects`，和`weapons`。例如原名为 _Puffer Hat_ 的ID为`"JsonAssets:hats:Puffer Hat"`。
 * **安装**的Json Assets内容包
   使用[Json Assets token](https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/docs/author-guide.md#integration-with-content-patcher)
   获取实际ID，用作[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID)。

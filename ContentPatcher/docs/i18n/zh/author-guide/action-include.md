@@ -1,6 +1,6 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-一个含有**`"Action": "Include"`**的补丁会从另外一个JSON文件里加载更多补丁。
+一个含有 **`"Action": "Include"`** 的补丁会从另外一个JSON文件里加载更多补丁。
 
 ## 内容
 * [用法](#usage)

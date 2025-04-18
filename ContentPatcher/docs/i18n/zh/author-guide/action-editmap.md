@@ -113,7 +113,7 @@
 <td>&nbsp;</td>
 <td>
 
-详见以上的_[公共字段](#common-fields)_
+详见以上的 _[公共字段](#common-fields)_
 
 </td>
 </tr>
@@ -223,7 +223,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 <td>&nbsp;</td>
 <td>
 
-详见以上的_[公共字段](#common-fields)_
+详见以上的 _[公共字段](#common-fields)_
 
 </td>
 </tr>
@@ -302,7 +302,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 <td>&nbsp;</td>
 <td>
 
-详见以上的_[公共字段](#common-fields)_
+详见以上的 _[公共字段](#common-fields)_
 
 </td>
 </tr>

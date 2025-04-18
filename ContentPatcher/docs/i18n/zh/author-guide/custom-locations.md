@@ -8,7 +8,7 @@
 
 `CustomLocations`功能允许你添加新地点，并配有自己的地图和传送点。Content Patcher会自动处理NPC探索，对象持久性等。
 
-**只有新增地点时才需要此功能。**编辑原有地点用[`EditMap`](action-editmap.md)即可。
+**只有新增地点时才需要此功能。** 编辑原有地点用[`EditMap`](action-editmap.md)即可。
 
 ## Contents
 * [介绍](#introduction)
@@ -72,7 +72,7 @@ The name:
 * 必须仅包含字母数字或下划线字符。
 * 必须以[你模组的manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest)作为开头
   (like `Your.ModId_`)，防止冲突。 出于旧版支持原因，你也可以用`Custom_`作为开头，但这不推荐。
-* 必须**全局独特**，所以强烈推荐使用模组ID作为前缀。如果两个内容包添加了名称重复的地点，两个地点都不生效。如果玩家此时保存游戏，地点内的东西将会永久丢失。
+* 必须 **全局独特** ，所以强烈推荐使用模组ID作为前缀。如果两个内容包添加了名称重复的地点，两个地点都不生效。如果玩家此时保存游戏，地点内的东西将会永久丢失。
 
 此字段不能用[令牌](../author-guide.md#tokens).
 
@@ -185,7 +185,7 @@ For example:
 
 旧版名可以有任意格式，但是有两个限制：
 
-* 必须**全局独特**，不能和任意其他`Name`或`MigrateLegacyNames`重叠，包括玩家所有安装过的模组。
+* 必须 **全局独特** ，不能和任意其他`Name`或`MigrateLegacyNames`重叠，包括玩家所有安装过的模组。
 * 不能和原版游戏的地点名一样。
 
 ## 参见<a name="see-also"></a>

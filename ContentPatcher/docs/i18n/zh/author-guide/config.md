@@ -172,7 +172,7 @@ For each field, add any combination of these translation keys:
 
 ![](../screenshots/config-with-translations.png)
 
-详见[维基上的_翻译模组_页](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BF%BB%E8%AF%91%E6%A8%A1%E7%BB%84)。
+详见[维基上的 _翻译模组_ 页](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BF%BB%E8%AF%91%E6%A8%A1%E7%BB%84)。
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
