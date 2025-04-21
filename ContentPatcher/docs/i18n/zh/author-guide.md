@@ -4,7 +4,7 @@
 
 **其他信息请参见[主README](README.md)**。
 
-## 内容
+## 目录
 * [介绍](#introduction)
   * [什么是Content Patcher？](#what-is-content-patcher)
   * [内容包长什么样？](#what-does-a-content-pack-look-like)

@@ -2,7 +2,7 @@
 
 一个含有 **`"Action": "Include"`** 的补丁会从另外一个JSON文件里加载更多补丁。
 
-## 内容
+## 目录
 * [用法](#usage)
   * [概述](#overview)
   * [格式](#format)

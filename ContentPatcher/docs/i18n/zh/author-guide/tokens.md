@@ -4,7 +4,7 @@
 
 **详见[README](../README.md)**。
 
-## 内容
+## 目录
 * [介绍](#introduction)
   * [概述](#overview)
   * [令牌类型](#token-types)
