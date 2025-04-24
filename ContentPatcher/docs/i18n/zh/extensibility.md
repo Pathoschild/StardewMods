@@ -5,7 +5,7 @@ This doc helps SMAPI mod authors extend Content Patcher with custom functionalit
 **To use Content Patcher conditions in your mod, see the [conditions API](conditions-api.md). See
 the [main README](README.md) for other info**.
 
-## Contents
+## 目录
 * [Introduction](#introduction)
 * [Access the API](#access-the-api)
 * [Basic API](#basic-api)

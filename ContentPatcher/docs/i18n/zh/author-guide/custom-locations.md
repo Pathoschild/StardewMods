@@ -10,7 +10,7 @@
 
 **只有新增地点时才需要此功能。** 编辑原有地点用[`EditMap`](action-editmap.md)即可。
 
-## Contents
+## 目录
 * [介绍](#introduction)
   * [地图和地点](#maps-vs-locations)
 * [用法](#usage)

@@ -2,7 +2,7 @@
 
 此页记录Content Patcher所添加的自定义[触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
 
-## Contents
+## 目录
 * [`MigrateIds`](#migrateids)
 * [参见](#参见)
 

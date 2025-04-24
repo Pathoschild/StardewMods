@@ -2,7 +2,7 @@
 
 此页描述各种帮助你排查内容包问题的工具。
 
-## Contents
+## 目录
 * [JSON模式验证](#schema-validator)
 * [补丁(patch)命令](#patch-commands)
   * [`summary`](#summary)

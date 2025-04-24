@@ -2,7 +2,7 @@
 
 一个含有 **`"Action": "EditMap"`** 的补丁会更改游戏已加载的地图的一部分。任意数量的内容包都可以编辑同一素材。你可以用补丁向下和向右延伸地图（Content Patcher将扩展地图以适应新地图）。
 
-## Contents
+## 目录
 * [介绍](#introduction)
   * [什么是地图？](#what-is-a-map)
 * [用法](#usage)

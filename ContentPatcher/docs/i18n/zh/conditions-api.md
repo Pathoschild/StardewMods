@@ -1,77 +1,70 @@
 ﻿← [README](README.md)
 
-This doc helps SMAPI mod authors use Content Patcher's condition system in their own mods.
+此文档帮助SMAPI模组作者在自己模组中使用Content Patcher的条件系统。
 
-**To add custom tokens for content packs to use, see the [extensibility API](extensibility.md). See
-the [main README](README.md) for other info**.
+**如果你想添加新的令牌给内容包使用，请参考[拓展API](extensibility.md)，其他信息详见[主README](README.md)**
 
-## Contents
-* [Overview](#overview)
-* [Access the API](#access-the-api)
-* [Parse conditions](#parse-conditions)
-* [Manage conditions](#manage-conditions)
-* [Caveats](#caveats)
-* [See also](#see-also)
+## 目录
+* [概述](#overview)
+* [访问API](#access-the-api)
+* [解析条件](#parse-conditions)
+* [管理条件](#manage-conditions)
+* [注意事项](#caveats)
+* [参见](#see-also)
 
-## Overview
-Content Patcher has a [conditions system](author-guide/tokens.md) which lets content packs check
-dozens of contextual values for conditional changes. For example:
+## 概述<a name="overview"></a>
+
+Content Patcher有一个[条件系统](author-guide/tokens.md)。内容包作者可以使用各种根据情况改变的值来实现条件化的更改。比如说
 ```js
 "When": {
-   "PlayerGender": "male",             // player is male
-   "Relationship: Abigail": "Married", // player is married to Abigail
-   "HavingChild": "{{spouse}}",        // Abigail is having a child
-   "Season": "Winter"                  // current season is winter
+   "PlayerGender": "male",             // 玩家为男性
+   "Relationship: Abigail": "Married", // 玩家和阿比盖尔结婚了
+   "HavingChild": "{{spouse}}",        // 阿比盖尔准备生孩子
+   "Season": "Winter"                  // 现在是冬天
 }
 ```
 
-Other SMAPI mods can use this conditions system too. They essentially create a dictionary
-representing the conditions they want to check (e.g. by parsing them from their own content packs),
-call the API below to get a 'managed conditions' object, then use that to manage the conditions.
+其他SMAPI模组也可以用这个系统。使用方式为创建一个代表需检查的条件的字典，然后通过API来获得一个'托管条件'的对象，然后用这个对象来管理条件。
 
-## Access the API
-To access the API:
+## 访问API<a name="access-the-api"></a>
 
-1. Add Content Patcher as [a **required** dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+访问API的步骤为：
+
+1. 将Content Patcher设为[`manifest.json`中的**必要**依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
       { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.6.0" }
    ]
    ```
-2. Add a reference to the Content Patcher DLL in your mod's `.csproj` file. Make sure you set
-   `Private="False"`, so the DLL isn't added to your mod folder:
+2. 在你模组的`.csproj`里添加对Content Patcher DLL的引用。将此引用设置为`Private="False"`，确保它不被复制到你的模组文件夹中：
+_译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和IManagedConditions.cs复制到你自己模组中即可_
    ```xml
    <ItemGroup>
      <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
    </ItemGroup>
    ```
-3. Somewhere in your mod code (e.g. in the [`GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)),
-   get a reference to Content Patcher's API:
+3. 在你的模组代码中（如[`GameLaunched`事件](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Events#GameLoop.GameLaunched)中，获取Content Patcher的API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<ContentPatcher.IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```
 
-## Parse conditions
-**Note:** see [_caveats_](#caveats) before calling this API.
+## 解析条件<a name="parse-conditions"></a>
+**注意:** 使用API前请阅读[_注意事项_](#caveats)。
 
-Now that you have access to the API, you can parse conditions.
+获取API以后你可以解析条件。
 
-1. Create a `Dictionary<string, string>` model of the conditions you want to check. This can use
-   Content Patcher features like tokens. For this example, let's assume you have these hardcoded
-   conditions (see the [conditions documentation](author-guide/tokens.md) for the format):
+1. 创建一个`Dictionary<string, string>`对象，代表你想检查的条件。这里可以使用Content Patcher功能，如令牌。假设你有这些条件（格式详见[条件文档](author-guide/tokens.md)）：
    ```c#
    var rawConditions = new Dictionary<string, string>
    {
-      ["PlayerGender"] = "male",             // player is male
-      ["Relationship: Abigail"] = "Married", // player is married to Abigail
-      ["HavingChild"] = "{{spouse}}",        // Abigail is having a child
-      ["Season"] = "Winter"                  // current season is winter
+      ["PlayerGender"] = "male",             // 玩家为男性
+      ["Relationship: Abigail"] = "Married", // 玩家和阿比盖尔结婚了
+      ["HavingChild"] = "{{spouse}}",        // 阿比盖尔准备生孩子
+      ["Season"] = "Winter"                  // 现在是冬天
    };
    ```
 
-2. Call the API to parse the conditions into an `IManagedConditions` wrapper. The `formatVersion`
-   matches the [`Format` field described in the author guide](author-guide.md#overview) to
-   enable forward compatibility with future versions of Content Patcher.
+2. 用API将条件解析为一个`IManagedConditions`对象。其中的`formatVersion`对应[作者指南中描述的`Format`字段](author-guide.md#overview)，用于维持跟未来的Content Patcher版本兼容。
 
    ```c#
    var conditions = api.ParseConditions(
@@ -81,17 +74,14 @@ Now that you have access to the API, you can parse conditions.
    );
    ```
 
-3. Get the result from the `IsMatch` property. For example:
+3. 从`IsMatch`属性中获取结果，例如：
    ```cs
    conditions.UpdateContext();
    if (conditions.IsMatch)
       ...
    ```
 
-If you want to allow custom tokens added by other SMAPI mods, you can specify a list of mod IDs
-to assume are installed. You don't need to do this for your own mod ID, for mods listed as
-required dependencies in your mod's `manifest.json`, or for mods listed via `HasMod` in the
-conditions dictionary.
+如果你想使用其他SMAPI模组添加的令牌，你可以用`assumeModIds`来指定所安装的模组id。你不需要把自己ID，必要依赖的ID,和任何在条件字段中以`HasMod`指定的Id添加到`assumeModIds`中。
 ```c#
 var conditions = api.ParseConditions(
    manifest: this.ModManifest,
@@ -101,16 +91,15 @@ var conditions = api.ParseConditions(
 );
 ```
 
-## Manage conditions
-The `IManagedConditions` object you got above provides a number of properties and methods to manage
-the parsed conditions. You can check IntelliSense in Visual Studio to see what's available, but
-here are some of the most useful properties:
+## 管理条件<a name="manage-conditions"></a>
+
+你获取的`IManagedConditions`对象提供一系列属性和方法，用于管理已解析的条件。你可以通过Visual Studio中的IntelliSense来查看可用的属性和方法。以下列出最有用的：
 
 <table>
 <tr>
-<th>property</th>
-<th>type</th>
-<th>description</th>
+<th>属性</th>
+<th>类型</th>
+<th>描述</th>
 </tr>
 
 <tr>
@@ -118,7 +107,7 @@ here are some of the most useful properties:
 <td><code>bool</code></td>
 <td>
 
-Whether the conditions were parsed successfully (regardless of whether they're in scope currently).
+条件是否成功解析（不管它是否在当前范围中）。
 
 </td>
 </tr>
@@ -127,11 +116,10 @@ Whether the conditions were parsed successfully (regardless of whether they're i
 <td><code>string</code></td>
 <td>
 
-When `IsValid` is false, an error phrase indicating why the conditions failed to parse, formatted
-like this:
+当`IsValid`为否，描述条件为何解析失败。格式如下：
 > 'seasonz' isn't a valid token name; must be one of &lt;token list&gt;
 
-If the conditions are valid, this is `null`.
+如果条件成功解析，这是`null`。
 
 </td>
 </tr>
@@ -140,8 +128,7 @@ If the conditions are valid, this is `null`.
 <td><code>bool</code></td>
 <td>
 
-Whether the conditions' tokens are all valid in the current context. For example, this would be
-false if the conditions use `Season` and a save isn't loaded yet.
+所需要的令牌是否都在当前上下文。例如，如果还没有加载存档，`Season`还没准备好，所以这是false。
 
 </td>
 </tr>
@@ -150,9 +137,9 @@ false if the conditions use `Season` and a save isn't loaded yet.
 <td><code>bool</code></td>
 <td>
 
-Whether `IsReady` is true, and the conditions all match in the current context.
+`IsReady`是否为true，并且所有条件在当前上下文都成立。
 
-If there are no conditions (i.e. you parsed an empty dictionary), this is always true.
+如果没有任何条件（你解析了一个空字典），这永远为true。
 
 </td>
 </tr>
@@ -161,21 +148,19 @@ If there are no conditions (i.e. you parsed an empty dictionary), this is always
 <td><code>bool</code></td>
 <td>
 
-Whether `IsMatch` may change depending on the context. For example, `Season` is mutable since it
-depends on the in-game season. `HasMod` is not mutable, since it can't change after the game is
-launched.
+`IsMatch`是否会根据当前上下文改变。例如，`Season`可改变，因为它对标游戏内的季节。`HasMod`不可改变，因为游戏加载后模组列表不会改变。
 
 </td>
 </tr>
 </table>
 
-And methods:
+和方法：
 
 <table>
 <tr>
-<th>method</th>
-<th>type</th>
-<th>description</th>
+<th>方法</th>
+<th>类型</th>
+<th>描述</th>
 </tr>
 
 <tr>
@@ -183,11 +168,10 @@ And methods:
 <td><code>string</code></td>
 <td>
 
-If `IsMatch` is false, this analyzes the conditions/context and provides a human-readable reason
-phrase explaining why the conditions don't match the context. For example:
+如果`IsMatch`为否，分析条件和上下文并返回一个人类可读的原因，描述为何此条件不成立。例如：
 > conditions don't match: season
 
-If the conditions do match, this returns `null`.
+如果条件成立，这是`null`。
 
 </td>
 </tr>
@@ -196,53 +180,47 @@ If the conditions do match, this returns `null`.
 <td><code>bool</code></td>
 <td>
 
-Updates the conditions based on Content Patcher's current context, and returns whether `IsMatch`
-changed. It's safe to call this as often as you want, but it has no effect if the Content Patcher
-context hasn't changed since you last called it.
+根据Content Patcher的当前上下文更新条件的上下文，并返回`IsMatch`是否有更改。这个方法可随时使用，但它只有在Content Patcher的上下文更新后才有效果。
 
 </td>
 </tr>
 </table>
 
-## Caveats
+## 注意事项<a name="caveats"></a>
 <dl>
-<dt>The conditions API isn't available immediately.</dt>
+<dt>条件API不可立即使用。</dt>
 <dd>
 
-The conditions API is available two ticks after the `GameLaunched` event (and anytime after that
-point). That's due to the Content Patcher lifecycle:
 
-1. `GameLaunched`: other mods can register custom tokens.
-2. `GameLaunched + 1 tick`: Content Patcher initializes the token context (including custom tokens).
-3. `GameLaunched + 2 ticks`: other mods can use the conditions API.
+条件API在`GameLaunched`两tick（更新）后可使用。这和Content Patcher的生命周期有关：
+
+1. `GameLaunched`: 其他模组可以注册自定义令牌。
+2. `GameLaunched + 1 tick`: Content Patcher初始化令牌上下文（包括自定义令牌）。
+3. `GameLaunched + 2 ticks`: 其他模组可使用条件API。
 
 </dd>
-<dt>Conditions should be cached.</dt>
+<dt>条件应缓存。</dt>
 <dd>
 
-Parsing conditions through the API is a relatively expensive operation. If you'll recheck the same
-conditions often, it's best to save and reuse the `IManagedConditions` instance.
+通过API解析条件是一个相对昂贵的操作。如果你需要经常使用某些条件，最好保存并重利用同一个`IManagedConditions`对象。
 
 </dd>
-<dt>Conditions don't update automatically.</dt>
+<dt>条件不会自动更新。</dt>
 <dd>
 
-When using a cached `IManagedConditions` object, make sure to update it using
-`conditions.UpdateContext()` as needed.
+当使用一个缓存的`IManagedConditions`对象，你必须在需要时用`conditions.UpdateContext()`来更新它。
 
-Note that condition updates are limited to Content Patcher's [update
-rate](author-guide.md#update-rate). When you call `conditions.UpdateContext()`, it will reflect the
-tokens as of Content Patcher's last internal context update.
+注意，条件更新频率限于Content Patcher的[更新频率](author-guide.md#update-rate)。当你使用`conditions.UpdateContext()`时，它会更新到Content Patcher的内置上下文最近一次更新的状态。
 
 </dd>
-<dt>Conditions handle split-screen automatically.</dt>
+<dt>条件自动处理本地多人双屏模式。</dt>
 <dd>
 
-For example, `IsMatch` returns whether it matches the _current screen's_ context. The exception is
-`UpdateContext`, which updates the context for all active screens.
+比如说`IsMatch`会返回对于 _当前屏幕_ 的上下文的值。
+`UpdateContext`例外，这会更新所有屏幕的上下文。
 
 </dd>
 </dl>
 
-## See also
-* [README](README.md) for other info
+## 参见<a name="see-also"></a>
+* 其他操作和选项请参考[模组作者指南](../author-guide.md)
