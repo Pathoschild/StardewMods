@@ -368,6 +368,18 @@ internal class ExportCommand : BaseCommand
         )
             return [typeof(Dictionary<string, string>)];
 
+        if (assetName.IsDirectlyUnderPath("Data"))
+        {
+            string name = assetName.BaseName["Data/".Length..];
+            // No vanilla data asset has `_` in its name, but DataLoader uses it in a few places for subfolder assets, eg 'Festivals_FestivalDates'
+            if (name.Contains('_')) return null;
+            var reflectionType = typeof(DataLoader).GetMethods().FirstOrDefault(type => type.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            if (reflectionType != null)
+            {
+                return [reflectionType.ReturnType];
+            }
+        }
+
         return null;
     }
 
