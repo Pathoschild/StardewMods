@@ -40,7 +40,7 @@
    ]
    ```
 
-2. 把[`IContentPatcherAPI`](../IContentPatcherAPI.cs) 复制到你模组里并删除**任何你不需要用的方法，为了兼容未来更改**.
+2. 把[`IContentPatcherAPI`](../../../IContentPatcherAPI.cs) 复制到你模组里并删除**任何你不需要用的方法，为了兼容未来更改**.
 3. 在你的模组代码中（如[`GameLaunched`事件](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Events#GameLoop.GameLaunched)中，获取Content Patcher的API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
@@ -56,7 +56,6 @@
 <dt>范围</dt>
 <dd>
 
-
 Content Patcher只有在更新令牌时才会调用你的代码。这可以在存档加载前，加载中，和加载后。如果你的令牌还没准备好，你可以返回null或空列表 这三种情况在 _[添加令牌](#add-a-token)_ 中都照顾到。
 
 </dd>
@@ -64,44 +63,40 @@ Content Patcher只有在更新令牌时才会调用你的代码。这可以在�
 <dt>数据顺序</dt>
 <dd>
 
-The order you return values affects features like `valueAt`. You should use the order which makes
-most sense for your token, since content pack authors can't change it. For most tokens,
-alphanumeric order is fine (e.g. `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`).
-
 你返回的顺序会影响`valueAt`。推荐使用对于你令牌来说最有意义的顺序，因为内容包作者无法改变此顺序。大部分令牌使用字母数字顺序即可（如 `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`）。
 
 </dd>
 </dl>
 
 ### 添加令牌<a name="add-a-token"></a>
-You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
-_[Access the API](#access-the-api)_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
-current player's name:
+
+你可以在`GameLaunched`事件中通过`RegisterToken`添加简单令牌（详见 _[访问API](#access-the-api)_ ）。例如，以下代码创建一个`{{your-mod-id/PlayerName}}`令牌代表当前玩家名：
+
 ```c#
 api.RegisterToken(this.ModManifest, "PlayerName", () =>
 {
-    // save is loaded
+    // 存档已加载
     if (Context.IsWorldReady)
         return new[] { Game1.player.Name };
 
-    // or save is currently loading
+    // 存档正在加载
     if (SaveGame.loaded?.player != null)
         return new[] { SaveGame.loaded.player.Name };
 
-    // no save loaded (e.g. on the title screen)
+    // 未加载存档(e.g. 在主页)
     return null;
 });
 ```
 
-`RegisterToken` in this case has three arguments:
+`RegisterToken` 有三个参数：
 
-argument   | type | purpose
+参数   | 类型 | 用途
 ---------- | ---- | -------
-`mod`      | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
-`name`     | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `PlayerName` in the above example will become `your-mod-id/PlayerName`.
-`getValue` | `Func<IEnumerable<string>>` | A function which returns the current token value. If this returns a null or empty list, the token is considered unavailable in the current context and any patches or dynamic tokens using it are disabled.
+`mod`      | `IManifest` | 提供此令牌模组的manifest，你可以直接使用ModEntry的`this.ModManifest`
+`name`     | `string` | 令牌名称，这个名字只需要在你自己模组中独一。Content Patcher会自动给这个名字添加前缀。以上例子的`PlayerName`会变成`your-mod-id/PlayerName`。
+`getValue` | `Func<IEnumerable<string>>` | 一个函数，反馈当前值。如果这反馈null或空列表，这个令牌会以不存在于当前范围来处理，任何使用它的补丁和动态令牌也会被禁用。
 
-That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+现在，任何将你的模组列为依赖的内容包都可以在其字段中使用令牌：
 ```js
 {
    "Format": "2.6.0",
@@ -117,125 +112,106 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 }
 ```
 
-## 添加令牌<a name="advanced-api"></a>
+## 进阶API<a name="advanced-api"></a>
 ### 注意事项<a name="caveats"></a>
-The _basic API_ section above is strongly recommended for most tokens, since Content
-Patcher will handle details like context updates and change tracking for you, it's easier to
-troubleshoot, and it's guaranteed not to break without a major-version update.
 
-If you really need it, the advanced API gives you full control (almost equivalent to a token in the
-Content Patcher core). However:
+大部分时候，强烈推荐使用以上的 _基本API_，因为Content Patcher会帮你处理上下文更新和更改追踪等细节，这方便排查错误，而且无大型更新时绝对不会失效。
 
-* <strong>This is experimental. There's no guarantee that future versions will be backwards
-  compatible, or that you'll get any warning before it changes.</strong>
-* <strong>This is low-level. You must account for the token design considerations documented below,
-  unlike the basic API above which handles them for you.</strong>
+如果你真的非常需要更多控制，你可以使用进阶API添加令牌（基本和Content Patcher自带的令牌一致），但是：
+
+* <strong>这是实验性功能。无法保证未来版本会倒退兼容，或在更改之前会收到任何警告。</strong>
+* <strong>这是底层功能。与以上的基本API不同，你必须考虑下面记录的令牌设计注意事项。</strong>
 
 ### 概念<a name="concepts-1"></a>
-When registering a token through the advanced API, here are some design considerations to avoid
-problems.
+
+当通过进阶API添加令牌时，你需要考虑这些因素来避免问题：
 
 <dl>
-<dt>Scope and value order</dt>
+<dt>范围和数据顺序</dt>
 <dd>
 
-See [_Basic API: concepts_](#concepts) above.
+详见 [_基本API：概念_](#concepts)。
 
 </dd>
 
-<dt>Context updates</dt>
+<dt>上下文更新</dt>
 <dd>
 
-Token values are a cached view of the game state, updated at specific points (e.g. on day start).
-The combination of all tokens is called the 'context'; a 'context update' is when Content Patcher
-refreshes all tokens, rebuilds caches, rechecks patch conditions, reloads assets if needed, etc.
+令牌值可以视为缓存的游戏状态，在特定时刻更新（如每天开始）。所有令牌的集合为“上下文”；而“上下文更新”是Content Patcher刷新令牌，生成缓存，检查条件，重加载素材，等等。
 
-**Tokens must not change value outside of the `UpdateContext` method**. Doing so may have severe
-and undocumented effects, from graphical glitches to outright game crashes.
+**令牌值不能在`UpdateContext`以外更改**。这样做可能会导致贴图错误或游戏彻底崩溃。
 
-That doesn't preclude tokens that calculate their value dynamically (e.g. `FileExists`), so long
-as this calculation does not change. If a token may change dynamically between context updates
-(e.g. `Random`), it must implement caching to ensure it does not.
+这并不等于令牌不可有动态计算出的值（如`FileExists`）只要这个计算本身不改变。如果一个令牌会在上下文更新之间改变数值，你必须将令牌值缓存。
 
 </dd>
 
-<dt>Bounded values</dt>
+<dt>有界值</dt>
 <dd>
 
-A token is _bounded_ if its values are guaranteed to match a set of known values; otherwise it's
-_unrestricted_.
+如果一个令牌的值必定在某一范围之间，这个令牌是 _有界_ 的。
 
-This affects two things:
-* Where the token can be used. For example, a token not guaranteed to return integer values can't
-  be used in a number field, even if it _currently_ returns a number.
-* Validation when the token is used as part of a `When` condition. For example, this will show a
-  warning since it's guaranteed to always be false:
+这影响了两件事：
+* 此令牌在哪里可使用。例如，只有必定会反馈数值的令牌才可在数值字段中使用，其他令牌就算现在是 _数字_ 时也不能在数值字段中使用。
+* 令牌在`When`条件中的验证。例如，这个条件永远为否，所以会显示一个警告。
   ```js
   "When": {
      "Season": "totally not a valid season"
   }
    ```
 
-Note that boundedness is _per-input_. For example, your token might be bounded if it receives input
-arguments, but unrestricted without one:
+有界性按参数分开计算。例如，你的令牌可能在有参数时为 _有界_ ，而没参数时为无界。
 ```js
 "When": {
-   "Relationship": "Abigail:Married", // unrestricted: may return any value (e.g. for custom NPCs)
-   "Relationship:Abigail": "Married"  // bounded: returns predefined values like 'married' or 'dating'
+   "Relationship": "Abigail:Married", // 无界：可返回任意值（如自定义NPC）
+   "Relationship:Abigail": "Married"  // 有界：只可返回'married'或'dating'等提前定义的值
 }
 ```
 
-When registering a token, a token is bounded if you implement `HasBoundedValues` or
-`HasBoundedRangeValues`. Implementing `TryValidateValues` lets you add custom validation, but does
-_not_ make the token bounded since Content Patcher can't get a list of possible values.
+
+当你添加令牌时，你实现`HasBoundedValues`，将令牌变成有界。你还可以实现`TryValidateValues`来无界令牌的实现自定义验证机制。
 
 </dd>
-<dt>Immutable values</dt>
+<dt>不变值</dt>
 <dd>
 
-A token is _immutable_ if its value for a given input will never change for the entire lifetime of
-the current game instance (from game launch to full exit). Most tokens are _mutable_, meaning their
-value may change.
+如果一个令牌的值在同一参数在整个游戏行程（从启动到退出）必定不变，这个令牌是 _不变_ 的。大部分令牌为可变的，意味它们的值会根据状态改变。
 
-Immutability enables several optimizations. For example, since Content Patcher doesn't need to
-update their value, it also doesn't need to update dependent tokens/patches (and their dependents,
-etc).
+不变特性允许一些优化。例如，Content Patcher不需要更新一个令牌，所以也不需要更新依赖这个令牌的令牌/补丁。
 
 </dd>
 
-<dt>Input arguments</dt>
+<dt>输入参数</dt>
 <dd>
 
-See [_input arguments_ in the tokens guide](author-guide/tokens.md#input-arguments) for more info.
+详见 [令牌指南中的 _输入参数_](author-guide/tokens.md#input-arguments)。
 
-Due to limitations in SMAPI's API proxying, your mod will receive a normalised input string
-identical to the format shown in the tokens guide instead of a parsed object. Any tokens in the
-input will be replaced by their value. Note that if no input arguments were given, the token will
-receive `null`.
+由于SMAPI API代理的限制，你的模组受到的输入是一个归一化后的字符串，格式和令牌指南上一致，而不是已解析后的令牌对象。输入参数中的令牌会被它们实际值替代。如果没有任何输入值，令牌会收到`null`。
 
 </dd>
 </dl>
 
 ### 添加令牌<a name="add-a-token-1"></a>
-To register a custom token using the advanced API:
+
+用进阶API添加自定义令牌：
 
 <ol>
 <li>
 
-Create a token class with any combination of [the methods listed in this file](../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs).
-Note that the methods in your class must exactly match the names, return values, and arguments. If
-Content Patcher files a non-matching or unrecognized public method, it'll show an error and reject
-the token.
+创建一个令牌类，需要有在这个文件里[所列出的方法](../../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
+=
+你的类中的方法必须有完全一样的名字，返回类，和参数。Content Patcher发现不对应的公开方法时会报错并退回此令牌。
 
 For example, let's say we want a token which returns the initials for the given name (like
 `{{Initials:John Smith}}` → `JS`), or the player's name if called with no input. Here's a token
 class to do that:
+
+例如，我们想要一个提供名字缩写的令牌（如`{{Initials:John Smith}}` → `JS`），或无参数时提供玩家的名字缩写。这是一个实现此功能的令牌类：
 ```c#
-/// <summary>A token which returns the player's initials, or the initials of the input name.</summary>
+/// <summary>返回玩家的缩写或输入名称的缩写的令牌.</summary>
 internal class InitialsToken
 {
     /*********
-    ** Fields
+    ** 字段
     *********/
     /// <summary>The player name as of the last context update.</summary>
     private string PlayerName;
@@ -268,7 +244,7 @@ internal class InitialsToken
     public bool UpdateContext()
     {
         string oldName = this.PlayerName;
-        this.PlayerName = Game1.player?.Name ?? SaveGame.loaded?.player?.Name; // tokens may update while the save is still being loaded
+        this.PlayerName = Game1.player?.Name ?? SaveGame.loaded?.player?.Name; // 存档仍在加载时，令牌可能会更新
         return this.PlayerName != oldName;
     }
 
@@ -282,12 +258,12 @@ internal class InitialsToken
     /// <param name="input">The input arguments, if applicable.</param>
     public IEnumerable<string> GetValues(string input)
     {
-        // get name
+        // 获取名称
         string name = input ?? this.PlayerName;
         if (string.IsNullOrWhiteSpace(name))
             yield break;
 
-        // get initials
+        // 获取缩写
         yield return string.Join("", name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
     }
 }
@@ -296,8 +272,7 @@ internal class InitialsToken
 </li>
 <li>
 
-Next let's register it with Content Patcher in the `GameLaunched` event (see [_Access the API_](#access-the-api)
-above):
+接下来我们通过API来添加这个令牌（详见[访问API](#access-the-api)）：
 
 ```cs
 api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
@@ -306,7 +281,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 </li>
 </ul>
 
-That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+现在，任何将您的mod列为依赖项列出的内容包都可以在其字段中使用令牌：
 ```js
 {
    "Format": "2.6.0",
@@ -322,5 +297,5 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 }
 ```
 
-## See also
-* [README](README.md) for other info
+## 参见<a name="see-also"></a>
+* 其他操作和选项请参考[模组作者指南](../author-guide.md)

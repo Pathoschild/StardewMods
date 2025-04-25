@@ -1450,12 +1450,10 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
    ]
 }
 ```
-<a name="input-arguments"></a>
 
-## 输入参数 
-<a name="overview-1"></a>
+## 输入参数<a name="input-arguments"></a>
 
-### 概述 
+### 概述<a name="overview-1"></a>
 **输入参数** 是在`{{...}}`大括号内传递给令牌的值。输入可以是
 _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分隔，命名参数以竖线分隔。
 
@@ -1468,9 +1466,7 @@ _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分
 }
 ```
 
-<a name="global-input-arguments"></a>
-
-### 全局输入参数 
+### 全局输入参数<a name="global-input-arguments"></a>
 全局输入参数由Content Patcher处理，适用于所有令牌（包括模组提供的令牌）。多个参数按从左到右顺序应用。
 
 #### `contains`
