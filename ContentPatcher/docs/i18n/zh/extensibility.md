@@ -1,46 +1,38 @@
 ﻿← [README](README.md)
 
-This doc helps SMAPI mod authors extend Content Patcher with custom functionality.
+此文档帮助SMAPI模组作者延伸Content Patcher的功能。
 
-**To use Content Patcher conditions in your mod, see the [conditions API](conditions-api.md). See
-the [main README](README.md) for other info**.
+**如果你想在你的模组中使用条件，详见[条件API](conditions-api.md)。其他信息请参见[主README](README.md)**
 
 ## 目录
-* [Introduction](#introduction)
-* [Access the API](#access-the-api)
-* [Basic API](#basic-api)
-  * [Concepts](#concepts)
-  * [Add a token](#add-a-token)
-* [Advanced API](#advanced-api)
-  * [Caveats](#caveats)
-  * [Concepts](#concepts-1)
-  * [Add a token](#add-a-token)
-* [See also](#see-also)
+* [入门](#introduction)
+* [访问API](#access-the-api)
+* [基本API](#basic-api)
+  * [概念](#concepts)
+  * [添加令牌](#add-a-token)
+* [进阶API](#advanced-api)
+  * [注意事项](#caveats)
+  * [概念](#concepts-1)
+  * [添加令牌](#add-a-token-1)
+* [参见](#see-also)
 
-## Introduction
-Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
-you can use from your own SMAPI mod to add custom tokens. Custom tokens are always prefixed with
-the ID of the mod that created them, like `your-mod-id/SomeTokenName`.
+## 入门<a name="introduction"></a>
 
-There are two parts of the API you can use:
+你的SMAPI模组可以使用Content Patcher的[模组API](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Integrations#.E6.A8.A1.E7.BB.84API)来添加自定义令牌。自定义令牌的前缀为提供它们的模组，如`your-mod-id/SomeTokenName`。
 
-* The **basic API** is strongly recommended for most mods. This lets you create custom tokens
-  with minimal knowledge of how Content Patcher works internally; Content Patcher will
-  automatically handle the gritty details for you, and your tokens are highly compatible with
-  future versions of SMAPI.
+你可以用这两种API：
 
-* The **advanced API** gives you much more control over how the token works. The disadvantages are
-  that your token code will be more complex, you need a grasp of how Content Patcher works
-  internally, and your token may break in future versions of Content Patcher when its internal
-  implementation changes. Using the advanced API is strongly discouraged unless you can't use the
-  basic API.
+* 大部分模组推荐使用 **基本API**。你可以在不了解Content Patcher内部结构的情况下创建令牌；Content Patcher会自动管理各种细节，而且你的令牌和未来版本更兼容。
 
-Note that you can use both at once from your mod code.
+* **进阶API**提供更多控制选项。但是你的令牌会更加复杂，你需要了解Content Patcher的内在运行逻辑，而且你的令牌可能会在未来Content Patcher内在运行逻辑更改时失效。进阶API强烈不推荐使用，除非基本API不可用。
 
-## Access the API
-To access the API:
+你可以同时使用基本和进阶API。
 
-1. Add Content Patcher as [a dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+## 访问API<a name="access-the-api"></a>
+
+访问API的步骤为：
+
+1. 将Content Patcher设为[`manifest.json`中的依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
 
    ```js
    "Dependencies": [
@@ -48,42 +40,40 @@ To access the API:
    ]
    ```
 
-2. Copy [`IContentPatcherAPI`](../IContentPatcherAPI.cs)
-   into your mod code, and **delete any methods you won't need for future compatibility**.
-3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
-   and get a copy of the API:
+2. 把[`IContentPatcherAPI`](../IContentPatcherAPI.cs) 复制到你模组里并删除**任何你不需要用的方法，为了兼容未来更改**.
+3. 在你的模组代码中（如[`GameLaunched`事件](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Events#GameLoop.GameLaunched)中，获取Content Patcher的API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```
-4. Use the API to extend Content Patcher (see below).
+4. 使用API延伸Content Patcher功能，（详见以下）。
 
-## Basic API
-### Concepts
-The basic API handles most of the design considerations for you. There's just two things to keep in
-mind:
+## 基本API<a name="basic-api"></a>
+### 概念<a name="concepts"></a>
+
+基本API会替你处理大部分设计因素。你只需要考虑以下两点：
 
 <dl>
-<dt>Scope</dt>
+<dt>范围</dt>
 <dd>
 
-Content Patcher will call your code to get the values each time it updates tokens. That can happen
-before a save is loaded, while it's still loading, and after it's loaded. You can return null or an
-empty list if your token isn't ready yet. See the example under _[add a token](#add-a-token)_ which
-handles all three cases.
+
+Content Patcher只有在更新令牌时才会调用你的代码。这可以在存档加载前，加载中，和加载后。如果你的令牌还没准备好，你可以返回null或空列表 这三种情况在 _[添加令牌](#add-a-token)_ 中都照顾到。
 
 </dd>
 
-<dt>Value order</dt>
+<dt>数据顺序</dt>
 <dd>
 
 The order you return values affects features like `valueAt`. You should use the order which makes
 most sense for your token, since content pack authors can't change it. For most tokens,
 alphanumeric order is fine (e.g. `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`).
 
+你返回的顺序会影响`valueAt`。推荐使用对于你令牌来说最有意义的顺序，因为内容包作者无法改变此顺序。大部分令牌使用字母数字顺序即可（如 `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`）。
+
 </dd>
 </dl>
 
-### Add a token
+### 添加令牌<a name="add-a-token"></a>
 You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
 _[Access the API](#access-the-api)_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
 current player's name:
@@ -127,8 +117,8 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 }
 ```
 
-## Advanced API
-### Caveats
+## 添加令牌<a name="advanced-api"></a>
+### 注意事项<a name="caveats"></a>
 The _basic API_ section above is strongly recommended for most tokens, since Content
 Patcher will handle details like context updates and change tracking for you, it's easier to
 troubleshoot, and it's guaranteed not to break without a major-version update.
@@ -141,7 +131,7 @@ Content Patcher core). However:
 * <strong>This is low-level. You must account for the token design considerations documented below,
   unlike the basic API above which handles them for you.</strong>
 
-### Concepts
+### 概念<a name="concepts-1"></a>
 When registering a token through the advanced API, here are some design considerations to avoid
 problems.
 
@@ -226,7 +216,7 @@ receive `null`.
 </dd>
 </dl>
 
-### Add a token
+### 添加令牌<a name="add-a-token-1"></a>
 To register a custom token using the advanced API:
 
 <ol>
