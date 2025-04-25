@@ -16,6 +16,7 @@ NOTE: notify kittycatcasey a few days before release, so she can release the req
 
 -->
 
+* The `patch export` command now auto-detects the type for all vanilla top-level data assets (thanks to SinZ!).
 * Fixed error editing a data model asset using Windows-only type formats on Android/Linux/macOS. They're now converted automatically.
 * Fixed issue where `EditData` patches could append to a list/dictionary field instead of replacing it.
 
