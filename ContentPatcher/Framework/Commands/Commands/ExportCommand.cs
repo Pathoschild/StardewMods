@@ -346,6 +346,7 @@ internal class ExportCommand : BaseCommand
     {
         IAssetName assetName = this.ContentHelper.ParseAssetName(asset);
 
+        // based on path
         if (assetName.IsDirectlyUnderPath("Maps"))
             return [typeof(Map), typeof(Texture2D)];
 
@@ -364,9 +365,21 @@ internal class ExportCommand : BaseCommand
             assetName.IsDirectlyUnderPath("Characters/Dialogue")
             || assetName.IsDirectlyUnderPath("Characters/schedules")
             || assetName.IsDirectlyUnderPath("Data/Events")
-            || assetName.IsDirectlyUnderPath("Data/festivals")
+            || assetName.IsDirectlyUnderPath("Data/Festivals")
         )
             return [typeof(Dictionary<string, string>)];
+
+        // based on DataLoader method
+        if (assetName.IsDirectlyUnderPath("Data"))
+        {
+            string name = assetName.BaseName["Data/".Length..];
+            if (name.Contains('_'))
+                return null; // no vanilla data asset has `_` in its name, but DataLoader uses it for subfolders like 'Festivals_FestivalDates'
+
+            MethodInfo? method = typeof(DataLoader).GetMethod(name, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
+            if (method != null)
+                return [method.ReturnType];
+        }
 
         return null;
     }
