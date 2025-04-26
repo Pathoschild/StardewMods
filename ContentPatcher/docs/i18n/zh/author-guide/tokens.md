@@ -132,16 +132,16 @@ Content Patcher里的令牌是[集合](https://zh.wikipedia.org/wiki/%E9%9B%86%E
 <td>DayEvent</td>
 <td>
 
-今天会发生的节日或者婚礼， 可取值为：
+今天会发生的节日或者婚礼，可取值为：
 * `wedding` (当前玩家结婚事件)；
-* `dance of the moonlight jellies`（月光水母节）；
-* `egg festival`（复活节）；
-* `feast of the winter star`（冬日星盛宴）
-* `festival of ice`（冰雪节）；
-* `flower dance`（花舞节）；
-* `luau`（夏威夷宴会）；
-* `stardew valley fair`（星露谷展览会）；
-* `spirit's eve`（万灵节）；
+* `dance of the moonlight jellies`；
+* `egg festival`；
+* `feast of the winter star`；
+* `festival of ice`；
+* `flower dance`；
+* `luau`；
+* `stardew valley fair`；
+* `spirit's eve`；
 * 其他自定义节日名称。
 
 </td>
