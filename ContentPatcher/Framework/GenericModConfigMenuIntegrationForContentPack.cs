@@ -25,6 +25,9 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
     /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
     private readonly Func<string, IInvariantSet> ParseCommaDelimitedField;
 
+    /// <summary>Game content helper.</summary>
+    private readonly IGameContentHelper GameContent;
+
 
     /*********
     ** Public methods
@@ -33,41 +36,49 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
     /// <param name="contentPack">The content pack whose config is being managed.</param>
     /// <param name="parseCommaDelimitedField">The Generic Mod Config Menu integration.</param>
     /// <param name="config">The config model.</param>
-    public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, Func<string, IInvariantSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config)
+    public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, Func<string, IInvariantSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, IGameContentHelper gameContent)
     {
         this.ContentPack = contentPack;
         this.Config = config;
         this.ParseCommaDelimitedField = parseCommaDelimitedField;
+        this.GameContent = gameContent;
     }
 
     /// <inheritdoc />
     public void Register(TConfigMenu menu, IMonitor monitor)
     {
-        menu.Register();
-
         // get fields by section
-        InvariantDictionary<InvariantDictionary<ConfigField>> fieldsBySection = new() { [""] = new() };
+        InvariantDictionary<InvariantDictionary<InvariantDictionary<ConfigField>>> fieldsByPageBySection = new() { [""] = new() };
         foreach (var (name, config) in this.Config)
         {
-            string sectionId = config.Section?.Trim() ?? "";
+            string pageId = config.Page?.Trim() ?? "";
+            if (!fieldsByPageBySection.TryGetValue(pageId, out InvariantDictionary<InvariantDictionary<ConfigField>>? page))
+                fieldsByPageBySection[pageId] = page = new();
 
-            if (!fieldsBySection.TryGetValue(sectionId, out InvariantDictionary<ConfigField>? section))
-                fieldsBySection[sectionId] = section = new();
+            string sectionId = config.Section?.Trim() ?? "";
+            if (!page.TryGetValue(sectionId, out InvariantDictionary<ConfigField>? section))
+                page[sectionId] = section = new();
 
             section[name] = config;
         }
 
+        // no configs to show, exit
+        if (fieldsByPageBySection.Count == 0)
+            return;
+
+        menu.Register();
+
         // add section/field elements
-        foreach ((string sectionId, InvariantDictionary<ConfigField> fields) in fieldsBySection)
+        foreach ((string pageId, InvariantDictionary<InvariantDictionary<ConfigField>> pages) in fieldsByPageBySection.OrderBy(kv => kv.Key))
         {
-            if (!fields.Any())
-                continue;
-
-            if (sectionId != "")
-                this.AddSection(menu, sectionId);
-
-            foreach ((string name, ConfigField config) in fields)
-                this.AddField(menu, name, config);
+            if (pageId == "")
+            {
+                this.AddPageElements(menu, pages);
+            }
+            else
+            {
+                this.AddPage(menu, pageId, pages);
+            }
         }
     }
 
@@ -182,6 +193,19 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
                 formatAllowedValue: GetValueText
             );
         }
+
+        // image for preview image
+        if (field.PreviewImages?.Any() ?? false)
+        {
+            foreach (var image in field.PreviewImages)
+            {
+                menu.AddImage(
+                    texture: () => image.GetPreviewTexture(this.GameContent),
+                    texturePixelArea: image.SourceRect,
+                    scale: image.Scale
+                );
+            }
+        }
     }
 
     /// <summary>Register a config menu section with Generic Mod Config Menu.</summary>
@@ -193,6 +217,31 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
             text: () => this.TryTranslate($"config.section.{name}.name", name),
             tooltip: () => this.TryTranslate($"config.section.{name}.description", null)
         );
+    }
+
+    private void AddPage(TConfigMenu menu, string pageId, InvariantDictionary<InvariantDictionary<ConfigField>> pages)
+    {
+        menu.AddPage(
+            pageId,
+            title: () => this.TryTranslate($"config.page.{pageId}.name", pageId),
+            tooltip: () => this.TryTranslate($"config.page.{pageId}.description", null),
+            (pageMenu) => this.AddPageElements(pageMenu, pages)
+        );
+    }
+
+    private void AddPageElements(TConfigMenu menu, InvariantDictionary<InvariantDictionary<ConfigField>> pages)
+    {
+        foreach ((string sectionId, InvariantDictionary<ConfigField> fields) in pages)
+        {
+            if (!fields.Any())
+                continue;
+
+            if (sectionId != "")
+                this.AddSection(menu, sectionId);
+
+            foreach ((string name, ConfigField config) in fields)
+                this.AddField(menu, name, config);
+        }
     }
 
     /// <summary>Get a translation if it exists, else get the fallback text.</summary>

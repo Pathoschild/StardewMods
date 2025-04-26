@@ -1,6 +1,9 @@
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
+using StardewValley;
 
 namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 
@@ -232,6 +235,51 @@ internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration<IGener
                 setValue: val => set(this.GetConfig(), val)
             );
         }
+
+        return this;
+    }
+
+
+    /// <summary>Add an image to the form</summary>
+    /// <param name="texture">Texture to display</param>
+    /// <param name="texturePixelArea">Texture source area to display</param>
+    /// <param name="scale">Draw scale, default <see cref="Game1.pixelZoom"/></param>
+    /// <param name="enable">Whether the field is enabled.</param>
+    public GenericModConfigMenuIntegration<TConfig> AddImage(Func<Texture2D> texture, Rectangle? texturePixelArea = null, int scale = Game1.pixelZoom, bool enable = true)
+    {
+        this.AssertLoaded();
+
+        if (enable)
+        {
+            this.ModApi.AddImage(
+                mod: this.ConsumerManifest,
+                texture: texture,
+                texturePixelArea: texturePixelArea,
+                scale: scale
+            );
+        }
+
+        return this;
+    }
+
+
+    /// <summary>Add a subpage to the form</summary>
+    /// <param name="pageId">Unique id of page</param>
+    /// <param name="title">The label text to show in page link and page title.</param>
+    /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field.</param>
+    /// <param name="pageContent">Callback that adds the child config options</param>
+    /// <param name="enable">Whether the field is enabled.</param>
+    public GenericModConfigMenuIntegration<TConfig> AddPage(string pageId, Func<string> title, Func<string>? tooltip, Action<GenericModConfigMenuIntegration<TConfig>> pageContent, bool enable = true)
+    {
+        this.AssertLoaded();
+
+        if (!enable)
+            return this;
+
+        this.ModApi.AddPageLink(this.ConsumerManifest, pageId, title, tooltip);
+        this.ModApi.AddPage(this.ConsumerManifest, pageId, title);
+        pageContent(this);
+        this.ModApi.AddPage(this.ConsumerManifest, "");
 
         return this;
     }

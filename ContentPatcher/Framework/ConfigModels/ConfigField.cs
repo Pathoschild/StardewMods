@@ -31,6 +31,11 @@ internal class ConfigField
     /// <summary>An optional section key to group related fields.</summary>
     public string? Section { get; }
 
+    /// <summary>An optional page key to group related fields.</summary>
+    public string? Page { get; }
+
+    /// <summary>An optional list of preview image definitions that will be displayed on the config menu.</summary>
+    public IList<ConfigPreviewImage>? PreviewImages { get; }
 
     /*********
     ** Public methods
@@ -43,7 +48,8 @@ internal class ConfigField
     /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
     /// <param name="description">An optional explanation of the config field for players.</param>
     /// <param name="section">An optional section key to group related fields.</param>
-    public ConfigField(IInvariantSet? allowValues, IInvariantSet? defaultValues, IInvariantSet? value, bool allowBlank, bool allowMultiple, string? description, string? section)
+    public ConfigField(IInvariantSet? allowValues, IInvariantSet? defaultValues, IInvariantSet? value, bool allowBlank, bool allowMultiple, string? description, string? section,
+        string? page, IList<ConfigPreviewImage>? previewImages)
     {
         this.AllowValues = allowValues ?? InvariantSets.Empty;
         this.DefaultValues = defaultValues ?? InvariantSets.Empty;
@@ -52,6 +58,8 @@ internal class ConfigField
         this.AllowMultiple = allowMultiple;
         this.Description = description;
         this.Section = section;
+        this.Page = page;
+        this.PreviewImages = previewImages;
     }
 
     /// <summary>Get whether the field represents a boolean value.</summary>

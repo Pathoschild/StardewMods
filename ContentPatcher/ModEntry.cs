@@ -320,7 +320,7 @@ internal class ModEntry : Mod
                 if (!api.IsLoaded)
                     break;
 
-                var configMenu = new GenericModConfigMenuIntegrationForContentPack(contentPack.ContentPack, this.ParseCommaDelimitedField, config);
+                var configMenu = new GenericModConfigMenuIntegrationForContentPack(contentPack.ContentPack, this.ParseCommaDelimitedField, config, this.Helper.GameContent);
                 configMenu.Register(api, this.Monitor);
             }
         }

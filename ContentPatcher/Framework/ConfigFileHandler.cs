@@ -161,7 +161,9 @@ internal class ConfigFileHandler
                 allowBlank: field.AllowBlank,
                 allowMultiple: field.AllowMultiple,
                 description: field.Description,
-                section: field.Section
+                section: field.Section,
+                page: field.Page,
+                previewImages: field.PreviewImages
             );
         }
 

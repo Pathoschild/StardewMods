@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ContentPatcher.Framework.ConfigModels;
 
 /// <summary>The raw schema for a field in the <c>config.json</c> file.</summary>
@@ -24,6 +26,11 @@ internal class ConfigSchemaFieldConfig
     /// <summary>An optional section key to group related fields.</summary>
     public string? Section { get; }
 
+    /// <summary>An optional page key to group related fields.</summary>
+    public string? Page { get; }
+
+    /// <summary>An optional list of preview image definitions that will be displayed on the config menu.</summary>
+    public IList<ConfigPreviewImage>? PreviewImages { get; }
 
     /*********
     ** Accessors
@@ -35,7 +42,7 @@ internal class ConfigSchemaFieldConfig
     /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
     /// <param name="description">An optional explanation of the config field for players.</param>
     /// <param name="section">An optional section key to group related fields.</param>
-    public ConfigSchemaFieldConfig(string allowValues, string @default, bool allowBlank, bool allowMultiple, string description, string section)
+    public ConfigSchemaFieldConfig(string allowValues, string @default, bool allowBlank, bool allowMultiple, string description, string section, string page, IList<ConfigPreviewImage>? previewImages)
     {
         this.AllowValues = allowValues;
         this.Default = @default;
@@ -43,5 +50,7 @@ internal class ConfigSchemaFieldConfig
         this.AllowMultiple = allowMultiple;
         this.Description = description;
         this.Section = section;
+        this.Page = page;
+        this.PreviewImages = previewImages;
     }
 }
