@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -24,6 +25,9 @@ internal class TokenParser
     /// <summary>Handles parsing raw strings into tokens.</summary>
     private readonly Lexer Lexer = Lexer.Instance;
 
+    /// <summary>Stores the Reflection accessors to the JProperty _name field</summary>
+    private static FieldInfo JPropertyName;
+
 
     /*********
     ** Accessors
@@ -44,6 +48,11 @@ internal class TokenParser
     /*********
     ** Public methods
     *********/
+    static TokenParser()
+    {
+        JPropertyName = typeof(JProperty).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance)!;
+    }
+
     /// <summary>Construct an instance.</summary>
     /// <param name="tokenContext">The tokens available for this content pack.</param>
     /// <param name="forMod">The manifest for the content pack being parsed.</param>
@@ -276,7 +285,7 @@ internal class TokenParser
                     LogPathBuilder localPath = path.With(p.Name);
 
                     // resolve property name
-                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => property = this.ReplaceJsonProperty(property, new JProperty(val, property.Value)), localPath.With("key"), out error, out TokenizableProxy? proxyName))
+                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => JPropertyName.SetValue(property, val), localPath.With("key"), out error, out TokenizableProxy? proxyName))
                         return false;
                     fields.Add(proxyName);
 
@@ -344,15 +353,5 @@ internal class TokenParser
             setValue(tokenStr.Value!);
         parsed = null;
         return true;
-    }
-
-    /// <summary>Replace a JSON property with a new one.</summary>
-    /// <param name="oldProperty">The JSON property to replace.</param>
-    /// <param name="newProperty">The new JSON property to inject.</param>
-    /// <returns>Returns the injected property.</returns>
-    private JProperty ReplaceJsonProperty(JProperty oldProperty, JProperty newProperty)
-    {
-        oldProperty.Replace(newProperty);
-        return newProperty;
     }
 }
