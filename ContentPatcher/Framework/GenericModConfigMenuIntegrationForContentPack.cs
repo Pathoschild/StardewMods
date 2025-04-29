@@ -48,7 +48,7 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
     public void Register(TConfigMenu menu, IMonitor monitor)
     {
         // get fields by section
-        InvariantDictionary<InvariantDictionary<InvariantDictionary<ConfigField>>> fieldsByPageBySection = new() { [""] = new() };
+        InvariantDictionary<InvariantDictionary<InvariantDictionary<ConfigField>>> fieldsByPageBySection = [];
         foreach (var (name, config) in this.Config)
         {
             string pageId = config.Page?.Trim() ?? "";
@@ -195,7 +195,7 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
         }
 
         // image for preview image
-        if (field.PreviewImages?.Any() ?? false)
+        if (field.PreviewImages != null)
         {
             foreach (var image in field.PreviewImages)
             {
