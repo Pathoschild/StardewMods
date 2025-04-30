@@ -76,7 +76,7 @@ internal class FishSpawnRulesField : CheckboxListField
         : base(label)
     {
         this.CheckboxLists = spawnConditions;
-        this.HasValue = this.CheckboxLists.Any();
+        this.HasValue = this.CheckboxLists.Any(checkboxList => checkboxList.Checkboxes.Any());
     }
 
     /// <summary>Get the formatted checkbox conditions for all fish in a location.</summary>
