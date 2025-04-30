@@ -154,11 +154,23 @@ internal class DataParser
             if (drop is null)
                 continue;
 
-            string[] itemIds = this.GetItemSpawnFieldIds(drop.RandomItemId, drop.ItemId);
-            foreach (string itemId in itemIds)
+            IList<ItemQueryResult> itemQueryResults = ItemQueryResolver.TryResolve(drop, new ItemQueryContext(), ItemQuerySearchMode.AllOfTypeItem);
+
+            float chance = drop.Chance * (1f / itemQueryResults.Count);
+            // edge case, each drop chance is < 0.01 and would display as 0%
+            if (chance < 0.01)
             {
-                float chance = drop.Chance * (1f / itemIds.Length);
-                yield return new FishPondDropData(drop.RequiredPopulation, itemId, drop.MinStack, drop.MaxStack, chance, drop.Condition);
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, ItemRegistry.Create($"{drop.Id}-{drop.ItemId}"), drop.MinStack, drop.MaxStack, drop.Chance, drop.Condition);
+            }
+            else
+            {
+                foreach (ItemQueryResult res in itemQueryResults)
+                {
+                    if (res.Item is Item item)
+                    {
+                        yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, item, drop.MinStack, drop.MaxStack, chance, drop.Condition);
+                    }
+                }
             }
         }
     }
@@ -791,20 +803,6 @@ internal class DataParser
         }
 
         return recipes.ToArray();
-    }
-
-    /// <summary>Get the item IDs that can be produced by item spawn fields.</summary>
-    /// <param name="randomItemIds">The item IDs to randomly choose from. If set, this overrides <paramref name="itemId"/>.</param>
-    /// <param name="itemId">The item ID to produce by default.</param>
-    public string[] GetItemSpawnFieldIds(List<string?>? randomItemIds, string? itemId)
-    {
-        if (randomItemIds is not null)
-            return randomItemIds.Where(id => id is not null).ToArray()!;
-
-        if (itemId is not null)
-            return [itemId];
-
-        return [];
     }
 
 

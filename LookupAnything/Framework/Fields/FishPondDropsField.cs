@@ -51,7 +51,7 @@ internal class FishPondDropsField : GenericField
     {
         this.GameHelper = gameHelper;
         this.Codex = codex;
-        this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).ToArray();
+        this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).OrderBy(data => new ValueTuple<int, int>(data.Precedence, -data.MinPopulation)).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
     }
@@ -190,14 +190,13 @@ internal class FishPondDropsField : GenericField
                     continue; // can never match for this fish
 
                 if (conditions != drop.Conditions)
-                    drop = new FishPondDropData(drop.MinPopulation, drop.ItemId, drop.MinDrop, drop.MaxDrop, drop.Probability, conditions);
+                    drop = new FishPondDropData(drop.MinPopulation, drop.Precedence, drop.SampleItem, drop.MinDrop, drop.MaxDrop, drop.Probability, conditions);
             }
 
             // build drop record
             bool isUnlocked = currentPopulation >= drop.MinPopulation;
-            Item item = ItemRegistry.Create(drop.ItemId);
-            SpriteInfo? sprite = gameHelper.GetSprite(item);
-            yield return new FishPondDrop(drop, item, sprite, isUnlocked);
+            SpriteInfo? sprite = gameHelper.GetSprite(drop.SampleItem);
+            yield return new FishPondDrop(drop, drop.SampleItem, sprite, isUnlocked);
         }
     }
 
