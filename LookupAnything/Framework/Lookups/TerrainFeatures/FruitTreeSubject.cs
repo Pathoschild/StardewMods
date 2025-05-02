@@ -27,6 +27,9 @@ internal class FruitTreeSubject : BaseSubject
     /// <summary>The tree's tile position.</summary>
     private readonly Vector2 Tile;
 
+    /// <summary>Whether to show the internal fruit tree id.</summary>
+    private readonly bool ShowInternalId;
+
 
     /*********
     ** Public methods
@@ -35,11 +38,12 @@ internal class FruitTreeSubject : BaseSubject
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="tree">The lookup target.</param>
     /// <param name="tile">The tree's tile position.</param>
-    public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile)
+    public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile, bool showInternalId)
         : base(gameHelper, I18n.FruitTree_Name(fruitName: FruitTreeSubject.GetDisplayName(tree)), null, I18n.Type_FruitTree())
     {
         this.Target = tree;
         this.Tile = tile;
+        this.ShowInternalId = showInternalId;
     }
 
     /// <inheritdoc />
@@ -57,6 +61,12 @@ internal class FruitTreeSubject : BaseSubject
             IModInfo? fromMod = this.GameHelper.TryGetModFromStringId(tree.treeId.Value);
             if (fromMod != null)
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
+        }
+
+        // internal id: fruit tree id
+        if (this.ShowInternalId)
+        {
+            yield return new GenericField(I18n.InternalId(), tree.treeId.Value);
         }
 
         // show next fruit

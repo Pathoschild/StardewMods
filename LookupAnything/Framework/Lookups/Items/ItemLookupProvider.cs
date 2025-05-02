@@ -132,7 +132,7 @@ internal class ItemLookupProvider : BaseLookupProvider
                     if (entry is Item item)
                         return this.BuildSubject(item, ObjectContext.Inventory, null);
                     if (entry is MovieConcession snack)
-                        return new MovieSnackSubject(this.GameHelper, snack);
+                        return new MovieSnackSubject(this.GameHelper, snack, this.Config().ShowInternalId);
                 }
 
                 // inventory
@@ -363,6 +363,7 @@ internal class ItemLookupProvider : BaseLookupProvider
             highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
             showGiftTastes: config.ShowGiftTastes,
             collapseFieldsConfig: config.CollapseLargeFields,
+            showInternalId: config.ShowInternalId,
             item: target,
             context: context,
             knownQuality: knownQuality,
@@ -397,6 +398,7 @@ internal class ItemLookupProvider : BaseLookupProvider
             highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
             showGiftTastes: config.ShowGiftTastes,
             collapseFieldsConfig: config.CollapseLargeFields,
+            showInternalId: config.ShowInternalId,
             item: ItemRegistry.Create(indexOfHarvest),
             context: context,
             location: dirt?.Location,

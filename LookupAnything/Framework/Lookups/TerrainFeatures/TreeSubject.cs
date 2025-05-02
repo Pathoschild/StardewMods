@@ -28,6 +28,9 @@ internal class TreeSubject : BaseSubject
     /// <summary>Provides subject entries.</summary>
     private readonly ISubjectRegistry Codex;
 
+    /// <summary>Whether to show the internal tree type.</summary>
+    private readonly bool ShowInternalId;
+
 
     /*********
     ** Public methods
@@ -37,12 +40,13 @@ internal class TreeSubject : BaseSubject
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="tree">The lookup target.</param>
     /// <param name="tile">The tree's tile position.</param>
-    public TreeSubject(ISubjectRegistry codex, GameHelper gameHelper, Tree tree, Vector2 tile)
+    public TreeSubject(ISubjectRegistry codex, GameHelper gameHelper, Tree tree, Vector2 tile, bool showInternalId)
         : base(gameHelper, TreeSubject.GetName(tree), null, I18n.Type_Tree())
     {
         this.Codex = codex;
         this.Target = tree;
         this.Tile = tile;
+        this.ShowInternalId = showInternalId;
     }
 
     /// <inheritdoc />
@@ -59,6 +63,12 @@ internal class TreeSubject : BaseSubject
             IModInfo? fromMod = this.GameHelper.TryGetModFromStringId(tree.treeType.Value);
             if (fromMod != null)
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
+        }
+
+        // internal id: tree type
+        if (this.ShowInternalId)
+        {
+            yield return new GenericField(I18n.InternalId(), tree.treeType.Value);
         }
 
         // get growth stage

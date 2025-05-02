@@ -45,6 +45,9 @@ internal class BuildingSubject : BaseSubject
     /// <summary>Whether to show recipes involving error items.</summary>
     private readonly bool ShowInvalidRecipes;
 
+    /// <summary>Whether to show the internal building type.</summary>
+    public readonly bool ShowInternalId;
+
 
     /*********
     ** Public methods
@@ -56,7 +59,7 @@ internal class BuildingSubject : BaseSubject
     /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
     /// <param name="collapseFieldsConfig">The configured minimum field values needed before they're auto-collapsed.</param>
     /// <param name="showInvalidRecipes">Whether to show recipes involving error items.</param>
-    public BuildingSubject(ISubjectRegistry codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle, ModCollapseLargeFieldsConfig collapseFieldsConfig, bool showInvalidRecipes)
+    public BuildingSubject(ISubjectRegistry codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle, ModCollapseLargeFieldsConfig collapseFieldsConfig, bool showInvalidRecipes, bool showInternalId)
         : base(gameHelper, building.buildingType.Value, null, I18n.Type_Building())
     {
         // init
@@ -65,6 +68,7 @@ internal class BuildingSubject : BaseSubject
         this.SourceRectangle = sourceRectangle;
         this.CollapseFieldsConfig = collapseFieldsConfig;
         this.ShowInvalidRecipes = showInvalidRecipes;
+        this.ShowInternalId = showInternalId;
 
         // get name/description from data if available
         BuildingData? buildingData = building.GetData();
@@ -86,6 +90,12 @@ internal class BuildingSubject : BaseSubject
             IModInfo? fromMod = this.GameHelper.TryGetModFromStringId(building.buildingType.Value);
             if (fromMod != null)
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
+        }
+
+        // internal id: building type
+        if (this.ShowInternalId)
+        {
+            yield return new GenericField(I18n.InternalId(), building.buildingType.Value);
         }
 
         // construction / upgrade

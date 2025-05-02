@@ -24,6 +24,9 @@ internal class FarmAnimalSubject : BaseSubject
     /// <summary>Provides subject entries.</summary>
     private readonly ISubjectRegistry Codex;
 
+    /// <summary>Whether to show the internal farm animal type.</summary>
+    private readonly bool ShowInternalId;
+
 
     /*********
     ** Public methods
@@ -33,11 +36,12 @@ internal class FarmAnimalSubject : BaseSubject
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="animal">The lookup target.</param>
     /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-    public FarmAnimalSubject(ISubjectRegistry codex, GameHelper gameHelper, FarmAnimal animal)
+    public FarmAnimalSubject(ISubjectRegistry codex, GameHelper gameHelper, FarmAnimal animal, bool showInternalId)
         : base(gameHelper, animal.displayName, null, animal.displayType)
     {
         this.Codex = codex;
         this.Target = animal;
+        this.ShowInternalId = showInternalId;
     }
 
     /// <inheritdoc />
@@ -60,6 +64,12 @@ internal class FarmAnimalSubject : BaseSubject
             IModInfo? fromMod = this.GameHelper.TryGetModFromStringId(animal.type.Value);
             if (fromMod != null)
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
+        }
+
+        // internal id: farm animal type
+        if (this.ShowInternalId)
+        {
+            yield return new GenericField(I18n.InternalId(), animal.type.Value);
         }
 
         // yield fields

@@ -59,6 +59,9 @@ internal class CharacterSubject : BaseSubject
     /// <summary>Whether to show gift tastes that the player doesn't own somewhere in the world.</summary>
     private readonly bool ShowUnownedGifts;
 
+    /// <summary>Whether to show the internal building type.</summary>
+    public readonly bool ShowInternalId;
+
     /// <summary>Whether the NPC is Gourmand in the Fern Islands farm cave.</summary>
     private readonly bool IsGourmand;
 
@@ -88,7 +91,7 @@ internal class CharacterSubject : BaseSubject
     /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
     /// <param name="showUnownedGifts">Whether to show gift tastes that the player doesn't own somewhere in the world.</param>
     /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-    public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, ModCollapseLargeFieldsConfig collapseFieldsConfig, bool enableTargetRedirection, bool showUnownedGifts)
+    public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, ModCollapseLargeFieldsConfig collapseFieldsConfig, bool enableTargetRedirection, bool showUnownedGifts, bool showInternalId)
         : base(gameHelper)
     {
         this.Codex = codex;
@@ -98,6 +101,7 @@ internal class CharacterSubject : BaseSubject
         this.CollapseFieldsConfig = collapseFieldsConfig;
         this.EnableTargetRedirection = enableTargetRedirection;
         this.ShowUnownedGifts = showUnownedGifts;
+        this.ShowInternalId = showInternalId;
 
         // initialize
         this.Target = npc;
@@ -131,6 +135,12 @@ internal class CharacterSubject : BaseSubject
             IModInfo? fromMod = this.GameHelper.TryGetModFromStringId(npc.Name);
             if (fromMod != null)
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
+        }
+
+        // internal id: NPC internal name
+        if (this.ShowInternalId)
+        {
+            yield return new GenericField(I18n.InternalId(), npc.Name);
         }
 
         // specific fields

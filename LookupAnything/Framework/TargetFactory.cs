@@ -58,7 +58,7 @@ internal class TargetFactory : ISubjectRegistry
             new BuildingLookupProvider(reflection, gameHelper, config, codex),
             new CharacterLookupProvider(reflection, gameHelper, config, codex),
             new ItemLookupProvider(reflection, gameHelper, config, codex),
-            new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
+            new TerrainFeatureLookupProvider(reflection, gameHelper, config, codex),
             new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
         ];
     }
