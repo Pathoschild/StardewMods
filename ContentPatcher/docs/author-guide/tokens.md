@@ -1,4 +1,4 @@
-﻿← [author guide](../author-guide.md)
+← [author guide](../author-guide.md)
 
 This document lists the tokens available in Content Patcher packs.
 
@@ -608,7 +608,7 @@ child.
 <td>
 
 The player's heart level with a given NPC. You can specify the character name as an input argument
-(using their English name regardless of translations), like this:
+(using their internal name regardless of translations), like this:
 
 ```js
 "When": {
@@ -625,7 +625,7 @@ The player's heart level with a given NPC. You can specify the character name as
 <td>
 
 The player's relationship with a given NPC or player. You can specify the character name as part
-of the key (using their English name regardless of translations), like this:
+of the key (using their internal name regardless of translations), like this:
 
 ```js
 "When": {
@@ -652,7 +652,7 @@ Divorced | The player married and then divorced them.
 <td>Roommate</td>
 <td>
 
-The name of the [current or specified player](#target-player)'s NPC roommate (using their English
+The name of the [current or specified player](#target-player)'s NPC roommate (using their internal
 name regardless of translations).
 
 </td>
@@ -664,7 +664,7 @@ name regardless of translations).
 <td>Spouse</td>
 <td>
 
-The name of the [current or specified player](#target-player)'s NPC spouse (using their English
+The name of the [current or specified player](#target-player)'s NPC spouse (using their internal
 name regardless of translations).
 
 </td>
