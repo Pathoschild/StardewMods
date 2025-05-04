@@ -1,4 +1,4 @@
-[author guide](../author-guide.md)
+← [author guide](../author-guide.md)
 
 This document lists the tokens available in Content Patcher packs.
 
