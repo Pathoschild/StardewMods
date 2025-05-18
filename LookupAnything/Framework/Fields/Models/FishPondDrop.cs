@@ -10,9 +10,6 @@ internal record FishPondDrop : FishPondDropData
     /*********
     ** Accessors
     *********/
-    /// <summary>An instance of the produced item.</summary>
-    public Item SampleItem { get; }
-
     /// <summary>The sprite icon to draw.</summary>
     public SpriteInfo? Sprite { get; }
 
@@ -29,9 +26,8 @@ internal record FishPondDrop : FishPondDropData
     /// <param name="sprite">The sprite icon to draw.</param>
     /// <param name="isUnlocked">Whether the item has been unlocked for the current fish pond.</param>
     public FishPondDrop(FishPondDropData data, Item sampleItem, SpriteInfo? sprite, bool isUnlocked)
-        : base(data.MinPopulation, data.ItemId, data.MinDrop, data.MaxDrop, data.Probability, data.Conditions)
+        : base(data.MinPopulation, data.Precedence, sampleItem, data.MinDrop, data.MaxDrop, data.Probability, data.Conditions)
     {
-        this.SampleItem = sampleItem;
         this.Sprite = sprite;
         this.IsUnlocked = isUnlocked;
     }
