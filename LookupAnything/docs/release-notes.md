@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Fixed fish ponds not listing produced items that are based on an item query (thanks to Mushymato!).
+* Fixed fish spawn rules field shown incorrectly in some cases (thanks to Mushymato!).
 * Fixed controller snapping enabled for the lookup and search menus.
 * Improved translations. Thanks to gab-umich (updated Chinese) and MakinDay (updated Italian)!
 

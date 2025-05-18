@@ -17,13 +17,15 @@ NOTE: notify kittycatcasey a few days before release, so she can release the req
 -->
 
 * The `patch export` command now auto-detects the type for all vanilla top-level data assets (thanks to SinZ!).
-* Fixed error editing a data model asset using Windows-only type formats on Android/Linux/macOS. They're now converted automatically.
-* Fixed issue where `EditData` patches could append to a list/dictionary field instead of replacing it.
+* Fixed `EditData`'s handling of data model fields with tokens in both the name and value (thanks to SinZ!).
+* Fixed `EditData`'s handling of certain Windows-only data formats when playing on Android/Linux/macOS.
+* Fixed `EditData` patches appending to a list/dictionary field instead of replacing it in some cases.
+* Clarified in [token docs](author-guide/tokens.md) that tokens use NPCs' internal names (thanks to DenisSilent!).
 
 **[Breaking change]**  
-Content Patcher 2.7.0 fixes a long-standing bug with `EditData` when applied to list/dictionary
-fields. However, some mods may have accidentally depended on the broken behavior. Unfortunately the
-change is required, since it can lead to very counterintuitive behavior for content packs.
+This update fixes a long-standing bug with `EditData` where it could append to a list/dictionary instead of replacing
+it as intended. The bug could cause counterintuitive behavior, but some content packs may have depended on the old
+logic.
 
 If you see new errors after updating Content Patcher, make sure you update your other mods to their
 latest versions. If the errors still happen, feel free to report them on the Content Patcher mod
