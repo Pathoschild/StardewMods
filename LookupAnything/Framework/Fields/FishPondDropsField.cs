@@ -126,7 +126,7 @@ internal class FishPondDropsField : GenericField
 
                 // draw text
                 float textIndent = position.X + innerIndent + iconSize.X + 5;
-                string text = I18n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
+                string text = I18n.Generic_PercentChanceOf(percent: CommonHelper.GetFormattedPercentageNumber(drop.Probability), label: drop.SampleItem.DisplayName);
                 if (drop.MinDrop != drop.MaxDrop)
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)

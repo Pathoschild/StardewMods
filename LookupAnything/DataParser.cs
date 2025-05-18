@@ -157,20 +157,10 @@ internal class DataParser
             IList<ItemQueryResult> itemQueryResults = ItemQueryResolver.TryResolve(drop, new ItemQueryContext(), ItemQuerySearchMode.AllOfTypeItem);
 
             float chance = drop.Chance * (1f / itemQueryResults.Count);
-            // edge case, each drop chance is < 0.01 and would display as 0%
-            if (chance < 0.01)
+            foreach (ItemQueryResult result in itemQueryResults)
             {
-                yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, ItemRegistry.Create($"{drop.Id}-{drop.ItemId}"), drop.MinStack, drop.MaxStack, drop.Chance, drop.Condition);
-            }
-            else
-            {
-                foreach (ItemQueryResult res in itemQueryResults)
-                {
-                    if (res.Item is Item item)
-                    {
-                        yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, item, drop.MinStack, drop.MaxStack, chance, drop.Condition);
-                    }
-                }
+                if (result.Item is Item item)
+                    yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, item, drop.MinStack, drop.MaxStack, chance, drop.Condition);
             }
         }
     }
