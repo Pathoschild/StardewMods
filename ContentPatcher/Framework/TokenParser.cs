@@ -25,8 +25,8 @@ internal class TokenParser
     /// <summary>Handles parsing raw strings into tokens.</summary>
     private readonly Lexer Lexer = Lexer.Instance;
 
-    /// <summary>Stores the Reflection accessors to the JProperty _name field</summary>
-    private static FieldInfo JPropertyName;
+    /// <summary>The private <c>_name</c> field on <see cref="JProperty"/> instances, used to update tokenized property names.</summary>
+    private static readonly FieldInfo PropertyNameField;
 
 
     /*********
@@ -48,9 +48,12 @@ internal class TokenParser
     /*********
     ** Public methods
     *********/
+    /// <summary>Initialize static fields.</summary>
     static TokenParser()
     {
-        JPropertyName = typeof(JProperty).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        TokenParser.PropertyNameField =
+            typeof(JProperty).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance)
+            ?? throw new InvalidOperationException($"Failed to initialize token parser: required field '{nameof(JProperty)}._name' not found");
     }
 
     /// <summary>Construct an instance.</summary>
@@ -279,13 +282,12 @@ internal class TokenParser
                 break;
 
             case JObject objToken:
-                foreach (JProperty p in objToken.Properties().ToArray())
+                foreach (JProperty property in objToken.Properties().ToArray())
                 {
-                    JProperty property = p;
-                    LogPathBuilder localPath = path.With(p.Name);
+                    LogPathBuilder localPath = path.With(property.Name);
 
                     // resolve property name
-                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => JPropertyName.SetValue(property, val), localPath.With("key"), out error, out TokenizableProxy? proxyName))
+                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => TokenParser.PropertyNameField.SetValue(property, val), localPath.With("key"), out error, out TokenizableProxy? proxyName))
                         return false;
                     fields.Add(proxyName);
 
