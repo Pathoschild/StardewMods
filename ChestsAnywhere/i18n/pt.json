@@ -5,8 +5,8 @@
     // default chest names
     "default-name.fridge": "Geladeira",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "Enviar Items",
-    "default-name.shipping-bin.take": "Retirar Items",
+    "default-name.shipping-bin.store": "Enviar itens",
+    "default-name.shipping-bin.take": "Retirar itens",
 
     // default category names
     "default-category.owned-cabin": "Cabana ({{owner}})",
@@ -19,30 +19,30 @@
     "label.name": "Nome",
     "label.category": "Categoria",
     "label.order": "Ordem",
-    "label.hide-chest": "Esconder esse baú",
-    "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
-    "label.automate-options": "Automate",
-    "label.automate-store": "Coloque itens neste baú",
-    "label.automate-store-first": "Primeiro coloque itens neste baú",
-    "label.automate-store-disabled": "Nunca coloque itens neste baú",
-    "label.automate-take": "Pegue itens deste baú",
-    "label.automate-take-first": "Primeiro pegue itens deste baú",
-    "label.automate-take-disabled": "Nunca pegue itens deste baú",
+    "label.hide-chest": "Ocultar este baú",
+    "label.hide-chest-hidden": "Ocultar este baú (será preciso achá-lo para desfazer a ação)",
+    "label.automate-options": "Automate (MOD)",
+    "label.automate-store": "Colocar itens neste baú",
+    "label.automate-store-first": "Priorizar colocar itens neste baú.",
+    "label.automate-store-disabled": "Nunca colocar itens neste baú",
+    "label.automate-take": "Retirar itens deste baú",
+    "label.automate-take-first": "Priorizar retirar itens neste baú.",
+    "label.automate-take-disabled": "Nunca retirar itens deste baú",
 
     // button labels
     "button.edit-chest": "editar baú",
-    "button.sort-inventory": "arrumar inventário",
+    "button.sort-inventory": "organizar inventário",
     "button.save": "salvar",
-    "button.reset": "resetar",
+    "button.reset": "padrão",
 
 
     /**********
     ** Errors
     **********/
-    "errors.disabled-from-here": "Você não pode acessar baús daqui.",
-    "errors.no-chests": "Você não possui baús ainda.",
-    "errors.no-chests-in-location": "Você não possui nenhum baú nesta área.",
-    "errors.no-chests-in-range": "Você não possui baús ao seu alcance.",
+    "errors.disabled-from-here": "Não é possível acessar os baús a partir deste local.",
+    "errors.no-chests": "Nenhum baú disponível até o momento.",
+    "errors.no-chests-in-location": "Não há baús nesta área.",
+    "errors.no-chests-in-range": "Não há baús dentro do alcance.",
 
 
     /**********
@@ -53,84 +53,83 @@
     ****/
     "config.title.general-options": "Opções gerais",
 
-    "config.show-hover-tooltips.name": "Mostrar dicas de ferramentas",
-    "config.show-hover-tooltips.desc": "Mostrar o nome do baú em uma dica de ferramenta ao apontar para um baú.",
+    "config.show-hover-tooltips.name": "Mostrar dicas ao passar o mouse",
+    "config.show-hover-tooltips.desc": "Exibe o nome do baú como dica ao passar o mouse sobre ele.",
 
-    "config.enable-shipping-bin.name": "Ativar caixa de remessa",
-    "config.enable-shipping-bin.desc": "Habilitar acesso à caixa de remessa.",
+    "config.enable-shipping-bin.name": "Ativar caixa de remessas",
+    "config.enable-shipping-bin.desc": "Permite o acesso à caixa de remessas.",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "Ativar acessórios de irrigadores",
+    "config.enable-sprinkler-attachments.desc": "Permite o acesso a acessórios como enriquecedores conectados aos irrigadores.",
 
-    "config.add-organize-player-items.name": "Adicionar botão para organizar itens do jogador",
-    "config.add-organize-player-items.desc": "Adicionar botão 'organizar' no inventário do jogador.",
+    "config.add-organize-player-items.name": "Exibir botão 'organizar' inventário",
+    "config.add-organize-player-items.desc": "Adiciona um botão de organização no inventário do jogador dentro da interface dos baús.",
 
     /****
     ** remote access
     ****/
-    "config.title.remote-access": "Remote access", // TODO
+    "config.title.remote-access": "Acesso remoto",
 
     "config.range.name": "Alcance",
-    "config.range.desc": "O alcance em que os baús são acessíveis através do menu.",
+    "config.range.desc": "Define até onde os baús podem ser acessados pelo menu.",
     "config.range.unlimited": "Todos os baús",
-    "config.range.currentWorldArea": "Baús dentro da área atual do mundo",
-    "config.range.currentLocation": "Baús dentro da localização atual",
-    "config.range.none": "Nenhum (não é possível acessar os baús remotamente)",
+    "config.range.currentWorldArea": "Baús na área atual do mundo",
+    "config.range.currentLocation": "Baús na localização atual",
+    "config.range.none": "Nenhum (acesso remoto desativado)",
 
-    "config.disable-mines.name": "Desabilitar em Minas e Caverna da Caveira",
-    "config.disable-mines.desc": "Se deve desabilitar o acesso remoto aos baús enquanto estiver nas Minas ou na Caverna da Caveira.",
+    "config.disable-mines.name": "Desat. em Minas (leia descrição)",
+    "config.disable-mines.desc": "Impede o acesso remoto aos baús enquanto estiver nas Minas ou na Caverna da Caveira.",
 
-    "config.disable-custom-names.name": "Desabilitar em nomes de locais",
-    "config.disable-custom-names.desc": "Os nomes internos (como mostrado pelo mod Debug Mode) para locais onde desabilitar o acesso remoto aos baús. Você pode listar vários nomes separando-os por vírgulas.",
+    "config.disable-custom-names.name": "Desativar nestes locais:",
+    "config.disable-custom-names.desc": "Lista de nomes internos (como exibido pelo mod Debug Mode) de locais onde o acesso remoto aos baús será desativado. Separe com vírgulas para inserir mais de um.",
 
     /****
     ** open menu hotkey
     ****/
-    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
+    "config.title.open-menu-hotkey": "Atalho para abrir o menu dos baús",
 
-    "config.toggle-ui-key.name": "Alternar interface",
-    "config.toggle-ui-key.desc": "As teclas que mostram ou ocultam a interface do baú.",
+    "config.toggle-ui-key.name": "Abrir interface dos baús",
+    "config.toggle-ui-key.desc": "Teclas que exibem ou ocultam a interface dos baús.",
 
-    "config.reopen-last-chest.name": "Reopen last chest", // TODO
-    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+    "config.reopen-last-chest.name": "Reabrir último baú",
+    "config.reopen-last-chest.desc": "Ao pressionar o botão de abrir a interface, reabre o último baú acessado na sessão atual.",
 
-    "config.default-category.name": "Default category", // TODO
-    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
+    "config.default-category.name": "Categoria padrão",
+    "config.default-category.desc": "Define a categoria de baús exibida ao abrir a interface (se configurada). Isso ocorre após reabrir o último baú.",
 
     /****
     ** controls when chest UI is open
     ****/
-    "config.title.menu-controls": "Controles com interface do baú aberta",
+    "config.title.menu-controls": "Controles com a interface dos baús aberta",
 
     "config.edit-chest.name": "Editar baú",
-    "config.edit-chest.desc": "As teclas usadas para editar as opções do baú atual.",
+    "config.edit-chest.desc": "Teclas que permitem editar as opções do baú atual.",
 
-    "config.sort-items.name": "Classificar itens",
-    "config.sort-items.desc": "As teclas usadas para classificar os itens no baú atual.",
+    "config.sort-items.name": "Organizar itens",
+    "config.sort-items.desc": "Teclas que organizam os itens dentro do baú atual.",
 
     "config.navigate-prev-chest.name": "Navegar: baú anterior",
-    "config.navigate-prev-chest.desc": "As teclas que permitem navegar para o baú anterior enquanto o menu do baú estiver aberto.",
+    "config.navigate-prev-chest.desc": "Teclas para navegar até o baú anterior com o menu aberto.",
 
     "config.navigate-next-chest.name": "Navegar: próximo baú",
-    "config.navigate-next-chest.desc": "As teclas que permitem navegar para o próximo baú enquanto o menu estiver aberto.",
+    "config.navigate-next-chest.desc": "Teclas para navegar até o próximo baú com o menu aberto.",
 
     "config.navigate-prev-category.name": "Navegar: categoria anterior",
-    "config.navigate-prev-category.desc": "As teclas que navegam para a categoria anterior enquanto o menu está aberto.",
+    "config.navigate-prev-category.desc": "Teclas para navegar até a categoria anterior com o menu aberto.",
 
     "config.navigate-next-category.name": "Navegar: próxima categoria",
-    "config.navigate-next-category.desc": "Teclas que navegam para a próxima categoria enquanto o menu está aberto.",
+    "config.navigate-next-category.desc": "Teclas para navegar até a próxima categoria com o menu aberto.",
 
-    "config.hold-to-scroll-categories.name": "Segurar para rolar as categorias",
-    "config.hold-to-scroll-categories.desc": "As teclas que, quando mantidas pressionadas, permitem rolar a lista suspensa de categoria com a roda de rolagem do mouse.",
+    "config.hold-to-scroll-categories.name": "Segurar para rolar categorias",
+    "config.hold-to-scroll-categories.desc": "Teclas que, ao serem mantidas pressionadas, permitem rolar a lista de categorias com a roda do mouse.",
 
-    "config.hold-to-scroll-chests.name": "Manter pressionado para rolar baú",
-    "config.hold-to-scroll-chests.desc": "As teclas que, quando pressionadas, permitem rolar o menu de baús usando a roda de rolagem do mouse.",
+    "config.hold-to-scroll-chests.name": "Segurar para rolar baús",
+    "config.hold-to-scroll-chests.desc": "Teclas que, ao serem mantidas pressionadas, permitem rolar a lista de baús com a roda do mouse.",
 
 
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
     "icon.open-menu.name": "Chests Anywhere",
-    "icon.open-menu.desc": "Open Menu"
+    "icon.open-menu.desc": "Abrir Menu"
 }
