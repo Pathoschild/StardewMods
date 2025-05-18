@@ -51,7 +51,7 @@ internal class FishPondDropsField : GenericField
     {
         this.GameHelper = gameHelper;
         this.Codex = codex;
-        this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).OrderBy(data => new ValueTuple<int, int>(data.Precedence, -data.MinPopulation)).ToArray();
+        this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).OrderBy(drop => drop.Precedence).ThenByDescending(drop => drop.MinPopulation).ToArray();
         this.HasValue = this.Drops.Any();
         this.Preface = preface;
     }
