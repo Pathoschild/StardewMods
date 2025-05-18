@@ -1,10 +1,10 @@
-{
+﻿{
     /*********
     ** Generic translations
     *********/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-    "generic.line-wrap-on": " ", // characters after which we can line-wrap text if needed, even if there's no space
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "maintenant",
@@ -102,6 +102,8 @@
 
     // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
+
+    // mine containers
     "data.item.barrel.name": "Tonneau",
     "data.item.barrel.description": "À casser pour obtenir des biens divers.",
     "data.item.box.name": "Boîte",
@@ -151,11 +153,11 @@
     "condition.day-of-month.even": "jours pairs",
     "condition.day-of-month.odd": "jours impairs",
 
-    "condition.item-type.input": "introduire l’objet",
-    "condition.item-type.target": "cibler l’objet",
+    "condition.item-type.input": "l’objet introduit",
+    "condition.item-type.target": "l’objet cible",
 
     "condition.raw-context-tag": "Étiquette de contexte \"{{tag}}\"",
-    "condition.raw-condition": "nécessite \"{{tag}}\"",
+    "condition.raw-condition": "règle dynamique \"{{tag}}\"",
 
     "condition.item-context-tag": "{{item}} a l’étiquette de contexte {{tags}}",
     "condition.item-context-tags": "{{item}} a les étiquettes de contexte {{tags}}",
@@ -198,7 +200,7 @@
     // labels
     "building.animals": "Animaux",
     "building.construction": "Construction",
-    "building.construction-costs": "Construction costs",
+    "building.construction-costs": "Coûts de construction",
     "building.feed-trough": "Mangeoire",
     "building.horse": "Cheval",
     "building.horse-location": "Position du cheval",
@@ -310,8 +312,8 @@
     "crop.summary.drops-X-to-Y": "donne de {{min}} à {{max}} ({{percent}}% chance de culture supplémentaire)",
     "crop.summary.harvest-once": "récolté après {{daysToFirstHarvest}} jours",
     "crop.summary.harvest-multi": "récolté après {{daysToFirstHarvest}} jours, puis tout les {{daysToNextHarvests}} jours",
-    "crop.summary.farming-xp": "donne +{{amount}} EXP de récolte par récolte",
-    "crop.summary.foraging-xp": "gives +{{amount}} EXP de cueillette par récolte",
+    "crop.summary.farming-xp": "donne +{{amount}} EXP de récolte par récolte",
+    "crop.summary.foraging-xp": "donne +{{amount}} EXP de cueillette par récolte",
     "crop.summary.seasons": "pousse en {{seasons}}",
     "crop.summary.sells-for": "vendu pour {{price}}",
     "crop.harvest.too-late": "trop tard dans la saison pour la prochaine récolte (sera le {{date}})",
@@ -679,8 +681,8 @@
     "tree.name.oak": "Chêne",
     "tree.name.palm": "Palmier",
     "tree.name.pine": "Pin",
-    "tree.name.mossy": "Mossy Tree",
-    "tree.name.mystic": "Mystic Tree",
+    "tree.name.mossy": "Arbre moussu",
+    "tree.name.mystic": "Arbre mystique",
     "tree.name.unknown": "Arbre inconnu",
     "tree.stage.done": "Taille adulte",
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",
@@ -711,8 +713,8 @@
     // progression mode
     "config.title.progression": "Mode de progression",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Règles d’apparition des\npoissons non attrapés", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Détermine s’il faut afficher les conditions d’apparitions pour les poissons non encore attrapés.", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Règles d’apparition des\npoissons non attrapés",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Détermine s’il faut afficher les conditions d’apparitions pour les poissons non encore attrapés.",
 
     "config.progression.show-unknown-gift-tastes.name": "Montrer les goûts inconnus",
     "config.progression.show-unknown-gift-tastes.desc": "Détermine s’il faut afficher les goûts de cadeau que vous n’avez pas encore découvert en jeu (par exemple d’un texte de dialogue ou en expérimentant).",
@@ -743,15 +745,15 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras.",
 
     // collapse fields
-    "config.title.collapse-fields": "Élargir les grands champs",
+    "config.title.collapse-fields": "Réduire les grands champs",
 
     "config.collapse-fields.enabled.name": "Activé",
-    "config.collapse-fields.enabled.desc": "Détermine s’il faut élargir les grandes zones de texte, de telle sorte que le menu de recherche remplace la liste par une liste avec un lien cliquable « Montrer X valeurs pour l’étendre",
+    "config.collapse-fields.enabled.desc": "Détermine s’il faut réduire les grandes zones de texte, de telle sorte que le menu de recherche remplace la liste avec un lien cliquable « Montrer X valeurs » pour l’étendre.",
 
-    "config.collapse-fields.building-recipes.name": "Recherche de bâtiments : recettes",
-    "config.collapse-fields.item-recipes.name": "Recherche d’objets : recettes",
-    "config.collapse-fields.npc-gift-tastes.name": "Recherche de PNJ : goûts de cadeaux",
-    "config.collapse-fields.any.desc": "Si le champ contient trop de valeurs, le menu de recherche sera remplacé par une liste avec un lien cliquable « Montrer X valeurs » pour l’étendre.",
+    "config.collapse-fields.building-recipes.name": "Page d’info de bâtiments : recettes",
+    "config.collapse-fields.item-recipes.name": "Page d’info d’objets : recettes",
+    "config.collapse-fields.npc-gift-tastes.name": "Page d’info de PNJ : goûts de cadeaux",
+    "config.collapse-fields.any.desc": "Si le champ contient trop de valeurs, le menu de recherche remplacera la liste avec un lien cliquable « Montrer X valeurs » pour l’étendre.",
 
     // advanced options
     "config.title.advanced-options": "Options avancées",
