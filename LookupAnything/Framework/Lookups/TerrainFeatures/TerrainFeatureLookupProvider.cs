@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -13,9 +12,6 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
     /*********
     ** Fields
     *********/
-    /// <summary>The mod configuration.</summary>
-    private readonly Func<ModConfig> Config;
-
     /// <summary>Provides subject entries.</summary>
     private readonly ISubjectRegistry Codex;
 
@@ -27,10 +23,9 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="codex">Provides subject entries.</param>
-    public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
+    public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex)
         : base(reflection, gameHelper)
     {
-        this.Config = config;
         this.Codex = codex;
     }
 
@@ -103,7 +98,7 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
     /// <param name="tile">The tree tile.</param>
     private ISubject BuildSubject(FruitTree tree, Vector2 tile)
     {
-        return new FruitTreeSubject(this.GameHelper, tree, tile, this.Config().ShowInternalId);
+        return new FruitTreeSubject(this.GameHelper, tree, tile);
     }
 
     /// <summary>Build a subject.</summary>
@@ -111,6 +106,6 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
     /// <param name="tile">The tree tile.</param>
     private ISubject BuildSubject(Tree tree, Vector2 tile)
     {
-        return new TreeSubject(this.Codex, this.GameHelper, tree, tile, this.Config().ShowInternalId);
+        return new TreeSubject(this.Codex, this.GameHelper, tree, tile);
     }
 }

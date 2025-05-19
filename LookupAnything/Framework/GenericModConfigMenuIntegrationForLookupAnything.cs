@@ -147,12 +147,6 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
                 set: (config, value) => config.ShowInvalidRecipes = value
             )
             .AddCheckbox(
-                name: I18n.Config_ShowInternalId_Name,
-                tooltip: I18n.Config_ShowInternalId_Desc,
-                get: config => config.ShowInternalId,
-                set: (config, value) => config.ShowInternalId = value
-            )
-            .AddCheckbox(
                 name: I18n.Config_TargetRedirection_Name,
                 tooltip: I18n.Config_TargetRedirection_Desc,
                 get: config => config.EnableTargetRedirection,

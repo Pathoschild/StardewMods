@@ -84,6 +84,6 @@ internal class BuildingLookupProvider : BaseLookupProvider
     private ISubject BuildSubject(Building building)
     {
         ModConfig config = this.Config();
-        return new BuildingSubject(this.Codex, this.GameHelper, building, building.getSourceRectForMenu() ?? building.getSourceRect(), config.CollapseLargeFields, config.ShowInvalidRecipes, config.ShowInternalId);
+        return new BuildingSubject(this.Codex, this.GameHelper, building, building.getSourceRectForMenu() ?? building.getSourceRect(), config.CollapseLargeFields, config.ShowInvalidRecipes);
     }
 }

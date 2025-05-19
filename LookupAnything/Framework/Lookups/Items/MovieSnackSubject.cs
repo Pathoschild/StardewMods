@@ -19,9 +19,6 @@ internal class MovieSnackSubject : BaseSubject
     /// <summary>The lookup target.</summary>
     private readonly MovieConcession Target;
 
-    /// <summary>Whether to show the internal tree type.</summary>
-    private readonly bool ShowInternalId;
-
 
     /*********
     ** Public methods
@@ -29,11 +26,10 @@ internal class MovieSnackSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="item">The underlying target.</param>
-    public MovieSnackSubject(GameHelper gameHelper, MovieConcession item, bool showInternalId)
+    public MovieSnackSubject(GameHelper gameHelper, MovieConcession item)
         : base(gameHelper)
     {
         this.Target = item;
-        this.ShowInternalId = showInternalId;
         this.Initialize(item.DisplayName, item.getDescription(), I18n.Type_Other());
     }
 
@@ -49,11 +45,8 @@ internal class MovieSnackSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal id: tree type
-        if (this.ShowInternalId)
-        {
-            yield return new GenericField(I18n.InternalId(), item.Id);
-        }
+        // tree type
+        yield return new GenericField(I18n.InternalId(), item.Id);
 
         // date's taste
         NPC? date = Game1.player.team.movieInvitations.FirstOrDefault(p => p.farmer == Game1.player)?.invitedNPC;

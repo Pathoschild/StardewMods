@@ -269,8 +269,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
     /// <param name="animal">The entity to look up.</param>
     private ISubject BuildSubject(FarmAnimal animal)
     {
-        ModConfig config = this.Config();
-        return new FarmAnimalSubject(this.Codex, this.GameHelper, animal, config.ShowInternalId);
+        return new FarmAnimalSubject(this.Codex, this.GameHelper, animal);
     }
 
     /// <summary>Build a subject.</summary>
@@ -290,8 +289,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
             showGiftTastes: config.ShowGiftTastes,
             collapseFieldsConfig: config.CollapseLargeFields,
             enableTargetRedirection: config.EnableTargetRedirection,
-            showUnownedGifts: config.ShowUnownedGifts,
-            showInternalId: config.ShowInternalId
+            showUnownedGifts: config.ShowUnownedGifts
         );
     }
 

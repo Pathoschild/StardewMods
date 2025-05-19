@@ -65,9 +65,6 @@ internal class ModConfig
     /// <summary>Whether to show recipes involving error items.</summary>
     public bool ShowInvalidRecipes { get; set; } = false;
 
-    /// <summary>Whether to show the internal qualified item id.</summary>
-    public bool ShowInternalId { get; set; } = true;
-
 
     /*********
     ** Public methods

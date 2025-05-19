@@ -76,9 +76,6 @@ internal class ItemSubject : BaseSubject
     /// <summary>Whether to show recipes involving error items.</summary>
     private readonly bool ShowInvalidRecipes;
 
-    /// <summary>Whether to show the internal qualified item id.</summary>
-    public readonly bool ShowInternalId;
-
     /// <summary>The configured minimum field values needed before they're auto-collapsed.</summary>
     private readonly ModCollapseLargeFieldsConfig CollapseFieldsConfig;
 
@@ -109,7 +106,7 @@ internal class ItemSubject : BaseSubject
     /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
     /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
     /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUncaughtFishSpawnRules, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, bool showInternalId, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
+    public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool showUncaughtFishSpawnRules, bool showUnknownGiftTastes, bool highlightUnrevealedGiftTastes, ModGiftTasteConfig showGiftTastes, bool showUnknownRecipes, bool showInvalidRecipes, ModCollapseLargeFieldsConfig collapseFieldsConfig, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
         : base(gameHelper)
     {
         this.Codex = codex;
@@ -119,7 +116,6 @@ internal class ItemSubject : BaseSubject
         this.ShowGiftTastes = showGiftTastes;
         this.ShowUnknownRecipes = showUnknownRecipes;
         this.ShowInvalidRecipes = showInvalidRecipes;
-        this.ShowInternalId = showInternalId;
         this.CollapseFieldsConfig = collapseFieldsConfig;
         this.Target = item;
         this.FromCrop = fromCrop ?? fromDirt?.crop;
@@ -169,14 +165,11 @@ internal class ItemSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal id: (qualifier)item id +preserve id
-        if (this.ShowInternalId)
+        // item ID
+        yield return new GenericField(I18n.InternalId(), I18n.InternalId_UnqualifiedAndQualifiedItemId(item.ItemId, item.QualifiedItemId));
+        if (obj?.preservedParentSheetIndex.Value is string preserveId && ItemRegistry.Create(preserveId) is Item preserveItem)
         {
-            yield return new GenericField(I18n.InternalId(), I18n.InternalId_UnqualifiedAndQualifiedItemId(item.ItemId, item.QualifiedItemId));
-            if (obj?.preservedParentSheetIndex.Value is string preserveId && ItemRegistry.Create(preserveId) is Item preserveItem)
-            {
-                yield return new LinkField(I18n.InternalId_Flavour(), preserveItem.DisplayName, () => this.Codex.GetByEntity(preserveItem, null));
-            }
+            yield return new LinkField(I18n.InternalId_Flavour(), preserveItem.DisplayName, () => this.Codex.GetByEntity(preserveItem, null));
         }
 
         // don't show data for dead crop
