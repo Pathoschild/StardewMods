@@ -66,6 +66,8 @@
 
     // internal id
     "internal-id": "内置ID",
+    "internal-id.unqualified-and-qualified-item-id": "{{itemId}}（全局唯一'限定性ID'：{{qualifiedItemId}}）",
+    "internal-id.flavour": "风味",
 
     /*********
     ** Data translations (数据翻译)

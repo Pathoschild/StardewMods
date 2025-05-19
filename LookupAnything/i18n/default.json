@@ -66,6 +66,8 @@
 
     // internal id
     "internal-id": "Internal Id",
+    "internal-id.unqualified-and-qualified-item-id": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})",
+    "internal-id.flavour": "Flavor",
 
     /*********
     ** Data translations

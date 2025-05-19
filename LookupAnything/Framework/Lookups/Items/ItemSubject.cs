@@ -172,27 +172,10 @@ internal class ItemSubject : BaseSubject
         // internal id: (qualifier)item id +preserve id
         if (this.ShowInternalId)
         {
-            if (obj?.preservedParentSheetIndex.Value != null)
+            yield return new GenericField(I18n.InternalId(), I18n.InternalId_UnqualifiedAndQualifiedItemId(item.ItemId, item.QualifiedItemId));
+            if (obj?.preservedParentSheetIndex.Value is string preserveId && ItemRegistry.Create(preserveId) is Item preserveItem)
             {
-                yield return new GenericField(
-                    I18n.InternalId(),
-                    [
-                        new FormattedText(obj.TypeDefinitionId, color: Color.Gray),
-                        new FormattedText(obj.ItemId),
-                        new FormattedText("/", color: Color.Gray),
-                        new FormattedText(obj.preservedParentSheetIndex.Value),
-                    ]
-                );
-            }
-            else
-            {
-                yield return new GenericField(
-                    I18n.InternalId(),
-                    [
-                        new FormattedText(item.TypeDefinitionId, color: Color.Gray),
-                        new FormattedText(item.ItemId),
-                    ]
-                );
+                yield return new LinkField(I18n.InternalId_Flavour(), preserveItem.DisplayName, () => this.Codex.GetByEntity(preserveItem, null));
             }
         }
 
