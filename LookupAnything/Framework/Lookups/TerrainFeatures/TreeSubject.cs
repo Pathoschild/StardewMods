@@ -116,6 +116,9 @@ internal class TreeSubject : BaseSubject
                     yield return new GenericField(I18n.Tree_Seed(), I18n.Tree_Seed_NotReady() + Environment.NewLine + string.Join(Environment.NewLine, lines));
             }
         }
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), tree.treeType.Value);
     }
 
     /// <inheritdoc />

@@ -251,6 +251,9 @@ internal class BuildingSubject : BaseSubject
                 yield return field;
             }
         }
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), building.buildingType.Value);
     }
 
     /// <inheritdoc />

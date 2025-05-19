@@ -71,6 +71,9 @@ internal class FarmAnimalSubject : BaseSubject
         if (!isFullyGrown)
             yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
         yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), animal.type.Value);
     }
 
     /// <inheritdoc />
