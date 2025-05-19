@@ -47,7 +47,7 @@ internal class MachineManager
     public MachineGroupFactory Factory { get; }
 
     /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
-    public JunimoMachineGroup JunimoMachineGroup { get; }
+    public List<GlobalMachineGroup> GlobalMachineGroups { get; } = new();
 
 
     /*********
@@ -67,7 +67,7 @@ internal class MachineManager
         this.Factory = new(this.GetMachineOverride, this.BuildStorage, monitor);
         this.Factory.Add(defaultFactory);
 
-        this.JunimoMachineGroup = new(this.Factory.SortMachines, this.BuildStorage, this.Monitor);
+        //this.GlobalMachineGroups = new(this.Factory.SortMachines, this.BuildStorage, this.Monitor);
     }
 
     /****
@@ -76,8 +76,9 @@ internal class MachineManager
     /// <summary>Get the machine groups in every location.</summary>
     public IEnumerable<IMachineGroup> GetActiveMachineGroups()
     {
-        if (this.JunimoMachineGroup.HasInternalAutomation)
-            yield return this.JunimoMachineGroup;
+        foreach (IMachineGroup group in this.GlobalMachineGroups)
+            if (group.HasInternalAutomation)
+                yield return group;
 
         foreach (IMachineGroup group in this.ActiveMachineGroups)
             yield return group;
@@ -92,7 +93,7 @@ internal class MachineManager
         return this
             .ActiveMachineGroups
             .Concat(this.DisabledMachineGroups)
-            .Concat(this.JunimoMachineGroup.GetAll())
+            .Concat(this.GlobalMachineGroups.SelectMany(group => group.GetAll()))
             .Where(p => p.LocationKey == locationKey);
     }
 
@@ -139,7 +140,7 @@ internal class MachineManager
         this.MachineData.Clear();
         this.ActiveMachineGroups = [];
         this.DisabledMachineGroups = [];
-        this.JunimoMachineGroup.Clear();
+        this.GlobalMachineGroups.Clear();
     }
 
     /// <summary>Clear all registered machines and add all locations to the reload queue.</summary>
@@ -147,7 +148,8 @@ internal class MachineManager
     {
         this.Clear();
 
-        this.JunimoMachineGroup.Rebuild();
+        foreach (GlobalMachineGroup group in this.GlobalMachineGroups)
+            group.Rebuild();
 
         this.ReloadQueue.AddRange(CommonHelper.GetLocations());
     }
@@ -211,7 +213,8 @@ internal class MachineManager
     /// <param name="removedLocations">The locations which have been removed, and whose machines should be reloaded if they still exist.</param>
     private void ReloadMachinesIn(ISet<GameLocation> locations, ISet<GameLocation> removedLocations)
     {
-        bool junimoGroupChanged = false;
+        List<IMachineGroup> globalAdded = [];
+        HashSet<IMachineGroup> globalChanged = [];
         bool anyChanged = false;
 
         // remove old groups
@@ -223,10 +226,13 @@ internal class MachineManager
             foreach (string locationKey in locationKeys)
                 anyChanged |= this.MachineData.Remove(locationKey);
 
-            if (this.JunimoMachineGroup.RemoveLocations(locationKeys))
+            foreach (GlobalMachineGroup globalGroup in this.GlobalMachineGroups)
             {
-                anyChanged = true;
-                junimoGroupChanged = true;
+                if (globalGroup.RemoveLocations(locationKeys))
+                {
+                    anyChanged = true;
+                    globalChanged.Add(globalGroup);
+                }
             }
         }
 
@@ -238,31 +244,26 @@ internal class MachineManager
             // collect new groups
             List<IMachineGroup> active = [];
             List<IMachineGroup> disabled = [];
-            List<IMachineGroup> junimo = [];
             foreach (IMachineGroup group in this.Factory.GetMachineGroups(location, this.Monitor))
             {
                 if (!group.HasInternalAutomation)
                     disabled.Add(group);
 
-                else if (group.IsJunimoGroup)
-                    junimo.Add(group);
+                else if (!group.IsGlobalGroup)
+                    active.Add(group);
 
                 else
-                    active.Add(group);
+                {
+                    globalAdded.Add(group);
+                    globalChanged.Add(group);
+                }
             }
 
             // add groups
             this.MachineData[locationKey] = new MachineDataForLocation(locationKey, active, disabled);
 
             // track change
-            if (junimo.Any())
-            {
-                this.JunimoMachineGroup.Add(junimo);
-                junimoGroupChanged = true;
-                anyChanged = true;
-            }
-            else if (active.Any())
-                anyChanged = true;
+            anyChanged |= active.Any();
         }
 
         // rebuild caches
@@ -281,7 +282,60 @@ internal class MachineManager
             this.DisabledMachineGroups = disabled.ToArray();
         }
 
-        if (junimoGroupChanged)
-            this.JunimoMachineGroup.Rebuild();
+        if (!globalChanged.Any())
+            return;
+
+        // determine distinct groups
+        List<HashSet<string>> distinctGlobalGroups = [];
+        foreach (HashSet<string> groupKeys in globalChanged.Select(p => p.GlobalContainerKeys))
+        {
+            HashSet<string>? existing = distinctGlobalGroups.FirstOrDefault(p => p.Overlaps(groupKeys));
+            if (existing != null)
+                existing.UnionWith(groupKeys);
+            else
+                distinctGlobalGroups.Add(groupKeys);
+        }
+
+        foreach (HashSet<string> groupKeys in distinctGlobalGroups)
+        {
+            GlobalMachineGroup? selectedGroup = null;
+            int total = this.GlobalMachineGroups.Count;
+
+            for (int i = 0; i < total; i++)
+            {
+                GlobalMachineGroup globalGroup = this.GlobalMachineGroups[i];
+                if (!globalGroup.GlobalContainerKeys.Overlaps(groupKeys))
+                    continue;
+
+                selectedGroup ??= globalGroup;
+                if (selectedGroup == globalGroup)
+                    globalChanged.Add(selectedGroup);
+
+                else
+                {
+                    selectedGroup.Add([.. globalGroup.GetAll()]);
+                    this.GlobalMachineGroups.Remove(globalGroup);
+                    total--;
+                }
+            }
+
+            // create new group
+            if (selectedGroup == null)
+            {
+                selectedGroup = new GlobalMachineGroup(this.Factory.SortMachines, this.BuildStorage, this.Monitor);
+                this.GlobalMachineGroups.Add(selectedGroup);
+            }
+
+            // add groups to selected
+            IList<IMachineGroup> groups = [.. globalAdded.Where(p => p.GlobalContainerKeys.Overlaps(groupKeys))];
+            if (groups.Any())
+                selectedGroup.Add(groups);
+        }
+
+        // rebuild groups
+        foreach (GlobalMachineGroup globalGroup in globalChanged.OfType<GlobalMachineGroup>())
+        {
+            globalGroup.Rebuild();
+        }
     }
 }

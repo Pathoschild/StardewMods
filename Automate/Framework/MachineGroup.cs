@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
@@ -60,6 +61,9 @@ internal class MachineGroup : IMachineGroup
     public string? LocationKey { get; }
 
     /// <inheritdoc />
+    public HashSet<string> GlobalContainerKeys { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <inheritdoc />
     public IMachine[] Machines { get; protected set; }
 
     /// <inheritdoc />
@@ -67,10 +71,10 @@ internal class MachineGroup : IMachineGroup
 
     /// <inheritdoc />
     [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
-    public bool IsJunimoGroup { get; protected set; }
+    public bool IsGlobalGroup { get; protected set; }
 
     /// <inheritdoc />
-    public virtual bool HasInternalAutomation => this.IsJunimoGroup || (this.Machines.Length > 0 && this.Containers.Any(p => !p.IsJunimoChest));
+    public virtual bool HasInternalAutomation => this.IsGlobalGroup || (this.Machines.Length > 0 && this.Containers.Any(p => !p.IsGlobalChest));
 
 
     /*********
@@ -91,7 +95,15 @@ internal class MachineGroup : IMachineGroup
         this.Tiles = [.. tiles];
         this.Monitor = monitor;
 
-        this.IsJunimoGroup = this.Containers.Any(p => p.IsJunimoChest);
+        foreach (IContainer container in this.Containers)
+        {
+            if (container.IsGlobalChest)
+            {
+                this.GlobalContainerKeys.Add(container.GlobalInventoryId);
+            }
+        }
+
+        this.IsGlobalGroup = this.GlobalContainerKeys.Count > 0;
         this.StorageManager = buildStorage(this.GetUniqueContainers(this.Containers));
     }
 

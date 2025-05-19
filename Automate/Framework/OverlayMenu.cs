@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -25,8 +26,8 @@ internal class OverlayMenu : BaseOverlay
     /// <summary>The machine data for the current location.</summary>
     private readonly MachineDataForLocation? MachineData;
 
-    /// <summary>The machine group for machines connected to Junimo chests.</summary>
-    private readonly JunimoMachineGroup JunimoGroup;
+    /// <summary>The machine groups for machines connected to global inventories.</summary>
+    private readonly List<GlobalMachineGroup> GlobalGroups;
 
 
     /*********
@@ -38,13 +39,13 @@ internal class OverlayMenu : BaseOverlay
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="locationKey">The unique key for the current location.</param>
     /// <param name="machineData">The machine groups to display.</param>
-    /// <param name="junimoGroup">The machine group for machines connected to Junimo chests.</param>
-    public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, string locationKey, MachineDataForLocation? machineData, JunimoMachineGroup junimoGroup)
+    /// <param name="globalGroups">The machine group for machines connected to global inventories.</param>
+    public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, string locationKey, MachineDataForLocation? machineData, List<GlobalMachineGroup> globalGroups)
         : base(events, inputHelper, reflection)
     {
         this.LocationKey = locationKey;
         this.MachineData = machineData;
-        this.JunimoGroup = junimoGroup;
+        this.GlobalGroups = globalGroups;
     }
 
 
@@ -59,7 +60,7 @@ internal class OverlayMenu : BaseOverlay
             return;
 
         // draw each tile
-        IReadOnlySet<Vector2> junimoChestTiles = this.JunimoGroup.GetTiles(this.LocationKey);
+        IReadOnlySet<Vector2> globalInventoryTiles = new HashSet<Vector2>(this.GlobalGroups.SelectMany(p => p.GetTiles(this.LocationKey)));
         foreach (Vector2 tile in TileHelper.GetVisibleTiles(expand: 1))
         {
             // get tile's screen coordinates
@@ -70,12 +71,12 @@ internal class OverlayMenu : BaseOverlay
             // get machine group
             IMachineGroup? group = null;
             Color? color = null;
-            if (junimoChestTiles.Contains(tile))
+            if (globalInventoryTiles.Contains(tile))
             {
-                color = this.JunimoGroup.HasInternalAutomation
+                group = this.GlobalGroups.FirstOrDefault(p => p.GetTiles(this.LocationKey).Contains(tile));
+                color = group?.HasInternalAutomation == true
                     ? Color.Green * 0.2f
                     : Color.Red * 0.2f;
-                group = this.JunimoGroup;
             }
             else if (this.MachineData is not null)
             {

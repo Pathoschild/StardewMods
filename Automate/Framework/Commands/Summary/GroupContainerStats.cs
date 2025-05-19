@@ -28,7 +28,7 @@ internal class GroupContainerStats
     public int TotalSlots { get; }
 
     /// <summary>Whether the container is a Junimo chest.</summary>
-    public bool IsJunimoChest { get; }
+    public HashSet<string> GlobalInventoryChests { get; } = new(StringComparer.OrdinalIgnoreCase);
 
 
     /*********
@@ -47,12 +47,11 @@ internal class GroupContainerStats
 
         foreach (IContainer container in containers)
         {
-            // only track Junimo chests once
-            if (container.IsJunimoChest)
+            // only track same global inventory chest once
+            if (container.IsGlobalChest)
             {
-                if (this.IsJunimoChest)
+                if (this.GlobalInventoryChests.Add(container.GlobalInventoryId))
                     continue;
-                this.IsJunimoChest = true;
             }
 
             // track stats

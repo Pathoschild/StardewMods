@@ -43,7 +43,7 @@ internal record MachineDataForLocation(string LocationKey, IReadOnlyCollection<I
     *********/
     /// <summary>Get whether the tile area intersects a machine group which meets the minimum requirements for automation (regardless of whether the machines are currently running).</summary>
     /// <param name="tileArea">The tile area to check.</param>
-    /// <remarks>This is the normal-chest equivalent of <see cref="JunimoMachineGroup.IntersectsAutomatedGroup"/>.</remarks>
+    /// <remarks>This is the normal-chest equivalent of <see cref="GlobalMachineGroup.IntersectsAutomatedGroup"/>.</remarks>
     public bool IntersectsAutomatedGroup(Rectangle tileArea)
     {
         var activeTiles = this.ActiveTiles;
@@ -59,7 +59,7 @@ internal record MachineDataForLocation(string LocationKey, IReadOnlyCollection<I
 
     /// <summary>Get whether a tile area contains or is adjacent to a tracked automateable.</summary>
     /// <param name="tileArea">The tile area to check.</param>
-    /// <remarks>This is the normal-chest equivalent of <see cref="JunimoMachineGroup.ContainsOrAdjacent"/>.</remarks>
+    /// <remarks>This is the normal-chest equivalent of <see cref="GlobalMachineGroup.ContainsOrAdjacent"/>.</remarks>
     public bool ContainsOrAdjacent(Rectangle tileArea)
     {
         var activeTiles = this.ActiveTiles;

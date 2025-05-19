@@ -430,7 +430,7 @@ internal class ModEntry : Mod
             reflection: this.Helper.Reflection,
             locationKey: this.MachineManager.Factory.GetLocationKey(Game1.currentLocation),
             machineData: this.MachineManager.GetMachineDataFor(Game1.currentLocation),
-            junimoGroup: this.MachineManager.JunimoMachineGroup
+            globalGroups: this.MachineManager.GlobalMachineGroups
         );
     }
 
@@ -453,7 +453,7 @@ internal class ModEntry : Mod
     {
         string locationKey = this.MachineManager.Factory.GetLocationKey(location);
         MachineDataForLocation? data = this.MachineManager.GetMachineDataFor(location);
-        JunimoMachineGroup junimoData = this.MachineManager.JunimoMachineGroup;
+        List<GlobalMachineGroup> globalData = this.MachineManager.GlobalMachineGroups;
 
         bool shouldReload = false;
         foreach ((Rectangle tileArea, TEntity entity, bool isAdded) in entities)
@@ -479,7 +479,7 @@ internal class ModEntry : Mod
             if (isAdded)
             {
                 shouldReload =
-                    junimoData.ContainsOrAdjacent(locationKey, tileArea)
+                    globalData.Any(p => p.ContainsOrAdjacent(locationKey, tileArea))
                     || (automateable is IContainer ? data.ContainsOrAdjacent(tileArea) : data.IsConnectedToChest(tileArea));
 
                 if (shouldReload)
@@ -487,7 +487,7 @@ internal class ModEntry : Mod
             }
 
             // reload if removed from a valid machine group
-            if (data.IntersectsAutomatedGroup(tileArea) || junimoData.IntersectsAutomatedGroup(locationKey, tileArea))
+            if (data.IntersectsAutomatedGroup(tileArea) || globalData.Any(p => p.IntersectsAutomatedGroup(locationKey, tileArea)))
             {
                 shouldReload = true;
                 break;

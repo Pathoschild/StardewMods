@@ -35,7 +35,7 @@ internal class GroupStats
     {
         this.MachineGroup = machineGroup;
 
-        if (machineGroup.IsJunimoGroup)
+        if (machineGroup.IsGlobalGroup)
             this.Name = "Distributed group";
         else
         {
@@ -43,7 +43,7 @@ internal class GroupStats
             this.Name = $"Group at ({tile.X}, {tile.Y})";
         }
 
-        this.IsJunimoGroup = machineGroup.IsJunimoGroup;
+        this.IsJunimoGroup = machineGroup.IsGlobalGroup;
 
         this.Machines = machineGroup.Machines
             .GroupBy(p => p.MachineTypeID)

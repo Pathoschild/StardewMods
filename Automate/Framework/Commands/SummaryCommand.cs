@@ -189,7 +189,7 @@ internal class SummaryCommand : BaseCommand
                                             .ThenBy(p => p.TileArea.Y)
                                             .ToArray();
 
-                                        IContainer[] junimoChests = chests.Where(p => p.IsJunimoChest).ToArray();
+                                        IContainer[] junimoChests = chests.Where(p => p.IsGlobalChest).ToArray();
                                         return junimoChests.Any()
                                             ? junimoChests
                                             : chests; // special case: no Junimo chests in this location, but we're still connected somehow. This is most likely a custom connected chest from another mod, so just list all of them.

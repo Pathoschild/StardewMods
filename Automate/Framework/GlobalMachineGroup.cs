@@ -9,7 +9,7 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.Automate.Framework;
 
 /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
-internal class JunimoMachineGroup : MachineGroup
+internal class GlobalMachineGroup : MachineGroup
 {
     /*********
     ** Fields
@@ -38,7 +38,7 @@ internal class JunimoMachineGroup : MachineGroup
     /// <param name="sortMachines">Sort machines by priority.</param>
     /// <param name="buildStorage">Build a storage manager for the given containers.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    public JunimoMachineGroup(Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
+    public GlobalMachineGroup(Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
         : base(
             locationKey: null,
             machines: [],
@@ -48,7 +48,7 @@ internal class JunimoMachineGroup : MachineGroup
             monitor: monitor
         )
     {
-        this.IsJunimoGroup = true;
+        this.IsGlobalGroup = true;
         this.SortMachines = sortMachines;
     }
 
@@ -64,12 +64,14 @@ internal class JunimoMachineGroup : MachineGroup
     public void Add(IList<IMachineGroup> groups)
     {
         this.MachineGroups.AddRange(groups);
+        this.GlobalContainerKeys.UnionWith(groups.SelectMany(p => p.GlobalContainerKeys));
     }
 
     /// <summary>Remove all machine groups in the collection.</summary>
     public void Clear()
     {
         this.MachineGroups.Clear();
+        this.GlobalContainerKeys.Clear();
 
         this.StorageManager.SetContainers([]);
 
@@ -94,6 +96,8 @@ internal class JunimoMachineGroup : MachineGroup
         this.Machines = this.SortMachines(this.MachineGroups.SelectMany(p => p.Machines)).ToArray();
         this.Tiles = null;
 
+        this.GlobalContainerKeys.Clear();
+        this.GlobalContainerKeys.UnionWith(this.MachineGroups.SelectMany(p => p.GlobalContainerKeys));
         this.StorageManager.SetContainers(this.Containers);
     }
 

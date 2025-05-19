@@ -8,20 +8,23 @@ namespace Pathoschild.Stardew.Automate.Framework;
 internal interface IMachineGroup
 {
     /*********
-    ** Accessors
-    *********/
+     ** Accessors
+     *********/
     /// <summary>The main location containing the group (as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>), unless this is an aggregate machine group.</summary>
     string? LocationKey { get; }
 
-    /// <summary>The machines in the group.</summary>
+    /// <summary>The keys for all containers which are linked to global inventories.</summary>
+    HashSet<string> GlobalContainerKeys { get; }
+
+/// <summary>The machines in the group.</summary>
     IMachine[] Machines { get; }
 
     /// <summary>The containers in the group.</summary>
     IContainer[] Containers { get; }
 
-    /// <summary>Whether the machine group is linked to a Junimo chest.</summary>
+    /// <summary>Whether the machine group is linked to a global inventory.</summary>
     [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
-    bool IsJunimoGroup { get; }
+    bool IsGlobalGroup { get; }
 
     /// <summary>Whether the group has the minimum requirements to enable internal automation (i.e., at least one chest and one machine).</summary>
     bool HasInternalAutomation { get; }

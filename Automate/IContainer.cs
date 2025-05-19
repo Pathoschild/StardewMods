@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using StardewValley;
 using StardewValley.Inventories;
 using StardewValley.Mods;
@@ -15,11 +16,15 @@ public interface IContainer : IAutomatable, IEnumerable<ITrackedStack>
     /// <summary>The container name (if any).</summary>
     string Name { get; }
 
+    /// <summary>The global inventory id (if any).</summary>
+    string? GlobalInventoryId { get; }
+
     /// <summary>The raw mod data for the container.</summary>
     ModDataDictionary ModData { get; }
 
-    /// <summary>Whether this is a Junimo chest, which shares a global inventory with all other Junimo chests.</summary>
-    bool IsJunimoChest { get; }
+    /// <summary>Whether this is a global inventory chest, which shares an inventory with all other chests with the same Global Inventory Id.</summary>
+    [MemberNotNullWhen(true, nameof(IContainer.GlobalInventoryId))]
+    bool IsGlobalChest { get; }
 
     /// <summary>Whether this chest is locked (e.g. because a player has it open).</summary>
     bool IsLocked { get; }

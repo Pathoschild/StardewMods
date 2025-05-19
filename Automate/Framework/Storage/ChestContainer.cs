@@ -34,10 +34,13 @@ internal class ChestContainer : IContainer
     public string Name => this.Chest.Name;
 
     /// <inheritdoc />
+    public string? GlobalInventoryId => this.Chest.GlobalInventoryId ?? (this.Chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest ? "JunimoChests" : null);
+
+    /// <inheritdoc />
     public ModDataDictionary ModData => this.Chest.modData;
 
     /// <inheritdoc />
-    public bool IsJunimoChest => this.Chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest;
+    public bool IsGlobalChest => this.Chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest || this.Chest.GlobalInventoryId != null;
 
     /// <inheritdoc />
     public bool IsLocked => this.Chest.GetMutex().IsLocked();
