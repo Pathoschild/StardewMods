@@ -514,7 +514,7 @@ internal class PatchManager
         {
             e.LoadFrom(
                 load: () => this.ApplyLoad<T>(loader, assetName)!, // only returns null when invalid, in which case there's no other way to abort
-                priority: AssetLoadPriority.Exclusive,
+                priority: (AssetLoadPriority)loader.Priority,
                 onBehalfOf: loader.ContentPack.Manifest.UniqueID
             );
         }
@@ -526,10 +526,12 @@ internal class PatchManager
             foreach (List<IPatch> group in editGroups)
             {
                 List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
+                IPatch samplePatch = patches[0];
+
                 e.Edit(
                     apply: data => this.ApplyEdits<T>(patches, data),
-                    priority: AssetEditPriority.Default,
-                    onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
+                    priority: (AssetEditPriority)samplePatch.Priority,
+                    onBehalfOf: samplePatch.ContentPack.Manifest.UniqueID
                 );
             }
         }
