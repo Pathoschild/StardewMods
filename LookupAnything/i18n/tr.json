@@ -64,6 +64,9 @@
     "added-by-mod": "Mod tarafından eklendi",
     "added-by-mod.summary": "{{modName}}",
 
+    // internal ID
+    "internal-id": "Internal ID", // TODO
+
 
     /*********
     ** Data translations
@@ -328,6 +331,7 @@
     "item.dislikes-this": "Bunu beğenmez",
     "item.hates-this": "Bundan nefret eder",
     "item.needed-for": "Şunun için lazım",
+    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Sahip",
     "item.number-cooked": "Pişmiş",
     "item.number-crafted": "Yapılmış",
@@ -361,6 +365,7 @@
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "bundan {{count}} tane yaptın",
+    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
 
 
     /*********
