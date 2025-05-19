@@ -151,7 +151,20 @@ internal class CharacterSubject : BaseSubject
             yield return field;
 
         // internal name
-        yield return new GenericField(I18n.InternalId(), npc.Name);
+        switch (this.TargetType)
+        {
+            case SubjectType.Horse:
+                yield return new GenericField(I18n.InternalId(), ((Horse)npc).HorseId.ToString());
+                break;
+
+            case SubjectType.Pet:
+                yield return new GenericField(I18n.InternalId(), ((Pet)npc).petType.Value);
+                break;
+
+            default:
+                yield return new GenericField(I18n.InternalId(), npc.Name);
+                break;
+        }
     }
 
     /// <inheritdoc />
