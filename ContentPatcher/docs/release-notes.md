@@ -16,16 +16,18 @@ NOTE: notify kittycatcasey a few days before release, so she can release the req
 
 -->
 
+* The `Priority` patch field is now sent to SMAPI to influence patch order relative to non-Content Patcher mods too (thanks to ichortower!).
 * The `patch export` command now auto-detects the type for all vanilla top-level data assets (thanks to SinZ!).
-* Fixed `EditData`'s handling of data model fields with tokens in both the name and value (thanks to SinZ!).
-* Fixed `EditData`'s handling of certain Windows-only data formats when playing on Android/Linux/macOS.
 * Fixed `EditData` patches appending to a list/dictionary field instead of replacing it in some cases.
+* Fixed `EditData`'s handling of certain Windows-only data formats when playing on Android/Linux/macOS.
+* Fixed `EditData`'s handling of data model fields with tokens in both the name and value (thanks to SinZ!).
 * Clarified in [token docs](author-guide/tokens.md) that tokens use NPCs' internal names (thanks to DenisSilent!).
 
-**[Breaking change]**  
-This update fixes a long-standing bug with `EditData` where it could append to a list/dictionary instead of replacing
-it as intended. The bug could cause counterintuitive behavior, but some content packs may have depended on the old
-logic.
+**Potential breaking changes:**
+* Previously all patches were sent to SMAPI with a priority of `Exclusive` (load) or `Default` (edit). Content Patcher
+  now sends the `Priority` value instead if set, so the priority is relative to non-Content Patcher mods too. This may
+  change the order of some edits.
+* `EditData` no longer appends to a list/dictionary in some cases instead of replacing.
 
 If you see new errors after updating Content Patcher, make sure you update your other mods to their
 latest versions. If the errors still happen, feel free to report them on the Content Patcher mod
