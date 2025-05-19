@@ -133,7 +133,7 @@ internal class CharacterSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // NPC internal name
+        // internal name
         yield return new GenericField(I18n.InternalId(), npc.Name);
 
         // specific fields

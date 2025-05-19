@@ -64,10 +64,8 @@
     "added-by-mod": "由模组添加",
     "added-by-mod.summary": "{{modName}}",
 
-    // internal id
+    // internal ID
     "internal-id": "内置ID",
-    "internal-id.unqualified-and-qualified-item-id": "{{itemId}}（全局唯一'限定性ID'：{{qualifiedItemId}}）",
-    "internal-id.flavour": "风味",
 
 
     /*********
@@ -333,6 +331,7 @@
     "item.dislikes-this": "不喜欢",
     "item.hates-this": "讨厌",
     "item.needed-for": "用于",
+    "item.flavor": "风味", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "拥有",
     "item.number-cooked": "已烹饪",
     "item.number-crafted": "已打造",
@@ -366,6 +365,7 @@
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
     "item.number-owned-flavored.summary": "你目前拥有{{count}}个{{name}}（总共拥有{{baseCount}}个{{baseName}}）", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these" 例如，"你目前拥有5个鲟鱼籽（总共拥有20个鱼籽）"
     "item.number-crafted.summary": "你已制造{{count}}个此物",
+    "item.internal-id.summary": "{{itemId}}（全局唯一'限定性ID'：{{qualifiedItemId}}）",
 
 
     /*********

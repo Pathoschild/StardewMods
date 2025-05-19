@@ -88,7 +88,7 @@ internal class BuildingSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // building type
+        // internal type
         yield return new GenericField(I18n.InternalId(), building.buildingType.Value);
 
         // construction / upgrade

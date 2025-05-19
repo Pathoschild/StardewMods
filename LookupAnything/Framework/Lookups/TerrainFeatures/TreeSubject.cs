@@ -61,7 +61,7 @@ internal class TreeSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // tree type
+        // internal type
         yield return new GenericField(I18n.InternalId(), tree.treeType.Value);
 
         // get growth stage

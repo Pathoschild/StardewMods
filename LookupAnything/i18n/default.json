@@ -64,10 +64,8 @@
     "added-by-mod": "Added by mod",
     "added-by-mod.summary": "{{modName}}",
 
-    // internal id
-    "internal-id": "Internal Id",
-    "internal-id.unqualified-and-qualified-item-id": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})",
-    "internal-id.flavour": "Flavor",
+    // internal ID
+    "internal-id": "Internal ID",
 
 
     /*********
@@ -333,6 +331,7 @@
     "item.dislikes-this": "Dislikes this",
     "item.hates-this": "Hates this",
     "item.needed-for": "Needed for",
+    "item.flavor": "Flavor", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Owned",
     "item.number-cooked": "Cooked",
     "item.number-crafted": "Crafted",
@@ -366,6 +365,7 @@
     "item.number-owned.summary": "you own {{count}} of these",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "you made {{count}} of these",
+    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})",
 
 
     /*********

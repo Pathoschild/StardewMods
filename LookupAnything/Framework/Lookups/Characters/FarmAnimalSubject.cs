@@ -62,7 +62,7 @@ internal class FarmAnimalSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // farm animal type
+        // internal type
         yield return new GenericField(I18n.InternalId(), animal.type.Value);
 
         // yield fields

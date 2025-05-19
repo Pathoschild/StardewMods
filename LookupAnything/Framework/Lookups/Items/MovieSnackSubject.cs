@@ -45,7 +45,7 @@ internal class MovieSnackSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // tree type
+        // internal ID
         yield return new GenericField(I18n.InternalId(), item.Id);
 
         // date's taste

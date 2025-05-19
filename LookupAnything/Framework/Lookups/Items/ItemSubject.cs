@@ -166,10 +166,11 @@ internal class ItemSubject : BaseSubject
         }
 
         // item ID
-        yield return new GenericField(I18n.InternalId(), I18n.InternalId_UnqualifiedAndQualifiedItemId(item.ItemId, item.QualifiedItemId));
-        if (obj?.preservedParentSheetIndex.Value is string preserveId && ItemRegistry.Create(preserveId) is Item preserveItem)
+        yield return new GenericField(I18n.InternalId(), I18n.Item_InternalId_Summary(itemId: item.ItemId, qualifiedItemId: item.QualifiedItemId));
+        if (obj?.preservedParentSheetIndex.Value != null)
         {
-            yield return new LinkField(I18n.InternalId_Flavour(), preserveItem.DisplayName, () => this.Codex.GetByEntity(preserveItem, null));
+            Item preservedItem = ItemRegistry.Create(obj.preservedParentSheetIndex.Value);
+            yield return new LinkField(I18n.Item_Flavor(), preservedItem.DisplayName, () => this.Codex.GetByEntity(preservedItem, null));
         }
 
         // don't show data for dead crop

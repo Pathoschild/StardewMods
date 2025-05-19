@@ -59,7 +59,7 @@ internal class FruitTreeSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // fruit tree ID
+        // internal ID
         yield return new GenericField(I18n.InternalId(), tree.treeId.Value);
 
         // show next fruit
