@@ -54,7 +54,7 @@ internal class MovieSnackSubject : BaseSubject
         }
 
         // internal ID
-        yield return new GenericField(I18n.InternalId(), item.Id);
+        yield return new GenericField(I18n.InternalId(), I18n.Item_InternalId_Summary(itemId: item.Id, qualifiedItemId: item.QualifiedItemId));
     }
 
     /// <inheritdoc />
