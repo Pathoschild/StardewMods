@@ -88,9 +88,6 @@ internal class BuildingSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal type
-        yield return new GenericField(I18n.InternalId(), building.buildingType.Value);
-
         // construction / upgrade
         if (!built || building.daysUntilUpgrade.Value > 0)
         {
@@ -254,6 +251,9 @@ internal class BuildingSubject : BaseSubject
                 yield return field;
             }
         }
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), building.buildingType.Value);
     }
 
     /// <inheritdoc />

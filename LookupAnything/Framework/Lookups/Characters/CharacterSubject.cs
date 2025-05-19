@@ -133,9 +133,6 @@ internal class CharacterSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal name
-        yield return new GenericField(I18n.InternalId(), npc.Name);
-
         // specific fields
         var fields = this.TargetType switch
         {
@@ -152,6 +149,9 @@ internal class CharacterSubject : BaseSubject
         };
         foreach (ICustomField field in fields)
             yield return field;
+
+        // internal name
+        yield return new GenericField(I18n.InternalId(), npc.Name);
     }
 
     /// <inheritdoc />

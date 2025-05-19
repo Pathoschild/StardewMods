@@ -59,9 +59,6 @@ internal class FruitTreeSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal ID
-        yield return new GenericField(I18n.InternalId(), tree.treeId.Value);
-
         // show next fruit
         if (isMature && !isDead)
         {
@@ -135,6 +132,9 @@ internal class FruitTreeSubject : BaseSubject
                 );
             }
         }
+
+        // internal ID
+        yield return new GenericField(I18n.InternalId(), tree.treeId.Value);
     }
 
     /// <inheritdoc />

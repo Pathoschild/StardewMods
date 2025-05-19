@@ -62,9 +62,6 @@ internal class FarmAnimalSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal type
-        yield return new GenericField(I18n.InternalId(), animal.type.Value);
-
         // yield fields
         yield return new CharacterFriendshipField(I18n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
         yield return new PercentageBarField(I18n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, I18n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
@@ -74,6 +71,9 @@ internal class FarmAnimalSubject : BaseSubject
         if (!isFullyGrown)
             yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
         yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), animal.type.Value);
     }
 
     /// <inheritdoc />

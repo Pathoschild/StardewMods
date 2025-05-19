@@ -61,9 +61,6 @@ internal class TreeSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal type
-        yield return new GenericField(I18n.InternalId(), tree.treeType.Value);
-
         // get growth stage
         WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
         bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
@@ -119,6 +116,9 @@ internal class TreeSubject : BaseSubject
                     yield return new GenericField(I18n.Tree_Seed(), I18n.Tree_Seed_NotReady() + Environment.NewLine + string.Join(Environment.NewLine, lines));
             }
         }
+
+        // internal type
+        yield return new GenericField(I18n.InternalId(), tree.treeType.Value);
     }
 
     /// <inheritdoc />

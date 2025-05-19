@@ -45,9 +45,6 @@ internal class MovieSnackSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
-        // internal ID
-        yield return new GenericField(I18n.InternalId(), item.Id);
-
         // date's taste
         NPC? date = Game1.player.team.movieInvitations.FirstOrDefault(p => p.farmer == Game1.player)?.invitedNPC;
         if (date != null)
@@ -55,6 +52,9 @@ internal class MovieSnackSubject : BaseSubject
             string taste = MovieTheater.GetConcessionTasteForCharacter(date, item);
             yield return new GenericField(I18n.Item_MovieSnackPreference(), I18n.ForMovieTasteLabel(taste, date.displayName));
         }
+
+        // internal ID
+        yield return new GenericField(I18n.InternalId(), item.Id);
     }
 
     /// <inheritdoc />
