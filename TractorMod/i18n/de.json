@@ -183,6 +183,9 @@
     "config.clear-tilled-dirt.name": "Entferne gepflügten Erde",
     "config.clear-tilled-dirt.tooltip": "Ob gepflügter Erde wieder zu normaler Erde werden soll",
 
+    "config.clear-fertilized-dirt.name": "Gedüngte Erde entfernen",
+    "config.clear-fertilized-dirt.tooltip": "Ob gedüngte Erde entfernt werden soll.",
+
 
     /****
     ** Mining

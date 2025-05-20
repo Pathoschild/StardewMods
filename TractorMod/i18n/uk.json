@@ -190,6 +190,9 @@
     "config.clear-tilled-dirt.name": "Перекопати оброблений ґрунт",
     "config.clear-tilled-dirt.tooltip": "Переконування обробленого ґрунту.",
 
+    "config.clear-fertilized-dirt.name": "Очистити удобрену землю",
+    "config.clear-fertilized-dirt.tooltip": "Чи очищати удобрену зорану землю.",
+
 
     /****
     ** Mining

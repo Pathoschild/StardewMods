@@ -85,7 +85,11 @@ internal class PickaxeAttachment : BaseAttachment
         if (tileFeature is HoeDirt dirt && tileObj is null)
         {
             // clear tilled dirt
-            if (this.Config.ClearDirt && dirt.crop == null)
+            if (this.Config.ClearDirt && dirt.crop == null && !dirt.HasFertilizer())
+                return this.UseToolOnTile(tool, tile, player, location);
+
+            // clear fertilized dirt
+            if (this.Config.ClearFertilizedDirt && dirt.crop == null && dirt.HasFertilizer())
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // clear dead crops

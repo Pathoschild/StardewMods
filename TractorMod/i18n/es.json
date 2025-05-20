@@ -189,6 +189,9 @@
     "config.clear-tilled-dirt.name": "Limpiar tierra labrada",
     "config.clear-tilled-dirt.tooltip": "Si se limpia la tierra labrada.",
 
+    "config.clear-fertilized-dirt.name": "Limpiar tierra fertilizada",
+    "config.clear-fertilized-dirt.tooltip": "Si se debe limpiar la tierra fertilizada.",
+
 
     /****
     ** Mining

@@ -184,6 +184,9 @@
     "config.clear-tilled-dirt.name": "耕した土を戻す",
     "config.clear-tilled-dirt.tooltip": "耕した土をもとに戻す。",
 
+    "config.clear-fertilized-dirt.name": "肥料がまかれた土を戻す",
+    "config.clear-fertilized-dirt.tooltip": "肥料がまかれた土をもとに戻す。",
+
 
     /****
     ** Mining

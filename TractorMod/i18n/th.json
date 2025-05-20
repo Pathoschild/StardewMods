@@ -188,6 +188,9 @@
     "config.clear-tilled-dirt.name": "ขจัดพื้นดิน",
     "config.clear-tilled-dirt.tooltip": "รวมถึงขจัดดินที่ไถพรวน",
 
+    "config.clear-fertilized-dirt.name": "ขจัดดินที่ใส่ปุ๋ยแล้ว",
+    "config.clear-fertilized-dirt.tooltip": "ว่าจะขจัดดินที่ใส่ปุ๋ยแล้วหรือไม่",
+
 
     /****
     ** Mining

@@ -183,6 +183,9 @@
     "config.clear-tilled-dirt.name": "İşlenmiş Toprağı Temizle",
     "config.clear-tilled-dirt.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",
 
+    "config.clear-fertilized-dirt.name": "Gübreli Toprağı Temizle",
+    "config.clear-fertilized-dirt.tooltip": "Gübreli toprağın temizlenip temizlenmeyeceği.",
+
 
     /****
     ** Mining

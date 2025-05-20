@@ -189,6 +189,9 @@
     "config.clear-tilled-dirt.name": "Очистка вспаханной земли",
     "config.clear-tilled-dirt.tooltip": "Очищает вспаханную землю от сорняков.",
 
+    "config.clear-fertilized-dirt.name": "Очистка удобренной земли",
+    "config.clear-fertilized-dirt.tooltip": "Будет ли очищаться удобренная земля.",
+
 
     /****
     ** Mining

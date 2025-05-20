@@ -183,6 +183,8 @@
     "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
     "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
 
+    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
+    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
 
     /****
     ** Mining

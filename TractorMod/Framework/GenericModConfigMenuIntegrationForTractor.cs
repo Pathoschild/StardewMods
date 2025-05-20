@@ -267,6 +267,12 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 set: (config, value) => config.StandardAttachments.PickAxe.ClearDirt = value
             )
             .AddCheckbox(
+                name: I18n.Config_ClearFertilizedDirt_Name,
+                tooltip: I18n.Config_ClearFertilizedDirt_Tooltip,
+                get: config => config.StandardAttachments.PickAxe.ClearFertilizedDirt,
+                set: (config, value) => config.StandardAttachments.PickAxe.ClearFertilizedDirt = value
+            )
+            .AddCheckbox(
                 name: I18n.Config_ClearWeeds_Name,
                 tooltip: I18n.Config_ClearWeeds_Tooltip,
                 get: config => config.StandardAttachments.PickAxe.ClearWeeds,

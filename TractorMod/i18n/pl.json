@@ -195,6 +195,9 @@
     "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
     "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
 
+    "config.clear-fertilized-dirt.name": "Usuń użyźnioną glebę",
+    "config.clear-fertilized-dirt.tooltip": "Określa, czy usuwać użyźnioną glebę.",
+
 
     /****
     ** Mining

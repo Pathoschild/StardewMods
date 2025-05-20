@@ -12,6 +12,9 @@ internal class PickAxeConfig
     /// <summary>Whether to clear tilled dirt.</summary>
     public bool ClearDirt { get; set; } = true;
 
+    /// <summary>Whether to clear tilled dirt with fertilizer.</summary>
+    public bool ClearFertilizedDirt { get; set; } = false;
+
     /// <summary>Whether to clear placed flooring.</summary>
     public bool ClearFlooring { get; set; } = false;
 
