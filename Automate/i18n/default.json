@@ -36,6 +36,17 @@
     "config.junimo-huts.move-into-chests": "Move from Junimo huts into chests",
     "config.junimo-huts.move-into-huts": "Move from chests into Junimo huts",
 
+    // per-storage settings
+    "config.title.storage-settings": "Storage settings",
+    "config.default-storage-override.name": "Default behavior",
+    "config.default-storage-override.desc": "The default behavior for storage when they're set to Default.",
+    "config.default-storage-override.true": "Enabled",
+    "config.default-storage-override.false": "Disabled",
+    "config.storage-override.default": "Default",
+    "config.storage-override.enabled": "Enabled",
+    "config.storage-override.disabled": "Disabled",
+
+
     // per-machine settings
     "config.title.machine-settings": "{{machineName}} settings",
     "config.machine-settings-enabled.Name": "Enabled",

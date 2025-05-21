@@ -28,6 +28,12 @@ internal class MachineGroupFactory
     /// <summary>Get the configuration for specific machines by ID, if any.</summary>
     private readonly Func<string, ModConfigMachine?> GetMachineOverride;
 
+    /// <summary>
+    /// Get the configuration for specific storage by ID, if any.
+    /// Not so consistent to the signature of GetMachineOverride, hence name changed too.
+    /// </summary>
+    private readonly Func<string, bool> IsStorageEnabled;
+
     /// <summary>Build a storage manager for the given containers.</summary>
     private readonly Func<IContainer[], StorageManager> BuildStorage;
 
@@ -40,11 +46,13 @@ internal class MachineGroupFactory
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
+    /// <param name="isStorageEnabled">Get the configuration for specific storage by ID</param>
     /// <param name="buildStorage">Build a storage manager for the given containers.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    public MachineGroupFactory(Func<string, ModConfigMachine?> getMachineOverride, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
+    public MachineGroupFactory(Func<string, ModConfigMachine?> getMachineOverride, Func<string, bool> isStorageEnabled, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
     {
         this.GetMachineOverride = getMachineOverride;
+        this.IsStorageEnabled = isStorageEnabled;
         this.BuildStorage = buildStorage;
         this.Monitor = monitor;
     }
@@ -187,7 +195,8 @@ internal class MachineGroupFactory
                 case IContainer container:
                     if (container.StorageAllowed() || container.TakingItemsAllowed())
                     {
-                        group.Add(container);
+                        if (this.IsStorageEnabled(container.StorageTypeID))
+                            group.Add(container);
                         anyAdded = true;
                     }
                     break;

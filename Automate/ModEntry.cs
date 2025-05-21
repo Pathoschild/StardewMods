@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.BigCraftables;
 
 namespace Pathoschild.Stardew.Automate;
 
@@ -106,6 +107,7 @@ internal class ModEntry : Mod
         this.CommandHandler = new CommandHandler(this.Monitor, () => this.Config, this.MachineManager);
 
         // hook events
+        helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.DayStarted += this.OnDayStarted;
         helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -140,6 +142,25 @@ internal class ModEntry : Mod
     /****
     ** Event handlers
     ****/
+    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+    private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+    {
+        // add automate storage tags for vanilla storages to enable per-storage settings feature
+        if (e.NameWithoutLocale.IsEquivalentTo("Data/BigCraftables"))
+        {
+            e.Edit(asset =>
+            {
+                var vanillaStorageIds = new HashSet<string> { "130", "BigChest", "232", "BigStoneChest", "256" };
+                foreach ((string id, BigCraftableData data) in asset.AsDictionary<string, BigCraftableData>().Data)
+                {
+                    if (!vanillaStorageIds.Contains(id)) continue;
+                    data.ContextTags ??= [];
+                    data.ContextTags.Add("automate_storage");
+                }
+            });
+        }
+    }
+
     /// <inheritdoc cref="IGameLoopEvents.SaveLoaded" />
     private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
     {

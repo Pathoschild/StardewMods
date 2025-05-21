@@ -8,14 +8,17 @@ using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FloorsAndPaths;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.TokenizableStrings;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework;
 
@@ -129,6 +132,41 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
             get: config => config.JunimoHutBehaviorForSeeds,
             set: (config, value) => config.JunimoHutBehaviorForSeeds = value
         );
+
+        // storage settings
+        menu.AddSectionTitle(I18n.Config_Title_StorageSettings);
+        menu.AddDropdown(
+            name: I18n.Config_DefaultStorageOverride_Name,
+            tooltip: I18n.Config_DefaultStorageOverride_Desc,
+            get: config => config.DefaultStorageOverride? "true" : "false",
+            set: (config, value) => config.DefaultStorageOverride = value == "true",
+            allowedValues: ["true", "false"],
+            formatAllowedValue: value => value switch
+            {
+                "true" => I18n.Config_DefaultStorageOverride_True(),
+                "false" => I18n.Config_DefaultStorageOverride_False(),
+                _ => value
+            }
+        );
+
+        // per-storage settings
+        foreach ((string storageId, Func<string> getName) in this.GetStorageIds())
+        {
+            menu.AddDropdown(
+                name: getName,
+                tooltip: () => "",
+                get: config => this.GetStorageOverride(config, storageId),
+                set: (config, value) => this.SetStorageOverride(config, storageId, value),
+                allowedValues: ["default", "enabled", "disabled"],
+                formatAllowedValue: value => value switch
+                {
+                    "default" => I18n.Config_StorageOverride_Default(),
+                    "enabled" => I18n.Config_StorageOverride_Enabled(),
+                    "disabled" => I18n.Config_StorageOverride_Disabled(),
+                    _ => value
+                }
+            );
+        }
 
         // per-machine settings
         string treeId = BaseMachine.GetDefaultMachineId<TreeMachine>();
@@ -256,6 +294,67 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
             if (!string.IsNullOrWhiteSpace(name))
                 config.ConnectorNames.Add(name);
         }
+    }
+
+    /****
+    ** Storage overrides
+    ****/
+    private Dictionary<string,Func<string>> GetStorageIds()
+    {
+        var itemRepo = new ItemRepository();
+        return itemRepo
+            .GetAll(ItemRegistry.type_object, includeVariants: false)
+            .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false))
+            .Where(si => si.Item.HasContextTag("automate_storage")) // other mods can reuse per-storage settings feature by adding this tag
+            .ToDictionary(
+                si => si.Item.QualifiedItemId,
+                si => new Func<string>(() => this.GetStorageNameFromItemId(si.Item.QualifiedItemId))
+            );
+    }
+
+    private string GetStorageNameFromItemId(string itemId)
+    {
+        ParsedItemData data = ItemRegistry.GetDataOrErrorItem(itemId);
+        return I18n
+            .GetByKey($"config.storages.{data.InternalName.Replace(" ", "-")}")
+            .Default(data.DisplayName);
+    }
+
+    private string GetStorageOverride(ModConfig config, string name)
+    {
+        if (!config.StorageOverrides.TryGetValue(name, out var opt))
+            return "default";
+        return opt.Switch switch
+        {
+            ModConfigStorage.SwitchTypes.Default => "default",
+            ModConfigStorage.SwitchTypes.Enabled => "enabled",
+            ModConfigStorage.SwitchTypes.Disabled => "disabled",
+            _ => "default"
+        };
+    }
+
+    /// <summary>Set the override for a storage.</summary>
+    /// <param name="config">The mod configuration.</param>
+    /// <param name="name">The storage name.</param>
+    /// <param name="value">Set value passed by UI.</param>
+    private void SetStorageOverride(ModConfig config, string name, string value)
+    {
+        // get updated settings
+        if (!config.StorageOverrides.TryGetValue(name, out var opt))
+            opt = new ModConfigStorage();
+        opt.Switch = value switch
+        {
+            "default" => ModConfigStorage.SwitchTypes.Default,
+            "enabled" => ModConfigStorage.SwitchTypes.Enabled,
+            "disabled" => ModConfigStorage.SwitchTypes.Disabled,
+            _ => ModConfigStorage.SwitchTypes.Default
+        };
+
+        // update settings
+        if (opt.Switch == ModConfigStorage.SwitchTypes.Default)
+            config.StorageOverrides.Remove(name);
+        else
+            config.StorageOverrides[name] = opt;
     }
 
     /****

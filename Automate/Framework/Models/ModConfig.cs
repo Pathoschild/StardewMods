@@ -43,6 +43,12 @@ internal class ModConfig
     /// <summary>Whether to log a warning if the player installs a custom-machine mod that requires a separate compatibility patch which isn't installed.</summary>
     public bool WarnForMissingBridgeMod { get; set; } = true;
 
+    /// <summary>The configuration for specific storage types by ID.</summary>
+    public Dictionary<string, ModConfigStorage> StorageOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Fallback when <see cref="StorageOverrides"/> set to default.</summary>
+    public bool DefaultStorageOverride { get; set; } = true;
+
     /// <summary>The configuration for specific machines by ID.</summary>
     public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
@@ -68,5 +74,8 @@ internal class ModConfig
 
         this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
         this.MachineOverrides.RemoveWhere(pair => pair.Value is null);
+
+        this.StorageOverrides = this.StorageOverrides.ToNonNullCaseInsensitive();
+        this.StorageOverrides.RemoveWhere(pair => pair.Value is null);
     }
 }

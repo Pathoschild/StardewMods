@@ -36,6 +36,16 @@
     "config.junimo-huts.move-into-chests": "从祝尼魔屋移动到宝箱内",
     "config.junimo-huts.move-into-huts": "从宝箱移动到祝尼魔屋内",
 
+    // per-storage settings
+    "config.title.storage-settings": "箱子设置",
+    "config.default-storage-override.name": "默认设置",
+    "config.default-storage-override.desc": "当箱子设置为「跟随默认设置」时的行为",
+    "config.default-storage-override.true": "启用",
+    "config.default-storage-override.false": "禁用",
+    "config.storage-override.default": "跟随默认设置",
+    "config.storage-override.enabled": "强制启用",
+    "config.storage-override.disabled": "强制禁用",
+
     // per-machine settings
     "config.title.machine-settings": "{{machineName}}行为",
     "config.machine-settings-enabled.Name": "启用",
