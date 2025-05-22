@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Split pickaxe "Clear Tilled Dirt" into options for fertilized and unfertilized dirt (thanks to TWT233!).
 * Fixed "your pickaxe isn't strong enough" message shown near quarry boulder with a low-level pickaxe.
 * Fixed local seasonal tractor/garage textures no longer updated on season change after 4.21.0.
 
