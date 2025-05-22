@@ -180,12 +180,12 @@
     "config.dig-seed-spots.name": "Tohum Noktalarını Kaz",
     "config.dig-seed-spots.tooltip": "Tohum noktalarının kazılıp kazılmayacağı.",
 
-    "config.clear-tilled-dirt.name": "İşlenmiş Toprağı Temizle",
-    "config.clear-tilled-dirt.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",
+    "config.clear-dirt-without-fertilizer.name": "İşlenmiş Toprağı Temizle",
+    "config.clear-dirt-without-fertilizer.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",
 
     // TODO
-    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
-    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
+    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
 
 
     /****
