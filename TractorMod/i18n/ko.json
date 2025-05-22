@@ -183,8 +183,9 @@
     "config.clear-tilled-dirt.name": "경작 된 땅 제거",
     "config.clear-tilled-dirt.tooltip": "곡괭이로 경작된 땅을 제거 할 수 있습니다.",
 
-    "config.clear-fertilized-dirt.name": "비료 뿌린 땅 제거",
-    "config.clear-fertilized-dirt.tooltip": "비료가 뿌려진 땅을 제거합니다.",
+    // TODO
+    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
+    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
 
 
     /****

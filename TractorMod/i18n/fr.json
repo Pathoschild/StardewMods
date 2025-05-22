@@ -190,8 +190,9 @@
     "config.clear-tilled-dirt.name": "Déblayer terre labourée",
     "config.clear-tilled-dirt.tooltip": "S'il faut déblayer une terre labourée.",
 
-    "config.clear-fertilized-dirt.name": "Déblayer la terre fertilisée",
-    "config.clear-fertilized-dirt.tooltip": "S'il faut déblayer la terre fertilisée.",
+    // TODO
+    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
+    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
 
 
     /****

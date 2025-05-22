@@ -190,8 +190,9 @@
     "config.clear-tilled-dirt.name": "Limpar Terra Arada",
     "config.clear-tilled-dirt.tooltip": "Se deve limpar a terra arada.",
 
-    "config.clear-fertilized-dirt.name": "Limpar Terra Fertilizad",
-    "config.clear-fertilized-dirt.tooltip": "Se deve limpar a terra fertilizada.",
+    // TODO
+    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
+    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
 
 
     /****

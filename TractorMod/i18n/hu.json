@@ -189,8 +189,9 @@
     "config.clear-tilled-dirt.name": "Megművelt föld tisztítása",
     "config.clear-tilled-dirt.tooltip": "A megművelt föld eltávolítása.",
 
-    "config.clear-fertilized-dirt.name": "Trágyázott föld tisztítása",
-    "config.clear-fertilized-dirt.tooltip": "A trágyázott föld eltávolítása.",
+    // TODO
+    "config.clear-fertilized-dirt.name": "Clear Fertilized Dirt",
+    "config.clear-fertilized-dirt.tooltip": "Whether to clear fertilized dirt.",
 
 
     /****
