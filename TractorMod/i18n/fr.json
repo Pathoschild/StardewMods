@@ -187,8 +187,12 @@
     "config.dig-seed-spots.name": "Dig Seed Spots",
     "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
-    "config.clear-tilled-dirt.name": "Déblayer terre labourée",
-    "config.clear-tilled-dirt.tooltip": "S'il faut déblayer une terre labourée.",
+    "config.clear-dirt-without-fertilizer.name": "Déblayer terre labourée",
+    "config.clear-dirt-without-fertilizer.tooltip": "S'il faut déblayer une terre labourée.",
+
+    // TODO
+    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
 
 
     /****
