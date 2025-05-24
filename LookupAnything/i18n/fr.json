@@ -50,7 +50,7 @@
     "quality.iridium": "iridium",
 
     // item names shown in recipes
-    "item.wild-seeds": "Wild Seeds (Any)", // TODO
+    "item.wild-seeds": "Graines sauvages (n’importe)",
 
     // NPC friendship
     "friendship-status.friendly": "Ami",
@@ -61,8 +61,7 @@
     "friendship-status.kicked-out": "Rejeté",
 
     // custom content (shows which mod added an item, NPC, etc)
-    // TODO
-    "added-by-mod": "Added by mod",
+    "added-by-mod": "Ajouté par le mod",
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
@@ -116,20 +115,20 @@
     // location names
     "location.beach.east-pier": "plage (jetée à l'est)",
     "location.bugLand": "repaire des insectes mutants",
-    "location.desert.topPond": "desert (north pond)", // TODO
+    "location.desert.topPond": "{{locationName}} (mare au nord)",
     "location.farmCave": "grotte de la ferme",
     "location.farmHouse": "maison de ferme",
     "location.forest.island-tip": "rivière de la forêt (pointe sud de la grande île)",
     "location.forest.lake": "étang de la forêt",
     "location.forest.river": "rivère de la forêt",
-    "location.HarveyRoom": "Harvey's Room", // TODO
-    "location.LeoTreeHouse": "Treehouse", // TODO
-    "location.SandyHouse": "Oasis", // TODO
-    "location.SebastianRoom": "Sebastian's Room", // TODO
+    "location.HarveyRoom": "Chambre d’Harvey",
+    "location.LeoTreeHouse": "Maison dans l'arbre",
+    "location.SandyHouse": "Oasis",
+    "location.SebastianRoom": "Chambre de Sebastian",
     "location.submarine": "sous-marin du marché de nuit",
     "location.town.northmost-bridge": "ville (pont le plus au nord)",
     "location.undergroundMine": "mines",
-    "location.undergroundMine.level": "mine niveau {{level}}",
+    "location.undergroundMine.level": "mines niveau {{level}}",
     "location.witchSwamp": "marais de la sorcière",
 
     "location.caldera": "Île Gingembre - Caldeira",
@@ -149,33 +148,32 @@
     /*********
     ** Conditions & context tags
     *********/
-    // TODO
     "conditions-summary": "[conditions: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
 
     "condition-or-context-tag.negate": "not {{value}}",
 
-    "condition.day-of-month": "on specific days ({{days}})",
-    "condition.day-of-month.even": "even days",
-    "condition.day-of-month.odd": "odd days",
+    "condition.day-of-month": "à ces jours spécifiques ({{days}})",
+    "condition.day-of-month.even": "jours pairs",
+    "condition.day-of-month.odd": "jours impairs",
 
-    "condition.item-type.input": "input item",
-    "condition.item-type.target": "target item",
+    "condition.item-type.input": "l’objet introduit",
+    "condition.item-type.target": "l’objet cible",
 
-    "condition.raw-context-tag": "context tag \"{{tag}}\"",
-    "condition.raw-condition": "query \"{{tag}}\"",
+    "condition.raw-context-tag": "Étiquette de contexte \"{{tag}}\"",
+    "condition.raw-condition": "règle dynamique \"{{tag}}\"",
 
-    "condition.item-context-tag": "{{item}} has context tag {{tags}}",
-    "condition.item-context-tags": "{{item}} has context tags {{tags}}",
+    "condition.item-context-tag": "{{item}} a l’étiquette de contexte {{tags}}",
+    "condition.item-context-tags": "{{item}} a les étiquettes de contexte {{tags}}",
     "condition.item-context-tag.value": "'{{tag}}'", // the format of each context tag in the list (each context tag isn't translated)
 
-    "condition.item-edibility.edible": "{{item}} is edible",
-    "condition.item-edibility.min": "{{item}} has edibility of {{min}} or more",
-    "condition.item-edibility.range": "{{item}} has edibility of {{min}} to {{max}}",
+    "condition.item-edibility.edible": "{{item}} est comestible",
+    "condition.item-edibility.min": "{{item}} a une comestibilité de {{min}} ou plus",
+    "condition.item-edibility.range": "{{item}} a une comestibilité de {{min}} à {{max}}",
 
-    "context-tag.bone": "any bone",
-    "context-tag.egg": "any egg",
-    "context-tag.large-egg": "any large egg",
-    "context-tag.preserved-item": "preserved {{name}}",
+    "context-tag.bone": "n’importe quel os",
+    "context-tag.egg": "n’importe quel œuf",
+    "context-tag.large-egg": "n’importe quel œuf large",
+    "context-tag.preserved-item": "{{name}} séchés",
 
 
     /*********
@@ -205,7 +203,7 @@
     // labels
     "building.animals": "Animaux",
     "building.construction": "Construction",
-    "building.construction-costs": "Construction costs", // TODO
+    "building.construction-costs": "Coûts de construction",
     "building.feed-trough": "Mangeoire",
     "building.horse": "Cheval",
     "building.horse-location": "Position du cheval",
@@ -317,8 +315,8 @@
     "crop.summary.drops-X-to-Y": "donne de {{min}} à {{max}} ({{percent}}% chance de culture supplémentaire)",
     "crop.summary.harvest-once": "récolté après {{daysToFirstHarvest}} jours",
     "crop.summary.harvest-multi": "récolté après {{daysToFirstHarvest}} jours, puis tout les {{daysToNextHarvests}} jours",
-    "crop.summary.farming-xp": "gives +{{amount}} farming XP per harvest", // TODO
-    "crop.summary.foraging-xp": "gives +{{amount}} foraging XP per harvest", // TODO
+    "crop.summary.farming-xp": "donne +{{amount}} EXP de récolte par récolte",
+    "crop.summary.foraging-xp": "donne +{{amount}} EXP de cueillette par récolte",
     "crop.summary.seasons": "pousse en {{seasons}}",
     "crop.summary.sells-for": "vendu pour {{price}}",
     "crop.harvest.too-late": "trop tard dans la saison pour la prochaine récolte (sera le {{date}})",
@@ -354,20 +352,20 @@
     "item.undiscovered-gift-taste-appended": ", et {{count}} goût(s) de villageois non découvert(s)",
     "item.needed-for.community-center": "centre communautaire ({{bundles}})",
     "item.needed-for.full-shipment": "succès de livraison complète (1 à livrer)",
-    "item.needed-for.monoculture": "monoculture achievement (ship {{count}} more)", // TODO
-    "item.needed-for.polyculture": "succès polyculture ({{count}} encore à livrer)",
+    "item.needed-for.monoculture": "succès de monoculture ({{count}} encore à livrer)",
+    "item.needed-for.polyculture": "succès de polyculture ({{count}} encore à livrer)",
     "item.needed-for.full-collection": "succès collection complète (1 à donner au musée)",
     "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",
     "item.needed-for.craft-master": "succès maître artisant (fabriquer {{recipes}})",
     "item.needed-for.quests": "quêtes en cours ({{quests}})",
-    "item.unknown-recipes": "{{count}} unknown recipes", // TODO
+    "item.unknown-recipes": "{{count}} recettes inconnues",
     "item.sells-to.shipping-box": "bac d'expédition",
     "item.recipes-for-ingredient.entry": "{{name}} (nécessite {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
-    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
-    "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
+    "item.recipes-for-machine.same-as-input": "[même chose que la saisie]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.too-complex": "Certaines règles de machine sont trop dynamiques pour être affichées",
     "item.number-owned.summary": "vous en possédez {{count}}",
-    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-owned-flavored.summary": "vous possédez {{count}} ({{name}}) ou {{baseCount}} ({{baseName}}) de ceci", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "vous en avez fabriqué {{count}}",
     "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
 
@@ -416,7 +414,7 @@
     // values
     "item.fish-spawn-rules.min-fishing-level": "niveau minimum de pêche : {{level}}",
     "item.fish-spawn-rules.not-caught-yet": "pas encore attrapé (ne peux être attrapé qu'une fois)",
-    "item.fish-spawn-rules.extended-family-quest-active": "\"Extended Family\" quest active", // TODO
+    "item.fish-spawn-rules.extended-family-quest-active": "quête active \"Famille étendue\"",
     "item.fish-spawn-rules.locations": "emplacements : {{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "emplacements :",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}} : {{locations}}",
@@ -425,7 +423,7 @@
     "item.fish-spawn-rules.time": "heure : {{times}}",
     "item.fish-spawn-rules.weather-sunny": "temps : ensoleillé",
     "item.fish-spawn-rules.weather-rainy": "temps : pluvieux",
-    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
+    "item.uncaught-fish": "{{count}} poissons non attrapés",
 
 
     /*********
@@ -510,7 +508,7 @@
     "npc.neutral-gifts": "Cadeaux neutres",
     "npc.dislikes-gifts": "Cadeaux non appréciés",
     "npc.hates-gifts": "Cadeaux détestés",
-    "npc.schedule": "Today's schedule", // TODO
+    "npc.schedule": "Emploi du temps d’aujourd’hui",
 
     // values
     "npc.can-romance.married": "Vous êtes mariés ! <", // < turns into a heart
@@ -519,13 +517,13 @@
     "npc.friendship.need-bouquet": "besoin d'un bouquet",
     "npc.friendship.need-points": "manque {{count}} pts",
     "npc.undiscovered-gift-taste": "{{count}} goût(s) non révelé(s)",
-    "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
-    "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
-    "npc.schedule.no-entries": "No schedule loaded.", // TODO
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
-    "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
-    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
-    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
+    "npc.unowned-gift-taste": "{{count}} objets non possédés",
+    "npc.schedule.current-position": "Actuellement à {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.no-entries": "Aucun emploi du temps trouvé.",
+    "npc.schedule.not-following-schedule": "Ne suit pas un emploi du temps actuellement. Cela signifie généralement que le PNJ a un comportement spécial (par exemple au cinéma).",
+    "npc.schedule.entry": "{{time}} : se déplace à {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Actuellement dans un emplacement inconnu de l’hôte.",
+    "npc.schedule.farmhand.unknown-schedule": "En multijoueur, les PNJs sont gérés par l’hôte donc leur emploi du temps n’est pas accessible.",
 
 
     /*********
@@ -567,7 +565,7 @@
     "player.farm-name": "Nom de la ferme",
     "player.farm-map": "Carte de la ferme",
     "player.favorite-thing": "Chose préférée",
-    "player.gender": "Sexe",
+    "player.gender": "Genre",
     "player.housemate": "Colocataire",
     "player.spouse": "Conjoint(e)",
     "player.watched-movie-this-week": "A regardé un film cette semaine",
@@ -688,8 +686,8 @@
     "tree.name.oak": "Chêne",
     "tree.name.palm": "Palmier",
     "tree.name.pine": "Pin",
-    "tree.name.mossy": "Mossy Tree", // TODO
-    "tree.name.mystic": "Mystic Tree", // TODO
+    "tree.name.mossy": "Arbre moussu",
+    "tree.name.mystic": "Arbre mystique",
     "tree.name.unknown": "Arbre inconnu",
     "tree.stage.done": "Taille adulte",
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",
@@ -718,20 +716,19 @@
     "config.force-full-screen.desc": "Si le menu doit toujours être en plein écran, au lieu d'être centré dans la fenêtre. Ceci est principalement utile lors de l'affichage des champs d'exploration de données.",
 
     // progression mode
-    // TODO
     "config.title.progression": "Mode de progression",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Règles d’apparition des\npoissons non attrapés",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Détermine s’il faut afficher les conditions d’apparitions pour les poissons non encore attrapés.",
 
-    "config.progression.show-unknown-gift-tastes.name": "Show unknown gift tastes",
-    "config.progression.show-unknown-gift-tastes.desc": "Whether to show gift tastes you haven't learned about in-game yet (e.g. from dialogue text or experimenting).",
+    "config.progression.show-unknown-gift-tastes.name": "Montrer les goûts inconnus",
+    "config.progression.show-unknown-gift-tastes.desc": "Détermine s’il faut afficher les goûts de cadeau que vous n’avez pas encore découvert en jeu (par exemple d’un texte de dialogue ou en expérimentant).",
 
-    "config.progression.show-unknown-recipes.name": "Show unknown recipes",
-    "config.progression.show-unknown-recipes.desc": "Whether to show recipes you haven't learned in-game yet.",
+    "config.progression.show-unknown-recipes.name": "Montrer les recettes inconnues",
+    "config.progression.show-unknown-recipes.desc": "Détermine s’il faut afficher les recettes que vous n’avez pas encore découvert en jeu.",
 
-    "config.progression.show-puzzle-solutions.name": "Show puzzle solutions",
-    "config.progression.show-puzzle-solutions.desc": "Whether to show puzzle solutions.",
+    "config.progression.show-puzzle-solutions.name": "Montrer les solutions de puzzle",
+    "config.progression.show-puzzle-solutions.desc": "Détermine s’il faut afficher les solutions des puzzles.",
 
     // gift tastes
     "config.title.gift-tastes": "Goûts en matière de cadeaux",
@@ -753,16 +750,15 @@
     "config.highlight-unrevealed-gift-tastes.desc": "Si vous souhaitez mettre en évidence les goûts en matière de cadeaux qui n'ont pas été révélés dans le profil du PNJ. Lorsque cette option est activée, les goûts des cadeaux qui n'ont pas été révélés seront en gras.",
 
     // collapse fields
-    // TODO
-    "config.title.collapse-fields": "Collapse large fields",
+    "config.title.collapse-fields": "Réduire les grands champs",
 
-    "config.collapse-fields.enabled.name": "Enabled",
-    "config.collapse-fields.enabled.desc": "Whether to collapse large fields, so the lookup menu will replace the list with a clickable 'show X values' link to expand it.",
+    "config.collapse-fields.enabled.name": "Activé",
+    "config.collapse-fields.enabled.desc": "Détermine s’il faut réduire les grandes zones de texte, de telle sorte que le menu de recherche remplace la liste avec un lien cliquable « Montrer X valeurs » pour l’étendre.",
 
-    "config.collapse-fields.building-recipes.name": "Building lookup: recipes",
-    "config.collapse-fields.item-recipes.name": "Item lookup: recipes",
-    "config.collapse-fields.npc-gift-tastes.name": "NPC lookup: gift tastes",
-    "config.collapse-fields.any.desc": "If the field contains this many values, the lookup menu will replace the list with a clickable 'show X values' link to expand it.",
+    "config.collapse-fields.building-recipes.name": "Page d’info de bâtiments : recettes",
+    "config.collapse-fields.item-recipes.name": "Page d’info d’objets : recettes",
+    "config.collapse-fields.npc-gift-tastes.name": "Page d’info de PNJ : goûts de cadeaux",
+    "config.collapse-fields.any.desc": "Si le champ contient trop de valeurs, le menu de recherche remplacera la liste avec un lien cliquable « Montrer X valeurs » pour l’étendre.",
 
     // advanced options
     "config.title.advanced-options": "Options avancées",
@@ -770,8 +766,8 @@
     "config.tile-lookups.desc": "Si l'on veut inclure les cases de la carte comme cibles de recherche.",
     "config.data-mining-fields.name": "Afficher les données data-minées",
     "config.data-mining-fields.desc": "Afficher ou non les données brutes utiles aux chercheurs de données (sous forme de champs séparés au bas des résultats de la recherche). Il s'agit d'une fonctionnalité avancée qui n'est pas destinée à la plupart des joueurs.",
-    "config.show-invalid-recipes.name": "Show invalid recipes", // TODO
-    "config.show-invalid-recipes.desc": "Whether to show recipes which require or produce broken items.", // TODO
+    "config.show-invalid-recipes.name": "Montrer les recettes invalides",
+    "config.show-invalid-recipes.desc": "Afficher ou non les recettes qui nécessitent ou produisent des objets cassés.",
     "config.target-redirection.name": "Redirection de la cible",
     "config.target-redirection.desc": "Dans certains cas, le jeu crée une entité temporaire pour en représenter une autre. Par exemple, Abigail dans les mines est en fait un PNJ temporaire avec le nom 'AbigailMine', donc la rechercher là-bas ne montrera pas les vraies informations d'Abigail. Si cette option est activée, Lookup Anything recherchera la vraie Abigail à la place.",
     "config.scroll-amount.name": "Quantité de défilement",
