@@ -1,769 +1,769 @@
 ﻿{
-  /*********
-   ** Generic translations
-   *********/
-  // language info
-  "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
-  "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
-
-  // date names
-  "generic.now": "jetzt",
-  "generic.tomorrow": "morgen",
-  "generic.yesterday": "gestern",
-
-  // generic values
-  "generic.unknown": "unbekannt",
-
-  // generic field values
-  "generic.percent": "{{percent}}%",
-  "generic.percent-chance-of": "{{percent}}% Chance auf {{label}}",
-  "generic.percent-ratio": "{{percent}}% ({{value}} von {{max}})",
-  "generic.ratio": "{{value}} von {{max}}",
-  "generic.range": "{{min}} zu {{max}}",
-  "generic.yes": "ja",
-  "generic.no": "nein",
-  "generic.seconds": "{{count}} Sekunden",
-  "generic.minutes": "{{count}} Minuten",
-  "generic.hours": "{{count}} Stunden",
-  "generic.days": "{{count}} Tage",
-  "generic.in-x-days": "in {{count}} Tagen",
-  "generic.x-days-ago": "vor {{count}} Tagen",
-  "generic.price": "{{price}}g",
-  "generic.price-for-quality": "{{price}}g ({{quality}})",
-  "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
-  "generic.show-x-results": "zeige {{count}} Ergebnisse",
-
-  // types
-  "type.building": "Gebäude",
-  "type.bush": "Busch",
-  "type.fruit-tree": "Obstbaum",
-  "type.monster": "Monster",
-  "type.player": "Spieler",
-  "type.tree": "Baum",
-  "type.villager": "Dorfbewohner",
-  "type.other": "Sonstiges", // default type
-
-  // item qualities
-  "quality.normal": "Normal",
-  "quality.silver": "Silber",
-  "quality.gold": "Gold",
-  "quality.iridium": "Iridium",
-
-  // item names shown in recipes
-  "item.wild-seeds": "Wilde Samen (Beliebig)",
-
-  // NPC friendship
-  "friendship-status.friendly": "Freundlich",
-  "friendship-status.dating": "Zusammen",
-  "friendship-status.engaged": "Verlobt",
-  "friendship-status.married": "Verheiratet",
-  "friendship-status.divorced": "Geschieden",
-  "friendship-status.kicked-out": "Rausgeschmissen",
-
-  // custom content (shows which mod added an item, NPC, etc)
-  "added-by-mod": "Von Mod hinzugefügt",
-  "added-by-mod.summary": "{{modName}}",
-
-  // internal ID
-  "internal-id": "Interne ID",
-
-  /*********
-   ** Data translations
-   *********/
-  // Community Center bundle areas
-  "bundle-area.pantry": "Speisekammer",
-  "bundle-area.crafts-room": "Handwerksraum",
-  "bundle-area.fish-tank": "Aquarium",
-  "bundle-area.boiler-room": "Heizraum",
-  "bundle-area.vault": "Tresor",
-  "bundle-area.bulletin-board": "Schwarzes Brett",
-  "bundle-area.abandoned-joja-mart": "Verlassener Joja-Markt",
-
-  // shop names
-  "shop.adventure-guild": "Abenteurergilde",
-  "shop.clint": "Clint",
-  "shop.marnie": "Marnie",
-  "shop.pierre": "Pierre",
-  "shop.robin": "Robin",
-  "shop.volcano": "Vulkan Händler",
-  "shop.willy": "Willy",
-
-  // recipe types
-  "recipe-type.cooking": "Kochen",
-  "recipe-type.crafting": "Herstellen",
-  "recipe-type.tailoring": "Schneiderei",
-
-  // NPC descriptions
-  "data.npc.pet.description": "Dein treues Haustier.",
-  "data.npc.horse.description": "Dein treues Ross.",
-  "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
-  "data.npc.trash-bear.description": "Ein freundlicher Geist, der Müll beseitigt.",
-
-  // item types
-  "data.type.container": "Behältniss",
-
-  // override item text
-  "data.item.egg-incubator.description": "Brütet Eier zu Küken und Entchen aus.",
-  "data.item.barrel.name": "Fass",
-  "data.item.barrel.description": "Zerschlage es um verschiedenes Gut zu erhalten.",
-  "data.item.box.name": "Kiste",
-  "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
-
-  // location names
-  "location.beach.east-pier": "Strand (östliches Pier)",
-  "location.bugLand": "Mutantenkäferhöhle",
-  "location.desert.topPond": "Wüste (nördlicher Teich)",
-  "location.farmCave": "Bauernhof-Höhle",
-  "location.farmHouse": "Bauernhaus",
-  "location.forest.island-tip": "Waldfluss (Südspitze der großen Insel)",
-  "location.forest.lake": "Waldteich",
-  "location.forest.river": "Waldfluss",
-  "location.HarveyRoom": "Harveys Zimmer",
-  "location.LeoTreeHouse": "Baumhaus",
-  "location.SandyHouse": "Oase",
-  "location.SebastianRoom": "Sebastians Zimmer",
-  "location.submarine": "Nachtmarkt Tiefsee-U-Boot",
-  "location.town.northmost-bridge": "Stadt (Nord-östliche Brücke)",
-  "location.undergroundMine": "Mine",
-  "location.undergroundMine.level": "Minenebene {{level}}",
-  "location.witchSwamp": "Hexensumpf",
-
-  "location.caldera": "Feuerberg",
-  "location.islandEast": "Insel Ost",
-  "location.islandNorth": "Insel Nord",
-  "location.islandSouth": "Insel Süd",
-  "location.islandSouthEast": "Insel Südost",
-  "location.islandSouthEastCave": "Piratenhöhle",
-  "location.islandWest": "Insel West",
-  "location.islandWest.freshwater": "Insel West (Teich)",
-  "location.islandWest.ocean": "Insel West (Meer)",
-
-  "location.fish-area": "{{locationName}} ({{areaName}})",
-  "location.unknown-fish-area": "{{locationName}} (Angelgebiet {{id}})",
-
-  /*********
-   ** Conditions & context tags
-   *********/
-  "conditions-summary": "[Bedingung: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
-
-  "condition-or-context-tag.negate": "nicht {{value}}",
-
-  "condition.day-of-month": "An bestimmten Tagen ({{days}})",
-  "condition.day-of-month.even": "Gerade Tage",
-  "condition.day-of-month.odd": "Ungerade Tage",
-
-  "condition.item-type.input": "Eingabe Item",
-  "condition.item-type.target": "Ziel Item",
-
-  "condition.raw-context-tag": "Kontext-Tag \"{{tag}}\"",
-  "condition.raw-condition": "Abfrage \"{{tag}}\"",
-
-  "condition.item-context-tag": "{{item}} hat Kontext Tag {{tags}}",
-  "condition.item-context-tags": "{{item}} hat Kontext Tags {{tags}}",
-  "condition.item-context-tag.value": "'{{tag}}'", // the format of each context tag in the list (each context tag isn't translated)
-
-  "condition.item-edibility.edible": "{{item}} ist essbar",
-  "condition.item-edibility.min": "{{item}} hat Essbarkeit von {{min}} oder mehr",
-  "condition.item-edibility.range": "{{item}} hat Essbarkeit von {{min}} bis {{max}}",
-
-  "context-tag.bone": "Beliebige Knochen",
-  "context-tag.egg": "Beliebige Eier",
-  "context-tag.large-egg": "Beliebige große Eier",
-  "context-tag.preserved-item": "eingemacht {{name}}",
-
-  /*********
-   ** Animal lookups
-   *********/
-  // labels
-  "animal.love": "Liebe",
-  "animal.happiness": "Glücklichkeit",
-  "animal.mood": "Stimmung heute",
-  "animal.complaints": "Beschwerden",
-  "animal.produce-ready": "Produkt fertig",
-  "animal.growth": "Wachstum",
-  "animal.sells-for": "Verkaufbar für",
-
-  // values
-  "animal.complaints.hungry": "Wurde gestern nicht gefüttert",
-  "animal.complaints.left-out": "Wurde letzte Nacht draußen gelassen",
-  "animal.complaints.new-home": "Ist in ein neues Zuhause gezogen",
-  "animal.complaints.no-heater": "Keine Heizung im Winter",
-  "animal.complaints.not-petted": "Wurde heute noch nicht gestreichelt",
-  "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
-
-  /*********
-   ** Building > generic lookups
-   *********/
-  // labels
-  "building.animals": "Tiere",
-  "building.construction": "Bau",
-  "building.construction-costs": "Baukosten",
-  "building.feed-trough": "Futtertrog",
-  "building.horse": "Pferd",
-  "building.horse-location": "Pferd Standort",
-  "building.owner": "Besitzer",
-  "building.slimes": "Schleime",
-  "building.stored-hay": "Gelagertes Heu",
-  "building.upgrades": "Verbesserungen",
-  "building.water-trough": "Wassertrog",
-
-  // values
-  "building.animals.summary": "{{count}} von bis zu {{max}} Tieren",
-  "building.construction.summary": "Fertig am {{date}}",
-  "building.feed-trough.automated": "automatisiert",
-  "building.feed-trough.summary": "{{filled}} von {{max}} Futterplätzen gefüllt",
-  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-  "building.junimo-harvesting-enabled": "Ernten aktiviert",
-  "building.owner.none": "kein Besitzer",
-  "building.output-processing": "Ausgabe in Arbeit",
-  "building.output-ready": "Ausgabe fertig",
-  "building.slimes.summary": "{{count}} von bis zu {{max}} Schleimen",
-  "building.stored-hay.summary": "{{hayCount}} von bis zu {{maxHayInLocation}} Heu an diesem Ort (maximale Kapazität in diesem Gebäude: {{maxHayInBuilding}})",
-  "building.upgrades.barn.0": "bis zu 4 Tiere, fügt Kühe hinzu",
-  "building.upgrades.barn.1": "bis zu 8 Tiere, fügt Schwangerschaft und Ziegen hinzu",
-  "building.upgrades.barn.2": "bis zu 12 Tiere, fügt automatische Fütterung, Schweine und Schafe hinzu",
-  "building.upgrades.cabin.0": "Anfangshütte ",
-  "building.upgrades.cabin.1": "Fügt Küche hinzu, schaltet heiraten frei",
-  "building.upgrades.cabin.2": "macht Kinder möglich",
-  "building.upgrades.coop.0": "bis zu 4 Tiere, fügt Hühner hinzu",
-  "building.upgrades.coop.1": "bis zu 8 Tiere, fügt Brutkasten, Dinosaurier und Enten hinzu",
-  "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
-  "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
-
-  /*********
-   ** Building > fish pond lookups
-   *********/
-  // labels
-  "building.fish-pond.population": "Population",
-  "building.fish-pond.drops": "Produziert",
-  "building.fish-pond.quests": "Aufträge",
-
-  // values
-  "building.fish-pond.population.empty": "Füge einen Fisch hinzu, um den Teich zu starten",
-  "building.fish-pond.population.next-spawn": "Neuer Fisch erscheint {{relativeDate}}",
-  "building.fish-pond.drops.preface": "{{chance}}% Wahrscheinlichkeit jedes Tages, dass das erste passende Produkt produziert wird",
-  "building.fish-pond.drops.min-fish": "Mit {{count}} Fisch:",
-  "building.fish-pond.quests.done": "{{count}} Fische",
-  "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
-  "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",
-  "building.fish-pond.quests.available": "{{relativeDate}} verfügbar",
-
-  /*********
-   ** Bush lookups
-   *********/
-  // labels
-  "bush.name.berry": "Beerenbusch",
-  "bush.name.plain": "Einfacher Busch",
-  "bush.name.tea": "Teestrauch",
-  "bush.description.berry": "Ein Busch an dem Lachsbeeren und Brombeeren wachsen.",
-  "bush.description.plain": "Ein einfacher Busch an dem nichts wächst.",
-  "bush.description.Tea": "Ein Strauch an dem Teeblätter wachsen.",
-  "bush.date-planted": "Pflanzdatum",
-  "bush.growth": "Wachstum",
-  "bush.next-harvest": "Nächste Ernte",
-
-  // values
-  "bush.growth.summary": "Ausgewachsen am {{date}}",
-  "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
-  "bush.schedule.tea": "Bekommt Teeblätter ab dem 22. jeder Jahreszeit (außer im Winter wenn nicht im Gewächshaus).",
-
-  /*********
-   ** Fruit tree lookups
-   *********/
-  // labels
-  "fruit-tree.complaints": "Beschwerden",
-  "fruit-tree.name": "{{fruitName}}baum",
-  "fruit-tree.growth": "Wachstum",
-  "fruit-tree.next-fruit": "nächste Frucht",
-  "fruit-tree.season": "Jahreszeit",
-  "fruit-tree.quality": "Qualität",
-
-  // values
-  "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
-  "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
-  "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
-  "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
-  "fruit-tree.next-fruit.struck-by-lightning": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
-  "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
-  "fruit-tree.quality.now": "{{quality}} jetzt",
-  "fruit-tree.quality.on-date": "{{quality}} am {{date}}",
-  "fruit-tree.quality.on-date-next-year": "{{quality}} am {{date}} nächstes Jahr",
-  "fruit-tree.season.summary": "{{season}} (oder jederzeit im Gewächshaus)",
-
-  /*********
-   ** Crop lookups
-   *********/
-  // labels
-  "crop.summary": "Saat",
-  "crop.harvest": "Ernte",
-  "crop.fertilized": "Gedüngt",
-  "crop.watered": "Gegossen",
-
-  // values
-  "crop.summary.dead": "Diese Saat ist tot.",
-  "crop.summary.drops-X": "Gibt {{count}} her",
-  "crop.summary.drops-X-to-Y": "Gibt {{min}} bis {{max}} her. ({{percent}}% Chance auf extra Saat)",
-  "crop.summary.harvest-once": "Ernte nach {{daysToFirstHarvest}} Tagen.",
-  "crop.summary.harvest-multi": "Ernte nach {{daysToFirstHarvest}} Tagen, danach alle {{daysToNextHarvests}} Tage.",
-  "crop.summary.farming-xp": "gibt +{{amount}} Hofarbeit-XP pro Ernte",
-  "crop.summary.foraging-xp": "gibt +{{amount}} Sammeln-XP pro Ernte",
-  "crop.summary.seasons": "Wächst im {{seasons}}.",
-  "crop.summary.sells-for": "Lässt sich für {{price}} verkaufen.",
-  "crop.harvest.too-late": "Zu spät in der Jahrezeit für eine weitere Ernte (wäre am {{date}}).",
-
-  /*********
-   ** Item > generic lookups
-   *********/
-  // labels
-  "item.contents": "Inhalt",
-  "item.loves-this": "Liebt das",
-  "item.likes-this": "Mag das",
-  "item.neutral-about-this": "Steht neutral dazu",
-  "item.dislikes-this": "Magt dies nicht",
-  "item.hates-this": "Hasst das",
-  "item.needed-for": "Gebraucht für",
-  "item.flavor": "Geschmack", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
-  "item.number-owned": "Im Besitz",
-  "item.number-cooked": "Gekocht",
-  "item.number-crafted": "Hergestellt",
-  "item.recipes": "Rezepte",
-  "item.see-also": "Siehe auch",
-  "item.sells-for": "Lässt sich verkaufen für",
-  "item.sells-to": "Lässt sich verkaufen bei",
-  "item.can-be-dyed": "Kann gefärbt werden",
-  "item.produces-dye": "Erzeugt Farbe",
-
-  // values
-  "item.contents.placed": "{{name}} platziert",
-  "item.contents.ready": "{{name}} bereit",
-  "item.contents.partial": "{{name}} in {{time}}",
-  "item.undiscovered-gift-taste": "{{count}} unaufgedeckte Dorfbewohner",
-  "item.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Dorfbewohner",
-  "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
-  "item.needed-for.full-shipment": "\"Volle Lieferung\" Errungenschaft (liefere einen)",
-  "item.needed-for.monoculture": "Monokultur-Erfolg (verschiffe {{count}} mehr)",
-  "item.needed-for.polyculture": "\"Polykultur\" Errungenschaft (liefere noch {{count}})",
-  "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
-  "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
-  "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
-  "item.needed-for.quests": "aktuelle Aufgaben ({{quests}})",
-  "item.unknown-recipes": "{{count}} unbekannte Rezepte",
-  "item.sells-to.shipping-box": "Versandkiste",
-  "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
-  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-  "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
-  "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
-  "item.number-owned.summary": "Du besitzt {{count}} davon",
-  "item.number-owned-flavored.summary": "Du besitzt {{count}} ({{name}}) oder {{baseCount}} ({{baseName}}) davon", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
-  "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
-  "item.internal-id.summary": "{{itemId}} (global eindeutige 'qualifizierte ID': {{qualifiedItemId}})",
-
-  /*********
-   ** Item > cask lookups
-   *********/
-  // labels
-  "item.cask-contents": "Inhalt",
-  "item.cask-schedule": "Altern",
-
-  // values
-  "item.cask-schedule.now": "{{quality}} jetzt bereit.",
-  "item.cask-schedule.now-partial": "{{quality}} jetzt bereit (benutze die Spitzhacke um das Altern zu stoppen).",
-  "item.cask-schedule.tomorrow": "{{quality}} morgen",
-  "item.cask-schedule.in-x-days": "{{quality}} in {{count}} Tagen ({{date}})",
-
-  /*********
-   ** Item > crab pot lookups
-   *********/
-  // labels
-  "item.crabpot-bait": "Köder",
-  "item.crabpot-bait-needed": "Braucht Köder!",
-  "item.crabpot-bait-not-needed": "Wegen Lockmeister Beruf nicht benötigt.",
-
-  /*********
-   ** Item > fence lookups
-   *********/
-  // labels
-  "item.fence-health": "Leben",
-
-  // values
-  "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
-  "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
-
-  /*********
-   ** Item > fish lookups
-   *********/
-  // labels
-  "item.fish-pond-drops": "Fischteich-Produktion",
-  "item.fish-spawn-rules": "Spawn-Regeln",
-
-  // values
-  "item.fish-spawn-rules.min-fishing-level": "Mindest-Angelstufe: {{level}}",
-  "item.fish-spawn-rules.not-caught-yet": "Noch nicht gefangen (kann nur einmal gefangen werden)",
-  "item.fish-spawn-rules.extended-family-quest-active": "\"Erweiterte Familie\"-Quest aktiv",
-  "item.fish-spawn-rules.locations": "Standorte: {{locations}}",
-  "item.fish-spawn-rules.locations-by-season.label": "Standorte:",
-  "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
-  "item.fish-spawn-rules.season-any": "Jede Jahreszeit",
-  "item.fish-spawn-rules.season-list": "Jahreszeiten : {{seasons}}",
-  "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
-  "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
-  "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
-  "item.uncaught-fish": "{{count}} nicht gefangene Fische",
-
-  /*********
-   ** Item > melee weapon lookups
-   *********/
-  // labels
-  "item.melee-weapon.accuracy": "Genauigkeit",
-  "item.melee-weapon.critical-chance": "Kritische Trefferchance",
-  "item.melee-weapon.critical-damage": "Kritischer Schaden",
-  "item.melee-weapon.damage": "Schaden",
-  "item.melee-weapon.defense": "Verteidigung",
-  "item.melee-weapon.knockback": "Rückstoß",
-  "item.melee-weapon.reach": "Reichweite",
-  "item.melee-weapon.speed": "Angriffsgeschwindigkeit",
-
-  // values
-  "item.melee-weapon.critical-damage.label": "{{multiplier}}-facher normaler Schaden (vor Spielerboni)",
-  "item.melee-weapon.defense.label": "{{amount}} beim Tragen",
-  "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}}-fache normale Distanz)",
-  "item.melee-weapon.reach.label": "{{amount}} Pixel",
-  "item.melee-weapon.speed.shown-vs-actual": "angezeigt: {{shownSpeed}}{{lineBreak}}tatsächlich: {{actualSpeed}}",
-  "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} Millisekunden pro Schwingphase, vor Spielergeschwindigkeitsboni)",
-
-  /*********
-   ** Item > movie lookups
-   *********/
-  // labels
-  "item.movie-snack-preference": "Bevorzugt",
-  "item.movie-ticket.movie-this-week": "Film dieser Woche",
-  "item.movie-ticket.loves-movie": "Liebt Film",
-  "item.movie-ticket.likes-movie": "Mag Film",
-  "item.movie-ticket.dislikes-movie": "Mag Film nicht",
-  "item.movie-ticket.rejects-movie": "Möchte den Film nicht sehen",
-
-  // values
-  "item.movie-snack-preference.love": "{{name}} liebt das",
-  "item.movie-snack-preference.like": "{{name}} mag das",
-  "item.movie-snack-preference.dislike": "{{name}} mag das nicht",
-  "item.movie-ticket.movie-this-week.none": "Kein Film diese Woche",
-
-  /*********
-   ** Item > music block lookups
-   *********/
-  // labels
-  "item.music-block.pitch": "Tonhöhe",
-  "item.music-block.drum-type": "Trommelart",
-
-  /*********
-   ** Monster lookups
-   *********/
-  // labels
-  "monster.invincible": "Unbesiegbar",
-  "monster.health": "Leben",
-  "monster.drops": "Beute",
-  "monster.experience": "XP",
-  "monster.defense": "Verteidigung",
-  "monster.attack": "Angriff",
-  "monster.adventure-guild": "Abenteurergilde",
-
-  // values
-  "monster.drops.nothing": "nichts",
-  "monster.adventure-guild.eradication-goal": "Ziele für die Monsterjagd: {{name}} ({{count}} von {{requiredCount}} getötet)",
-
-  /*********
-   ** NPC > generic lookups
-   *********/
-  // labels
-  "npc.birthday": "Geburtstag",
-  "npc.can-romance": "Datebar",
-  "npc.friendship": "Freundschaft",
-  "npc.talked-today": "Heute geredet",
-  "npc.gifted-today": "Heute beschenkt",
-  "npc.gifted-this-week": "Diese Woche beschenkt",
-  "npc.kissed-today": "Heute geküsst",
-  "npc.hugged-today": "Heute umarmt",
-  "npc.loves-gifts": "Geliebte Geschenke",
-  "npc.likes-gifts": "Gemochte Geschenke",
-  "npc.neutral-gifts": "Neutrale Geschenke",
-  "npc.dislikes-gifts": "Nicht gemochte Geschenke",
-  "npc.hates-gifts": "Gehasste Geschenke",
-  "npc.schedule": "Heutiger Zeitplan",
-
-  // values
-  "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart
-  "npc.can-romance.housemate": "Ihr seid Mitbewohner!",
-  "npc.friendship.not-met": "Du hast die Person noch nicht getroffen",
-  "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
-  "npc.friendship.need-points": "nächstes in {{count}} Punkten",
-  "npc.undiscovered-gift-taste": "{{count}} unaufgedeckte Gegenstände",
-  "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
-  "npc.schedule.current-position": "Derzeit bei {{locationName}} ({{x}}, {{y}}).",
-  "npc.schedule.no-entries": "Kein Zeitplan geladen.",
-  "npc.schedule.not-following-schedule": "Folgt momentan keinem Zeitplan. Dies bedeutet in der Regel, dass der NPC einer besonderen Aktivität nachgeht (z.B. im Kino).",
-  "npc.schedule.entry": "{{time}}: gehe zu {{locationName}} ({{x}}, {{y}}).",
-  "npc.schedule.farmhand.unknown-position": "Derzeit an einem unbekannten Ort auf dem Host.",
-  "npc.schedule.farmhand.unknown-schedule": "Im Mehrspielermodus werden NPCs vom Host verwaltet, daher ist ihr Zeitplan nicht verfügbar.",
-
-  /*********
-   ** NPC > child lookups
-   *********/
-  // labels
-  "npc.child.age": "Alter",
-
-  // values
-  "npc.child.age.description-partial": "{{label}} ({{count}} Tage zum {{nextLabel}})",
-  "npc.child.age.description-grown": "{{label}}",
-  "npc.child.age.newborn": "Neugeborenes",
-  "npc.child.age.baby": "Baby",
-  "npc.child.age.crawler": "Krabbelkind",
-  "npc.child.age.toddler": "Kleinkind",
-
-  /*********
-   ** Pet lookups
-   *********/
-  // labels
-  "pet.love": "Liebe",
-  "pet.petted-today": "Heute gestreichelt",
-  "pet.last-petted": "Zuletzt gestreichelt",
-  "pet.water-bowl": "Wasserschale",
-
-  // values
-  "pet.last-petted.yes": "Ja (+12 Liebe)",
-  "pet.last-petted.days-ago": "Vor {{days}} Tagen",
-  "pet.last-petted.never": "Nie",
-  "pet.water-bowl.empty": "Leer",
-  "pet.water-bowl.filled": "Gefüllt (+6 Liebe)",
-
-  /*********
-   ** Player lookups
-   *********/
-  // labels
-  "player.farm-name": "Farmname",
-  "player.farm-map": "Farmtyp",
-  "player.favorite-thing": "Lieblingsgegenstand",
-  "player.gender": "Geschlecht",
-  "player.housemate": "Mitbewohner",
-  "player.spouse": "Ehepartner",
-  "player.watched-movie-this-week": "Film diese Woche gesehen",
-  "player.combat-skill": "Kampf",
-  "player.farming-skill": "Hofarbeit",
-  "player.fishing-skill": "Fischen",
-  "player.foraging-skill": "Sammeln",
-  "player.mining-skill": "Bergbau",
-  "player.luck": "Glück",
-  "player.save-format": "Speicherformat",
-
-  // values
-  "player.farm-map.custom": "Eigene",
-  "player.gender.male": "Männlich",
-  "player.gender.female": "Weiblich",
-  "player.luck.summary": "{{percent}}% auf viele zufällige Ereignisse",
-  "player.skill.progress": "Level {{level}} ({{expNeeded}} XP erforderlich)",
-  "player.skill.progress-last": "Level {{level}}",
-
-  /*********
-   ** Puzzles
-   *********/
-  // labels
-  "puzzle.solution": "Lösung",
-
-  // values
-  "puzzle.solution.solved": "Rätsel gelöst!",
-  "puzzle.solution.hidden": "Lösungen der Rätsel sind gemäß Ihrer Einstellungen nicht sichtbar.",
-
-  /*********
-   ** Puzzles > Fern Islands crystal cave
-   *********/
-  // labels
-  "puzzle.island-crystal-cave.title": "Farbige Kristalle Puzzle",
-  "puzzle.island-crystal-cave.crystal-id": "Kristall ID",
-
-  // values
-  "puzzle.island-crystal-cave.solution.not-activated": "Aktiviere die Statue um das Rätsel zu starten.",
-  "puzzle.island-crystal-cave.solution.waiting": "Warte bis das Spiel die Sequenz generiert ...",
-  "puzzle.island-crystal-cave.solution.activated": "Wiederhole die Reihenfolge der aktivierten Kristalle:",
-
-  /*********
-   ** Puzzles > Fern Islands mermaid puzzle
-   *********/
-  // labels
-  "puzzle.island-mermaid.title": "Meerjungfrauen-Rätsel",
-  "puzzle.island-mermaid.solution.intro": "Benutze Flötenblöcke um das Lied der Meerjungfrau vom Nachtmarkt zu spielen. Tonhöhen: (Es ist möglich die Tonhöhe eines Flötenblocks nachzusehen):",
-
-  /*********
-   ** Puzzles > Fern Islands shrine puzzle
-   *********/
-  // labels
-  "puzzle.island-shrine.title": "Edelsteinvogel-Rätsel",
-
-  // values
-  "puzzle.island-shrine.solution": "Lege den Edelstein auf den Sockel der vom Edelsteinvogel am passenden Ort bei Regen gelegt wurde. Die Edelsteine sind für jeden Speicherstand zufällig.",
-  "puzzle.island-shrine.solution.east": "Osten: {{item}}",
-  "puzzle.island-shrine.solution.north": "Norden: {{item}}",
-  "puzzle.island-shrine.solution.south": "Süden: {{item}}",
-  "puzzle.island-shrine.solution.west": "Westen: {{item}}",
-
-  /*********
-   ** Tile lookups
-   *********/
-  // Note for translators:
-  // The translations in this section are a bit more technical. Quick summary:
-  //
-  //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
-  //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
-  //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
-  //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
-  //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
-
-  // labels
-  "tile.title": "Kartenkachel ({{x}}, {{y}})",
-  "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
-  "tile.game-location": "Standort",
-  "tile.map-name": "Kartenname",
-  "tile.map-properties": "Karteneigenschaften",
-  "tile.layer-tile": "{{layer}} Kachel",
-  "tile.layer-tile-none": "Kachel",
-
-  // values
-  "tile.map-properties.value": "{{name}}: {{value}}",
-  "tile.layer-tile.appearance": "Index {{index}} aus dem Tilesheet '{{tilesheetId}}' (Pfad: '{{tilesheetPath}}')",
-  "tile.layer-tile.blend-mode": "Überblendungsmodus: {{value}}",
-  "tile.layer-tile.index-property": "Indexeigenschaften: {{name}}: {{value}}",
-  "tile.layer-tile.tile-property": "Eigenschaften: {{name}}: {{value}}",
-  "tile.layer-tile.none-here": "Keine Kachel hier.",
-
-  /*********
-   ** Trash Bear or Gourmand lookups
-   *********/
-  // labels
-  "trash-bear-or-gourmand.item-wanted": "Gegenstand benötigt",
-  "trash-bear-or-gourmand.quest-progress": "Auftragsfortschritt",
-
-  /*********
-   ** Wild tree lookups
-   *********/
-  // labels
-  "tree.stage": "Wachstumsstadium",
-  "tree.next-growth": "Nächstes Wachstum",
-  "tree.seed": "Trägt Samen",
-  "tree.is-fertilized": "Ist gedüngt",
-
-  // values
-  "tree.name.big-mushroom": "Großer Pilz",
-  "tree.name.mahogany": "Mahagonibaum",
-  "tree.name.maple": "Ahornbaum",
-  "tree.name.oak": "Eichenbaum",
-  "tree.name.palm": "Palme",
-  "tree.name.pine": "Tannenbaum",
-  "tree.name.mossy": "Moosiger Baum",
-  "tree.name.mystic": "Mystischer Baum",
-  "tree.name.unknown": "unbekannter Baum",
-  "tree.stage.done": "Voll ausgewachsen",
-  "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",
-  "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen, wenn es nicht gedüngt wird.",
-  "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
-  "tree.next-growth.chance": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
-  "tree.seed.not-ready": "Nicht bereit",
-  "tree.seed.probability-daily": "{{chance}}% Chance auf {{itemName}} jeden Tag.",
-  "tree.seed.probability-on-chop": "{{chance}}% Chance {{itemName}} fallenzulassen, wenn es gefällt wird.",
-
-  // growth stages
-  "tree.stages.seed": "Samen",
-  "tree.stages.sprout": "Sprössling",
-  "tree.stages.sapling": "Setzling",
-  "tree.stages.bush": "Busch",
-  "tree.stages.smallTree": "Kleiner Baum",
-  "tree.stages.tree": "Baum",
-
-  /*********
-   ** Generic Mod Config Menu UI
-   *********/
-  // main options
-  "config.title.main-options": "Hauptoptionen",
-  "config.force-full-screen.name": "Erzwinge Vollbild",
-  "config.force-full-screen.desc": "Legt fest, ob das Menü immer als Vollbild angezeigt werden soll, anstatt in der Mitte des Fensters. Dies ist vor allem bei der Anzeige von Data Mining Feldern nützlich.",
-
-  // progression mode
-  "config.title.progression": "Fortschrittsmodus",
-
-  "config.progression.show-uncaught-fish-spawn-rules.name": "Regeln für das Erscheinen ungefangener Fische anzeigen",
-  "config.progression.show-uncaught-fish-spawn-rules.desc": "Ob Regeln für das Erscheinen ungefangener Fische angezeigt werden sollen.",
-
-  "config.progression.show-unknown-gift-tastes.name": "Unbekannte Geschenke Vorlieben anzeigen",
-  "config.progression.show-unknown-gift-tastes.desc": "Ob Geschenk Vorlieben gezeigt werden sollen, die du im Spiel noch nicht kennengelernt hast (z. B. aus Dialogtexten oder beim Experimentieren).",
-
-  "config.progression.show-unknown-recipes.name": "Unbekannte Rezepte anzeigen",
-  "config.progression.show-unknown-recipes.desc": "Ob Rezepte angezeigt werden sollen, die im Spiel noch nicht erlernt wurden.",
-
-  "config.progression.show-puzzle-solutions.name": "Puzzle-Lösungen anzeigen",
-  "config.progression.show-puzzle-solutions.desc": "Ob Puzzle-Lösungen angezeigt werden sollen.",
-
-  // gift tastes
-  "config.title.gift-tastes": "Geschenke-Geschmäcker",
-  "config.show-gift-tastes.loved.name": "Zeige beliebte Geschenke",
-  "config.show-gift-tastes.loved.desc": "Ob beliebte Geschenke in NPC- und Gegenstandssuchen angezeigt werden sollen.",
-  "config.show-gift-tastes.liked.name": "Zeige gemochte Geschenke",
-  "config.show-gift-tastes.liked.desc": "Ob gemochte Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
-  "config.show-gift-tastes.neutral.name": "Zeige neutrale Geschenke",
-  "config.show-gift-tastes.neutral.desc": "Ob neutrale Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
-  "config.show-gift-tastes.disliked.name": "Zeige unbeliebte Geschenke",
-  "config.show-gift-tastes.disliked.desc": "Ob unbeliebte Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
-  "config.show-gift-tastes.hated.name": "Zeige gehasste Geschenke",
-  "config.show-gift-tastes.hated.desc": "Ob gehasste Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
-
-  "config.show-unowned-gifts.name": "Nicht besessene Geschenkvorlieben anzeigen",
-  "config.show-unowned-gifts.desc": "Ob die Geschenkvorlieben für Gegenstände angezeigt werden sollen, die der Spieler nirgendwo in der Welt besitzt.",
-
-  "config.highlight-unrevealed-gift-tastes.name": "Hebe unentdeckte Geschenkvorlieben hervor",
-  "config.highlight-unrevealed-gift-tastes.desc": "Hervorhebung von Gegenstandsgeschenken, die im NSC-Profil noch nicht offenbart wurden. Wenn diese Option aktiviert ist, werden nicht enthüllte Geschenkvorlieben fett dargestellt.",
-
-  // collapse fields
-  "config.title.collapse-fields": "Große Felder einklappen",
-
-  "config.collapse-fields.enabled.name": "Aktiviert",
-  "config.collapse-fields.enabled.desc": "Ob große Felder eingeklappt werden sollen, so dass das Nachschlagemenü die Liste durch einen anklickbaren Link 'X Werte anzeigen' ersetzt, um sie zu erweitern.",
-
-  "config.collapse-fields.building-recipes.name": "Suche nach Gebäuden: Rezepte",
-  "config.collapse-fields.item-recipes.name": "Suche nach Artikeln: Rezepte",
-  "config.collapse-fields.npc-gift-tastes.name": "NPC-Suche: Geschenk-Vorlieben",
-  "config.collapse-fields.any.desc": "Wenn das Feld so viele Werte enthält, ersetzt das Nachschlagemenü die Liste durch einen anklickbaren Link 'X Werte anzeigen', um sie zu erweitern.",
-
-  // advanced options
-  "config.title.advanced-options": "Erweiterte Optionen",
-  "config.tile-lookups.name": "Nachschlagen von Kacheln",
-  "config.tile-lookups.desc": "Ob Kartenkacheln als Nachschlageziele einbezogen werden sollen.",
-  "config.data-mining-fields.name": "Data Mining Felder anzeigen",
-  "config.data-mining-fields.desc": "Ob Rohdaten angezeigt werden sollen, die für Data Miner nützlich sind (als separate Felder am Ende der Suchergebnisse). Dies ist eine erweiterte Funktion, die nicht für die meisten Spieler gedacht ist.",
-  "config.show-invalid-recipes.name": "Ungültige Rezepte anzeigen",
-  "config.show-invalid-recipes.desc": "Ob Rezepte angezeigt werden sollen, die ungültige Gegenstände erfordern oder erzeugen",
-  "config.target-redirection.name": "Ziel Umleitung",
-  "config.target-redirection.desc": "In manchen Fällen legt das Spiel eine temporäre Entität an, um eine andere zu repräsentieren. Zum Beispiel ist Abigail in den Minen in Wirklichkeit ein temporärer NSC mit dem Namen 'AbigailMine', so dass die Suche nach ihr dort nicht Abigails wirkliche Informationen zeigen wird. Wenn diese Option aktiviert ist, sucht Lookup Anything stattdessen nach der ursprünglichen Abigail.",
-  "config.scroll-amount.name": "Scroll Anzahl",
-  "config.scroll-amount.desc": "Die Anzahl an Pixeln um welche der Inhalt verschoben wird bei jedem hoch/runter scrollen.",
-
-  // controls section
-  "config.title.controls": "Steuerung",
-  "config.hide-on-key-up.name": "Verstecke beim Loslassen der Taste",
-  "config.hide-on-key-up.desc": "Ob die Lookup-Oberfläche ausgeblendet werden soll, wenn Sie die Lookup-Taste loslassen.",
-  "config.toggle-lookup.name": "Lookup umschalten",
-  "config.toggle-lookup.desc": "Die Tasten, die die Lookup-Oberfläche für etwas unter dem Cursor umschalten.",
-  "config.toggle-search.name": "Suche umschalten",
-  "config.toggle-search.desc": "Die Tasten, mit denen die Suchoberfläche umgeschaltet wird.",
-  "config.scroll-up.name": "Hoch scrollen",
-  "config.scroll-up.desc": "Die Tasten, die lange Inhalte um einige Zeilen nach oben scrollen.",
-  "config.scroll-down.name": "Runter scrollen",
-  "config.scroll-down.desc": "Die Tasten, die lange Inhalte um einige Zeilen nach unten scrollen.",
-  "config.page-up.name": "Seite hoch",
-  "config.page-up.desc": "Die Tasten, die lange Inhalte um eine ganze Seite nach oben blättern.",
-  "config.page-down.name": "Seite runter",
-  "config.page-down.desc": "Die Tasten, die lange Inhalte um eine ganze Seite nach unten blättern.",
-  "config.toggle-debug.name": "Debug umschalten",
-  "config.toggle-debug.desc": "Die Tasten, mit denen die Anzeige der Debug-Informationen umgeschaltet wird.",
-
-  /*********
-   ** Iconic Framework icon
-   *********/
-  "icon.toggle-search.name": "Alles Nachschlagen",
-  "icon.toggle-search.desc": "Umschalten der Alles Nachschlagen-Suche"
+    /*********
+    ** Generic translations
+    *********/
+    // language info
+    "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
+
+    // date names
+    "generic.now": "jetzt",
+    "generic.tomorrow": "morgen",
+    "generic.yesterday": "gestern",
+
+    // generic values
+    "generic.unknown": "unbekannt",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% Chance auf {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} von {{max}})",
+    "generic.ratio": "{{value}} von {{max}}",
+    "generic.range": "{{min}} zu {{max}}",
+    "generic.yes": "ja",
+    "generic.no": "nein",
+    "generic.seconds": "{{count}} Sekunden",
+    "generic.minutes": "{{count}} Minuten",
+    "generic.hours": "{{count}} Stunden",
+    "generic.days": "{{count}} Tage",
+    "generic.in-x-days": "in {{count}} Tagen",
+    "generic.x-days-ago": "vor {{count}} Tagen",
+    "generic.price": "{{price}}g",
+    "generic.price-for-quality": "{{price}}g ({{quality}})",
+    "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
+    "generic.show-x-results": "zeige {{count}} Ergebnisse",
+
+    // types
+    "type.building": "Gebäude",
+    "type.bush": "Busch",
+    "type.fruit-tree": "Obstbaum",
+    "type.monster": "Monster",
+    "type.player": "Spieler",
+    "type.tree": "Baum",
+    "type.villager": "Dorfbewohner",
+    "type.other": "Sonstiges", // default type
+
+    // item qualities
+    "quality.normal": "Normal",
+    "quality.silver": "Silber",
+    "quality.gold": "Gold",
+    "quality.iridium": "Iridium",
+
+    // item names shown in recipes
+    "item.wild-seeds": "Wilde Samen (Beliebig)",
+
+    // NPC friendship
+    "friendship-status.friendly": "Freundlich",
+    "friendship-status.dating": "Zusammen",
+    "friendship-status.engaged": "Verlobt",
+    "friendship-status.married": "Verheiratet",
+    "friendship-status.divorced": "Geschieden",
+    "friendship-status.kicked-out": "Rausgeschmissen",
+
+    // custom content (shows which mod added an item, NPC, etc)
+    "added-by-mod": "Von Mod hinzugefügt",
+    "added-by-mod.summary": "{{modName}}",
+
+    // internal ID
+    "internal-id": "Interne ID",
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Speisekammer",
+    "bundle-area.crafts-room": "Handwerksraum",
+    "bundle-area.fish-tank": "Aquarium",
+    "bundle-area.boiler-room": "Heizraum",
+    "bundle-area.vault": "Tresor",
+    "bundle-area.bulletin-board": "Schwarzes Brett",
+    "bundle-area.abandoned-joja-mart": "Verlassener Joja-Markt",
+
+    // shop names
+    "shop.adventure-guild": "Abenteurergilde",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.volcano": "Vulkan Händler",
+    "shop.willy": "Willy",
+
+    // recipe types
+    "recipe-type.cooking": "Kochen",
+    "recipe-type.crafting": "Herstellen",
+    "recipe-type.tailoring": "Schneiderei",
+
+    // NPC descriptions
+    "data.npc.pet.description": "Dein treues Haustier.",
+    "data.npc.horse.description": "Dein treues Ross.",
+    "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
+    "data.npc.trash-bear.description": "Ein freundlicher Geist, der Müll beseitigt.",
+
+    // item types
+    "data.type.container": "Behältniss",
+
+    // override item text
+    "data.item.egg-incubator.description": "Brütet Eier zu Küken und Entchen aus.",
+    "data.item.barrel.name": "Fass",
+    "data.item.barrel.description": "Zerschlage es um verschiedenes Gut zu erhalten.",
+    "data.item.box.name": "Kiste",
+    "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
+
+    // location names
+    "location.beach.east-pier": "Strand (östliches Pier)",
+    "location.bugLand": "Mutantenkäferhöhle",
+    "location.desert.topPond": "Wüste (nördlicher Teich)",
+    "location.farmCave": "Bauernhof-Höhle",
+    "location.farmHouse": "Bauernhaus",
+    "location.forest.island-tip": "Waldfluss (Südspitze der großen Insel)",
+    "location.forest.lake": "Waldteich",
+    "location.forest.river": "Waldfluss",
+    "location.HarveyRoom": "Harveys Zimmer",
+    "location.LeoTreeHouse": "Baumhaus",
+    "location.SandyHouse": "Oase",
+    "location.SebastianRoom": "Sebastians Zimmer",
+    "location.submarine": "Nachtmarkt Tiefsee-U-Boot",
+    "location.town.northmost-bridge": "Stadt (Nord-östliche Brücke)",
+    "location.undergroundMine": "Mine",
+    "location.undergroundMine.level": "Minenebene {{level}}",
+    "location.witchSwamp": "Hexensumpf",
+
+    "location.caldera": "Feuerberg",
+    "location.islandEast": "Insel Ost",
+    "location.islandNorth": "Insel Nord",
+    "location.islandSouth": "Insel Süd",
+    "location.islandSouthEast": "Insel Südost",
+    "location.islandSouthEastCave": "Piratenhöhle",
+    "location.islandWest": "Insel West",
+    "location.islandWest.freshwater": "Insel West (Teich)",
+    "location.islandWest.ocean": "Insel West (Meer)",
+
+    "location.fish-area": "{{locationName}} ({{areaName}})",
+    "location.unknown-fish-area": "{{locationName}} (Angelgebiet {{id}})",
+
+    /*********
+    ** Conditions & context tags
+    *********/
+    "conditions-summary": "[Bedingung: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+
+    "condition-or-context-tag.negate": "nicht {{value}}",
+
+    "condition.day-of-month": "An bestimmten Tagen ({{days}})",
+    "condition.day-of-month.even": "Gerade Tage",
+    "condition.day-of-month.odd": "Ungerade Tage",
+
+    "condition.item-type.input": "Eingabe Item",
+    "condition.item-type.target": "Ziel Item",
+
+    "condition.raw-context-tag": "Kontext-Tag \"{{tag}}\"",
+    "condition.raw-condition": "Abfrage \"{{tag}}\"",
+
+    "condition.item-context-tag": "{{item}} hat Kontext Tag {{tags}}",
+    "condition.item-context-tags": "{{item}} hat Kontext Tags {{tags}}",
+    "condition.item-context-tag.value": "'{{tag}}'", // the format of each context tag in the list (each context tag isn't translated)
+
+    "condition.item-edibility.edible": "{{item}} ist essbar",
+    "condition.item-edibility.min": "{{item}} hat Essbarkeit von {{min}} oder mehr",
+    "condition.item-edibility.range": "{{item}} hat Essbarkeit von {{min}} bis {{max}}",
+
+    "context-tag.bone": "Beliebige Knochen",
+    "context-tag.egg": "Beliebige Eier",
+    "context-tag.large-egg": "Beliebige große Eier",
+    "context-tag.preserved-item": "eingemacht {{name}}",
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Liebe",
+    "animal.happiness": "Glücklichkeit",
+    "animal.mood": "Stimmung heute",
+    "animal.complaints": "Beschwerden",
+    "animal.produce-ready": "Produkt fertig",
+    "animal.growth": "Wachstum",
+    "animal.sells-for": "Verkaufbar für",
+
+    // values
+    "animal.complaints.hungry": "Wurde gestern nicht gefüttert",
+    "animal.complaints.left-out": "Wurde letzte Nacht draußen gelassen",
+    "animal.complaints.new-home": "Ist in ein neues Zuhause gezogen",
+    "animal.complaints.no-heater": "Keine Heizung im Winter",
+    "animal.complaints.not-petted": "Wurde heute noch nicht gestreichelt",
+    "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Tiere",
+    "building.construction": "Bau",
+    "building.construction-costs": "Baukosten",
+    "building.feed-trough": "Futtertrog",
+    "building.horse": "Pferd",
+    "building.horse-location": "Pferd Standort",
+    "building.owner": "Besitzer",
+    "building.slimes": "Schleime",
+    "building.stored-hay": "Gelagertes Heu",
+    "building.upgrades": "Verbesserungen",
+    "building.water-trough": "Wassertrog",
+
+    // values
+    "building.animals.summary": "{{count}} von bis zu {{max}} Tieren",
+    "building.construction.summary": "Fertig am {{date}}",
+    "building.feed-trough.automated": "automatisiert",
+    "building.feed-trough.summary": "{{filled}} von {{max}} Futterplätzen gefüllt",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Ernten aktiviert",
+    "building.owner.none": "kein Besitzer",
+    "building.output-processing": "Ausgabe in Arbeit",
+    "building.output-ready": "Ausgabe fertig",
+    "building.slimes.summary": "{{count}} von bis zu {{max}} Schleimen",
+    "building.stored-hay.summary": "{{hayCount}} von bis zu {{maxHayInLocation}} Heu an diesem Ort (maximale Kapazität in diesem Gebäude: {{maxHayInBuilding}})",
+    "building.upgrades.barn.0": "bis zu 4 Tiere, fügt Kühe hinzu",
+    "building.upgrades.barn.1": "bis zu 8 Tiere, fügt Schwangerschaft und Ziegen hinzu",
+    "building.upgrades.barn.2": "bis zu 12 Tiere, fügt automatische Fütterung, Schweine und Schafe hinzu",
+    "building.upgrades.cabin.0": "Anfangshütte ",
+    "building.upgrades.cabin.1": "Fügt Küche hinzu, schaltet heiraten frei",
+    "building.upgrades.cabin.2": "macht Kinder möglich",
+    "building.upgrades.coop.0": "bis zu 4 Tiere, fügt Hühner hinzu",
+    "building.upgrades.coop.1": "bis zu 8 Tiere, fügt Brutkasten, Dinosaurier und Enten hinzu",
+    "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
+    "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Produziert",
+    "building.fish-pond.quests": "Aufträge",
+
+    // values
+    "building.fish-pond.population.empty": "Füge einen Fisch hinzu, um den Teich zu starten",
+    "building.fish-pond.population.next-spawn": "Neuer Fisch erscheint {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% Wahrscheinlichkeit jedes Tages, dass das erste passende Produkt produziert wird",
+    "building.fish-pond.drops.min-fish": "Mit {{count}} Fisch:",
+    "building.fish-pond.quests.done": "{{count}} Fische",
+    "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",
+    "building.fish-pond.quests.available": "{{relativeDate}} verfügbar",
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Beerenbusch",
+    "bush.name.plain": "Einfacher Busch",
+    "bush.name.tea": "Teestrauch",
+    "bush.description.berry": "Ein Busch an dem Lachsbeeren und Brombeeren wachsen.",
+    "bush.description.plain": "Ein einfacher Busch an dem nichts wächst.",
+    "bush.description.Tea": "Ein Strauch an dem Teeblätter wachsen.",
+    "bush.date-planted": "Pflanzdatum",
+    "bush.growth": "Wachstum",
+    "bush.next-harvest": "Nächste Ernte",
+
+    // values
+    "bush.growth.summary": "Ausgewachsen am {{date}}",
+    "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
+    "bush.schedule.tea": "Bekommt Teeblätter ab dem 22. jeder Jahreszeit (außer im Winter wenn nicht im Gewächshaus).",
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Beschwerden",
+    "fruit-tree.name": "{{fruitName}}baum",
+    "fruit-tree.growth": "Wachstum",
+    "fruit-tree.next-fruit": "nächste Frucht",
+    "fruit-tree.season": "Jahreszeit",
+    "fruit-tree.quality": "Qualität",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
+    "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
+    "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
+    "fruit-tree.next-fruit.struck-by-lightning": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
+    "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
+    "fruit-tree.quality.now": "{{quality}} jetzt",
+    "fruit-tree.quality.on-date": "{{quality}} am {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} am {{date}} nächstes Jahr",
+    "fruit-tree.season.summary": "{{season}} (oder jederzeit im Gewächshaus)",
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Saat",
+    "crop.harvest": "Ernte",
+    "crop.fertilized": "Gedüngt",
+    "crop.watered": "Gegossen",
+
+    // values
+    "crop.summary.dead": "Diese Saat ist tot.",
+    "crop.summary.drops-X": "Gibt {{count}} her",
+    "crop.summary.drops-X-to-Y": "Gibt {{min}} bis {{max}} her. ({{percent}}% Chance auf extra Saat)",
+    "crop.summary.harvest-once": "Ernte nach {{daysToFirstHarvest}} Tagen.",
+    "crop.summary.harvest-multi": "Ernte nach {{daysToFirstHarvest}} Tagen, danach alle {{daysToNextHarvests}} Tage.",
+    "crop.summary.farming-xp": "gibt +{{amount}} Hofarbeit-XP pro Ernte",
+    "crop.summary.foraging-xp": "gibt +{{amount}} Sammeln-XP pro Ernte",
+    "crop.summary.seasons": "Wächst im {{seasons}}.",
+    "crop.summary.sells-for": "Lässt sich für {{price}} verkaufen.",
+    "crop.harvest.too-late": "Zu spät in der Jahrezeit für eine weitere Ernte (wäre am {{date}}).",
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "Inhalt",
+    "item.loves-this": "Liebt das",
+    "item.likes-this": "Mag das",
+    "item.neutral-about-this": "Steht neutral dazu",
+    "item.dislikes-this": "Magt dies nicht",
+    "item.hates-this": "Hasst das",
+    "item.needed-for": "Gebraucht für",
+    "item.flavor": "Geschmack", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.number-owned": "Im Besitz",
+    "item.number-cooked": "Gekocht",
+    "item.number-crafted": "Hergestellt",
+    "item.recipes": "Rezepte",
+    "item.see-also": "Siehe auch",
+    "item.sells-for": "Lässt sich verkaufen für",
+    "item.sells-to": "Lässt sich verkaufen bei",
+    "item.can-be-dyed": "Kann gefärbt werden",
+    "item.produces-dye": "Erzeugt Farbe",
+
+    // values
+    "item.contents.placed": "{{name}} platziert",
+    "item.contents.ready": "{{name}} bereit",
+    "item.contents.partial": "{{name}} in {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} unaufgedeckte Dorfbewohner",
+    "item.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Dorfbewohner",
+    "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
+    "item.needed-for.full-shipment": "\"Volle Lieferung\" Errungenschaft (liefere einen)",
+    "item.needed-for.monoculture": "Monokultur-Erfolg (verschiffe {{count}} mehr)",
+    "item.needed-for.polyculture": "\"Polykultur\" Errungenschaft (liefere noch {{count}})",
+    "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
+    "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
+    "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
+    "item.needed-for.quests": "aktuelle Aufgaben ({{quests}})",
+    "item.unknown-recipes": "{{count}} unbekannte Rezepte",
+    "item.sells-to.shipping-box": "Versandkiste",
+    "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
+    "item.number-owned.summary": "Du besitzt {{count}} davon",
+    "item.number-owned-flavored.summary": "Du besitzt {{count}} ({{name}}) oder {{baseCount}} ({{baseName}}) davon", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
+    "item.internal-id.summary": "{{itemId}} (global eindeutige 'qualifizierte ID': {{qualifiedItemId}})",
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Inhalt",
+    "item.cask-schedule": "Altern",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} jetzt bereit.",
+    "item.cask-schedule.now-partial": "{{quality}} jetzt bereit (benutze die Spitzhacke um das Altern zu stoppen).",
+    "item.cask-schedule.tomorrow": "{{quality}} morgen",
+    "item.cask-schedule.in-x-days": "{{quality}} in {{count}} Tagen ({{date}})",
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Köder",
+    "item.crabpot-bait-needed": "Braucht Köder!",
+    "item.crabpot-bait-not-needed": "Wegen Lockmeister Beruf nicht benötigt.",
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Leben",
+
+    // values
+    "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
+    "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Fischteich-Produktion",
+    "item.fish-spawn-rules": "Spawn-Regeln",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "Mindest-Angelstufe: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "Noch nicht gefangen (kann nur einmal gefangen werden)",
+    "item.fish-spawn-rules.extended-family-quest-active": "\"Erweiterte Familie\"-Quest aktiv",
+    "item.fish-spawn-rules.locations": "Standorte: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "Standorte:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "Jede Jahreszeit",
+    "item.fish-spawn-rules.season-list": "Jahreszeiten : {{seasons}}",
+    "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
+    "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
+    "item.uncaught-fish": "{{count}} nicht gefangene Fische",
+
+    /*********
+    ** Item > melee weapon lookups
+    *********/
+    // labels
+    "item.melee-weapon.accuracy": "Genauigkeit",
+    "item.melee-weapon.critical-chance": "Kritische Trefferchance",
+    "item.melee-weapon.critical-damage": "Kritischer Schaden",
+    "item.melee-weapon.damage": "Schaden",
+    "item.melee-weapon.defense": "Verteidigung",
+    "item.melee-weapon.knockback": "Rückstoß",
+    "item.melee-weapon.reach": "Reichweite",
+    "item.melee-weapon.speed": "Angriffsgeschwindigkeit",
+
+    // values
+    "item.melee-weapon.critical-damage.label": "{{multiplier}}-facher normaler Schaden (vor Spielerboni)",
+    "item.melee-weapon.defense.label": "{{amount}} beim Tragen",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}}-fache normale Distanz)",
+    "item.melee-weapon.reach.label": "{{amount}} Pixel",
+    "item.melee-weapon.speed.shown-vs-actual": "angezeigt: {{shownSpeed}}{{lineBreak}}tatsächlich: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} Millisekunden pro Schwingphase, vor Spielergeschwindigkeitsboni)",
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Bevorzugt",
+    "item.movie-ticket.movie-this-week": "Film dieser Woche",
+    "item.movie-ticket.loves-movie": "Liebt Film",
+    "item.movie-ticket.likes-movie": "Mag Film",
+    "item.movie-ticket.dislikes-movie": "Mag Film nicht",
+    "item.movie-ticket.rejects-movie": "Möchte den Film nicht sehen",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} liebt das",
+    "item.movie-snack-preference.like": "{{name}} mag das",
+    "item.movie-snack-preference.dislike": "{{name}} mag das nicht",
+    "item.movie-ticket.movie-this-week.none": "Kein Film diese Woche",
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Tonhöhe",
+    "item.music-block.drum-type": "Trommelart",
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Unbesiegbar",
+    "monster.health": "Leben",
+    "monster.drops": "Beute",
+    "monster.experience": "XP",
+    "monster.defense": "Verteidigung",
+    "monster.attack": "Angriff",
+    "monster.adventure-guild": "Abenteurergilde",
+
+    // values
+    "monster.drops.nothing": "nichts",
+    "monster.adventure-guild.eradication-goal": "Ziele für die Monsterjagd: {{name}} ({{count}} von {{requiredCount}} getötet)",
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "Geburtstag",
+    "npc.can-romance": "Datebar",
+    "npc.friendship": "Freundschaft",
+    "npc.talked-today": "Heute geredet",
+    "npc.gifted-today": "Heute beschenkt",
+    "npc.gifted-this-week": "Diese Woche beschenkt",
+    "npc.kissed-today": "Heute geküsst",
+    "npc.hugged-today": "Heute umarmt",
+    "npc.loves-gifts": "Geliebte Geschenke",
+    "npc.likes-gifts": "Gemochte Geschenke",
+    "npc.neutral-gifts": "Neutrale Geschenke",
+    "npc.dislikes-gifts": "Nicht gemochte Geschenke",
+    "npc.hates-gifts": "Gehasste Geschenke",
+    "npc.schedule": "Heutiger Zeitplan",
+
+    // values
+    "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart
+    "npc.can-romance.housemate": "Ihr seid Mitbewohner!",
+    "npc.friendship.not-met": "Du hast die Person noch nicht getroffen",
+    "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
+    "npc.friendship.need-points": "nächstes in {{count}} Punkten",
+    "npc.undiscovered-gift-taste": "{{count}} unaufgedeckte Gegenstände",
+    "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
+    "npc.schedule.current-position": "Derzeit bei {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.no-entries": "Kein Zeitplan geladen.",
+    "npc.schedule.not-following-schedule": "Folgt momentan keinem Zeitplan. Dies bedeutet in der Regel, dass der NPC einer besonderen Aktivität nachgeht (z.B. im Kino).",
+    "npc.schedule.entry": "{{time}}: gehe zu {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "Derzeit an einem unbekannten Ort auf dem Host.",
+    "npc.schedule.farmhand.unknown-schedule": "Im Mehrspielermodus werden NPCs vom Host verwaltet, daher ist ihr Zeitplan nicht verfügbar.",
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Alter",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} ({{count}} Tage zum {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "Neugeborenes",
+    "npc.child.age.baby": "Baby",
+    "npc.child.age.crawler": "Krabbelkind",
+    "npc.child.age.toddler": "Kleinkind",
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Liebe",
+    "pet.petted-today": "Heute gestreichelt",
+    "pet.last-petted": "Zuletzt gestreichelt",
+    "pet.water-bowl": "Wasserschale",
+
+    // values
+    "pet.last-petted.yes": "Ja (+12 Liebe)",
+    "pet.last-petted.days-ago": "Vor {{days}} Tagen",
+    "pet.last-petted.never": "Nie",
+    "pet.water-bowl.empty": "Leer",
+    "pet.water-bowl.filled": "Gefüllt (+6 Liebe)",
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Farmname",
+    "player.farm-map": "Farmtyp",
+    "player.favorite-thing": "Lieblingsgegenstand",
+    "player.gender": "Geschlecht",
+    "player.housemate": "Mitbewohner",
+    "player.spouse": "Ehepartner",
+    "player.watched-movie-this-week": "Film diese Woche gesehen",
+    "player.combat-skill": "Kampf",
+    "player.farming-skill": "Hofarbeit",
+    "player.fishing-skill": "Fischen",
+    "player.foraging-skill": "Sammeln",
+    "player.mining-skill": "Bergbau",
+    "player.luck": "Glück",
+    "player.save-format": "Speicherformat",
+
+    // values
+    "player.farm-map.custom": "Eigene",
+    "player.gender.male": "Männlich",
+    "player.gender.female": "Weiblich",
+    "player.luck.summary": "{{percent}}% auf viele zufällige Ereignisse",
+    "player.skill.progress": "Level {{level}} ({{expNeeded}} XP erforderlich)",
+    "player.skill.progress-last": "Level {{level}}",
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Lösung",
+
+    // values
+    "puzzle.solution.solved": "Rätsel gelöst!",
+    "puzzle.solution.hidden": "Lösungen der Rätsel sind gemäß Ihrer Einstellungen nicht sichtbar.",
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Farbige Kristalle Puzzle",
+    "puzzle.island-crystal-cave.crystal-id": "Kristall ID",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Aktiviere die Statue um das Rätsel zu starten.",
+    "puzzle.island-crystal-cave.solution.waiting": "Warte bis das Spiel die Sequenz generiert ...",
+    "puzzle.island-crystal-cave.solution.activated": "Wiederhole die Reihenfolge der aktivierten Kristalle:",
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Meerjungfrauen-Rätsel",
+    "puzzle.island-mermaid.solution.intro": "Benutze Flötenblöcke um das Lied der Meerjungfrau vom Nachtmarkt zu spielen. Tonhöhen: (Es ist möglich die Tonhöhe eines Flötenblocks nachzusehen):",
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Edelsteinvogel-Rätsel",
+
+    // values
+    "puzzle.island-shrine.solution": "Lege den Edelstein auf den Sockel der vom Edelsteinvogel am passenden Ort bei Regen gelegt wurde. Die Edelsteine sind für jeden Speicherstand zufällig.",
+    "puzzle.island-shrine.solution.east": "Osten: {{item}}",
+    "puzzle.island-shrine.solution.north": "Norden: {{item}}",
+    "puzzle.island-shrine.solution.south": "Süden: {{item}}",
+    "puzzle.island-shrine.solution.west": "Westen: {{item}}",
+
+    /*********
+    ** Tile lookups
+    *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
+    // labels
+    "tile.title": "Kartenkachel ({{x}}, {{y}})",
+    "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
+    "tile.game-location": "Standort",
+    "tile.map-name": "Kartenname",
+    "tile.map-properties": "Karteneigenschaften",
+    "tile.layer-tile": "{{layer}} Kachel",
+    "tile.layer-tile-none": "Kachel",
+
+    // values
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "Index {{index}} aus dem Tilesheet '{{tilesheetId}}' (Pfad: '{{tilesheetPath}}')",
+    "tile.layer-tile.blend-mode": "Überblendungsmodus: {{value}}",
+    "tile.layer-tile.index-property": "Indexeigenschaften: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "Eigenschaften: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "Keine Kachel hier.",
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Gegenstand benötigt",
+    "trash-bear-or-gourmand.quest-progress": "Auftragsfortschritt",
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Wachstumsstadium",
+    "tree.next-growth": "Nächstes Wachstum",
+    "tree.seed": "Trägt Samen",
+    "tree.is-fertilized": "Ist gedüngt",
+
+    // values
+    "tree.name.big-mushroom": "Großer Pilz",
+    "tree.name.mahogany": "Mahagonibaum",
+    "tree.name.maple": "Ahornbaum",
+    "tree.name.oak": "Eichenbaum",
+    "tree.name.palm": "Palme",
+    "tree.name.pine": "Tannenbaum",
+    "tree.name.mossy": "Moosiger Baum",
+    "tree.name.mystic": "Mystischer Baum",
+    "tree.name.unknown": "unbekannter Baum",
+    "tree.stage.done": "Voll ausgewachsen",
+    "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",
+    "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen, wenn es nicht gedüngt wird.",
+    "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
+    "tree.next-growth.chance": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
+    "tree.seed.not-ready": "Nicht bereit",
+    "tree.seed.probability-daily": "{{chance}}% Chance auf {{itemName}} jeden Tag.",
+    "tree.seed.probability-on-chop": "{{chance}}% Chance {{itemName}} fallenzulassen, wenn es gefällt wird.",
+
+    // growth stages
+    "tree.stages.seed": "Samen",
+    "tree.stages.sprout": "Sprössling",
+    "tree.stages.sapling": "Setzling",
+    "tree.stages.bush": "Busch",
+    "tree.stages.smallTree": "Kleiner Baum",
+    "tree.stages.tree": "Baum",
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Hauptoptionen",
+    "config.force-full-screen.name": "Erzwinge Vollbild",
+    "config.force-full-screen.desc": "Legt fest, ob das Menü immer als Vollbild angezeigt werden soll, anstatt in der Mitte des Fensters. Dies ist vor allem bei der Anzeige von Data Mining Feldern nützlich.",
+
+    // progression mode
+    "config.title.progression": "Fortschrittsmodus",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Regeln für das Erscheinen ungefangener Fische anzeigen",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Ob Regeln für das Erscheinen ungefangener Fische angezeigt werden sollen.",
+
+    "config.progression.show-unknown-gift-tastes.name": "Unbekannte Geschenke Vorlieben anzeigen",
+    "config.progression.show-unknown-gift-tastes.desc": "Ob Geschenk Vorlieben gezeigt werden sollen, die du im Spiel noch nicht kennengelernt hast (z. B. aus Dialogtexten oder beim Experimentieren).",
+
+    "config.progression.show-unknown-recipes.name": "Unbekannte Rezepte anzeigen",
+    "config.progression.show-unknown-recipes.desc": "Ob Rezepte angezeigt werden sollen, die im Spiel noch nicht erlernt wurden.",
+
+    "config.progression.show-puzzle-solutions.name": "Puzzle-Lösungen anzeigen",
+    "config.progression.show-puzzle-solutions.desc": "Ob Puzzle-Lösungen angezeigt werden sollen.",
+
+    // gift tastes
+    "config.title.gift-tastes": "Geschenke-Geschmäcker",
+    "config.show-gift-tastes.loved.name": "Zeige beliebte Geschenke",
+    "config.show-gift-tastes.loved.desc": "Ob beliebte Geschenke in NPC- und Gegenstandssuchen angezeigt werden sollen.",
+    "config.show-gift-tastes.liked.name": "Zeige gemochte Geschenke",
+    "config.show-gift-tastes.liked.desc": "Ob gemochte Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
+    "config.show-gift-tastes.neutral.name": "Zeige neutrale Geschenke",
+    "config.show-gift-tastes.neutral.desc": "Ob neutrale Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
+    "config.show-gift-tastes.disliked.name": "Zeige unbeliebte Geschenke",
+    "config.show-gift-tastes.disliked.desc": "Ob unbeliebte Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
+    "config.show-gift-tastes.hated.name": "Zeige gehasste Geschenke",
+    "config.show-gift-tastes.hated.desc": "Ob gehasste Geschenke in der NPC- und Gegenstandssuche angezeigt werden sollen.",
+
+    "config.show-unowned-gifts.name": "Nicht besessene Geschenkvorlieben anzeigen",
+    "config.show-unowned-gifts.desc": "Ob die Geschenkvorlieben für Gegenstände angezeigt werden sollen, die der Spieler nirgendwo in der Welt besitzt.",
+
+    "config.highlight-unrevealed-gift-tastes.name": "Hebe unentdeckte Geschenkvorlieben hervor",
+    "config.highlight-unrevealed-gift-tastes.desc": "Hervorhebung von Gegenstandsgeschenken, die im NSC-Profil noch nicht offenbart wurden. Wenn diese Option aktiviert ist, werden nicht enthüllte Geschenkvorlieben fett dargestellt.",
+
+    // collapse fields
+    "config.title.collapse-fields": "Große Felder einklappen",
+
+    "config.collapse-fields.enabled.name": "Aktiviert",
+    "config.collapse-fields.enabled.desc": "Ob große Felder eingeklappt werden sollen, so dass das Nachschlagemenü die Liste durch einen anklickbaren Link 'X Werte anzeigen' ersetzt, um sie zu erweitern.",
+
+    "config.collapse-fields.building-recipes.name": "Suche nach Gebäuden: Rezepte",
+    "config.collapse-fields.item-recipes.name": "Suche nach Artikeln: Rezepte",
+    "config.collapse-fields.npc-gift-tastes.name": "NPC-Suche: Geschenk-Vorlieben",
+    "config.collapse-fields.any.desc": "Wenn das Feld so viele Werte enthält, ersetzt das Nachschlagemenü die Liste durch einen anklickbaren Link 'X Werte anzeigen', um sie zu erweitern.",
+
+    // advanced options
+    "config.title.advanced-options": "Erweiterte Optionen",
+    "config.tile-lookups.name": "Nachschlagen von Kacheln",
+    "config.tile-lookups.desc": "Ob Kartenkacheln als Nachschlageziele einbezogen werden sollen.",
+    "config.data-mining-fields.name": "Data Mining Felder anzeigen",
+    "config.data-mining-fields.desc": "Ob Rohdaten angezeigt werden sollen, die für Data Miner nützlich sind (als separate Felder am Ende der Suchergebnisse). Dies ist eine erweiterte Funktion, die nicht für die meisten Spieler gedacht ist.",
+    "config.show-invalid-recipes.name": "Ungültige Rezepte anzeigen",
+    "config.show-invalid-recipes.desc": "Ob Rezepte angezeigt werden sollen, die ungültige Gegenstände erfordern oder erzeugen",
+    "config.target-redirection.name": "Ziel Umleitung",
+    "config.target-redirection.desc": "In manchen Fällen legt das Spiel eine temporäre Entität an, um eine andere zu repräsentieren. Zum Beispiel ist Abigail in den Minen in Wirklichkeit ein temporärer NSC mit dem Namen 'AbigailMine', so dass die Suche nach ihr dort nicht Abigails wirkliche Informationen zeigen wird. Wenn diese Option aktiviert ist, sucht Lookup Anything stattdessen nach der ursprünglichen Abigail.",
+    "config.scroll-amount.name": "Scroll Anzahl",
+    "config.scroll-amount.desc": "Die Anzahl an Pixeln um welche der Inhalt verschoben wird bei jedem hoch/runter scrollen.",
+
+    // controls section
+    "config.title.controls": "Steuerung",
+    "config.hide-on-key-up.name": "Verstecke beim Loslassen der Taste",
+    "config.hide-on-key-up.desc": "Ob die Lookup-Oberfläche ausgeblendet werden soll, wenn Sie die Lookup-Taste loslassen.",
+    "config.toggle-lookup.name": "Lookup umschalten",
+    "config.toggle-lookup.desc": "Die Tasten, die die Lookup-Oberfläche für etwas unter dem Cursor umschalten.",
+    "config.toggle-search.name": "Suche umschalten",
+    "config.toggle-search.desc": "Die Tasten, mit denen die Suchoberfläche umgeschaltet wird.",
+    "config.scroll-up.name": "Hoch scrollen",
+    "config.scroll-up.desc": "Die Tasten, die lange Inhalte um einige Zeilen nach oben scrollen.",
+    "config.scroll-down.name": "Runter scrollen",
+    "config.scroll-down.desc": "Die Tasten, die lange Inhalte um einige Zeilen nach unten scrollen.",
+    "config.page-up.name": "Seite hoch",
+    "config.page-up.desc": "Die Tasten, die lange Inhalte um eine ganze Seite nach oben blättern.",
+    "config.page-down.name": "Seite runter",
+    "config.page-down.desc": "Die Tasten, die lange Inhalte um eine ganze Seite nach unten blättern.",
+    "config.toggle-debug.name": "Debug umschalten",
+    "config.toggle-debug.desc": "Die Tasten, mit denen die Anzeige der Debug-Informationen umgeschaltet wird.",
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.toggle-search.name": "Alles Nachschlagen",
+    "icon.toggle-search.desc": "Umschalten der Alles Nachschlagen-Suche"
 }
