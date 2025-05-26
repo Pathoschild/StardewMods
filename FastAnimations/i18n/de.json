@@ -1,126 +1,126 @@
 ﻿{
-  /*********
+    /*********
    ** Generic Mod Config Menu UI
    *********/
-  /****
+    /****
    ** 'General Options' section
    ****/
-  "config.general-options": "Allgemeine Optionen",
+    "config.general-options": "Allgemeine Optionen",
 
-  "config.disable-eat-prompt.name": "Aufforderung zum Essen/Trinken deaktivieren",
-  "config.disable-eat-prompt.tooltip": "Ob Sie die Bestätigungsaufforderung überspringen möchten, ob Sie wirklich etwas essen/trinken möchten.",
+    "config.disable-eat-prompt.name": "Aufforderung zum Essen/Trinken deaktivieren",
+    "config.disable-eat-prompt.tooltip": "Ob Sie die Bestätigungsaufforderung überspringen möchten, ob Sie wirklich etwas essen/trinken möchten.",
 
-  /****
+    /****
    ** 'Player Animation Speeds' section
    ****/
-  "config.animation-speeds": "Geschwindigkeiten der Spieleranimation",
+    "config.animation-speeds": "Geschwindigkeiten der Spieleranimation",
 
-  "config.eat-or-drink.name": "Essen/Trinken",
-  "config.eat-or-drink.tooltip": "Wie schnell Sie essen und trinken. Standardwert {{defaultValue}}x.",
+    "config.eat-or-drink.name": "Essen/Trinken",
+    "config.eat-or-drink.tooltip": "Wie schnell Sie essen und trinken. Standardwert {{defaultValue}}x.",
 
-  "config.fish.name": "Fischen",
-  "config.fish.tooltip": "Wie schnell Sie beim Angeln werfen und spulen (hat keinen Einfluss auf das Minispiel). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.fish.name": "Fischen",
+    "config.fish.tooltip": "Wie schnell Sie beim Angeln werfen und spulen (hat keinen Einfluss auf das Minispiel). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
-  "config.harvest.name": "Ernten",
-  "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
+    "config.harvest.name": "Ernten",
+    "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
 
-  "config.hold-up-item.name": "Gegenstand hochhalten",
-  "config.hold-up-item.tooltip": "Wie schnell du einen Gegenstand hochhältst. Standardwert {{defaultValue}}x.",
+    "config.hold-up-item.name": "Gegenstand hochhalten",
+    "config.hold-up-item.tooltip": "Wie schnell du einen Gegenstand hochhältst. Standardwert {{defaultValue}}x.",
 
-  "config.horse-flute.name": "Pferde-Flöte spielen",
-  "config.horse-flute.tooltip": "Wie schnell Sie die Pferde-Flöte spielen. Standardwert {{defaultValue}}x.",
+    "config.horse-flute.name": "Pferde-Flöte spielen",
+    "config.horse-flute.tooltip": "Wie schnell Sie die Pferde-Flöte spielen. Standardwert {{defaultValue}}x.",
 
-  "config.milk.name": "Melken",
-  "config.milk.tooltip": "Wie schnell Sie den Milcheimer verwenden. Standardwert {{defaultValue}}x.",
+    "config.milk.name": "Melken",
+    "config.milk.tooltip": "Wie schnell Sie den Milcheimer verwenden. Standardwert {{defaultValue}}x.",
 
-  "config.mount.name": "Auf-/Absteigen",
-  "config.mount.tooltip": "Wie schnell Sie Pferde besteigen/absteigen (einschließlich benutzerdefinierter Reittiere wie die Traktor Mod). Standardwert {{defaultValue}}x.",
+    "config.mount.name": "Auf-/Absteigen",
+    "config.mount.tooltip": "Wie schnell Sie Pferde besteigen/absteigen (einschließlich benutzerdefinierter Reittiere wie die Traktor Mod). Standardwert {{defaultValue}}x.",
 
-  "config.read-book.name": "Buch lesen",
-  "config.read-book.tooltip": "Wie schnell du Bücher liest. Standardwert {{defaultValue}}x.",
+    "config.read-book.name": "Buch lesen",
+    "config.read-book.tooltip": "Wie schnell du Bücher liest. Standardwert {{defaultValue}}x.",
 
-  "config.shear.name": "Scheren",
-  "config.shear.tooltip": "Wie schnell Sie die Schere verwenden. Standardwert {{defaultValue}}x.",
+    "config.shear.name": "Scheren",
+    "config.shear.tooltip": "Wie schnell Sie die Schere verwenden. Standardwert {{defaultValue}}x.",
 
-  "config.slingshot.name": "Schleuder verwenden",
-  "config.slingshot.tooltip": "Wie schnell Sie die Schleuder aufziehen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.slingshot.name": "Schleuder verwenden",
+    "config.slingshot.tooltip": "Wie schnell Sie die Schleuder aufziehen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
-  "config.tool.name": "Werkzeug schwingen",
-  "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.tool.name": "Werkzeug schwingen",
+    "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
-  "config.use-totem.name": "Totem verwenden",
-  "config.use-totem.tooltip": "Wie schnell du ein Totem verwendest. Standardwert {{defaultValue}}x.",
+    "config.use-totem.name": "Totem verwenden",
+    "config.use-totem.tooltip": "Wie schnell du ein Totem verwendest. Standardwert {{defaultValue}}x.",
 
-  "config.weapon.name": "Waffen schwingen",
-  "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.weapon.name": "Waffen schwingen",
+    "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
-  /****
+    /****
    ** 'World Animation Speeds' section
    ****/
-  "config.world-speeds": "Weltanimationsgeschwindigkeiten",
+    "config.world-speeds": "Weltanimationsgeschwindigkeiten",
 
-  "config.break-geodes.name": "Geoden brechen",
-  "config.break-geodes.tooltip": "Wie schnell der Schmied Geoden für Sie bricht. Standardwert {{defaultValue}}x.",
+    "config.break-geodes.name": "Geoden brechen",
+    "config.break-geodes.tooltip": "Wie schnell der Schmied Geoden für Sie bricht. Standardwert {{defaultValue}}x.",
 
-  "config.bus.name": "Pam's Bus",
-  "config.bus.tooltip": "Wie schnell Pam ihren Bus in die und aus der Wüste fährt. Standardwert {{defaultValue}}x.",
+    "config.bus.name": "Pam's Bus",
+    "config.bus.tooltip": "Wie schnell Pam ihren Bus in die und aus der Wüste fährt. Standardwert {{defaultValue}}x.",
 
-  "config.casino-slots.name": "Casino-Slots",
-  "config.casino-slots.tooltip": "Wie schnell sich die Casino-Slots drehen. Standardwert {{defaultValue}}x.",
+    "config.casino-slots.name": "Casino-Slots",
+    "config.casino-slots.tooltip": "Wie schnell sich die Casino-Slots drehen. Standardwert {{defaultValue}}x.",
 
-  "config.fade.name": "Übergang",
-  "config.fade.tooltip": "Wie schnell der Bildschirm auf Schwarz wechselt und wieder eingeblendet wird. Standardwert {{defaultValue}}x.",
+    "config.fade.name": "Übergang",
+    "config.fade.tooltip": "Wie schnell der Bildschirm auf Schwarz wechselt und wieder eingeblendet wird. Standardwert {{defaultValue}}x.",
 
-  "config.fishing-treasure.name": "Schatztruhe beim Fischen",
-  "config.fishing-treasure.tooltip": "Wie schnell du eine Schatztruhe beim Fischen öffnest. Standardwert {{defaultValue}}x.",
+    "config.fishing-treasure.name": "Schatztruhe beim Fischen",
+    "config.fishing-treasure.tooltip": "Wie schnell du eine Schatztruhe beim Fischen öffnest. Standardwert {{defaultValue}}x.",
 
-  "config.forge.name": "Schmiede",
-  "config.forge.tooltip": "Wie schnell die Vulkanschmiede funktioniert. Standardwert {{defaultValue}}x.",
+    "config.forge.name": "Schmiede",
+    "config.forge.tooltip": "Wie schnell die Vulkanschmiede funktioniert. Standardwert {{defaultValue}}x.",
 
-  "config.open-chest.name": "Kiste öffnen",
-  "config.open-chest.tooltip": "Wie schnell du Kisten öffnest. Standardwert {{defaultValue}}x.",
+    "config.open-chest.name": "Kiste öffnen",
+    "config.open-chest.tooltip": "Wie schnell du Kisten öffnest. Standardwert {{defaultValue}}x.",
 
-  "config.parrot-express.name": "Papageien-Express",
-  "config.parrot-express.tooltip": "Wie schnell der Papageienexpress fährt. Standardwert {{defaultValue}}x.",
+    "config.parrot-express.name": "Papageien-Express",
+    "config.parrot-express.tooltip": "Wie schnell der Papageienexpress fährt. Standardwert {{defaultValue}}x.",
 
-  "config.prize-ticket-machine.name": "Gewinnkartenautomat",
-  "config.prize-ticket-machine.tooltip": "Wie schnell Lewis' Gewinnkartenautomat eine Karte annimmt und einen Artikel produziert. Standardwert {{defaultValue}}x.",
+    "config.prize-ticket-machine.name": "Gewinnkartenautomat",
+    "config.prize-ticket-machine.tooltip": "Wie schnell Lewis' Gewinnkartenautomat eine Karte annimmt und einen Artikel produziert. Standardwert {{defaultValue}}x.",
 
-  "config.tailor.name": "Nähen",
-  "config.tailor.tooltip": "Wie schnell die Nähmaschine funktioniert. Default {{defaultValue}}x.",
+    "config.tailor.name": "Nähen",
+    "config.tailor.tooltip": "Wie schnell die Nähmaschine funktioniert. Default {{defaultValue}}x.",
 
-  "config.tree-fall.name": "Baum fällt",
-  "config.tree-fall.tooltip": "Wie schnell Bäume fallen, nachdem Sie sie gefällt haben. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+    "config.tree-fall.name": "Baum fällt",
+    "config.tree-fall.tooltip": "Wie schnell Bäume fallen, nachdem Sie sie gefällt haben. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
-  "config.wheel-spin.name": "Am Rad drehen",
-  "config.wheel-spin.tooltip": "Wie schnell sich das Sternentautaler Volksfest-Rad-Minispiel dreht. Standardwert {{defaultValue}}x.",
+    "config.wheel-spin.name": "Am Rad drehen",
+    "config.wheel-spin.tooltip": "Wie schnell sich das Sternentautaler Volksfest-Rad-Minispiel dreht. Standardwert {{defaultValue}}x.",
 
-  /****
+    /****
    ** 'UI Animation Speeds' section
    ****/
-  "config.ui-speeds": "UI-Animationsgeschwindigkeiten",
+    "config.ui-speeds": "UI-Animationsgeschwindigkeiten",
 
-  "config.dialogue-typing.name": "Tippen von Dialogen",
-  "config.dialogue-typing.tooltip": "Wie schnell Text in Dialogfeldern erscheint. Standardwert {{defaultValue}}x",
+    "config.dialogue-typing.name": "Tippen von Dialogen",
+    "config.dialogue-typing.tooltip": "Wie schnell Text in Dialogfeldern erscheint. Standardwert {{defaultValue}}x",
 
-  "config.open-dialogue-box.name": "Öffnen eines Dialogfeldes",
-  "config.open-dialogue-box.tooltip": "Wie schnell sich Dialogfelder öffnen. Standardwert {{defaultValue}}x.",
+    "config.open-dialogue-box.name": "Öffnen eines Dialogfeldes",
+    "config.open-dialogue-box.tooltip": "Wie schnell sich Dialogfelder öffnen. Standardwert {{defaultValue}}x.",
 
-  "config.shipping-menu.name": "Übergänge im Versandmenü",
-  "config.shipping-menu.tooltip": "Wie schnell das Versandmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
+    "config.shipping-menu.name": "Übergänge im Versandmenü",
+    "config.shipping-menu.tooltip": "Wie schnell das Versandmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
 
-  "config.title-menu.name": "Übergänge im Titelmenü",
-  "config.title-menu.tooltip": "Wie schnell das Titelmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
+    "config.title-menu.name": "Übergänge im Titelmenü",
+    "config.title-menu.tooltip": "Wie schnell das Titelmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
 
-  "config.load-game-blink.name": "Spiel laden blinken",
-  "config.load-game-blink.tooltip": "Wie schnell die Verzögerung des blinkenden Slots auftritt, nachdem Sie auf einen Load-Save-Slot geklickt haben. Standardwert {{defaultValue}}x.",
+    "config.load-game-blink.name": "Spiel laden blinken",
+    "config.load-game-blink.tooltip": "Wie schnell die Verzögerung des blinkenden Slots auftritt, nachdem Sie auf einen Load-Save-Slot geklickt haben. Standardwert {{defaultValue}}x.",
 
-  /****
+    /****
    ** 'Experimental' section
    ****/
-  "config.experimental": "Experimentelle Optionen",
-  "config.experimental-warning": "Diese Optionen sind noch nicht absolut stabil und können zu Problemen wie Einfrieren und Abstürzen führen. Eine dieser Optionen zu aktivieren wird nicht empfohlen.",
+    "config.experimental": "Experimentelle Optionen",
+    "config.experimental-warning": "Diese Optionen sind noch nicht absolut stabil und können zu Problemen wie Einfrieren und Abstürzen führen. Eine dieser Optionen zu aktivieren wird nicht empfohlen.",
 
-  "config.event.name": "Ereignis-Zwischensequenz",
-  "config.event.tooltip": "Wie schnell Ereignis-Zwischensequenzen abgespielt werden. Standardwert {{defaultValue}}x, empfohlen {{suggestedValue}}x."
+    "config.event.name": "Ereignis-Zwischensequenz",
+    "config.event.tooltip": "Wie schnell Ereignis-Zwischensequenzen abgespielt werden. Standardwert {{defaultValue}}x, empfohlen {{suggestedValue}}x."
 }
