@@ -67,6 +67,7 @@
     // internal ID
     "internal-id": "Interne ID",
 
+
     /*********
     ** Data translations
     *********/
@@ -141,6 +142,7 @@
     "location.fish-area": "{{locationName}} ({{areaName}})",
     "location.unknown-fish-area": "{{locationName}} (Angelgebiet {{id}})",
 
+
     /*********
     ** Conditions & context tags
     *********/
@@ -171,6 +173,7 @@
     "context-tag.large-egg": "Beliebige große Eier",
     "context-tag.preserved-item": "eingemacht {{name}}",
 
+
     /*********
     ** Animal lookups
     *********/
@@ -190,6 +193,7 @@
     "animal.complaints.no-heater": "Keine Heizung im Winter",
     "animal.complaints.not-petted": "Wurde heute noch nicht gestreichelt",
     "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
+
 
     /*********
     ** Building > generic lookups
@@ -230,6 +234,7 @@
     "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
     "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
 
+
     /*********
     ** Building > fish pond lookups
     *********/
@@ -247,6 +252,7 @@
     "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",
     "building.fish-pond.quests.available": "{{relativeDate}} verfügbar",
+
 
     /*********
     ** Bush lookups
@@ -266,6 +272,7 @@
     "bush.growth.summary": "Ausgewachsen am {{date}}",
     "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
     "bush.schedule.tea": "Bekommt Teeblätter ab dem 22. jeder Jahreszeit (außer im Winter wenn nicht im Gewächshaus).",
+
 
     /*********
     ** Fruit tree lookups
@@ -290,6 +297,7 @@
     "fruit-tree.quality.on-date-next-year": "{{quality}} am {{date}} nächstes Jahr",
     "fruit-tree.season.summary": "{{season}} (oder jederzeit im Gewächshaus)",
 
+
     /*********
     ** Crop lookups
     *********/
@@ -310,6 +318,7 @@
     "crop.summary.seasons": "Wächst im {{seasons}}.",
     "crop.summary.sells-for": "Lässt sich für {{price}} verkaufen.",
     "crop.harvest.too-late": "Zu spät in der Jahrezeit für eine weitere Ernte (wäre am {{date}}).",
+
 
     /*********
     ** Item > generic lookups
@@ -358,6 +367,7 @@
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
     "item.internal-id.summary": "{{itemId}} (global eindeutige 'qualifizierte ID': {{qualifiedItemId}})",
 
+
     /*********
     ** Item > cask lookups
     *********/
@@ -371,6 +381,7 @@
     "item.cask-schedule.tomorrow": "{{quality}} morgen",
     "item.cask-schedule.in-x-days": "{{quality}} in {{count}} Tagen ({{date}})",
 
+
     /*********
     ** Item > crab pot lookups
     *********/
@@ -378,6 +389,7 @@
     "item.crabpot-bait": "Köder",
     "item.crabpot-bait-needed": "Braucht Köder!",
     "item.crabpot-bait-not-needed": "Wegen Lockmeister Beruf nicht benötigt.",
+
 
     /*********
     ** Item > fence lookups
@@ -388,6 +400,7 @@
     // values
     "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
     "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
+
 
     /*********
     ** Item > fish lookups
@@ -410,6 +423,7 @@
     "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
     "item.uncaught-fish": "{{count}} nicht gefangene Fische",
 
+
     /*********
     ** Item > melee weapon lookups
     *********/
@@ -431,6 +445,7 @@
     "item.melee-weapon.speed.shown-vs-actual": "angezeigt: {{shownSpeed}}{{lineBreak}}tatsächlich: {{actualSpeed}}",
     "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} Millisekunden pro Schwingphase, vor Spielergeschwindigkeitsboni)",
 
+
     /*********
     ** Item > movie lookups
     *********/
@@ -448,12 +463,14 @@
     "item.movie-snack-preference.dislike": "{{name}} mag das nicht",
     "item.movie-ticket.movie-this-week.none": "Kein Film diese Woche",
 
+
     /*********
     ** Item > music block lookups
     *********/
     // labels
     "item.music-block.pitch": "Tonhöhe",
     "item.music-block.drum-type": "Trommelart",
+
 
     /*********
     ** Monster lookups
@@ -470,6 +487,7 @@
     // values
     "monster.drops.nothing": "nichts",
     "monster.adventure-guild.eradication-goal": "Ziele für die Monsterjagd: {{name}} ({{count}} von {{requiredCount}} getötet)",
+
 
     /*********
     ** NPC > generic lookups
@@ -505,6 +523,7 @@
     "npc.schedule.farmhand.unknown-position": "Derzeit an einem unbekannten Ort auf dem Host.",
     "npc.schedule.farmhand.unknown-schedule": "Im Mehrspielermodus werden NPCs vom Host verwaltet, daher ist ihr Zeitplan nicht verfügbar.",
 
+
     /*********
     ** NPC > child lookups
     *********/
@@ -518,6 +537,7 @@
     "npc.child.age.baby": "Baby",
     "npc.child.age.crawler": "Krabbelkind",
     "npc.child.age.toddler": "Kleinkind",
+
 
     /*********
     ** Pet lookups
@@ -534,6 +554,7 @@
     "pet.last-petted.never": "Nie",
     "pet.water-bowl.empty": "Leer",
     "pet.water-bowl.filled": "Gefüllt (+6 Liebe)",
+
 
     /*********
     ** Player lookups
@@ -562,6 +583,7 @@
     "player.skill.progress": "Level {{level}} ({{expNeeded}} XP erforderlich)",
     "player.skill.progress-last": "Level {{level}}",
 
+
     /*********
     ** Puzzles
     *********/
@@ -571,6 +593,7 @@
     // values
     "puzzle.solution.solved": "Rätsel gelöst!",
     "puzzle.solution.hidden": "Lösungen der Rätsel sind gemäß Ihrer Einstellungen nicht sichtbar.",
+
 
     /*********
     ** Puzzles > Fern Islands crystal cave
@@ -584,12 +607,14 @@
     "puzzle.island-crystal-cave.solution.waiting": "Warte bis das Spiel die Sequenz generiert ...",
     "puzzle.island-crystal-cave.solution.activated": "Wiederhole die Reihenfolge der aktivierten Kristalle:",
 
+
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     "puzzle.island-mermaid.title": "Meerjungfrauen-Rätsel",
     "puzzle.island-mermaid.solution.intro": "Benutze Flötenblöcke um das Lied der Meerjungfrau vom Nachtmarkt zu spielen. Tonhöhen: (Es ist möglich die Tonhöhe eines Flötenblocks nachzusehen):",
+
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
@@ -603,6 +628,7 @@
     "puzzle.island-shrine.solution.north": "Norden: {{item}}",
     "puzzle.island-shrine.solution.south": "Süden: {{item}}",
     "puzzle.island-shrine.solution.west": "Westen: {{item}}",
+
 
     /*********
     ** Tile lookups
@@ -633,12 +659,14 @@
     "tile.layer-tile.tile-property": "Eigenschaften: {{name}}: {{value}}",
     "tile.layer-tile.none-here": "Keine Kachel hier.",
 
+
     /*********
     ** Trash Bear or Gourmand lookups
     *********/
     // labels
     "trash-bear-or-gourmand.item-wanted": "Gegenstand benötigt",
     "trash-bear-or-gourmand.quest-progress": "Auftragsfortschritt",
+
 
     /*********
     ** Wild tree lookups
@@ -675,6 +703,7 @@
     "tree.stages.bush": "Busch",
     "tree.stages.smallTree": "Kleiner Baum",
     "tree.stages.tree": "Baum",
+
 
     /*********
     ** Generic Mod Config Menu UI
@@ -760,6 +789,7 @@
     "config.page-down.desc": "Die Tasten, die lange Inhalte um eine ganze Seite nach unten blättern.",
     "config.toggle-debug.name": "Debug umschalten",
     "config.toggle-debug.desc": "Die Tasten, mit denen die Anzeige der Debug-Informationen umgeschaltet wird.",
+
 
     /*********
     ** Iconic Framework icon
