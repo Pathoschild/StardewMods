@@ -1,18 +1,18 @@
 ﻿{
     /*********
-   ** Generic Mod Config Menu UI
-   *********/
+    ** Generic Mod Config Menu UI
+    *********/
     /****
-   ** 'General Options' section
-   ****/
+    ** 'General Options' section
+    ****/
     "config.general-options": "Allgemeine Optionen",
 
     "config.disable-eat-prompt.name": "Aufforderung zum Essen/Trinken deaktivieren",
     "config.disable-eat-prompt.tooltip": "Ob Sie die Bestätigungsaufforderung überspringen möchten, ob Sie wirklich etwas essen/trinken möchten.",
 
     /****
-   ** 'Player Animation Speeds' section
-   ****/
+    ** 'Player Animation Speeds' section
+    ****/
     "config.animation-speeds": "Geschwindigkeiten der Spieleranimation",
 
     "config.eat-or-drink.name": "Essen/Trinken",
@@ -55,8 +55,8 @@
     "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standardwert {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
 
     /****
-   ** 'World Animation Speeds' section
-   ****/
+    ** 'World Animation Speeds' section
+    ****/
     "config.world-speeds": "Weltanimationsgeschwindigkeiten",
 
     "config.break-geodes.name": "Geoden brechen",
@@ -96,8 +96,8 @@
     "config.wheel-spin.tooltip": "Wie schnell sich das Sternentautaler Volksfest-Rad-Minispiel dreht. Standardwert {{defaultValue}}x.",
 
     /****
-   ** 'UI Animation Speeds' section
-   ****/
+    ** 'UI Animation Speeds' section
+    ****/
     "config.ui-speeds": "UI-Animationsgeschwindigkeiten",
 
     "config.dialogue-typing.name": "Tippen von Dialogen",
@@ -116,8 +116,8 @@
     "config.load-game-blink.tooltip": "Wie schnell die Verzögerung des blinkenden Slots auftritt, nachdem Sie auf einen Load-Save-Slot geklickt haben. Standardwert {{defaultValue}}x.",
 
     /****
-   ** 'Experimental' section
-   ****/
+    ** 'Experimental' section
+    ****/
     "config.experimental": "Experimentelle Optionen",
     "config.experimental-warning": "Diese Optionen sind noch nicht absolut stabil und können zu Problemen wie Einfrieren und Abstürzen führen. Eine dieser Optionen zu aktivieren wird nicht empfohlen.",
 
