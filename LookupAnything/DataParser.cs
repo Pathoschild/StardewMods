@@ -307,29 +307,33 @@ internal class DataParser
     {
         // get fish from game data
         HashSet<string> seenFishIds = [];
-        foreach (SpawnFishData fishData in location.GetData().Fish)
+        List<SpawnFishData?>? locationFish = location.GetData()?.Fish;
+        if (locationFish is not null)
         {
-            if (fishData.ItemId is null)
-                continue;
+            foreach (SpawnFishData? fishData in locationFish)
+            {
+                if (fishData?.ItemId is null)
+                    continue;
 
-            seenFishIds.Add(fishData.ItemId);
+                seenFishIds.Add(fishData.ItemId);
 
-            // skip if fish can't spawn in this body of water
-            if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
-                continue;
+                // skip if fish can't spawn in this body of water
+                if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                    continue;
 
-            // skip if position doesn't match
-            if (fishData.BobberPosition?.Contains(tile) is false)
-                continue;
-            if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
-                continue;
+                // skip if position doesn't match
+                if (fishData.BobberPosition?.Contains(tile) is false)
+                    continue;
+                if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
+                    continue;
 
-            // skip if data isn't for a fish or jelly (e.g. furniture)
-            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
-            if (fish.ObjectType != "Fish")
-                continue;
+                // skip if data isn't for a fish or jelly (e.g. furniture)
+                ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+                if (fish.ObjectType != "Fish")
+                    continue;
 
-            yield return this.GetFishSpawnRules(fish, metadata);
+                yield return this.GetFishSpawnRules(fish, metadata);
+            }
         }
 
         // get fish from custom metadata

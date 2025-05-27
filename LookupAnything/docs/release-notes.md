@@ -8,6 +8,7 @@
 * Fixed fish spawn rules field shown incorrectly in some cases (thanks to Mushymato!).
 * Fixed controller snapping enabled for the lookup and search menus.
 * Fixed fish spawn rule checkboxes not ticked for fish that can be caught on any mine level.
+* Fixed error if a location has invalid fish data.
 * Improved translations. Thanks to CaranudLapin (updated French), gab-umich (updated Chinese), JanUwU42 (updated German), and MakinDay (updated Italian)!
 
 ## 1.50.0
