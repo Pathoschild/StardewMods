@@ -5,6 +5,7 @@
 * Added shop ID when viewing a shop menu.
 * Fixed info drawn behind menu overlays.
 * Fixed negative tile positions being off by one (thanks to isaacalger!).
+* Improved translations. Thanks to JanUwU42 (updated German)!
 
 ## 1.16.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.

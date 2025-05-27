@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to DawningW (updated Chinese)!
+* Improved translations. Thanks to DawningW (updated Chinese) and JanUwU42 (updated German)!
 
 ## 1.14.0
 Released 26 March 2025 for SMAPI 4.2.0 or later.
