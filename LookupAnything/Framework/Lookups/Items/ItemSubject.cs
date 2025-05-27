@@ -166,9 +166,10 @@ internal class ItemSubject : BaseSubject
         }
 
         // flavor
-        if (obj?.preservedParentSheetIndex.Value != null)
+        string? flavorId = obj?.GetPreservedItemId();
+        if (flavorId != null)
         {
-            Item preservedItem = ItemRegistry.Create(obj.preservedParentSheetIndex.Value);
+            Item preservedItem = ItemRegistry.Create(flavorId);
             yield return new LinkField(I18n.Item_Flavor(), preservedItem.DisplayName, () => this.Codex.GetByEntity(preservedItem, null));
         }
 
