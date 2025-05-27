@@ -105,8 +105,9 @@
     "config.edit-chest.name": "箱の編集",
     "config.edit-chest.desc": "現在の箱のオプションを編集するキー。",
 
-    "config.sort-items.name": "アイテムの並び替え",
-    "config.sort-items.desc": "現在の箱内のアイテムを並べ替えるキー。",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "前の箱への移動",
     "config.navigate-prev-chest.desc": "メニューUIが開いている間、前の箱に移動するキー。",

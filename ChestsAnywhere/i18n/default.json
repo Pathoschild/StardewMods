@@ -105,8 +105,8 @@
     "config.edit-chest.name": "Edit chest",
     "config.edit-chest.desc": "The keys which edit the options for the current chest.",
 
-    "config.sort-items.name": "Sort items",
-    "config.sort-items.desc": "The keys which sort items in the current chest.",
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Navigate: previous chest",
     "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",

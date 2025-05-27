@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Edition du coffre",
     "config.edit-chest.desc": "Les touches qui éditent les options pour le coffre actuel.",
 
-    "config.sort-items.name": "Trier les éléments",
-    "config.sort-items.desc": "Les touches qui permettent de trier les articles dans le coffre actuel.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Naviguer : coffre précédent",
     "config.navigate-prev-chest.desc": "Les touches qui permettent de naviguer vers le coffre précédent lorsque le menu est ouvert.",

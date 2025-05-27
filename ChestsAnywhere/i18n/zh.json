@@ -105,8 +105,9 @@
     "config.edit-chest.name": "编辑箱子",
     "config.edit-chest.desc": "编辑当前箱子选项的按键。",
 
-    "config.sort-items.name": "整理箱子内物品",
-    "config.sort-items.desc": "整理箱子内物品的按键",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "导航：上一个箱子",
     "config.navigate-prev-chest.desc": "在菜单打开时导航到上一个箱子的按键",

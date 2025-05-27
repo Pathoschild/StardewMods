@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Editar baú",
     "config.edit-chest.desc": "Teclas que permitem editar as opções do baú atual.",
 
-    "config.sort-items.name": "Organizar itens",
-    "config.sort-items.desc": "Teclas que organizam os itens dentro do baú atual.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Navegar: baú anterior",
     "config.navigate-prev-chest.desc": "Teclas para navegar até o baú anterior com o menu aberto.",

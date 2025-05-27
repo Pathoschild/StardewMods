@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Sandığı düzenle",
     "config.edit-chest.desc": "Mevcut sandık için seçenekleri düzenleyen tuşlar.",
 
-    "config.sort-items.name": "Nesneleri sırala",
-    "config.sort-items.desc": "Mevcut sandıktaki eşyaları sıralayan tuşlar.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Gezin: önceki sandık",
     "config.navigate-prev-chest.desc": "Menü açıkken bir önceki sandığa giden tuşlar.",
