@@ -5,6 +5,7 @@
 * Added internal ID field for buildings, items, NPCs, and trees (thanks to Mushymato!).
 * Added flavor link field for items (thanks to Mushymato!).
 * Fixed fish ponds not listing produced items that are based on an item query (thanks to Mushymato!).
+* Fixed fish ponds not reflecting the new 'base produce chance' data in Stardew Valley 1.6.9+.
 * Fixed fish spawn rules field shown incorrectly in some cases (thanks to Mushymato!).
 * Fixed controller snapping enabled for the lookup and search menus.
 * Fixed fish spawn rule checkboxes not ticked for fish that can be caught on any mine level.

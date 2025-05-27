@@ -181,8 +181,10 @@ internal class BuildingSubject : BaseSubject
                         yield return new ItemIconField(this.GameHelper, I18n.Building_OutputReady(), pond.output.Value, this.Codex);
 
                         // drops
-                        int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                        yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()));
+                        float chanceOfAnyDrop = pondData.BaseMinProduceChance >= pondData.BaseMaxProduceChance
+                            ? pondData.BaseMinProduceChance
+                            : Utility.Lerp(pondData.BaseMinProduceChance, pondData.BaseMaxProduceChance, (float)pond.currentOccupants.Value / FishPond.MAXIMUM_OCCUPANCY);
+                        yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: (chanceOfAnyDrop * 100).ToString("0.##")));
 
                         // quests
                         if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
