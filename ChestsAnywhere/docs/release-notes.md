@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Very long dropdown labels are now truncated to avoid breaking the UI.
+* Removed length limit on manual chest/category names.
 * Improved translations. Thanks to DiQuintino (updated Portuguese)!
 
 ## 1.27.0
