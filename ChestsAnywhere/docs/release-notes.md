@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Chest labels are now shown for named furniture too.
 * Very long dropdown labels are now truncated to avoid breaking the UI.
 * Removed length limit on manual chest/category names.
 * Improved translations. Thanks to DiQuintino (updated Portuguese)!
