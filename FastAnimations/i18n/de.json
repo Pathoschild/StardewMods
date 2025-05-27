@@ -106,8 +106,8 @@
     "config.open-dialogue-box.name": "Öffnen eines Dialogfeldes",
     "config.open-dialogue-box.tooltip": "Wie schnell sich Dialogfelder öffnen. Standardwert {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    "config.shipping-menu.name": "Übergänge im Versandmenü",
+    "config.shipping-menu.tooltip": "Wie schnell das Versandmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
 
     "config.title-menu.name": "Übergänge im Titelmenü",
     "config.title-menu.tooltip": "Wie schnell das Titelmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
