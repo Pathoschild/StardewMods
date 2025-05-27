@@ -92,7 +92,7 @@ If omitted, it's applied to all localized and unlocalized variants of the asset.
 This changes the in-game sprite for one item:
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditImage",

@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17.0
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
 * Added shop ID when viewing a shop menu.
 * Fixed info drawn behind menu overlays.
 * Fixed negative tile positions being off by one (thanks to isaacalger!).

@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.23.0
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
 * Split pickaxe "Clear Tilled Dirt" into options for fertilized and unfertilized dirt (thanks to TWT233!).
 * Fixed "your pickaxe isn't strong enough" message shown near quarry boulder with a low-level pickaxe.
 * Fixed local seasonal tractor/garage textures no longer updated on season change after 4.21.0.
