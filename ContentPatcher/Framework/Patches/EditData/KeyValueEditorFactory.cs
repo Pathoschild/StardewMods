@@ -13,7 +13,7 @@ internal class KeyValueEditorFactory
     ** Fields
     *********/
     /// <summary>A cache of editor constructors by data type.</summary>
-    private static readonly Dictionary<Type, Func<object, IKeyValueEditor>?> CachedConstructors = new();
+    private static readonly Dictionary<Type, Func<object, IKeyValueEditor>?> CachedConstructors = [];
 
 
     /*********

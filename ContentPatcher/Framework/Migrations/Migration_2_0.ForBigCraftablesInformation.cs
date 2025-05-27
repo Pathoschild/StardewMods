@@ -30,7 +30,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private readonly VanillaAssetFactory<Dictionary<string, BigCraftableData>> OriginalData = new(DataLoader.BigCraftables);
 
         /// <summary>The numeric bigcraftable IDs added in Stardew Valley 1.6.</summary>
-        private readonly HashSet<string> NumericIdsAddedIn16 = new() { "221", "262", "263" };
+        private readonly HashSet<string> NumericIdsAddedIn16 = ["221", "262", "263"];
 
 
         /*********

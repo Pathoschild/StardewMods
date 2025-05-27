@@ -108,7 +108,7 @@ internal class StorageManager : IStorage
     /// <inheritdoc />
     public bool TryGetIngredient(IRecipe[] recipes, [NotNullWhen(true)] out IConsumable? consumable, [NotNullWhen(true)] out IRecipe? recipe)
     {
-        IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, _ => new StackAccumulator());
+        Dictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, _ => new StackAccumulator());
 
         foreach (ITrackedStack input in this.GetItems())
         {

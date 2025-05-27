@@ -21,7 +21,7 @@ internal class CrabPotMachine : GenericObjectMachine<CrabPot>
     private readonly IMonitor Monitor;
 
     /// <summary>The qualified fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
-    private static readonly ISet<string> LoggedInvalidDataErrors = new HashSet<string>();
+    private static readonly HashSet<string> LoggedInvalidDataErrors = [];
 
 
     /*********

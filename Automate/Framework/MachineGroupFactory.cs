@@ -23,7 +23,7 @@ internal class MachineGroupFactory
     ** Fields
     *********/
     /// <summary>The automation factories which construct machines, containers, and connectors.</summary>
-    private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();
+    private readonly List<IAutomationFactory> AutomationFactories = [];
 
     /// <summary>Get the configuration for specific machines by ID, if any.</summary>
     private readonly Func<string, ModConfigMachine?> GetMachineOverride;
@@ -85,7 +85,7 @@ internal class MachineGroupFactory
     {
         MachineGroupBuilder builder = new(this.GetLocationKey(location), this.SortMachines, this.BuildStorage, this.Monitor);
         LocationFloodFillIndex locationIndex = new(location, monitor);
-        ISet<Vector2> visited = new HashSet<Vector2>();
+        HashSet<Vector2> visited = [];
         foreach (Vector2 tile in location.GetTiles())
         {
             this.FloodFillGroup(builder, location, tile, locationIndex, visited);

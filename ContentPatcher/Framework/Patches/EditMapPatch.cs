@@ -262,7 +262,7 @@ internal class EditMapPatch : Patch
     private bool TryApplyTile(Map map, EditMapPatchTile tilePatch, [NotNullWhen(false)] out string? error)
     {
         // parse tile data
-        if (!this.TryReadTile(tilePatch, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out IDictionary<string, string?> setProperties, out bool removeTile, out error))
+        if (!this.TryReadTile(tilePatch, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out Dictionary<string, string?> setProperties, out bool removeTile, out error))
             return this.Fail(error, out error);
         bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Count > 0;
 
@@ -327,7 +327,7 @@ internal class EditMapPatch : Patch
         errors = new InvariantDictionary<string>();
 
         // build new warp string
-        List<string> validWarps = new List<string>(addWarps.Length);
+        List<string> validWarps = new(addWarps.Length);
         foreach (string? warp in addWarps.Select(p => p.Value))
         {
             if (!this.ValidateWarp(warp, out string? error))
@@ -430,12 +430,12 @@ internal class EditMapPatch : Patch
     /// <param name="remove">The parsed remove flag.</param>
     /// <param name="error">An error indicating why parsing failed, if applicable.</param>
     /// <returns>Returns whether parsing the tile succeeded.</returns>
-    private bool TryReadTile(EditMapPatchTile tile, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out IDictionary<string, string?> properties, out bool remove, [NotNullWhen(false)] out string? error)
+    private bool TryReadTile(EditMapPatchTile tile, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out Dictionary<string, string?> properties, out bool remove, [NotNullWhen(false)] out string? error)
     {
         // init
         setIndex = null;
         position = Location.Origin;
-        properties = new Dictionary<string, string?>();
+        properties = [];
         remove = false;
 
         // layer & tilesheet

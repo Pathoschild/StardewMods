@@ -74,7 +74,7 @@ internal class ModConfig
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
     public void OnDeserialized(StreamingContext context)
     {
-        this.BuildMaterials ??= new Dictionary<string, int>();
+        this.BuildMaterials ??= [];
         this.StandardAttachments ??= new StandardAttachmentsConfig();
         this.Controls ??= new ModConfigKeys();
         this.CustomAttachments ??= [];

@@ -43,7 +43,7 @@ internal class PatchManager
     private readonly IAssetValidator[] AssetValidators;
 
     /// <summary>The patches which are permanently disabled for this session.</summary>
-    private readonly IList<DisabledPatch> PermanentlyDisabledPatches = new List<DisabledPatch>();
+    private readonly List<DisabledPatch> PermanentlyDisabledPatches = [];
 
     /// <summary>The patches to apply.</summary>
     private readonly SortedSet<IPatch> Patches = new(PatchIndexComparer.Instance);
@@ -52,7 +52,7 @@ internal class PatchManager
     private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new();
 
     /// <summary>The patches to apply, indexed by asset name.</summary>
-    private readonly Dictionary<IAssetName, SortedSet<IPatch>> PatchesByCurrentTarget = new();
+    private readonly Dictionary<IAssetName, SortedSet<IPatch>> PatchesByCurrentTarget = [];
 
     /// <summary>The values under which each patch is indexed in <see cref="PatchesAffectedByToken"/> and <see cref="PatchesByCurrentTarget"/>.</summary>
     private readonly Dictionary<IPatch, IndexedPatchValues> IndexedPatchValues = new(new ObjectReferenceComparer<IPatch>());
@@ -64,7 +64,7 @@ internal class PatchManager
     private readonly HashSet<IAssetName> AssetsWithRemovedPatches = [];
 
     /// <summary>The token changes queued for periodic update types.</summary>
-    private readonly IDictionary<ContextUpdateType, MutableInvariantSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, MutableInvariantSet>
+    private readonly Dictionary<ContextUpdateType, MutableInvariantSet> QueuedTokenChanges = new()
     {
         [ContextUpdateType.OnTimeChange] = [],
         [ContextUpdateType.OnLocationChange] = [],
@@ -158,8 +158,8 @@ internal class PatchManager
         }
 
         // get changes to apply
-        Queue<IPatch> patchQueue = new Queue<IPatch>(this.GetPatchesToUpdate(globalChangedTokens, updateType));
-        ISet<IAssetName> reloadAssetNames = new HashSet<IAssetName>(this.AssetsWithRemovedPatches);
+        Queue<IPatch> patchQueue = new(this.GetPatchesToUpdate(globalChangedTokens, updateType));
+        HashSet<IAssetName> reloadAssetNames = new(this.AssetsWithRemovedPatches);
         if (!patchQueue.Any() && !reloadAssetNames.Any())
             return;
 
@@ -265,7 +265,7 @@ internal class PatchManager
             {
                 verbosePatchesReloaded!.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
 
-                IList<string> changes = new List<string>();
+                List<string> changes = [];
                 if (wasReady != isReady)
                     changes.Add(isReady ? "enabled" : "disabled");
                 if (wasTargetAsset != patch.TargetAsset)

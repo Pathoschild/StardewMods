@@ -26,7 +26,7 @@ internal class PerPlayerValueProvider : BaseValueProvider
     private readonly Func<Farmer, IInvariantSet> FetchValues;
 
     /// <summary>The values as of the last context update.</summary>
-    private readonly IDictionary<long, IInvariantSet> Values = new Dictionary<long, IInvariantSet>();
+    private readonly Dictionary<long, IInvariantSet> Values = [];
 
     /// <summary>The player ID for the host player.</summary>
     private long HostPlayerId;

@@ -74,7 +74,7 @@ internal class ChestFactory
             // find chests
             foreach (var entry in locations)
             {
-                IDictionary<string, int> nameCounts = new Dictionary<string, int>();
+                Dictionary<string, int> nameCounts = [];
 
                 // get info
                 GameLocation location = entry.Location;

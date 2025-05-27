@@ -28,7 +28,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private const string NewAssetName = "Data/Characters";
 
         /// <summary>The NPC names added in Stardew Valley 1.6.</summary>
-        private readonly HashSet<string> NpcNamesAddedIn16 = new() { "???", "Bear", "Birdie", "Bouncer", "Gil", "Governor", "Grandpa", "Gunther", "Henchman", "Mister Qi", "Morris", "Old Mariner", "Welwick" };
+        private readonly HashSet<string> NpcNamesAddedIn16 = ["???", "Bear", "Birdie", "Bouncer", "Gil", "Governor", "Grandpa", "Gunther", "Henchman", "Mister Qi", "Morris", "Old Mariner", "Welwick"];
 
         /// <summary>The vanilla data without mod edits applied, used as the base when a pre-1.6 content pack loads the asset.</summary>
         private readonly VanillaAssetFactory<Dictionary<string, CharacterData>> OriginalData = new(DataLoader.Characters);
@@ -226,7 +226,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
 
         /// <summary>Get the pre-1.6 birthday field from the new asset.</summary>
         /// <param name="season">The birthday season, or <c>null</c> if the NPC has no birthday.</param>
-        /// <param name="season">The birthday day.</param>
+        /// <param name="day">The birthday day.</param>
         private string GetOldBirthdayField(Season? season, int day)
         {
             return season is not null
@@ -285,7 +285,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private void MergeFriendsAndFamilyIntoNewFormat(CharacterData entry, string rawFriendsAndFamily)
         {
             // parse field
-            Dictionary<string, string> newValues = new();
+            Dictionary<string, string> newValues = [];
             {
                 int startFrom = 0;
                 while (startFrom < rawFriendsAndFamily.Length - 1)
@@ -363,7 +363,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
             }
 
             // else reset to match
-            entry.Home ??= new List<CharacterHomeData>();
+            entry.Home ??= [];
             entry.Home.Clear();
             entry.Home.Add(new CharacterHomeData
             {

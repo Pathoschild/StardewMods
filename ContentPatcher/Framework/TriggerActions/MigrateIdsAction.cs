@@ -398,7 +398,7 @@ internal class MigrateIdsAction
     /// <summary>Load the Json Assets ID map for the current save, indexed by entity type.</summary>
     private Dictionary<string, Dictionary<string, string>> LoadJsonAssetsMap()
     {
-        Dictionary<string, Dictionary<string, string>> data = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        var data = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
 
         foreach (string type in this.JsonAssetsTypes.Keys)
         {

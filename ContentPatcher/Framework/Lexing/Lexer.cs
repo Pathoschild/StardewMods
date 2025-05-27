@@ -288,7 +288,7 @@ internal class Lexer
         }
 
         // normalize literal values
-        ISet<LinkedListNode<ILexToken>> removeQueue = new HashSet<LinkedListNode<ILexToken>>(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
+        HashSet<LinkedListNode<ILexToken>> removeQueue = new(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
         for (LinkedListNode<ILexToken>? node = tokens.First; node != null; node = node.Next)
         {
             // fetch info

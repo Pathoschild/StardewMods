@@ -208,7 +208,7 @@ internal class ModEntry : Mod
         if (Context.IsMainPlayer)
         {
             // init garages + tractors
-            Dictionary<Guid, Horse?> validTractors = new();
+            Dictionary<Guid, Horse?> validTractors = [];
             foreach (GameLocation location in this.GetLocations())
             {
                 foreach (Stable garage in this.GetGaragesIn(location))

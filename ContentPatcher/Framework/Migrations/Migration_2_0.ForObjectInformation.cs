@@ -29,7 +29,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private const string NewAssetName = "Data/Objects";
 
         /// <summary>The numeric object IDs added in Stardew Valley 1.6.</summary>
-        private readonly HashSet<string> NumericIdsAddedIn16 = new() { "6", "8", "10", "12", "14", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "742" };
+        private readonly HashSet<string> NumericIdsAddedIn16 = ["6", "8", "10", "12", "14", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50", "52", "54", "56", "58", "742"];
 
         /// <summary>The vanilla data without mod edits applied, used as the base when a pre-1.6 content pack loads the asset.</summary>
         private readonly VanillaAssetFactory<Dictionary<string, ObjectData>> OriginalData = new(DataLoader.Objects);
@@ -284,7 +284,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
             // geode
             if (objectId is "275" or "535" or "536" or "537" or "749")
             {
-                HashSet<string> dropIds = new HashSet<string>(miscellaneous.Split(' '));
+                HashSet<string> dropIds = new(miscellaneous.Split(' '));
 
                 // step 1: remove existing entries
                 if (data.GeodeDrops != null)
@@ -334,7 +334,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
             if (data.Type == "Arch")
             {
                 // parse artifact field
-                Dictionary<string, double> drops = new();
+                Dictionary<string, double> drops = [];
                 {
                     string[] fields = miscellaneous.Split(' ');
                     for (int i = 0; i < fields.Length - 1; i += 2)

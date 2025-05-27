@@ -45,7 +45,7 @@ internal sealed class TractorManager
     private IAttachment[] Attachments = [];
 
     /// <summary>The attachment cooldowns in ticks for each rate-limited attachment.</summary>
-    private Dictionary<IAttachment, int> AttachmentCooldowns = new();
+    private Dictionary<IAttachment, int> AttachmentCooldowns = [];
 
     /// <summary>The mod settings.</summary>
     private ModConfig Config;

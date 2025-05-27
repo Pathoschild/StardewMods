@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         private readonly Dictionary<string, ApiDataLayer> CustomLayers = [];
 
         /// <summary>Maps key bindings to the layers they should activate.</summary>
-        private readonly IDictionary<KeybindList, ILayer> ShortcutMap = new Dictionary<KeybindList, ILayer>();
+        private readonly Dictionary<KeybindList, ILayer> ShortcutMap = [];
 
 
         /*********

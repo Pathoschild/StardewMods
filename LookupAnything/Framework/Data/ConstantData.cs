@@ -32,7 +32,7 @@ internal class ConstantData
     ** NPCs
     ****/
     /// <summary>The names of villagers for which to override the <see cref="StardewValley.NPC.CanSocialize"/> field.</summary>
-    public Dictionary<string, bool> ForceSocialVillagers { get; set; } = new();
+    public Dictionary<string, bool> ForceSocialVillagers { get; set; } = [];
 
     /// <summary>The number of hearts for dateable NPCs which are locked until you give them a bouquet.</summary>
     public int DatingHearts { get; set; }
@@ -69,7 +69,7 @@ internal class ConstantData
     ****/
     /// <summary>The age thresholds for casks.</summary>
     /// <remarks>Derived from <see cref="StardewValley.Objects.Cask.checkForMaturity"/>.</remarks>
-    public Dictionary<ItemQuality, int> CaskAgeSchedule { get; set; } = new();
+    public Dictionary<ItemQuality, int> CaskAgeSchedule { get; set; } = [];
 
     /****
     ** Items

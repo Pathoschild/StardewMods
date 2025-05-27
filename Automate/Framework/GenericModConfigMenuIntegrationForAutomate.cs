@@ -203,7 +203,7 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     /****
     ** Connectors
     ****/
-    /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="Flooring.GetFloorPathLookup"/>.</summary>
+    /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="Game1.floorPathData"/>.</summary>
     /// <param name="name">The item name.</param>
     private bool IsCustomConnector(string name)
     {
@@ -264,7 +264,7 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     /// <summary>Get the machine IDs and display names to show in the config UI.</summary>
     private Dictionary<string, Func<string>> GetMachineIds()
     {
-        Dictionary<string, Func<string>> machineIds = new();
+        Dictionary<string, Func<string>> machineIds = [];
 
         // default overrides
         foreach (string rawId in this.Data.DefaultMachineOverrides.Keys)

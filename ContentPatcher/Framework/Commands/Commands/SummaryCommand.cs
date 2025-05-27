@@ -118,7 +118,7 @@ internal class SummaryCommand : BaseCommand
         bool showFull = false;
         bool sort = true;
         MutableInvariantSet forModIds = [];
-        HashSet<string> onlyAssets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        HashSet<string> onlyAssets = new(StringComparer.OrdinalIgnoreCase);
         for (int i = 0; i < args.Length; i++)
         {
             // flags
@@ -470,7 +470,7 @@ internal class SummaryCommand : BaseCommand
 
                 // print patch effects
                 {
-                    IDictionary<string, MutableInvariantSet> effectsByPatch = new Dictionary<string, MutableInvariantSet>(StringComparer.OrdinalIgnoreCase);
+                    Dictionary<string, MutableInvariantSet> effectsByPatch = new(StringComparer.OrdinalIgnoreCase);
                     foreach (PatchInfo patch in patchGroup)
                     {
                         if (!patch.IsApplied || patch.Patch == null)

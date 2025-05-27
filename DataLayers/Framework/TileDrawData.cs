@@ -16,7 +16,7 @@ internal class TileDrawData
     public HashSet<Color> Colors { get; } = [];
 
     /// <summary>The border colors to draw.</summary>
-    public Dictionary<Color, TileEdge> BorderColors { get; } = new();
+    public Dictionary<Color, TileEdge> BorderColors { get; } = [];
 
     /// <summary>The pixel offset at which to draw this tile.</summary>
     public Point DrawOffset { get; }

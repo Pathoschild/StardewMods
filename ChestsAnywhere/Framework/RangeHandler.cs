@@ -101,7 +101,7 @@ internal class RangeHandler
     /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
     private IDictionary<GameLocation, string> GetWorldAreaZones(IDictionary<string, HashSet<string>>? worldAreas)
     {
-        IDictionary<GameLocation, string> zones = new Dictionary<GameLocation, string>();
+        Dictionary<GameLocation, string> zones = [];
 
         foreach (GameLocation location in Game1.locations)
         {

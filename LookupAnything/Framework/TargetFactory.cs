@@ -32,7 +32,7 @@ internal class TargetFactory : ISubjectRegistry
     private readonly ILookupProvider[] LookupProviders;
 
     /// <summary>The cached lookups by entity.</summary>
-    private readonly Dictionary<(object, GameLocation?), ISubject?> SubjectCache = new();
+    private readonly Dictionary<(object, GameLocation?), ISubject?> SubjectCache = [];
 
     /// <summary>The <see cref="Game1.ticks">game tick</see> when the <see cref="SubjectCache"/> should be reset.</summary>
     private int SubjectCacheUntil;

@@ -152,7 +152,7 @@ internal class JunimoMachineGroup : MachineGroup
     /// <summary>Build a map of covered tiles by location key.</summary>
     private Dictionary<string, IReadOnlySet<Vector2>> BuildTileMap()
     {
-        Dictionary<string, IReadOnlySet<Vector2>> tiles = new();
+        Dictionary<string, IReadOnlySet<Vector2>> tiles = [];
 
         foreach (IGrouping<string?, IMachineGroup> groupByLocation in this.MachineGroups.GroupBy(p => p.LocationKey))
         {

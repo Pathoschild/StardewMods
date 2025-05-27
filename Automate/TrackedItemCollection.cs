@@ -12,7 +12,7 @@ public class TrackedItemCollection : ITrackedStack
     ** Fields
     *********/
     /// <summary>The underlying item stacks.</summary>
-    private readonly IList<ITrackedStack> Stacks = new List<ITrackedStack>();
+    private readonly List<ITrackedStack> Stacks = [];
 
 
     /*********

@@ -44,7 +44,7 @@ public class WorldItemScanner
     public IEnumerable<FoundItem> GetAllOwnedItems()
     {
         List<FoundItem> items = [];
-        ISet<Item> itemsSeen = new HashSet<Item>(new ObjectReferenceComparer<Item>());
+        HashSet<Item> itemsSeen = new(new ObjectReferenceComparer<Item>());
 
         // in locations
         foreach (GameLocation location in CommonHelper.GetLocations())

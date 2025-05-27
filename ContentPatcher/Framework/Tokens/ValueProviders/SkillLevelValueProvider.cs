@@ -18,7 +18,7 @@ internal class SkillLevelValueProvider : BaseValueProvider
     private readonly TokenSaveReader SaveReader;
 
     /// <summary>The player's current skill levels.</summary>
-    private readonly Dictionary<Skill, int> SkillLevels = new();
+    private readonly Dictionary<Skill, int> SkillLevels = [];
 
     /// <summary>The valid skill values.</summary>
     private readonly IInvariantSet ValidValues = InvariantSets.From(Enum.GetNames(typeof(Skill)));
@@ -41,7 +41,7 @@ internal class SkillLevelValueProvider : BaseValueProvider
     {
         return this.IsChanged(() =>
         {
-            IDictionary<Skill, int> oldSkillLevels = new Dictionary<Skill, int>(this.SkillLevels);
+            Dictionary<Skill, int> oldSkillLevels = new(this.SkillLevels);
 
             this.SkillLevels.Clear();
             if (this.MarkReady(this.SaveReader.IsReady))

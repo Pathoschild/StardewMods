@@ -28,7 +28,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private const string NewAssetName = "Data/Buildings";
 
         /// <summary>The building IDs added in Stardew Valley 1.6.</summary>
-        private readonly HashSet<string> BuildingIdsAddedIn16 = new() { "Cabin", "Pet Bowl", "Farmhouse" };
+        private readonly HashSet<string> BuildingIdsAddedIn16 = ["Cabin", "Pet Bowl", "Farmhouse"];
 
         /// <summary>The vanilla data without mod edits applied, used as the base when a pre-1.6 content pack loads the asset.</summary>
         private readonly VanillaAssetFactory<Dictionary<string, BuildingData>> OriginalData = new(DataLoader.Buildings);
@@ -235,7 +235,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
             string[] fields = field.Split(' ');
 
             // build list
-            Dictionary<string, int> materials = new();
+            Dictionary<string, int> materials = [];
             for (int i = 0; i < fields.Length - 1; i += 2)
             {
                 string itemId = ArgUtility.Get(fields, i, allowBlank: false);

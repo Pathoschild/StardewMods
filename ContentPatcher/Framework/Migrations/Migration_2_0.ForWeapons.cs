@@ -22,7 +22,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private const string AssetName = "Data/Weapons";
 
         /// <summary>The numeric object IDs added in Stardew Valley 1.6.</summary>
-        private readonly HashSet<string> NumericIdsAddedIn16 = new() { "65", "66" };
+        private readonly HashSet<string> NumericIdsAddedIn16 = ["65", "66"];
 
         /// <summary>The vanilla data without mod edits applied, used as the base when a pre-1.6 content pack loads the asset.</summary>
         private readonly VanillaAssetFactory<Dictionary<string, WeaponData>> OriginalData = new(DataLoader.Weapons);

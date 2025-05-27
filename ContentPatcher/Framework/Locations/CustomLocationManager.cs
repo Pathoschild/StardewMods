@@ -28,7 +28,7 @@ internal class CustomLocationManager
     private readonly List<CustomLocationData> CustomLocations = [];
 
     /// <summary>The enabled locations indexed by their normalized map path.</summary>
-    private readonly Dictionary<IAssetName, CustomLocationData> CustomLocationsByMapPath = new();
+    private readonly Dictionary<IAssetName, CustomLocationData> CustomLocationsByMapPath = [];
 
     /// <summary>Encapsulates monitoring and logging.</summary>
     private readonly IMonitor Monitor;
@@ -274,7 +274,7 @@ internal class CustomLocationManager
     /// <param name="locations">The locations for which to build a lookup.</param>
     private IDictionary<string, GameLocation> MapByName(IEnumerable<GameLocation> locations)
     {
-        var lookup = new Dictionary<string, GameLocation>();
+        Dictionary<string, GameLocation> lookup = [];
         foreach (GameLocation location in locations)
             lookup[location.NameOrUniqueName] = location;
         return lookup;

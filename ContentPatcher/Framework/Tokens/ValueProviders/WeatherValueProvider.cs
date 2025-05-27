@@ -18,7 +18,7 @@ internal class WeatherValueProvider : BaseValueProvider
     private readonly TokenSaveReader SaveReader;
 
     /// <summary>The values as of the last context update.</summary>
-    private readonly IDictionary<string, string?> Values = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, string?> Values = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>The context name for the current location.</summary>
     private string? CurrentLocationContextName;
