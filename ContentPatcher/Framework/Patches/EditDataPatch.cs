@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
@@ -15,6 +16,8 @@ using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Framework;
+using StardewModdingAPI.Toolkit;
 using xTile;
 
 namespace ContentPatcher.Framework.Patches;
@@ -50,10 +53,7 @@ internal class EditDataPatch : Patch
     private readonly TryParseFieldsDelegate TryParseFields;
 
     /// <summary>The cached JSON serializer used to apply JSON structures to a model.</summary>
-    private readonly Lazy<JsonSerializer> Serializer = new(() => new()
-    {
-        ObjectCreationHandling = ObjectCreationHandling.Replace
-    });
+    private static readonly Lazy<JsonSerializer> JsonSerializer = new(EditDataPatch.CreateJsonSerializer);
 
     /// <summary>Whether the file specified by <see cref="Patch.FromAsset"/> has been loaded at least once for this patch.</summary>
     private bool HasEverLoadedFromFile;
@@ -264,6 +264,15 @@ internal class EditDataPatch : Patch
     /*********
     ** Private methods
     *********/
+    /// <summary>Create a JSON serializer which matches SMAPI's internal serializer settings.</summary>
+    /// <exception cref="InvalidOperationException">SMAPI's internal toolkit instance could not be accessed.</exception>
+    private static JsonSerializer CreateJsonSerializer()
+    {
+        // HACK: get SMAPI's internal JSON helper
+        ModToolkit toolkit = typeof(SCore).GetField("Toolkit", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(SCore.Instance) as ModToolkit ?? throw new InvalidOperationException("Can't access SMAPI's toolkit instance.");
+        return toolkit.JsonHelper.GetSerializer();
+    }
+
     /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
     /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
     /// <param name="context">The tokens available for this content pack.</param>
@@ -378,7 +387,7 @@ internal class EditDataPatch : Patch
             object fromObj;
             try
             {
-                fromObj = fromValue.ToObject(targetType)!;
+                fromObj = fromValue.ToObject(targetType, EditDataPatch.JsonSerializer.Value)!;
             }
             catch (Exception ex)
             {
@@ -448,7 +457,7 @@ internal class EditDataPatch : Patch
                 foreach (EditDataPatchField field in recordGroup)
                     obj[field.FieldKey.Value!] = field.Value?.Value;
                 using JsonReader reader = obj.CreateReader();
-                this.Serializer.Value.Populate(reader, editor.GetEntry(key)!);
+                EditDataPatch.JsonSerializer.Value.Populate(reader, editor.GetEntry(key)!);
             }
         }
     }

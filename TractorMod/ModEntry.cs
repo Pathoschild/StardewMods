@@ -99,7 +99,8 @@ internal class ModEntry : Mod
         this.TextureManager = new(
             directoryPath: this.Helper.DirectoryPath,
             publicAssetBasePath: this.PublicAssetBasePath,
-            contentHelper: helper.ModContent,
+            gameContentHelper: helper.GameContent,
+            modContentHelper: helper.ModContent,
             monitor: this.Monitor
         );
         this.TractorManagerImpl = new(() =>
@@ -207,7 +208,7 @@ internal class ModEntry : Mod
         if (Context.IsMainPlayer)
         {
             // init garages + tractors
-            Dictionary<Guid, Horse?> validTractors = new();
+            Dictionary<Guid, Horse?> validTractors = [];
             foreach (GameLocation location in this.GetLocations())
             {
                 foreach (Stable garage in this.GetGaragesIn(location))

@@ -39,7 +39,7 @@ internal class ModConfig
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
     public void OnDeserialized(StreamingContext context)
     {
-        this.Locations ??= new Dictionary<string, PerLocationConfig>();
+        this.Locations ??= [];
         this.Locations.RemoveWhere(p => p.Value is null);
     }
 }

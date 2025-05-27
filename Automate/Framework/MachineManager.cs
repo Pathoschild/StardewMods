@@ -25,7 +25,7 @@ internal class MachineManager
     private readonly DataModel Data;
 
     /// <summary>The machine data for each location.</summary>
-    private readonly Dictionary<string, MachineDataForLocation> MachineData = new();
+    private readonly Dictionary<string, MachineDataForLocation> MachineData = [];
 
     /// <summary>The cached machines to process.</summary>
     private IMachineGroup[] ActiveMachineGroups = [];

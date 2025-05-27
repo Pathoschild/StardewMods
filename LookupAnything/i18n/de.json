@@ -64,6 +64,9 @@
     "added-by-mod": "Von Mod hinzugefügt",
     "added-by-mod.summary": "{{modName}}",
 
+    // internal ID
+    "internal-id": "Interne ID",
+
 
     /*********
     ** Data translations
@@ -328,6 +331,7 @@
     "item.dislikes-this": "Magt dies nicht",
     "item.hates-this": "Hasst das",
     "item.needed-for": "Gebraucht für",
+    "item.flavor": "Geschmack", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Im Besitz",
     "item.number-cooked": "Gekocht",
     "item.number-crafted": "Hergestellt",
@@ -359,8 +363,9 @@
     "item.recipes-for-machine.same-as-input": "[Gleiches wie Eingabe]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Einige Maschinen-Regeln sind zu dynamisch, um sie anzuzeigen.",
     "item.number-owned.summary": "Du besitzt {{count}} davon",
-    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-owned-flavored.summary": "Du besitzt {{count}} ({{name}}) oder {{baseCount}} ({{baseName}}) davon", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
+    "item.internal-id.summary": "{{itemId}} (global eindeutige 'qualifizierte ID': {{qualifiedItemId}})",
 
 
     /*********
@@ -416,7 +421,7 @@
     "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
     "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
-    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
+    "item.uncaught-fish": "{{count}} nicht gefangene Fische",
 
 
     /*********
@@ -513,10 +518,10 @@
     "npc.unowned-gift-taste": "{{count}} nicht bessesene Gegenstände",
     "npc.schedule.current-position": "Derzeit bei {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Kein Zeitplan geladen.",
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
+    "npc.schedule.not-following-schedule": "Folgt momentan keinem Zeitplan. Dies bedeutet in der Regel, dass der NPC einer besonderen Aktivität nachgeht (z.B. im Kino).",
     "npc.schedule.entry": "{{time}}: gehe zu {{locationName}} ({{x}}, {{y}}).",
-    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
-    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
+    "npc.schedule.farmhand.unknown-position": "Derzeit an einem unbekannten Ort auf dem Host.",
+    "npc.schedule.farmhand.unknown-schedule": "Im Mehrspielermodus werden NPCs vom Host verwaltet, daher ist ihr Zeitplan nicht verfügbar.",
 
 
     /*********
@@ -642,13 +647,13 @@
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
     "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
-    "tile.map-properties": "Map properties", // TODO
-    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.map-properties": "Karteneigenschaften",
+    "tile.layer-tile": "{{layer}} Kachel",
     "tile.layer-tile-none": "Kachel",
 
     // values
-    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
-    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "Index {{index}} aus dem Tilesheet '{{tilesheetId}}' (Pfad: '{{tilesheetPath}}')",
     "tile.layer-tile.blend-mode": "Überblendungsmodus: {{value}}",
     "tile.layer-tile.index-property": "Indexeigenschaften: {{name}}: {{value}}",
     "tile.layer-tile.tile-property": "Eigenschaften: {{name}}: {{value}}",
@@ -711,8 +716,8 @@
     // progression mode
     "config.title.progression": "Fortschrittsmodus",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Regeln für das Erscheinen ungefangener Fische anzeigen",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Ob Regeln für das Erscheinen ungefangener Fische angezeigt werden sollen.",
 
     "config.progression.show-unknown-gift-tastes.name": "Unbekannte Geschenke Vorlieben anzeigen",
     "config.progression.show-unknown-gift-tastes.desc": "Ob Geschenk Vorlieben gezeigt werden sollen, die du im Spiel noch nicht kennengelernt hast (z. B. aus Dialogtexten oder beim Experimentieren).",

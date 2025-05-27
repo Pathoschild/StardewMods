@@ -1,6 +1,19 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.51.0
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
+* Added internal ID field for buildings, items, NPCs, and trees (thanks to Mushymato!).
+* Added flavor link field for items (thanks to Mushymato!).
+* Fixed fish ponds not listing produced items that are based on an item query (thanks to Mushymato!).
+* Fixed fish ponds not reflecting the new 'base produce chance' data in Stardew Valley 1.6.9+.
+* Fixed fish spawn rules field shown incorrectly in some cases (thanks to Mushymato!).
+* Fixed fish spawn rule checkboxes not ticked for fish which can be caught on any mine level.
+* Fixed controller snapping enabled for the lookup and search menus.
+* Fixed error if a location has invalid fish data.
+* Improved translations. Thanks to CaranudLapin (updated French), gab-umich (updated Chinese), JanUwU42 (updated German), and MakinDay (updated Italian)!
+
 ## 1.50.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.
 

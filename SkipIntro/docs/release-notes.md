@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.23
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
+* Internal changes to simplify maintenance.
+
 ## 1.9.22
 Released 07 February 2025 for SMAPI 4.1.10 or later.
 

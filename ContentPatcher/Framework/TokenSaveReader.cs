@@ -38,7 +38,7 @@ internal class TokenSaveReader
     private readonly Func<bool> IsLoadedImpl;
 
     /// <summary>A cache of common values fetched during the current context updates.</summary>
-    private readonly Dictionary<string, object?> Cache = new();
+    private readonly Dictionary<string, object?> Cache = [];
 
     /// <summary>The last context update for which cached values were updated.</summary>
     private int LastCacheTick;

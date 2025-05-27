@@ -27,7 +27,7 @@ internal abstract class BaseAttachment : IAttachment
     protected IModRegistry ModRegistry { get; }
 
     /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
-    private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, long> CooldownStartTimes = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Whether the Farm Type Manager mod is installed.</summary>
     private readonly bool HasFarmTypeManager;

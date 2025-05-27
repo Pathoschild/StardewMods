@@ -22,8 +22,8 @@ internal class Migration_1_15_Rewrites : BaseMigration
     private static readonly Regex IgnoreRandomArgumentPattern = new(@"\|\s*key\s*=", RegexOptions.Compiled);
 
     /// <summary>The names of tokens which dropped support for the {{token:search}} form in favor of the universal {{token |contains=search}} form.</summary>
-    private readonly ISet<ConditionType> TokensWhichDroppedSearchForm = new HashSet<ConditionType>
-    {
+    private readonly HashSet<ConditionType> TokensWhichDroppedSearchForm =
+    [
         // date and weather
         ConditionType.Day,
         ConditionType.DayEvent,
@@ -63,7 +63,7 @@ internal class Migration_1_15_Rewrites : BaseMigration
         // metadata
         ConditionType.HasMod,
         ConditionType.Language
-    };
+    ];
 
     /// <summary>The dynamic and config token names defined by the content pack.</summary>
     private readonly Lazy<IInvariantSet> LocalTokenNames;

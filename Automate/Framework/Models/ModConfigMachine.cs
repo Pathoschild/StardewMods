@@ -22,7 +22,7 @@ internal class ModConfigMachine
     /// <summary>Get the machine settings which don't match the default.</summary>
     public IDictionary<string, string?> GetCustomSettings()
     {
-        Dictionary<string, string?> customSettings = new();
+        Dictionary<string, string?> customSettings = [];
 
         var defaults = new ModConfigMachine();
         foreach (PropertyInfo property in this.GetType().GetProperties())

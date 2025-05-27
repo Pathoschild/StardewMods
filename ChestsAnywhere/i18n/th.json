@@ -105,8 +105,9 @@
     "config.edit-chest.name": "แก้ไขหีบ",
     "config.edit-chest.desc": "ปุ่มที่ใช้สำหรับแก้ไขตัวเลือกสำหรับหีบปัจจุบัน",
 
-    "config.sort-items.name": "จัดเรียงรายการ",
-    "config.sort-items.desc": "ปุ่มที่ใช้สำหรับจัดเรียงไอเทมในหีบปัจจุบัน",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "นำทาง: หีบก่อนหน้า",
     "config.navigate-prev-chest.desc": "ปุ่มที่ใช้สำหรับนำทางไปยังหีบก่อนหน้าในขณะที่เมนูเปิดอยู่",

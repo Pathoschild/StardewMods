@@ -311,7 +311,7 @@ internal abstract class BaseValueProvider : IValueProvider
     {
         return this.IsChanged(() =>
         {
-            ISet<T> oldValues = new HashSet<T>(values);
+            HashSet<T> oldValues = new(values);
             action();
             return this.IsChanged(oldValues, values);
         });
@@ -324,7 +324,7 @@ internal abstract class BaseValueProvider : IValueProvider
     {
         return this.IsChanged(() =>
         {
-            Dictionary<string, string> oldValues = new Dictionary<string, string>(values);
+            Dictionary<string, string> oldValues = new(values);
             action();
             return
                 values.Count != oldValues.Count

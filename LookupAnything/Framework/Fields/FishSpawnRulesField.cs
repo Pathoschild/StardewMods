@@ -76,7 +76,7 @@ internal class FishSpawnRulesField : CheckboxListField
         : base(label)
     {
         this.CheckboxLists = spawnConditions;
-        this.HasValue = this.CheckboxLists.Any();
+        this.HasValue = this.CheckboxLists.Any(checkboxList => checkboxList.Checkboxes.Length > 0);
     }
 
     /// <summary>Get the formatted checkbox conditions for all fish in a location.</summary>
@@ -109,7 +109,7 @@ internal class FishSpawnRulesField : CheckboxListField
         if (spawnRules.Locations?.Any() != true)
             yield break;
 
-        // not caught uet
+        // not caught yet
         if (spawnRules.IsUnique)
             yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !FishSpawnRulesField.HasPlayerCaughtFish(fish));
 
@@ -143,7 +143,7 @@ internal class FishSpawnRulesField : CheckboxListField
         // locations & seasons
         if (FishSpawnRulesField.HaveSameSeasons(spawnRules.Locations))
         {
-            var firstLocation = spawnRules.Locations[0];
+            FishSpawnLocationData firstLocation = spawnRules.Locations[0];
 
             // seasons
             if (firstLocation.Seasons.Count == 4)
@@ -172,7 +172,7 @@ internal class FishSpawnRulesField : CheckboxListField
         }
         else
         {
-            IDictionary<string, string[]> locationsBySeason =
+            Dictionary<string, string[]> locationsBySeason =
                 (
                     from location in spawnRules.Locations
                     from season in location.Seasons

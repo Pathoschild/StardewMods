@@ -367,7 +367,7 @@ internal class DataLayerOverlay : BaseOverlay
     private IDictionary<Vector2, TileDrawData> AggregateTileData(IEnumerable<TileGroup> groups, bool combineOverlappingBorders)
     {
         // collect tile details
-        IDictionary<Vector2, TileDrawData> tiles = new Dictionary<Vector2, TileDrawData>();
+        Dictionary<Vector2, TileDrawData> tiles = [];
         foreach (TileGroup group in groups)
         {
             Lazy<HashSet<Vector2>> inGroupLazy = new Lazy<HashSet<Vector2>>(() => [.. group.Tiles.Select(p => p.TilePosition)]);

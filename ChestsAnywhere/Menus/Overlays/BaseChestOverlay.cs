@@ -585,11 +585,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         int topOffset = this.GetTopOffset(this.Menu);
 
         Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
+        int maxDropdownLabelWidth = (bounds.Width / 2) - 50;
 
         // category dropdown
         if (this.ShowCategoryDropdown)
         {
-            this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category);
+            this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category, maxDropdownLabelWidth);
 
             if (Constants.TargetPlatform != GamePlatform.Android)
                 this.CategoryDropdown.bounds.Y = bounds.Y - this.CategoryDropdown.bounds.Height + topOffset;
@@ -601,7 +602,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         {
             ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
             ManagedChest? selected = ChestFactory.GetBestMatch(chests, this.Chest);
-            this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName);
+            this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName, maxDropdownLabelWidth);
 
             if (Constants.TargetPlatform != GamePlatform.Android)
             {

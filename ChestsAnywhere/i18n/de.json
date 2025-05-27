@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Truhe bearbeiten",
     "config.edit-chest.desc": "Die Tasten zum Bearbeiten der Optionen für die aktuelle Truhe.",
 
-    "config.sort-items.name": "Gegenstände sortieren",
-    "config.sort-items.desc": "Die Tasten, die die Gegenstände in der aktuellen Truhe sortieren.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Navigieren: vorherige Truhe",
     "config.navigate-prev-chest.desc": "Die Tasten, die bei offenem Menü zur vorherigen Truhe navigieren.",

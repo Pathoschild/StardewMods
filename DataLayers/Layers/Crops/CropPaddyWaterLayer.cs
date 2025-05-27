@@ -26,7 +26,7 @@ internal class CropPaddyWaterLayer : BaseLayer
     private GameLocation? LastLocation;
 
     /// <summary>The cached tiles in range of open water for the current location.</summary>
-    private readonly IDictionary<Vector2, bool> TilesInRange = new Dictionary<Vector2, bool>();
+    private readonly Dictionary<Vector2, bool> TilesInRange = [];
 
     /// <summary>A sample paddy crop.</summary>
     private readonly Lazy<Crop> PaddyCrop = new(() => new SamplePaddyCrop());

@@ -65,6 +65,9 @@
     "added-by-mod": "Added by mod",
     "added-by-mod.summary": "{{modName}}",
 
+    // internal ID
+    "internal-id": "Internal ID", // TODO
+
 
     /*********
     ** Data translations
@@ -330,6 +333,7 @@
     "item.dislikes-this": "Не подобається",
     "item.hates-this": "Ненавидить",
     "item.needed-for": "Необхідно для",
+    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Наявність",
     "item.number-cooked": "Приготовано",
     "item.number-crafted": "Створено",
@@ -363,6 +367,7 @@
     "item.number-owned.summary": "Ви маєте {{count}} од.",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Ви створили {{count}} од.",
+    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
 
 
     /*********

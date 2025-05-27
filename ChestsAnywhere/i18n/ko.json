@@ -105,8 +105,9 @@
     "config.edit-chest.name": "보관함 편집",
     "config.edit-chest.desc": "현재 보관함 설정을 편집하는 키.",
 
-    "config.sort-items.name": "아이템 정렬",
-    "config.sort-items.desc": "현재 보관함에 있는 아이템을 정렬하는 키.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "탐색: 이전 보관함",
     "config.navigate-prev-chest.desc": "메뉴에서 이전 보관함으로 이동하는 키.",

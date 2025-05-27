@@ -17,7 +17,7 @@ internal sealed class TreeFallingHandler : BaseAnimationHandler
     ** Fields
     *********/
     /// <summary>The trees in the current location.</summary>
-    private Dictionary<Vector2, TerrainFeature> Trees = new();
+    private Dictionary<Vector2, TerrainFeature> Trees = [];
 
 
     /*********

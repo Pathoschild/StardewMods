@@ -286,7 +286,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
             if (applies)
             {
                 // extract colors
-                HashSet<string> newColors = new();
+                HashSet<string> newColors = [];
                 for (int i = 1; i < fields.Length - 3; i += 3)
                     newColors.Add($"{fields[i]} {fields[i + 1]} {fields[i + 2]}");
 

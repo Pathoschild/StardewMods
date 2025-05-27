@@ -181,8 +181,12 @@
     "config.dig-seed-spots.name": "Đào Địa điểm Hạt giống",
     "config.dig-seed-spots.tooltip": "Có đào địa điểm hạt giống hay không.",
 
-    "config.clear-tilled-dirt.name": "Dọn dẹp Đất đã cày",
-    "config.clear-tilled-dirt.tooltip": "Có dọn dẹp đất đã cày hay không.",
+    "config.clear-dirt-without-fertilizer.name": "Dọn dẹp Đất đã cày",
+    "config.clear-dirt-without-fertilizer.tooltip": "Có dọn dẹp đất đã cày hay không.",
+
+    // TODO
+    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
 
 
     /****

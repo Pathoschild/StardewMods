@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Редагувати скриню",
     "config.edit-chest.desc": "Клавіші, які редагують налаштування для поточної скрині.",
 
-    "config.sort-items.name": "Сортувати предмети",
-    "config.sort-items.desc": "Клавіші, які сортують предмети в поточній скрині.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Навігація: попередня скриня",
     "config.navigate-prev-chest.desc": "Клавіші, які переходять до попередньої скрині, коли відкрите меню.",

@@ -39,10 +39,10 @@ internal class ContentManager
     private readonly LiveMessageQueue BookshelfMessages;
 
     /// <summary>The dialogues shown when the player clicks a tourist, indexed by <c>{map id}#{tourist id}</c>.</summary>
-    private readonly Dictionary<string, LiveMessageQueue> TouristDialogues = new();
+    private readonly Dictionary<string, LiveMessageQueue> TouristDialogues = [];
 
     /// <summary>The 'strange occurrence' messages shown in rare cases.</summary>
-    private readonly Dictionary<string, LiveMessageQueue> StrangeMessages = new();
+    private readonly Dictionary<string, LiveMessageQueue> StrangeMessages = [];
 
     /// <summary>Whether the central station is showing the rare dark form (lighting dimmed, shops closed, etc.).</summary>
     private readonly PerScreen<bool> StationDark = new();
@@ -540,7 +540,7 @@ internal class ContentManager
     private void AddCentralStationTourists(IAssetDataForMap assetData)
     {
         // read tourist areas from map property
-        Dictionary<string, Rectangle> touristAreas = new();
+        Dictionary<string, Rectangle> touristAreas = [];
         {
             if (!assetData.Data.Properties.TryGetValue(Constant.TouristAreasMapProperty, out string rawProperty))
                 return;

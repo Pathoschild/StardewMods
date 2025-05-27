@@ -133,37 +133,37 @@ internal class SprinklerLayer : BaseLayer
     /// <summary>Get the current relative sprinkler coverage by qualified item ID, including any dynamic mod changes.</summary>
     private IDictionary<string, Vector2[]> GetCustomSprinklerTiles()
     {
-        var tilesBySprinklerID = new Dictionary<string, Vector2[]>();
+        var tilesBySprinklerId = new Dictionary<string, Vector2[]>();
 
         // Better Sprinklers
         if (this.Mods.BetterSprinklers.IsLoaded)
         {
             foreach ((int id, Vector2[] range) in this.Mods.BetterSprinklers.GetSprinklerTiles())
-                tilesBySprinklerID[$"{ItemRegistry.type_object}{id}"] = range;
+                tilesBySprinklerId[$"{ItemRegistry.type_object}{id}"] = range;
         }
 
         // Better Sprinklers Plus
         if (this.Mods.BetterSprinklersPlus.IsLoaded)
         {
             foreach ((int id, Vector2[] range) in this.Mods.BetterSprinklersPlus.GetSprinklerTiles())
-                tilesBySprinklerID[$"{ItemRegistry.type_object}{id}"] = range;
+                tilesBySprinklerId[$"{ItemRegistry.type_object}{id}"] = range;
         }
 
         // Line Sprinklers
         if (this.Mods.LineSprinklers.IsLoaded)
         {
             foreach ((int id, Vector2[] range) in this.Mods.LineSprinklers.GetSprinklerTiles())
-                tilesBySprinklerID[$"{ItemRegistry.type_object}{id}"] = range;
+                tilesBySprinklerId[$"{ItemRegistry.type_object}{id}"] = range;
         }
 
         // Simple Sprinkler
         if (this.Mods.SimpleSprinkler.IsLoaded)
         {
             foreach ((int id, Vector2[] range) in this.Mods.SimpleSprinkler.GetNewSprinklerTiles())
-                tilesBySprinklerID[$"{ItemRegistry.type_object}{id}"] = range;
+                tilesBySprinklerId[$"{ItemRegistry.type_object}{id}"] = range;
         }
 
-        return tilesBySprinklerID;
+        return tilesBySprinklerId;
     }
 
     /// <summary>Get a sprinkler tile radius.</summary>

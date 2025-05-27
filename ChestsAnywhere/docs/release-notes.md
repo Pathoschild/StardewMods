@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.0
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
+* Chest labels are now shown for named furniture too.
+* Removed length limit on chest/category names.
+* Fixed hover text not shown for 'edit chest' and 'organize inventory' buttons in chest UI.
+* Fixed 'sort items' description in config UI saying it sorts the chest, rather than the player inventory.
+* Fixed long dropdown labels breaking the UI.
+* Improved translations. Thanks to DiQuintino (updated Portuguese)!
+
 ## 1.27.0
 Released 26 March 2025 for SMAPI 4.1.10 or later.
 

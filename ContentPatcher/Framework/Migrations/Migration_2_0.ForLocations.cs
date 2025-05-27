@@ -43,7 +43,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         private readonly Season[] ValidSeasons = [Season.Spring, Season.Summer, Season.Fall, Season.Winter];
 
         /// <summary>The backing cache for <see cref="ParseEffectiveSeasons"/>.</summary>
-        private readonly Dictionary<string, IReadOnlySet<Season>?> ParseSeasonsCache = new();
+        private readonly Dictionary<string, IReadOnlySet<Season>?> ParseSeasonsCache = [];
 
         /// <summary>The vanilla data without mod edits applied, used as the base when a pre-1.6 content pack loads the asset.</summary>
         private readonly VanillaAssetFactory<Dictionary<string, LocationData>> OriginalData = new(DataLoader.Locations);
@@ -102,7 +102,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         /// <param name="skippedDueToNoData">The location names which were skipped because they had no spawn data. These shouldn't be deleted if they're missing.</param>
         private Dictionary<string, string> GetOldFormat(IDictionary<string, LocationData> from, out HashSet<string> skippedDueToNoData)
         {
-            Dictionary<string, string> data = new();
+            Dictionary<string, string> data = [];
             skippedDueToNoData = new();
 
             string[] fields = new string[9];
@@ -263,7 +263,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
                         continue;
 
                     // get updated chance for each season the entry targets
-                    Dictionary<Season, double> seasonChances = new();
+                    Dictionary<Season, double> seasonChances = [];
                     double? oneChance = null;
                     bool allSameChance = true;
                     foreach (Season season in actualSeasons)
@@ -377,7 +377,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
                     FishSpawnValue key = new FishSpawnValue(objectId, entry.FishAreaId);
 
                     // get updated chance for each season the entry targets
-                    HashSet<Season> newSeasons = new();
+                    HashSet<Season> newSeasons = [];
                     foreach (Season season in actualSeasons)
                     {
                         if (GetListForSeason(season).Contains(key))
@@ -559,7 +559,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         /// <param name="rawData">The raw forage list string.</param>
         private Dictionary<string, double> GetChancesFromOldArtifactOrForageList(string rawData)
         {
-            Dictionary<string, double> forage = new();
+            Dictionary<string, double> forage = [];
 
             string[] fields = rawData.Split(' ');
             for (int i = 0; i < fields.Length - 1; i += 2)
@@ -577,7 +577,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
         /// <param name="rawData">The raw forage list string.</param>
         private HashSet<FishSpawnValue> GetValuesFromOldFishList(string locationName, string rawData)
         {
-            HashSet<FishSpawnValue> fish = new();
+            HashSet<FishSpawnValue> fish = [];
 
             string[] fields = rawData.Split(' ');
             for (int i = 0; i < fields.Length - 1; i += 2)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 
@@ -30,9 +31,13 @@ internal record FishSpawnLocationData(string LocationId, string? Area, HashSet<s
     /// <param name="locationId">The location internal name to match.</param>
     public bool MatchesLocation(string locationId)
     {
-        // specific mine level (e.g. Lava Eel in UndergroundMine100)
-        if (this.LocationId == "UndergroundMine" && !string.IsNullOrWhiteSpace(this.Area))
-            return locationId == $"{this.LocationId}{this.Area}";
+        // mine level
+        if (this.LocationId == "UndergroundMine")
+        {
+            return string.IsNullOrWhiteSpace(this.Area)
+                ? MineShaft.IsGeneratedLevel(locationId)
+                : locationId == $"{this.LocationId}{this.Area}";
+        }
 
         // location name
         return locationId == this.LocationId;

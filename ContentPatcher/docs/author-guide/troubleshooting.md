@@ -142,7 +142,7 @@ Content pack reloaded.
 
 ### `export`
 `patch export` saves a copy of a given asset to your game folder, which lets you see what it looks
-like with all changes applied. This currently works for image and data assets.
+like with all changes applied. This currently works for data, image, and map assets.
 
 For example:
 
@@ -248,4 +248,3 @@ questions to ask:
 
 ## See also
 * [Author guide](../author-guide.md) for other actions and options
-* [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info

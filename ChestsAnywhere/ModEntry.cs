@@ -48,6 +48,10 @@ internal class ModEntry : Mod
     /// <summary>The Better Game Menu integration.</summary>
     private BetterGameMenuIntegration? BetterGameMenu;
 
+    /// <summary>The cached chest lookup for the last tile checked.</summary>
+    private ChestOnTile? CachedChestOnTile;
+
+
     /*********
     ** Public methods
     *********/
@@ -128,9 +132,22 @@ internal class ModEntry : Mod
     private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
     {
         // show chest label
-        if (this.Config.ShowHoverTooltips)
+        if (this.Config.ShowHoverTooltips && Game1.currentLocation != null)
         {
-            ManagedChest? cursorChest = this.ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+            string locationName = Game1.currentLocation.NameOrUniqueName;
+            Vector2 tile = Game1.currentCursorTile;
+            ChestOnTile? cached = this.CachedChestOnTile;
+
+            if (tile != cached?.Tile || locationName != cached.LocationName)
+            {
+                this.CachedChestOnTile = cached = new ChestOnTile(
+                    Tile: tile,
+                    LocationName: locationName,
+                    Chest: this.ChestFactory.GetChestFromTile(tile)
+                );
+            }
+
+            ManagedChest? cursorChest = cached.Chest;
             if (cursorChest != null && !cursorChest.HasDefaultName())
             {
                 Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
@@ -364,4 +381,10 @@ internal class ModEntry : Mod
 
         return I18n.Errors_NoChests();
     }
+
+    /// <summary>A cached chest on a given tile for displaying labels.</summary>
+    /// <param name="Tile">The tile that was last checked.</param>
+    /// <param name="LocationName">The location unique name that was last checked.</param>
+    /// <param name="Chest">The chest found on the tile, if any.</param>
+    private record ChestOnTile(Vector2 Tile, string LocationName, ManagedChest? Chest);
 }

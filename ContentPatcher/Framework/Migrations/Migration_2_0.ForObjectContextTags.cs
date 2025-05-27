@@ -166,7 +166,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
                     entry.ContextTags?.Clear();
                 else
                 {
-                    entry.ContextTags ??= new List<string>();
+                    entry.ContextTags ??= [];
                     entry.ContextTags.Clear();
                     entry.ContextTags.AddRange(tags);
                 }

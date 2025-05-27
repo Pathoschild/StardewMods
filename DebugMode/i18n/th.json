@@ -9,9 +9,10 @@
     "label.submenu": "เมนูย่อย",
     "label.minigame": "มินิเกม",
     "label.dialogue": "dialogue", // TODO
-    "label.festival-name": "เทศกาล",
     "label.event-id": "รหัสเหตุการณ์",
     "label.event-script": "สคริปต์เหตุการณ์",
+    "label.festival-name": "เทศกาล",
+    "label.shop-id": "shop ID", // TODO
     "label.song": "เพลง",
 
 

@@ -45,7 +45,7 @@ public class AutomateAPI : IAutomateAPI
     /// <param name="tileArea">The tile area for which to display data.</param>
     public IDictionary<Vector2, int> GetMachineStates(GameLocation location, Rectangle tileArea)
     {
-        IDictionary<Vector2, int> data = new Dictionary<Vector2, int>();
+        Dictionary<Vector2, int> data = [];
         foreach (IMachine machine in this.MachineManager.GetForApi(location).SelectMany(group => group.Machines))
         {
             if (machine.TileArea.Intersects(tileArea))

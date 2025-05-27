@@ -24,8 +24,9 @@ internal class PickaxeAttachment : BaseAttachment
 
     /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
     /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
-    private readonly IDictionary<int, int> ResourceUpgradeLevelsNeeded = new Dictionary<int, int>
+    private readonly Dictionary<int, int> ResourceUpgradeLevelsNeeded = new()
     {
+        [ResourceClump.quarryBoulderIndex] = Tool.gold,
         [ResourceClump.meteoriteIndex] = Tool.gold,
         [ResourceClump.boulderIndex] = Tool.steel
     };
@@ -84,8 +85,11 @@ internal class PickaxeAttachment : BaseAttachment
         if (tileFeature is HoeDirt dirt && tileObj is null)
         {
             // clear tilled dirt
-            if (this.Config.ClearDirt && dirt.crop == null)
-                return this.UseToolOnTile(tool, tile, player, location);
+            if (dirt.crop is null)
+            {
+                if (dirt.HasFertilizer() ? this.Config.ClearDirtWithFertilizer : this.Config.ClearDirt)
+                    return this.UseToolOnTile(tool, tile, player, location);
+            }
 
             // clear dead crops
             if (this.Config.ClearDeadCrops && dirt.crop != null && dirt.crop.dead.Value)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -119,13 +120,48 @@ internal static class CommonHelper
     }
 
     /****
-    ** Fonts
+    ** Display text
     ****/
     /// <summary>Get the dimensions of a space character.</summary>
     /// <param name="font">The font to measure.</param>
     public static float GetSpaceWidth(SpriteFont font)
     {
         return font.MeasureString("A B").X - font.MeasureString("AB").X;
+    }
+
+    /// <summary>Get a user-friendly percentage number without the '%' symbol, like <c>15</c> for 15%.</summary>
+    /// <param name="chance">The probability to represent, as a value between 0 (never) and 1 (always).</param>
+    public static string GetFormattedPercentageNumber(float chance)
+    {
+        float percent = chance * 100;
+
+        switch (percent)
+        {
+            // snap to valid value
+            case <= 0:
+                return "0";
+            case >= 100:
+                return "100";
+
+            // if less than 1%, round to one significant figure
+            case < 1f:
+                for (int precision = 3; precision < 28; precision++)
+                {
+                    decimal result = Math.Round((decimal)percent, precision);
+                    if (result > 0)
+                        return result.ToString("0.".PadRight(precision + 2, '#'));
+                }
+
+                return percent.ToString(CultureInfo.InvariantCulture);
+
+            // if less than 2%, round to one decimal place
+            case < 1.95f:
+                return percent.ToString("#.#");
+
+            // else round to nearest integer
+            default:
+                return percent.ToString("#");
+        }
     }
 
     /****

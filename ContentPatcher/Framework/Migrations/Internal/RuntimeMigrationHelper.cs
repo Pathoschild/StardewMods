@@ -12,7 +12,7 @@ internal static class RuntimeMigrationHelper
     ** Fields
     *********/
     /// <summary>The backing cache for <see cref="ParseObjectId"/>.</summary>
-    private static readonly Dictionary<string, string?> ParseObjectIdCache = new();
+    private static readonly Dictionary<string, string?> ParseObjectIdCache = [];
 
 
     /*********

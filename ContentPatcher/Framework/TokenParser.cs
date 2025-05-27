@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -24,6 +25,9 @@ internal class TokenParser
     /// <summary>Handles parsing raw strings into tokens.</summary>
     private readonly Lexer Lexer = Lexer.Instance;
 
+    /// <summary>The private <c>_name</c> field on <see cref="JProperty"/> instances, used to update tokenized property names.</summary>
+    private static readonly FieldInfo PropertyNameField;
+
 
     /*********
     ** Accessors
@@ -44,6 +48,14 @@ internal class TokenParser
     /*********
     ** Public methods
     *********/
+    /// <summary>Initialize static fields.</summary>
+    static TokenParser()
+    {
+        TokenParser.PropertyNameField =
+            typeof(JProperty).GetField("_name", BindingFlags.NonPublic | BindingFlags.Instance)
+            ?? throw new InvalidOperationException($"Failed to initialize token parser: required field '{nameof(JProperty)}._name' not found");
+    }
+
     /// <summary>Construct an instance.</summary>
     /// <param name="tokenContext">The tokens available for this content pack.</param>
     /// <param name="forMod">The manifest for the content pack being parsed.</param>
@@ -270,13 +282,12 @@ internal class TokenParser
                 break;
 
             case JObject objToken:
-                foreach (JProperty p in objToken.Properties().ToArray())
+                foreach (JProperty property in objToken.Properties().ToArray())
                 {
-                    JProperty property = p;
-                    LogPathBuilder localPath = path.With(p.Name);
+                    LogPathBuilder localPath = path.With(property.Name);
 
                     // resolve property name
-                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => property = this.ReplaceJsonProperty(property, new JProperty(val, property.Value)), localPath.With("key"), out error, out TokenizableProxy? proxyName))
+                    if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => TokenParser.PropertyNameField.SetValue(property, val), localPath.With("key"), out error, out TokenizableProxy? proxyName))
                         return false;
                     fields.Add(proxyName);
 
@@ -344,15 +355,5 @@ internal class TokenParser
             setValue(tokenStr.Value!);
         parsed = null;
         return true;
-    }
-
-    /// <summary>Replace a JSON property with a new one.</summary>
-    /// <param name="oldProperty">The JSON property to replace.</param>
-    /// <param name="newProperty">The new JSON property to inject.</param>
-    /// <returns>Returns the injected property.</returns>
-    private JProperty ReplaceJsonProperty(JProperty oldProperty, JProperty newProperty)
-    {
-        oldProperty.Replace(newProperty);
-        return newProperty;
     }
 }

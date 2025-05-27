@@ -29,7 +29,7 @@ internal class StopManager
     ** Public methods
     *********/
     /// <summary>The stops registered through the mod API.</summary>
-    public Dictionary<string, Stop> ModApiStops { get; } = new();
+    public Dictionary<string, Stop> ModApiStops { get; } = [];
 
 
     /*********

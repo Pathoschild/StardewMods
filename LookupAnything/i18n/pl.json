@@ -65,6 +65,9 @@
     "added-by-mod": "Added by mod",
     "added-by-mod.summary": "{{modName}}",
 
+    // internal ID
+    "internal-id": "Internal ID", // TODO
+
 
     /*********
     ** Data translations
@@ -329,6 +332,7 @@
     "item.dislikes-this": "Nie lubi tego",
     "item.hates-this": "Nienawidzi tego",
     "item.needed-for": "Potrzebne do",
+    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Posiadane",
     "item.number-cooked": "Przyrządzone",
     "item.number-crafted": "Wytworzone",
@@ -362,6 +366,7 @@
     "item.number-owned.summary": "masz takich {{count}}",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "zrobiono takich {{count}}",
+    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
 
 
     /*********

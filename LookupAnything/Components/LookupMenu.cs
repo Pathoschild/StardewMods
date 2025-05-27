@@ -90,7 +90,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     ** Public methods
     *********/
     /****
-    ** Constructors
+    ** Initialization
     ****/
     /// <summary>Construct an instance.</summary>
     /// <param name="subject">The metadata to display.</param>
@@ -142,6 +142,12 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // hide game HUD
         Game1.displayHUD = false;
+    }
+
+    /// <inheritdoc />
+    public override bool overrideSnappyMenuCursorMovementBan()
+    {
+        return true; // controller snapping not implemented
     }
 
     /****

@@ -10,6 +10,6 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
+    <ModZipPath Condition="'$(SolutionDir)' != ''">$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
 </Project>

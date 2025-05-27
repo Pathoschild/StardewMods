@@ -110,7 +110,7 @@ internal class PatchLoader
 
         // load patches
         int index = -1;
-        IList<IPatch> loadedPatches = new List<IPatch>(patches.Length);
+        List<IPatch> loadedPatches = new(patches.Length);
         foreach (PatchConfig patch in patches)
         {
             index++;
@@ -938,7 +938,7 @@ internal class PatchLoader
         }
 
         // get empty list
-        textOperations = new List<ITextOperation>();
+        textOperations = [];
         if (!patch.TextOperations.Any())
         {
             error = null;

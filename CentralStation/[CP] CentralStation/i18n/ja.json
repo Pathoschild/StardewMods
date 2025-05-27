@@ -1,0 +1,155 @@
+﻿//
+// Note for translators:
+// Some lines have a 'note for translators' comment like this one to clarify intent. You generally shouldn't translate
+// the 'note for translators' comments themselves, since they just explain the official intent and aren't shown in-game.
+//
+{
+    /*********
+    ** Destination names
+    *********/
+    // default stops
+    "destinations.central-station": "中央駅",
+    "destinations.stardew-valley": "スターデューバレー",
+
+    // default stops when shown in Central Station menu
+    "destinations.stardew-valley.boat": "スターデューバレー - ボート乗り場",
+    "destinations.stardew-valley.bus": "スターデューバレー - バス停",
+    "destinations.stardew-valley.train": "スターデューバレー - 鉄道",
+
+    // stops from other mods
+    "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name
+
+
+    /*********
+    ** Shop dialogues
+    *********/
+    "food-court.dialogue.1": "食べ物はここで調達しよう！ほとんどは虫を原材料としていません。", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "フードコート最安値を保証します。", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "前回の食品安全検査にはほぼ合格したんだ！",
+    "food-court.dialogue.4": "ああ、お客さんだ。何の用？",
+    "food-court.dialogue.5": "新鮮でアツアツの料理だよ！まあまあ熱いよ。電子レンジで温めればね。", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+
+    "gift-shop.dialogue.1": "遠出かな？必要なものは全部揃えておいてね！",
+    "gift-shop.dialogue.2": "家に帰るのかな？お土産を買って帰ろう！",
+    "gift-shop.dialogue.3": "ノベルティシャツのコレクションも充実しています。 (たくさんありすぎるので、ぜひお買い求めください。)",
+    "gift-shop.dialogue.4": "物が多すぎて、どこに収納しようか迷っています。何か買ってください！",
+    "gift-shop.dialogue.5": "寒いところへお出かけですか？防寒具の在庫がありますよ！",
+    "gift-shop.dialogue.6": "このイヤマフを試してみて。どう？本物のキャッスルヴィレッジ産のベルベットだよ！",
+    "gift-shop.dialogue.7": "これはジュエル海を渡ってきた珍しい木材なんだ。他のところでは手に入らないよ。",
+
+    "vendor-shop.dialogue.coming-soon": "小さな看板：\"もうすぐ地元のポップアップショップがオープンします！\"中から作業員が準備をしている音が聞こえてくる。",
+
+
+    /*********
+    ** Book titles
+    *********/
+    // Note for translators: this section refers to locations mentioned in the base game (like the Ferngill Republic and Zuzu City).
+    // You can find their translations via the language links on the left of the page at https://stardewvalleywiki.com/Setting.
+    // The 'Z.C. Rarecrow Society' is from a letter; see https://stardewvalleywiki.com/Deluxe_Scarecrow and its language links.
+    "books.cooking.1": "『ボイドマヨネーズとゴブリンの珍味』",
+
+    "books.geography.1": "『フェーンギル海岸とそこで見つけたもの』",
+    "books.geography.2": "『グランプルトン林業：第7巻』",
+    "books.geography.3": "『ズズシティの夜』",
+    "books.geography.4": "『プレーリーアイランドのアライグマ』",
+    "books.geography.5": "『スターデューバレーと趣のある土地』",
+    "books.geography.6": "サンディ女史著 『フェーンギル共和国の花』",
+
+    "books.history.1": "『スモルアヌ百科事典：文化、歴史、固定観念、推測』",
+    "books.history.2": "M.ラスモディウス著『神秘学入門』",
+    "books.history.3": "『侵略者と影：エレメンタル戦争の歴史』",
+    "books.history.4": "『凍てつく海の向こうのツンドラの住人たち』",
+    "books.history.5": "『帝国と共和国』：フェーンギル協和国とゴトロ帝国の対立を徹底分析する",
+    "books.history.6": "Z.C.レアクロウ・ソサエティ著 『レアクロウ史の網羅的カタログ』",
+
+    "books.promotional.1": "『信じられないペリカンタウン』ルイス市長による宣伝用チラシだ。",
+
+    "books.religion.1": "『ヨバの見つけ方』 スターデューバレーの匿名パンフレット",
+
+    "books.science.1": "『ジュニモとフェーンギル共和国の民俗学』",
+
+
+    /*********
+    ** Location flavor text
+    *********/
+    // message from the transit area doors
+    "location.transit-area-doors": "ドックとホームに戻ります。まずチケットカウンターでチケットを購入してください。",
+
+    // messages from exit door
+    "location.exit-door.strange-sounds": "...？",
+
+    // rare messages from ticket counter
+    "location.ticket-counter.1": "（チケット売り場を覗き込もうとしたが、色ガラス越しにぼんやりと影が見えるだけだ。）",
+    "location.ticket-counter.2": "（ガラスの向こうから奇妙なささやき声が聞こえてくる。）",
+    "location.ticket-counter.3": "（今一瞬だけガラスの向こうが見えた気がする。でもなぜか、何を見たのか思い出せない。）",
+
+    // rare messages from ticket machine
+    "location.ticket-machine.1": "（チケットカウンターから漠然とした不興を感じる。あるいは気のせいかもしれない。）",
+    "location.ticket-machine.2": "（チケットカウンターをスキップすることに漠然とした不安を覚える。）",
+    "location.ticket-machine.3": "（機械が聞いたこともない何十もの目的地をリストアップする。瞬きをすると、通常のリストに戻った。）",
+
+    // rare messages from cola machine
+    "location.cola-machine.1": "（この販売機ではJojaコーラしか売っていない。しかし、あなたが近づくと、何かがトレイにドサッと落ちた。）",
+    "location.cola-machine.2": "（あなたはコーラマシンに近づいた。何もしていないのに、ガチャンと音を立てて商品が落ちてきた。）",
+    "location.cola-machine.3": "（どういうわけか、コーラマシンが手助けしたがっているのを感じる。）",
+
+
+    /*********
+    ** Tourist dialogue
+    *********/
+    "tourist.young-boy.1": "やぁ。",
+    "tourist.young-boy.2": "ママを待ってるんだ。",
+    "tourist.young-boy.3": "知らない人に話しかけちゃいけないんだよ。",
+
+    "tourist.woman-in-black-dress": "いろんな町のお祭り目当てに旅するのが好きなの。仕事の息抜きにもなるしね。",
+
+    "tourist.man-with-drink.1": "旅行のだいごみは食事だよ。",
+    "tourist.man-with-drink.2": "フードコートには行ってみた？正直、ほとんど食べられたものじゃない。でも、これも経験だね！",
+
+    "tourist.man-with-sunglasses": "チケット売り場を覗いてみたか？誰がいるのかよくわからないんだ。#あいつら店主も従業員じゃないみたいだ。",
+
+    "tourist.man-with-top-hat.1": "やあ、若いの。金持ちになるひけつを知りたいか？",
+    "tourist.man-with-top-hat.2": "一攫千金さ。ギャンブルだよ。カジノではいつも勝つんだ。へへ",
+
+    "tourist.strong-man": "俺みたいに強いって？石を砕いてみろよ！#でもここには石がない。悲しい。",
+
+    "tourist.desert-racer-man.1": "レースに行ってくるよ！",
+    "tourist.desert-racer-man.2": "ああ、本当にそうだよ。引退して、ようやくレースイベントを直接見に旅行できるようになったんだ。楽しみだ。",
+
+    "tourist.desert-scholar-man.1": "やあ、友よ！ズズシティに新しい図書館がオープンしたんだ。",
+    "tourist.desert-scholar-man.2": "探している本がたくさんあるんだよ。図書館にあるといいんだが。",
+    "tourist.desert-scholar-man.3": "もしなくても、きっと新しい本に出会えるよね！",
+
+    "tourist.flamingo.1": "...",
+    "tourist.flamingo.2": "...？",
+    "tourist.flamingo.3": "*クラクションの音*",
+    "tourist.flamingo.4": "（彼女にがっつり無視された。）",
+
+    "tourist.shrouded-figure": "お金を払えば、家まで送ってあげるよ。#まあ、バスに乗ればいいか。",
+
+    "tourist.welwick.1": "私の旧友ラスモディウスと話をしたようだね。",
+    "tourist.welwick.2": "あいつの陰謀に巻き込まれていないことを祈るよ。",
+
+    "tourist.cashier-girl.1": "私は長時間立ちっぱなしで仕事をしているの。疲れるし、自分の時間もほとんどないわ。",
+    "tourist.cashier-girl.2": "家は好きよ。でも、冒険のない人生なんて考えられる？！",
+    "tourist.cashier-girl.3": "無料で行ける場所はたくさんあるの。全部行ってみるつもりよ！",
+
+    "tourist.governor.1": "実に奇妙だな。誰がこの局を運営しているのか誰も知らないんだ。#許可証はすべて提出されたのに、誰もそれを覚えていない。#まあ、このあたりで奇妙なことはこれだけではないがな。",
+    "tourist.governor.2": "ようやく自分も電車に乗れるよ。#今度は妻も連れてこよう。",
+
+    "tourist.lupini.1": "こんにちは、若き${男性^女性^人}$よ。私の最新の絵はご覧いただけたかな？", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
+    "tourist.lupini.2": "新しいギャラリーを開きに行ってくるよ。よかったら君もおいで。",
+
+    "tourist.red-cap-guy.1": "旅行の素晴らしさは、様々な人々とファッションに出会えることさ。",
+    "tourist.red-cap-guy.2": "みんながこんなに違うと、着飾りすぎてるなんて感じないよ！",
+
+    "tourist.shorts-man": "ここ、やたらと寒いな。#ギフトショップで防寒具を買おうか...",
+
+    "tourist.red-pirate": "（彼は飲み物に夢中で、あなたに気づかない。）",
+
+    "tourist.grim-pirate": "あの線路から聞こえてくるのは、ぞっとするような物語...#駅の奥深くで聞こえたアナウンス...#ああ、電車を逃しちまった。",
+
+    "tourist.blackgull-pirate.1": "おおっと、みんなはどこだ？",
+    "tourist.blackgull-pirate.2": "もうすぐ乗船の時間だぞ..."
+}

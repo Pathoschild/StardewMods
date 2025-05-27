@@ -17,7 +17,7 @@ internal class StardewValley_1_3_36_Validator : BaseValidator
     ** Fields
     *********/
     /// <summary>A map of tilesheets removed in Stardew Valley 1.3.36 and the new tilesheets that should be referenced instead.</summary>
-    private readonly IDictionary<string, string> ObsoleteTilesheets = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    private readonly Dictionary<string, string> ObsoleteTilesheets = new(StringComparer.OrdinalIgnoreCase)
     {
         ["mine"] = "Mines/mine",
         ["mine_dark"] = "Mines/mine_dark",

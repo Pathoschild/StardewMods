@@ -16,7 +16,7 @@ internal record MachineDataForLocation(string LocationKey, IReadOnlyCollection<I
     ** Fields
     *********/
     /// <summary>The backing field for <see cref="OutdatedTiles"/>.</summary>
-    private readonly Dictionary<Vector2, IAutomatable> OutdatedTilesImpl = new();
+    private readonly Dictionary<Vector2, IAutomatable> OutdatedTilesImpl = [];
 
     /// <summary>The backing field for <see cref="ActiveTiles"/>.</summary>
     private readonly Lazy<Dictionary<Vector2, IMachineGroup>> ActiveTilesImpl = new(() => GetTileLookup(LocationKey, ActiveMachineGroups));

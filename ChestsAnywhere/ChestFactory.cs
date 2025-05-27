@@ -74,7 +74,7 @@ internal class ChestFactory
             // find chests
             foreach (var entry in locations)
             {
-                IDictionary<string, int> nameCounts = new Dictionary<string, int>();
+                Dictionary<string, int> nameCounts = [];
 
                 // get info
                 GameLocation location = entry.Location;
@@ -248,16 +248,9 @@ internal class ChestFactory
     /// <param name="tile">The tile to check.</param>
     public ManagedChest? GetChestFromTile(Vector2 tile)
     {
-        if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || obj is not Chest chest)
-            return null;
-
-        return ChestFactory.GetBestMatch(
-            chests: this.GetChests(RangeHandler.CurrentLocation()),
-            inventory: this.GetChestInventory(chest),
-            location: Game1.currentLocation,
-            tile: tile,
-            mapEntity: chest
-        );
+        return this
+            .GetChests(RangeHandler.CurrentLocation())
+            .FirstOrDefault(chest => chest.Tile == tile);
     }
 
     /// <summary>Get the player chest from the given menu, if any.</summary>

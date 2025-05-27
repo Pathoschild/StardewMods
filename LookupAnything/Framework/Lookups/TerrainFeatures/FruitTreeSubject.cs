@@ -132,6 +132,9 @@ internal class FruitTreeSubject : BaseSubject
                 );
             }
         }
+
+        // internal ID
+        yield return new GenericField(I18n.InternalId(), tree.treeId.Value);
     }
 
     /// <inheritdoc />

@@ -165,6 +165,14 @@ internal class ItemSubject : BaseSubject
                 yield return new GenericField(I18n.AddedByMod(), I18n.AddedByMod_Summary(modName: fromMod.Manifest.Name));
         }
 
+        // flavor
+        string? flavorId = obj?.GetPreservedItemId();
+        if (flavorId != null)
+        {
+            Item preservedItem = ItemRegistry.Create(flavorId);
+            yield return new LinkField(I18n.Item_Flavor(), preservedItem.DisplayName, () => this.Codex.GetByEntity(preservedItem, null));
+        }
+
         // don't show data for dead crop
         if (isDeadCrop)
         {
@@ -194,7 +202,6 @@ internal class ItemSubject : BaseSubject
                 if (subject != null)
                     yield return new LinkField(I18n.Item_Contents(), subject.Name, () => subject);
             }
-
         }
 
         // machine output
@@ -415,6 +422,9 @@ internal class ItemSubject : BaseSubject
             string dropName = ItemRegistry.GetDataOrErrorItem(this.SeedForCrop!.indexOfHarvest.Value).DisplayName;
             yield return new LinkField(I18n.Item_SeeAlso(), dropName, () => this.GetCropSubject(this.SeedForCrop, ObjectContext.Inventory, null));
         }
+
+        // internal ID
+        yield return new GenericField(I18n.InternalId(), I18n.Item_InternalId_Summary(itemId: item.ItemId, qualifiedItemId: item.QualifiedItemId));
     }
 
     /// <inheritdoc />

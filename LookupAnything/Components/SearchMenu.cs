@@ -65,6 +65,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /*********
     ** Public methods
     *********/
+    /****
+    ** Initialization
+    ****/
     /// <summary>Construct an instance.</summary>
     /// <param name="searchSubjects">The subjects available to search.</param>
     /// <param name="showLookup">Show a lookup menu.</param>
@@ -87,6 +90,12 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         this.UpdateLayout();
         this.SearchTextbox.Select();
         this.SearchTextbox.OnChanged += (_, text) => this.ReceiveSearchTextboxChanged(text);
+    }
+
+    /// <inheritdoc />
+    public override bool overrideSnappyMenuCursorMovementBan()
+    {
+        return true; // controller snapping not implemented
     }
 
     /****

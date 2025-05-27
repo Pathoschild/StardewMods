@@ -23,7 +23,7 @@ internal class AxeAttachment : BaseAttachment
 
     /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
     /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
-    private readonly IDictionary<int, int> ResourceUpgradeLevelsNeeded = new Dictionary<int, int>
+    private readonly Dictionary<int, int> ResourceUpgradeLevelsNeeded = new()
     {
         [ResourceClump.stumpIndex] = Tool.copper,
         [ResourceClump.hollowLogIndex] = Tool.steel

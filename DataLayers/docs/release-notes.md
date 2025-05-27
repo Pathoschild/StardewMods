@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.2
+Released 27 May 2025 for SMAPI 4.1.10 or later.
+
+* Fixed coverage for held objects being off by one when the cursor is over a negative tile position (thanks to isaacalger!).
+
 ## 1.20.1
 Released 26 March 2025 for SMAPI 4.1.10 or later.
 

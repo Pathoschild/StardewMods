@@ -187,8 +187,12 @@
     "config.dig-seed-spots.name": "Dig Seed Spots",
     "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
 
-    "config.clear-tilled-dirt.name": "Перекопати оброблений ґрунт",
-    "config.clear-tilled-dirt.tooltip": "Переконування обробленого ґрунту.",
+    "config.clear-dirt-without-fertilizer.name": "Перекопати оброблений ґрунт",
+    "config.clear-dirt-without-fertilizer.tooltip": "Переконування обробленого ґрунту.",
+
+    // TODO
+    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
 
 
     /****

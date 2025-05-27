@@ -105,8 +105,9 @@
     "config.edit-chest.name": "Editar el cofre",
     "config.edit-chest.desc": "Las teclas que editan las opciones del cofre actual.",
 
-    "config.sort-items.name": "Clasificar artículos",
-    "config.sort-items.desc": "Las claves que ordenan los artículos en el cofre actual.",
+    // TODO
+    "config.sort-items.name": "Sort player items",
+    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
     "config.navigate-prev-chest.name": "Navegar: cofre anterior",
     "config.navigate-prev-chest.desc": "Las teclas que navegan al cofre anterior mientras el menú está abierto.",

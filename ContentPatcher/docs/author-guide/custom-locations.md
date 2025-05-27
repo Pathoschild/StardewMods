@@ -1,7 +1,9 @@
 ﻿← [author guide](../author-guide.md)
 
-**This feature is deprecated. See [Modding:Location data](https://stardewvalleywiki.com/Modding:Location_data) for help
-adding/editing locations through the built-in feature in Stardew Valley 1.6 and later.**
+> [!WARNING]  
+> **This feature is deprecated and shouldn't be used in newer content packs.**  
+> See [Modding:Location data](https://stardewvalleywiki.com/Modding:Location_data) for help
+adding or editing locations through the built-in feature in Stardew Valley 1.6 and later.
 
 ----
 
@@ -125,7 +127,7 @@ Here's how you'd do that:
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
 
    "CustomLocations": [
       // add the in-game location
@@ -187,7 +189,7 @@ For example:
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "CustomLocations": [
       {
          "Name": "{{ModId}}_AbigailCloset",

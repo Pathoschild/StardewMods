@@ -113,13 +113,13 @@ internal class TmxlLocationLoader
     }
 
     /// <summary>Get the raw serialized locations from the TMXL Map Toolkit data.</summary>
-    private IDictionary<string, string> GetSerializedLocations()
+    private Dictionary<string, string> GetSerializedLocations()
     {
         try
         {
             if (SaveGame.loaded.CustomData.TryGetValue("smapi/mod-data/platonymous.tmxloader/locations", out string? json) && !string.IsNullOrWhiteSpace(json))
             {
-                Dictionary<string, string> serializedLocations = new();
+                Dictionary<string, string> serializedLocations = [];
 
                 var saveData = JsonConvert.DeserializeObject<SaveData>(json);
                 if (saveData is not null)
@@ -137,7 +137,7 @@ internal class TmxlLocationLoader
             this.Monitor.Log(ex.ToString());
         }
 
-        return new Dictionary<string, string>();
+        return [];
     }
 
     /// <summary>The model for TMXL Map Toolkit's save data.</summary>

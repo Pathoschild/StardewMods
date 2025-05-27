@@ -12,7 +12,7 @@ internal class LocationConfigManager
     ** Fields
     *********/
     /// <summary>A lookup cache of configurations by location key.</summary>
-    private readonly Dictionary<string, PerLocationConfig?> ConfigCache = new();
+    private readonly Dictionary<string, PerLocationConfig?> ConfigCache = [];
 
     /// <summary>Whether there's only one location config defined and it's for the <c>*</c> key.</summary>
     private bool OnlyHasGlobal;

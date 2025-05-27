@@ -29,7 +29,7 @@ internal class ScytheAttachment : BaseAttachment
     private readonly IReflectionHelper Reflection;
 
     /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest(Crop)"/>.</summary>
-    private readonly Dictionary<string, bool> IsFlowerCache = new();
+    private readonly Dictionary<string, bool> IsFlowerCache = [];
 
     /// <summary>A temporary axe instance for harvesting green weed bushes.</summary>
     private readonly Axe Axe = ItemRegistry.Create<Axe>("(T)IridiumAxe");

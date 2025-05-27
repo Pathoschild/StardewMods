@@ -17,7 +17,7 @@ internal class BuildingTarget : GenericTarget<Building>
     private readonly Rectangle TileArea;
 
     /// <summary>Spritesheet areas to treat as part of the sprite even if they're transparent, indexed by <see cref="Building.buildingType"/> value.</summary>
-    private static readonly IDictionary<string, Rectangle[]> SpriteCollisionOverrides = new Dictionary<string, Rectangle[]>
+    private static readonly Dictionary<string, Rectangle[]> SpriteCollisionOverrides = new()
     {
         ["Barn"] = [new Rectangle(48, 90, 32, 22)], // animal door
         ["Big Barn"] = [new Rectangle(64, 90, 32, 22)], // animal door

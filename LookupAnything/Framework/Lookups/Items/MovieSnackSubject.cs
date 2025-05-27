@@ -52,6 +52,9 @@ internal class MovieSnackSubject : BaseSubject
             string taste = MovieTheater.GetConcessionTasteForCharacter(date, item);
             yield return new GenericField(I18n.Item_MovieSnackPreference(), I18n.ForMovieTasteLabel(taste, date.displayName));
         }
+
+        // internal ID
+        yield return new GenericField(I18n.InternalId(), I18n.Item_InternalId_Summary(itemId: item.Id, qualifiedItemId: item.QualifiedItemId));
     }
 
     /// <inheritdoc />

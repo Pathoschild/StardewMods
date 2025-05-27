@@ -25,7 +25,7 @@ internal class QueryValueProvider : BaseValueProvider
     private readonly DataTable DataTable = new();
 
     /// <summary>A cache of calculations since the last update.</summary>
-    private readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> Cache = [];
 
 
     /*********

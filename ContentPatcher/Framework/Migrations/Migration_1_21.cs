@@ -21,7 +21,7 @@ internal class Migration_1_21 : BaseMigration
     private readonly Lexer Lexer = Lexer.Instance;
 
     /// <summary>Literal token strings to ignore when validating use of the <see cref="ConditionType.Render"/> token, since they were added by this migration.</summary>
-    private readonly HashSet<string> IgnoreRenderStrings = new();
+    private readonly HashSet<string> IgnoreRenderStrings = [];
 
 
     /*********

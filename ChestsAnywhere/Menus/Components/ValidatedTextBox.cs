@@ -76,7 +76,10 @@ internal class ValidatedTextBox : IKeyboardSubscriber
     public ValidatedTextBox(SpriteFont font, Color textColor, Func<char, bool> validate)
     {
         this.Validator = validate;
-        this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor);
+        this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor)
+        {
+            limitWidth = false
+        };
     }
 
     /// <summary>Set the input focus to this control.</summary>

@@ -156,7 +156,7 @@ internal class InputArguments : IInputArguments
     /// <param name="namedArgs">The named arguments.</param>
     /// <param name="reservedArgs">The named arguments handled by Content Patcher.</param>
     /// <param name="reservedArgsList">An ordered list of the <paramref name="reservedArgs"/>, including duplicate args.</param>
-    private static void Parse(ITokenString? input, out string positionalSegment, out string[] positionalArgs, out InvariantDictionary<IInputArgumentValue> namedArgs, out InvariantDictionary<IInputArgumentValue> reservedArgs, out IList<KeyValuePair<string, IInputArgumentValue>> reservedArgsList)
+    private static void Parse(ITokenString? input, out string positionalSegment, out string[] positionalArgs, out InvariantDictionary<IInputArgumentValue> namedArgs, out InvariantDictionary<IInputArgumentValue> reservedArgs, out List<KeyValuePair<string, IInputArgumentValue>> reservedArgsList)
     {
         Lexer lexer = Lexer.Instance;
         InputArguments.GetRawArguments(input, lexer, out positionalSegment, out InvariantDictionary<string> rawNamedArgs);
@@ -169,7 +169,7 @@ internal class InputArguments : IInputArguments
         positionalArgs = lexer.SplitLexically(positionalSegment, delimiter: inputSeparator).ToArray();
         namedArgs = new InvariantDictionary<IInputArgumentValue>();
         reservedArgs = new InvariantDictionary<IInputArgumentValue>();
-        reservedArgsList = new List<KeyValuePair<string, IInputArgumentValue>>();
+        reservedArgsList = [];
         foreach ((string key, string value) in rawNamedArgs)
         {
             var values = new InputArgumentValue(value, lexer.SplitLexically(value, delimiter: inputSeparator).ToArray());

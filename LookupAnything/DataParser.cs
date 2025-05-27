@@ -154,11 +154,13 @@ internal class DataParser
             if (drop is null)
                 continue;
 
-            string[] itemIds = this.GetItemSpawnFieldIds(drop.RandomItemId, drop.ItemId);
-            foreach (string itemId in itemIds)
+            IList<ItemQueryResult> itemQueryResults = ItemQueryResolver.TryResolve(drop, new ItemQueryContext(), ItemQuerySearchMode.AllOfTypeItem);
+
+            float chance = drop.Chance * (1f / itemQueryResults.Count);
+            foreach (ItemQueryResult result in itemQueryResults)
             {
-                float chance = drop.Chance * (1f / itemIds.Length);
-                yield return new FishPondDropData(drop.RequiredPopulation, itemId, drop.MinStack, drop.MaxStack, chance, drop.Condition);
+                if (result.Item is Item item)
+                    yield return new FishPondDropData(drop.RequiredPopulation, drop.Precedence, item, drop.MinStack, drop.MaxStack, chance, drop.Condition);
             }
         }
     }
@@ -305,29 +307,33 @@ internal class DataParser
     {
         // get fish from game data
         HashSet<string> seenFishIds = [];
-        foreach (SpawnFishData fishData in location.GetData().Fish)
+        List<SpawnFishData?>? locationFish = location.GetData()?.Fish;
+        if (locationFish is not null)
         {
-            if (fishData.ItemId is null)
-                continue;
+            foreach (SpawnFishData? fishData in locationFish)
+            {
+                if (fishData?.ItemId is null)
+                    continue;
 
-            seenFishIds.Add(fishData.ItemId);
+                seenFishIds.Add(fishData.ItemId);
 
-            // skip if fish can't spawn in this body of water
-            if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
-                continue;
+                // skip if fish can't spawn in this body of water
+                if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                    continue;
 
-            // skip if position doesn't match
-            if (fishData.BobberPosition?.Contains(tile) is false)
-                continue;
-            if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
-                continue;
+                // skip if position doesn't match
+                if (fishData.BobberPosition?.Contains(tile) is false)
+                    continue;
+                if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
+                    continue;
 
-            // skip if data isn't for a fish or jelly (e.g. furniture)
-            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
-            if (fish.ObjectType != "Fish")
-                continue;
+                // skip if data isn't for a fish or jelly (e.g. furniture)
+                ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+                if (fish.ObjectType != "Fish")
+                    continue;
 
-            yield return this.GetFishSpawnRules(fish, metadata);
+                yield return this.GetFishSpawnRules(fish, metadata);
+            }
         }
 
         // get fish from custom metadata
@@ -791,20 +797,6 @@ internal class DataParser
         }
 
         return recipes.ToArray();
-    }
-
-    /// <summary>Get the item IDs that can be produced by item spawn fields.</summary>
-    /// <param name="randomItemIds">The item IDs to randomly choose from. If set, this overrides <paramref name="itemId"/>.</param>
-    /// <param name="itemId">The item ID to produce by default.</param>
-    public string[] GetItemSpawnFieldIds(List<string?>? randomItemIds, string? itemId)
-    {
-        if (randomItemIds is not null)
-            return randomItemIds.Where(id => id is not null).ToArray()!;
-
-        if (itemId is not null)
-            return [itemId];
-
-        return [];
     }
 
 

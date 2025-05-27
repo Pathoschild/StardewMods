@@ -31,7 +31,7 @@ internal class MachineGroup : IMachineGroup
     private readonly Dictionary<IMachine, double> MachinePauseExpiries = new(new ObjectReferenceComparer<IMachine>());
 
     /// <summary>The output items which are temporarily paused, with the game time in milliseconds when their pause expires.</summary>
-    private readonly Dictionary<string, double> OutputPauseExpiries = new();
+    private readonly Dictionary<string, double> OutputPauseExpiries = [];
 
     /// <summary>The storage manager for the group.</summary>
     protected readonly StorageManager StorageManager;
