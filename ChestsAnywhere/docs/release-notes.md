@@ -4,6 +4,7 @@
 ## Upcoming release
 * Chest labels are now shown for named furniture too.
 * Removed length limit on manual chest/category names.
+* Fixed hover text not shown for 'edit chest' and 'organize inventory' buttons in chest UI.
 * Fixed 'sort items' description in config UI saying it sorts the chest, rather than the player inventory.
 * Fixed long dropdown labels breaking the UI.
 * Improved translations. Thanks to DiQuintino (updated Portuguese)!

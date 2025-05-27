@@ -30,8 +30,8 @@
     "label.automate-take-disabled": "Never take items from this chest",
 
     // button labels
-    "button.edit-chest": "edit chest",
-    "button.sort-inventory": "sort inventory",
+    "button.edit-chest": "Edit Chest",
+    "button.sort-inventory": "Organize Inventory",
     "button.save": "save",
     "button.reset": "reset",
 

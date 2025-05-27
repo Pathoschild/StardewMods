@@ -31,6 +31,9 @@ internal class ChestOverlay : BaseChestOverlay
     /// <summary>The button which sorts the player inventory.</summary>
     private ClickableTextureComponent? SortInventoryButton;
 
+    /// <summary>The hover text to draw if the menu isn't already drawing hover text.</summary>
+    private string? HoverText;
+
     /// <summary>Whether the color picker was visible when we last initialized the components.</summary>
     private bool WasColorPickerShown;
 
@@ -117,10 +120,19 @@ internal class ChestOverlay : BaseChestOverlay
     /// <inheritdoc />
     protected override bool ReceiveCursorHover(int x, int y)
     {
+        this.HoverText = null;
+
         if (this.IsInitialized)
         {
             if (this.ActiveElement == Element.Menu)
+            {
                 this.SortInventoryButton?.tryHover(x, y);
+
+                if (this.EditButton.containsPoint(x, y))
+                    this.HoverText = this.EditButton.hoverText;
+                else if (this.SortInventoryButton?.containsPoint(x, y) is true)
+                    this.HoverText = this.SortInventoryButton.hoverText;
+            }
         }
 
         return base.ReceiveCursorHover(x, y);
@@ -134,6 +146,9 @@ internal class ChestOverlay : BaseChestOverlay
             float navOpacity = this.CanCloseChest ? 1f : 0.5f;
             this.SortInventoryButton?.draw(batch, Color.White * navOpacity, 1f);
         }
+
+        if (this.HoverText != null && string.IsNullOrEmpty(this.Menu.hoverText))
+            IClickableMenu.drawHoverText(batch, this.HoverText, Game1.smallFont);
 
         base.DrawUi(batch); // run base logic last, to draw cursor over everything else
     }
@@ -151,7 +166,7 @@ internal class ChestOverlay : BaseChestOverlay
             ClickableTextureComponent okButton = this.Menu.okButton;
             float zoom = Game1.pixelZoom;
             Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-            this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, I18n.Button_SortInventory(), CommonSprites.Icons.Sheet, sprite, zoom);
+            this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, "", I18n.Button_SortInventory(), CommonSprites.Icons.Sheet, sprite, zoom);
 
             // adjust menu to fit
             this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
