@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 2.7.1
+Released 28 May 2025 for SMAPI 4.1.10 or later.
+
 * Fixed content packs which incorrectly set `EndSlideShow` in `Data/Characters` to a true/false value.  
   _Content Patcher 2.7.0 fixed a bug that allowed setting enum fields to a boolean value; 2.7.1 adds a format migration so older content packs will work like before._
 
