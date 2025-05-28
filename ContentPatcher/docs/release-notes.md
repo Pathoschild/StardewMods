@@ -9,6 +9,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed content packs which incorrectly set `EndSlideShow` in `Data/Characters` to a true/false value.  
+  _Content Patcher 2.7.0 fixed a bug that allowed setting enum fields to a boolean value; 2.7.1 adds a format migration so older content packs will work like before._
+
 ## 2.7.0
 Released 27 May 2025 for SMAPI 4.1.10 or later. See [release highlights](https://www.patreon.com/posts/130042997).
 
@@ -17,6 +21,7 @@ Released 27 May 2025 for SMAPI 4.1.10 or later. See [release highlights](https:/
 * Fixed `EditData` patches appending to a list/dictionary field instead of replacing it in some cases.
 * Fixed `EditData`'s handling of certain Windows-only data formats when playing on Android/Linux/macOS.
 * Fixed `EditData`'s handling of data model fields with tokens in both the name and value (thanks to SinZ!).
+* Fixed `EditData` incorrectly allowing true/false values for enum fields and mapping them transitively (like `true` → `1` → `"MainGroup"`).
 * Clarified in [token docs](author-guide/tokens.md) that tokens use NPCs' internal names (thanks to DenisSilent!).
 
 **Update notes for players:**  
