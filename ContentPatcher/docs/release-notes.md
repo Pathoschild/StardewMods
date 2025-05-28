@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## 2.7.0
-Released 27 May 2025 for SMAPI 4.1.10 or later.
+Released 27 May 2025 for SMAPI 4.1.10 or later. See [release highlights](https://www.patreon.com/posts/130042997).
 
 * The `Priority` patch field is now sent to SMAPI to influence patch order relative to non-Content Patcher mods too (thanks to ichortower!).
 * The `patch export` command now auto-detects the type for all vanilla top-level data assets (thanks to SinZ!).
