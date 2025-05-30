@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed search UI hiding different villager NPCs with the same display name as duplicates.
+
 ## 1.51.0
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 

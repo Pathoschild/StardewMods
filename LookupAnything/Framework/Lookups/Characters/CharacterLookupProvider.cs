@@ -223,34 +223,30 @@ internal class CharacterLookupProvider : BaseLookupProvider
     /// <inheritdoc />
     public override IEnumerable<ISubject> GetSearchSubjects()
     {
-        // get all matching NPCs
-        IEnumerable<ISubject> GetAll()
+        HashSet<string> seen = [];
+
+        // NPCs
+        foreach (NPC npc in Utility.getAllCharacters())
         {
-
-            // NPCs
-            foreach (NPC npc in Utility.getAllCharacters())
+            if (seen.Add($"NPC:{npc.Name}"))
                 yield return this.BuildSubject(npc);
-
-            // animals
-            foreach (GameLocation location in CommonHelper.GetLocations())
-            {
-                foreach (FarmAnimal animal in location.Animals.Values)
-                    yield return this.BuildSubject(animal);
-            }
-
-            // players
-            foreach (Farmer player in Game1.getAllFarmers())
-                yield return this.BuildSubject(player);
         }
 
-        // filter duplicates (e.g. multiple monsters)
-        HashSet<string> seen = [];
-        foreach (ISubject subject in GetAll())
+        // animals
+        foreach (GameLocation location in CommonHelper.GetLocations())
         {
-            if (!seen.Add($"{subject.GetType().FullName}::{subject.Type}::{subject.Name}"))
-                continue;
+            foreach (FarmAnimal animal in location.Animals.Values)
+            {
+                if (seen.Add($"Animal:{animal.myID}"))
+                    yield return this.BuildSubject(animal);
+            }
+        }
 
-            yield return subject;
+        // players
+        foreach (Farmer player in Game1.getAllFarmers())
+        {
+            if (seen.Add($"Farmer:{player.UniqueMultiplayerID}"))
+                yield return this.BuildSubject(player);
         }
     }
 
