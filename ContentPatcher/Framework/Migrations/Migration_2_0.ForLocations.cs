@@ -920,7 +920,7 @@ internal partial class Migration_2_0 : BaseRuntimeMigration
                 if (string.Equals(name, nameof(GameStateQuery.DefaultResolvers.LOCATION_SEASON)))
                     seasonIndex = 2;
                 else if (string.Equals(name, nameof(GameStateQuery.DefaultResolvers.SEASON)))
-                    seasonIndex = -1;
+                    seasonIndex = 1;
                 else
                     return false; // non-season query, too dynamic to convert
 
