@@ -102,7 +102,7 @@ _其他_
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -143,7 +143,7 @@ _其他_
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",

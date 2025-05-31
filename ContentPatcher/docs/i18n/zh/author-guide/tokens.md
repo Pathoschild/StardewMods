@@ -590,7 +590,7 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 <td>
 
 玩家与指定角色的心数。可将角色名称作为输入参数
-（只能使用角色的英文名）。比如：
+（只能使用角色的内置名）。比如：
 
 ```js
 "When": {
@@ -606,7 +606,7 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 <td>Relationship</td>
 <td>
 
-玩家与指定角色或玩家的关系。可将角色名称作为输入参数（只能使用角色的英文名），例如：
+玩家与指定角色或玩家的关系。可将角色名称作为输入参数（只能使用角色的内置名），例如：
 
 ```js
 "When": {
@@ -633,7 +633,7 @@ Divorced | 玩家和角色结婚然后又离了。
 <td>Roommate</td>
 <td>
 
-[当前或特定玩家](#target-player)的室友（只能用英文名）。
+[当前或特定玩家](#target-player)的室友（只能用内置名）。
 
 </td>
 <td><a href="#Roommate">#</a></td>
@@ -644,7 +644,7 @@ Divorced | 玩家和角色结婚然后又离了。
 <td>Spouse</td>
 <td>
 
-[当前或特定玩家](#target-player)的配偶（只能用英文名）。
+[当前或特定玩家](#target-player)的配偶（只能用内置名）。
 
 </td>
 <td><a href="#Spouse">#</a></td>
@@ -1253,7 +1253,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1272,7 +1272,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 注意其他内容包无法定位内部素材键（因此称为内部）。若需允许其他内容包编辑，可使用[`Action: Load`](action-load.md)创建新素材，并使用该素材名。强烈建议使用[唯一字符串ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#%E5%94%AF%E4%B8%80%E5%AD%97%E7%AC%A6%E4%B8%B2ID)以避免冲突：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1306,7 +1306,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1348,7 +1348,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1755,7 +1755,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 使用`Query`执行查询表达式。可用作占位符或条件，可包含嵌套令牌：
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1875,7 +1875,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../extensibility.md)），用法与Content Patcher的令牌相同。例如，使用Json Assets的令牌：
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1893,7 +1893,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 * 或使用令牌的补丁有不可变的`HasMod`条件列出该模组：
   ```js
   {
-     "Format": "2.6.0",
+     "Format": "2.7.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1918,7 +1918,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使�
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -1943,7 +1943,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使�
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "DynamicTokens": [
         {
             "Name": "PufferchickId",

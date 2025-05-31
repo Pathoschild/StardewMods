@@ -28,7 +28,7 @@ Content Patcher有一个令牌系统(author-guide/tokens.md)，允许内容包�
 1. 将Content Patcher设为[`manifest.json`中的**必要**依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.6.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
    ]
    ```
 2. 在你模组的`.csproj`里添加对Content Patcher DLL的引用。将此引用设置为`Private="False"`，确保它不被复制到你的模组文件夹中：
@@ -59,7 +59,7 @@ _译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和I
    var tokenString = api.ParseTokenString(
       manifest: this.ModManifest,
       rawValue: rawTokenString,
-      formatVersion: new SemanticVersion("2.6.0")
+      formatVersion: new SemanticVersion("2.7.0")
    );
    ```
 3. 从`Value`属性中获取结果，例如：
@@ -73,7 +73,7 @@ _译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和I
 var tokenString = api.ParseTokenString(
    manifest: this.ModManifest,
    rawValue: rawTokenString,
-   formatVersion: new SemanticVersion("2.6.0"),
+   formatVersion: new SemanticVersion("2.7.0"),
    assumeModIds: new[] { "spacechase0.JsonAssets" }
 );
 ```

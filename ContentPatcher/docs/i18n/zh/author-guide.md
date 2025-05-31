@@ -62,7 +62,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "Load",
@@ -110,7 +110,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 5. 创建一个新`content.json`文件，包含以下内容：
    ```js
    {
-       "Format": "2.6.0",
+       "Format": "2.7.0",
        "Changes": [
            // 这里面是你要更改的内容
        ]
@@ -149,7 +149,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 此例子将阿比盖尔原有的肖像替换成你提供的你提供的`assets/abigail.png`图像：
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "Load",
@@ -181,7 +181,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -216,7 +216,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -247,7 +247,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 例如，将城镇广场替换为内容文件夹中的自定义版本：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -272,7 +272,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 例如，你可以将其与[Tokens和条件](#tokens)结合起来加载动态文件：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "Include",
@@ -305,7 +305,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "Load",
@@ -320,7 +320,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "Load",
@@ -344,7 +344,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -373,7 +373,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",

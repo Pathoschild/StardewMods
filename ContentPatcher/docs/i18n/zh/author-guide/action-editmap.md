@@ -198,7 +198,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 例如，将城镇广场替换为另一个地图里的版本：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -274,7 +274,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 例如，此补丁更改农场洞穴的`Outdoors`地图属性，并增加一个传送（传送格式详见维基上的[地图说明文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE)）
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -335,7 +335,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 例如，此补丁延长农场里通向出货箱的路径，新增一个图块。
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -355,7 +355,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 `MapTiles`的所有子字段都支持[令牌](../author-guide.md#tokens)。例如，此补丁在出货箱前新增一个每天都会随机选择目的地的传送。
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditMap",

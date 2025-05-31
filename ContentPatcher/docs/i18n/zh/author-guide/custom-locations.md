@@ -110,7 +110,7 @@ _(可选)_ 原来使用过并可能出现在存档里的的地点名，对应`Na
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
 
    "CustomLocations": [
       // 添加新地点；
@@ -165,7 +165,7 @@ Content Patcher允许你定义原有地点名。当加载存档时，如果某�
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "CustomLocations": [
       {
          "Name": "{{ModId}}_AbigailCloset",

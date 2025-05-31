@@ -261,7 +261,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -288,7 +288,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -306,7 +306,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 你可以用把字段设为`null`的方式把某个条目删除。比如，下列事件会被替换为一个前置条件不同的另一个事件：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -350,7 +350,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 为了更改那个内容包中的音乐，你必须使用它的ID：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -374,7 +374,7 @@ ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 对于列表来说，顺序很重要（比如，游戏会使用`Data\MoviesReactions`的第一个条件适合的条目来匹配NPC反应。你可以用`MoveEntries`字段来更改顺序。比如，这会移动`Abigail`的每一个条目：
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -432,7 +432,7 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 然后我们就可以像数据素材一样在列表中添加，替换，删除条目。
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -487,7 +487,7 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 
 ```json
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "Changes": [
         {
             "Action": "EditData",

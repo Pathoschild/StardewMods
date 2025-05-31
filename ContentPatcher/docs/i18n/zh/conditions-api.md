@@ -33,7 +33,7 @@ Content Patcher有一个[条件系统](author-guide/tokens.md)。内容包作者
 1. 将Content Patcher设为[`manifest.json`中的**必要**依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.6.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
    ]
    ```
 2. 在你模组的`.csproj`里添加对Content Patcher DLL的引用。将此引用设置为`Private="False"`，确保它不被复制到你的模组文件夹中：

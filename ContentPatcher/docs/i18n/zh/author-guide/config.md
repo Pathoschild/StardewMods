@@ -41,7 +41,7 @@
 
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -98,7 +98,7 @@
 
 ```js
 {
-    "Format": "2.6.0",
+    "Format": "2.7.0",
     "ConfigSchema": {
         // 外观分段
         "Material": {

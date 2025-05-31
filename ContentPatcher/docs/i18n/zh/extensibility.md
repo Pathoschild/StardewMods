@@ -99,7 +99,7 @@ api.RegisterToken(this.ModManifest, "PlayerName", () =>
 现在，任何将你的模组列为依赖的内容包都可以在其字段中使用令牌：
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -284,7 +284,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 现在，任何将您的mod列为依赖项列出的内容包都可以在其字段中使用令牌：
 ```js
 {
-   "Format": "2.6.0",
+   "Format": "2.7.0",
    "Changes": [
       {
          "Action": "EditData",
