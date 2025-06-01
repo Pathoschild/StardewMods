@@ -304,7 +304,7 @@ name of the map property to change.
 </tr>
 </table>
 
-For example, this changes the `Outdoors` tile for the farm cave and adds a warp (see
+For example, this changes the `Outdoors` map property for the farm cave and adds a warp (see
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {

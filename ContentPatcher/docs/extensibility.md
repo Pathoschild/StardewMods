@@ -14,7 +14,7 @@ the [main README](README.md) for other info**.
 * [Advanced API](#advanced-api)
   * [Caveats](#caveats)
   * [Concepts](#concepts-1)
-  * [Add a token](#add-a-token)
+  * [Add a token](#add-a-token-1)
 * [See also](#see-also)
 
 ## Introduction

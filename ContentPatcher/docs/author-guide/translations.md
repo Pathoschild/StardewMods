@@ -145,7 +145,7 @@ For example, let's say you have this translation:
 }
 ```
 
-If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_").
+If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_".
 You can pass in the token like this instead: `{{i18n: today |dayOfWeek={{DayOfWeek}} }}`, in which
 case it'll show something like "_today is Monday_".
 

@@ -8,6 +8,7 @@ to change the game's data, images, and maps without replacing game files.
   * [Configure content packs](#configure-content-packs)
   * [Multiplayer](#multiplayer)
 * [For mod authors](#for-mod-authors)
+* [Configure](#configure)
 * [See also](#see-also)
 
 ## For players
