@@ -2,6 +2,8 @@
 
 设置选项功能让你向玩家提供可更改的设置，并基于设置实现动态。
 
+**🌐 其他语言： [en (English)](../../../author-guide/config.md)。**
+
 ## 目录
 * [基本设置](#basic-config)
   * [概述](#overview)

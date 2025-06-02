@@ -4,6 +4,8 @@
 
 **如果你想添加新的令牌给内容包使用，请参考[拓展API](extensibility.md)，其他信息详见[主README](README.md)**
 
+**🌐 其他语言： [en (English)](../../conditions-api.md)。**
+
 ## 目录
 * [概述](#overview)
 * [访问API](#access-the-api)

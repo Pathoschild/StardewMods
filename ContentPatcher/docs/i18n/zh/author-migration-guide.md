@@ -4,6 +4,8 @@
 
 **其他信息请参考[主README](README.md)**
 
+**🌐 其他语言： [en (English)](../../author-migration-guide.md)。**
+
 ## 目录
 * [常见问题](#faqs)
 * [迁移指南](#migration-guides)

@@ -1,6 +1,8 @@
 ﻿**Content Patcher** is a [Stardew Valley](http://stardewvalley.net/) mod which loads content packs
 to change the game's data, images, and maps without replacing game files.
 
+**🌐 In other languages: [zh (中文)](i18n/zh/README.md)**.
+
 ## Contents
 * [For players](#for-players)
   * [Install](#install)

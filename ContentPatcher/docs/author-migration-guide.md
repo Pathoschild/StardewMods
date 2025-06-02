@@ -4,6 +4,8 @@ This document helps mod authors update their content packs for newer versions of
 
 **See the [main README](README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](i18n/zh/author-migration-guide.md)**.
+
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)

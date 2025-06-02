@@ -4,6 +4,8 @@
 
 **如果你想在你的模组中使用条件，详见[条件API](conditions-api.md)。其他信息请参见[主README](README.md)**
 
+**🌐 其他语言： [en (English)](../../extensibility.md)。**
+
 ## 目录
 * [入门](#introduction)
 * [访问API](#access-the-api)

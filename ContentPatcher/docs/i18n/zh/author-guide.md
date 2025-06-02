@@ -4,6 +4,8 @@
 
 **其他信息请参见[主README](README.md)**。
 
+**🌐 其他语言： [en (English)](../../author-guide.md)。**
+
 ## 目录
 * [介绍](#introduction)
   * [什么是Content Patcher？](#what-is-content-patcher)

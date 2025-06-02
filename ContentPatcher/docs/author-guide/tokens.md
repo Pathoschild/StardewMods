@@ -4,6 +4,8 @@ This document lists the tokens available in Content Patcher packs.
 
 **See the [main README](../README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/tokens.md)**.
+
 ## Contents
 * [Introduction](#introduction)
   * [Overview](#overview)

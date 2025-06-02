@@ -19,6 +19,8 @@ https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95
 
 -->
 
+**🌐 其他语言： [en (English)](../../README.md)。**
+
 ## 目录
 * [玩家指南](#for-players)
   * [安装](#install)

@@ -2,6 +2,8 @@
 
 A patch with **`"Action": "Include"`** lets you load patches from another JSON file.
 
+**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/action-include.md)**.
+
 ## Contents
 * [Usage](#usage)
   * [Overview](#overview)

@@ -4,6 +4,8 @@
 
 **详见[README](../README.md)**。
 
+**🌐 其他语言： [en (English)](../../../author-guide/tokens.md)。**
+
 ## 目录
 * [介绍](#introduction)
   * [概述](#overview)

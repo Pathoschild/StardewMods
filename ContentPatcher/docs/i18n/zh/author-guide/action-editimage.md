@@ -2,6 +2,8 @@
 
 一个含有 **`"Action": "EditImage"`** 的补丁会更改游戏已加载的图像的一部分。任意数量的内容包都可以编辑同一素材。你可以用补丁向下延伸图像（Content Patcher将扩展图像以适应新图像）。
 
+**🌐 其他语言： [en (English)](../../../author-guide/action-editimage.md)。**
+
 ## 目录<a name="contents"></a>
 * [用法](#usage)
   * [格式](#format)

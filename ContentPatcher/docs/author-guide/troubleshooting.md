@@ -2,6 +2,8 @@
 
 This page documents various tools available to track down issues with your content pack.
 
+**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/troubleshooting.md)**.
+
 ## Contents
 * [Schema validator](#schema-validator)
 * [Patch commands](#patch-commands)

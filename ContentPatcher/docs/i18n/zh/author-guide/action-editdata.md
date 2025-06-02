@@ -2,6 +2,8 @@
 
 使用 **`"Action": "EditData"`** 可以编辑数据素材中的字段和条目。多个内容包可以编辑同一个素材。
 
+**🌐 其他语言： [en (English)](../../../author-guide/action-editdata.md)。**
+
 ## 目录
 * [基本概念](#basic-concepts)
   * [数据素材](#data-assets)

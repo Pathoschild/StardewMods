@@ -2,6 +2,7 @@
 
 一个含有 **`"Action": "Load"`** 的补丁用你提供的文件替换整个素材。
 
+**🌐 其他语言： [en (English)](../../../author-guide/action-load.md)。**
 
 ## 目录
 * [注意事项](#caveats)

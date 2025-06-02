@@ -4,6 +4,8 @@
 
 [`EditData`](action-editdata.md)和[`EditMap`](action-editmap.md)类型的补丁支持用`TextOperations`字段定义文本操作。
 
+**🌐 其他语言： [en (English)](../../../author-guide/text-operations.md)。**
+
 ## 目录
 * [示例](#example)
 * [格式](#format)

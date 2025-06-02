@@ -1,4 +1,4 @@
-← [README](README.md)
+﻿← [README](README.md)
 
 此文档描述中文翻译的选词
 

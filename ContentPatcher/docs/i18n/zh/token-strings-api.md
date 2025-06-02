@@ -4,6 +4,8 @@
 
 **若需要添加给其他内容包使用的自定义令牌，请参阅[扩展性API](extensibility.md)。其他信息请参见[主README](README.md)**
 
+**🌐 其他语言： [en (English)](../../token-strings-api.md)。**
+
 ## 目录
 * [概述](#overview)
 * [访问API](#access-the-api)
