@@ -175,21 +175,21 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 
 例如，假设你有一个大部分为空的源地图，包含两个图层：`Back`（红）和`Buildings`（蓝）：
 
-![](../screenshots/map-patch-mode-source.png)
+![](../../../screenshots/map-patch-mode-source.png)
 
 以下是它们在不同`PatchMode`下的组合（黑色区域代表地图背后的虚空，游戏内显示为黑）：
 
 * **`Overlay`**  
   只替换对应的图块。`Back`图层的红图块代替了`Back`图层的地面，而`Buildings`图层的蓝图块没有替换任何图块，地面依旧可见。
-  ![](../screenshots/map-patch-mode-overlay.png)
+  ![](../../../screenshots/map-patch-mode-overlay.png)
 
 * **`ReplaceByLayer`** _(default)_  
   替换所有图块，限于存在于源地图的图层。
-  ![](../screenshots/map-patch-mode-replace-by-layer.png)
+  ![](../../../screenshots/map-patch-mode-replace-by-layer.png)
 
 * **`Replace`**  
   替换所有图块。
-  ![](../screenshots/map-patch-mode-replace.png)
+  ![](../../../screenshots/map-patch-mode-replace.png)
 
 </td>
 </tr>

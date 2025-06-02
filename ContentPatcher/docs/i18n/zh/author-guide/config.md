@@ -125,12 +125,12 @@
 
 游戏内显示如下：
 
-![](../screenshots/config-with-sections.png)
+![](../../../screenshots/config-with-sections.png)
 
 ### 翻译<a name="translations"></a>
 默认情况下，你的配置选项会显示为内置名，没有工具提示或翻译。
 
-![](../screenshots/config-plain.png)
+![](../../../screenshots/config-plain.png)
 
 You can add [translation files](https://stardewvalleywiki.com/Modding:Translations) for your config
 to have a more . To do that, create an `i18n/default.json` for your default text.
@@ -170,7 +170,7 @@ For each field, add any combination of these translation keys:
 
 添加后法语玩家会看到以下界面：
 
-![](../screenshots/config-with-translations.png)
+![](../../../screenshots/config-with-translations.png)
 
 详见[维基上的 _翻译模组_ 页](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BF%BB%E8%AF%91%E6%A8%A1%E7%BB%84)。
 
