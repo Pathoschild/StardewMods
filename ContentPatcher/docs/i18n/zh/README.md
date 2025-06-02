@@ -1,23 +1,4 @@
 ﻿**Content Patcher** 是一款[星露谷物语](http://stardewvalley.net/)模组，用于加载内容包并以不更换游戏原有文件的形式更改游戏数据，贴图，和地图。
-<!--
-
-关于此汉化
-
-原版文档更新时：
-cd <repository>
-rsync --update --recursive --exclude 'i18n' ContentPatcher/docs/ ContentPatcher/docs/i18n/zh/
-
-不汉化以下文档：
-release-notes.md - 长，而且内容跟正式文档重复
-author-tokens-guide.md - 已转移到author-guide/tokens.md
-
-不汉化以下名词：
-任何需要写入模组json的词，如"Action"
-
-Wiki链接换成中文wiki
-https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95
-
--->
 
 **🌐 其他语言： [en (English)](../../README.md)。**
 

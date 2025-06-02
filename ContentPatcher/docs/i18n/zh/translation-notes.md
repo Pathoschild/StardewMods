@@ -2,6 +2,23 @@
 
 此文档描述中文翻译的选词
 
+## 关于此汉化
+
+原版文档更新时：
+```sh
+cd <repository>
+rsync --update --recursive --exclude 'i18n' ContentPatcher/docs/ ContentPatcher/docs/i18n/zh/
+```
+
+不汉化以下文档：
+- `release-notes.md` - 长，而且内容跟正式文档重复
+- `author-tokens-guide.md` - 已转移到`author-guide/tokens.md`
+
+不汉化以下名词：
+- 任何需要写入模组json的词，如"Action"
+
+Wiki链接换成[中文wiki](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)
+
 ## 词汇表
 
 __内容包__: Content Pack
