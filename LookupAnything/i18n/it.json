@@ -65,7 +65,7 @@
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
-    "internal-id": "Internal ID", // TODO
+    "internal-id": "ID Interno",
 
 
     /*********
@@ -331,7 +331,7 @@
     "item.dislikes-this": "Non piace a",
     "item.hates-this": "Lo odia",
     "item.needed-for": "Ne ha bisogno",
-    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.flavor": "Sapore", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Posseduto",
     "item.number-cooked": "Cucinato",
     "item.number-crafted": "Fabbricato",
@@ -365,7 +365,7 @@
     "item.number-owned.summary": "Quantità posseduta: {{count}}",
     "item.number-owned-flavored.summary": "ne possiedi {{count}} ({{name}}) o {{baseCount}} ({{baseName}}) di questi", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "Quantità fabbricata: {{count}}",
-    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
+    "item.internal-id.summary": "{{itemId}} ('ID qualificato' globalmente unico: {{qualifiedItemId}})",
 
 
     /*********
