@@ -131,7 +131,11 @@ internal class ModEntry : Mod
         if (config.EatAndDrinkSpeed > 1 || config.DisableEatAndDrinkConfirmation)
             yield return new EatingHandler(config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
         if (config.FishingSpeed > 1)
+        {
             yield return new FishingHandler(config.FishingSpeed);
+            yield return new FishingHitHandler(config.FishingSpeed);
+            yield return new FishingPerfectHandler(this.Helper, config.FishingSpeed);
+        }
         if (config.HarvestSpeed > 1)
             yield return new HarvestHandler(config.HarvestSpeed);
         if (config.HoldUpItemSpeed > 1)
