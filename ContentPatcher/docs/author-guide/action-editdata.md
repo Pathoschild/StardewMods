@@ -14,6 +14,7 @@ content packs can edit the same asset.
   * [Overview](#overview)
   * [Edit a dictionary](#edit-a-dictionary)
   * [Edit a list](#edit-a-list)
+  * [Moving list entries](#moving-list-entries)
   * [Edit a model](#edit-a-model)
   * [Combining operations](#combining-operations)
 * [Target field](#target-field)

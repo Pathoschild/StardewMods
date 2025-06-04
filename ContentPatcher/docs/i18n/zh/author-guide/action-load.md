@@ -12,7 +12,7 @@
 * [参见](#see-also)
 
 ## 注意事项<a name="caveats"></a>
-`Load`的功能很简单明了，但是每个素材只能被一个补丁替换。一个使用`Load`的内容包将不兼容另一个含有同`Target`的`Load`的内容包。而只使用`Edit`的内容包不会有这个问题。
+`Load`的功能很简单明了，但是每个素材只能被一个补丁替换。一个使用`Load`的内容包将不兼容另一个含有同`Target`的`Load`的内容包。而只使用`Edit*`的内容包不会有这个问题。
 
 有需求时（如加载新素材）可以使用，但是有可能的话优先考虑[其他action](../author-guide.md#actions)。
 
@@ -37,9 +37,9 @@
 field     | purpose
 --------- | -------
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
-`LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Include data/patches.json`的名称。
+`LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Load Data/Achievements`的名称。
 `Update`      | _（可选）_ 补丁字段多久更新一次。详见[更新速率](../author-guide.md#update-rate)。
-`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部令牌](../author-guide/tokens.md#local-tokens)。所有被引用的补丁都会继承这些令牌。
+`LocalTokens` | _（可选）_ 可在本补丁字段中使用的[局部令牌](../author-guide/tokens.md#local-tokens)。
 
 </dd>
 <dt>进阶字段：</dt>

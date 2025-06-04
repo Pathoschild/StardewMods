@@ -69,7 +69,6 @@
 
 地点的独有内置名。
 
-The name:
 此名字：
 * 必须仅包含字母数字或下划线字符。
 * 必须以[你模组的manifest `UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)作为开头

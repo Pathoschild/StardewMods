@@ -200,12 +200,7 @@ api.RegisterToken(this.ModManifest, "PlayerName", () =>
 <li>
 
 创建一个令牌类，需要有在这个文件里[所列出的方法](../../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
-=
 你的类中的方法必须有完全一样的名字，返回类，和参数。Content Patcher发现不对应的公开方法时会报错并退回此令牌。
-
-For example, let's say we want a token which returns the initials for the given name (like
-`{{Initials:John Smith}}` → `JS`), or the player's name if called with no input. Here's a token
-class to do that:
 
 例如，我们想要一个提供名字缩写的令牌（如`{{Initials:John Smith}}` → `JS`），或无参数时提供玩家的名字缩写。这是一个实现此功能的令牌类：
 ```c#

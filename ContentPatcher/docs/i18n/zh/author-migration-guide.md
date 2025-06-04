@@ -82,7 +82,7 @@
 
 这些更改只有在你将`Format`设置到某版本或更高时才有用。全部更改请参见[（未翻译）发行说明](../../release-notes.md)。
 
-## 2.1
+### 2.1
 于2024年5月22日发布。
 
 * `"Action": "Load"` 补丁 _只有_ 在原版游戏中有地域区分时才会自动加载到所有地域版本：
@@ -98,7 +98,7 @@
 
   这对于大部分内容包没有影响，除了修复一些非英语玩家的问题。
 
-## 2.0
+### 2.0
 于2024年3月19日发行。
 
 <ul>
@@ -159,29 +159,29 @@ Content Patcher会自动将{{ModId}}替换为[你模组manifest中的`UniqueId`]
 
 **已知限制：**
 * You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,
-you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
-`Data/Locations` to edit the data added for your location.
+  you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
+  `Data/Locations` to edit the data added for your location.
 
 * 你不能直接将`TMXL Map Toolkit`提供的地点迁移到`Data/Locations`。如果你需要继续支持`TMXL`，你可以继续使用依旧支持`TMXL`地点的`CustomLocations`，然后用`EditData`来编辑`Data/Locations`来更改你地点的数据。
 
 </li>
 </ul>
 
-## 1.25
+### 1.25
 于2022年2月27日发行。
 * **`Enabled`字段不再被支持**，你应该用`When`来实现条件化补丁。
 
-## 1.24
+### 1.24
 于2021年10月31日发行。
 
 * **`Spouse`令牌不再包括室友** 如果你想同时检查室友和配偶，可使用`{{Merge: {{Roommate}}, {{Spouse}}}}`匹配之前的效果。
 * **有些令牌的返回顺序有更改**到对应游戏的排列。绝大部分内容包不被此更改影响，除非有在`HasActiveQuest`，`HasCaughtFish`，`HasDialogueAnswer`，`HasFlag`，`HasProfession`，和`HasSeenEvent`使用`valueAt`。
 
-## 1.21
+### 1.21
 于2021年3月7日发行。
 * **`Enabled`字段不再支持令牌**，你应该用`When`来实现条件化补丁。
 
-## 1.20
+### 1.20
 于2021年2月6日发行。
 
 * `Weather`令牌默认返回当前 _地点上下文_ （如island或valley）的天气。你可以用`{{Weather: Valley}}`匹配之前的效果。

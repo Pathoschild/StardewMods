@@ -17,7 +17,6 @@
 ## 概述<a name="overview"></a>
 Content Patcher有一个令牌系统(author-guide/tokens.md)，允许内容包组成复杂并遵守上下文的字符串。
 ```js
-""
 "My favorite season is {{Season}}." // If a save is loaded, {{Season}} will be replaced with the current season.
 ```
 
@@ -41,7 +40,6 @@ _译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和I
    </ItemGroup>
    ```
 3. 在你的模组代码中（如[`GameLaunched`事件](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Events#GameLoop.GameLaunched)中，获取Content Patcher的API：
-   get a reference to Content Patcher's API:
    ```c#
    var api = this.Helper.ModRegistry.GetApi<ContentPatcher.IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```

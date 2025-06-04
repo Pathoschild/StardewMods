@@ -19,7 +19,6 @@ the [main README](README.md) for other info**.
 Content Patcher has a [token system](author-guide/tokens.md) which lets content packs make complex
 strings using contextual values. For example:
 ```js
-""
 "My favorite season is {{Season}}." // If a save is loaded, {{Season}} will be replaced with the current season.
 ```
 

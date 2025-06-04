@@ -325,7 +325,7 @@ The previous sections explain how to make static changes, but you can use tokens
 make _dynamic_ changes.
 
 For example, you can...
-* change patches based on wide range of factors like the season, answered dialogue questions,
+* change patches based on a wide range of factors like the season, answered dialogue questions,
   in-game progress, etc.
 * use randomization, arithmetic, and dynamic queries;
 * and more.
@@ -541,7 +541,7 @@ translation exists:
 ```
 
 ### How do multiple patches interact?
-Any number of patches can be applied to the same file. `Action: Load` always happens before other
+Any number of patches can be applied to the same asset. `Action: Load` always happens before other
 action types, but otherwise each patch is applied sequentially. After each patch is done, the next
 patch will see the combined asset as the input.
 

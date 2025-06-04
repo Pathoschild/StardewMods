@@ -26,8 +26,6 @@
 
 使用设置选项的第一步用`ConfigSchema`字段来描述你的内容包所提供的选项。`ConfigSchema`是与`Format`和`Changes`同级的字段。每一个设置选项有一个作为令牌的键，和一个包含一下字段的模型：
 
-一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。
-
 类型                 | 作用
 ------------------- | -------
 `AllowValues`       | _（可选）_ 一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。<br />**Tip:** 当你用`"true, false"`定义可启用/禁用的选项时，Content Patcher会认出它是布尔(并在[设置菜单](#config-ui)以复选框显示此设置).
@@ -134,11 +132,7 @@
 
 ![](../../../screenshots/config-plain.png)
 
-You can add [translation files](https://zh.stardewvalleywiki.com/模组:翻译模组) for your config
-to have a more . To do that, create an `i18n/default.json` for your default text.
-For each field, add any combination of these translation keys:
-
-你可以为设置添加[翻译文档]，从而实现更用户友好的UI。当你创建一个`i18n/default.json`后你可以给每一个设置提供这些翻译键（任何组合）：
+你可以为设置添加[翻译文档](https://zh.stardewvalleywiki.com/模组:翻译模组)，从而实现更用户友好的UI。当你创建一个`i18n/default.json`后你可以给每一个设置提供这些翻译键（任何组合）：
 
 键格式                             | 描述
 :------------------------------------- | :----------

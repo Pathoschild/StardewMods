@@ -10,6 +10,7 @@
 * [介绍](#introduction)
   * [概述](#overview)
   * [令牌类型](#token-types)
+  * [集理论](#set-theory)
 * [全局令牌](#global-tokens)
   * [日期和天气](#date-and-weather)
   * [玩家](#player)
@@ -35,20 +36,13 @@
 * [共同值](#common-values)
 * [参见](#see-also)
 
-<a name="introduction"></a>
-
-## 介绍 
-<a name="overview"></a>
-
-### 概述 
-
+## 介绍<a name="introduction"></a>
+### 概述<a name="overview"></a>
 一个 **令牌** （token）是有名字的一组值。比如说，名为`season`的令牌在游戏季节为夏天时的值为`"summer"`.
 
 令牌主要有两种使用方法：
-<a name="placeholders"></a>
 
-#### 占位符 
-
+#### 占位符<a name="placeholders"></a>
 在文本中把令牌名称放入两层大括號即可调用令牌的值，运行时会自动将令牌占位符替换成对应的令牌值。
 
 大部分字段都可以可使用令牌占位符（每个字段的文档会注释可否使用令牌），不区分大小写（`{{season}}`和`{{SEASON}}`是同一个令牌）。一个含有当前不可用的补丁将不生效。
@@ -64,10 +58,8 @@
 ```
 
 只有一个值的令牌最适合以占位符形式使用，但多值的令牌也可以用（显示为以逗号分割的列表）。
-<a name="conditions"></a>
 
-#### 条件 
-
+#### 条件<a name="conditions"></a>
 你可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
 
 每个条件里含有：
@@ -90,10 +82,8 @@
 ```
 
 一个条件里值只要有一个值对应令牌那整个条件成立。而一个补丁只有在`When`里所有的条件都成立时才会生效。
-<a name="token-types"></a>
 
-### 令牌类型 
-
+### 令牌类型<a name="token-types"></a>
 令牌有很多类型，但使用方式都一样。
 
 你不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
@@ -105,18 +95,16 @@
 * _(高级)_ [局部令牌](#local-tokens)和动态令牌类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
 * _(高级)_ [模组提供令牌](#mod-provided-tokens)由玩家安装的其他模组提供。
 
-## 集理论
+## 集理论<a name="set-theory"></a>
 Content Patcher里的令牌是[集合](https://zh.wikipedia.org/wiki/集合_(数学))，在实践层面上这意味它们：
 - 不能有重复值（每个独特的值只会出现一次）
 - 大部分时候无排列
 - 执行值对比的效率很高
-<a name="global-tokens"></a>
 
-## 全局令牌 
+## 全局令牌<a name="global-tokens"></a>
 全局令牌的值由Content Patcher定义，因此无需额外操作即可直接使用。
-<a name="date-and-weather"></a>
 
-### 日期与天气 
+### 日期与天气<a name="date-and-weather"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -228,9 +216,8 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td><a href="#Year">#</a></td>
 </tr>
 </table>
-<a name="player"></a>
 
-### 玩家
+### 玩家<a name="player"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -563,9 +550,8 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 <td><a href="#SkillLevel">#</a></td>
 </tr>
 </table>
-<a name="relationships"></a>
 
-### 人际关系 
+### 人际关系<a name="relationships"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -651,9 +637,8 @@ Divorced | 玩家和角色结婚然后又离了。
 <td><a href="#Spouse">#</a></td>
 </tr>
 </table>
-<a name="world"></a>
 
-### 世界
+### 世界<a name="world"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -769,9 +754,8 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 <td><a href="#Pregnant">#</a></td>
 </tr>
 </table>
-<a name="number-manipulation"></a>
 
-### 数字操纵
+### 数字操纵<a name="number-manipulation"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -858,9 +842,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 </tr>
 </table>
 
-<a name="string-manipulation"></a>
-
-### 字符串操纵
+### 字符串操纵<a name="string-manipulation"></a>
 <table>
 <tr>
 <th>条件</th>
@@ -1131,9 +1113,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 </tr>
 </table>
 
-<a name="field-references"></a>
-
-### 字段引用
+### 字段引用<a name="field-references"></a>
 这些令牌包含当前补丁的字段值。例如，`{{FromFile}}`为当前`FromFile`字段的值。
 
 限制：
@@ -1201,9 +1181,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 </tr>
 </table>
 
-<a name="specialized"></a>
-
-### 特定场合
+### 特定场合<a name="specialized"></a>
 这些是高级令牌，用于支持特定场景。
 
 <table>
@@ -1298,9 +1276,8 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 <td><a href="#InternalAssetKey">#</a></td>
 </tr>
 </table>
-<a name="config-tokens"></a>
 
-### 设置令牌 
+### 设置令牌<a name="config-tokens"></a>
 可通过`config.json`文件让玩家配置模组。若玩家安装[通用模组设置菜单](https://www.nexusmods.com/stardewvalley/mods/5098)，可通过游戏内的菜单设置不同的值。
 
 例如，使用配置值作为令牌和条件：
@@ -1327,9 +1304,8 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 ```
 
 详见[玩家配置文档](config.md)。
-<a name="dynamic-tokens"></a>
 
-### 动态令牌 
+### 动态令牌<a name="dynamic-tokens"></a>
 动态令牌在`content.json`的`DynamicTokens`部分定义。每块定义使用以下字段：
 
 字段   | 用途
@@ -1372,9 +1348,8 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
    ]
 }
 ```
-<a name="local-tokens"></a>
 
-### 局部令牌 
+### 局部令牌<a name="local-tokens"></a>
 局部令牌通过补丁的`LocalTokens`字段定义。令牌名称必须为纯字符串，但值可包含其他令牌。
 
 **重要限制：**
@@ -1453,7 +1428,6 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 ```
 
 ## 输入参数<a name="input-arguments"></a>
-
 ### 概述<a name="overview-1"></a>
 **输入参数** 是在`{{...}}`大括号内传递给令牌的值。输入可以是
 _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分隔，命名参数以竖线分隔。
@@ -1574,9 +1548,7 @@ _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分
   </tr>
 </table>
 
-<a name="custom-input-value-separator"></a>
-
-### 自定义参数分割符号 
+### 自定义参数分割符号<a name="custom-input-value-separator"></a>
 默认输入参数以逗号分隔，但有时需允许逗号出现在值中。可使用`inputSeparator`参数指定不同分隔符（可为一个或多个字符）。
 
 例如，允许随机对话中的分隔符不为逗号：
@@ -1588,9 +1560,8 @@ _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分
 ```
 
 **注意：** 应避免在分隔符中使用`{}|=:`，即使理论上技术有效。分隔符可能与令牌语法冲突，可能随Content Patcher版本改进。
-<a name="randomization"></a>
 
-## 随机 
+## 随机<a name="randomization"></a>
 ### 概述
 可使用`Random`令牌来随机化：
 ```js
@@ -1744,15 +1715,12 @@ key:
 ```
 </dd>
 </dl>
-<a name="advanced"></a>
 
-## 进阶 
-<a name="query-expressions"></a>
-
-## 查询表达式 
+## 进阶<a name="advanced"></a>
+### 查询表达式<a name="query-expressions"></a>
 _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术和逻辑表达式。
 
-### 用法
+#### 用法
 使用`Query`执行查询表达式。可用作占位符或条件，可包含嵌套令牌：
 ```js
 {
@@ -1779,7 +1747,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 
 表达式不区分大小写，包括文本比较。
 
-### 注意事项
+#### 注意事项
 查询表达式功能强大，但需注意：
 
 * 查询表达式 **很难验证** 无效表达式通常不会预先警告，仅在应用补丁时失败。需仔细测试表达式的功能，可以用[`patch parse`](troubleshooting.md#parse)检查新表达式。
@@ -1819,7 +1787,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 </tr>
 </table>
 
-### 运算符
+#### 运算符
 支持的运算符如下：
 
 * 算术运算（如`5 + 5`）：
@@ -1870,9 +1838,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
   "Query: '{{spouse}}' LIKE 'Abig*'": true
   ```
 
-<a name="mod-provided-tokens"></a>
-
-### 模组提供令牌 
+### 模组提供令牌<a name="mod-provided-tokens"></a>
 SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../extensibility.md)），用法与Content Patcher的令牌相同。例如，使用Json Assets的令牌：
 ```js
 {
@@ -1910,9 +1876,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
   }
   ```
 
-<a name="aliases"></a>
-
-### 别名 
+### 别名<a name="aliases"></a>
 _别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使用别名和原名。主要用于其他模组提供的长名令牌。
 
 在`content.json`的`AliasTokenNames`字段定义别名，键为别名，值为原名：
@@ -1962,9 +1926,8 @@ _别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使�
     ]
 }
 ```
-<a name="common-values"></a>
 
-## 共同值 
+## 共同值<a name="common-values"></a>
 这些是令牌中使用的预定义值，根据令牌文档的需要引用。
 
 ### 位置上下文
@@ -2004,7 +1967,5 @@ _别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使�
 `anyPlayer` | 所有玩家的组合值，无论是否在线。
 _玩家ID_ | 指定玩家的唯一多人ID，如`3864039824286870457`.
 
-<a name="see-also"></a>
-
-## 另见 
+## 另见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)

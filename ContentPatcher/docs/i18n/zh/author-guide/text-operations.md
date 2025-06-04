@@ -16,7 +16,7 @@
   * [`ReplaceDelimited`](#replacedelimited)
 * [参见](#see-also)
 
-## 示例<a name="caveats"></a>
+## 示例<a name="example"></a>
 在详细解释细节前，让我们先看一个简单案例。
 
 当你没有用文本操作时，这是添加NPC礼物喜好的方法：

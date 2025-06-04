@@ -75,7 +75,7 @@
   <td><code>TargetLocale</code></td>
   <td>
 
- _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
+ _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Animals/Dinosaur.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
 如果省略，它将应用于所有素材，不管有没有本地化。
 

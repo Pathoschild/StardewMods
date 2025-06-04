@@ -16,7 +16,7 @@
 * [已知限制](#known-limitations)
 * [参见](#see-also)
 
-## 介绍<a name="usage"></a>
+## 介绍<a name="introduction"></a>
 ### 什么是地图？<a name="what-is-a-map"></a>
 一个地图素材描述游戏内某个区域的的地形（水，悬崖，地面），地形特征（灌木），建筑，路径，和触发点。当屏幕在你到达某个区域的边缘或进入建筑物时变黑时，你正在从一个地图移动到另一个地图。
 
@@ -27,7 +27,7 @@
 每一个`EditMap`补丁可以对某一地图进行三种类型的更改：叠加地图、更改地图属性或更改地图图块。
 
 这三种类更改型的效果大相径庭，所以分段描述，但是它们可以同时出现在一个补丁。
-一个补丁补丁中的字段以此顺序生效：`FromFile`，`MapTiles`，`MapProperties`，`AddWarps`，和`TextOperations`.
+一个补丁补丁中的字段以此顺序生效：`FromFile`，`MapTiles`，`MapProperties`，`AddNpcWarps`，`AddWarps`，和`TextOperations`.
 
 ### 公共字段<a name="common-fields"></a>
 一个`EditImage`补丁是`Changes`下含有此字段的模型 (见例子)。所有更改类型都需要这些字段。
@@ -48,7 +48,7 @@
 字段       | 用途
 --------- | -------
 `When`      | _(可选)_ 使此补丁只有在指定[条件](../author-guide.md#conditions)下生效.
-`LogName`   | _(可选)_ 此补丁在日志里显示的名字，有助于理解报错。默认为类似`EditImage Maps/Town`的名字。
+`LogName`   | _(可选)_ 此补丁在日志里显示的名字，有助于理解报错。默认为类似`EditMap Maps/Town`的名字。
 `Update`    | _(可选)_ 此补丁字条的更新频率，详见[update rate](../author-guide.md#update-rate)。
 `LocalTokens` | _(可选)_ 一组仅在此补丁中生效的[局部令牌](../author-guide/tokens.md#local-tokens)。
 
@@ -89,7 +89,7 @@
   <td><code>TargetLocale</code></td>
   <td>
 
- _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
+ _（可选）_ 素材名称中要匹配的地区代码，比如设置`"TargetLocale": "fr-FR"`只编辑法语形式的素材（比如`Maps/Town.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
 如果省略，它将应用于所有素材，不管有没有本地化。
 
