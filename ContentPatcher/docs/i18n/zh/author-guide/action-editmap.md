@@ -20,7 +20,7 @@
 ### 什么是地图？<a name="what-is-a-map"></a>
 一个地图素材描述游戏内某个区域的的地形（水，悬崖，地面），地形特征（灌木），建筑，路径，和触发点。当屏幕在你到达某个区域的边缘或进入建筑物时变黑时，你正在从一个地图移动到另一个地图。
 
-**维基上的[模组:地图](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE)**有更详细的介绍地图的入门和进阶概念。
+**维基上的[模组:地图](https://zh.stardewvalleywiki.com/模组:地图)**有更详细的介绍地图的入门和进阶概念。
 
 ## 用法<a name="usage"></a>
 ### 概述<a name="overview"></a>
@@ -273,7 +273,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 </tr>
 </table>
 
-例如，此补丁更改农场洞穴的`Outdoors`地图属性，并增加一个传送（传送格式详见维基上的[地图说明文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE)）
+例如，此补丁更改农场洞穴的`Outdoors`地图属性，并增加一个传送（传送格式详见维基上的[地图说明文档](https://zh.stardewvalleywiki.com/模组:地图)）
 ```js
 {
     "Format": "2.7.0",
@@ -323,8 +323,8 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 
 字段 | 用途
 ----- | -------
-`Layer` | (必填) 需更改的图块所在的[地图图层](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE#.E5.9F.BA.E6.9C.AC.E6.A6.82.E5.BF.B5)。
-`Position` | (必填) 需更改的图块所在的[图块坐标](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE#.E5.9C.B0.E5.9D.97.E5.9D.90.E6.A0.87)。你可以用[Debug Mode模组](https://www.nexusmods.com/stardewvalley/mods/679)在游戏内查看坐标。
+`Layer` | (必填) 需更改的图块所在的[地图图层](https://zh.stardewvalleywiki.com/模组:地图#基本概念)。
+`Position` | (必填) 需更改的图块所在的[图块坐标](https://zh.stardewvalleywiki.com/模组:地图#地块坐标)。你可以用[Debug Mode模组](https://www.nexusmods.com/stardewvalley/mods/679)在游戏内查看坐标。
 `SetTilesheet` | (新增图块时必填，已有图块时可选) 指定此图块的图块表ID。
 `SetIndex` | (新增图块时必填，已有图块时可选) 指定此图块在图块表里的索引号。
 `SetProperties` | 需新增或移除的图块属性，会和并到任何已存在的图块属性。需删除属性的话，将值设置为`null`(不能用带有双引号的`"null"`！).

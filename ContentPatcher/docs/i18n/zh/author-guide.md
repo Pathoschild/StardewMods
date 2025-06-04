@@ -46,7 +46,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 
 你还可以对游戏进行动态调整。例如，除非玩家娶了阿比盖尔，否则冬天的周末晚上都会下雪。
 
-[维基上的模组制作文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)通常是为Content Patcher内容包作者编写的，所以你可以在那里找到很多例子。
+[维基上的模组制作文档](https://zh.stardewvalleywiki.com/模组:目录)通常是为Content Patcher内容包作者编写的，所以你可以在那里找到很多例子。
 
 ### 内容包长什么样？<a name="what-is-content-patcher"></a>
 内容包只是一个文件夹，其中包含两个文本文件： `manifest.json` （里面有很多信息，比如你的模组名）和 `content.json` （里面写着你要修改的内容）。你的
@@ -83,7 +83,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 素材名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
 
 You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:Editing_XNB_files#unpacking)
-你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BC%96%E8%BE%91_XNB_%E6%96%87%E4%BB%B6#.E8.A7.A3.E5.8C.85.E6.B8.B8.E6.88.8F.E6.96.87.E4.BB.B6)并查看内容。以下是`Portraits/Abigail`包含的内容：
+你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#解包游戏文件)并查看内容。以下是`Portraits/Abigail`包含的内容：
 
 ![](screenshots/sample-asset.png)
 
@@ -102,7 +102,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
        "Version": "1.0.0",
        "Description": "One or two sentences about the mod.",
        "UniqueID": "YourName.YourModName",
-       "UpdateKeys": [], //当你发布模组时，更新键填写在这里详见 https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Update_checks 来获取
+       "UpdateKeys": [], //当你发布模组时，更新键填写在这里详见 https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Update_checks 来获取
        "ContentPackFor": {
            "UniqueID": "Pathoschild.ContentPatcher"
        }
@@ -179,7 +179,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 * 在列表中重新排序条目；
 * 或在条目中编辑单个字段。
 
-此例子把苔藓汤的价格改到80（详见[物体字段](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%89%A9%E4%BD%93)。
+此例子把苔藓汤的价格改到80（详见[物体字段](https://zh.stardewvalleywiki.com/模组:物体)。
 
 ```js
 {
@@ -214,7 +214,7 @@ You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:
 * 将新图像叠加到现有图像上，支持透明度；
 * 或扩展图像大小（例如，将更多的贴图添加到贴图集）。
 
-此例子把原版[吞拿鱼](https://zh.stardewvalleywiki.com/%E9%87%91%E6%9E%AA%E9%B1%BC)替换成你提供的`assets/tuna.png`图片。
+此例子把原版[吞拿鱼](https://zh.stardewvalleywiki.com/金枪鱼)替换成你提供的`assets/tuna.png`图片。
 
 ```js
 {
@@ -413,7 +413,7 @@ For example, this adds pufferfish as a universally loved gift:
 See the [text operations documentation](author-guide/text-operations.md) for more info.
 
 ### 触发动作<a name="trigger-actions"></a>
-Content Patcher 为特定内容添加自定义[触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)，例如更新存档的命名ID。
+Content Patcher 为特定内容添加自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如更新存档的命名ID。
 
 See [Content Patcher's trigger action documentation](author-guide/trigger-actions.md) for more info.
 
@@ -520,19 +520,19 @@ translation exists:
 补丁会把修改过的数据素材合并并输入。
 
 在一个内容包内，补丁会按照在`content.json`中列出的顺序应用。 
-如果你有多个内容包，每个内容包都会按照 SMAPI 加载的顺序应用；如果你需要依赖另一个内容包，请参阅[manifest中的依赖](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Integrations).
+如果你有多个内容包，每个内容包都会按照 SMAPI 加载的顺序应用；如果你需要依赖另一个内容包，请参阅[manifest中的依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Integrations).
 
 ### 已知限制<a name="known-limitations"></a>
 某些游戏素材具有特殊逻辑。这不是Content Patcher特有的限制，但为了保险起见故在此列出这些限制。
 
 asset | notes
 ----- | -----
-`Characters/Dialogue/*` | 对话是在一天开始时设置的，因此设置[自定义更新速度](#update-rate)不会影响一天开始后的对话。（不过你可以用[特定位置对话键](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%AF%B9%E8%AF%9D#%E5%9C%B0%E7%82%B9%E5%AF%B9%E8%AF%9D)来规避这个问题）。
+`Characters/Dialogue/*` | 对话是在一天开始时设置的，因此设置[自定义更新速度](#update-rate)不会影响一天开始后的对话。（不过你可以用[特定位置对话键](https://zh.stardewvalleywiki.com/模组:对话#地点对话)来规避这个问题）。
 `Characters/Farmer/accessories` | 附件的数量是硬编码，因此自定义附件需要替换现有附件。
 `Characters/Farmer/skinColors` | 皮肤颜色的数量是硬编码，因此自定义颜色需要替换现有颜色。
 `Data/SpecialOrders` | 游戏会在 _保存之前_ 缓存该素材的副本，并在首次打开会话的特殊订单板时加载单独的副本。有条件地添加/删除特殊命令时要非常小心，因为当玩家试图从新列表中接受缓存列表中不存在的特殊订单命令时，可能会导致游戏崩溃。
-`Maps/*` | 参见维基上的[地图编辑中的潜在问题](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E5%9B%BE#%E6%BD%9C%E5%9C%A8%E9%97%AE%E9%A2%98)。
+`Maps/*` | 参见维基上的[地图编辑中的潜在问题](https://zh.stardewvalleywiki.com/模组:地图#潜在问题)。
 
 ## 参见<a name="see-also"></a>
 * [README](README.md)
-* [帮助](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%B8%AE%E5%8A%A9)
+* [帮助](https://zh.stardewvalleywiki.com/模组:帮助)

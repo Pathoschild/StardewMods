@@ -85,7 +85,7 @@ _备注：以下描述的“补丁”指同一`Target`的`Load`补丁。_
 </dl>
 
 ### 示例<a name="examples"></a>
-此补丁将阿比盖尔的肖像替换为你提供的图片（详见[NPC模组](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:NPC%E6%95%B0%E6%8D%AE)）：
+此补丁将阿比盖尔的肖像替换为你提供的图片（详见[NPC模组](https://zh.stardewvalleywiki.com/模组:NPC数据)）：
 ```js
 {
     "Format": "2.7.0",

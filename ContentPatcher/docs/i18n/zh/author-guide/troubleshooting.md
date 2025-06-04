@@ -40,8 +40,8 @@
 
 格式 | JSON模式URL
 ------ | ----------
-[SMAPI: `manifest.json`](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Manifest) | https://smapi.io/schemas/manifest.json
-[SMAPI: 翻译 (`i18n` 文件夹)](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation) | https://smapi.io/schemas/i18n.json
+[SMAPI: `manifest.json`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest) | https://smapi.io/schemas/manifest.json
+[SMAPI: 翻译 (`i18n` 文件夹)](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Translation) | https://smapi.io/schemas/i18n.json
 [Content Patcher: `content.json`](../README.md) | https://smapi.io/schemas/content-patcher.json
 
 译：以上内容改编自[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)

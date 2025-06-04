@@ -18,7 +18,7 @@
 
 你可以将翻译存在名为`i18n`的子目录，然后用`i18n` 令牌来调用翻译文本。当某个语言没有翻译时，Content Patcher会自动使用默认翻译文本。
 
-翻译文件的格式详见维基上[_i18n_ 文件夹](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Translation#i18n_.E6.96.87.E4.BB.B6.E5.A4.B9)的文档。文件里的翻译键必须逐字提供给`i18n`代币。（请参阅以下）。
+翻译文件的格式详见维基上[_i18n_ 文件夹](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Translation#i18n_文件夹)的文档。文件里的翻译键必须逐字提供给`i18n`代币。（请参阅以下）。
 
 补丁里可以用`{{i18n: <键>}}`令牌，把`<键>`替换成`i18n`文档里需调用的翻译键。你可以给`i18n`提供以下参数：
 
@@ -178,4 +178,4 @@ _其他_
 
 ## 参见 <a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
-* 更多信息请参考维基上的[_翻译模组_](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%BF%BB%E8%AF%91%E6%A8%A1%E7%BB%84)文档
+* 更多信息请参考维基上的[_翻译模组_](https://zh.stardewvalleywiki.com/模组:翻译模组)文档

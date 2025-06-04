@@ -1,6 +1,6 @@
 ﻿← [模组作者指南](../author-guide.md)
 
-此页记录Content Patcher所添加的自定义[触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
+此页记录Content Patcher所添加的自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)
 
 **🌐 其他语言： [en (English)](../../../author-guide/trigger-actions.md)。**
 
@@ -9,10 +9,10 @@
 * [参见](#参见)
 
 ## `MigrateIds`
-`Pathoschild.ContentPatcher_MigrateIds` [触发动作](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
+`Pathoschild.ContentPatcher_MigrateIds` [触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)
 用于更新原有存档的事件，物品，信件，配方，和音频。
 
-此触发动作可帮助旧模组迁移到[唯一字符串ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E5.94.AF.E4.B8.80.E5.AD.97.E7.AC.A6.E4.B8.B2ID).
+此触发动作可帮助旧模组迁移到[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID).
 
 参数格式为`<类型> [<旧ID> <新ID>]+`：
 
@@ -37,12 +37,12 @@
 
 如果类型是`Items`，并曾经定义在
 * 数据素材，如`Data/Objects`:  
-  使用[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID), like `(O)OldId`。
+  使用[qualified item ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#物品ID), like `(O)OldId`。
 * **未安装**的Json Assets内容包
   使用`"JsonAssets:<类型>:<名称>"`形式的ID。可使用`big-craftables`，`clothing`，`hats`，`objects`，和`weapons`。例如原名为 _Puffer Hat_ 的ID为`"JsonAssets:hats:Puffer Hat"`。
 * **安装**的Json Assets内容包
   使用[Json Assets token](https://github.com/spacechase0/StardewValleyMods/blob/develop/JsonAssets/docs/author-guide.md#integration-with-content-patcher)
-  获取实际ID，用作[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID)。
+  获取实际ID，用作[qualified item ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#物品ID)。
   例如`(O){{spacechase0.JsonAssets/ObjectId: Puffer Hat}}`。
 
 </td>
@@ -53,7 +53,7 @@
 
 迁移后的新ID。
 
-物品推荐使用[qualified item ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E7.89.A9.E5.93.81ID)，避免产生歧义。
+物品推荐使用[qualified item ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#物品ID)，避免产生歧义。
 
 </td>
 </tr>
@@ -88,4 +88,4 @@
 
 ## 参见
 * [模组作者指南](../author-guide.md)
-* [触发动作wiki](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%A7%A6%E5%8F%91%E5%8A%A8%E4%BD%9C)
+* [触发动作wiki](https://zh.stardewvalleywiki.com/模组:触发动作)

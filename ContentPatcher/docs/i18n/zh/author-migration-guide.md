@@ -104,7 +104,7 @@
 <ul>
 <li>
 
-游戏本身的内容更改请详见 _[迁移至游戏本体1.6](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E8%BF%81%E7%A7%BB%E8%87%B3%E6%B8%B8%E6%88%8F%E6%9C%AC%E4%BD%931.6)_
+游戏本身的内容更改请详见 _[迁移至游戏本体1.6](https://zh.stardewvalleywiki.com/模组:迁移至游戏本体1.6)_
 
 </li>
 <li>
@@ -115,7 +115,7 @@
 <li>
 
 [`CustomLocations`](custom-locations.md)已弃用。你应该将地点添加到1.6版游戏本体的
-[新的 `Data/Locations` 素材](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E7%82%B9%E6%95%B0%E6%8D%AE)。
+[新的 `Data/Locations` 素材](https://zh.stardewvalleywiki.com/模组:地点数据)。
 
 例如，如果你有这样的`CustomLocations`：
 
@@ -153,9 +153,9 @@
 ]
 ```
 
-游戏地点名使用标准[唯一字符串ID](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE%E5%AD%97%E6%AE%B5#.E5.94.AF.E4.B8.80.E5.AD.97.E7.AC.A6.E4.B8.B2ID)格式。以上例子使用了新格式(`{{ModId}}_AbigailCloset`)并把旧名字(`Custom_ExampleMod_AbigailCloset`)添加到`FormerLocationNames`将此地点自动在现有存档中迁移到新名字。
+游戏地点名使用标准[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID)格式。以上例子使用了新格式(`{{ModId}}_AbigailCloset`)并把旧名字(`Custom_ExampleMod_AbigailCloset`)添加到`FormerLocationNames`将此地点自动在现有存档中迁移到新名字。
 
-Content Patcher会自动将{{ModId}}替换为[你模组manifest中的`UniqueId`](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/APIs/Manifest)。
+Content Patcher会自动将{{ModId}}替换为[你模组manifest中的`UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)。
 
 **已知限制：**
 * You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,

@@ -27,7 +27,7 @@
 
 
 ### 数据素材<a name="data-assets"></a>
- _数据素材（data asset）_ 包括从游戏中加载的: 时间地点，角色对话等数据。比如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在[维基](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)上有阐述。
+ _数据素材（data asset）_ 包括从游戏中加载的: 时间地点，角色对话等数据。比如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在[维基](https://zh.stardewvalleywiki.com/模组:目录)上有阐述。
 
 以下是三种主要的数据素材：
 
@@ -505,4 +505,4 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 
 ## 参见<a name="see-also"></a>
 * [模组作者指南](../author-guide.md)
-* 维基上的[数据素材格式文档](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E7%9B%AE%E5%BD%95)
+* 维基上的[数据素材格式文档](https://zh.stardewvalleywiki.com/模组:目录)

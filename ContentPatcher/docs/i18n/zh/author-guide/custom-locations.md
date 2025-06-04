@@ -2,7 +2,7 @@
 
 > [!WARNING]  
 > **此功能已弃用，不应该使用于新内容包。**  
-> 1.6的新模组应该使用游戏内置的`Data/Locations`来添加自定义地点，详见[模组:地点数据](https://zh.stardewvalleywiki.com/%E6%A8%A1%E7%BB%84:%E5%9C%B0%E7%82%B9%E6%95%B0%E6%8D%AE)。
+> 1.6的新模组应该使用游戏内置的`Data/Locations`来添加自定义地点，详见[模组:地点数据](https://zh.stardewvalleywiki.com/模组:地点数据)。
 
 ----
 
