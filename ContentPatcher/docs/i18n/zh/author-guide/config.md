@@ -134,7 +134,7 @@
 
 ![](../../../screenshots/config-plain.png)
 
-You can add [translation files](https://stardewvalleywiki.com/Modding:Translations) for your config
+You can add [translation files](https://zh.stardewvalleywiki.com/模组:翻译模组) for your config
 to have a more . To do that, create an `i18n/default.json` for your default text.
 For each field, add any combination of these translation keys:
 

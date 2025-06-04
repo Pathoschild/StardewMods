@@ -252,7 +252,7 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 </td>
 <td>
 
-在[`NPCWarp`或`Warp`地图属性](https://stardewvalleywiki.com/Modding:Maps#Warps_.26_map_positions)里添加新的传送（Warp），有需要时创建此条目。此字段支持[令牌](../author-guide.md#tokens)。如果多个传送出现在同一图块上，最晚添加的传送将会生效。
+在[`NPCWarp`或`Warp`地图属性](https://zh.stardewvalleywiki.com/模组:地图#传送和地图位置)里添加新的传送（Warp），有需要时创建此条目。此字段支持[令牌](../author-guide.md#tokens)。如果多个传送出现在同一图块上，最晚添加的传送将会生效。
 
 </td>
 </tr>

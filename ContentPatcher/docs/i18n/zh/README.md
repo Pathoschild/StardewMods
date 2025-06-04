@@ -71,7 +71,7 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
   <td><code>Controls</code></td>
   <td>
 
-设置的手柄、键盘和鼠标按钮（参见 [键绑定](https://stardewvalleywiki.com/Modding:Key_bindings)）.
+设置的手柄、键盘和鼠标按钮（参见 [键绑定](https://zh.stardewvalleywiki.com/模组:使用指南/按键绑定)）.
 默认绑定为：
 
 * `F3`显示[调试模式](author-guide/troubleshooting.md#debug-mode) (需启用调试功能);
@@ -86,4 +86,4 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 ## 参见<a name="see-also"></a>
 * [版本发布说明](../../release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
-* [更多帮助](https://stardewvalleywiki.com/Modding:Help)
+* [更多帮助](https://zh.stardewvalleywiki.com/模组:帮助)

@@ -294,8 +294,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasConversationTopic</td>
 <td>
 
-[当前或特定玩家](#target-player)正在进行的[对话主题](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
-。
+[当前或特定玩家](#target-player)正在进行的[对话主题](https://zh.stardewvalleywiki.com/模组:对话#对话主题)。
 
 </td>
 <td><a href="#HasConversationTopic">#</a></td>
@@ -666,7 +665,7 @@ Divorced | 玩家和角色结婚然后又离了。
 <td>FarmCave</td>
 <td>
 
-[农场洞穴](https://stardewvalleywiki.com/The_Cave)的类型。可取值：`None`（无）， `Bats`（蝙蝠洞），
+[农场洞穴](https://zh.stardewvalleywiki.com/山洞)的类型。可取值：`None`（无）， `Bats`（蝙蝠洞），
 `Mushrooms`（蘑菇洞）。
 
 </td>
@@ -708,7 +707,7 @@ _无效类型_ | `Farm`
 <td>FarmType</td>
 <td>
 
-[农场类型](https://stardewvalleywiki.com/The_Farm#Farm_Maps)。有以下取值：
+[农场类型](https://zh.stardewvalleywiki.com/农场#农场地图)。有以下取值：
 
 值 | 描述
 ----- | -----------
@@ -1121,7 +1120,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 当前内容包的唯一ID（`manifest.json`的`UniqueID`字段）。
 
-通常用于构建[唯一字符串ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID)。
+通常用于构建[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID)。
 例如：
 ```json
 "Id": "{{ModId}}_ExampleItem"
@@ -1891,7 +1890,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 ```
 
 使用模组提供的令牌需满足以下至少一项：
-* 提供令牌的模组是你的内容包的[必需依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies)。
+* 提供令牌的模组是你的内容包的[必需依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)。
 * 或使用令牌的补丁有不可变的`HasMod`条件列出该模组：
   ```js
   {

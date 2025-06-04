@@ -72,7 +72,7 @@
 <td><code>Target</code></td>
 <td>
 
-需更改的文本，以[面包屑路径](https://en.wikipedia.org/wiki/Breadcrumb_navigation)格式表示。
+需更改的文本，以[面包屑路径](https://zh.wikipedia.org/wiki/面包屑导航)格式表示。
 
 每一个路径值代表要导航到的一个字段。可使用的字段根据补丁类型会变化，详见[`EditData`](action-editdata.md)和[`EditMap`](action-editmap.md)的文档。
 

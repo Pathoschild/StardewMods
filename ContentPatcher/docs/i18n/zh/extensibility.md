@@ -34,7 +34,7 @@
 
 访问API的步骤为：
 
-1. 将Content Patcher设为[`manifest.json`中的依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+1. 将Content Patcher设为[`manifest.json`中的依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性):
 
    ```js
    "Dependencies": [

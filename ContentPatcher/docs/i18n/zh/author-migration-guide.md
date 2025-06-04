@@ -284,4 +284,4 @@ you can continue using `CustomLocations` which still supports specifying TMXL lo
 
 ## 参见<a name="see-also"></a>
 * 其他信息请见[README](README.md)
-* [寻求帮助](https://stardewvalleywiki.com/Modding:Help)
+* [寻求帮助](https://zh.stardewvalleywiki.com/模组:帮助)

@@ -27,7 +27,7 @@ Content Patcher有一个令牌系统(author-guide/tokens.md)，允许内容包�
 
 访问API的步骤为：
 
-1. 将Content Patcher设为[`manifest.json`中的**必要**依赖](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+1. 将Content Patcher设为[`manifest.json`中的**必要**依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性):
    ```js
    "Dependencies": [
       { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }

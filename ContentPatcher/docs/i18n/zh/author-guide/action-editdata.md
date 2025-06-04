@@ -258,7 +258,7 @@
 </dl>
 
 ### 编辑字典<a name="edit-a-dictionary"></a>
-[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。比如，以下操作会[添加一个新物品](https://stardewvalleywiki.com/Modding:Items)
+[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。比如，以下操作会[添加一个新物品](https://zh.stardewvalleywiki.com/模组:物品数据)
 ID为`{{ModId}}_Pufferchick`的物品，会被添加到`Data/Objects`中：
 
 ```js

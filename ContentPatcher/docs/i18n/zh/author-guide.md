@@ -82,7 +82,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 
 素材名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
 
-You can [unpack the game's content files](https://stardewvalleywiki.com/Modding:Editing_XNB_files#unpacking)
+You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#unpacking)
 你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#解包游戏文件)并查看内容。以下是`Portraits/Abigail`包含的内容：
 
 ![](screenshots/sample-asset.png)
@@ -456,7 +456,6 @@ _多种更新频率_         | 您可以指定由逗号分隔的多个值，如`
     "Update": "OnTimeChange"
 }
 ```
-
 
 ### Content Patcher更新是否与旧版本兼容？<a name="are-content-patcher-updates-backwards-compatible"></a>
 兼容。详见[作者迁移指南](author-migration-guide.md)。

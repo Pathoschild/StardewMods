@@ -29,8 +29,8 @@
 
 虽然地图和地点经常互换使用，代码里的“地图（map）”和“地点（location）”是两个不同的概念。区别对于理解此功能的工作方式至关重要：
 
-* [**地图**](https://stardewvalleywiki.com/Modding:Maps)是一个种素材，描述图块，分布，图块表，和地图/图块属性。每当你加载游戏和每次模组更改地图时，整个地图会重新加载。
-* [**地点**](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#GameLocation_et_al)是游戏中管理某区域的代码（包括非地图实体，如玩家）。地点会保存到存档文件中，并只在加载存档时加载一次。
+* [**地图**](https://zh.stardewvalleywiki.com/模组:地图)是一个种素材，描述图块，分布，图块表，和地图/图块属性。每当你加载游戏和每次模组更改地图时，整个地图会重新加载。
+* [**地点**](https://zh.stardewvalleywiki.com/模组:制作指南/游戏基本架构#GameLocation_et_al)是游戏中管理某区域的代码（包括非地图实体，如玩家）。地点会保存到存档文件中，并只在加载存档时加载一次。
 
 换句话说，_地点_(游戏代码) 包含 _地图_（从`Content`加载的素材）：
 
@@ -72,7 +72,7 @@
 The name:
 此名字：
 * 必须仅包含字母数字或下划线字符。
-* 必须以[你模组的manifest `UniqueId`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest)作为开头
+* 必须以[你模组的manifest `UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)作为开头
   (like `Your.ModId_`)，防止冲突。 出于旧版支持原因，你也可以用`Custom_`作为开头，但这不推荐。
 * 必须 **全局独特** ，所以强烈推荐使用模组ID作为前缀。如果两个内容包添加了名称重复的地点，两个地点都不生效。如果玩家此时保存游戏，地点内的东西将会永久丢失。
 
@@ -149,7 +149,7 @@ _(可选)_ 原来使用过并可能出现在存档里的的地点名，对应`Na
 ### 游戏中如何抵达我的自定义地点？<a name="how-do-i-get-to-my-location-in-game"></a>
 
 `CustomLocations`仅添加地点。不要忘记给玩家进入地点的方法，如用[`EditMap`](action-editmap.md)添加传送。测试时可用`debug warp <location name>` [console
-command](https://stardewvalleywiki.com/Modding:Console_commands#Console_commands)
+command](https://zh.stardewvalleywiki.com/模组:控制台命令#控制台命令)
 
 ### 地点可以添加条件吗?<a name="can-i-make-the-location-conditional"></a>
 
