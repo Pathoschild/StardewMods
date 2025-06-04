@@ -245,8 +245,6 @@ you can continue using `CustomLocations` which still supports specifying TMXL lo
   "Update": "OnLocationChange"
   ```
 
-  （这是迁移到实时内容更新的一部分，所有令牌都将及时更新）
-
 ### 1.15
 于2020年7月4日发布。
 

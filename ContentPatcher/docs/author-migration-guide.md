@@ -274,9 +274,6 @@ Released 16 August 2020.
   "Update": "OnLocationChange"
   ```
 
-  (This is part of the migration to realtime content updates, since all tokens will soon update
-  live.)
-
 ### 1.15
 Released 04 July 2020.
 
