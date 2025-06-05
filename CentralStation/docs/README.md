@@ -10,6 +10,7 @@ the Central Station location with their own content like tourists and bookshelf 
   * [Buy a ticket](#buy-a-ticket)
   * [Visit Central Station](#visit-central-station)
   * [Mod compatibility](#mod-compatibility)
+  * [Reassign old content packs](#reassign-old-content-packs)
 * [For mod authors](#for-mod-authors)
 * [See also](#see-also)
 
@@ -54,6 +55,38 @@ There are no known conflicts with other mods.
 
 Central Station automatically shows stops added through the Bus Locations and Train Station mods if they're installed
 too.
+
+### Reassign old content packs
+Normally Bus Locations or Train Station content packs only work if you install their framework mod. However, you can
+reassign them to Central Station to avoid needing to install Bus Locations or Train Station separately.
+
+To do that:
+
+1. Open the content pack's `manifest.json` file in a text editor.
+2. Find the line that looks like this:
+   ```json
+   "ContentPackFor": {
+      "UniqueID": "hootless.BusLocations"
+   }
+   ```
+   Or like this:
+   ```json
+   "ContentPackFor": {
+      "UniqueID": "Cherry.TrainStation"
+   }
+   ```
+3. And change it to this:
+   ```json
+   "ContentPackFor": {
+      "UniqueID": "Pathoschild.CentralStation"
+   }
+   ```
+
+That's it! Now just launch the game, and the content pack will be loaded by Central Station directly.
+
+> [!NOTE]  
+> This section is **intended for players**. If you're a mod author, see [_for mod authors_](#for-mod-authors) to add a
+> stop to Central Station in a non-obsolete way.
 
 ## For mod authors
 See the [author guide](author-guide.md) for more info!

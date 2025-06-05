@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Pathoschild.Stardew.CentralStation.Framework;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
-using Pathoschild.Stardew.CentralStation.Framework.Integrations;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -29,7 +30,7 @@ internal class ModEntry : Mod
     private ContentManager ContentManager = null!; // set in Entry
 
     /// <summary>Manages the available destinations, including destinations provided through other frameworks like Train Station.</summary>
-    private StopManager StopManager = null!; // set in Entry
+    private Lazy<StopManager> StopManager = null!; // set in Entry
 
     /// <summary>Whether the Bus Locations mod is installed, regardless of whether it has any stops loaded.</summary>
     private bool HasBusLocationsMod;
@@ -53,10 +54,11 @@ internal class ModEntry : Mod
 
         // init
         this.ContentManager = new(helper.GameContent, helper.ModRegistry, this.Monitor);
-        this.StopManager = new(this.ContentManager, this.Monitor, helper.ModRegistry);
+        this.StopManager = new Lazy<StopManager>(() => new(this.ContentManager, this.Monitor, helper.ModRegistry)); // must be lazy since we can't access mod-provided APIs in Entry
         this.HasBusLocationsMod = helper.ModRegistry.IsLoaded(BusLocationsStopProvider.ModId);
 
         // hook events
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.DayStarted += this.ContentManager.OnDayStarted;
         helper.Events.Content.AssetRequested += this.ContentManager.OnAssetRequested;
         helper.Events.Content.AssetReady += this.ContentManager.OnAssetReady;
@@ -71,13 +73,33 @@ internal class ModEntry : Mod
     /// <inheritdoc />
     public override object GetApi(IModInfo mod)
     {
-        return new CentralStationApi(mod.Manifest, this.StopManager);
+        return new CentralStationApi(mod.Manifest, this.StopManager.Value);
     }
 
 
     /*********
     ** Private methods
     *********/
+    /****
+    ** Load reassigned content packs
+    ****/
+    /// <summary>Try to load old content packs which were reassigned to Central Station.</summary>
+    private void LoadReassignedContentPacks()
+    {
+        foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
+        {
+            try
+            {
+                if (!this.StopManager.Value.TryLoadContentPack(contentPack))
+                    this.Monitor.Log($"Failed to load reassigned content pack '{contentPack.Manifest.Name}'. This doesn't seem to be a Bus Locations or Train Station content pack.");
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Failed to load reassigned content pack '{contentPack.Manifest.Name}'. Is this a valid Bus Locations or Train Station content pack?\n\nTechnical details: {ex}");
+            }
+        }
+    }
+
     /****
     ** Handle map actions
     ****/
@@ -282,6 +304,12 @@ internal class ModEntry : Mod
     /****
     ** Handle SMAPI events
     ****/
+    /// <inheritdoc cref="IGameLoopEvents.GameLaunched" />
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        this.LoadReassignedContentPacks();
+    }
+
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
     private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
     {
@@ -316,7 +344,7 @@ internal class ModEntry : Mod
     {
         // get stops
         // Central Station first, then Stardew Valley, then any others in alphabetical order
-        var choices = this.StopManager
+        var choices = this.StopManager.Value
             .GetAvailableStops(networks)
             .Select(stop => (Stop: stop, Label: this.ContentManager.GetStopLabel(stop, networks)))
             .OrderBy(choice => choice.Stop.Id switch
