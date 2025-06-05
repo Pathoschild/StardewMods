@@ -71,6 +71,10 @@
     "config.fade.name": "Übergang",
     "config.fade.tooltip": "Wie schnell der Bildschirm auf Schwarz wechselt und wieder eingeblendet wird. Standardwert {{defaultValue}}x.",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "Schatztruhe beim Fischen",
     "config.fishing-treasure.tooltip": "Wie schnell du eine Schatztruhe beim Fischen öffnest. Standardwert {{defaultValue}}x.",
 

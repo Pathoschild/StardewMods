@@ -71,6 +71,10 @@
     "config.fade.name": "淡入淡出",
     "config.fade.tooltip": "屏幕淡入淡出黑色的速度。默认{{defaultValue}}x。",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "钓鱼宝箱",
     "config.fishing-treasure.tooltip": "钓鱼宝箱打开的速度。默认{{defaultValue}}x。",
 
