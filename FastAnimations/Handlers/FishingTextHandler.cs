@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -10,35 +8,69 @@ using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.FastAnimations.Handlers;
 
-/// <summary>Handles the fishing "perfect" toast animation.</summary>
-/// <remarks>See game logic in <see cref="BobberBar.update"/>.</remarks>
+/// <summary>Handles the fishing text animations.</summary>
+/// <remarks>See game logic in <see cref="BobberBar.update"/> and <see cref="FishingRod.DoFunction"/>.</remarks>
 internal sealed class FishingTextHandler : BaseAnimationHandler
 {
-    private readonly IModHelper helper;
+    /*********
+    ** Fields
+    *********/
+    /// <summary>Simplifies access to private game code.</summary>
+    private readonly IReflectionHelper Reflection;
+
 
     /*********
     ** Public methods
     *********/
-    /// <inheritdoc />
-    public FishingTextHandler(IModHelper helper, float multiplier)
+    /// <summary>Construct an instance.</summary>
+    /// <param name="multiplier">The animation speed multiplier to apply.</param>
+    /// <param name="reflection">Simplifies access to private game code.</param>
+    public FishingTextHandler(float multiplier, IReflectionHelper reflection)
         : base(multiplier)
     {
-        this.helper = helper;
+        this.Reflection = reflection;
     }
 
     /// <inheritdoc />
     public override bool TryApply(int playerAnimationId)
     {
+        Farmer player = Game1.player;
+
+        // HIT! text
+        if (player.CurrentTool is FishingRod && Game1.screenOverlayTempSprites.Any())
+        {
+            bool applied = this.ApplySkipsWhile(() =>
+            {
+                bool anyApplied = false;
+
+                foreach (TemporaryAnimatedSprite sprite in Game1.screenOverlayTempSprites)
+                {
+                    if (sprite.id == 987654321)
+                    {
+                        sprite.update(Game1.currentGameTime);
+                        anyApplied = true;
+                    }
+                }
+
+                return anyApplied;
+            });
+            if (applied)
+                return true;
+        }
+
+        // PERFECT text
         if (Game1.activeClickableMenu is BobberBar bobberMenu)
         {
-            var field = this.helper.Reflection.GetField<SparklingText?>(bobberMenu, "sparkleText");
+            IReflectedField<SparklingText?> field = this.Reflection.GetField<SparklingText?>(bobberMenu, "sparkleText");
             return
                 field.GetValue() is not null
-                && this.ApplySkipsWhile(() => {
-                    if (field.GetValue() is not null) {
-                        bobberMenu.update(Game1.currentGameTime);
-                    }
-                    return field.GetValue() is not null;
+                && this.ApplySkipsWhile(() =>
+                {
+                    if (field.GetValue() is null)
+                        return false;
+
+                    bobberMenu.update(Game1.currentGameTime);
+                    return true;
                 });
         }
         return false;
