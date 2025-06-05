@@ -65,6 +65,9 @@ internal class ModConfig
     /// <summary>The speed multiplier for the screen fade to black.</summary>
     public float FadeSpeed { get; set; } = 4;
 
+    /// <summary>The speed multiplier for fishing text like 'HIT!' and 'PERFECT'.</summary>
+    public float FishingTextSpeed { get; set; } = 1;
+
     /// <summary>The speed multiplier for opening a fishing treasure chest.</summary>
     public float FishingTreasureSpeed { get; set; } = 4;
 

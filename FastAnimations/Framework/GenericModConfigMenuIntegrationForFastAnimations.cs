@@ -167,6 +167,14 @@ internal class GenericModConfigMenuIntegrationForFastAnimations : IGenericModCon
                 max: maxSpeed
             )
             .AddNumberField(
+                name: I18n.Config_FishingText_Name,
+                tooltip: () => I18n.Config_FishingText_Tooltip(defaultValue: defaultConfig.FishingTextSpeed),
+                get: config => config.FishingTextSpeed,
+                set: (config, value) => config.FishingTextSpeed = value,
+                min: minSpeed,
+                max: maxSpeed
+            )
+            .AddNumberField(
                 name: I18n.Config_FishingTreasure_Name,
                 tooltip: () => I18n.Config_FishingTreasure_Tooltip(defaultValue: defaultConfig.FishingTreasureSpeed),
                 get: config => config.FishingTreasureSpeed,

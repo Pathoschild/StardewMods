@@ -131,10 +131,7 @@ internal class ModEntry : Mod
         if (config.EatAndDrinkSpeed > 1 || config.DisableEatAndDrinkConfirmation)
             yield return new EatingHandler(config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
         if (config.FishingSpeed > 1)
-        {
             yield return new FishingHandler(config.FishingSpeed);
-            yield return new FishingTextHandler(config.FishingSpeed, this.Helper.Reflection);
-        }
         if (config.HarvestSpeed > 1)
             yield return new HarvestHandler(config.HarvestSpeed);
         if (config.HoldUpItemSpeed > 1)
@@ -167,6 +164,8 @@ internal class ModEntry : Mod
             yield return new EventHandler(config.Experimental_EventSpeed);
         if (config.FadeSpeed > 1)
             yield return new FadeHandler(config.FadeSpeed);
+        if (config.FishingTextSpeed > 1)
+            yield return new FishingTextHandler(config.FishingTextSpeed, this.Helper.Reflection);
         if (config.FishingTreasureSpeed > 1)
             yield return new FishingTreasureHandler(config.FishingTreasureSpeed);
         if (config.ForgeSpeed > 1)

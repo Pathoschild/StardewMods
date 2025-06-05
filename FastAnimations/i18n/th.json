@@ -24,8 +24,9 @@
     "config.harvest.name": "เก็บเกี่ยว",
     "config.harvest.tooltip": "ต้องการเก็บเกี่ยวพืชผลและอาหารด้วยมือเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
 
-    "config.hold-up-item.name": "Hold up item", // TODO
-    "config.hold-up-item.tooltip": "How fast you hold up an item. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.hold-up-item.name": "Hold up item",
+    "config.hold-up-item.tooltip": "How fast you hold up an item. Default {{defaultValue}}x.",
 
     "config.horse-flute.name": "เล่นขลุ่ยม้า",
     "config.horse-flute.tooltip": "ต้องการเล่นขลุ่ยม้าให้มันเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
@@ -68,32 +69,38 @@
     "config.casino-slots.name": "สล็อตคาสิโน",
     "config.casino-slots.tooltip": "ต้องการให้สล็อตคาสิโนหมุนเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x",
 
-    "config.fade.name": "Fade", // TODO
-    "config.fade.tooltip": "How fast the screen fades to black and fades back in. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.fade.name": "Fade",
+    "config.fade.tooltip": "How fast the screen fades to black and fades back in. Default {{defaultValue}}x.",
 
-    "config.fishing-treasure.name": "Fishing treasure chest", // TODO
-    "config.fishing-treasure.tooltip": "How fast you open a fishing treasure chest. Default {{defaultValue}}x.", // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
 
-    "config.forge.name": "Forge", // TODO
-    "config.forge.tooltip": "How fast the volcano forge works. Default {{defaultValue}}x.", // TODO
+    "config.fishing-treasure.name": "Fishing treasure chest",
+    "config.fishing-treasure.tooltip": "How fast you open a fishing treasure chest. Default {{defaultValue}}x.",
+
+    "config.forge.name": "Forge",
+    "config.forge.tooltip": "How fast the volcano forge works. Default {{defaultValue}}x.",
 
     "config.open-chest.name": "เปิดกล่องเก็บของ",
     "config.open-chest.tooltip": "ต้องการให้เปิดกล่องเก็บของเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x.",
 
-    "config.parrot-express.name": "Parrot express", // TODO
-    "config.parrot-express.tooltip": "How fast the parrot express runs. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.parrot-express.name": "Parrot express",
+    "config.parrot-express.tooltip": "How fast the parrot express runs. Default {{defaultValue}}x.",
 
-    "config.prize-ticket-machine.name": "Prize ticket machine", // TODO
-    "config.prize-ticket-machine.tooltip": "How fast Lewis' prize ticket machine accepts a ticket and produces an item. Default {{defaultValue}}x.", // TODO
+    "config.prize-ticket-machine.name": "Prize ticket machine",
+    "config.prize-ticket-machine.tooltip": "How fast Lewis' prize ticket machine accepts a ticket and produces an item. Default {{defaultValue}}x.",
 
-    "config.tailor.name": "Tailor", // TODO
-    "config.tailor.tooltip": "How fast the sewing machine works. Default {{defaultValue}}x.", // TODO
+    "config.tailor.name": "Tailor",
+    "config.tailor.tooltip": "How fast the sewing machine works. Default {{defaultValue}}x.",
 
     "config.tree-fall.name": "ต้นไม้ล้มลงพื้น",
     "config.tree-fall.tooltip": "ต้องต้นไม้ล้มลงถึงพื้นเร็วแค่ไหนหลังจากที่คุณโค่นมันแล้ว ค่าเริ่มต้นคือ {{defaultValue}}x, ขอแนะนำ {{suggestedValue}}x",
 
-    "config.wheel-spin.name": "Wheel spin", // TODO
-    "config.wheel-spin.tooltip": "How fast the Stardew Valley Fair wheel minigame spins. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.wheel-spin.name": "Wheel spin",
+    "config.wheel-spin.tooltip": "How fast the Stardew Valley Fair wheel minigame spins. Default {{defaultValue}}x.",
 
     /****
     ** 'UI Animation Speeds' section
@@ -106,8 +113,9 @@
     "config.open-dialogue-box.name": "แสดงบทสทนา",
     "config.open-dialogue-box.tooltip": "ต้องการแสดงบทสนทนาเร็วแค่ไหน ค่าเริ่มต้นคือ {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.shipping-menu.name": "Shipping menu transitions",
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
 
     "config.title-menu.name": "การเปลี่ยนเมนูชื่อเรื่อง",
     "config.title-menu.tooltip": "ความเร็วในการเปลี่ยนเมนูชื่อเรื่องระหว่างหน้าจอ ค่าเริ่มต้นคือ {{defaultValue}}x",
@@ -118,9 +126,10 @@
     /****
     ** 'Experimental' section
     ****/
-    "config.experimental": "Experimental options", // TODO
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.", // TODO
+    // TODO
+    "config.experimental": "Experimental options",
+    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.",
 
-    "config.event.name": "Event cutscene", // TODO
-    "config.event.tooltip": "How fast event cutscenes play. Default {{defaultValue}}x, suggested {{suggestedValue}}x." // TODO
+    "config.event.name": "Event cutscene",
+    "config.event.tooltip": "How fast event cutscenes play. Default {{defaultValue}}x, suggested {{suggestedValue}}x."
 }

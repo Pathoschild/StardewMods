@@ -71,6 +71,10 @@
     "config.fade.name": "Dissolvenza",
     "config.fade.tooltip": "La velocità con cui lo schermo passa al nero e va in dissolvenza. Predefinito {{defaultValue}}x.",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "Pescare i forzieri del tesoro",
     "config.fishing-treasure.tooltip": "La velocità con cui apri i forzieri del tesoro pescati. Predefinito {{defaultValue}}x.",
 
