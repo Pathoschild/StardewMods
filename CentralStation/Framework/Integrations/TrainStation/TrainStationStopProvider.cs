@@ -22,8 +22,14 @@ internal class TrainStationStopProvider : ICustomStopProvider
     /// <summary>The integration with the Train Station mod.</summary>
     private readonly TrainStationIntegration TrainStation;
 
+    /// <summary>The stops loaded from content packs reassigned to Central Station.</summary>
+    private readonly List<Stop> ReassignedStops = [];
+
     /// <summary>Get a translation provided by the content pack.</summary>
     private readonly Func<string, object[], string> GetTranslation;
+
+    /// <summary>The Train Station stop IDs which shouldn't be added to Central Station.</summary>
+    private readonly HashSet<string> IgnoreStopIds = ["Cherry.TrainStation_BoatTunnel", "Cherry.TrainStation_GingerIsland", "Cherry.TrainStation_Railroad"];
 
 
     /*********
@@ -48,77 +54,99 @@ internal class TrainStationStopProvider : ICustomStopProvider
         return this.TrainStation.IsLoaded;
     }
 
+    /// <summary>Try to load a Train Station content pack.</summary>
+    /// <param name="contentPack">The content pack to load.</param>
+    /// <returns>Returns whether it was successfully loaded as a Train Station content pack.</returns>
+    public bool TryLoadContentPack(IContentPack contentPack)
+    {
+        if (!contentPack.HasFile("TrainStops.json"))
+            return false;
+
+        ReassignedContentPackModel data = contentPack.ModContent.Load<ReassignedContentPackModel>("TrainStops.json");
+        if (data.BoatStops is null && data.TrainStops is null)
+            return false; // not a Bus Locations content pack
+
+        foreach (Stop stop in this.TryLoadStopsFromContentPackList(contentPack, data.BoatStops, StopNetworks.Boat))
+            this.ReassignedStops.Add(stop);
+
+        foreach (Stop stop in this.TryLoadStopsFromContentPackList(contentPack, data.TrainStops, StopNetworks.Train))
+            this.ReassignedStops.Add(stop);
+
+        return true;
+    }
+
     /// <inheritdoc />
     public IEnumerable<Stop> GetAvailableStops(StopNetworks networks)
     {
-        var api = this.TrainStation;
-
-        // skip if not applicable
-        if (!api.IsLoaded || !networks.HasAnyFlag(StopNetworks.Boat | StopNetworks.Train))
-            yield break;
-
-        // get enumerator
-        IEnumerator<ITrainStationStopModel?>? enumerator = null;
-        try
+        // from reassigned content packs
+        if (this.ReassignedStops.Count > 0)
         {
-            bool isBoat = networks.HasFlag(StopNetworks.Boat);
-            bool isTrain = networks.HasFlag(StopNetworks.Train);
-
-            enumerator = isBoat && isTrain
-                ? api.GetAvailableStops(true).Concat(api.GetAvailableStops(false)).GetEnumerator()
-                : api.GetAvailableStops(isBoat).GetEnumerator();
-        }
-        catch (Exception ex)
-        {
-            this.Monitor.Log($"Could not load {networks} stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
-            enumerator?.Dispose();
-            yield break;
+            foreach (Stop stop in this.ReassignedStops)
+            {
+                if (stop.Network.HasAnyFlag(networks))
+                    yield return stop;
+            }
         }
 
-        // yield each result
-        while (true)
+        // from Train Station API
+        if (this.TrainStation is { IsLoaded: true } api && networks.HasAnyFlag(StopNetworks.Boat | StopNetworks.Train))
         {
-            // get next stop
-            ITrainStationStopModel? stop;
+            // get enumerator
+            IEnumerator<ITrainStationStopModel?>? enumerator = null;
             try
             {
-                if (!enumerator.MoveNext())
-                {
-                    enumerator.Dispose();
-                    yield break;
-                }
+                bool isBoat = networks.HasFlag(StopNetworks.Boat);
+                bool isTrain = networks.HasFlag(StopNetworks.Train);
 
-                stop = enumerator.Current;
-                if (stop is null)
-                    continue;
+                enumerator = isBoat && isTrain
+                    ? api.GetAvailableStops(true).Concat(api.GetAvailableStops(false)).GetEnumerator()
+                    : api.GetAvailableStops(isBoat).GetEnumerator();
             }
             catch (Exception ex)
             {
                 this.Monitor.Log($"Could not load {networks} stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
+                enumerator?.Dispose();
                 yield break;
             }
 
-            // ignore stops which duplicate a Central Station stop
-            switch (stop.Id)
+            // yield each result
+            while (true)
             {
-                case "Cherry.TrainStation_BoatTunnel":
-                case "Cherry.TrainStation_GingerIsland":
-                case "Cherry.TrainStation_Railroad":
-                    continue;
-            }
+                // get next stop
+                ITrainStationStopModel? stop;
+                try
+                {
+                    if (!enumerator.MoveNext())
+                    {
+                        enumerator.Dispose();
+                        yield break;
+                    }
 
-            // add stop
-            yield return new Stop(
-                Id: stop.Id,
-                DisplayName: () => this.GetTranslation("destinations.from-train-station-mod", [stop.DisplayName]),
-                DisplayNameInCombinedLists: null,
-                ToLocation: stop.TargetMapName,
-                ToTile: new Point(stop.TargetX, stop.TargetY),
-                ToFacingDirection: stop.FacingDirectionAfterWarp,
-                Cost: stop.Cost,
-                Network: stop.IsBoat ? StopNetworks.Boat : StopNetworks.Train,
-                Condition: this.ConvertExpandedPreconditionsToGameStateQuery(stop.Conditions)
-            );
+                    stop = enumerator.Current;
+                    if (stop is null)
+                        continue;
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Could not load {networks} stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
+                    yield break;
+                }
+
+                // add stop if valid
+                Stop? loadedStop = this.TryLoadStop(
+                    id: stop.Id,
+                    displayName: () => stop.DisplayName,
+                    targetMapName: stop.TargetMapName,
+                    targetX: stop.TargetX,
+                    targetY: stop.TargetY,
+                    facingDirectionAfterWarp: stop.FacingDirectionAfterWarp,
+                    cost: stop.Cost,
+                    conditions: stop.Conditions,
+                    network: stop.IsBoat ? StopNetworks.Boat : StopNetworks.Train
+                );
+                if (loadedStop is not null)
+                    yield return loadedStop;
+            }
         }
     }
 
@@ -126,9 +154,68 @@ internal class TrainStationStopProvider : ICustomStopProvider
     /*********
     ** Private methods
     *********/
+    /// <summary>Try to load Train Station stops from a content pack reassigned to Central Station.</summary>
+    /// <param name="contentPack">The content pack being loaded.</param>
+    /// <param name="rawStops">The raw stops listed in the content pack.</param>
+    /// <param name="network">The network for which to add the stop.</param>
+    private IEnumerable<Stop> TryLoadStopsFromContentPackList(IContentPack contentPack, List<ReassignedContentPackStopModel?>? rawStops, StopNetworks network)
+    {
+        if (rawStops?.Count is not > 0)
+            yield break;
+
+        int index = 0;
+        foreach (ReassignedContentPackStopModel? stop in rawStops)
+        {
+            if (stop?.TargetMapName is null)
+                continue;
+
+            this.TryLoadStop(
+                id: $"{contentPack.Manifest.UniqueID}_{network}_{index++}", // match generated Train Station IDs
+                displayName: stop.GetDisplayName,
+                targetMapName: stop.TargetMapName,
+                targetX: stop.TargetX,
+                targetY: stop.TargetY,
+                facingDirectionAfterWarp: stop.FacingDirectionAfterWarp,
+                cost: stop.Cost,
+                conditions: stop.Conditions,
+                network: network
+            );
+        }
+    }
+
+    /// <summary>Try to load a Train Station stop based on its raw data.</summary>
+    /// <param name="id">The unique ID for this stop.</param>
+    /// <param name="displayName"><inheritdoc cref="ITrainStationStopModel.DisplayName" path="/summary"/></param>
+    /// <param name="targetMapName"><inheritdoc cref="ITrainStationStopModel.TargetMapName" path="/summary"/></param>
+    /// <param name="targetX"><inheritdoc cref="ITrainStationStopModel.TargetX" path="/summary"/></param>
+    /// <param name="targetY"><inheritdoc cref="ITrainStationStopModel.TargetY" path="/summary"/></param>
+    /// <param name="facingDirectionAfterWarp"><inheritdoc cref="ITrainStationStopModel.FacingDirectionAfterWarp" path="/summary"/></param>
+    /// <param name="cost"><inheritdoc cref="ITrainStationStopModel.Cost" path="/summary"/></param>
+    /// <param name="conditions"><inheritdoc cref="ITrainStationStopModel.Conditions" path="/summary"/></param>
+    /// <param name="network"><inheritdoc cref="Stop.Network" path="/summary"/></param>
+    private Stop? TryLoadStop(string id, Func<string> displayName, string targetMapName, int targetX, int targetY, int facingDirectionAfterWarp, int cost, string?[]? conditions, StopNetworks network)
+    {
+        // ignore stops which duplicate a Central Station stop
+        if (this.IgnoreStopIds.Contains(id))
+            return null;
+
+        // get stop
+        return new Stop(
+            Id: id,
+            DisplayName: () => this.GetTranslation("destinations.from-train-station-mod", [displayName()]),
+            DisplayNameInCombinedLists: null,
+            ToLocation: targetMapName,
+            ToTile: new Point(targetX, targetY),
+            ToFacingDirection: facingDirectionAfterWarp,
+            Cost: cost,
+            Network: network,
+            Condition: this.ConvertExpandedPreconditionsToGameStateQuery(conditions)
+        );
+    }
+
     /// <summary>Convert Expanded Preconditions Utility's conditions to its equivalent game state query syntax.</summary>
     /// <param name="conditions">The Expanded Preconditions Utility conditions.</param>
-    private string? ConvertExpandedPreconditionsToGameStateQuery(string[]? conditions)
+    private string? ConvertExpandedPreconditionsToGameStateQuery(string?[]? conditions)
     {
         // skip if nothing to do
         if (conditions?.Length is null or 0)
