@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.CentralStation.Framework.Integrations;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.TrainStation;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.CentralStation.Framework;

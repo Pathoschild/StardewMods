@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Integrations.TrainStation;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.CentralStation.Framework.Integrations;
+namespace Pathoschild.Stardew.CentralStation.Framework.Integrations.TrainStation;
 
 /// <summary>An integration which adds stops from the Train Station mod.</summary>
 internal class TrainStationStopProvider : ICustomStopProvider

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace Pathoschild.Stardew.CentralStation.Framework.Integrations;
+namespace Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
 
 /// <summary>An integration which adds stops from the Bus Locations mod.</summary>
 internal class BusLocationsStopProvider : ICustomStopProvider
@@ -67,7 +67,7 @@ internal class BusLocationsStopProvider : ICustomStopProvider
         try
         {
             // get mod info
-            IModInfo? modInfo = modRegistry.Get(BusLocationsStopProvider.ModId);
+            IModInfo? modInfo = modRegistry.Get(ModId);
             if (modInfo is null)
                 return null;
 
@@ -99,10 +99,10 @@ internal class BusLocationsStopProvider : ICustomStopProvider
                     Type type = location.GetType();
                     string? displayName = type.GetProperty("DisplayName")?.GetValue(location) as string;
                     string? mapName = type.GetProperty("MapName")?.GetValue(location) as string;
-                    int destinationX = (type.GetProperty("DestinationX")?.GetValue(location) as int?) ?? -1;
-                    int destinationY = (type.GetProperty("DestinationY")?.GetValue(location) as int?) ?? -1;
-                    int arrivalFacing = (type.GetProperty("ArrivalFacing")?.GetValue(location) as int?) ?? Game1.down;
-                    int ticketPrice = (type.GetProperty("TicketPrice")?.GetValue(location) as int?) ?? 0;
+                    int destinationX = type.GetProperty("DestinationX")?.GetValue(location) as int? ?? -1;
+                    int destinationY = type.GetProperty("DestinationY")?.GetValue(location) as int? ?? -1;
+                    int arrivalFacing = type.GetProperty("ArrivalFacing")?.GetValue(location) as int? ?? Game1.down;
+                    int ticketPrice = type.GetProperty("TicketPrice")?.GetValue(location) as int? ?? 0;
 
                     // ignore duplicate or invalid stops
                     if (string.IsNullOrWhiteSpace(mapName) || mapName is "Desert")
