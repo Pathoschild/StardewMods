@@ -134,7 +134,7 @@ internal class ModEntry : Mod
         {
             yield return new FishingHandler(config.FishingSpeed);
             yield return new FishingHitHandler(config.FishingSpeed);
-            yield return new FishingPerfectHandler(this.Helper, config.FishingSpeed);
+            yield return new FishingTextHandler(this.Helper, config.FishingSpeed);
         }
         if (config.HarvestSpeed > 1)
             yield return new HarvestHandler(config.HarvestSpeed);

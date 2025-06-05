@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers;
 
 /// <summary>Handles the fishing "perfect" toast animation.</summary>
 /// <remarks>See game logic in <see cref="BobberBar.update"/>.</remarks>
-internal sealed class FishingPerfectHandler : BaseAnimationHandler
+internal sealed class FishingTextHandler : BaseAnimationHandler
 {
     private readonly IModHelper helper;
 
@@ -20,7 +20,7 @@ internal sealed class FishingPerfectHandler : BaseAnimationHandler
     ** Public methods
     *********/
     /// <inheritdoc />
-    public FishingPerfectHandler(IModHelper helper, float multiplier)
+    public FishingTextHandler(IModHelper helper, float multiplier)
         : base(multiplier)
     {
         this.helper = helper;
