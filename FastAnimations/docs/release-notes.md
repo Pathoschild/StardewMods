@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added option to speed up fishing text like 'HIT!' (thanks to jltaylor-us!).
+
 ## 1.14.1
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 
