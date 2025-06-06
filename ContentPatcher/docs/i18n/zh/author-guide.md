@@ -410,9 +410,7 @@ You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模�
 }
 ```
 
-
 更多信息详见[文本操作](author-guide/text-operations.md)。
-
 
 ### 触发动作<a name="trigger-actions"></a>
 Content Patcher 为特定使用场景添加自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如更新已有存档内容中的内置ID。
@@ -466,14 +464,7 @@ _多种更新频率_         | 您可以指定由逗号分隔的多个值，如`
 ### 如何更改另一种语言的素材？<a name="how-do-i-change-assets-in-another-language"></a>
 **默认影响所有语言**
 
-The asset name in the `Target` field doesn't include the language. For example,
-`"Target": "Dialogue/Abigail"` (the asset name) will change the content loaded from
-`Content/Dialogue/Abigail.de-DE.xnb` (the file path) when playing in German. If you want
-to make the same change in every language, you don't need to do anything else.
-
-
 `Target`字段里的素材名称不包含语言。如果你使用`"Target": "Dialogue/Abigail"`并把游戏语言设为德语，`Content/Dialogue/Abigail.de-DE.xnb`的内容将会被编辑。如果你希望某个更改在所有语言中生效，你不需要做任何特殊处理。
-
 
 如果你想编辑特定语言，你可以加一个语言条件，如下：
 ```js
@@ -487,9 +478,6 @@ to make the same change in every language, you don't need to do anything else.
 }
 ```
 
-You can also load the translated version automatically if it exists. That way you can just add
-translated files to your content pack, and it'll default to the untranslated version if no
-translation exists:
 你也可以在某语言有翻译版文档存在时自动加载它，这样可以在有翻译版时自动使用翻译版，无翻译版时默认使用原语言版。
 
 ```js

@@ -125,6 +125,7 @@ You can inject the translated text directly into your patches using the `i18n`
                     "DisplayName": "{{i18n: item.name}}",
                     "Price": 1200,
                     ...
+                }
             }
         }
     ]
