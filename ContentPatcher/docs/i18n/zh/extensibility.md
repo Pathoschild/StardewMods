@@ -141,7 +141,7 @@ api.RegisterToken(this.ModManifest, "PlayerName", () =>
 
 令牌值可以视为缓存的游戏状态，在特定时刻更新（如每天开始）。所有令牌的集合为“上下文”；而“上下文更新”是Content Patcher刷新令牌，生成缓存，检查条件，重加载素材，等等。
 
-**令牌值不能在`UpdateContext`以外更改**。这样做可能会导致贴图错误或游戏彻底崩溃。
+**令牌值不能在`UpdateContext`以外更改**。这样做可能会导致很多严重并不明确的问题，如图像错误和游戏彻底崩溃。
 
 这并不等于令牌不可有动态计算出的值（如`FileExists`）只要这个计算本身不改变。如果一个令牌会在上下文更新之间改变数值，你必须将令牌值缓存。
 
@@ -199,7 +199,7 @@ api.RegisterToken(this.ModManifest, "PlayerName", () =>
 <ol>
 <li>
 
-创建一个令牌类，需要有在这个文件里[所列出的方法](../../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
+创建一个令牌类，此类需要有在这个文件里[所列出的方法的任意组合](../../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
 你的类中的方法必须有完全一样的名字，返回类，和参数。Content Patcher发现不对应的公开方法时会报错并退回此令牌。
 
 例如，我们想要一个提供名字缩写的令牌（如`{{Initials:John Smith}}` → `JS`），或无参数时提供玩家的名字缩写。这是一个实现此功能的令牌类：
@@ -210,34 +210,34 @@ internal class InitialsToken
     /*********
     ** 字段
     *********/
-    /// <summary>The player name as of the last context update.</summary>
+    /// <summary>上一次更新时的玩家名</summary>
     private string PlayerName;
 
 
     /*********
-    ** Public methods
+    ** 公开方法
     *********/
     /****
-    ** Metadata
+    ** 元数据
     ****/
-    /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
+    /// <summary>查询此令牌是否允许输入参数(例如一个关系令牌要求NPC名).</summary>
     public bool AllowsInput()
     {
         return true;
     }
 
-    /// <summary>Whether the token may return multiple values for the given input.</summary>
-    /// <param name="input">The input arguments, if applicable.</param>
+    /// <summary>令牌是否可以有多个值</summary>
+    /// <param name="input">输入参数，若适用。</param>
     public bool CanHaveMultipleValues(string input = null)
     {
         return false;
     }
 
     /****
-    ** State
+    ** 状态
     ****/
-    /// <summary>Update the values when the context changes.</summary>
-    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
+    /// <summary>上下文更新时，更新这个令牌的值。</summary>
+    /// <returns>反馈令牌是否更改，若有更改可能会导致补丁更新</returns>
     public bool UpdateContext()
     {
         string oldName = this.PlayerName;
@@ -245,14 +245,14 @@ internal class InitialsToken
         return this.PlayerName != oldName;
     }
 
-    /// <summary>Get whether the token is available for use.</summary>
+    /// <summary>查询令牌是否可使用</summary>
     public bool IsReady()
     {
         return this.PlayerName != null;
     }
 
-    /// <summary>Get the current values.</summary>
-    /// <param name="input">The input arguments, if applicable.</param>
+    /// <summary>查询当前令牌值</summary>
+    /// <param name="input">输入参数，若适用。</param>
     public IEnumerable<string> GetValues(string input)
     {
         // 获取名称
@@ -269,7 +269,7 @@ internal class InitialsToken
 </li>
 <li>
 
-接下来我们通过API来添加这个令牌（详见[访问API](#access-the-api)）：
+接下来我们在`GameLanched`事件中通过API来添加这个令牌（详见[访问API](#access-the-api)）：
 
 ```cs
 api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
@@ -295,4 +295,4 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 ```
 
 ## 参见<a name="see-also"></a>
-* 其他操作和选项请参考[模组作者指南](../author-guide.md)
+* 其他信息详见[README](README.md)

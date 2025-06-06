@@ -34,7 +34,7 @@
 <dt>可选字段：</dt>
 <dd>
 
-field     | purpose
+字段       | 用途
 --------- | -------
 `When`    | _（可选）_ 当给定的[条件](../author-guide.md#conditions)匹配时才应用这个内容补丁。
 `LogName`     | _（可选）_ 在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似`Load Data/Achievements`的名称。

@@ -86,14 +86,14 @@ _其他_
 假设你有这两个翻译文件：
 
 ```js
-// i18n/default.json
+// i18n/default.json（默认语言，英文）
 {
    "item.name": "Pufferchick",
    "item.description": "A tiny hybrid between a pufferfish and chicken."
 }
 ```
 ```js
-// i18n/fr.json
+// i18n/fr.json（法语）
 {
    "item.name": "Poussin-globe",
    "item.description": "Un tout petit hybride entre un poisson-globe et un poussin."
@@ -114,6 +114,7 @@ _其他_
                     "DisplayName": "{{i18n: item.name}}",
                     "Price": 1200,
                     ...
+                }
             }
         }
     ]
@@ -121,7 +122,7 @@ _其他_
 ```
 
 ## 限制
-* [性别切换](https://stardewvalleywiki.com/Modding:Dialogue#Gender_switch)只有特定场合（如对话）可用。
+* [性别切换](https://stardewvalleywiki.com/Modding:Dialogue#Gender_switch)只有在文本在被游戏解译的场合下可用，例如对话。
 
 ## 常见问题<a name="faqs"></a>
 ### 我可以在`i18n`文件里用令牌吗?<a name="can-i-use-content-patcher-tokens-in-i18n-files"></a>

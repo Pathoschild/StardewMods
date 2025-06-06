@@ -200,6 +200,8 @@ var conditions = api.ParseConditions(
 2. `GameLaunched + 1 tick`: Content Patcher初始化令牌上下文（包括自定义令牌）。
 3. `GameLaunched + 2 ticks`: 其他模组可使用条件API。
 
+译：tick指游戏更新循环中的一刻
+
 </dd>
 <dt>条件应缓存。</dt>
 <dd>
@@ -225,4 +227,4 @@ var conditions = api.ParseConditions(
 </dl>
 
 ## 参见<a name="see-also"></a>
-* 其他操作和选项请参考[模组作者指南](../author-guide.md)
+* 其他信息详见[README](README.md)

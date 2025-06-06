@@ -28,7 +28,7 @@
 
 类型                 | 作用
 ------------------- | -------
-`AllowValues`       | _（可选）_ 一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。<br />**Tip:** 当你用`"true, false"`定义可启用/禁用的选项时，Content Patcher会认出它是布尔(并在[设置菜单](#config-ui)以复选框显示此设置).
+`AllowValues`       | _（可选）_ 一个以逗号分隔的字符串，代表玩家可选的值。如果省略，则允许任何值。<br />**提示:** 当你用`"true, false"`定义可启用/禁用的选项时，Content Patcher会认出它是布尔(并在[设置菜单](#config-ui)以复选框显示此设置).
 `AllowBlank`        | _（可选）_ 该字段是否可以留空。如果false或省略，则将用默认值（`Default`）替换空白字段。
 `AllowMultiple`     | _（可选）_ 玩家是否可以指定多个以逗号分隔的值。默认false。
 `Default`           | _(可选，除非`AllowBlank`为false)_ 此设置的默认值。如果`AllowMultiple`为true的，则可以包含多个以逗号分隔的值。如果省略，默认值为空白。
@@ -147,7 +147,7 @@
 这个例子为以上的设置添加法语翻译：
 
 ```js
-// i18n/default.json（英文）
+// i18n/default.json（默认语言，英文）
 {
     "config.Material.name": "Material",
     "config.Material.description": "The material style for the billboard background.",

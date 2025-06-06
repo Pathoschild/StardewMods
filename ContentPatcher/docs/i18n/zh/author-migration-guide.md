@@ -158,10 +158,6 @@
 Content Patcher会自动将{{ModId}}替换为[你模组manifest中的`UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)。
 
 **已知限制：**
-* You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,
-  you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
-  `Data/Locations` to edit the data added for your location.
-
 * 你不能直接将`TMXL Map Toolkit`提供的地点迁移到`Data/Locations`。如果你需要继续支持`TMXL`，你可以继续使用依旧支持`TMXL`地点的`CustomLocations`，然后用`EditData`来编辑`Data/Locations`来更改你地点的数据。
 
 </li>
@@ -283,5 +279,5 @@ Content Patcher会自动将{{ModId}}替换为[你模组manifest中的`UniqueId`]
 * `Weather`令牌在有风的天返回`Wind`而不是`Sun`。
 
 ## 参见<a name="see-also"></a>
-* 其他信息请见[README](README.md)
+* 其他信息详见[README](README.md)
 * [寻求帮助](https://zh.stardewvalleywiki.com/模组:帮助)

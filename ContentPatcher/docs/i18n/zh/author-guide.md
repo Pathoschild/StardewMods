@@ -44,7 +44,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 * 改变商店库存；
 * 还有很多其他的修改。
 
-你还可以对游戏进行动态调整。例如，除非玩家娶了阿比盖尔，否则冬天的周末晚上都会下雪。
+你还可以对游戏进行动态调整。例如，在玩家还没有娶阿比盖尔时，每冬日周末晚上下雪天时提高咖啡价格。
 
 [维基上的模组制作文档](https://zh.stardewvalleywiki.com/模组:目录)通常是为Content Patcher内容包作者编写的，所以你可以在那里找到很多例子。
 
@@ -80,7 +80,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 ### 什么是数据素材？<a name="what-is-an-asset"></a>
  _素材(assets)_ 是指游戏从`Content`内容文件夹（或者从其他模组文件夹）中加载的图像、数据模型或地图。这些都是 Content Patcher 可以更改的内容。
 
-素材名称不包括 "内容" ，即[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
+素材名称不包括 `Content` ，[语言代码](#how-do-i-change-assets-in-another-language)，或文件扩展名。例如，`Content/Maps/spring_beach.xnb`和`Content/Maps/spring_beach.fr-FR.xnb`是相同的`Maps/spring_beach`素材。
 
 You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#unpacking)
 你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#解包游戏文件)并查看内容。以下是`Portraits/Abigail`包含的内容：
@@ -369,7 +369,7 @@ You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模�
 
 ### 翻译<a name="translations"></a>
 你可以在模组中添加翻译文件，并通过`i18n` token访问翻译文件。如果某些内容没有翻译成当前的
-语言，Content Patcher将自动处理，显示默认（英文）文本。
+语言，Content Patcher将自动处理，显示默认（`default`）文本。
 
 例如，如果你的`i18n`文件包含一个关键字为`rainy-day`的翻译，你可以在任何支持[Tokens和条件](#tokens)的Content Patcher 字段里访问它：
 
@@ -388,12 +388,12 @@ You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模�
 }
 ```
 
-See the [translation documentation](author-guide/translations.md) for more info.
+更多信息详见[翻译功能](author-guide/translations.md)。
 
 ### 文本操作<a name="text-operations"></a>
 文本操作可让你根据文本字段的已有值进行修改，而不只是设置一个新的值。例如，你可以在当前值上添加其他文本。
 
-For example, this adds pufferfish as a universally loved gift:
+此例子将河豚添加到村民的普遍喜好中：
 
 ```js
 {
@@ -410,10 +410,12 @@ For example, this adds pufferfish as a universally loved gift:
 }
 ```
 
-See the [text operations documentation](author-guide/text-operations.md) for more info.
+
+更多信息详见[文本操作](author-guide/text-operations.md)。
+
 
 ### 触发动作<a name="trigger-actions"></a>
-Content Patcher 为特定内容添加自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如更新存档的命名ID。
+Content Patcher 为特定使用场景添加自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如更新已有存档内容中的内置ID。
 
 See [Content Patcher's trigger action documentation](author-guide/trigger-actions.md) for more info.
 
@@ -533,5 +535,5 @@ asset | notes
 `Maps/*` | 参见维基上的[地图编辑中的潜在问题](https://zh.stardewvalleywiki.com/模组:地图#潜在问题)。
 
 ## 参见<a name="see-also"></a>
-* [README](README.md)
+* 其他信息详见[README](README.md)
 * [帮助](https://zh.stardewvalleywiki.com/模组:帮助)

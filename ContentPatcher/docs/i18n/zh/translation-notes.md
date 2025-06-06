@@ -4,12 +4,6 @@
 
 ## 关于此汉化
 
-原版文档更新时：
-```sh
-cd <repository>
-rsync --update --recursive --exclude 'i18n' ContentPatcher/docs/ ContentPatcher/docs/i18n/zh/
-```
-
 不汉化以下文档：
 - `release-notes.md` - 长，而且内容跟正式文档重复
 - `author-tokens-guide.md` - 已转移到`author-guide/tokens.md`
@@ -63,8 +57,11 @@ __"local token"__: 局部令牌，专属令牌
 
 Content Patcher有两个不同的local tokens概念，翻译中为了区分选了两个不同的词
 * `LocalTokens`字段里出现的令牌是“局部令牌”，仅生效于此补丁或Include的补丁。
-* 每个内容包会有不同值的令牌是“专属令牌”，如`{{ModId}}`，`{{i18n}}`等。
+* 每个内容包独有的令牌是“专属令牌”，如`{{ModId}}`，`{{i18n}}`等。这些令牌的值和在不同内容包中不一样。
 
 __上下文__: Context
 
 计算机术语，在Content Patcher中指某一个范围中令牌的状态，可理解为“当下场景”。
+
+## 参见<a name="see-also"></a>
+* 其他信息详见[README](README.md)

@@ -17,7 +17,7 @@
 ## 概述<a name="overview"></a>
 Content Patcher有一个令牌系统(author-guide/tokens.md)，允许内容包组成复杂并遵守上下文的字符串。
 ```js
-"My favorite season is {{Season}}." // If a save is loaded, {{Season}} will be replaced with the current season.
+"My favorite season is {{Season}}." // 如果有加载存档，{{Season}}会被当前季节所替换
 ```
 
 其他SMAPI模组也可以使用此系统，通过API解析一个包含令牌的字符串来获得一个'托管令牌字符串'对象，之后使用此对象来管理令牌字符串。
@@ -65,10 +65,10 @@ _译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和I
 3. 从`Value`属性中获取结果，例如：
    ```cs
    tokenString.UpdateContext();
-   string value = tokenString.Value; // The current time is 1430 on Spring 5, year 2.
+   string value = tokenString.Value; // 现在时间为1430，春5，第二年
    ```
 
-如果你想使用其他SMAPI模组添加的令牌，你可以用`assumeModIds`来指定所安装的模组id。你不需要把自己ID，必要依赖的ID,和任何在条件字段中以`HasMod`指定的Id添加到`assumeModIds`中。
+如果你想使用其他SMAPI模组添加的令牌，你可以用`assumeModIds`来指定所安装的模组id。你不需要把自己ID和必要依赖的ID添加到`assumeModIds`中。
 ```c#
 var tokenString = api.ParseTokenString(
    manifest: this.ModManifest,
@@ -162,6 +162,8 @@ var tokenString = api.ParseTokenString(
 2. `GameLaunched + 1 tick`: Content Patcher初始化令牌上下文（包括自定义令牌）。
 3. `GameLaunched + 2 ticks`: 其他模组可使用令牌字符串API。
 
+译：tick指游戏更新循环中的一刻
+
 </dd>
 <dt>令牌字符串应缓存。</dt>
 <dd>
@@ -187,4 +189,4 @@ var tokenString = api.ParseTokenString(
 </dl>
 
 ## 参见<a name="see-also"></a>
-* 其他操作和选项请参考[模组作者指南](../author-guide.md)
+* 其他信息详见[README](README.md)

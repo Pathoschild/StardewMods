@@ -64,7 +64,7 @@
 
 每个条件里含有：
 * 一个含有[令牌](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
-* 一个含有以逗号分割的列表的值，如`spring, summer`。若键里的令牌等于列表中任意值，此条件成立。值本身也支持[令牌](#introduction)，不区分大小写。
+* 一个含有以逗号分割的列表的值，如`spring, summer`。若键里的令牌含有列表中任意值，此条件成立。值本身也支持[令牌](#introduction)，不区分大小写。
 
 
 此例子让农舍在第一年的春天（spring）和夏天（summer）更改外观。
@@ -860,13 +860,13 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 <dt>Lowercase</dt>
 <dd>
 
-转为全小写。<br />例如：`{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`
+转为全小写。<br />例如：`{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`，仅适用于拉丁文字母。
 
 </dd>
 <dt>Uppercase</dt>
 <dd>
 
-转为全大写：<br />例如： `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`
+转为全大写：<br />例如： `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`，仅适用于拉丁文字母。
 
 </dd>
 </dl>
@@ -1618,7 +1618,7 @@ _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分
 </li>
 <li>
 
-**有界的。** 选项不含令牌。例如，若所有选项为'true'或'false'，可在布尔类型的条目中使用；若为数字，可在数值类型的条目中使用。
+**选项不含令牌时为有界的。** 。例如，若所有选项为'true'或'false'，可在布尔类型的条目中使用；若为数字，可在数值类型的条目中使用。
 
 </li>
 </ul>
@@ -1751,7 +1751,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 查询表达式功能强大，但需注意：
 
 * 查询表达式 **很难验证** 无效表达式通常不会预先警告，仅在应用补丁时失败。需仔细测试表达式的功能，可以用[`patch parse`](troubleshooting.md#parse)检查新表达式。
-* 查询表达式 **可能错误读取文本** 例如，玩家名含单引号`D'Artagnan`，时，以下表达式会因语法错误失败：
+* 查询表达式 **会计算扩展后的文本** 例如，玩家名含单引号`D'Artagnan`，时，以下表达式会因语法错误失败：
   ```js
   "Query: '{{PlayerName}}' LIKE 'D*'": true // 'D'Artagnan' LIKE 'D*'
   ```
@@ -1826,7 +1826,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
   "Query: ({{Time}} >= 0600 AND {{Time}} <= 1200) OR {{Time}} > 2400": true
   ```
 
-* 检查值是否`IN`或`NOT IN`列表中：
+* 检查值是否存在于（`IN`）或不存在于（`NOT IN`）列表中：
 
   ```js
   "Query: '{{spouse}}' IN ('Abigail', 'Leah', 'Maru')": true
@@ -1857,7 +1857,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 
 使用模组提供的令牌需满足以下至少一项：
 * 提供令牌的模组是你的内容包的[必需依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)。
-* 或使用令牌的补丁有不可变的`HasMod`条件列出该模组：
+* 或使用令牌的补丁中含有对于令牌提供模组的不可变（不使用任何令牌）`HasMod`条件：
   ```js
   {
      "Format": "2.7.0",
@@ -1877,7 +1877,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
   ```
 
 ### 别名<a name="aliases"></a>
-_别名_ 为现有令牌添加可选替代名称，仅影响内容包，可使用别名和原名。主要用于其他模组提供的长名令牌。
+_别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可使用别名和原名。主要用于其他模组提供的长名令牌。
 
 在`content.json`的`AliasTokenNames`字段定义别名，键为别名，值为原名：
 
