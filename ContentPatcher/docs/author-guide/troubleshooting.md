@@ -2,6 +2,8 @@
 
 This page documents various tools available to track down issues with your content pack.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/troubleshooting.md)**.
+
 ## Contents
 * [Schema validator](#schema-validator)
 * [Patch commands](#patch-commands)
@@ -38,7 +40,7 @@ Tips:
 * If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
   line mentioned (or the one above it) for a missing comma, bracket, etc.
 * If you need help figuring out an error, see [_see also_ in the main readme](../README.md#see-also)
-* for some links to places you can ask.
+  for some links to places you can ask.
 
 ## Patch commands
 Content Patcher adds several console commands for testing and troubleshooting. Enter `patch help`

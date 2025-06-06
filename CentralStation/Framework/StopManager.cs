@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.CentralStation.Framework.Integrations;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.TrainStation;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.CentralStation.Framework;
@@ -14,11 +16,11 @@ internal class StopManager
     /// <summary>Manages the Central Station content provided by content packs.</summary>
     private readonly ContentManager ContentManager;
 
-    /// <summary>Encapsulates monitoring and logging.</summary>
-    private readonly IMonitor Monitor;
+    /// <summary>The stop provider which provides compatibility with the Bus Locations mod.</summary>
+    private readonly BusLocationsStopProvider BusLocationsProvider;
 
-    /// <summary>The SMAPI API for fetching metadata about loaded mods.</summary>
-    private readonly IModRegistry ModRegistry;
+    /// <summary>The stop provider which provides compatibility with the Train Station mod.</summary>
+    private readonly TrainStationStopProvider TrainStationStopProvider;
 
     /// <summary>The mod integrations which add stops to the Central Station networks.</summary>
     /// <remarks>Most code should use <see cref="GetCustomStopProviders"/> instead.</remarks>
@@ -37,13 +39,14 @@ internal class StopManager
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="contentManager"><inheritdoc cref="ContentManager" path="/summary" /></param>
-    /// <param name="monitor"><inheritdoc cref="Monitor" path="/summary" /></param>
-    /// <param name="modRegistry"><inheritdoc cref="ModRegistry" path="/summary" /></param>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
+    /// <param name="modRegistry">The SMAPI API for fetching metadata about loaded mods.</param>
     public StopManager(ContentManager contentManager, IMonitor monitor, IModRegistry modRegistry)
     {
         this.ContentManager = contentManager;
-        this.Monitor = monitor;
-        this.ModRegistry = modRegistry;
+
+        this.BusLocationsProvider = new BusLocationsStopProvider(modRegistry, monitor, this.ContentManager.GetTranslation);
+        this.TrainStationStopProvider = new TrainStationStopProvider(modRegistry, monitor, this.ContentManager.GetTranslation);
     }
 
     /// <summary>Get the stops which can be selected from the current location.</summary>
@@ -69,6 +72,19 @@ internal class StopManager
         }
     }
 
+    /// <summary>Try to load a legacy content pack which was reassigned to Central Station.</summary>
+    /// <param name="contentPack">The content pack to load.</param>
+    public bool TryLoadContentPack(IContentPack contentPack)
+    {
+        if (this.BusLocationsProvider.TryLoadContentPack(contentPack) || this.TrainStationStopProvider.TryLoadContentPack(contentPack))
+        {
+            this.CustomStopProviders = null;
+            return true;
+        }
+
+        return false;
+    }
+
 
     /*********
     ** Private methods
@@ -81,13 +97,11 @@ internal class StopManager
         {
             this.CustomStopProviders = [];
 
-            BusLocationsStopProvider busLocations = new(this.ModRegistry, this.Monitor, this.ContentManager.GetTranslation);
-            if (busLocations.IsNeeded())
-                this.CustomStopProviders.Add(busLocations);
+            if (this.BusLocationsProvider.IsNeeded())
+                this.CustomStopProviders.Add(this.BusLocationsProvider);
 
-            TrainStationStopProvider trainStation = new(this.ModRegistry, this.Monitor, this.ContentManager.GetTranslation);
-            if (trainStation.IsNeeded())
-                this.CustomStopProviders.Add(trainStation);
+            if (this.TrainStationStopProvider.IsNeeded())
+                this.CustomStopProviders.Add(this.TrainStationStopProvider);
         }
 
         return this.CustomStopProviders;

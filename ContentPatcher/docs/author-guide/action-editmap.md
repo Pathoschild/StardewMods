@@ -4,6 +4,8 @@ A patch with **`"Action": "EditMap"`** changes part of a map loaded by the game.
 content packs can edit the same asset. You can extend a map downwards or rightward by just patching
 past the edge (Content Patcher will expand the map to fit).
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/action-editmap.md)**.
+
 ## Contents
 * [Introduction](#introduction)
   * [What is a map?](#what-is-a-map)
@@ -304,7 +306,7 @@ name of the map property to change.
 </tr>
 </table>
 
-For example, this changes the `Outdoors` tile for the farm cave and adds a warp (see
+For example, this changes the `Outdoors` map property for the farm cave and adds a warp (see
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {

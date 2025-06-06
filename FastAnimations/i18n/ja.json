@@ -71,6 +71,10 @@
     "config.fade.name": "フェード",
     "config.fade.tooltip": "画面が黒くフェードアウトし、フェードインするまでの時間。標準は{{defaultValue}}x。",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "釣りの宝箱",
     "config.fishing-treasure.tooltip": "釣りの宝箱を開ける速さ。標準は{{defaultValue}}x。",
 
@@ -106,8 +110,9 @@
     "config.open-dialogue-box.name": "ダイアログボックスを開く",
     "config.open-dialogue-box.tooltip": "ダイアログボックスを開く速さ。標準は{{defaultValue}}x。",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.shipping-menu.name": "Shipping menu transitions",
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
 
     "config.title-menu.name": "タイトルメニューの遷移",
     "config.title-menu.tooltip": "タイトルメニューの画面遷移の速さ。標準は{{defaultValue}}x。",
@@ -118,8 +123,9 @@
     /****
     ** 'Experimental' section
     ****/
-    "config.experimental": "Experimental options", // TODO
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.", // TODO
+    // TODO
+    "config.experimental": "Experimental options",
+    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.",
 
     "config.event.name": "イベントのカットシーン",
     "config.event.tooltip": "イベントのカットシーンの再生速度。標準は{{defaultValue}}x、推奨は{{suggestedValue}}x。"

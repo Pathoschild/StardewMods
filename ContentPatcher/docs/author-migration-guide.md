@@ -4,6 +4,8 @@ This document helps mod authors update their content packs for newer versions of
 
 **See the [main README](README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](zh/author-migration-guide.md)**.
+
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
@@ -89,7 +91,7 @@ You can fix it by:
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](release-notes.md) for a full list of changes.
 
-## 2.1
+### 2.1
 Released 22 May 2024.
 
 * `"Action": "Load"` patches now apply to localized asset names _only_ if they have localized forms in the base game
@@ -108,7 +110,7 @@ Released 22 May 2024.
   This should have no effect on most content packs, besides fixing various issues with some edits for non-English
   players.
 
-## 2.0
+### 2.0
 Released 19 March 2024.
 
 <ul>
@@ -126,7 +128,7 @@ compatibility by using it when relevant.
 </li>
 <li>
 
-[`CustomLocations`](custom-locations.md) is now deprecated. You should add custom locations to the
+[`CustomLocations`](author-guide/custom-locations.md) is now deprecated. You should add custom locations to the
 [new `Data/Locations` asset](https://stardewvalleywiki.com/Modding:Location_data) in Stardew Valley
 1.6 instead.
 
@@ -175,18 +177,18 @@ Content Patcher will replace `{{ModId}}` automatically with [your mod's manifest
 
 **Known limitations:**
 * You can't migrate TMXL Map Toolkit locations directly to Data/Locations. If you need to support migrations from TMXL,
-you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
-`Data/Locations` to edit the data added for your location.
+  you can continue using `CustomLocations` which still supports specifying TMXL locations. You can then edit
+  `Data/Locations` to edit the data added for your location.
 
 </li>
 </ul>
 
-## 1.25
+### 1.25
 Released 27 February 2022.
 
 * **The `Enabled` field is no longer supported.** You can use `When` conditions instead.
 
-## 1.24
+### 1.24
 Released 31 October 2021.
 
 * **The `Spouse` token no longer includes roommates.** If you want to check for both roommate and
@@ -196,13 +198,13 @@ Released 31 October 2021.
   `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`, and
   `HasSeenEvent`.
 
-## 1.21
+### 1.21
 Released 07 March 2021.
 
 * **The `Enabled` field no longer allows tokens.** You should use `When` for conditional logic
   instead.
 
-## 1.20
+### 1.20
 Released 06 February 2021.
 
 * **The `Weather` token now returns weather for the _current location context_ (i.e. island or
@@ -271,9 +273,6 @@ Released 16 August 2020.
   ```js
   "Update": "OnLocationChange"
   ```
-
-  (This is part of the migration to realtime content updates, since all tokens will soon update
-  live.)
 
 ### 1.15
 Released 04 July 2020.

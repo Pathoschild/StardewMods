@@ -87,7 +87,7 @@ internal class RangeHandler
                 };
 
             case ChestRange.CurrentLocation:
-                return location.Name;
+                return location.NameOrUniqueName;
 
             case ChestRange.None:
                 return null;

@@ -183,9 +183,8 @@
     "config.clear-dirt-without-fertilizer.name": "Elimina terra dissodata",
     "config.clear-dirt-without-fertilizer.tooltip": "Scegli se vuoi eliminare la terra dissodata.",
 
-    // TODO
-    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
-    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
+    "config.clear-dirt-with-fertilizer.name": "Elimina terra dissodata (Fertilizzata)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Scegli se vuoi eliminare la terra dissodata e fertilizzata.",
 
 
     /****

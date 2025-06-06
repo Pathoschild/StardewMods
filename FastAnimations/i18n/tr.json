@@ -71,6 +71,10 @@
     "config.fade.name": "Kararma",
     "config.fade.tooltip": "Ekranın kararma ve aydınlanma hızı. Varsayılan: {{defaultValue}}x.",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "Hazine sandıkları",
     "config.fishing-treasure.tooltip": "Balık tutarken bulunan hazinelerin açılma hızını belirler. Varsayılan: {{defaultValue}}x.",
 
@@ -106,8 +110,9 @@
     "config.open-dialogue-box.name": "Diyalog kutusunu aç",
     "config.open-dialogue-box.tooltip": "Diyalog kutularının açılma hızı. Varsayılan: {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.shipping-menu.name": "Shipping menu transitions",
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
 
     "config.title-menu.name": "Başlık menüsü geçişleri",
     "config.title-menu.tooltip": "Başlık menüsünün ekranlar arasında ne kadar hızlı geçiş yaptığı. Varsayılan {{defaultValue}}x.",

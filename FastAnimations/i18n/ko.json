@@ -71,6 +71,10 @@
     "config.fade.name": "화면 전환",
     "config.fade.tooltip": "다른 맵으로 이동할 때 화면이 전환되는 속도. 기본 값 {{defaultValue}}x.",
 
+    // TODO
+    "config.fishing-text.name": "Fishing minigame text",
+    "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
+
     "config.fishing-treasure.name": "낚시 보물 상자",
     "config.fishing-treasure.tooltip": "낚시 중 보물 상자 열리는 속도. 기본 값 {{defaultValue}}x.",
 
@@ -106,8 +110,9 @@
     "config.open-dialogue-box.name": "대화창 열림",
     "config.open-dialogue-box.tooltip": "대화창이 열리는 속도. 기본 값 {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions", // TODO
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.", // TODO
+    // TODO
+    "config.shipping-menu.name": "Shipping menu transitions",
+    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
 
     "config.title-menu.name": "타이틀 메뉴 전환",
     "config.title-menu.tooltip": "타이틀 메뉴 화면 전환 속도. 기본 값 {{defaultValue}}.",

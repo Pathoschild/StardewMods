@@ -5,6 +5,8 @@ This doc helps SMAPI mod authors use Content Patcher's token strings in their ow
 **To add custom tokens for content packs to use, see the [extensibility API](extensibility.md). See
 the [main README](README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](zh/token-strings-api.md)**.
+
 ## Contents
 * [Overview](#overview)
 * [Access the API](#access-the-api)
@@ -17,7 +19,6 @@ the [main README](README.md) for other info**.
 Content Patcher has a [token system](author-guide/tokens.md) which lets content packs make complex
 strings using contextual values. For example:
 ```js
-""
 "My favorite season is {{Season}}." // If a save is loaded, {{Season}} will be replaced with the current season.
 ```
 

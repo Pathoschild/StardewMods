@@ -105,9 +105,8 @@
     "config.edit-chest.name": "Modifica baule",
     "config.edit-chest.desc": "I tasti che modificano le opzioni del baule attuale.",
 
-    // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "Ordina oggetti del giocatore",
+    "config.sort-items.desc": "I tasti che ordinano gli oggetti nell'inventario del giocatore mentre il baule è aperto.",
 
     "config.navigate-prev-chest.name": "Naviga: baule precedente",
     "config.navigate-prev-chest.desc": "I tasti che consentono di passare al baule precedente quando il menu è aperto.",

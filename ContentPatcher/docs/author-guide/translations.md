@@ -3,6 +3,8 @@
 The translation feature lets you store translatable text in `i18n` files and load the correct text
 for the current language automatically.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/translations.md)**.
+
 ## Contents
 * [Usage](#usage)
   * [Format](#format)
@@ -123,6 +125,7 @@ You can inject the translated text directly into your patches using the `i18n`
                     "DisplayName": "{{i18n: item.name}}",
                     "Price": 1200,
                     ...
+                }
             }
         }
     ]
@@ -145,7 +148,7 @@ For example, let's say you have this translation:
 }
 ```
 
-If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_").
+If you just use `{{i18n: today}}`, it'll show the literal text "_today is {{DayOfWeek}}_".
 You can pass in the token like this instead: `{{i18n: today |dayOfWeek={{DayOfWeek}} }}`, in which
 case it'll show something like "_today is Monday_".
 

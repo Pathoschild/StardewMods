@@ -5,6 +5,8 @@ This doc helps SMAPI mod authors use Content Patcher's condition system in their
 **To add custom tokens for content packs to use, see the [extensibility API](extensibility.md). See
 the [main README](README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](zh/conditions-api.md)**.
+
 ## Contents
 * [Overview](#overview)
 * [Access the API](#access-the-api)

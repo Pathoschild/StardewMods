@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.3.0
+Released 06 June 2025 for SMAPI 4.1.10 or later.
+
+* Central Station can now load old Bus Locations and Train Station content packs directly if [you reassign them](README.md#reassign-old-content-packs).
+
 ## 1.2.2
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 

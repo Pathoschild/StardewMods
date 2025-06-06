@@ -13,6 +13,8 @@ warps. Content Patcher automatically handles NPC pathfinding, object persistence
 **This is only needed to add a new location.** To edit an existing one, use
 [`EditMap`](action-editmap.md) instead.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/custom-locations.md)**.
+
 ## Contents
 * [Introduction](#introduction)
   * [Maps vs locations](#maps-vs-locations)
@@ -106,9 +108,9 @@ using [`EditMap`](action-editmap.md) after it's loaded (see examples below).
 <td>
 
 _(optional)_ A list of former location names that may appear in the save file instead of the one
-given by `Name`. This field can't contain tokens. This is only meant to allow migrating locations
-added through a different mod, and shouldn't be used in most cases. See [_Can I rename a
-location?_](#can-i-rename-a-location) for more info.
+given by `Name`. This is only meant to allow migrating locations added through a different mod, and
+shouldn't be used in most cases. See [_Can I rename a location?_](#can-i-rename-a-location) for
+more info.
 
 This field can't contain [tokens](../author-guide.md#tokens).
 

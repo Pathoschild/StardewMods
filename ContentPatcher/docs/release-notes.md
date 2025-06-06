@@ -9,6 +9,12 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 2.7.2
+Released 06 June 2025 for SMAPI 4.1.10 or later.
+
+* Added [Chinese documentation](zh/README.md) (thanks to mushymato with help from Luo7710/Mignon!).
+* Fixed error migrating pre-Stardew-Valley-1.6 location edits in some cases.
+
 ## 2.7.1
 Released 28 May 2025 for SMAPI 4.1.10 or later.
 

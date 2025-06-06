@@ -6,6 +6,8 @@ new value. For example, you can append or prepend text without removing the curr
 They're set using the `TextOperations` field for an [`EditData`](action-editdata.md) or
 [`EditMap`](action-editmap.md) patch.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/text-operations.md)**.
+
 ## Contents
 * [Example](#example)
 * [Format](#format)

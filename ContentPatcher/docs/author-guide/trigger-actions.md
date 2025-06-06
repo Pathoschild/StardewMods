@@ -3,6 +3,8 @@
 This page documents the custom [trigger actions](https://stardewvalleywiki.com/Modding:Trigger_actions) added by
 Content Patcher.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/trigger-actions.md)**.
+
 ## Contents
 * [`MigrateIds`](#migrateids)
 * [See also](#see-also)

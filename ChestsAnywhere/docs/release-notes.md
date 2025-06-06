@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.28.1
+Released 06 June 2025 for SMAPI 4.1.10 or later.
+
+* Fixed chest labels shown for chests at equivalent positions in another building of the same type.
+* Fixed 'current location' range including all buildings of the same type while inside one of them.
+* Fixed unable to paste text into edit-chest textboxes.
+* Improved translations. Thanks to DiQuintino (updated Portuguese), JanUwU42 (updated German), and MakinDay (updated Italian)!
+
 ## 1.28.0
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 

@@ -4,6 +4,8 @@ This document lists the tokens available in Content Patcher packs.
 
 **See the [main README](../README.md) for other info**.
 
+**🌐 In other languages: [zh (中文)](../zh/author-guide/tokens.md)**.
+
 ## Contents
 * [Introduction](#introduction)
   * [Overview](#overview)
@@ -423,7 +425,7 @@ Possible values:
 
 flag                       | meaning
 -------------------------- | -------
-`DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
+`DwarvishTranslationGuide` | Unlocks speaking to Dwarf in the mine and the dwarf in the volcano shop.
 `RustyKey`                 | Unlocks the sewers.
 `ClubCard`                 | Unlocks the desert casino.
 `KeyToTheTown`             | Allows access to all buildings in town, at any time of day.
@@ -1824,11 +1826,11 @@ choose the same value (since same index = different value):
 </dl>
 
 ## Advanced
-## Query expressions
+### Query expressions
 A _query expression_ is an arbitrary set of arithmetic and logical expressions which can be
 evaluated into a number, `true`/`false` value, or text.
 
-### Usage
+#### Usage
 Query expressions are evaluated using the `Query` token. It can be used as a placeholder or condition,
 and can include nested tokens. Here's an example which includes all of those:
 ```js
@@ -1856,7 +1858,7 @@ You can use text values in expressions if they're single-quoted (including token
 
 Expressions are case-insensitive, including when comparing text values.
 
-### Caveats
+#### Caveats
 Query expressions are very powerful, but you should be aware of the caveats:
 
 * Query expressions have **very little validation**. An invalid expression generally won't show
@@ -1900,7 +1902,7 @@ Consider using non-expression features instead where possible. For example:
 </tr>
 </table>
 
-### Operators
+#### Operators
 The supported operators are listed below.
 
 * Perform arithmetic on numeric values (like `5 + 5`):
