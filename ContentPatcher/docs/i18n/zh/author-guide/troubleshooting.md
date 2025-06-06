@@ -28,9 +28,12 @@
 3. 将JSON文件拖放到文本框里，或将其粘贴到文本框里。
 4. 点'save & validate file'查看验证结果。如果想给其他人看，你可以分享此结果页面的URL。
 
+你可以在支持JSON模式的文本编辑软件自动验证你的JSON格式，详见网页JSON验证器的文档：
+[_直接使用JSON模式文件_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+
 <!-- Following content adapted from SMAPI docs 'Using a schema file directly' -->
 ------
-译：以下内容改编自[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+译：以下内容改编自[_直接使用JSON模式文件_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
 
 你可以在支持JSON模式的文本编辑软件里直接使用SMAPI提供的JSON模式，例如：
 ```
@@ -49,7 +52,7 @@
 [Content Patcher: `content.json`](../README.md) | https://smapi.io/schemas/content-patcher.json
 
 ------
-译：以上内容改编自[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+译：以上内容改编自[_直接使用JSON模式文件_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
 <!-- Above content adapted from SMAPI docs 'Using a schema file directly' -->
 
 
