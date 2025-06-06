@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.2.2</Version>
+    <Version>1.3.0</Version>
     <RootNamespace>Pathoschild.Stardew.CentralStation</RootNamespace>
 
     <IgnoreModFilePaths>assets/.paths.png, assets/.spring_outdoorsTileSheet.png, assets/.spring_outdoorsTileSheet2.png, assets/.spring_Shadows.png</IgnoreModFilePaths>

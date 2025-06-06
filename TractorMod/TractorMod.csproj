@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>4.23.0</Version>
+    <Version>4.23.1</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
   </PropertyGroup>
 
