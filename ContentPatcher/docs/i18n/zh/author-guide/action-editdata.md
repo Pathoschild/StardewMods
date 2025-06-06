@@ -426,7 +426,8 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 },
 ```
 
-如果我们要更改上下文标签，又不想重新定义整个项目，或者丢失其他模组的更改，可以用`"TargetField": [ "Goby", "ContextTags" ]`：
+如果我们要更改上下文标签，又不想重新定义整个条目，或者丢失其他模组的更改，可以用`"TargetField": [ "Goby", "ContextTags" ]`。
+新补丁生效后内容如下：
 ```json
 [ "color_brown", "fish_river", "season_fall", "season_spring", "season_summer" ]
 ```
@@ -478,12 +479,12 @@ ID         | 数据内的[字典键](#编辑字典)或者[列表键](#编辑列�
 
 比如我们想把菠萝种子从5个改成20个，那么这些字段的层次结构是：
 
-* entry: `791`
-  * field: `GeodeDrops`
-    * list value with ID: `Default`
-      * field: `StackModifiers`
-        * list value with ID: `PineappleSeeds`
-          * field: `Amount`
+* 条目: `791`
+  * 字段: `GeodeDrops`
+    * 含ID的列表值: `Default`
+      * 字段: `StackModifiers`
+        * 含ID的列表值: `PineappleSeeds`
+          * 字段: `Amount`
 
 我们只需要“深入”这个层次结构，编辑我们需要的字段：
 
