@@ -230,14 +230,14 @@ Result （结果）
 [Content Patcher] Invalidated asset 'Portraits/Abigail'.
 ```
 
-## 调试模式<a name="patch-commands"></a>
+## 调试模式<a name="debug-mode"></a>
 Content Patcher有一个“调试模式”，允许你在游戏内查看任何已加载的图像。你可以通过编辑`config.json`把`EnableDebugFeatures`设为`true`来开启此功能。
 
 启用以后按`F3`显示图像，左右`ctrl`循环查看图像。更新图像和图像列表需要关闭再开启调试UI。
 
 > ![](../../screenshots/debug-mode.png)
 
-## 详细日志<a name="patch-commands"></a>
+## 详细日志<a name="verbose-log"></a>
 Content Patcher没有很多日志内容。你在`smapi-internal/StardewModdingAPI.config.json`里开启`VerboseLogging`来获得更多日志。
 **这可能会大大减慢加载，不需要时不推荐启用**
 
@@ -254,5 +254,5 @@ Content Patcher没有很多日志内容。你在`smapi-internal/StardewModdingAP
 * 当SMAPI检查是否可加载内容时，旁边的框框有没有勾号？
   _如果没有，检查你的`When`和`Target`字段_
 
-## 参见<a name="patch-commands"></a>
+## 参见<a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)

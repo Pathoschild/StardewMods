@@ -48,7 +48,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 
 [维基上的模组制作文档](https://zh.stardewvalleywiki.com/模组:目录)通常是为Content Patcher内容包作者编写的，所以你可以在那里找到很多例子。
 
-### 内容包长什么样？<a name="what-is-content-patcher"></a>
+### 内容包长什么样？<a name="what-does-a-content-pack-look-like"></a>
 内容包只是一个文件夹，其中包含两个文本文件： `manifest.json` （里面有很多信息，比如你的模组名）和 `content.json` （里面写着你要修改的内容）。你的
 文件夹中还可能有图像或其他文件，这些文件通常被放在 `assets` 子文件夹中。
 ```

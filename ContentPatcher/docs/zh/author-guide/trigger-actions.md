@@ -6,7 +6,7 @@
 
 ## 目录
 * [`MigrateIds`](#migrateids)
-* [参见](#参见)
+* [参见](#see-also)
 
 ## `MigrateIds`
 `Pathoschild.ContentPatcher_MigrateIds` [触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)
@@ -86,6 +86,6 @@
 >* TriggerAction没有设为`"Trigger": "DayStarted"`和`"HostOnly": true`
 >* 触发动作被`Data/TriggerActions`以外的机制触发
 
-## 参见
+## 参见<a name="see-also"></a>
 * [模组作者指南](../author-guide.md)
 * [触发动作wiki](https://zh.stardewvalleywiki.com/模组:触发动作)

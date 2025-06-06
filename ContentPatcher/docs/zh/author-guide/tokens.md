@@ -1636,7 +1636,7 @@ _位置参数_（未命名值列表）或 _命名参数_。参数值以逗号分
   {{Random: a, b, c |key=Abigail portraits {{Time}} }}
   ```
 
-### 固定键
+### 固定键<a name="pinned-keys"></a>
 <dl>
 <dt>基础固定键：</dt>
 <dd>
@@ -1930,7 +1930,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 ## 共同值<a name="common-values"></a>
 这些是令牌中使用的预定义值，根据令牌文档的需要引用。
 
-### 位置上下文
+### 位置上下文<a name="location-context"></a>
 部分令牌允许通过[输入参数](#input-arguments)选择世界区域：
 
 例子 | 含义
@@ -1947,7 +1947,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 `island`  | [姜岛](https://zh.stardewvalleywiki.com/姜岛).
 `valley`  | 其他区域。
 
-### 目标玩家
+### 目标玩家<a name="target-player"></a>
 部分令牌允许通过[输入参数](#input-arguments)选择玩家信息：
 
 例子                                  | 含义

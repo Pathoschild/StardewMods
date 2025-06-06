@@ -16,7 +16,7 @@
 
 ## 用法<a name="usage"></a>
 ### 概述<a name="overview"></a>
-如果你不想在`content.json`定义模组中的所有的补丁，你可以在其他文件里定义补丁然后在`content.json`里用`Include`引用其他文件的补丁。功能上来说，这些引用的补丁等于把这些补丁拷贝到`Include`的位置。所有在`content.json`可使用的功能，如[令牌和条件](#../author-guide.md#tokens)），均可在这些`Include`的补丁里使用。任何相对本地文件路径仍然以`content.json`为准。
+如果你不想在`content.json`定义模组中的所有的补丁，你可以在其他文件里定义补丁然后在`content.json`里用`Include`引用其他文件的补丁。功能上来说，这些引用的补丁等于把这些补丁拷贝到`Include`的位置。所有在`content.json`可使用的功能，如[令牌和条件](../author-guide.md#tokens)），均可在这些`Include`的补丁里使用。任何相对本地文件路径仍然以`content.json`为准。
 
 
 被引用的文件必须是只有`"Changes"`字段的`.json`文件
@@ -58,7 +58,7 @@
 </dd>
 </dl>
 
-### 示例<a name="example"></a>
+### 示例<a name="examples"></a>
 最基本的使用方式是用`Include`把你的补丁分类到子文件里：
 
 ```js

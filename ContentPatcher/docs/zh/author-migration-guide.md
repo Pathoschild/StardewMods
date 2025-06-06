@@ -78,7 +78,7 @@
 > [!TIP]
 > 如果你有疑问可以在[Discord](https://smapi.io/community#Discord)上询问
 
-## 迁移指南<a name="usage"></a>
+## 迁移指南<a name="migration-guides"></a>
 
 这些更改只有在你将`Format`设置到某版本或更高时才有用。全部更改请参见[（未翻译）发行说明](../release-notes.md)。
 

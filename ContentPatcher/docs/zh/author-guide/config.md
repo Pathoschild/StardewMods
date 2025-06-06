@@ -20,7 +20,7 @@
 
 你可以使用`ConfigSchema`字段定义内容包的设置选项。Content Patcher将自动添加`config.json`文件和[游戏内设置菜单](#config-ui)并允许玩家更改你提供的设置。
 
-在内容包内你可以把设置选项当作[令牌和条件](#../author-guide.md#tokens)使用，从而实现动态改变。
+在内容包内你可以把设置选项当作[令牌和条件](../author-guide.md#tokens)使用，从而实现动态改变。
 
 ### 设置定义<a name="define-your-config"></a>
 
