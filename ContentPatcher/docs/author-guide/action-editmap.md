@@ -4,7 +4,7 @@ A patch with **`"Action": "EditMap"`** changes part of a map loaded by the game.
 content packs can edit the same asset. You can extend a map downwards or rightward by just patching
 past the edge (Content Patcher will expand the map to fit).
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/action-editmap.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/action-editmap.md)**.
 
 ## Contents
 * [Introduction](#introduction)

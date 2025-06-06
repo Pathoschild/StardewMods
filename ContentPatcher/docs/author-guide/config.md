@@ -3,7 +3,7 @@
 The config feature lets you make dynamic changes in your content pack that depends on settings
 selected by the player.
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/config.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/config.md)**.
 
 ## Contents
 * [Basic config](#basic-config)

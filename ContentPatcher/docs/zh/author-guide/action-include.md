@@ -2,7 +2,7 @@
 
 一个含有 **`"Action": "Include"`** 的补丁会从另外一个JSON文件里加载更多补丁。
 
-**🌐 其他语言： [en (English)](../../../author-guide/action-include.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/action-include.md)。**
 
 ## 目录
 * [用法](#usage)

@@ -4,7 +4,7 @@
 
 **其他信息请参见[主README](README.md)**。
 
-**🌐 其他语言： [en (English)](../../author-guide.md)。**
+**🌐 其他语言： [en (English)](../author-guide.md)。**
 
 ## 目录
 * [介绍](#introduction)
@@ -85,7 +85,7 @@ Content Patcher 可让你只使用 JSON 文件更改游戏内容。JSON 是一�
 You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#unpacking)
 你可以[解包游戏的内容文件](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#解包游戏文件)并查看内容。以下是`Portraits/Abigail`包含的内容：
 
-![](screenshots/sample-asset.png)
+![](../screenshots/sample-asset.png)
 
 因此，如果你想更改阿比盖尔的肖像，你可以使用Content Patcher加载或编辑`Portraits/Abigail`然后像前面的示例代码一样更改该图片。
 

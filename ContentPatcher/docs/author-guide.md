@@ -4,7 +4,7 @@ This document helps mod authors create a content pack for Content Patcher.
 
 **See the [main README](README.md) for other info**.
 
-**🌐 In other languages: [zh (中文)](i18n/zh/author-guide.md)**.
+**🌐 In other languages: [zh (中文)](zh/author-guide.md)**.
 
 ## Contents
 * [Introduction](#introduction)

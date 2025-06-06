@@ -1,6 +1,6 @@
 ﻿**Content Patcher** 是一款[星露谷物语](http://stardewvalley.net/)模组，用于加载内容包并以不更换游戏原有文件的形式更改游戏数据，贴图，和地图。
 
-**🌐 其他语言： [en (English)](../../README.md)。**
+**🌐 其他语言： [en (English)](../README.md)。**
 
 ## 目录
 * [玩家指南](#for-players)
@@ -30,7 +30,7 @@ Content Patcher与Linux/macOS/Windows星露谷物语1.6+版本兼容，包括单
 如果你安装了[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)，
 Content Patcher会自动将可设置的内容包添加到其游戏内菜单中：
 
-![](screenshots/config-with-sections.png)
+![](../screenshots/config-with-sections.png)
 
 ### 多人<a name="multiplayer"></a>
 Content Patcher兼容多人游戏。最好所有玩家都拥有相同的内容包，但这不是必须的。
@@ -84,6 +84,6 @@ Content Patcher在首次启动游戏时创建`config.json`文件。你可以用�
 </table>
 
 ## 参见<a name="see-also"></a>
-* [版本发布说明](../../release-notes.md)
+* [版本发布说明](../release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
 * [更多帮助](https://zh.stardewvalleywiki.com/模组:帮助)

@@ -2,7 +2,7 @@
 
 A patch with **`"Action": "Load"`** replaces an entire asset with your own version.
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/action-load.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/action-load.md)**.
 
 ## Contents
 * [Caveats](#caveats)

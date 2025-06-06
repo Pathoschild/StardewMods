@@ -5,7 +5,7 @@ This doc helps SMAPI mod authors use Content Patcher's token strings in their ow
 **To add custom tokens for content packs to use, see the [extensibility API](extensibility.md). See
 the [main README](README.md) for other info**.
 
-**🌐 In other languages: [zh (中文)](i18n/zh/token-strings-api.md)**.
+**🌐 In other languages: [zh (中文)](zh/token-strings-api.md)**.
 
 ## Contents
 * [Overview](#overview)

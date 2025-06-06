@@ -2,7 +2,7 @@
 
 此页记录Content Patcher所添加的自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)
 
-**🌐 其他语言： [en (English)](../../../author-guide/trigger-actions.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/trigger-actions.md)。**
 
 ## 目录
 * [`MigrateIds`](#migrateids)

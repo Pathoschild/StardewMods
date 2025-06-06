@@ -2,7 +2,7 @@
 
 一个含有 **`"Action": "EditMap"`** 的补丁会更改游戏已加载的地图的一部分。任意数量的内容包都可以编辑同一素材。你可以用补丁向下和向右延伸地图（Content Patcher将扩展地图以适应新地图）。
 
-**🌐 其他语言： [en (English)](../../../author-guide/action-editmap.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/action-editmap.md)。**
 
 ## 目录
 * [介绍](#introduction)
@@ -177,21 +177,21 @@ _（可选）_ 何将 `FromArea` 应用于 `ToArea`。默认为 `ReplaceByLayer`
 
 例如，假设你有一个大部分为空的源地图，包含两个图层：`Back`（红）和`Buildings`（蓝）：
 
-![](../../../screenshots/map-patch-mode-source.png)
+![](../../screenshots/map-patch-mode-source.png)
 
 以下是它们在不同`PatchMode`下的组合（黑色区域代表地图背后的虚空，游戏内显示为黑）：
 
 * **`Overlay`**  
   只替换对应的图块。`Back`图层的红图块代替了`Back`图层的地面图块，而`Buildings`图层的蓝图块被添加到`Building`图层并没有替换任何`Back`图层的地面图块，所以地面依旧可见。
-  ![](../../../screenshots/map-patch-mode-overlay.png)
+  ![](../../screenshots/map-patch-mode-overlay.png)
 
 * **`ReplaceByLayer`** _(default)_  
   替换所有图块，限于存在于源地图的图层。
-  ![](../../../screenshots/map-patch-mode-replace-by-layer.png)
+  ![](../../screenshots/map-patch-mode-replace-by-layer.png)
 
 * **`Replace`**  
   替换所有图块。
-  ![](../../../screenshots/map-patch-mode-replace.png)
+  ![](../../screenshots/map-patch-mode-replace.png)
 
 </td>
 </tr>

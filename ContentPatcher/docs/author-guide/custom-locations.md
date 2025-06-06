@@ -13,7 +13,7 @@ warps. Content Patcher automatically handles NPC pathfinding, object persistence
 **This is only needed to add a new location.** To edit an existing one, use
 [`EditMap`](action-editmap.md) instead.
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/custom-locations.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/custom-locations.md)**.
 
 ## Contents
 * [Introduction](#introduction)

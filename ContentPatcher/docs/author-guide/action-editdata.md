@@ -3,7 +3,7 @@
 A patch with **`"Action": "EditData"`** edits fields and entries inside a data asset. Any number of
 content packs can edit the same asset.
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/action-editdata.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/action-editdata.md)**.
 
 ## Contents
 * [Basic concepts](#basic-concepts)

@@ -2,7 +2,7 @@
 
 此页描述各种帮助你排查内容包问题的工具。
 
-**🌐 其他语言： [en (English)](../../../author-guide/troubleshooting.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/troubleshooting.md)。**
 
 ## 目录
 * [JSON模式验证](#schema-validator)
@@ -235,7 +235,7 @@ Content Patcher有一个“调试模式”，允许你在游戏内查看任何�
 
 启用以后按`F3`显示图像，左右`ctrl`循环查看图像。更新图像和图像列表需要关闭再开启调试UI。
 
-> ![](../../../screenshots/debug-mode.png)
+> ![](../../screenshots/debug-mode.png)
 
 ## 详细日志<a name="patch-commands"></a>
 Content Patcher没有很多日志内容。你在`smapi-internal/StardewModdingAPI.config.json`里开启`VerboseLogging`来获得更多日志。

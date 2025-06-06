@@ -4,7 +4,7 @@
 
 **如果你想在你的模组中使用条件，详见[条件API](conditions-api.md)。其他信息请参见[主README](README.md)**
 
-**🌐 其他语言： [en (English)](../../extensibility.md)。**
+**🌐 其他语言： [en (English)](../extensibility.md)。**
 
 ## 目录
 * [入门](#introduction)
@@ -42,7 +42,7 @@
    ]
    ```
 
-2. 把[`IContentPatcherAPI`](../../../IContentPatcherAPI.cs) 复制到你模组里并删除**任何你不需要用的方法，为了兼容未来更改**.
+2. 把[`IContentPatcherAPI`](../../IContentPatcherAPI.cs) 复制到你模组里并删除**任何你不需要用的方法，为了兼容未来更改**.
 3. 在你的模组代码中（如[`GameLaunched`事件](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Events#GameLoop.GameLaunched)中，获取Content Patcher的API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
@@ -199,7 +199,7 @@ api.RegisterToken(this.ModManifest, "PlayerName", () =>
 <ol>
 <li>
 
-创建一个令牌类，此类需要有在这个文件里[所列出的方法的任意组合](../../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
+创建一个令牌类，此类需要有在这个文件里[所列出的方法的任意组合](../../Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs)
 你的类中的方法必须有完全一样的名字，返回类，和参数。Content Patcher发现不对应的公开方法时会报错并退回此令牌。
 
 例如，我们想要一个提供名字缩写的令牌（如`{{Initials:John Smith}}` → `JS`），或无参数时提供玩家的名字缩写。这是一个实现此功能的令牌类：

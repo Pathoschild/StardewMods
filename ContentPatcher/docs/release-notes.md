@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Added [Chinese documentation](i18n/zh/README.md) (thanks to mushymato with help from Luo7710/Mignon!).
+* Added [Chinese documentation](zh/README.md) (thanks to mushymato with help from Luo7710/Mignon!).
 * Fixed error migrating pre-Stardew-Valley-1.6 location edits in some cases.
 
 ## 2.7.1

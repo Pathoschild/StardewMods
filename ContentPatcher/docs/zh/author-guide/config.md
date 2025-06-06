@@ -2,7 +2,7 @@
 
 设置选项功能让你向玩家提供可更改的设置，并基于设置实现动态。
 
-**🌐 其他语言： [en (English)](../../../author-guide/config.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/config.md)。**
 
 ## 目录
 * [基本设置](#basic-config)
@@ -125,12 +125,12 @@
 
 游戏内显示如下：
 
-![](../../../screenshots/config-with-sections.png)
+![](../../screenshots/config-with-sections.png)
 
 ### 翻译<a name="translations"></a>
 默认情况下，你的配置选项会显示为内置名，没有工具提示或翻译。
 
-![](../../../screenshots/config-plain.png)
+![](../../screenshots/config-plain.png)
 
 你可以为设置添加[翻译文档](https://zh.stardewvalleywiki.com/模组:翻译模组)，从而实现更用户友好的UI。当你创建一个`i18n/default.json`后你可以给每一个设置提供这些翻译键（任何组合）：
 
@@ -166,7 +166,7 @@
 
 添加后法语玩家会看到以下界面：
 
-![](../../../screenshots/config-with-translations.png)
+![](../../screenshots/config-with-translations.png)
 
 详见[维基上的 _翻译模组_ 页](https://zh.stardewvalleywiki.com/模组:翻译模组)。
 

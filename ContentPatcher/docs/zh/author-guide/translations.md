@@ -2,7 +2,7 @@
 
 翻译功能让你可以自动按照当前语言从`i18n`文件里加载正确翻译。
 
-**🌐 其他语言： [en (English)](../../../author-guide/translations.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/translations.md)。**
 
 ## 目录
 * [用法](#usage)

@@ -2,7 +2,7 @@
 
 一个含有 **`"Action": "EditImage"`** 的补丁会更改游戏已加载的图像的一部分。任意数量的内容包都可以编辑同一素材。你可以用补丁向下延伸图像（Content Patcher将扩展图像以适应新图像）。
 
-**🌐 其他语言： [en (English)](../../../author-guide/action-editimage.md)。**
+**🌐 其他语言： [en (English)](../../author-guide/action-editimage.md)。**
 
 ## 目录<a name="contents"></a>
 * [用法](#usage)
@@ -33,7 +33,7 @@
 ----------- | -------
 `FromArea`  | <p>源图片中需拷贝到目标的部分，默认整个源图片</p><p>此字段是一个对象，含有左上角点的X和Y像素坐标，和区域的像素大小，长（Width）与高（Height）。该对象的字段支持[令牌](../author-guide.md#tokens)。</p>
 `ToArea`    | <p>目标图片中要替换的部分。默认大小与 `FromArea` 相同，位于贴图的左上角。</p><p>此字段是一个含有左上角点的X和Y像素坐标区域的长（Width）与高（Height）的对象。该对象的字段支持[令牌](../author-guide.md#tokens)。</p><p>如果你指定的区域超出了图像的底部，Content Patcher将自动调整图像大小以适应新图像。</p>
-`PatchMode` | <p>如何将 `FromArea` 应用于 `ToArea`。默认为 `Replace`。</p> 可使用的值: <ul><li><code>Replace</code>: 用源图像替换目标区域中的每个像素。如果源图像有透明像素，则目标图像将在那里变为透明。</li><li><code>Overlay</code>: 在目标区域上绘制源图像。如果源图像有透明或半透明像素，则目标图像将“显示”这些像素。不透明像素将替换目标像素。</li></ul>例如，假设你的源图像是具有透明背景的河豚，而目标图像是实心绿色正方形。 以下是它们在不同`PatchMode`下的组合：<br />![](../../../screenshots/patch-mode-examples.png)
+`PatchMode` | <p>如何将 `FromArea` 应用于 `ToArea`。默认为 `Replace`。</p> 可使用的值: <ul><li><code>Replace</code>: 用源图像替换目标区域中的每个像素。如果源图像有透明像素，则目标图像将在那里变为透明。</li><li><code>Overlay</code>: 在目标区域上绘制源图像。如果源图像有透明或半透明像素，则目标图像将“显示”这些像素。不透明像素将替换目标像素。</li></ul>例如，假设你的源图像是具有透明背景的河豚，而目标图像是实心绿色正方形。 以下是它们在不同`PatchMode`下的组合：<br />![](../../screenshots/patch-mode-examples.png)
 `When`      | _(可选)_ 使此补丁只有在指定[条件](../author-guide.md#conditions)下生效.
 `LogName`   | _(可选)_ 此补丁在日志里显示的名字，有助于理解报错。默认为类似`EditImage Animals/Dinosaur`的名字。
 `Update`    | _(可选)_ 此补丁字条的更新频率，详见[update rate](../author-guide.md#update-rate)。

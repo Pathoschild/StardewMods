@@ -4,7 +4,7 @@ A patch with **`"Action": "EditImage"`** changes part of an image loaded by the 
 content packs can edit the same asset. You can extend an image downwards by just patching past the
 bottom (Content Patcher will expand the image to fit).
 
-**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/action-editimage.md)**.
+**🌐 In other languages: [zh (中文)](../zh/author-guide/action-editimage.md)**.
 
 ## Contents
 * [Usage](#usage)

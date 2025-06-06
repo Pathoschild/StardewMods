@@ -4,7 +4,7 @@
 
 **其他信息请参考[主README](README.md)**
 
-**🌐 其他语言： [en (English)](../../author-migration-guide.md)。**
+**🌐 其他语言： [en (English)](../author-migration-guide.md)。**
 
 ## 目录
 * [常见问题](#faqs)
@@ -80,7 +80,7 @@
 
 ## 迁移指南<a name="usage"></a>
 
-这些更改只有在你将`Format`设置到某版本或更高时才有用。全部更改请参见[（未翻译）发行说明](../../release-notes.md)。
+这些更改只有在你将`Format`设置到某版本或更高时才有用。全部更改请参见[（未翻译）发行说明](../release-notes.md)。
 
 ### 2.1
 于2024年5月22日发布。
@@ -114,7 +114,7 @@
 </li>
 <li>
 
-[`CustomLocations`](custom-locations.md)已弃用。你应该将地点添加到1.6版游戏本体的
+[`CustomLocations`](author-guide/custom-locations.md)已弃用。你应该将地点添加到1.6版游戏本体的
 [新的 `Data/Locations` 素材](https://zh.stardewvalleywiki.com/模组:地点数据)。
 
 例如，如果你有这样的`CustomLocations`：
