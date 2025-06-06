@@ -169,7 +169,7 @@ internal class TrainStationStopProvider : ICustomStopProvider
             if (stop?.TargetMapName is null)
                 continue;
 
-            this.TryLoadStop(
+            Stop? parsedStop = this.TryLoadStop(
                 id: $"{contentPack.Manifest.UniqueID}_{network}_{index++}", // match generated Train Station IDs
                 displayName: stop.GetDisplayName,
                 targetMapName: stop.TargetMapName,
@@ -180,6 +180,8 @@ internal class TrainStationStopProvider : ICustomStopProvider
                 conditions: stop.Conditions,
                 network: network
             );
+            if (parsedStop is not null)
+                yield return parsedStop;
         }
     }
 
