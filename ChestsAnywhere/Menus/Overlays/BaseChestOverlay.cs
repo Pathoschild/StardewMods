@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
@@ -120,6 +121,18 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
     /// <summary>The textboxes managed by Chests Anywhere.</summary>
     private IEnumerable<ValidatedTextBox> ManagedTextboxes => [this.EditNameField, this.EditOrderField, this.EditCategoryField];
+
+    /// <summary>The keybind which pastes text into a selected textbox.</summary>
+    /// <remarks>Derived from <see cref="KeyboardDispatcher.Poll"/>.</remarks>
+    private readonly KeybindList PasteKey = new KeybindList(Constants.TargetPlatform == GamePlatform.Mac
+        ? [new Keybind(SButton.LeftWindows, SButton.V), new Keybind(SButton.RightWindows, SButton.V)]
+        : [new Keybind(SButton.LeftControl, SButton.V), new Keybind(SButton.RightControl, SButton.V)]
+    );
+
+    /// <summary>The modifier key that must be held to activate the <see cref="PasteKey"/>.</summary>
+    private readonly HashSet<SButton> PasteModifierKeys = Constants.TargetPlatform == GamePlatform.Mac
+        ? [SButton.LeftWindows, SButton.RightWindows]
+        : [SButton.LeftControl, SButton.RightControl];
 
 
     /*********
@@ -365,7 +378,22 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 if (this.EscapeKeybind.JustPressed())
                     this.ActiveElement = Element.Menu;
 
-                this.SuppressAll(e.Pressed); // always suppress in this context
+                // always suppress in this context, since we'll handle text input ourselves
+                if (e.Pressed.Any())
+                {
+                    // since we suppress all input, we need to handle CTRL + V ourselves
+                    KeyboardDispatcher dispatcher = Game1.keyboardDispatcher;
+                    if (dispatcher?.Subscriber != null && this.PasteKey.IsDown())
+                    {
+                        string? text = null;
+                        DesktopClipboard.GetText(ref text);
+                        if (text != null && !dispatcher.ShouldSuppress())
+                            dispatcher.Subscriber.RecieveTextInput(Regex.Replace(text, @"[\r\n]", ""));
+                    }
+
+                    this.SuppressAll(e.Pressed.Except(this.PasteModifierKeys));
+                }
+
                 break;
         }
     }
