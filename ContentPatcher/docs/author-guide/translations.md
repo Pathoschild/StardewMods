@@ -3,6 +3,8 @@
 The translation feature lets you store translatable text in `i18n` files and load the correct text
 for the current language automatically.
 
+**🌐 In other languages: [zh (中文)](../i18n/zh/author-guide/translations.md)**.
+
 ## Contents
 * [Usage](#usage)
   * [Format](#format)
@@ -123,6 +125,7 @@ You can inject the translated text directly into your patches using the `i18n`
                     "DisplayName": "{{i18n: item.name}}",
                     "Price": 1200,
                     ...
+                }
             }
         }
     ]
