@@ -65,7 +65,7 @@ _译者注：这段似乎没更新，使用API只需将IContentPatcherAPI.cs和I
 3. 从`Value`属性中获取结果，例如：
    ```cs
    tokenString.UpdateContext();
-   string value = tokenString.Value; // 现在时间为1430，春5，第二年
+   string value = tokenString.Value; // 此变量值为 "The current time is 1430 on Spring 5, year 2."
    ```
 
 如果你想使用其他SMAPI模组添加的令牌，你可以用`assumeModIds`来指定所安装的模组id。你不需要把自己ID和必要依赖的ID添加到`assumeModIds`中。

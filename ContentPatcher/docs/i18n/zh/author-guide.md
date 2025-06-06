@@ -415,7 +415,7 @@ You can [unpack the game's content files](https://zh.stardewvalleywiki.com/模�
 ### 触发动作<a name="trigger-actions"></a>
 Content Patcher 为特定使用场景添加自定义[触发动作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如更新已有存档内容中的内置ID。
 
-See [Content Patcher's trigger action documentation](author-guide/trigger-actions.md) for more info.
+详见[Content Patcher的触发动作指南](author-guide/trigger-actions.md)。
 
 ## 故障排除<a name="troubleshoot"></a>
 详见[故障排除指南](author-guide/troubleshooting.md)。
