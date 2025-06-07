@@ -390,6 +390,7 @@ The available methods are:
 
 method              | usage
 ------------------- | -----
+`GetAllStops`       | Get all currently registered destinations.
 `GetAvailableStops` | Get the destinations which are available at this moment from the player's current location.
 `RegisterStop`      | Add a destination that can be visited by the player, or replace one you previously registered from the same mod.
 `RemoveStop`        | Remove a stop that was registered by the same mod.

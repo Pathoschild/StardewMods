@@ -66,14 +66,11 @@ internal class BusLocationsStopProvider : ICustomStopProvider
     }
 
     /// <inheritdoc />
-    public IEnumerable<Stop> GetAvailableStops(StopNetworks networks, ShouldEnableStopDelegate shouldEnableStop)
+    public IEnumerable<Stop> GetAvailableStops(ShouldEnableStopDelegate shouldEnableStop)
     {
-        if (!networks.HasFlag(StopNetworks.Bus))
-            yield break;
-
         foreach (Stop stop in this.BusStops)
         {
-            if (shouldEnableStop(stop.Id, stop.ToLocation, stop.Condition, stop.Network, networks))
+            if (shouldEnableStop(stop.Id, stop.ToLocation, stop.Condition, stop.Network))
                 yield return stop;
         }
     }

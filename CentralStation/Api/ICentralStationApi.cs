@@ -8,6 +8,14 @@ namespace Pathoschild.Stardew.CentralStation;
 /// <summary>The public API for the Central Station mod.</summary>
 public interface ICentralStationApi
 {
+    /// <summary>Get all destinations which are currently registered, regardless of whether they'd normally be shown to the player.</summary>
+    /// <param name="network">If set, only return stops connected to these networks.</param>
+    /// <remarks>
+    ///   <para>Most code should use <see cref="GetAvailableStops"/> instead.</para>
+    ///   <para>This disables all filtering except the <paramref name="network"/> and basic validation. If applicable, you'll need to apply the normal exclusion for destinations in the current location, whose <see cref="IStop.Condition"/> field doesn't match, or whose location can't be found.</para>
+    /// </remarks>
+    IEnumerable<IStop> GetAllStops(StopNetworks? network = null);
+
     /// <summary>Get the destinations which are available at this moment from the player's current location.</summary>
     /// <param name="network">If set, only return stops connected to these networks.</param>
     /// <remarks>The <see cref="IStop.Condition"/> field is checked before returning each stop, so there's no need to check it again.</remarks>

@@ -76,35 +76,30 @@ internal class TrainStationStopProvider : ICustomStopProvider
     }
 
     /// <inheritdoc />
-    public IEnumerable<Stop> GetAvailableStops(StopNetworks networks, ShouldEnableStopDelegate shouldEnableStop)
+    public IEnumerable<Stop> GetAvailableStops(ShouldEnableStopDelegate shouldEnableStop)
     {
         // from reassigned content packs
         if (this.ReassignedStops.Count > 0)
         {
             foreach (Stop stop in this.ReassignedStops)
             {
-                if (shouldEnableStop(stop.Id, stop.ToLocation, stop.Condition, stop.Network, networks))
+                if (shouldEnableStop(stop.Id, stop.ToLocation, stop.Condition, stop.Network))
                     yield return stop;
             }
         }
 
         // from Train Station API
-        if (this.TrainStation is { IsLoaded: true } api && networks.HasAnyFlag(StopNetworks.Boat | StopNetworks.Train))
+        if (this.TrainStation is { IsLoaded: true } api)
         {
             // get enumerator
             IEnumerator<ITrainStationStopModel?>? enumerator = null;
             try
             {
-                bool isBoat = networks.HasFlag(StopNetworks.Boat);
-                bool isTrain = networks.HasFlag(StopNetworks.Train);
-
-                enumerator = isBoat && isTrain
-                    ? api.GetAvailableStops(true).Concat(api.GetAvailableStops(false)).GetEnumerator()
-                    : api.GetAvailableStops(isBoat).GetEnumerator();
+                enumerator = api.GetAvailableStops(true).Concat(api.GetAvailableStops(false)).GetEnumerator();
             }
             catch (Exception ex)
             {
-                this.Monitor.Log($"Could not load {networks} stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
+                this.Monitor.Log($"Could not load stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
                 enumerator?.Dispose();
                 yield break;
             }
@@ -128,9 +123,15 @@ internal class TrainStationStopProvider : ICustomStopProvider
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Could not load {networks} stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
+                    this.Monitor.Log($"Could not load stops from the Train Station mod because its API returned an unexpected error.\nTechnical details: {ex}", LogLevel.Warn);
                     yield break;
                 }
+
+                // skip if not available
+                StopNetworks network = stop.IsBoat ? StopNetworks.Boat : StopNetworks.Train;
+                string? condition = this.ConvertExpandedPreconditionsToGameStateQuery(stop.Conditions);
+                if (!shouldEnableStop(stop.Id, stop.TargetMapName, condition, network))
+                    continue;
 
                 // add stop if valid
                 Stop? loadedStop = this.TryLoadStop(
@@ -141,10 +142,10 @@ internal class TrainStationStopProvider : ICustomStopProvider
                     targetY: stop.TargetY,
                     facingDirectionAfterWarp: stop.FacingDirectionAfterWarp,
                     cost: stop.Cost,
-                    conditions: stop.Conditions,
-                    network: stop.IsBoat ? StopNetworks.Boat : StopNetworks.Train
+                    condition: condition,
+                    network: network
                 );
-                if (loadedStop is not null && shouldEnableStop(loadedStop.Id, loadedStop.ToLocation, loadedStop.Condition, loadedStop.Network, networks))
+                if (loadedStop is not null)
                     yield return loadedStop;
             }
         }
@@ -169,6 +170,7 @@ internal class TrainStationStopProvider : ICustomStopProvider
             if (stop?.TargetMapName is null)
                 continue;
 
+            string? condition = this.ConvertExpandedPreconditionsToGameStateQuery(stop.Conditions);
             Stop? parsedStop = this.TryLoadStop(
                 id: $"{contentPack.Manifest.UniqueID}_{network}_{index++}", // match generated Train Station IDs
                 displayName: stop.GetDisplayName,
@@ -177,7 +179,7 @@ internal class TrainStationStopProvider : ICustomStopProvider
                 targetY: stop.TargetY,
                 facingDirectionAfterWarp: stop.FacingDirectionAfterWarp,
                 cost: stop.Cost,
-                conditions: stop.Conditions,
+                condition: condition,
                 network: network
             );
             if (parsedStop is not null)
@@ -193,9 +195,9 @@ internal class TrainStationStopProvider : ICustomStopProvider
     /// <param name="targetY"><inheritdoc cref="ITrainStationStopModel.TargetY" path="/summary"/></param>
     /// <param name="facingDirectionAfterWarp"><inheritdoc cref="ITrainStationStopModel.FacingDirectionAfterWarp" path="/summary"/></param>
     /// <param name="cost"><inheritdoc cref="ITrainStationStopModel.Cost" path="/summary"/></param>
-    /// <param name="conditions"><inheritdoc cref="ITrainStationStopModel.Conditions" path="/summary"/></param>
+    /// <param name="condition"><inheritdoc cref="Stop.Condition" path="/summary"/></param>
     /// <param name="network"><inheritdoc cref="Stop.Network" path="/summary"/></param>
-    private Stop? TryLoadStop(string id, Func<string> displayName, string targetMapName, int targetX, int targetY, int facingDirectionAfterWarp, int cost, string?[]? conditions, StopNetworks network)
+    private Stop? TryLoadStop(string id, Func<string> displayName, string targetMapName, int targetX, int targetY, int facingDirectionAfterWarp, int cost, string? condition, StopNetworks network)
     {
         // ignore stops which duplicate a Central Station stop
         if (this.IgnoreStopIds.Contains(id))
@@ -211,7 +213,7 @@ internal class TrainStationStopProvider : ICustomStopProvider
             ToFacingDirection: facingDirectionAfterWarp,
             Cost: cost,
             Network: network,
-            Condition: this.ConvertExpandedPreconditionsToGameStateQuery(conditions)
+            Condition: condition
         );
     }
 

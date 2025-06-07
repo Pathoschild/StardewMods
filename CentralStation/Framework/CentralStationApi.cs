@@ -35,6 +35,12 @@ public class CentralStationApi : ICentralStationApi, IDeprecatedCentralStationAp
     ** Main API
     ****/
     /// <inheritdoc />
+    public IEnumerable<IStop> GetAllStops(StopNetworks? network = null)
+    {
+        return this.StopManager.GetStops(network ?? StopManager.AllNetworks, null);
+    }
+
+    /// <inheritdoc />
     public IEnumerable<IStop> GetAvailableStops(StopNetworks? network = null)
     {
         return this.StopManager.GetAvailableStops(network ?? StopManager.AllNetworks);
