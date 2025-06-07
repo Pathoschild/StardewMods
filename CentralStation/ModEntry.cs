@@ -164,7 +164,7 @@ internal class ModEntry : Mod
     /// <returns>Returns whether the action was handled.</returns>
     private bool OnCentralTicketAction(bool isTicketBooth)
     {
-        void ShowTickets() => this.OpenMenu(StopNetworks.Boat | StopNetworks.Bus | StopNetworks.Train);
+        void ShowTickets() => this.OpenMenu(Framework.StopManager.AllNetworks);
 
         // rare chance of showing a secret message before the ticket menu
         if (this.ContentManager.GetStationVisits() >= Constant.StrangeMessageMinVisits && !this.SawStrangeOccurrence.Value && Game1.random.NextBool(Constant.StrangeMessageChance))

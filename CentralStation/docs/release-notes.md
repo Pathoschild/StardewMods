@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
 * Fixed destinations from old Bus Locations and Train Station content packs not always hidden when they should be (e.g. when already in their location).
 
 ## 1.3.0

@@ -33,6 +33,9 @@ internal class StopManager
     /// <summary>The stops registered through the mod API.</summary>
     public Dictionary<string, Stop> ModApiStops { get; } = [];
 
+    /// <summary>A network value which includes all network types.</summary>
+    public const StopNetworks AllNetworks = StopNetworks.Boat | StopNetworks.Bus | StopNetworks.Train;
+
 
     /*********
     ** Public methods
