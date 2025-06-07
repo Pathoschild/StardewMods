@@ -67,7 +67,7 @@ internal class StopManager
         // from mod integrations
         foreach (ICustomStopProvider provider in this.GetCustomStopProviders())
         {
-            foreach (Stop stop in provider.GetAvailableStops(networks))
+            foreach (Stop stop in provider.GetAvailableStops(networks, this.ContentManager.ShouldEnableStop))
                 yield return stop;
         }
     }

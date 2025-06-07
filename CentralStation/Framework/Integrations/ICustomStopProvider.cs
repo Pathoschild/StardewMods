@@ -7,5 +7,6 @@ internal interface ICustomStopProvider
 {
     /// <summary>Get the stops which can be selected from the current location.</summary>
     /// <param name="networks">The networks for which to get stops.</param>
-    IEnumerable<Stop> GetAvailableStops(StopNetworks networks);
+    /// <param name="shouldEnableStop">Get whether a stop should be enabled from the current location.</param>
+    IEnumerable<Stop> GetAvailableStops(StopNetworks networks, ShouldEnableStopDelegate shouldEnableStop);
 }

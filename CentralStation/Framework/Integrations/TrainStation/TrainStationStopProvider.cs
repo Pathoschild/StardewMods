@@ -76,14 +76,14 @@ internal class TrainStationStopProvider : ICustomStopProvider
     }
 
     /// <inheritdoc />
-    public IEnumerable<Stop> GetAvailableStops(StopNetworks networks)
+    public IEnumerable<Stop> GetAvailableStops(StopNetworks networks, ShouldEnableStopDelegate shouldEnableStop)
     {
         // from reassigned content packs
         if (this.ReassignedStops.Count > 0)
         {
             foreach (Stop stop in this.ReassignedStops)
             {
-                if (stop.Network.HasAnyFlag(networks))
+                if (shouldEnableStop(stop.Id, stop.ToLocation, stop.Condition, stop.Network, networks))
                     yield return stop;
             }
         }
@@ -144,7 +144,7 @@ internal class TrainStationStopProvider : ICustomStopProvider
                     conditions: stop.Conditions,
                     network: stop.IsBoat ? StopNetworks.Boat : StopNetworks.Train
                 );
-                if (loadedStop is not null)
+                if (loadedStop is not null && shouldEnableStop(loadedStop.Id, loadedStop.ToLocation, loadedStop.Condition, loadedStop.Network, networks))
                     yield return loadedStop;
             }
         }
