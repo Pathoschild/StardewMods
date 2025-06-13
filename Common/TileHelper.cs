@@ -122,8 +122,8 @@ internal static class TileHelper
     /// <param name="y">The pixel Y coordinate.</param>
     public static Vector2 GetTileFromScreenPosition(float x, float y)
     {
-        float screenX = Game1.viewport.X + x;
-        float screenY = Game1.viewport.Y + y;
+        float screenX = Game1.viewport.X + x / Game1.options.zoomLevel;
+        float screenY = Game1.viewport.Y + y / Game1.options.zoomLevel;
 
         int tileX = (int)Math.Floor(screenX / Game1.tileSize);
         int tileY = (int)Math.Floor(screenY / Game1.tileSize);
