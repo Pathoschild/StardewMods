@@ -25,8 +25,8 @@
     "config.harvest.tooltip": "Как быстро вы собираете урожай и корм вручную. Значение по умолчанию {{defaultValue}}x.",
 
     // TODO
-    "config.hold-up-item.name": "Hold up item",
-    "config.hold-up-item.tooltip": "How fast you hold up an item. Default {{defaultValue}}x.",
+    "config.hold-up-item.name": "Демонстрация предмета",
+    "config.hold-up-item.tooltip": "Скорость демонстрации предмета. По умолчанию: {{defaultValue}}x.",
 
     "config.horse-flute.name": "Игра на лошадиной дудочке",
     "config.horse-flute.tooltip": "Как быстро вы играете на лошадиной дудочке. Значение по умолчанию {{defaultValue}}x.",
@@ -38,8 +38,8 @@
     "config.mount.tooltip": "Как быстро вы залазите/слазите на/с лошадей (включая пользовательских маунтов, таких как Tractor Mod). Значение по умолчанию  {{defaultValue}}x.",
 
     // TODO
-    "config.read-book.name": "Read book",
-    "config.read-book.tooltip": "How fast you read books. Default {{defaultValue}}x.",
+    "config.read-book.name": "Чтение книг",
+    "config.read-book.tooltip": "Скорость чтения книг. По умолчанию: {{defaultValue}}x.",
 
     "config.shear.name": "Ножницы",
     "config.shear.tooltip": "Как быстро вы используете ножницы. Значение по умолчанию {{defaultValue}}x.",
@@ -51,8 +51,8 @@
     "config.tool.tooltip": "Как быстро вы размахиваете своим оружием. По умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.",
 
     // TODO
-    "config.use-totem.name": "Use totem",
-    "config.use-totem.tooltip": "How fast you use a totem. Default {{defaultValue}}x.",
+    "config.use-totem.name": "Использование тотема",
+    "config.use-totem.tooltip": "Скорость активации тотемов. По умолчанию:  {{defaultValue}}x.",
 
     "config.weapon.name": "Размахивание оружием",
     "config.weapon.tooltip": "Как быстро вы размахиваете своим оружием. По умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.",
@@ -72,36 +72,36 @@
     "config.casino-slots.tooltip": "Как быстро вращаются слоты казино. Значение по умолчанию {{defaultValue}}x.",
 
     // TODO
-    "config.fade.name": "Fade",
-    "config.fade.tooltip": "How fast the screen fades to black and fades back in. Default {{defaultValue}}x.",
+    "config.fade.name": "Затемнение экрана",
+    "config.fade.tooltip": "Скорость затемнения и проявления экрана. По умолчанию: {{defaultValue}}x.",
 
     "config.fishing-text.name": "Fishing minigame text",
     "config.fishing-text.tooltip": "How fast fishing minigame text animations like 'HIT!' and 'PERFECT' play. Default {{defaultValue}}x.",
 
-    "config.fishing-treasure.name": "Fishing treasure chest",
-    "config.fishing-treasure.tooltip": "How fast you open a fishing treasure chest. Default {{defaultValue}}x.",
+    "config.fishing-treasure.name": "Сундуки в рыбалке",
+    "config.fishing-treasure.tooltip": "Скорость открытия сундуков в рыбалке. По умолчанию: {{defaultValue}}x.",
 
-    "config.forge.name": "Forge",
-    "config.forge.tooltip": "How fast the volcano forge works. Default {{defaultValue}}x.",
+    "config.forge.name": "Вулканическая кузня",
+    "config.forge.tooltip": "Скорость работы вулканической кузни. По умолчанию: {{defaultValue}}x.",
 
-    "config.open-chest.name": "Open chest",
-    "config.open-chest.tooltip": "How fast you open chests. Default {{defaultValue}}x.",
+    "config.open-chest.name": "Открытие сундуков",
+    "config.open-chest.tooltip": "Скорость открытия сундуков. По умолчанию: {{defaultValue}}x.",
 
-    "config.parrot-express.name": "Parrot express",
-    "config.parrot-express.tooltip": "How fast the parrot express runs. Default {{defaultValue}}x.",
+    "config.parrot-express.name": "Попугай-экспресс",
+    "config.parrot-express.tooltip": "Скорость работы службы доставки попугаев. По умолчанию: {{defaultValue}}x.",
 
-    "config.prize-ticket-machine.name": "Prize ticket machine",
-    "config.prize-ticket-machine.tooltip": "How fast Lewis' prize ticket machine accepts a ticket and produces an item. Default {{defaultValue}}x.",
+    "config.prize-ticket-machine.name": "Билетный автомат",
+    "config.prize-ticket-machine.tooltip": "Скорость выдачи призов в билетном автомате Льюиса. По умолчанию: {{defaultValue}}x.",
 
-    "config.tailor.name": "Tailor",
-    "config.tailor.tooltip": "How fast the sewing machine works. Default {{defaultValue}}x.",
+    "config.tailor.name": "Швейная машина",
+    "config.tailor.tooltip": "Скорость работы швейной машины. По умолчанию: {{defaultValue}}x.",
 
     "config.tree-fall.name": "Падение деревьев",
     "config.tree-fall.tooltip": "Как быстро падают деревья после того, как их срубили. По умолчанию {{defaultValue}}x, рекомендуется {{suggestedValue}}x.",
 
     // TODO
-    "config.wheel-spin.name": "Wheel spin",
-    "config.wheel-spin.tooltip": "How fast the Stardew Valley Fair wheel minigame spins. Default {{defaultValue}}x.",
+    "config.wheel-spin.name": "Колесо фортуны",
+    "config.wheel-spin.tooltip": "Скорость вращения колеса на Ярмарке. По умолчанию: {{defaultValue}}x.",
 
     /****
     ** 'UI Animation Speeds' section
@@ -109,14 +109,14 @@
     "config.ui-speeds": "Скорость анимации пользовательского интерфейса",
 
     // TODO
-    "config.dialogue-typing.name": "Dialogue typing",
-    "config.dialogue-typing.tooltip": "How fast text appears in dialogue boxes. Default {{defaultValue}}x",
+    "config.dialogue-typing.name": "Печать текста",
+    "config.dialogue-typing.tooltip": "Скорость появления текста в диалогах. По умолчанию: {{defaultValue}}x",
 
-    "config.open-dialogue-box.name": "Open dialogue box",
-    "config.open-dialogue-box.tooltip": "How fast dialogue boxes open. Default {{defaultValue}}x.",
+    "config.open-dialogue-box.name": "Открытие диалогов",
+    "config.open-dialogue-box.tooltip": "Скорость открытия диалоговых окон. По умолчанию: {{defaultValue}}x.",
 
-    "config.shipping-menu.name": "Shipping menu transitions",
-    "config.shipping-menu.tooltip": "How fast the shipping menu transitions between screens. Default {{defaultValue}}x.",
+    "config.shipping-menu.name": "Меню продажи",
+    "config.shipping-menu.tooltip": "Скорость переходов в меню продажи. По умолчанию: {{defaultValue}}x.",
 
     "config.title-menu.name": "Переходы в главном меню игры",
     "config.title-menu.tooltip": "Как быстро главное меню переключается между экранами. Значение по умолчанию {{defaultValue}}x.",
@@ -128,9 +128,9 @@
     ** 'Experimental' section
     ****/
     // TODO
-    "config.experimental": "Experimental options",
-    "config.experimental-warning": "These options aren't fully stable yet, and may cause issues like freezes and crashes. Enabling any of these isn't recommended.",
+    "config.experimental": "Экспериментальные настройки",
+    "config.experimental-warning": "Эти настройки нестабильны и могут вызывать зависания или сбои. Не рекомендуется включать.",
 
-    "config.event.name": "Event cutscene",
-    "config.event.tooltip": "How fast event cutscenes play. Default {{defaultValue}}x, suggested {{suggestedValue}}x."
+    "config.event.name": "Кат-сцены",
+    "config.event.tooltip": "Скорость проигрывания кат-сцен. По умолчанию: {{defaultValue}}x, рекомендуется: {{suggestedValue}}x."
 }
