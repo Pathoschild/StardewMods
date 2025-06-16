@@ -79,49 +79,49 @@
     *********/
     // TODO
     // section names
-    "config.section.main-options": "Main options",
-    "config.section.main-controls": "Main controls",
-    "config.section.layer": "'{{LayerName}}' layer", // {{LayerName}} is the layer name set above.
+    "config.section.main-options": "Основные настройки",
+    "config.section.main-controls": "Управление",
+    "config.section.layer": "Слой '{{LayerName}}'", // {{LayerName}} is the layer name set above.
 
     // main options
-    "config.show-grid.name": "Show grid",
-    "config.show-grid.desc": "Whether to show a tile grid when a layer is open.",
+    "config.show-grid.name": "Показывать сетку",
+    "config.show-grid.desc": "Показывать сетку при открытом слое.",
 
-    "config.combine-borders.name": "Combine overlapping borders",
-    "config.combine-borders.desc": "When two groups of the same color overlap, whether to draw one border around their combined edge instead of their individual borders.",
+     "config.combine-borders.name": "Объединять границы",
+    "config.combine-borders.desc": "Объединять границы перекрывающихся зон одного цвета.",
 
-    "config.color-scheme.name": "Color scheme",
-    "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
-    "config.color-schemes.default": "default colors",
+    "config.color-scheme.name": "Цветовая схема",
+    "config.color-scheme.desc": "Цветовая схема для всех слоёв.",
+    "config.color-schemes.default": "По умолчанию",
 
-    // main controls
-    "config.toggle-layer-key.name": "Toggle data layers",
-    "config.toggle-layer-key.desc": "The key binding which shows or hides the data layer overlay.",
+        // main controls
+    "config.toggle-layer-key.name": "Переключение слоёв",
+    "config.toggle-layer-key.desc": "Клавиша для показа/скрытия слоёв.",
 
-    "config.prev-layer-key.name": "Previous layer key",
-    "config.prev-layer-key.desc": "The key binding which cycles backwards through the available data layers.",
+    "config.prev-layer-key.name": "Предыдущий слой",
+    "config.prev-layer-key.desc": "Клавиша для переключения на предыдущий слой.",
 
-    "config.next-layer-key.name": "Next layer key",
-    "config.next-layer-key.desc": "The key binding which cycles forward through the available data layers.",
+    "config.next-layer-key.name": "Следующий слой",
+    "config.next-layer-key.desc": "Клавиша для переключения на следующий слой.",
 
     // data layers
-    "config.layer-enabled.name": "Enabled",
-    "config.layer-enabled.desc": "Whether this layer should be available in-game.",
+    "config.layer-enabled.name": "Активен",
+    "config.layer-enabled.desc": "Включить этот слой в игре.",
 
-    "config.layer-update-on-view-change.name": "Update when view changes",
-    "config.layer-update-on-view-change.desc": "Whether the drawn layer info should be updated when a new part of the world moves into view, regardless of the 'updates per second' setting.",
+    "config.layer-update-on-view-change.name": "Обновлять при смене вида",
+    "config.layer-update-on-view-change.desc": "Обновлять слой при изменении видимой области.",
 
-    "config.layer-updates-per-second.name": "Updates per second",
-    "config.layer-updates-per-second.desc": "How often the layer should update when it's being displayed, as a number per second. Setting this to a higher value than the default may cause lag. Default {{defaultValue}}.",
+    "config.layer-updates-per-second.name": "Обновлений в секунду",
+    "config.layer-updates-per-second.desc": "Частота обновления слоя (высокие значения могут вызывать лаги). По умолчанию {{defaultValue}}.",
 
-    "config.layer-shortcut.name": "Shortcut key",
-    "config.layer-shortcut.desc": "The key binding which selects this layer when the overlay is open.",
+    "config.layer-shortcut.name": "Горячая клавиша",
+    "config.layer-shortcut.desc": "Клавиша для быстрого выбора этого слоя.",
 
 
     /*********
     ** Iconic Framework icon
     *********/
     // TODO
-    "icon.toggle-data-layers.name": "Data Layers",
-    "icon.toggle-data-layers.desc": "Toggle Data Layers"
+    "icon.toggle-data-layers.name": "Слои карты",
+    "icon.toggle-data-layers.desc": "Переключение слоёв карты"
 }
