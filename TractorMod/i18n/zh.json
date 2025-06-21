@@ -184,9 +184,8 @@
     "config.clear-dirt-without-fertilizer.name": "填平耕地",
     "config.clear-dirt-without-fertilizer.tooltip": "是否填平已耕的地块。",
 
-    // TODO
-    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
-    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
+    "config.clear-dirt-with-fertilizer.name": "填平施肥过的耕地",
+    "config.clear-dirt-with-fertilizer.tooltip": "是否填平施肥过的耕地地块。",
 
 
     /****
