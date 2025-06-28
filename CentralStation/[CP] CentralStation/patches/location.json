@@ -97,7 +97,9 @@
             "Action": "EditData",
             "Target": "Strings/StringsFromMaps",
             "Entries": {
-                "{{MainModId}}_TransitAreaDoors": "{{i18n: location.transit-area-doors}}"
+                "{{MainModId}}_TransitAreaDoors": "{{i18n: location.transit-area-doors}}",
+                "{{MainModId}}_EmployeeLockers": "{{i18n: location.employee-lockers}}",
+                "{{MainModId}}_EmployeeFridge": "{{i18n: location.employee-fridge}}"
             }
         },
 

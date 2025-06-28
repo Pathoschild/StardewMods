@@ -94,6 +94,10 @@
     "location.cola-machine.2": "(Du näherst dich dem Cola-Automaten. Bevor du etwas tun konntest, fällt ein Gegenstand mit einem Poltern heraus).",
     "location.cola-machine.3": "(Irgendwie hast du das Gefühl, der Cola-Automat will dir helfen.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
 
     /*********
     ** Tourist dialogue

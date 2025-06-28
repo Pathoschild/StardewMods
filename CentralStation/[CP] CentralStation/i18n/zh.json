@@ -94,6 +94,11 @@
     "location.cola-machine.2": "（你刚走近可乐机，还没操作就有物品哐当落下）",
     "location.cola-machine.3": "（不知为何，你觉得可乐机是个好机）",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue (游客对话)

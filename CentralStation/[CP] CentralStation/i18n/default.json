@@ -94,6 +94,10 @@
     "location.cola-machine.2": "(You approach the cola machine. Before you can do anything, an item drops with a clunk.)",
     "location.cola-machine.3": "(Somehow you sense the cola machine wants to help.)",
 
+    // employee lounge
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue

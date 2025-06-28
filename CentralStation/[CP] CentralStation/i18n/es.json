@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(Te acercas a la máquina de refrescos. Antes de que puedas hacer algo, un objeto cae con un clonk.)",
     "location.cola-machine.3": "(De alguna manera sientes que la máquina de refrescos quiere ayudarte.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue (Diálogos de turistas)

@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(콜라 기계에 접근합니다. 당신이 무언가 하기도 전에, 물건이 쿵하고 떨어집니다.)",
     "location.cola-machine.3": "(왠지 콜라 기계가 도와주고 싶어하는 것 같습니다.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue

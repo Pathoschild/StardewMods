@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(Kola makinesine yaklaşıyorsun. Sen daha hiçbir şey yapmadan, bir şey takırdayarak düşüveriyor.)",
     "location.cola-machine.3": "(Bir şekilde kola makinesinin yardım etmek istediğini hissediyorsun.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue

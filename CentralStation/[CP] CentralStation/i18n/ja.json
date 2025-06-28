@@ -94,6 +94,11 @@
     "location.cola-machine.2": "（あなたはコーラマシンに近づいた。何もしていないのに、ガチャンと音を立てて商品が落ちてきた。）",
     "location.cola-machine.3": "（どういうわけか、コーラマシンが手助けしたがっているのを感じる。）",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue

@@ -102,6 +102,11 @@
     "location.cola-machine.2": "(Antes que você faça algo, um item cai na bandeja com um barulho seco.)",
     "location.cola-machine.3": "(De alguma forma, você sente que a máquina de refrigerante quer ajudar.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue (Diálogos dos turistas)

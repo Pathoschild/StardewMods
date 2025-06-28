@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(Ti avvicini al distributore. Prima che tu possa fare qualcosa, un oggetto cade con un colpo secco.)",
     "location.cola-machine.3": "(In qualche modo, percepisci che il distributore ti vuole aiutare.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue
