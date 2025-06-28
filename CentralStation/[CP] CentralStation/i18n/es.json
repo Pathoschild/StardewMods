@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "Desde esos rieles, una historia espeluznante...#Un anuncio escuchado en las profundidades de la estación...#Sí, perdí mi tren.",
 
     "tourist.blackgull-pirate.1": "¡Que el viento me lleve! ¿Dónde están los demás?",
-    "tourist.blackgull-pirate.2": "¡Nos estamos subiendo en cualquier minuto..."
+    "tourist.blackgull-pirate.2": "¡Nos estamos subiendo en cualquier minuto...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -160,6 +160,15 @@
                                 "{{i18n: tourist.blackgull-pirate.1}}",
                                 "{{i18n: tourist.blackgull-pirate.2}}"
                             ]
+                        },
+
+                        // custom tourists
+                        "BagDog": {
+                            "Index": 24,
+                            "Dialogue": [
+                                "{{i18n: tourist.bag-dog.1}}",
+                                "{{i18n: tourist.bag-dog.2}}"
+                            ]
                         }
                     }
                 }

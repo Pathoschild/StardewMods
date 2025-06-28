@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "Da lontano, arriva un racconto agghiacciante...#Un annuncio sentito nelle profondità della stazione...#Sì, ho perso il treno.",
 
     "tourist.blackgull-pirate.1": "Corpo di mille balene! Dove sono gli altri?",
-    "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro..."
+    "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
 * Revamped central station visuals (thanks to 6480 for the sprites and [Kisaa](https://next.nexusmods.com/profile/crystalinerose) for the map changes!).  
   _This includes a revamped gift shop area with a new clerk NPC, more tourist/travel clutter scattered around the station, floor shadows, and many new sprites that will be used in later versions._
+* Added a new dog tourist (thanks to 6480 for the sprites and Kisaa for the map edit!).
+* Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
 * Fixed destinations from old Bus Locations and Train Station content packs not always hidden when they should be (e.g. when already in their location).
 
 ## 1.3.0

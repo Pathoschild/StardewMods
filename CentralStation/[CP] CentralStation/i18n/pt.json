@@ -159,5 +159,9 @@
     "tourist.grim-pirate": "Das profundezas dos trilhos, uma história sombria...#Um anúncio ecoou pela estação...#Ah, perdi meu trem.",
 
     "tourist.blackgull-pirate.1": "Pelamor de yoba! Cadê os outros?",
-    "tourist.blackgull-pirate.2": "Tamo embarcando a qualquer minuto..."
+    "tourist.blackgull-pirate.2": "Tamo embarcando a qualquer minuto...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="6" height="8" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="254">
+<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="6" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="254">
  <properties>
   <property name="DefaultWarpLocation" value="60 13"/>
  </properties>
@@ -416,7 +416,68 @@
    </animation>
   </tile>
  </tileset>
- <layer id="2" name="Buildings" width="6" height="8">
+ <tileset firstgid="2559" name="centralStation" tilewidth="16" tileheight="16" tilecount="740" columns="20">
+  <image source=".Pathoschild.CentralStation_Tiles.png" width="320" height="592"/>
+  <tile id="489">
+   <animation>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="490" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="490" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+    <frame tileid="489" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="553">
+   <animation>
+    <frame tileid="553" duration="500"/>
+    <frame tileid="553" duration="500"/>
+    <frame tileid="554" duration="500"/>
+    <frame tileid="555" duration="500"/>
+    <frame tileid="555" duration="500"/>
+    <frame tileid="555" duration="500"/>
+    <frame tileid="554" duration="500"/>
+    <frame tileid="553" duration="500"/>
+    <frame tileid="553" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="671">
+   <animation>
+    <frame tileid="671" duration="500"/>
+    <frame tileid="691" duration="500"/>
+    <frame tileid="711" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="672">
+   <animation>
+    <frame tileid="672" duration="500"/>
+    <frame tileid="692" duration="500"/>
+    <frame tileid="712" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="673">
+   <animation>
+    <frame tileid="673" duration="500"/>
+    <frame tileid="693" duration="500"/>
+    <frame tileid="713" duration="500"/>
+   </animation>
+  </tile>
+  <tile id="674">
+   <animation>
+    <frame tileid="674" duration="500"/>
+    <frame tileid="694" duration="500"/>
+    <frame tileid="714" duration="500"/>
+   </animation>
+  </tile>
+ </tileset>
+ <layer id="2" name="Buildings" width="6" height="10">
   <data encoding="csv">
 0,0,0,0,0,0,
 308,285,349,311,309,96,
@@ -425,10 +486,12 @@
 0,0,0,0,0,0,
 2329,2304,2366,2364,2360,2330,
 0,0,0,0,0,0,
-2403,2451,2504,0,0,0
+2403,2451,2504,0,0,0,
+0,0,0,0,0,0,
+3112,0,0,0,0,0
 </data>
  </layer>
- <layer id="35" name="Front" width="6" height="8">
+ <layer id="35" name="Front" width="6" height="10">
   <data encoding="csv">
 0,253,317,279,277,64,
 0,0,0,0,0,0,
@@ -437,6 +500,8 @@
 2313,2288,2350,2348,2344,2314,
 0,0,0,0,0,0,
 2384,2432,2485,0,0,0,
+0,0,0,0,0,0,
+0,0,0,0,0,0,
 0,0,0,0,0,0
 </data>
  </layer>

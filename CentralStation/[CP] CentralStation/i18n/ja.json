@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "あの線路から聞こえてくるのは、ぞっとするような物語...#駅の奥深くで聞こえたアナウンス...#ああ、電車を逃しちまった。",
 
     "tourist.blackgull-pirate.1": "おおっと、みんなはどこだ？",
-    "tourist.blackgull-pirate.2": "もうすぐ乗船の時間だぞ..."
+    "tourist.blackgull-pirate.2": "もうすぐ乗船の時間だぞ...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

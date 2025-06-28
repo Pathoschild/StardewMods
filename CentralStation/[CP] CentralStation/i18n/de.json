@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "Von jenen Gleisen her, 'ne schaurige Mär...#Ne Ankündigung, die man in den Tiefen des Bahnhofs vernahm...#Aye, ich hab' meinen Zug verpasst.",
 
     "tourist.blackgull-pirate.1": "Heiliges Kanonenrohr! Wo sind die anderen?",
-    "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord..."
+    "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "铁轨传来骇人传说...#车站深处回荡的广播...#唉，我错过了那班车。",
 
     "tourist.blackgull-pirate.1": "我的天啊！其他船员呢？",
-    "tourist.blackgull-pirate.2": "我们马上要登船了..."
+    "tourist.blackgull-pirate.2": "我们马上要登船了...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

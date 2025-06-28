@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "저쪽 선로에서의, 오싹한 이야기...#역 깊은 곳에서 안내 방송이 들러오지...#아, 기차 놓쳤네.",
 
     "tourist.blackgull-pirate.1": "젠장할! 다른 사람들은 어디있지?",
-    "tourist.blackgull-pirate.2": "우리는 곧 탑승할거야..."
+    "tourist.blackgull-pirate.2": "우리는 곧 탑승할거야...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -151,5 +151,9 @@
     "tourist.grim-pirate": "Şuradaki izlerden, tüyler ürpertici bir hikâye...#İstasyonun derinliklerinden bir anons duyuldu...#Hay, trenimi kaçırdım.",
 
     "tourist.blackgull-pirate.1": "Titret beni keresteler! Diğerleri neredeler?",
-    "tourist.blackgull-pirate.2": "Kara göründü..."
+    "tourist.blackgull-pirate.2": "Kara göründü...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }
