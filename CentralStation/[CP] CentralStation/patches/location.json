@@ -122,6 +122,18 @@
                 "{{MainModId}}_Tiles/9/7": "1/1/up/highback_chair/9/7/false/Maps\\{{MainModId}}_Tiles",
                 "{{MainModId}}_Tiles/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles",
 
+                // cafeteria 2-tile white stool
+                "{{MainModId}}_Tiles/7/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 2-tile purple stool
+                "{{MainModId}}_Tiles/8/20": "1/1/down/stool tall/-1/-1/false",
+                
+                // cafeteria 1-tile white stool
+                "{{MainModId}}_Tiles/9/20": "1/1/down/stool short/-1/-1/false",
+
+                // cafeteria 1-tile purple stool
+                "{{MainModId}}_Tiles/10/20": "1/1/down/stool short/-1/-1/false",
+
                 /*********
                 ** HACK for SMAPI 4.1.10 and earlier
                 ** The game's Data/ChairTiles logic is hardcoded to assume a file extension, so the key for
@@ -142,7 +154,19 @@
                 // bench facing up
                 "Pathoschild/8/7": "1/1/up/custom 0.25 0 0.1/8/7/false/Maps\\{{MainModId}}_Tiles",
                 "Pathoschild/9/7": "1/1/up/highback_chair/9/7/false/Maps\\{{MainModId}}_Tiles",
-                "Pathoschild/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles"
+                "Pathoschild/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles",
+
+                // cafeteria 2-tile white stool
+                "Pathoschild/7/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 2-tile purple stool
+                "Pathoschild/8/20": "1/1/down/stool tall/-1/-1/false",
+                
+                // cafeteria 1-tile white stool
+                "Pathoschild/9/20": "1/1/down/stool short/-1/-1/false",
+
+                // cafeteria 1-tile purple stool
+                "Pathoschild/10/20": "1/1/down/stool short/-1/-1/false"
             }
         },
 
