@@ -114,7 +114,7 @@ internal static class TileHelper
     /// <summary>Get the tile under the player's cursor (not restricted to the player's grab tile range).</summary>
     public static Vector2 GetTileFromCursor()
     {
-        return TileHelper.GetTileFromScreenPosition(Game1.getMouseX(), Game1.getMouseY());
+        return TileHelper.GetTileFromScreenPosition(Game1.getMouseXRaw(), Game1.getMouseYRaw());
     }
 
     /// <summary>Get the tile at the non-UI pixel coordinate relative to the top-left corner of the screen.</summary>
