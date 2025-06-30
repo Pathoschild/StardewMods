@@ -5,12 +5,12 @@
     // default chest names
     "default-name.fridge": "冰箱",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "出货",
-    "default-name.shipping-bin.take": "收货",
+    "default-name.shipping-bin.store": "添加出货物品",
+    "default-name.shipping-bin.take": "取回出货物品",
 
     // default category names
-    "default-category.owned-cabin": "小屋({{owner}})",
-    "default-category.unowned-cabin": "小屋(空的)",
+    "default-category.owned-cabin": "小屋（{{owner}}）",
+    "default-category.unowned-cabin": "小屋（空的）",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -31,7 +31,7 @@
 
     // button labels
     "button.edit-chest": "编辑箱子",
-    "button.sort-inventory": "清单排序",
+    "button.sort-inventory": "整理",
     "button.save": "保存",
     "button.reset": "重置",
 
@@ -39,7 +39,7 @@
     /**********
     ** Errors
     **********/
-    "errors.disabled-from-here": "你无法从当前位置访问这个箱子",
+    "errors.disabled-from-here": "你无法在当前位置访问这个箱子",
     "errors.no-chests": "当前没有可用箱子",
     "errors.no-chests-in-location": "当前区域没有可用箱子",
     "errors.no-chests-in-range": "范围内没有可用箱子",
@@ -80,8 +80,8 @@
     "config.disable-mines.name": "在矿井和骷髅洞穴禁用",
     "config.disable-mines.desc": "是否在矿井或骷髅洞穴中禁用远程访问箱子的功能。",
 
-    "config.disable-custom-names.name": "在某个位置名称时禁用",
-    "config.disable-custom-names.desc": "用于在某个位置名称时禁用远程访问箱子的功能。关于名称请使用位置的内部名称（如调试模式Mod所示）。 你可以用逗号列出多个。",
+    "config.disable-custom-names.name": "在某个位置时禁用",
+    "config.disable-custom-names.desc": "用于在某个位置时禁用远程访问箱子的功能。填写时请使用该位置的内部名称（如调试模式Mod所示）。可以用半角逗号列出多个。",
 
     /****
     ** open menu hotkey
@@ -92,10 +92,10 @@
     "config.toggle-ui-key.desc": "显示或隐藏箱子UI的按键",
 
     "config.reopen-last-chest.name": "自动打开最后开过的箱子",
-    "config.reopen-last-chest.desc": "当你按下'切换UI'按钮时，是否重新打开当前游戏会话中你自己上次选择的箱子。",
+    "config.reopen-last-chest.desc": "当你按下“切换UI”按钮时，是否重新打开当前游戏会话中你自己上次选择的箱子。",
 
     "config.default-category.name": "默认类别",
-    "config.default-category.desc": "当你按下'切换界面'按钮时，默认显示此类别中的箱子（如果已设置）。此设置在启用'自动打开最后开过的箱子'之后生效。",
+    "config.default-category.desc": "当你按下“切换界面”按钮时，默认显示此类别中的箱子（如果已设置）。此设置在启用“自动打开最后开过的箱子”之后生效。",
 
     /****
     ** controls when chest UI is open
@@ -105,9 +105,8 @@
     "config.edit-chest.name": "编辑箱子",
     "config.edit-chest.desc": "编辑当前箱子选项的按键。",
 
-    // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "整理背包物品",
+    "config.sort-items.desc": "当打开任意箱子时，整理背包物品的按键",
 
     "config.navigate-prev-chest.name": "导航：上一个箱子",
     "config.navigate-prev-chest.desc": "在菜单打开时导航到上一个箱子的按键",
