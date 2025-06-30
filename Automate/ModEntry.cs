@@ -142,7 +142,7 @@ internal class ModEntry : Mod
     /****
     ** Event handlers
     ****/
-    /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+    /// <inheritdoc cref="IContentEvents.AssetRequested" />
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         // add automate storage tags for vanilla storages to enable per-storage settings feature
@@ -150,12 +150,15 @@ internal class ModEntry : Mod
         {
             e.Edit(asset =>
             {
-                var vanillaStorageIds = new HashSet<string> { "130", "BigChest", "232", "BigStoneChest", "256" };
-                foreach ((string id, BigCraftableData data) in asset.AsDictionary<string, BigCraftableData>().Data)
+                IDictionary<string, BigCraftableData> assetData = asset.AsDictionary<string, BigCraftableData>().Data;
+
+                foreach (string itemId in ModConstants.GetDefaultChestItemIds())
                 {
-                    if (!vanillaStorageIds.Contains(id)) continue;
-                    data.ContextTags ??= [];
-                    data.ContextTags.Add("automate_storage");
+                    if (assetData.TryGetValue(itemId, out BigCraftableData? entry))
+                    {
+                        entry.ContextTags ??= [];
+                        entry.ContextTags.Add(ModConstants.StorageTag);
+                    }
                 }
             });
         }

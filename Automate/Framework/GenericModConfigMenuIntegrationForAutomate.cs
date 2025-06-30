@@ -305,10 +305,10 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         return itemRepo
             .GetAll(ItemRegistry.type_object, includeVariants: false)
             .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false))
-            .Where(si => si.Item.HasContextTag("automate_storage")) // other mods can reuse per-storage settings feature by adding this tag
+            .Where(match => match.Item.HasContextTag(ModConstants.StorageTag))
             .ToDictionary(
-                si => si.Item.QualifiedItemId,
-                si => new Func<string>(() => this.GetStorageNameFromItemId(si.Item.QualifiedItemId))
+                match => match.Item.QualifiedItemId,
+                match => new Func<string>(() => this.GetStorageNameFromItemId(match.Item.QualifiedItemId))
             );
     }
 
