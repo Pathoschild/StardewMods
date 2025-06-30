@@ -43,11 +43,11 @@ internal class ModConfig
     /// <summary>Whether to log a warning if the player installs a custom-machine mod that requires a separate compatibility patch which isn't installed.</summary>
     public bool WarnForMissingBridgeMod { get; set; } = true;
 
-    /// <summary>The configuration for specific storage types by ID.</summary>
-    public Dictionary<string, ModConfigStorage> StorageOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>Whether chests should be automated (true) or ignored (false) by default, unless overridden by <see cref="ChestOverrides"/>.</summary>
+    public bool ChestsEnabledByDefault { get; set; } = true;
 
-    /// <summary>Fallback when <see cref="StorageOverrides"/> set to default.</summary>
-    public bool DefaultStorageOverride { get; set; } = true;
+    /// <summary>Whether each chest type should be used as storage, for types which override <see cref="ChestsEnabledByDefault"/>.</summary>
+    public Dictionary<string, ModConfigStorage> ChestOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>The configuration for specific machines by ID.</summary>
     public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
@@ -75,7 +75,7 @@ internal class ModConfig
         this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
         this.MachineOverrides.RemoveWhere(pair => pair.Value is null);
 
-        this.StorageOverrides = this.StorageOverrides.ToNonNullCaseInsensitive();
-        this.StorageOverrides.RemoveWhere(pair => pair.Value is null);
+        this.ChestOverrides = this.ChestOverrides.ToNonNullCaseInsensitive();
+        this.ChestOverrides.RemoveWhere(pair => pair.Value is null);
     }
 }
