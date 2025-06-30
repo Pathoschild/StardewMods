@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "ย้ายจากกระท่อม Junimo เข้าสู่หีบ",
     "config.junimo-huts.move-into-huts": "ย้ายจากหีบสู่กระท่อม Junimo",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "{{machineName}} พฤติกรรม",
-    "config.machine-settings-enabled.Name": "เปิดใช้งาน",
+    "config.machine-settings-enabled.name": "เปิดใช้งาน",
     "config.machine-settings-enabled.desc": "เปิดใช้งานเพื่อให้ {{machineName}} เป็นระบบอัตโนมัติ",
     "config.machine-settings-priority.name": "ลำดับความสำคัญ",
     "config.machine-settings-priority.desc": "ลำดับความสำคัญในการประมวลผลเครื่องจักร {{machineName}} เมื่อเทียบกับเครื่องจักรอื่นๆ โดยทั่วไปเครื่องจักรจะมีค่าความสำคัญเริ่มต้นที่ 0 โดยมีค่าที่สูงกว่าจะได้รับการประมวลผลก่อน.",

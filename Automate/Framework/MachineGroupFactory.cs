@@ -28,6 +28,12 @@ internal class MachineGroupFactory
     /// <summary>Get the configuration for specific machines by ID, if any.</summary>
     private readonly Func<string, ModConfigMachine?> GetMachineOverride;
 
+    /// <summary>Get the configuration for specific chests by ID, if any.</summary>
+    private readonly Func<string, ModConfigStorage?> GetChestOverride;
+
+    /// <summary>Get whether storage containers should be enabled by default if not set via <see cref="GetChestOverride"/>.</summary>
+    private readonly Func<bool> GetChestsEnabledByDefault;
+
     /// <summary>Build a storage manager for the given containers.</summary>
     private readonly Func<IContainer[], StorageManager> BuildStorage;
 
@@ -40,11 +46,15 @@ internal class MachineGroupFactory
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
+    /// <param name="getChestOverride">Get the configuration for specific chests by ID, if any.</param>
+    /// <param name="getChestsEnabledByDefault">Get whether chests should be enabled by default if not set via <see cref="getChestOverride"/>.</param>
     /// <param name="buildStorage">Build a storage manager for the given containers.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    public MachineGroupFactory(Func<string, ModConfigMachine?> getMachineOverride, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
+    public MachineGroupFactory(Func<string, ModConfigMachine?> getMachineOverride, Func<string, ModConfigStorage?> getChestOverride, Func<bool> getChestsEnabledByDefault, Func<IContainer[], StorageManager> buildStorage, IMonitor monitor)
     {
         this.GetMachineOverride = getMachineOverride;
+        this.GetChestOverride = getChestOverride;
+        this.GetChestsEnabledByDefault = getChestsEnabledByDefault;
         this.BuildStorage = buildStorage;
         this.Monitor = monitor;
     }
@@ -187,8 +197,12 @@ internal class MachineGroupFactory
                 case IContainer container:
                     if (container.StorageAllowed() || container.TakingItemsAllowed())
                     {
-                        group.Add(container);
-                        anyAdded = true;
+                        bool enabled = this.GetChestOverride(container.TypeId)?.Enabled ?? this.GetChestsEnabledByDefault();
+                        if (enabled)
+                        {
+                            group.Add(container);
+                            anyAdded = true;
+                        }
                     }
                     break;
 

@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Переміщувати з хатинок джунімо до скринь",
     "config.junimo-huts.move-into-huts": "Переміщувати зі скринь до хатинок джунімо",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "{{machineName}} Поведінка",
-    "config.machine-settings-enabled.Name": "Увімкнено",
+    "config.machine-settings-enabled.name": "Увімкнено",
     "config.machine-settings-enabled.desc": "Увімкнення автоматизації машини \"{{machineName}}\".",
     "config.machine-settings-priority.name": "Пріоритет",
     "config.machine-settings-priority.desc": "Порядок пріоритету, у якому машини {{machineName}} мають оброблятися в порівнянні з іншими машинами. Машини мають стандартний пріоритет 0, при цьому спочатку обробляються машини з вищими значеннями.",

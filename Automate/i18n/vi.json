@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Di chuyển từ lều Junimo vào rương",
     "config.junimo-huts.move-into-huts": "Di chuyển từ rương vào lều Junimo",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "Cài đặt máy {{machineName}}",
-    "config.machine-settings-enabled.Name": "Bật",
+    "config.machine-settings-enabled.name": "Bật",
     "config.machine-settings-enabled.desc": "Có bật tính năng tự động hóa cho {{machineName}} hay không.",
     "config.machine-settings-priority.name": "Ưu tiên",
     "config.machine-settings-priority.desc": "Thứ tự ưu tiên mà máy {{machineName}} sẽ được xử lý so với các máy khác. Máy có mức độ ưu tiên mặc định là 0, giá trị cao hơn được xử lý trước.",

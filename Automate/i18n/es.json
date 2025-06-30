@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Mover desde la Cabaña Junimo a los cofres",
     "config.junimo-huts.move-into-huts": "Mover desde los cobres a la Cabaña Junimo",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "Configuración de {{machineName}}",
-    "config.machine-settings-enabled.Name": "Permitir",
+    "config.machine-settings-enabled.name": "Permitir",
     "config.machine-settings-enabled.desc": "Para activar la automatización de {{machineName}}.",
     "config.machine-settings-priority.name": "Prioridad",
     "config.machine-settings-priority.desc": "Orden de prioridad en que trabajarán las máquinas de {{machineName}} respecto a otros tipos de máquinas. Todas las máquinas tiene una prioridad de 0 por default, los valores más altos se procesan primero.",

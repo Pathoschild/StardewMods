@@ -31,6 +31,9 @@ internal class ChestContainer : IContainer
     ** Accessors
     *********/
     /// <inheritdoc />
+    public string TypeId => this.Chest.QualifiedItemId;
+
+    /// <inheritdoc />
     public string Name => this.Chest.Name;
 
     /// <inheritdoc />

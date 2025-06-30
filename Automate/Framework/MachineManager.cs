@@ -64,7 +64,13 @@ internal class MachineManager
         this.Data = data;
         this.Monitor = monitor;
 
-        this.Factory = new(this.GetMachineOverride, this.BuildStorage, monitor);
+        this.Factory = new(
+            getMachineOverride: this.GetMachineOverride,
+            getChestOverride: this.GetChestOverride,
+            getChestsEnabledByDefault: () => this.Config().ChestsEnabledByDefault,
+            buildStorage: this.BuildStorage,
+            monitor: monitor
+        );
         this.Factory.Add(defaultFactory);
 
         this.JunimoMachineGroup = new(this.Factory.SortMachines, this.BuildStorage, this.Monitor);
@@ -116,6 +122,13 @@ internal class MachineManager
         return this.Config().MachineOverrides.TryGetValue(id, out ModConfigMachine? config) || this.Data.DefaultMachineOverrides.TryGetValue(id, out config)
             ? config
             : null;
+    }
+
+    /// <summary>Get the settings for a storage container.</summary>
+    /// <param name="id">The unique storage ID (usually the qualified item ID).</param>
+    public ModConfigStorage? GetChestOverride(string id)
+    {
+        return this.Config().ChestOverrides.GetValueOrDefault(id);
     }
 
     /****
