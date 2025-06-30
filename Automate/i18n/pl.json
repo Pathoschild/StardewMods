@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Przenieś z chatki do skrzyń",
     "config.junimo-huts.move-into-huts": "Przenieś ze skrzyń do chatki",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings (ustawienia dla maszyn)
     "config.title.machine-settings": "Ustawienia {{machineName}}",
-    "config.machine-settings-enabled.Name": "Włączone",
+    "config.machine-settings-enabled.name": "Włączone",
     "config.machine-settings-enabled.desc": "Określa, czy automatyzacja {{machineName}} jest włączona.",
     "config.machine-settings-priority.name": "Priorytet",
     "config.machine-settings-priority.desc": "Kolejność przetwarzania maszyn {{machineName}} w stosunku do innych maszyn. Maszyny mają domyślny priorytet 0, wyższe wartości są przetwarzane jako pierwsze.",

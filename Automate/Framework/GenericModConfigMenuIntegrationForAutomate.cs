@@ -15,10 +15,7 @@ using StardewValley;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FloorsAndPaths;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
 using StardewValley.TokenizableStrings;
-using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework;
 
@@ -134,19 +131,16 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         );
 
         // storage settings
-        menu.AddSectionTitle(I18n.Config_Title_StorageSettings);
+        menu.AddSectionTitle(I18n.Config_Title_ChestSettings);
         menu.AddDropdown(
-            name: I18n.Config_DefaultStorageOverride_Name,
-            tooltip: I18n.Config_DefaultStorageOverride_Desc,
-            get: config => config.DefaultStorageOverride? "true" : "false",
-            set: (config, value) => config.DefaultStorageOverride = value == "true",
-            allowedValues: ["true", "false"],
-            formatAllowedValue: value => value switch
-            {
-                "true" => I18n.Config_DefaultStorageOverride_True(),
-                "false" => I18n.Config_DefaultStorageOverride_False(),
-                _ => value
-            }
+            name: I18n.Config_DefaultChestOverride_Name,
+            tooltip: I18n.Config_DefaultChestOverride_Desc,
+            get: config => config.DefaultStorageOverride.ToString(),
+            set: (config, value) => config.DefaultStorageOverride = bool.Parse(value),
+            allowedValues: [bool.TrueString, bool.FalseString],
+            formatAllowedValue: value => bool.Parse(value)
+                ? I18n.Config_ChestOverride_Values_Enabled()
+                : I18n.Config_ChestOverride_Values_Disabled()
         );
 
         // per-storage settings
@@ -154,15 +148,15 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         {
             menu.AddDropdown(
                 name: getName,
-                tooltip: () => "",
+                tooltip: () => I18n.Config_ChestOverride_Desc(chestName: getName(), defaultBehaviorField: I18n.Config_DefaultChestOverride_Name()),
                 get: config => this.GetStorageOverride(config, storageId),
                 set: (config, value) => this.SetStorageOverride(config, storageId, value),
                 allowedValues: ["default", "enabled", "disabled"],
                 formatAllowedValue: value => value switch
                 {
-                    "default" => I18n.Config_StorageOverride_Default(),
-                    "enabled" => I18n.Config_StorageOverride_Enabled(),
-                    "disabled" => I18n.Config_StorageOverride_Disabled(),
+                    "default" => I18n.Config_ChestOverride_Values_Default(),
+                    "enabled" => I18n.Config_ChestOverride_Values_Enabled(),
+                    "disabled" => I18n.Config_ChestOverride_Values_Disabled(),
                     _ => value
                 }
             );

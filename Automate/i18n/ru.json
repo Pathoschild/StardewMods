@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Переместить из домиков Джунимо в сундуки",
     "config.junimo-huts.move-into-huts": "Переместить из сундуков в домики Джунимо",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "Поведение {{machineName}}",
-    "config.machine-settings-enabled.Name": "Включено",
+    "config.machine-settings-enabled.name": "Включено",
     "config.machine-settings-enabled.desc": "Следует ли автоматизировать {{machineName}}.",
     "config.machine-settings-priority.name": "Приоритет",
     "config.machine-settings-priority.desc": "Порядок приоритета, в котором должны обрабатываться машины {{machineName}} по сравнению с другими машинами. У машин по умолчанию приоритет равен 0, сначала обрабатываются машины с более высокими значениями.",

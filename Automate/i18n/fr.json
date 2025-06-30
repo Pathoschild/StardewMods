@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Déplacement des huttes Junimo vers les coffres",
     "config.junimo-huts.move-into-huts": "Déplacement des coffres vers les huttes Junimo",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings
     "config.title.machine-settings": "Comportement: {{machineName}}",
-    "config.machine-settings-enabled.Name": "Activé",
+    "config.machine-settings-enabled.name": "Activé",
     "config.machine-settings-enabled.desc": "Si vous souhaitez activer l'automatisation de {{machineName}}.",
     "config.machine-settings-priority.name": "Priorité",
     "config.machine-settings-priority.desc": "L'ordre de priorité dans lequel les machines {{machineName}} doivent être traitées par rapport aux autres machines. Les machines ont une priorité par défaut de 0, les valeurs plus élevées étant traitées en premier.",
