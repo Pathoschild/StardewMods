@@ -15,7 +15,8 @@ public interface IContainer : IAutomatable, IEnumerable<ITrackedStack>
     /// <summary>The container name (if any).</summary>
     string Name { get; }
 
-    string StorageTypeID { get; }
+    /// <summary>The unique ID for this container type (e.g. the qualified item ID).</summary>
+    string StorageTypeId { get; }
 
     /// <summary>The raw mod data for the container.</summary>
     ModDataDictionary ModData { get; }

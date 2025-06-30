@@ -34,7 +34,7 @@ internal class ChestContainer : IContainer
     public string Name => this.Chest.Name;
 
     /// <inheritdoc />
-    public string StorageTypeID => this.Chest.QualifiedItemId;
+    public string StorageTypeId => this.Chest.QualifiedItemId;
 
     /// <inheritdoc />
     public ModDataDictionary ModData => this.Chest.modData;

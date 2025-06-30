@@ -195,7 +195,7 @@ internal class MachineGroupFactory
                 case IContainer container:
                     if (container.StorageAllowed() || container.TakingItemsAllowed())
                     {
-                        if (this.IsStorageEnabled(container.StorageTypeID))
+                        if (this.IsStorageEnabled(container.StorageTypeId))
                             group.Add(container);
                         anyAdded = true;
                     }
