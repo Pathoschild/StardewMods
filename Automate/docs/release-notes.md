@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* You can now choose which chests are automated through the config UI (thanks to TWT233!).
+
 ## 2.3.5
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 
