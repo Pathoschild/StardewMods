@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Removed Harmony patches that are no longer needed in Stardew Valley 1.6+.
+
 ## 1.3.3
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 
