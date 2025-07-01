@@ -12,21 +12,32 @@ internal class ModConfig
     /*********
     ** Accessors
     *********/
-    /// <summary>The per-location settings.</summary>
-    public Dictionary<string, PlantRule> Locations { get; set; } = new()
-    {
-        ["*"] = new(
-            growCrops: true,
-            growCropsOutOfSeason: true,
-            useFruitTreesSeasonalSprites: false,
-            forceTillable: new(
-                dirt: true,
-                grass: true,
-                stone: false,
-                other: false
-            )
+    /// <summary>Where and when plants can be grown. The first matching rule is applied.</summary>
+    public List<PlantRule> PlantRules { get; set; } =
+    [
+        new(
+            forLocations: [],
+            forLocationContexts: [],
+            forSeasons: [],
+            canPlant: true,
+            canGrowOutOfSeason: true,
+            useFruitTreesSeasonalSprites: false
         )
-    };
+    ];
+
+    /// <summary>Which tiles to mark tillable. The first matching rule is applied.</summary>
+    public List<TillableRule> TillableRules { get; set; } =
+    [
+        new(
+            forLocations: [],
+            forLocationContexts: [],
+            forSeasons: [],
+            dirt: true,
+            grass: true,
+            stone: false,
+            other: false
+        )
+    ];
 
 
     /*********
@@ -35,11 +46,15 @@ internal class ModConfig
     /// <summary>Normalize the model after it's deserialized.</summary>
     /// <param name="context">The deserialization context.</param>
     [OnDeserialized]
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
     [SuppressMessage("ReSharper", "NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = SuppressReasons.UsedViaOnDeserialized)]
     public void OnDeserialized(StreamingContext context)
     {
-        this.Locations ??= [];
-        this.Locations.RemoveWhere(p => p.Value is null);
+        this.PlantRules?.RemoveWhere(p => p is null);
+        this.PlantRules ??= [];
+
+        this.TillableRules?.RemoveWhere(p => p is null);
+        this.TillableRules ??= [];
     }
 }

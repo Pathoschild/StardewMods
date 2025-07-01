@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using StardewValley;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 
-/// <summary>The tile types to let the player till, beyond those normally allowed by the game.</summary>
-internal class TillableRule
+/// <summary>A rule which sets the tiles to force tillable if it matches.</summary>
+internal class TillableRule : BaseRule
 {
     /*********
     ** Accessors
@@ -25,23 +27,31 @@ internal class TillableRule
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
-    /// <param name="dirt">Whether to allow tilling dirt tiles not normally allowed by the game.</param>
-    /// <param name="grass">Whether to allow tilling grass tiles.</param>
-    /// <param name="stone">Whether to allow tilling stone tiles.</param>
-    /// <param name="other">Whether to allow tilling other tile types (like paths, indoor floors, etc).</param>
+    /// <param name="conditions">The rule whose conditions to copy.</param>
+    /// <param name="dirt"><inheritdoc cref="Dirt" path="/summary"/></param>
+    /// <param name="grass"><inheritdoc cref="Grass" path="/summary"/></param>
+    /// <param name="stone"><inheritdoc cref="Stone" path="/summary"/></param>
+    /// <param name="other"><inheritdoc cref="Other" path="/summary"/></param>
+    public TillableRule(BaseRule conditions, bool dirt, bool grass, bool stone, bool other)
+        : this(conditions.ForLocations, conditions.ForLocationContexts, conditions.ForSeasons, dirt, grass, stone, other) { }
+
+    /// <summary>Construct an instance.</summary>
+    /// <param name="forLocations"><inheritdoc cref="BaseRule.ForLocations" path="/summary"/></param>
+    /// <param name="forLocationContexts"><inheritdoc cref="BaseRule.ForLocationContexts" path="/summary"/></param>
+    /// <param name="forSeasons"><inheritdoc cref="BaseRule.ForSeasons" path="/summary"/></param>
+    /// <param name="dirt"><inheritdoc cref="Dirt" path="/summary"/></param>
+    /// <param name="grass"><inheritdoc cref="Grass" path="/summary"/></param>
+    /// <param name="stone"><inheritdoc cref="Stone" path="/summary"/></param>
+    /// <param name="other"><inheritdoc cref="Other" path="/summary"/></param>
     [JsonConstructor]
-    public TillableRule(bool dirt, bool grass, bool stone, bool other)
+    public TillableRule(HashSet<string>? forLocations, HashSet<string>? forLocationContexts, HashSet<Season>? forSeasons, bool dirt, bool grass, bool stone, bool other)
+        : base(forLocations, forLocationContexts, forSeasons)
     {
         this.Dirt = dirt;
         this.Grass = grass;
         this.Stone = stone;
         this.Other = other;
     }
-
-    /// <summary>Construct an instance.</summary>
-    /// <param name="config">The config instance to copy.</param>
-    public TillableRule(TillableRule config)
-        : this(config.Dirt, config.Grass, config.Stone, config.Other) { }
 
     /// <summary>Whether any of the options are enabled.</summary>
     public bool IsAnyEnabled()

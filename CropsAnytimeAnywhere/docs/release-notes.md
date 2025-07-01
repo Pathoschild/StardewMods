@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Overhauled config options:
+  - you can now [set granular rules based on criteria like location and season](README.md#advanced-configuration);
+  - you can now enable 'crops grow out of season' even if 'can plant' is disabled for that location.
+* Fixed issue where enabling tillable overrides for the first time wouldn't apply until you restarted the game.
+
+> [!NOTE]  
+> This will reset any custom mod settings you saved in an earlier version. Unfortunately you'll
+> need to re-configure them in the new format.
+
 ## 1.6.5
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 

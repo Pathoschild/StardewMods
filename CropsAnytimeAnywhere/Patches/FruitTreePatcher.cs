@@ -16,7 +16,7 @@ internal class FruitTreePatcher : BasePatcher
     /*********
     ** Fields
     *********/
-    /// <summary>The mod configuration.</summary>
+    /// <summary>The config rule manager.</summary>
     private static ConfigRuleManager Config = null!; // set by first constructor
 
 
@@ -24,7 +24,7 @@ internal class FruitTreePatcher : BasePatcher
     ** Public methods
     *********/
     /// <summary>Initialize the Harmony patches.</summary>
-    /// <param name="config">The mod configuration.</param>
+    /// <param name="config">The config rule manager.</param>
     public FruitTreePatcher(ConfigRuleManager config)
     {
         FruitTreePatcher.Config = config;
@@ -52,7 +52,7 @@ internal class FruitTreePatcher : BasePatcher
     [SuppressMessage("ReSharper", "RedundantAssignment", Justification = "Matches original code code")]
     private static void After_GetCosmeticSeason(FruitTree __instance, ref Season __result)
     {
-        if (FruitTreePatcher.HasUnseasonalGreenhouseSprite(__instance.Location, __result) && FruitTreePatcher.Config.TryGetForLocation(__instance.Location, out PlantRule? config) && config.UseFruitTreesSeasonalSprites)
+        if (FruitTreePatcher.HasUnseasonalGreenhouseSprite(__instance.Location, __result) && FruitTreePatcher.Config.GetPlantRule(__instance.Location)?.UseFruitTreesSeasonalSprites is true)
             __result = Game1.season;
     }
 
