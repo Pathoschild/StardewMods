@@ -27,7 +27,7 @@ internal class LocationPatcher : BasePatcher
     private static IMonitor Monitor = null!; // set by first constructor
 
     /// <summary>The mod configuration.</summary>
-    private static LocationConfigManager Config = null!; // set by first constructor
+    private static ConfigRuleManager Config = null!; // set by first constructor
 
     /// <summary>The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</summary>
     private static Dictionary<string, Dictionary<int, string>> FallbackTileTypes = null!; // set by first constructor
@@ -43,7 +43,7 @@ internal class LocationPatcher : BasePatcher
     /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
     /// <param name="config">The mod configuration.</param>
     /// <param name="fallbackTileTypes">The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</param>
-    public LocationPatcher(IMonitor monitor, LocationConfigManager config, Dictionary<string, Dictionary<int, string>> fallbackTileTypes)
+    public LocationPatcher(IMonitor monitor, ConfigRuleManager config, Dictionary<string, Dictionary<int, string>> fallbackTileTypes)
     {
         LocationPatcher.Monitor = monitor;
         LocationPatcher.Config = config;
@@ -102,7 +102,7 @@ internal class LocationPatcher : BasePatcher
     [SuppressMessage("ReSharper", "RedundantAssignment", Justification = "Matches original code code")]
     private static void Before_CheckItemPlantRules(GameLocation __instance, ref bool defaultAllowed)
     {
-        if (!defaultAllowed && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops)
+        if (!defaultAllowed && LocationPatcher.Config.TryGetForLocation(__instance, out PlantRule? config) && config.GrowCrops)
             defaultAllowed = true;
     }
 
@@ -111,7 +111,7 @@ internal class LocationPatcher : BasePatcher
     /// <param name="__result">The return value to use for the method.</param>
     private static void After_SeedsIgnoreSeasonsHere(GameLocation __instance, ref bool __result)
     {
-        if (!__result && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config is { GrowCrops: true, GrowCropsOutOfSeason: true } && !LocationPatcher.IsGameClearingTilledDirt())
+        if (!__result && LocationPatcher.Config.TryGetForLocation(__instance, out PlantRule? config) && config is { GrowCrops: true, GrowCropsOutOfSeason: true } && !LocationPatcher.IsGameClearingTilledDirt())
             __result = true;
     }
 
@@ -193,7 +193,7 @@ internal class LocationPatcher : BasePatcher
     private static bool ShouldMakeTillable(GameLocation location, int xTile, int yTile)
     {
         // get tile config
-        var config = LocationPatcher.Config.TryGetForLocation(location, out PerLocationConfig? locationConfig)
+        var config = LocationPatcher.Config.TryGetForLocation(location, out PlantRule? locationConfig)
             ? locationConfig.ForceTillable
             : null;
         if (config?.IsAnyEnabled() != true)

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 
 /// <summary>Per-location mod configuration.</summary>
-internal class PerLocationConfig
+internal class PlantRule
 {
     /*********
     ** Accessors
@@ -15,7 +15,7 @@ internal class PerLocationConfig
     public bool GrowCropsOutOfSeason { get; }
 
     /// <summary>Whether to allow hoeing anywhere.</summary>
-    public ModConfigForceTillable ForceTillable { get; }
+    public TillableRule ForceTillable { get; }
 
     /// <summary>Whether fruit trees match the calendar season when drawn, even if they produce fruit per <see cref="GrowCropsOutOfSeason"/>.</summary>
     public bool UseFruitTreesSeasonalSprites { get; }
@@ -30,7 +30,7 @@ internal class PerLocationConfig
     /// <param name="useFruitTreesSeasonalSprites">Whether fruit trees match the calendar season when drawn, even if they produce fruit per <paramref name="growCropsOutOfSeason"/>.</param>
     /// <param name="forceTillable">Whether to allow hoeing anywhere.</param>
     [JsonConstructor]
-    public PerLocationConfig(bool growCrops, bool growCropsOutOfSeason, bool useFruitTreesSeasonalSprites, ModConfigForceTillable? forceTillable)
+    public PlantRule(bool growCrops, bool growCropsOutOfSeason, bool useFruitTreesSeasonalSprites, TillableRule? forceTillable)
     {
         this.GrowCrops = growCrops;
         this.GrowCropsOutOfSeason = growCropsOutOfSeason;
@@ -45,6 +45,6 @@ internal class PerLocationConfig
 
     /// <summary>Construct an instance.</summary>
     /// <param name="config">The config instance to copy.</param>
-    public PerLocationConfig(PerLocationConfig config)
-        : this(config.GrowCrops, config.GrowCropsOutOfSeason, config.UseFruitTreesSeasonalSprites, new ModConfigForceTillable(config.ForceTillable)) { }
+    public PlantRule(PlantRule config)
+        : this(config.GrowCrops, config.GrowCropsOutOfSeason, config.UseFruitTreesSeasonalSprites, new TillableRule(config.ForceTillable)) { }
 }

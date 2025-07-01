@@ -6,13 +6,13 @@ using StardewValley;
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 
 /// <summary>Encapsulates access to the per-location configuration.</summary>
-internal class LocationConfigManager
+internal class ConfigRuleManager
 {
     /*********
     ** Fields
     *********/
     /// <summary>A lookup cache of configurations by location key.</summary>
-    private readonly Dictionary<string, PerLocationConfig?> ConfigCache = [];
+    private readonly Dictionary<string, PlantRule?> ConfigCache = [];
 
     /// <summary>Whether there's only one location config defined and it's for the <c>*</c> key.</summary>
     private bool OnlyHasGlobal;
@@ -30,7 +30,7 @@ internal class LocationConfigManager
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="config">The underlying mod configuration.</param>
-    public LocationConfigManager(ModConfig config)
+    public ConfigRuleManager(ModConfig config)
     {
         this.UpdateConfig(config);
     }
@@ -54,7 +54,7 @@ internal class LocationConfigManager
 
     /// <summary>Get the location config that applies for a given location name.</summary>
     /// <param name="location">The location.</param>
-    public PerLocationConfig? GetForLocation(GameLocation location)
+    public PlantRule? GetForLocation(GameLocation location)
     {
         // shortcut for common case
         if (this.OnlyHasGlobal)
@@ -62,7 +62,7 @@ internal class LocationConfigManager
 
         // get config with caching
         string cacheKey = $"{location.NameOrUniqueName}|{location.IsOutdoors}|{location.GetHashCode()}";
-        if (!this.ConfigCache.TryGetValue(cacheKey, out PerLocationConfig? config))
+        if (!this.ConfigCache.TryGetValue(cacheKey, out PlantRule? config))
         {
             this.ConfigCache[cacheKey] = config =
                 (
@@ -79,7 +79,7 @@ internal class LocationConfigManager
     /// <summary>Get the configuration that applies for a given location, if any.</summary>
     /// <param name="location">The location being patched.</param>
     /// <param name="config">The config to apply, if any.</param>
-    public bool TryGetForLocation(GameLocation location, [NotNullWhen(true)] out PerLocationConfig? config)
+    public bool TryGetForLocation(GameLocation location, [NotNullWhen(true)] out PlantRule? config)
     {
         config = this.GetForLocation(location);
         return config != null;

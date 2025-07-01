@@ -13,7 +13,7 @@ internal class ModConfig
     ** Accessors
     *********/
     /// <summary>The per-location settings.</summary>
-    public Dictionary<string, PerLocationConfig> Locations { get; set; } = new()
+    public Dictionary<string, PlantRule> Locations { get; set; } = new()
     {
         ["*"] = new(
             growCrops: true,

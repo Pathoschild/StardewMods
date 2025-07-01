@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 
 /// <summary>The tile types to let the player till, beyond those normally allowed by the game.</summary>
-internal class ModConfigForceTillable
+internal class TillableRule
 {
     /*********
     ** Accessors
@@ -30,7 +30,7 @@ internal class ModConfigForceTillable
     /// <param name="stone">Whether to allow tilling stone tiles.</param>
     /// <param name="other">Whether to allow tilling other tile types (like paths, indoor floors, etc).</param>
     [JsonConstructor]
-    public ModConfigForceTillable(bool dirt, bool grass, bool stone, bool other)
+    public TillableRule(bool dirt, bool grass, bool stone, bool other)
     {
         this.Dirt = dirt;
         this.Grass = grass;
@@ -40,7 +40,7 @@ internal class ModConfigForceTillable
 
     /// <summary>Construct an instance.</summary>
     /// <param name="config">The config instance to copy.</param>
-    public ModConfigForceTillable(ModConfigForceTillable config)
+    public TillableRule(TillableRule config)
         : this(config.Dirt, config.Grass, config.Stone, config.Other) { }
 
     /// <summary>Whether any of the options are enabled.</summary>
