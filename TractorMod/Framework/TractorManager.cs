@@ -41,6 +41,9 @@ internal sealed class TractorManager
     /// <summary>Get the buff icon texture.</summary>
     private readonly Func<Texture2D?> GetBuffIconTexture;
 
+    /// <summary>Get the tool effect radius.</summary>
+    private readonly Func<int> GetDistance;
+
     /// <summary>The tractor attachments to apply.</summary>
     private IAttachment[] Attachments = [];
 
@@ -81,13 +84,15 @@ internal sealed class TractorManager
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="config">The mod settings.</param>
+    /// <param name="getDistance">Get the tool effect radius.</param>
     /// <param name="keys">The configured key bindings.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="getBuffIconTexture">Get the buff icon texture.</param>
     /// <param name="audioManager">Manages audio effects for the tractor.</param>
-    public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture, AudioManager audioManager)
+    public TractorManager(ModConfig config, Func<int> getDistance, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture, AudioManager audioManager)
     {
         this.Config = config;
+        this.GetDistance = getDistance;
         this.Keys = keys;
         this.Reflection = reflection;
         this.GetBuffIconTexture = getBuffIconTexture;
@@ -205,11 +210,12 @@ internal sealed class TractorManager
 
     /// <summary>Draw a radius around the player.</summary>
     /// <param name="spriteBatch">The sprite batch being drawn.</param>
-    public void DrawRadius(SpriteBatch spriteBatch)
+    /// <param name="alpha">The opacity at which to draw the radius, as a value between 0 (transparent) and 1 (default).</param>
+    public void DrawRadius(SpriteBatch spriteBatch, float alpha)
     {
         bool enabled = this.IsEnabled();
 
-        foreach (Vector2 tile in this.GetTileGrid(Game1.player.Tile, this.Config.Distance))
+        foreach (Vector2 tile in this.GetTileGrid(Game1.player.Tile, this.GetDistance()))
         {
             // get tile area in screen pixels
             Rectangle area = new((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
@@ -218,11 +224,11 @@ internal sealed class TractorManager
             Color color = enabled ? Color.Green : Color.Red;
 
             // draw background
-            spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
+            spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.5f * alpha);
 
             // draw border
             int borderSize = 1;
-            Color borderColor = color * 0.5f;
+            Color borderColor = color * alpha;
             spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
             spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
             spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
@@ -341,7 +347,7 @@ internal sealed class TractorManager
         // This must be done outside the temporary interaction block below, since that dismounts
         // the player which changes their position from what the player may expect.
         Vector2 origin = Game1.player.Tile;
-        Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
+        Vector2[] grid = this.GetTileGrid(origin, this.GetDistance()).ToArray();
 
         // apply tools
         try

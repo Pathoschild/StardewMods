@@ -41,11 +41,11 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
             .AddSectionTitle(I18n.Config_MainOptions)
             .AddNumberField(
                 name: I18n.Config_Distance_Name,
-                tooltip: () => I18n.Config_Distance_Tooltip(defaultValue: defaultConfig.Distance, maxRecommendedValue: 15),
+                tooltip: () => I18n.Config_Distance_Tooltip(defaultValue: defaultConfig.Distance, maxRecommendedValue: ModConstants.MaxRecommendedDistance),
                 get: config => config.Distance,
                 set: (config, value) => config.Distance = value,
                 min: 0,
-                max: 16
+                max: ModConstants.MaxRecommendedDistance + 1
             )
             .AddNumberField(
                 name: I18n.Config_Speed_Name,
@@ -142,6 +142,18 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 tooltip: I18n.Config_HoldToActivateKey_Tooltip,
                 get: config => config.Controls.HoldToActivate,
                 set: (config, value) => config.Controls.HoldToActivate = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_IncreaseDistanceKey_Name,
+                tooltip: () => I18n.Config_IncreaseDistanceKey_Tooltip(maxRecommendedValue: ModConstants.MaxRecommendedDistance),
+                get: config => config.Controls.IncreaseDistance,
+                set: (config, value) => config.Controls.IncreaseDistance = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_ReduceDistanceKey_Name,
+                tooltip: I18n.Config_ReduceDistanceKey_Tooltip,
+                get: config => config.Controls.ReduceDistance,
+                set: (config, value) => config.Controls.ReduceDistance = value
             )
 
             // axe

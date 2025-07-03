@@ -95,6 +95,13 @@
     "config.hold-to-activate-key.name": "กดค้างไว้เพื่อเปิดใช้งาน",
     "config.hold-to-activate-key.tooltip": "หากระบุไว้ รถแทรกเตอร์จะทำบางอย่างในขณะที่คุณกดปุ่มนี้ค้างไว้ หากไม่มีการระบุใดๆ รถแทรกเตอร์จะทำงานโดยอัตโนมัติในขณะที่คุณขี่",
 
+    // TODO
+    "config.increase-distance-key.name": "Increase Distance",
+    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+
+    "config.reduce-distance-key.name": "Reduce Distance",
+    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+
 
     /****
     ** Trees & bushes

@@ -21,6 +21,12 @@ internal class ModConfigKeys
     /// <summary>The keys which activate the tractor when held, or none to activate automatically.</summary>
     public KeybindList HoldToActivate { get; set; } = new();
 
+    /// <summary>The keys which temporarily increase the distance at which tools apply by one, up to the recommended maximum of 15.</summary>
+    public KeybindList IncreaseDistance { get; set; } = new();
+
+    /// <summary>The keys which temporarily reduce the distance at which tools apply by one, down to the minimum of 1.</summary>
+    public KeybindList ReduceDistance { get; set; } = new();
+
 
     /*********
     ** Public methods
@@ -35,5 +41,7 @@ internal class ModConfigKeys
         this.SummonTractor ??= new KeybindList();
         this.DismissTractor ??= new KeybindList();
         this.HoldToActivate ??= new KeybindList();
+        this.IncreaseDistance ??= new KeybindList();
+        this.ReduceDistance ??= new KeybindList();
     }
 }

@@ -92,6 +92,13 @@
     "config.hold-to-activate-key.name": "길게 눌러 사용",
     "config.hold-to-activate-key.tooltip": "지정하면 트랙터는 이 버튼을 누르고 있는 동안에만 작업을 수행합니다. \n아무 것도 지정하지 않으면 트랙터를 타는 동안 트랙터가 자동으로 작동합니다.",
 
+    // TODO
+    "config.increase-distance-key.name": "Increase Distance",
+    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+
+    "config.reduce-distance-key.name": "Reduce Distance",
+    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+
 
     /****
     ** Trees & bushes

@@ -93,6 +93,13 @@
     "config.hold-to-activate-key.name": "長押しで起動",
     "config.hold-to-activate-key.tooltip": "設定した場合、トラクターはこのボタンを押している間だけアクションをします。何も指定しない場合、乗車中は自動でアクションをする。",
 
+    // TODO
+    "config.increase-distance-key.name": "Increase Distance",
+    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+
+    "config.reduce-distance-key.name": "Reduce Distance",
+    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+
 
     /****
     ** Trees & bushes

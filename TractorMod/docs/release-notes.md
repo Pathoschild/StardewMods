@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added keybinds to temporarily increase or reduce the tool distance around the tractor (none by default).
 * Improved translations. Thanks to TWT233 (updated Chinese and Japanese)!
 
 ## 4.23.1
