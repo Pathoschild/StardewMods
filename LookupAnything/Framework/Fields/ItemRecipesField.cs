@@ -199,11 +199,11 @@ internal class ItemRecipesField : GenericField
                         curIconSize = Utility.PointToVector2(input.Sprite.SourceRectangle.Size) * Game1.pixelZoom; // gold icon doesn't resize well, draw it at the intended size
 
                     // move the draw position down to a new line if the next item would be drawn off the right edge
-                    Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, curIconSize, iconColor, input.Quality, probe: true);
+                    Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth - curPos.X, input.DisplayText, textColor, input.Sprite, curIconSize, iconColor, input.Quality, probe: true);
                     if (alignColumns)
                         inputSize.X = group.ColumnWidths[i + 1];
 
-                    if (curPos.X + inputSize.X > absoluteWrapWidth)
+                    if (curPos.X > inputLeft && curPos.X + inputSize.X > absoluteWrapWidth)
                     {
                         curPos = new Vector2(
                             x: inputLeft,
@@ -216,7 +216,8 @@ internal class ItemRecipesField : GenericField
                         : textColor;
 
                     // draw input item (icon + name + count)
-                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, actualTextColor, input.Sprite, curIconSize, iconColor, input.Quality);
+                    Vector2 outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth - curPos.X, input.DisplayText, actualTextColor, input.Sprite, curIconSize, iconColor, input.Quality);
+                    curPos.Y += outputSize.Y - lineHeight - otherRecipeTopMargin;
 
                     if (subject is not null)
                     {
