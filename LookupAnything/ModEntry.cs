@@ -285,7 +285,7 @@ internal class ModEntry : Mod
     {
         if (Game1.activeClickableMenu is SearchMenu)
             this.HideSearch();
-        else if (Context.IsWorldReady && Game1.activeClickableMenu is not LookupMenu)
+        else if (Context.IsWorldReady)
             this.ShowSearch();
     }
 
