@@ -182,45 +182,46 @@ internal class DataParser
             List<FishSpawnLocationData> curLocations = [];
             if (data?.Fish is not null)
             {
-                foreach (SpawnFishData spawn in data.Fish)
+                foreach (SpawnFishData? spawn in data.Fish)
                 {
                     if (spawn is null)
                         continue;
 
-                    ParsedItemData? spawnItemData = ItemRegistry.GetData(spawn.ItemId);
-                    if (spawnItemData?.ObjectType != "Fish" || spawnItemData.QualifiedItemId != fish.QualifiedItemId)
-                        continue;
+                    foreach (string itemId in this.GetItemIds(spawn))
+                    {
+                        ParsedItemData? spawnItemData = ItemRegistry.GetData(itemId);
+                        if (spawnItemData?.ObjectType != "Fish" || spawnItemData.QualifiedItemId != fish.QualifiedItemId)
+                            continue;
 
-                    if (spawn.Season.HasValue)
-                    {
-                        curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, new[] { spawn.Season.Value.ToString() }));
-                    }
-                    else if (spawn.Condition != null)
-                    {
-                        foreach (GameStateQuery.ParsedGameStateQuery condition in GameStateQuery.Parse(spawn.Condition))
+                        if (spawn.Season.HasValue)
+                            curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, new[] { spawn.Season.Value.ToString() }));
+                        else if (spawn.Condition != null)
                         {
-                            if (condition.Query.Length == 0)
-                                continue;
-
-                            // season
-                            if (GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]))
+                            foreach (GameStateQuery.ParsedGameStateQuery condition in GameStateQuery.Parse(spawn.Condition))
                             {
-                                var seasons = new List<string>();
-                                foreach (string season in new[] { "spring", "summer", "fall", "winter" })
-                                {
-                                    if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
-                                        seasons.Add(season);
-                                }
-                                curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, seasons.ToArray()));
-                            }
+                                if (condition.Query.Length == 0)
+                                    continue;
 
-                            // Qi's Extended Family quest
-                            else if (!isLegendaryFamily && condition is { Negated: false, Query: ["PLAYER_SPECIAL_ORDER_RULE_ACTIVE", "Current", "LEGENDARY_FAMILY"] })
-                                isLegendaryFamily = true;
+                                // season
+                                if (GameStateQuery.SeasonQueryKeys.Contains(condition.Query[0]))
+                                {
+                                    var seasons = new List<string>();
+                                    foreach (string season in new[] { "spring", "summer", "fall", "winter" })
+                                    {
+                                        if (!condition.Negated && condition.Query.Any(word => word.Equals(season, StringComparison.OrdinalIgnoreCase)))
+                                            seasons.Add(season);
+                                    }
+                                    curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, seasons.ToArray()));
+                                }
+
+                                // Qi's Extended Family quest
+                                else if (!isLegendaryFamily && condition is { Negated: false, Query: ["PLAYER_SPECIAL_ORDER_RULE_ACTIVE", "Current", "LEGENDARY_FAMILY"] })
+                                    isLegendaryFamily = true;
+                            }
                         }
+                        else
+                            curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, new[] { "spring", "summer", "fall", "winter" }));
                     }
-                    else
-                        curLocations.Add(new FishSpawnLocationData(locationId, spawn.FishAreaId, new[] { "spring", "summer", "fall", "winter" }));
                 }
             }
 
@@ -312,27 +313,30 @@ internal class DataParser
         {
             foreach (SpawnFishData? fishData in locationFish)
             {
-                if (fishData?.ItemId is null)
+                if (fishData is null)
                     continue;
 
-                seenFishIds.Add(fishData.ItemId);
+                foreach (string itemId in this.GetItemIds(fishData))
+                {
+                    seenFishIds.Add(itemId);
 
-                // skip if fish can't spawn in this body of water
-                if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
-                    continue;
+                    // skip if fish can't spawn in this body of water
+                    if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                        continue;
 
-                // skip if position doesn't match
-                if (fishData.BobberPosition?.Contains(tile) is false)
-                    continue;
-                if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
-                    continue;
+                    // skip if position doesn't match
+                    if (fishData.BobberPosition?.Contains(tile) is false)
+                        continue;
+                    if (fishData.PlayerPosition?.Contains(Game1.player.TilePoint) is false)
+                        continue;
 
-                // skip if data isn't for a fish or jelly (e.g. furniture)
-                ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
-                if (fish.ObjectType != "Fish")
-                    continue;
+                    // skip if data isn't for a fish or jelly (e.g. furniture)
+                    ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(itemId);
+                    if (fish.ObjectType != "Fish")
+                        continue;
 
-                yield return this.GetFishSpawnRules(fish, metadata);
+                    yield return this.GetFishSpawnRules(fish, metadata);
+                }
             }
         }
 
@@ -803,6 +807,22 @@ internal class DataParser
     /*********
     ** Private methods
     *********/
+    /// <summary>Get the item IDs produced by generic spawn data.</summary>
+    /// <param name="spawnData">The spawn data to check.</param>
+    private IEnumerable<string> GetItemIds(GenericSpawnItemData? spawnData)
+    {
+        if (spawnData?.RandomItemId?.Count > 0)
+        {
+            foreach (string? itemId in spawnData.RandomItemId)
+            {
+                if (itemId != null)
+                    yield return itemId;
+            }
+        }
+        else if (spawnData?.ItemId != null)
+            yield return spawnData.ItemId;
+    }
+
     /// <summary>Normalize raw ingredient ID and context tags from a machine recipe into the most specific item ID and context tags possible.</summary>
     /// <param name="fromItemId">The ingredient's raw item ID from the machine data.</param>
     /// <param name="fromContextTags">The ingredient's raw context tags from the machine data.</param>
