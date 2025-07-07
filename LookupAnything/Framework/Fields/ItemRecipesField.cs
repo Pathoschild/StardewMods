@@ -341,7 +341,7 @@ internal class ItemRecipesField : GenericField
 
                 // get output model
                 RecipeItemEntry output;
-                if (ItemRegistry.GetDataOrErrorItem(recipe.OutputQualifiedItemId)?.ItemId == "DROP_IN")
+                if (ItemRegistry.GetDataOrErrorItem(recipe.OutputQualifiedItemId)?.ItemId is "DROP_IN" or "DROP_IN_ID")
                 {
                     output = this.CreateItemEntry(
                         name: I18n.Item_RecipesForMachine_SameAsInput(),

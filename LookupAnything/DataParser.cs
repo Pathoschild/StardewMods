@@ -669,8 +669,13 @@ internal class DataParser
                                 itemQueryResults = ItemQueryResolver.TryResolve(
                                     outputItem,
                                     itemQueryContext,
-                                    formatItemId: id => id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0")
-                                );
+                                    formatItemId: id =>
+                                    {
+                                        string? newId = id?.Replace("DROP_IN_ID", "0").Replace("DROP_IN_PRESERVE", "0").Replace("NEARBY_FLOWER_ID", "0");
+                                        return newId != id && newId?.Trim() != "0" // this is meant to replace flavor arguments, don't replace entire ID with weeds
+                                            ? newId
+                                            : id;
+                                    });
                             }
                             else
                             {

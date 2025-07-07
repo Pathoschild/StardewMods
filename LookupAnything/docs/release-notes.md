@@ -3,8 +3,9 @@
 # Release notes
 ## Upcoming release
 * You can now open the search menu (`Shift` + `F1`) while a lookup is open.
-* Fixed fish lookup not showing spawn rules which randomly choose a fish ID.
-* Fixed overlapping text when showing some complex machine recipes.
+* Fixed item lookup for fish not showing spawn rules which randomly choose a fish ID.
+* Fixed item lookup for machines showing weeds for some custom machines which output the same item.
+* Fixed item lookup for machines having overlapped text for some complex recipes.
 * Fixed search UI overlapping tall building sprites with the next row.
 
 ## 1.51.1
