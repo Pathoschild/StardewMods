@@ -5,6 +5,7 @@
 * You can now open the search menu (`Shift` + `F1`) while a lookup is open.
 * Fixed fish lookup not showing spawn rules which randomly choose a fish ID.
 * Fixed overlapping text when showing some complex machine recipes.
+* Fixed search UI overlapping tall building sprites with the next row.
 
 ## 1.51.1
 Released 06 June 2025 for SMAPI 4.1.10 or later.
