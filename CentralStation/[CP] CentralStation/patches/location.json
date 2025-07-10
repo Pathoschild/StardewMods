@@ -27,6 +27,11 @@
         },
         {
             "Action": "Load",
+            "Target": "Maps/{{MainModId}}_EmptyWoodPedestal",
+            "FromFile": "assets/centralStation_emptyWoodPedestal.tmx"
+        },
+        {
+            "Action": "Load",
             "Target": "Maps/{{MainModId}}_Tiles",
             "FromFile": "assets/.Pathoschild.CentralStation_Tiles.png"
         },
@@ -129,7 +134,7 @@
 
                 // cafeteria 2-tile purple stool
                 "{{MainModId}}_Tiles/8/20": "1/1/down/stool tall/-1/-1/false",
-                
+
                 // cafeteria 1-tile white stool
                 "{{MainModId}}_Tiles/9/20": "1/1/down/stool short/-1/-1/false",
 
@@ -163,7 +168,7 @@
 
                 // cafeteria 2-tile purple stool
                 "Pathoschild/8/20": "1/1/down/stool tall/-1/-1/false",
-                
+
                 // cafeteria 1-tile white stool
                 "Pathoschild/9/20": "1/1/down/stool short/-1/-1/false",
 

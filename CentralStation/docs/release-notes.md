@@ -7,6 +7,7 @@
 * Added a new dog tourist (thanks to 6480 for the sprites and Kisaa for the map edit!).
 * Added employee lounge area with a new resident.
 * Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
+* The 'rare wood' in the gift shop now has a pedestal in the gift shop area.
 * Fixed destinations from old Bus Locations and Train Station content packs not always hidden when they should be (e.g. when already in their location).
 
 ## 1.3.0

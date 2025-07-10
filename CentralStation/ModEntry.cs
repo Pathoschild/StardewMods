@@ -148,6 +148,9 @@ internal class ModEntry : Mod
             case MapSubActions.ExitDoor:
                 return this.OnCentralExitDoorAction();
 
+            case MapSubActions.GiftShop:
+                return this.OnCentralGiftShopAction();
+
             case MapSubActions.PopUpShop:
                 return this.OnCentralPopupShopAction();
 
@@ -264,6 +267,23 @@ internal class ModEntry : Mod
         }
 
         return true;
+    }
+
+    /// <summary>Handle the player activating a <see cref="MapSubActions.GiftShop"/> action in the Central Station.</summary>
+    /// <returns>Returns whether the action was handled.</returns>
+    private bool OnCentralGiftShopAction()
+    {
+        if (Utility.TryOpenShopMenu($"{Constant.ModId}_GiftShop", null as string) && Game1.activeClickableMenu is ShopMenu shop)
+            shop.onPurchase = OnPurchase;
+        return true;
+
+        bool OnPurchase(ISalable salable, Farmer who, int countTaken, ItemStockInformation stock)
+        {
+            if (salable.QualifiedItemId == "(O)388" && Game1.currentLocation.Name == Constant.CentralStationLocationId)
+                this.ContentManager.OnRareWoodSold(Game1.currentLocation.Map);
+
+            return false;
+        }
     }
 
     /// <summary>Handle the player activating a <see cref="MapSubActions.PopUpShop"/> action in the Central Station.</summary>

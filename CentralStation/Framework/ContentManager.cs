@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
 using Pathoschild.Stardew.CentralStation.Framework.ContentModels;
 using Pathoschild.Stardew.Common;
@@ -13,7 +15,9 @@ using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.GameData;
 using StardewValley.Locations;
+using StardewValley.Network;
 using StardewValley.TokenizableStrings;
+using StardewValley.Util;
 using xTile;
 using xTile.Layers;
 using xTile.Tiles;
@@ -381,6 +385,20 @@ internal class ContentManager
         return true;
     }
 
+    /// <summary>Update the Central Station map when the rare wood is sold.</summary>
+    /// <param name="map">The map to edit.</param>
+    public void OnRareWoodSold(Map map)
+    {
+        IAssetDataForMap editor = this.ContentHelper.GetPatchHelper(map, map.assetPath).AsMap();
+
+        editor.PatchMap(
+            source: this.ContentHelper.Load<Map>($"Maps/{Constant.ModId}_EmptyWoodPedestal"),
+            sourceArea: new Rectangle(0, 0, 2, 3),
+            targetArea: new Rectangle(57, 25, 2, 3),
+            PatchMapMode.ReplaceByLayer
+        );
+    }
+
 
     /*********
     ** Private methods
@@ -457,8 +475,10 @@ internal class ContentManager
     /// <param name="assetData">The asset data.</param>
     private void EditCentralStationMap(IAssetData assetData)
     {
-        var map = assetData.AsMap().Data;
+        var editor = assetData.AsMap();
+        var map = editor.Data;
 
+        // dark station
         if (this.StationDark.Value)
         {
             // make it darker
@@ -510,8 +530,16 @@ internal class ContentManager
                 }
             }
         }
-        else
-            this.AddCentralStationTourists(assetData.AsMap());
+
+        // empty wood pedestal if sold
+        SynchronizedShopStock syncedShop = Game1.player.team.synchronizedShopStock;
+        string woodSyncId = $"{Constant.ModId}_GiftShop/{Game1.player.UniqueMultiplayerID}/Wood";
+        var syncedStock = syncedShop.GetType().GetField("stockDictionary", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.GetValue(syncedShop) as NetStringDictionary<int, NetInt>;
+        if (syncedStock != null && syncedStock.TryGetValue(woodSyncId, out int stock) && stock <= 0)
+            this.OnRareWoodSold(map);
+
+        // add tourists
+        this.AddCentralStationTourists(editor);
     }
 
     /// <summary>Add random tourist NPCs to the Central Station map.</summary>
