@@ -11,7 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ContentPacks Include="[CP] CentralStation" Version="$(Version)" />
+    <ContentPacks
+      Include="[CP] CentralStation"
+      Version="$(Version)"
+      IgnoreModFilePaths="assets/desert_festival_tilesheet.png, assets/Festivals.png, assets/MovieTheater_TileSheet.png, assets/paths.png, assets/pirates_tilesheet.png, assets/townInterior.png, assets/walls_and_floors.png"
+    />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

@@ -4,7 +4,7 @@
   <property name="DefaultWarpLocation" value="60 13"/>
  </properties>
  <tileset firstgid="1" name="z_festivals" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
-  <image source=".Festivals.png" width="512" height="512"/>
+  <image source="Festivals.png" width="512" height="512"/>
   <tile id="63">
    <animation>
     <frame tileid="63" duration="750"/>
@@ -43,7 +43,7 @@
   </tile>
  </tileset>
  <tileset firstgid="1025" name="z_desert_festival" tilewidth="16" tileheight="16" tilecount="1088" columns="32">
-  <image source=".desert_festival_tilesheet.png" width="512" height="544"/>
+  <image source="desert_festival_tilesheet.png" width="512" height="544"/>
   <tile id="411">
    <animation>
     <frame tileid="411" duration="500"/>
@@ -209,7 +209,7 @@
   </tile>
  </tileset>
  <tileset firstgid="2113" name="z_MovieTheater_TileSheet" tilewidth="16" tileheight="16" tilecount="256" columns="16">
-  <image source=".MovieTheater_TileSheet.png" width="256" height="256"/>
+  <image source="MovieTheater_TileSheet.png" width="256" height="256"/>
   <tile id="175">
    <animation>
     <frame tileid="175" duration="250"/>
@@ -309,7 +309,7 @@
   </tile>
  </tileset>
  <tileset firstgid="2369" name="z_pirates_tilesheet" tilewidth="16" tileheight="16" tilecount="190" columns="19">
-  <image source=".pirates_tilesheet.png" width="304" height="160"/>
+  <image source="pirates_tilesheet.png" width="304" height="160"/>
   <tile id="15">
    <animation>
     <frame tileid="15" duration="170"/>

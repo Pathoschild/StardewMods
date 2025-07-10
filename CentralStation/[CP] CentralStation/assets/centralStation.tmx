@@ -6,7 +6,7 @@
   <property name="Pathoschild.CentralStation_TouristAreas" value="FoodCourt 3 13 19 15 Bookshelves 55 14 15 2 GiftShop 53 20 19 8 TicketCounter 29 8 17 8 WaitingArea 29 21 17 12"/>
  </properties>
  <tileset firstgid="1" name="z_walls_and_floors" tilewidth="16" tileheight="16" tilecount="688" columns="16">
-  <image source=".walls_and_floors" width="256" height="688"/>
+  <image source="walls_and_floors" width="256" height="688"/>
   <tile id="346">
    <properties>
     <property name="Type" value="Wood"/>
@@ -49,7 +49,7 @@
   </tile>
  </tileset>
  <tileset firstgid="689" name="untitled tile sheet" tilewidth="16" tileheight="16" tilecount="2176" columns="32">
-  <image source=".townInterior.png" width="512" height="1088"/>
+  <image source="townInterior.png" width="512" height="1088"/>
   <tile id="1910">
    <animation>
     <frame tileid="1910" duration="3000"/>
@@ -125,7 +125,7 @@
   </tile>
  </tileset>
  <tileset firstgid="3605" name="paths" tilewidth="16" tileheight="16" tilecount="64" columns="4">
-  <image source=".paths.png" width="64" height="256"/>
+  <image source="paths.png" width="64" height="256"/>
  </tileset>
  <layer id="1" name="Back" width="75" height="100">
   <data encoding="csv">
