@@ -95,9 +95,8 @@
     "location.cola-machine.3": "(In qualche modo, percepisci che il distributore ti vuole aiutare.)",
 
     // employee lounge
-    // TODO
-    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
-    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+    "location.employee-lockers": "Gli armadietti degli impiegati non sono chiusi, ma senti che qualcosa ti sta guardando.",
+    "location.employee-fridge": "Il pranzo degli impegati. Sarebbe scortese prendere qualcosa.",
 
 
     /*********
@@ -158,7 +157,6 @@
     "tourist.blackgull-pirate.1": "Corpo di mille balene! Dove sono gli altri?",
     "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro...",
 
-    // TODO
-    "tourist.bag-dog.1": "(She's on an adventure.)",
-    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
+    "tourist.bag-dog.1": "(Sta vivendo un'avventura.)",
+    "tourist.bag-dog.2": "(Sta facendo una pausa nella sua borsa letto portatile.)"
 }
