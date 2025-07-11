@@ -12,6 +12,9 @@ internal class MapSubActions
     /// <summary>The sub-action which checks the exit door.</summary>
     public const string ExitDoor = "ExitDoor";
 
+    /// <summary>The sub-action which rummages through a garbage can.</summary>
+    public const string GarbageCan = "GarbageCan";
+
     /// <summary>The sub-action which opens the gift shop.</summary>
     public const string GiftShop = "GiftShop";
 

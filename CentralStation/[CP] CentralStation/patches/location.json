@@ -61,6 +61,104 @@
             }
         },
 
+        // garbage cans
+        {
+            "Action": "EditData",
+            "Target": "Data/GarbageCans",
+            "TargetField": [ "GarbageCans" ],
+            "Entries": {
+                "{{MainModId}}_FoodCourt": {
+                    "Items": [
+                        // food court shop item
+                        {
+                            "Id": "ExpensiveFood",
+                            "RandomItemId": [
+                                "(O)253", // triple shot espresso
+                                "(O)Raisins", // raisins
+                                "(O)904", // banana pudding
+                                "(O)220", // chocolate cake
+                                "(O)611" // blackberry cobbler
+                            ],
+                            "Condition": "RANDOM 0.1"
+                        },
+                        {
+                            "Id": "CommonFood",
+                            "RandomItemId": [
+                                "FLAVORED_ITEM Juice (O)613", // apple juice
+                                "FLAVORED_ITEM Juice (O)635", // orange juice
+                                "(O)395", // coffee
+
+                                "(O)194", // fried egg
+                                "(O)229", // tortilla
+                                "(O)205", // fried mushroom
+                                "(O)196", // salad
+                                "(O)241", // survival burger
+                                "(O)206", // pizza
+                                "(O)610", // fruit salad
+
+                                "(O)613", // apple
+                                "(O)91", // banana
+                                "(O)635", // orange
+                                "(O)832", // pineapple
+                                "(O)724", // maple syrup
+                                "(O)233", // ice cream
+                                "(O)223", // cookie
+                                "(O)612" // cranberry candy
+                            ],
+                            "Condition": "RANDOM 0.2 @addDailyLuck"
+                        }
+                    ]
+                },
+                "{{MainModId}}_GiftShop": {
+                    "Items": [
+                        // select gift shop items
+                        {
+                            "Id": "ExpensiveGifts",
+                            "RandomItemId": [
+                                "(P)6", // grass skirt
+                                "(S)1134", // bikini top
+                                "(S)1297", // island bikini
+                                "(S)1186", // holiday shirt
+                                "(S)1296", // tropical sunrise shirt
+                                "(S)1193", // ocean shirt
+                                "(S)1204", // vacation shirt
+                                "(S)1212", // sunset shirt
+                                "(S)1105", // Joja shirt
+                                "(S)1260" // rain coat
+                            ],
+                            "Condition": "RANDOM 0.05"
+                        },
+                        {
+                            "Id": "Wood",
+                            "ItemId": "(O)388",
+                            "Condition": "RANDOM 0.1"
+                        },
+                        {
+                            "Id": "CommonGifts",
+                            "RandomItemId": [
+                                "(H)88", // sunglasses
+                                "(H)55", // fishing hat
+                                "(H)54", // floppy beanie
+                                "(H)89", // goggles
+                                "(H)68", // propeller hat
+                                "(P)1" // shorts
+                            ],
+                            "Condition": "RANDOM 0.2"
+                        }
+                    ]
+                },
+                "{{MainModId}}_TicketArea": {
+                    "Items": [
+                        {
+                            "Id": "MovieTicket",
+                            "ItemId": "(O)809",
+                            "Condition": "RANDOM 0.05, PLAYER_HAS_MAIL Host ccMovieTheater"
+                        }
+                    ]
+                }
+            }
+        },
+
         // book shelf flavor text
         {
             "Action": "Load",
