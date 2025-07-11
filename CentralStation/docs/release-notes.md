@@ -9,6 +9,7 @@
 * Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
 * The 'rare wood' in the gift shop now has a pedestal in the gift shop area.
 * Fixed destinations from old Bus Locations and Train Station content packs not always hidden when they should be (e.g. when already in their location).
+* Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.3.0
 Released 06 June 2025 for SMAPI 4.1.10 or later.

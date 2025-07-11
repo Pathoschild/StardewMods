@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Added integration with the Profiler mod for performance monitoring (thanks to SinZ!).
+
 ## 2.7.2
 Released 06 June 2025 for SMAPI 4.1.10 or later.
 
