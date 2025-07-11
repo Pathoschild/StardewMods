@@ -3,21 +3,22 @@ using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common.Integrations.Profiler;
 
-internal static class ProfilerIntegration
+/// <summary>Handles the logic for integrating with the Profiler mod.</summary>
+internal class ProfilerIntegration : BaseIntegration<IProfilerApi>
 {
-    private static IProfilerApi? ProfilerApi;
-    internal static void Initialize(IModRegistry registry)
-    {
-        ProfilerApi = registry.GetApi<IProfilerApi>("SinZ.Profiler");
-    }
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
+    public ProfilerIntegration(IModRegistry modRegistry, IMonitor monitor)
+        : base("Profiler", "SinZ.Profiler", "2.0.0", modRegistry, monitor) { }
 
-    public static IDisposable? RecordSection(string modId, string eventType, string details)
+    /// <returns>If Profiler is installed, returns a disposable instance which can be disposed to end the operation; else returns <c>null</c>.</returns>
+    /// <inheritdoc cref="IProfilerApi.RecordSection"/>
+    public IDisposable? RecordSection(string modId, string eventType, string details)
     {
-        if (ProfilerApi == null)
-        {
-            return null;
-        }
-
-        return ProfilerApi.RecordSection(modId, eventType, details);
+        return this.ModApi?.RecordSection(modId, eventType, details);
     }
 }

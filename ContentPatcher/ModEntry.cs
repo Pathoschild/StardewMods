@@ -124,7 +124,6 @@ internal class ModEntry : Mod
 
         helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
-        helper.Events.GameLoop.GameLaunched += this.GameLaunched;
 
         // enable temporary PyTK legacy mode (unless running in SMAPI strict mode)
         IModInfo? pyTk = helper.ModRegistry.Get("Platonymous.Toolkit");
@@ -132,11 +131,6 @@ internal class ModEntry : Mod
             pyTk is not null
             && pyTk.Manifest.Version.IsOlderThan("1.24.0")
             && typeof(Constants).GetProperty("ExecutionPath") != null; // not SMAPI strict mode (which drops PyTK workarounds)
-    }
-
-    private void GameLaunched(object? sender, GameLaunchedEventArgs e)
-    {
-        ProfilerIntegration.Initialize(this.Helper.ModRegistry);
     }
 
     /// <inheritdoc />
@@ -337,13 +331,16 @@ internal class ModEntry : Mod
     /// <summary>Create a raw uninitialized screen manager instance.</summary>
     private ScreenManager CreateScreenManager()
     {
+        ProfilerIntegration profiler = new ProfilerIntegration(this.Helper.ModRegistry, this.Monitor);
+
         ModProvidedToken[] modTokens = this.QueuedModTokens.ToArray();
         return new ScreenManager(
             helper: this.Helper,
             monitor: this.Monitor,
             installedMods: this.GetInstalledMods(),
             modTokens: modTokens,
-            assetValidators: this.AssetValidators()
+            assetValidators: this.AssetValidators(),
+            profiler: profiler
         );
     }
 

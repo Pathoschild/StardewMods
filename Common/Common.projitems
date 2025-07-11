@@ -35,8 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\ICustomBushDrop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Profiler\IProfilerApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Profiler\ProfilerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\ExtraMachineConfigIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\IExtraMachineConfigApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GenericModConfigMenu\GenericModConfigMenuIntegration.cs" />
@@ -53,6 +51,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkIngredient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkRecipe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Profiler\IProfilerApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Profiler\ProfilerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SpaceCore\ISpaceCoreApi.cs" />
