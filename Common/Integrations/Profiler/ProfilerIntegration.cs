@@ -11,13 +11,13 @@ internal static class ProfilerIntegration
         ProfilerApi = registry.GetApi<IProfilerApi>("SinZ.Profiler");
     }
 
-    public static IDisposable? RecordSection(string ModId, string EventType, string Details)
+    public static IDisposable? RecordSection(string modId, string eventType, string details)
     {
         if (ProfilerApi == null)
         {
             return null;
         }
 
-        return ProfilerApi.RecordSection(ModId, EventType, Details);
+        return ProfilerApi.RecordSection(modId, eventType, details);
     }
 }
