@@ -15,6 +15,7 @@ using ContentPatcher.Framework.TriggerActions;
 using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Integrations.Profiler;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -330,13 +331,16 @@ internal class ModEntry : Mod
     /// <summary>Create a raw uninitialized screen manager instance.</summary>
     private ScreenManager CreateScreenManager()
     {
+        ProfilerIntegration profiler = new ProfilerIntegration(this.Helper.ModRegistry, this.Monitor);
+
         ModProvidedToken[] modTokens = this.QueuedModTokens.ToArray();
         return new ScreenManager(
             helper: this.Helper,
             monitor: this.Monitor,
             installedMods: this.GetInstalledMods(),
             modTokens: modTokens,
-            assetValidators: this.AssetValidators()
+            assetValidators: this.AssetValidators(),
+            profiler: profiler
         );
     }
 
