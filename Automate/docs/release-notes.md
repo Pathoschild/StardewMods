@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * You can now choose which chests are automated through the config UI (thanks to TWT233!).
+* Fixed tree automation not collecting some rare drops added in Stardew Valley 1.6.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 2.3.5
