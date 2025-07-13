@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+<!-- requires SMAPI 4.3.1 -->
 * Revamped central station visuals (thanks to 6480 for the sprites and [Kisaa](https://next.nexusmods.com/profile/crystalinerose) for the map changes!).  
   _This includes a revamped gift shop area with a new clerk NPC, more tourist/travel clutter scattered around the station, floor shadows, and many new sprites that will be used in later versions._
 * Added a new dog tourist (thanks to 6480 for the sprites and Kisaa for the map edit!).
@@ -9,6 +10,7 @@
 * Added garbage cans you can rummage through.
 * Added [C# mod API](author-guide.md#c-mod-api) to get the current available stops.
 * The 'rare wood' in the gift shop now has a pedestal in the gift shop area.
+* Updated to use the new ID parsing support in SMAPI 4.3.x.
 * Fixed destinations from old Bus Locations and Train Station content packs not always hidden when they should be (e.g. when already in their location).
 * Improved translations. Thanks to MakinDay (updated Italian)!
 

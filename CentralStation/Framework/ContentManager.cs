@@ -163,7 +163,7 @@ internal class ContentManager
                 this.Monitor.LogOnce($"Ignored {stop.Network} destination to {stop.ToLocation} with no ID field.", LogLevel.Warn);
                 continue;
             }
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, id) is null)
+            if (this.ModRegistry.GetFromNamespacedId(id, requirePrefix: true) is null)
             {
                 this.Monitor.LogOnce($"Ignored {stop.Network} destination with ID '{id}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_StopId`.", LogLevel.Warn);
                 continue;
@@ -584,7 +584,7 @@ internal class ContentManager
                 this.Monitor.LogOnce("Ignored tourist map with no ID field.", LogLevel.Warn);
                 continue;
             }
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, mapId, allowModOnlyId: true) is null)
+            if (this.ModRegistry.GetFromNamespacedId(mapId) is null)
             {
                 this.Monitor.LogOnce($"Ignored tourist map with ID '{mapId}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_TouristMapId`.", LogLevel.Warn);
                 continue;
@@ -788,7 +788,7 @@ internal class ContentManager
     {
         foreach ((string id, List<string?>? dialogues) in this.ContentHelper.Load<Dictionary<string, List<string?>?>>(AssetNames.Bookshelf))
         {
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, id, allowModOnlyId: true) is null)
+            if (this.ModRegistry.GetFromNamespacedId(id) is null)
             {
                 this.Monitor.LogOnce($"Ignored bookshelf messages with ID '{id}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_StopId`.", LogLevel.Warn);
                 continue;

@@ -2,7 +2,7 @@
     "Name": "Central Station",
     "Author": "Pathoschild",
     "Version": "%ProjectVersion%",
-    "MinimumApiVersion": "4.1.10",
+    "MinimumApiVersion": "4.3.1",
     "Description": "Lets you travel to other mods' destinations by boat, bus, or train through the Central Station.",
     "UniqueID": "Pathoschild.CentralStation",
     "EntryDll": "CentralStation.dll",

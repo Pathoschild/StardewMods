@@ -541,7 +541,7 @@ internal class GameHelper
     /// <param name="id">The content's unique ID to parse. For an item, this must be the unqualified item ID.</param>
     public IModInfo? TryGetModFromStringId(string? id)
     {
-        return CommonHelper.TryGetModFromStringId(this.ModRegistry, id);
+        return this.ModRegistry.GetFromNamespacedId(id, requirePrefix: true);
     }
 
 

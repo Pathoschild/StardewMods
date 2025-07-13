@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+<!-- requires SMAPI 4.3.1 -->
 * You can now open the search menu (`Shift` + `F1`) while a lookup is open.
+* Updated to use the new ID parsing support in SMAPI 4.3.x.
 * Fixed item lookup for fish not showing spawn rules which randomly choose a fish ID.
 * Fixed item lookup for machines showing weeds for some custom machines which output the same item.
 * Fixed item lookup for machines having overlapped text for some complex recipes.
