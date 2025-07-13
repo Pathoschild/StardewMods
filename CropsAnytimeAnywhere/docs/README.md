@@ -74,7 +74,7 @@ setting        | what it affects
 `CanGrowOutOfSeason` | Whether plants will grow here even if they're out of season.
 `UseFruitTreesSeasonalSprites` | When applied to a fruit tree, whether the fruit tree should match the calendar season when drawn even when producing fruits out of season. Default false.
 
-## `ForceTillable`
+## `TillableRules`
 These rules decide which tile types you can till. This is where you configure options like tilling
 grass tiles.
 
@@ -83,10 +83,11 @@ options are always additive, so you can't _disable_ tilling a tile which is norm
 
 For example:
 ```json
-"ForceTillable": [
+"TillableRules": [
     // can till any type on the farm
     {
-        "Locations": ["Farm"],
+        "ForLocations": ["Farm"],
+
         "Dirt": true,
         "Grass": true,
         "Stone": true,

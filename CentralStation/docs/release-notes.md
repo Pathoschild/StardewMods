@@ -1,8 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-<!-- requires SMAPI 4.3.1 -->
+## 1.4.0
+Released 06 June 2025 for SMAPI 4.3.1 or later.
+
 * Revamped central station visuals (thanks to 6480 for the sprites and [Kisaa](https://next.nexusmods.com/profile/crystalinerose) for the map changes!).  
   _This includes a revamped gift shop area with a new clerk NPC, more tourist/travel clutter scattered around the station, floor shadows, and many new sprites that will be used in later versions._
 * Added a new dog tourist (thanks to 6480 for the sprites and Kisaa for the map edit!).

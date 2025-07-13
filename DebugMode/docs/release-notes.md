@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17.1
+Released 13 July 2025 for SMAPI 4.1.10 or later.
+
 * Fixed wrong tile position shown in some cases depending on zoom level or UI scale (thanks to AlanDavison!).
 * Improved translations. Thanks to SummerFleur2997 (updated Chinese)!
 

@@ -1,8 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-<!-- requires SMAPI 4.3.1 -->
+## 1.51.2
+Released 13 July 2025 for SMAPI 4.3.1 or later.
+
 * You can now open the search menu (`Shift` + `F1`) while a lookup is open.
 * Updated to use the new ID parsing support in SMAPI 4.3.x.
 * Fixed item lookup for fish not showing spawn rules which randomly choose a fish ID.
