@@ -9,10 +9,15 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 2.7.3
+Released 13 July 2025 for SMAPI 4.1.10 or later.
+
+* Added optional integration with the Profiler mod for performance monitoring (thanks to SinZ!).
+
 ## 2.7.2
 Released 06 June 2025 for SMAPI 4.1.10 or later.
 
-* Added [Chinese documentation](zh/README.md) (thanks to mushymato with help from Luo7710/Mignon!).
+* Added [Chinese documentation](zh/README.md) (thanks to mushymato with help from Luo7710!).
 * Fixed error migrating pre-Stardew-Valley-1.6 location edits in some cases.
 
 ## 2.7.1

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
 
@@ -25,12 +25,9 @@ internal class GenericModConfigMenuIntegrationForCropsAnytimeAnywhere : IGeneric
     /// <param name="config">The current config model.</param>
     public GenericModConfigMenuIntegrationForCropsAnytimeAnywhere(ModConfig config)
     {
-        this.TooComplex = config.Locations.Count switch
-        {
-            0 => false, // we can re-add the default section
-            1 => !config.Locations.ContainsKey("*"), // only contains the default section
-            _ => true
-        };
+        this.TooComplex =
+            config.PlantRules.Any(rule => rule.HasConditions)
+            || config.TillableRules.Any(rule => rule.HasConditions);
     }
 
     /// <inheritdoc />
@@ -45,47 +42,50 @@ internal class GenericModConfigMenuIntegrationForCropsAnytimeAnywhere : IGeneric
         }
 
         menu
+            // plant rule
             .AddCheckbox(
                 name: I18n.Config_GrowCrops_Name,
                 tooltip: I18n.Config_GrowCrops_Desc,
-                get: config => this.GetOption(config, p => p.GrowCrops),
-                set: (config, value) => this.SetOption(config, p => new PerLocationConfig(value, p.GrowCropsOutOfSeason, p.UseFruitTreesSeasonalSprites, new ModConfigForceTillable(p.ForceTillable)))
+                get: config => this.GetPlantOption(config, p => p.CanPlant),
+                set: (config, value) => this.SetPlantOption(config, rule => new PlantRule(rule, value, rule.CanGrowOutOfSeason, rule.UseFruitTreesSeasonalSprites))
             )
             .AddCheckbox(
                 name: I18n.Config_GrowCropsOutOfSeason_Name,
                 tooltip: I18n.Config_GrowCropsOutOfSeason_Desc,
-                get: config => this.GetOption(config, p => p.GrowCropsOutOfSeason),
-                set: (config, value) => this.SetOption(config, p => new PerLocationConfig(p.GrowCrops, value, p.UseFruitTreesSeasonalSprites, new ModConfigForceTillable(p.ForceTillable)))
+                get: config => this.GetPlantOption(config, p => p.CanGrowOutOfSeason),
+                set: (config, value) => this.SetPlantOption(config, rule => new PlantRule(rule, rule.CanPlant, value, rule.UseFruitTreesSeasonalSprites))
             )
             .AddCheckbox(
                 name: I18n.Config_UseFruitTreesSeasonalSprites_Name,
                 tooltip: I18n.Config_UseFruitTreesSeasonalSprites_Desc,
-                get: config => this.GetOption(config, p => p.UseFruitTreesSeasonalSprites),
-                set: (config, value) => this.SetOption(config, p => new PerLocationConfig(p.GrowCrops, p.GrowCropsOutOfSeason, value, new ModConfigForceTillable(p.ForceTillable)))
+                get: config => this.GetPlantOption(config, p => p.UseFruitTreesSeasonalSprites),
+                set: (config, value) => this.SetPlantOption(config, rule => new PlantRule(rule, rule.CanPlant, rule.CanGrowOutOfSeason, value))
             )
+
+            // tillable rules
             .AddCheckbox(
                 name: I18n.Config_ForceTillDirt_Name,
                 tooltip: I18n.Config_ForceTillDirt_Desc,
                 get: config => this.GetTillableOption(config, p => p.Dirt),
-                set: (config, value) => this.SetTillableOption(config, p => new ModConfigForceTillable(value, p.Grass, p.Stone, p.Other))
+                set: (config, value) => this.SetTillableOption(config, rule => new TillableRule(rule, value, rule.Grass, rule.Stone, rule.Other))
             )
             .AddCheckbox(
                 name: I18n.Config_ForceTillGrass_Name,
                 tooltip: I18n.Config_ForceTillGrass_Desc,
                 get: config => this.GetTillableOption(config, p => p.Grass),
-                set: (config, value) => this.SetTillableOption(config, p => new ModConfigForceTillable(p.Dirt, value, p.Stone, p.Other))
+                set: (config, value) => this.SetTillableOption(config, rule => new TillableRule(rule, rule.Dirt, value, rule.Stone, rule.Other))
             )
             .AddCheckbox(
                 name: I18n.Config_ForceTillStone_Name,
                 tooltip: I18n.Config_ForceTillStone_Desc,
                 get: config => this.GetTillableOption(config, p => p.Stone),
-                set: (config, value) => this.SetTillableOption(config, p => new ModConfigForceTillable(p.Dirt, p.Grass, value, p.Other))
+                set: (config, value) => this.SetTillableOption(config, rule => new TillableRule(rule, rule.Dirt, rule.Grass, value, rule.Other))
             )
             .AddCheckbox(
                 name: I18n.Config_ForceTillOther_Name,
                 tooltip: I18n.Config_ForceTillOther_Desc,
                 get: config => this.GetTillableOption(config, p => p.Other),
-                set: (config, value) => this.SetTillableOption(config, p => new ModConfigForceTillable(p.Dirt, p.Grass, p.Stone, value))
+                set: (config, value) => this.SetTillableOption(config, rule => new TillableRule(rule, rule.Dirt, rule.Grass, rule.Stone, value))
             );
     }
 
@@ -93,29 +93,43 @@ internal class GenericModConfigMenuIntegrationForCropsAnytimeAnywhere : IGeneric
     /*********
     ** Private methods
     *********/
-    private bool GetOption(ModConfig config, Func<PerLocationConfig, bool> getValue)
+    /// <summary>Get an option from the global plant rule.</summary>
+    /// <param name="config">The mod configuration to read.</param>
+    /// <param name="getValue">Get the value from the rule.</param>
+    private bool GetPlantOption(ModConfig config, Func<PlantRule, bool> getValue)
     {
-        PerLocationConfig section = config.Locations.GetValueOrDefault("*") ?? this.DefaultConfig.Locations["*"];
-        return getValue(section);
+        PlantRule rule = config.PlantRules.FirstOrDefault() ?? this.DefaultConfig.PlantRules[0];
+        return getValue(rule);
     }
 
-    private void SetOption(ModConfig config, Func<PerLocationConfig, PerLocationConfig> createNewConfig)
+    /// <summary>Set an option on the global plant rule.</summary>
+    /// <param name="config">The mod configuration to update.</param>
+    /// <param name="createNewConfig">Create the new config rule.</param>
+    private void SetPlantOption(ModConfig config, Func<PlantRule, PlantRule> createNewConfig)
     {
-        PerLocationConfig section = config.Locations.GetValueOrDefault("*") ?? this.DefaultConfig.Locations["*"];
+        PlantRule rule = config.PlantRules.FirstOrDefault() ?? this.DefaultConfig.PlantRules[0];
 
-        config.Locations["*"] = createNewConfig(section);
+        config.PlantRules.Clear();
+        config.PlantRules.Add(createNewConfig(rule));
     }
 
-    private bool GetTillableOption(ModConfig config, Func<ModConfigForceTillable, bool> getValue)
+    /// <summary>Get an option from the global force-tillable rule.</summary>
+    /// <param name="config">The mod configuration to read.</param>
+    /// <param name="getValue">Get the value from the rule.</param>
+    private bool GetTillableOption(ModConfig config, Func<TillableRule, bool> getValue)
     {
-        PerLocationConfig section = config.Locations.GetValueOrDefault("*") ?? this.DefaultConfig.Locations["*"];
-        return getValue(section.ForceTillable);
+        TillableRule rule = config.TillableRules.FirstOrDefault() ?? this.DefaultConfig.TillableRules[0];
+        return getValue(rule);
     }
 
-    private void SetTillableOption(ModConfig config, Func<ModConfigForceTillable, ModConfigForceTillable> createNewConfig)
+    /// <summary>Set an option on the global force-tillable rule.</summary>
+    /// <param name="config">The mod configuration to update.</param>
+    /// <param name="createNewConfig">Create the new config rule.</param>
+    private void SetTillableOption(ModConfig config, Func<TillableRule, TillableRule> createNewConfig)
     {
-        PerLocationConfig section = config.Locations.GetValueOrDefault("*") ?? this.DefaultConfig.Locations["*"];
+        TillableRule rule = config.TillableRules.FirstOrDefault() ?? this.DefaultConfig.TillableRules[0];
 
-        config.Locations["*"] = new PerLocationConfig(section.GrowCrops, section.GrowCropsOutOfSeason, section.UseFruitTreesSeasonalSprites, createNewConfig(section.ForceTillable));
+        config.TillableRules.Clear();
+        config.TillableRules.Add(createNewConfig(rule));
     }
 }

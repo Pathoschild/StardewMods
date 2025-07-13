@@ -165,50 +165,6 @@ internal static class CommonHelper
     }
 
     /****
-    ** Mod integrations
-    ****/
-    /// <summary>Get the mod which added content, if it follows the <a href="https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID">unique string item ID convention</a>.</summary>
-    /// <param name="modRegistry">The SMAPI API for fetching metadata about loaded mods.</param>
-    /// <param name="id">The content's unique ID to parse. For an item, this must be the unqualified item ID.</param>
-    /// <param name="allowModOnlyId">Whether to recognize an ID which consists of only the mod ID, without a suffix for the item being identified.</param>
-    public static IModInfo? TryGetModFromStringId(IModRegistry modRegistry, string? id, bool allowModOnlyId = false)
-    {
-        if (id is null)
-            return null;
-
-        // ID is just a mod ID
-        IModInfo? mod = null;
-        if (allowModOnlyId)
-        {
-            mod = modRegistry.Get(id);
-            if (mod != null)
-                return mod;
-        }
-
-        // The unique string ID convention is `{mod id}_{content id}`, but both the mod ID and content ID can contain
-        // underscores. So here we split by `_` and check every possible prefix before the final underscore to see
-        // if it's a valid mod ID. We take the longest match since some mods use suffixes for grouped mods, like
-        // `mainMod` and `mainMod_cp`.
-        string[] parts = id.Split('_');
-        if (parts.Length == 1)
-            return null;
-
-        {
-            string modId = parts[0];
-            int itemIdIndex = parts.Length - 1;
-            for (int i = 0; i < itemIdIndex; i++)
-            {
-                if (i != 0)
-                    modId += '_' + parts[i];
-
-                mod = modRegistry.Get(modId) ?? mod;
-            }
-        }
-
-        return mod;
-    }
-
-    /****
     ** UI
     ****/
     /// <summary>Draw a sprite to the screen.</summary>

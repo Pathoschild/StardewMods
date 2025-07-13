@@ -72,7 +72,9 @@ internal class AutomationFactory : IAutomationFactory
                     return new MiniShippingBinMachine(chest, location);
 
                 default:
-                    return new ChestContainer(chest, location, tile);
+                    if (chest.HasContextTag(ModConstants.StorageTag))
+                        return new ChestContainer(chest, location, tile);
+                    break;
             }
         }
 

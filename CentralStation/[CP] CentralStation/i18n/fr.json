@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(Vous vous approchez du distributeur de Cola. Avant que vous ne puissiez faire quoi que ce soit, un objet tombe avec fracas.)",
     "location.cola-machine.3": "(D'une certaine manière, vous sentez que le distributeur de Cola veut vous aider.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue
@@ -151,5 +156,9 @@
     "tourist.grim-pirate": "De l'autre côté des rails, une histoire qui fait froid dans le dos...#Une annonce entendue dans les profondeurs de la gare...#Oups, j'ai raté mon train.",
 
     "tourist.blackgull-pirate.1": "Frissons dans le dos ! Où sont les autres ?",
-    "tourist.blackgull-pirate.2": "Nous allons embarquer d'une minute à l'autre..."
+    "tourist.blackgull-pirate.2": "Nous allons embarquer d'une minute à l'autre...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

@@ -2,7 +2,7 @@
     "Name": "Lookup Anything",
     "Author": "Pathoschild",
     "Version": "%ProjectVersion%",
-    "MinimumApiVersion": "4.1.10",
+    "MinimumApiVersion": "4.3.1",
     "MinimumGameVersion": "1.6.15",
     "Description": "View metadata about anything by pressing a button.",
     "UniqueID": "Pathoschild.LookupAnything",

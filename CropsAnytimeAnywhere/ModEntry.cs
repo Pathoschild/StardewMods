@@ -17,7 +17,7 @@ internal class ModEntry : Mod
     ** Fields
     *********/
     /// <summary>The mod configuration.</summary>
-    private LocationConfigManager Config = null!; // set in Entry
+    private ConfigRuleManager Config = null!; // set in Entry
 
 
     /*********
@@ -29,7 +29,7 @@ internal class ModEntry : Mod
         CommonHelper.RemoveObsoleteFiles(this, "CropsAnytimeAnywhere.pdb"); // removed in 1.4.7
 
         // read config & data
-        this.Config = new LocationConfigManager(helper.ReadConfig<ModConfig>());
+        this.Config = new ConfigRuleManager(helper.ReadConfig<ModConfig>());
         var fallbackTileTypes = this.LoadFallbackTileTypes();
 
         // init

@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "Áthelyezés a Junimo kunyhókból a ládákba",
     "config.junimo-huts.move-into-huts": "Áthelyezés a ládákból a Junimo kunyhókba",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "Chest settings",
+    "config.default-chest-override.name": "Default behavior",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Default",
+    "config.chest-override.values.enabled": "Enable",
+    "config.chest-override.values.disabled": "Disable",
+
     // per-machine settings (Gép beállítások)
     "config.title.machine-settings": "{{machineName}} beállítások",
-    "config.machine-settings-enabled.Name": "Engedélyezve",
+    "config.machine-settings-enabled.name": "Engedélyezve",
     "config.machine-settings-enabled.desc": "A(z) {{machineName}} gép automatizálásának engedélyezése.",
     "config.machine-settings-priority.name": "Prioritás",
     "config.machine-settings-priority.desc": "A(z) {{machineName}} gép prioritási sorrendje a többi géphez képest. A gép alapértelmezett prioritása 0, a magasabb értéket dolgozza fel először.",

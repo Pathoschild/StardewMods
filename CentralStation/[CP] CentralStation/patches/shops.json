@@ -421,6 +421,41 @@
                             "Price": 10000
                         }
                     ]
+                },
+                "{{MainModId}}_Locker": {
+                    "OpenSound": "turtle_pet",
+                    "Owners": [
+                        {
+                            "Id": "Default",
+                            "Name": "AnyOrNone",
+                            "Dialogues": []
+                        }
+                    ],
+                    "Items": [
+                        {
+                            "Id": "AlgaeOrMoss",
+                            "RandomItemId": [
+                                "(O)Moss",
+                                "(O)153", // green algae
+                                "(O)157" // white algae
+                            ],
+                            "Quality": 2,
+
+                            "TradeItemId": "(O)771", // fiber
+                            "AvailableStock": 1,
+                            "AvailableStockLimit": "Player"
+                        },
+                        {
+                            "Id": "AlgaeSoup",
+                            "ItemId": "(O)456",
+                            "Quality": 2,
+
+                            "TradeItemId": "(O)771", // fiber
+                            "TradeItemAmount": 4,
+                            "AvailableStock": 1,
+                            "AvailableStockLimit": "Player"
+                        }
+                    ]
                 }
             }
         }

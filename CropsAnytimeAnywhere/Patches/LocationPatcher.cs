@@ -26,8 +26,8 @@ internal class LocationPatcher : BasePatcher
     /// <summary>Encapsulates logging for the Harmony patch.</summary>
     private static IMonitor Monitor = null!; // set by first constructor
 
-    /// <summary>The mod configuration.</summary>
-    private static LocationConfigManager Config = null!; // set by first constructor
+    /// <summary>The config rule manager.</summary>
+    private static ConfigRuleManager Config = null!; // set by first constructor
 
     /// <summary>The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</summary>
     private static Dictionary<string, Dictionary<int, string>> FallbackTileTypes = null!; // set by first constructor
@@ -41,9 +41,9 @@ internal class LocationPatcher : BasePatcher
     *********/
     /// <summary>Initialize the Harmony patches.</summary>
     /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
-    /// <param name="config">The mod configuration.</param>
+    /// <param name="config">The config rule manager.</param>
     /// <param name="fallbackTileTypes">The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</param>
-    public LocationPatcher(IMonitor monitor, LocationConfigManager config, Dictionary<string, Dictionary<int, string>> fallbackTileTypes)
+    public LocationPatcher(IMonitor monitor, ConfigRuleManager config, Dictionary<string, Dictionary<int, string>> fallbackTileTypes)
     {
         LocationPatcher.Monitor = monitor;
         LocationPatcher.Config = config;
@@ -64,13 +64,10 @@ internal class LocationPatcher : BasePatcher
             postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_SeedsIgnoreSeasonsHere))
         );
 
-        if (LocationPatcher.Config.HasTillableOverrides())
-        {
-            harmony.Patch(
-                original: this.RequireMethod<GameLocation>(nameof(GameLocation.doesTileHaveProperty)),
-                postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_DoesTileHaveProperty))
-            );
-        }
+        harmony.Patch(
+            original: this.RequireMethod<GameLocation>(nameof(GameLocation.doesTileHaveProperty)),
+            postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_DoesTileHaveProperty))
+        );
 
         // IslandWest methods
         harmony.Patch(
@@ -102,7 +99,7 @@ internal class LocationPatcher : BasePatcher
     [SuppressMessage("ReSharper", "RedundantAssignment", Justification = "Matches original code code")]
     private static void Before_CheckItemPlantRules(GameLocation __instance, ref bool defaultAllowed)
     {
-        if (!defaultAllowed && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops)
+        if (!defaultAllowed && LocationPatcher.Config.GetPlantRule(__instance)?.CanPlant is true)
             defaultAllowed = true;
     }
 
@@ -111,7 +108,7 @@ internal class LocationPatcher : BasePatcher
     /// <param name="__result">The return value to use for the method.</param>
     private static void After_SeedsIgnoreSeasonsHere(GameLocation __instance, ref bool __result)
     {
-        if (!__result && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config is { GrowCrops: true, GrowCropsOutOfSeason: true } && !LocationPatcher.IsGameClearingTilledDirt())
+        if (!__result && LocationPatcher.Config.GetPlantRule(__instance)?.CanGrowOutOfSeason is true && !LocationPatcher.IsGameClearingTilledDirt())
             __result = true;
     }
 
@@ -124,8 +121,11 @@ internal class LocationPatcher : BasePatcher
     /// <param name="__result">The return value to use for the method.</param>
     private static void After_DoesTileHaveProperty(GameLocation __instance, int xTile, int yTile, string propertyName, string layerName, ref string __result)
     {
-        if (!Context.IsWorldReady || !__instance.farmers.Any())
+        if (!Context.IsWorldReady || __instance.farmers.Count == 0)
             return; // don't affect game logic for spawning ores, etc
+
+        if (!LocationPatcher.Config.HasTillableOverrides())
+            return;
 
         if (propertyName == "Diggable" && layerName == "Back")
         {
@@ -193,10 +193,8 @@ internal class LocationPatcher : BasePatcher
     private static bool ShouldMakeTillable(GameLocation location, int xTile, int yTile)
     {
         // get tile config
-        var config = LocationPatcher.Config.TryGetForLocation(location, out PerLocationConfig? locationConfig)
-            ? locationConfig.ForceTillable
-            : null;
-        if (config?.IsAnyEnabled() != true)
+        TillableRule? rule = LocationPatcher.Config.GetTillableRule(location);
+        if (rule?.IsAnyEnabled() is not true)
             return false;
 
         // get tile
@@ -208,10 +206,10 @@ internal class LocationPatcher : BasePatcher
         string? type = LocationPatcher.GetProperty(tile, "Type") ?? LocationPatcher.GetFallbackTileType(tile.TileSheet.ImageSource, tile.TileIndex);
         return type switch
         {
-            "Dirt" => config.Dirt,
-            "Grass" => config.Grass,
-            "Stone" => config.Stone,
-            _ => config.Other
+            "Dirt" => rule.Dirt,
+            "Grass" => rule.Grass,
+            "Stone" => rule.Stone,
+            _ => rule.Other
         };
     }
 

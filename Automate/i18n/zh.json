@@ -36,9 +36,19 @@
     "config.junimo-huts.move-into-chests": "从祝尼魔屋移动到宝箱内",
     "config.junimo-huts.move-into-huts": "从宝箱移动到祝尼魔屋内",
 
+    // per-chest settings
+    // TODO
+    "config.title.chest-settings": "箱子设置",
+    "config.default-chest-override.name": "默认设置",
+    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "跟随默认设置",
+    "config.chest-override.values.enabled": "强制启用",
+    "config.chest-override.values.disabled": "强制禁用",
+
     // per-machine settings
     "config.title.machine-settings": "{{machineName}}行为",
-    "config.machine-settings-enabled.Name": "启用",
+    "config.machine-settings-enabled.name": "启用",
     "config.machine-settings-enabled.desc": "是否启用{{machineName}}自动化。",
     "config.machine-settings-priority.name": "优先级",
     "config.machine-settings-priority.desc": "相对于其他机器，{{machineName}}机器应处理的优先级顺序。机器默认优先级为0，优先处理更高值。",

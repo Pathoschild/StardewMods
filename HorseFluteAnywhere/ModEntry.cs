@@ -51,7 +51,7 @@ internal class ModEntry : Mod
 
         // add patches
         HarmonyPatcher.Apply(this,
-            new UtilityPatcher(this.Monitor)
+            new UtilityPatcher()
         );
 
         // hook events

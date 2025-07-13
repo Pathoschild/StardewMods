@@ -148,11 +148,17 @@ internal class ModEntry : Mod
             case MapSubActions.ExitDoor:
                 return this.OnCentralExitDoorAction();
 
+            case MapSubActions.GarbageCan:
+                return this.OnCentralGarbageCanAction(location, tile, args);
+
+            case MapSubActions.GiftShop:
+                return this.OnCentralGiftShopAction(location);
+
             case MapSubActions.PopUpShop:
                 return this.OnCentralPopupShopAction();
 
             case MapSubActions.TouristDialogue:
-                return this.OnCentralTouristAction(location, args, tile);
+                return this.OnCentralTouristAction(location, tile, args);
 
             default:
                 return false;
@@ -164,7 +170,7 @@ internal class ModEntry : Mod
     /// <returns>Returns whether the action was handled.</returns>
     private bool OnCentralTicketAction(bool isTicketBooth)
     {
-        void ShowTickets() => this.OpenMenu(StopNetworks.Boat | StopNetworks.Bus | StopNetworks.Train);
+        void ShowTickets() => this.OpenMenu(Framework.StopManager.AllNetworks);
 
         // rare chance of showing a secret message before the ticket menu
         if (this.ContentManager.GetStationVisits() >= Constant.StrangeMessageMinVisits && !this.SawStrangeOccurrence.Value && Game1.random.NextBool(Constant.StrangeMessageChance))
@@ -266,6 +272,69 @@ internal class ModEntry : Mod
         return true;
     }
 
+    /// <summary>Handle the player activating a <see cref="MapSubActions.GarbageCan"/> action in the Central Station.</summary>
+    /// <param name="location">The location containing the property.</param>
+    /// <param name="tile">The tile containing the action property.</param>
+    /// <param name="args">The action arguments.</param>
+    /// <returns>Returns whether the action was handled.</returns>
+    private bool OnCentralGarbageCanAction(GameLocation location, Point tile, string[] args)
+    {
+        // read args
+        if (!ArgUtility.TryGet(args, 2, out string garbageCanId, out string error))
+        {
+            this.Monitor.LogOnce($"Location {location.NameOrUniqueName} has invalid {args[0]} property: {error}.", LogLevel.Warn);
+            return false;
+        }
+        garbageCanId = $"{Constant.ModId}_{garbageCanId}";
+
+        // apply
+        if (!Game1.netWorldState.Value.CheckedGarbage.Contains(garbageCanId))
+        {
+            // rummage
+            Vector2 tileVector = Utility.PointToVector2(tile);
+            location.CheckGarbage(garbageCanId, tileVector, Game1.player, playAnimations: false, logError: err => this.Monitor.Log(err, LogLevel.Warn)); // default animation uses the vanilla garbage can texture
+
+            // play animations (derived from GameLocation.CheckGarbage)
+            TemporaryAnimatedSpriteList trashCanSprites = [];
+            location.playSound("trashcan");
+            for (int i = 0; i < 5; i++)
+            {
+                var particleSprite = new TemporaryAnimatedSprite(Game1.mouseCursors2Name, new Microsoft.Xna.Framework.Rectangle(22 + Game1.random.Next(4) * 4, 32, 4, 4), tileVector * Game1.tileSize + new Vector2(Game1.random.Next(13), -3 + Game1.random.Next(3)) * Game1.pixelZoom, false, 0f, Color.White)
+                {
+                    interval = 500,
+                    motion = new Vector2(Game1.random.Next(-2, 3), -5f),
+                    acceleration = new Vector2(0, .4f),
+                    layerDepth = ((tile.Y + 1) * Game1.tileSize + 3) / 10000f,
+                    scale = Game1.pixelZoom,
+                    color = Utility.getRandomRainbowColor(Game1.random),
+                    delayBeforeAnimationStart = Game1.random.Next(100)
+                };
+                trashCanSprites.Add(particleSprite);
+            }
+            Game1.Multiplayer.broadcastSprites(location, trashCanSprites);
+        }
+
+        return true;
+    }
+
+    /// <summary>Handle the player activating a <see cref="MapSubActions.GiftShop"/> action in the Central Station.</summary>
+    /// <param name="location">The location containing the property.</param>
+    /// <returns>Returns whether the action was handled.</returns>
+    private bool OnCentralGiftShopAction(GameLocation location)
+    {
+        if (Utility.TryOpenShopMenu($"{Constant.ModId}_GiftShop", null as string) && Game1.activeClickableMenu is ShopMenu shop)
+            shop.onPurchase = OnPurchase;
+        return true;
+
+        bool OnPurchase(ISalable salable, Farmer who, int countTaken, ItemStockInformation stock)
+        {
+            if (salable.QualifiedItemId == "(O)388" && location.Name == Constant.CentralStationLocationId)
+                this.ContentManager.OnRareWoodSold(location.Map);
+
+            return false;
+        }
+    }
+
     /// <summary>Handle the player activating a <see cref="MapSubActions.PopUpShop"/> action in the Central Station.</summary>
     /// <returns>Returns whether the action was handled.</returns>
     private bool OnCentralPopupShopAction()
@@ -276,10 +345,10 @@ internal class ModEntry : Mod
 
     /// <summary>Handle the player activating a <see cref="MapSubActions.TouristDialogue"/> action in the Central Station.</summary>
     /// <param name="location">The location containing the property.</param>
-    /// <param name="args">The action arguments.</param>
     /// <param name="tile">The tile containing the action property.</param>
+    /// <param name="args">The action arguments.</param>
     /// <returns>Returns whether the action was handled.</returns>
-    private bool OnCentralTouristAction(GameLocation location, string[] args, Point tile)
+    private bool OnCentralTouristAction(GameLocation location, Point tile, string[] args)
     {
         // read args
         if (!ArgUtility.TryGet(args, 2, out string mapId, out string error) || !ArgUtility.TryGet(args, 3, out string touristId, out error))

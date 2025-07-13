@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="2" height="3" tilewidth="16" tileheight="16" infinite="0" nextlayerid="38" nextobjectid="267">
+ <tileset firstgid="1" name="centralStation" tilewidth="16" tileheight="16" tilecount="860" columns="20">
+  <image source=".Pathoschild.CentralStation_Tiles.png" width="320" height="592"/>
+ </tileset>
+ <layer id="2" name="Buildings" width="2" height="3">
+  <data encoding="csv">
+0,0,
+659,660,
+679,680
+</data>
+ </layer>
+ <layer id="35" name="Front" width="2" height="3">
+  <data encoding="csv">
+0,639,
+722,723,
+0,0
+</data>
+ </layer>
+</map>

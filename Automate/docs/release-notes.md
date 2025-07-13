@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.4.0
+Released 13 July 2025 for SMAPI 4.1.10 or later.
+
+* You can now choose which chests are automated through the config UI (thanks to TWT233!).
+* Fixed tree automation not collecting some rare drops added in Stardew Valley 1.6.
+* Improved translations. Thanks to MakinDay (updated Italian)!
+
 ## 2.3.5
 Released 27 May 2025 for SMAPI 4.1.10 or later.
 

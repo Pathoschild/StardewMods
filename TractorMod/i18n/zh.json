@@ -93,6 +93,13 @@
     "config.hold-to-activate-key.name": "按住以激活功能",
     "config.hold-to-activate-key.tooltip": "如果有指定键位，只有按住此键时才能激活拖拉机功能。",
 
+    // TODO
+    "config.increase-distance-key.name": "Increase Distance",
+    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+
+    "config.reduce-distance-key.name": "Reduce Distance",
+    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+
 
     /****
     ** Trees & bushes
@@ -184,9 +191,8 @@
     "config.clear-dirt-without-fertilizer.name": "填平耕地",
     "config.clear-dirt-without-fertilizer.tooltip": "是否填平已耕的地块。",
 
-    // TODO
-    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
-    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
+    "config.clear-dirt-with-fertilizer.name": "填平施肥过的耕地",
+    "config.clear-dirt-with-fertilizer.tooltip": "是否填平施肥过的耕地地块。",
 
 
     /****

@@ -94,6 +94,11 @@
     "location.cola-machine.2": "(Kola makinesine yaklaşıyorsun. Sen daha hiçbir şey yapmadan, bir şey takırdayarak düşüveriyor.)",
     "location.cola-machine.3": "(Bir şekilde kola makinesinin yardım etmek istediğini hissediyorsun.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+
 
     /*********
     ** Tourist dialogue
@@ -151,5 +156,9 @@
     "tourist.grim-pirate": "Şuradaki izlerden, tüyler ürpertici bir hikâye...#İstasyonun derinliklerinden bir anons duyuldu...#Hay, trenimi kaçırdım.",
 
     "tourist.blackgull-pirate.1": "Titret beni keresteler! Diğerleri neredeler?",
-    "tourist.blackgull-pirate.2": "Kara göründü..."
+    "tourist.blackgull-pirate.2": "Kara göründü...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

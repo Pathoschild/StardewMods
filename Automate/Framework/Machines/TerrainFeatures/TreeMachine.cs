@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Constants;
 using StardewValley.GameData.WildTrees;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
@@ -203,6 +205,18 @@ internal class TreeMachine : BaseMachine<Tree>
                     stack.Push(seed);
                 }
 
+                // drop mystery box
+                if (Utility.tryRollMysteryBox(.03))
+                {
+                    bool forageMastery = Game1.player.stats.Get(StatKeys.Mastery(Farmer.foragingSkill)) > 0;
+                    Item mysteryBox = ItemRegistry.Create(forageMastery ? "(O)GoldenMysteryBox" : "(O)MysteryBox");
+                    stack.Push(mysteryBox);
+                }
+
+                // drop 'rare objects'
+                foreach (Item item in this.TrySpawnRareObject())
+                    stack.Push(item);
+
                 // random Qi bean drop if tree has a seed
                 if (stack.Count > 0 && Game1.random.NextDouble() <= 0.5 && Game1.player.team.SpecialOrderRuleActive("DROP_QI_BEANS"))
                     stack.Push(ItemRegistry.Create("(O)890"));
@@ -220,5 +234,24 @@ internal class TreeMachine : BaseMachine<Tree>
             seed.Quality = SObject.bestQuality;
 
         return seed;
+    }
+
+    /// <summary>Get the items which can be produced by <see cref="Utility.trySpawnRareObject"/>.</summary>
+    private IEnumerable<Item> TrySpawnRareObject()
+    {
+        const double dailyLuckWeight = 1;
+        const double chanceModifier = 2;
+        Random random = Game1.random;
+
+        double luckMod = Game1.player.team.AverageDailyLuck() * dailyLuckWeight;
+
+        if (Game1.player.stats.Get(StatKeys.Mastery(Farmer.farmingSkill)) > 0 && random.NextDouble() < .001 * chanceModifier * luckMod)
+            yield return ItemRegistry.Create("(O)GoldenAnimalCracker");
+
+        if (Game1.stats.DaysPlayed > 2 && random.NextDouble() < .002 * chanceModifier)
+            yield return Utility.getRandomCosmeticItem(random);
+
+        if (Game1.stats.DaysPlayed > 2 && random.NextDouble() < .0006 * chanceModifier)
+            yield return ItemRegistry.Create("(O)SkillBook_" + random.Next(5));
     }
 }

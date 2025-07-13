@@ -94,6 +94,10 @@
     "location.cola-machine.2": "(Ti avvicini al distributore. Prima che tu possa fare qualcosa, un oggetto cade con un colpo secco.)",
     "location.cola-machine.3": "(In qualche modo, percepisci che il distributore ti vuole aiutare.)",
 
+    // employee lounge
+    "location.employee-lockers": "Gli armadietti degli impiegati non sono chiusi, ma senti che qualcosa ti sta guardando.",
+    "location.employee-fridge": "Il pranzo degli impegati. Sarebbe scortese prendere qualcosa.",
+
 
     /*********
     ** Tourist dialogue
@@ -151,5 +155,8 @@
     "tourist.grim-pirate": "Da lontano, arriva un racconto agghiacciante...#Un annuncio sentito nelle profondità della stazione...#Sì, ho perso il treno.",
 
     "tourist.blackgull-pirate.1": "Corpo di mille balene! Dove sono gli altri?",
-    "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro..."
+    "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro...",
+
+    "tourist.bag-dog.1": "(Sta vivendo un'avventura.)",
+    "tourist.bag-dog.2": "(Sta facendo una pausa nella sua borsa letto portatile.)"
 }

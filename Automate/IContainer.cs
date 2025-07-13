@@ -12,6 +12,9 @@ public interface IContainer : IAutomatable, IEnumerable<ITrackedStack>
     /*********
     ** Accessors
     *********/
+    /// <summary>The unique ID for this container type (e.g. the qualified item ID).</summary>
+    string TypeId { get; }
+
     /// <summary>The container name (if any).</summary>
     string Name { get; }
 

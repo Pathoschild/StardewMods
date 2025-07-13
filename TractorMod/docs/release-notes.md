@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 4.24.0
+Released 13 July 2025 for SMAPI 4.1.10 or later.
+
+* Added keybinds to temporarily increase or reduce the tool distance around the tractor (none by default).
+* Improved translations. Thanks to MakinDay (updated Italian) and TWT233 (updated Chinese and Japanese)!
+
 ## 4.23.1
 Released 06 June 2025 for SMAPI 4.1.10 or later.
 

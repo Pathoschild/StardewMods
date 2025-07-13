@@ -8,6 +8,7 @@ using ContentPatcher.Framework.Locations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using ContentPatcher.Framework.Validators;
+using Pathoschild.Stardew.Common.Integrations.Profiler;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
@@ -64,12 +65,13 @@ internal class ScreenManager
     /// <param name="installedMods">The installed mod IDs.</param>
     /// <param name="modTokens">The custom tokens provided by mods.</param>
     /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-    public ScreenManager(IModHelper helper, IMonitor monitor, IInvariantSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators)
+    /// <param name="profiler">The integration with the Profiler mod.</param>
+    public ScreenManager(IModHelper helper, IMonitor monitor, IInvariantSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators, ProfilerIntegration profiler)
     {
         this.Helper = helper;
         this.Monitor = monitor;
         this.TokenManager = new TokenManager(helper.GameContent, installedMods, modTokens);
-        this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
+        this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators, profiler);
         this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, helper.GameContent.ParseAssetName);
         this.CustomLocationManager = new CustomLocationManager(this.Monitor, helper.GameContent);
     }

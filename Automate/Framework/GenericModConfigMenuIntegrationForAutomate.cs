@@ -8,13 +8,13 @@ using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FloorsAndPaths;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.TerrainFeatures;
 using StardewValley.TokenizableStrings;
 
 namespace Pathoschild.Stardew.Automate.Framework;
@@ -129,6 +129,47 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
             get: config => config.JunimoHutBehaviorForSeeds,
             set: (config, value) => config.JunimoHutBehaviorForSeeds = value
         );
+
+        // storage settings
+        menu.AddSectionTitle(I18n.Config_Title_ChestSettings);
+        menu.AddDropdown(
+            name: I18n.Config_DefaultChestOverride_Name,
+            tooltip: I18n.Config_DefaultChestOverride_Desc,
+            get: config => config.ChestsEnabledByDefault.ToString(),
+            set: (config, value) => config.ChestsEnabledByDefault = bool.Parse(value),
+            allowedValues: [bool.TrueString, bool.FalseString],
+            formatAllowedValue: value => bool.Parse(value)
+                ? I18n.Config_ChestOverride_Values_Enabled()
+                : I18n.Config_ChestOverride_Values_Disabled()
+        );
+
+        // per-storage settings
+        foreach ((string itemId, Func<string> getName) in this.GetChestIds())
+        {
+            menu.AddDropdown(
+                name: getName,
+                tooltip: () => I18n.Config_ChestOverride_Desc(chestName: getName(), defaultBehaviorField: I18n.Config_DefaultChestOverride_Name()),
+                get: config => this.GetChestOverride(config, itemId)?.Enabled.ToString() ?? string.Empty,
+                set: (config, value) =>
+                {
+                    if (bool.TryParse(value, out bool parsed))
+                        this.SetChestOverride(config, itemId, parsed);
+                    else
+                        this.SetChestOverride(config, itemId, null);
+                },
+                allowedValues: [string.Empty, bool.TrueString, bool.FalseString],
+                formatAllowedValue: value =>
+                {
+                    if (bool.TryParse(value, out bool parsed))
+                    {
+                        return parsed
+                            ? I18n.Config_ChestOverride_Values_Enabled()
+                            : I18n.Config_ChestOverride_Values_Disabled();
+                    }
+
+                    return I18n.Config_ChestOverride_Values_Default();
+                });
+        }
 
         // per-machine settings
         string treeId = BaseMachine.GetDefaultMachineId<TreeMachine>();
@@ -259,6 +300,58 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     }
 
     /****
+    ** Chest overrides
+    ****/
+    /// <summary>Get the chest IDs and display names to show in the config UI.</summary>
+    private Dictionary<string,Func<string>> GetChestIds()
+    {
+        var itemRepo = new ItemRepository();
+        return itemRepo
+            .GetAll(ItemRegistry.type_object, includeVariants: false)
+            .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false))
+            .Where(match => match.Item.HasContextTag(ModConstants.StorageTag))
+            .ToDictionary(
+                match => match.Item.QualifiedItemId,
+                match => new Func<string>(() => this.GetTranslatedChestName(match.Item.QualifiedItemId))
+            );
+    }
+
+    /// <summary>Get the translated display name for a chest.</summary>
+    /// <param name="itemId">The qualified item ID for the chest.</param>
+    private string GetTranslatedChestName(string itemId)
+    {
+        ParsedItemData data = ItemRegistry.GetDataOrErrorItem(itemId);
+        return I18n
+            .GetByKey($"config.storages.{data.InternalName.Replace(" ", "-")}")
+            .Default(data.DisplayName);
+    }
+
+    /// <summary>Get the override for a given chest, if set.</summary>
+    /// <param name="config">The config to read.</param>
+    /// <param name="itemId">The qualified item ID for the chest.</param>
+    private ModConfigStorage? GetChestOverride(ModConfig config, string itemId)
+    {
+        return config.ChestOverrides.GetValueOrDefault(itemId);
+    }
+
+    /// <summary>Set the override for a chest.</summary>
+    /// <param name="config">The mod configuration.</param>
+    /// <param name="itemId">The qualified item ID for the chest.</param>
+    /// <param name="value">The value to set.</param>
+    private void SetChestOverride(ModConfig config, string itemId, bool? value)
+    {
+        if (value is null)
+            config.ChestOverrides.Remove(itemId);
+        else
+        {
+            if (!config.ChestOverrides.TryGetValue(itemId, out ModConfigStorage? @override))
+                config.ChestOverrides[itemId] = @override = new ModConfigStorage();
+
+            @override.Enabled = value.Value;
+        }
+    }
+
+    /****
     ** Machine overrides
     ****/
     /// <summary>Get the machine IDs and display names to show in the config UI.</summary>
@@ -334,14 +427,14 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     /// <summary>Get the custom override for a mod, if any.</summary>
     /// <param name="config">The mod configuration.</param>
     /// <param name="name">The machine name.</param>
-    private ModConfigMachine? GetCustomOverride(ModConfig config, string name)
+    private ModConfigMachine? GetMachineOverride(ModConfig config, string name)
     {
         return config.MachineOverrides.GetValueOrDefault(name);
     }
 
     /// <summary>Get the default override for a mod, if any.</summary>
     /// <param name="name">The machine name.</param>
-    private ModConfigMachine? GetDefaultOverride(string name)
+    private ModConfigMachine? GetDefaultMachineOverride(string name)
     {
         return this.Data.DefaultMachineOverrides.GetValueOrDefault(name);
     }
@@ -352,8 +445,8 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     private bool IsMachineEnabled(ModConfig config, string name)
     {
         return
-            this.GetCustomOverride(config, name)?.Enabled
-            ?? this.GetDefaultOverride(name)?.Enabled
+            this.GetMachineOverride(config, name)?.Enabled
+            ?? this.GetDefaultMachineOverride(name)?.Enabled
             ?? true;
     }
 
@@ -373,8 +466,8 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     private int GetMachinePriority(ModConfig config, string name)
     {
         return
-            this.GetCustomOverride(config, name)?.Priority
-            ?? this.GetDefaultOverride(name)?.Priority
+            this.GetMachineOverride(config, name)?.Priority
+            ?? this.GetDefaultMachineOverride(name)?.Priority
             ?? 0;
     }
 
@@ -385,11 +478,11 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     private void SetMachineOptions(ModConfig config, string name, Action<ModConfigMachine> set)
     {
         // get updated settings
-        ModConfigMachine options = this.GetCustomOverride(config, name) ?? new();
+        ModConfigMachine options = this.GetMachineOverride(config, name) ?? new();
         set(options);
 
         // check if it matches the default
-        ModConfigMachine? defaults = this.GetDefaultOverride(name);
+        ModConfigMachine? defaults = this.GetDefaultMachineOverride(name);
         bool isDefault = defaults != null
             ? options.Enabled == defaults.Enabled && options.Priority == defaults.Priority
             : !options.GetCustomSettings().Any();

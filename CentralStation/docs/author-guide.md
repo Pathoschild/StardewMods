@@ -360,16 +360,17 @@ you can use to add destinations from a C# mod.
 
 To add stops through the API:
 
-1. Copy [`ICentralStationApi.cs`](../ICentralStationApi.cs) into your mod code, and **remove any methods you don't
-   need**.
-2. In [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched),
+1. Copy [the API interfaces](../Api) into your ocde.
+2. **Remove any methods (and interfaces) you don't need**.  
+   _This reduces the chance that your mod breaks due to an API change._
+3. In [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched),
    get the API:
    ```c#
    var centralStation = this.Helper.ModRegistry.GetApi<ICentralStationApi>("Pathoschild.CentralStation");
    if (centralStation is null)
        return; // Central Station not installed
    ```
-3. Call methods on the API (see IntelliSense for documentation).
+4. Call methods on the API (see IntelliSense for documentation).
 
    For example, to register a stop:
    ```c#
@@ -380,10 +381,19 @@ To add stops through the API:
        toTile: null,
        toFacingDirection: Game1.down,
        cost: 100,
-       network: "Bus",
+       network: StopNetworks.Bus,
        condition: null
    );
    ```
+
+The available methods are:
+
+method              | usage
+------------------- | -----
+`GetAllStops`       | Get all currently registered destinations.
+`GetAvailableStops` | Get the destinations which are available at this moment from the player's current location.
+`RegisterStop`      | Add a destination that can be visited by the player, or replace one you previously registered from the same mod.
+`RemoveStop`        | Remove a stop that was registered by the same mod.
 
 ## Lore guide
 If you're just using Central Station's ticket machines, you can ignore this section.

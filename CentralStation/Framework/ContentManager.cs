@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
 using Pathoschild.Stardew.CentralStation.Framework.ContentModels;
 using Pathoschild.Stardew.Common;
@@ -13,7 +15,9 @@ using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.GameData;
 using StardewValley.Locations;
+using StardewValley.Network;
 using StardewValley.TokenizableStrings;
+using StardewValley.Util;
 using xTile;
 using xTile.Layers;
 using xTile.Tiles;
@@ -145,8 +149,8 @@ internal class ContentManager
     }
 
     /// <summary>Get the stops which can be selected from the current location.</summary>
-    /// <param name="networks">The networks for which to get stops.</param>
-    public IEnumerable<Stop> GetAvailableStops(StopNetworks networks)
+    /// <param name="shouldEnableStop">A filter which returns true for the stops to return.</param>
+    public IEnumerable<Stop> GetStops(ShouldEnableStopDelegate shouldEnableStop)
     {
         foreach ((string id, StopModel? stop) in this.ContentHelper.Load<Dictionary<string, StopModel?>>(AssetNames.Stops))
         {
@@ -159,7 +163,7 @@ internal class ContentManager
                 this.Monitor.LogOnce($"Ignored {stop.Network} destination to {stop.ToLocation} with no ID field.", LogLevel.Warn);
                 continue;
             }
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, id) is null)
+            if (this.ModRegistry.GetFromNamespacedId(id, requirePrefix: true) is null)
             {
                 this.Monitor.LogOnce($"Ignored {stop.Network} destination with ID '{id}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_StopId`.", LogLevel.Warn);
                 continue;
@@ -171,7 +175,7 @@ internal class ContentManager
             }
 
             // match if applicable
-            if (this.ShouldEnableStop(id, stop.ToLocation, stop.Condition, stop.Network, networks))
+            if (shouldEnableStop(id, stop.ToLocation, stop.Condition, stop.Network))
             {
                 yield return new Stop(
                     Id: id,
@@ -190,26 +194,6 @@ internal class ContentManager
                 );
             }
         }
-    }
-
-    /// <summary>Get whether a stop should be enabled from the current location.</summary>
-    /// <param name="id"><inheritdoc cref="Stop.Id"/></param>
-    /// <param name="stopLocation"><inheritdoc cref="Stop.ToLocation"/></param>
-    /// <param name="condition"><inheritdoc cref="Stop.Condition"/></param>
-    /// <param name="stopNetworks"><inheritdoc cref="Stop.Network"/></param>
-    /// <param name="travelingNetworks">The networks on which the player is traveling.</param>
-    public bool ShouldEnableStop(string id, string stopLocation, string? condition, StopNetworks stopNetworks, StopNetworks travelingNetworks)
-    {
-        if (!stopNetworks.HasAnyFlag(travelingNetworks) || stopLocation == Game1.currentLocation.Name || !GameStateQuery.CheckConditions(condition))
-            return false;
-
-        if (Game1.getLocationFromName(stopLocation) is null)
-        {
-            this.Monitor.LogOnce($"Ignored {stopNetworks} destination with ID '{id}' because its target location '{stopLocation}' could not be found.", LogLevel.Warn);
-            return false;
-        }
-
-        return true;
     }
 
     /// <summary>Get a translation provided by the content pack.</summary>
@@ -401,6 +385,20 @@ internal class ContentManager
         return true;
     }
 
+    /// <summary>Update the Central Station map when the rare wood is sold.</summary>
+    /// <param name="map">The map to edit.</param>
+    public void OnRareWoodSold(Map map)
+    {
+        IAssetDataForMap editor = this.ContentHelper.GetPatchHelper(map, map.assetPath).AsMap();
+
+        editor.PatchMap(
+            source: this.ContentHelper.Load<Map>($"Maps/{Constant.ModId}_EmptyWoodPedestal"),
+            sourceArea: new Rectangle(0, 0, 2, 3),
+            targetArea: new Rectangle(57, 25, 2, 3),
+            PatchMapMode.ReplaceByLayer
+        );
+    }
+
 
     /*********
     ** Private methods
@@ -477,8 +475,10 @@ internal class ContentManager
     /// <param name="assetData">The asset data.</param>
     private void EditCentralStationMap(IAssetData assetData)
     {
-        var map = assetData.AsMap().Data;
+        var editor = assetData.AsMap();
+        var map = editor.Data;
 
+        // dark station
         if (this.StationDark.Value)
         {
             // make it darker
@@ -530,8 +530,16 @@ internal class ContentManager
                 }
             }
         }
-        else
-            this.AddCentralStationTourists(assetData.AsMap());
+
+        // empty wood pedestal if sold
+        SynchronizedShopStock syncedShop = Game1.player.team.synchronizedShopStock;
+        string woodSyncId = $"{Constant.ModId}_GiftShop/{Game1.player.UniqueMultiplayerID}/Wood";
+        var syncedStock = syncedShop.GetType().GetField("stockDictionary", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.GetValue(syncedShop) as NetStringDictionary<int, NetInt>;
+        if (syncedStock != null && syncedStock.TryGetValue(woodSyncId, out int stock) && stock <= 0)
+            this.OnRareWoodSold(map);
+
+        // add tourists
+        this.AddCentralStationTourists(editor);
     }
 
     /// <summary>Add random tourist NPCs to the Central Station map.</summary>
@@ -576,7 +584,7 @@ internal class ContentManager
                 this.Monitor.LogOnce("Ignored tourist map with no ID field.", LogLevel.Warn);
                 continue;
             }
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, mapId, allowModOnlyId: true) is null)
+            if (this.ModRegistry.GetFromNamespacedId(mapId) is null)
             {
                 this.Monitor.LogOnce($"Ignored tourist map with ID '{mapId}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_TouristMapId`.", LogLevel.Warn);
                 continue;
@@ -780,7 +788,7 @@ internal class ContentManager
     {
         foreach ((string id, List<string?>? dialogues) in this.ContentHelper.Load<Dictionary<string, List<string?>?>>(AssetNames.Bookshelf))
         {
-            if (CommonHelper.TryGetModFromStringId(this.ModRegistry, id, allowModOnlyId: true) is null)
+            if (this.ModRegistry.GetFromNamespacedId(id) is null)
             {
                 this.Monitor.LogOnce($"Ignored bookshelf messages with ID '{id}': IDs must be prefixed with the exact unique mod ID, like `Example.ModId_StopId`.", LogLevel.Warn);
                 continue;

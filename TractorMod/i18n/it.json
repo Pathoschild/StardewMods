@@ -92,6 +92,12 @@
     "config.hold-to-activate-key.name": "Tieni premuto per attivare",
     "config.hold-to-activate-key.tooltip": "Se specificato, il trattore agirà solo quando si tiene premuto questo pulsante. Se non viene specificato nulla, il trattore funzionerà automaticamente durante la guida.",
 
+    "config.increase-distance-key.name": "Aumenta la distanza",
+    "config.increase-distance-key.tooltip": "Aumenta temporaneamente di uno la distanza a cui vengono applicati gli strumenti intorno al trattore, fino al massimo consigliato di {{maxRecommendedValue}} caselle. Questo vale fino a quando non si ricarica il salvataggio.",
+
+    "config.reduce-distance-key.name": "Riduci la distanza",
+    "config.reduce-distance-key.tooltip": "Riduce temporaneamente di uno la distanza a cui vengono applicati gli strumenti intorno al trattore, fino al minimo consigliato di 1 casella. Questo vale fino a quando non si ricarica il salvataggio.",
+
 
     /****
     ** Trees & bushes

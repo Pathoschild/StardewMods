@@ -77,6 +77,12 @@ internal class ModEntry : Mod
     /// <remarks>Due to how that asset works, audio changes are applicable for the remainder of the session even if we later remove the entries from the asset.</remarks>
     private bool AppliedAudioChanges;
 
+    /// <summary>The current opacity of the tractor radius if it's being temporarily displayed, as a value between 0 (transparent) and 1 (default).</summary>
+    private readonly PerScreen<float> HighlightDistanceAlpha = new();
+
+    /// <summary>The temporary radius, or -1 for the default radius.</summary>
+    private readonly PerScreen<int> TemporaryDistance = new(() => -1);
+
 
     /*********
     ** Public methods
@@ -105,7 +111,7 @@ internal class ModEntry : Mod
         );
         this.TractorManagerImpl = new(() =>
         {
-            var manager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection, () => this.TextureManager.BuffIconTexture, this.AudioManager);
+            var manager = new TractorManager(this.Config, this.GetDistance, this.Keys, this.Helper.Reflection, () => this.TextureManager.BuffIconTexture, this.AudioManager);
             this.UpdateConfigFor(manager);
             return manager;
         });
@@ -194,6 +200,9 @@ internal class ModEntry : Mod
             else
                 this.IsEnabled = true;
         }
+
+        this.TemporaryDistance.Value = -1;
+        this.HighlightDistanceAlpha.Value = 0;
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted" />
@@ -443,8 +452,16 @@ internal class ModEntry : Mod
             return;
 
         // render debug radius
-        if (this.Config.HighlightRadius && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager.IsCurrentPlayerRiding)
-            this.TractorManager.DrawRadius(Game1.spriteBatch);
+        if ((this.Config.HighlightRadius || this.HighlightDistanceAlpha.Value > 0) && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager.IsCurrentPlayerRiding)
+        {
+            if (this.Config.HighlightRadius)
+                this.TractorManager.DrawRadius(Game1.spriteBatch, 1f);
+            else
+            {
+                this.TractorManager.DrawRadius(Game1.spriteBatch, Math.Min(this.HighlightDistanceAlpha.Value, 1f));
+                this.HighlightDistanceAlpha.Value -= ModConstants.HighlightDistanceFade;
+            }
+        }
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />
@@ -457,6 +474,10 @@ internal class ModEntry : Mod
             this.SummonTractor();
         else if (this.Keys.DismissTractor.JustPressed() && Game1.player.isRidingHorse())
             this.DismissTractor(Game1.player.mount);
+        else if (this.Keys.IncreaseDistance.JustPressed() && this.TractorManager.IsCurrentPlayerRiding)
+            this.OffsetTemporaryDistance(1);
+        else if (this.Keys.ReduceDistance.JustPressed() && this.TractorManager.IsCurrentPlayerRiding)
+            this.OffsetTemporaryDistance(-1);
     }
 
     /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived" />
@@ -610,6 +631,33 @@ internal class ModEntry : Mod
 
         // warp home
         TractorManager.SetLocation(tractor, location, tile);
+    }
+
+    /// <summary>Temporarily increase or reduce the tractor tool distance by the given amount, and highlight the resulting radius.</summary>
+    /// <param name="offset">The amount to add to the distance.</param>
+    private void OffsetTemporaryDistance(int offset)
+    {
+        // get current distance
+        int distance = this.TemporaryDistance.Value;
+        if (distance < 0)
+            distance = this.Config.Distance;
+
+        // apply offset
+        distance = MathHelper.Clamp(distance + offset, 1, ModConstants.MaxRecommendedDistance);
+        if (distance == this.Config.Distance)
+            distance = -1;
+
+        // update
+        this.TemporaryDistance.Value = distance;
+        this.HighlightDistanceAlpha.Value = ModConstants.HighlightDistanceTicks * ModConstants.HighlightDistanceFade;
+    }
+
+    /// <summary>Get the tool effect distance to apply.</summary>
+    private int GetDistance()
+    {
+        return this.TemporaryDistance.Value > -1
+            ? this.TemporaryDistance.Value
+            : this.Config.Distance;
     }
 
     /// <summary>Get all available locations.</summary>

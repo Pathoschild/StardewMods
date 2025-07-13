@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -6,7 +7,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.CentralStation.Framework;
 
 /// <inheritdoc cref="ICentralStationApi" />
-public class CentralStationApi : ICentralStationApi
+public class CentralStationApi : ICentralStationApi, IDeprecatedCentralStationApi
 {
     /*********
     ** Fields
@@ -30,8 +31,23 @@ public class CentralStationApi : ICentralStationApi
         this.StopManager = stopManager;
     }
 
+    /****
+    ** Main API
+    ****/
     /// <inheritdoc />
-    public void RegisterStop(string id, Func<string> displayName, string toLocation, Point? toTile, int toFacingDirection, int cost, string network, string? condition)
+    public IEnumerable<IStop> GetAllStops(StopNetworks? network = null)
+    {
+        return this.StopManager.GetStops(network ?? StopManager.AllNetworks, null);
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<IStop> GetAvailableStops(StopNetworks? network = null)
+    {
+        return this.StopManager.GetAvailableStops(network ?? StopManager.AllNetworks);
+    }
+
+    /// <inheritdoc />
+    public void RegisterStop(string id, Func<string> displayName, string toLocation, Point? toTile, int toFacingDirection, int cost, StopNetworks network, string? condition)
     {
         // validate
         if (string.IsNullOrWhiteSpace(id))
@@ -40,10 +56,8 @@ public class CentralStationApi : ICentralStationApi
             throw this.BuildArgRequiredError(id, nameof(displayName));
         if (string.IsNullOrWhiteSpace(toLocation))
             throw this.BuildArgRequiredError(id, nameof(toLocation));
-        if (string.IsNullOrWhiteSpace(network))
+        if (!Enum.IsDefined(network))
             throw this.BuildArgRequiredError(id, nameof(network));
-        if (!Utility.TryParseEnum(network, out StopNetworks parsedNetwork))
-            throw this.BuildArgError(id, nameof(network), $"the '{nameof(network)}' value '{network}' can't be parsed as a valid network; must be one of ['{string.Join("', '", Enum.GetNames<StopNetworks>())}'] or a combination thereof");
 
         // normalize
         id = this.GetStopId(id);
@@ -64,7 +78,7 @@ public class CentralStationApi : ICentralStationApi
             ToTile: toTile,
             ToFacingDirection: toFacingDirection,
             Cost: cost,
-            Network: parsedNetwork,
+            Network: network,
             Condition: condition
         );
     }
@@ -75,6 +89,20 @@ public class CentralStationApi : ICentralStationApi
         id = this.GetStopId(id);
 
         return this.StopManager.ModApiStops.Remove(id);
+    }
+
+    /****
+    ** Deprecated API
+    ****/
+    /// <inheritdoc />
+    public void RegisterStop(string id, Func<string> displayName, string toLocation, Point? toTile, int toFacingDirection, int cost, string network, string? condition)
+    {
+        // validate
+        if (!Utility.TryParseEnum(network, out StopNetworks parsedNetwork))
+            throw this.BuildArgError(id, nameof(network), $"the '{nameof(network)}' value '{network}' can't be parsed as a valid network; must be one of ['{string.Join("', '", Enum.GetNames<StopNetworks>())}'] or a combination thereof");
+
+        // register stop
+        this.RegisterStop(id, displayName, toLocation, toTile, toFacingDirection, cost, parsedNetwork, condition);
     }
 
 

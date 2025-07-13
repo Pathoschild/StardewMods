@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.51.2
+Released 13 July 2025 for SMAPI 4.3.1 or later.
+
+* You can now open the search menu (`Shift` + `F1`) while a lookup is open.
+* Updated to use the new ID parsing support in SMAPI 4.3.x.
+* Fixed item lookup for fish not showing spawn rules which randomly choose a fish ID.
+* Fixed item lookup for machines showing weeds for some custom machines which output the same item.
+* Fixed item lookup for machines having overlapped text for some complex recipes.
+* Fixed search UI overlapping tall building sprites with the next row.
+
 ## 1.51.1
 Released 06 June 2025 for SMAPI 4.1.10 or later.
 

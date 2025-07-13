@@ -94,6 +94,10 @@
     "location.cola-machine.2": "(Du näherst dich dem Cola-Automaten. Bevor du etwas tun konntest, fällt ein Gegenstand mit einem Poltern heraus).",
     "location.cola-machine.3": "(Irgendwie hast du das Gefühl, der Cola-Automat will dir helfen.)",
 
+    // employee lounge
+    // TODO
+    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
+    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
 
     /*********
     ** Tourist dialogue
@@ -151,5 +155,9 @@
     "tourist.grim-pirate": "Von jenen Gleisen her, 'ne schaurige Mär...#Ne Ankündigung, die man in den Tiefen des Bahnhofs vernahm...#Aye, ich hab' meinen Zug verpasst.",
 
     "tourist.blackgull-pirate.1": "Heiliges Kanonenrohr! Wo sind die anderen?",
-    "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord..."
+    "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord...",
+
+    // TODO
+    "tourist.bag-dog.1": "(She's on an adventure.)",
+    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
 }

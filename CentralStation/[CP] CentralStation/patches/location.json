@@ -27,6 +27,11 @@
         },
         {
             "Action": "Load",
+            "Target": "Maps/{{MainModId}}_EmptyWoodPedestal",
+            "FromFile": "assets/centralStation_emptyWoodPedestal.tmx"
+        },
+        {
+            "Action": "Load",
             "Target": "Maps/{{MainModId}}_Tiles",
             "FromFile": "assets/.Pathoschild.CentralStation_Tiles.png"
         },
@@ -50,6 +55,104 @@
                         {
                             "Id": "CentralStation",
                             "LocationName": "{{MainModId}}_CentralStation"
+                        }
+                    ]
+                }
+            }
+        },
+
+        // garbage cans
+        {
+            "Action": "EditData",
+            "Target": "Data/GarbageCans",
+            "TargetField": [ "GarbageCans" ],
+            "Entries": {
+                "{{MainModId}}_FoodCourt": {
+                    "Items": [
+                        // food court shop item
+                        {
+                            "Id": "ExpensiveFood",
+                            "RandomItemId": [
+                                "(O)253", // triple shot espresso
+                                "(O)Raisins", // raisins
+                                "(O)904", // banana pudding
+                                "(O)220", // chocolate cake
+                                "(O)611" // blackberry cobbler
+                            ],
+                            "Condition": "RANDOM 0.1"
+                        },
+                        {
+                            "Id": "CommonFood",
+                            "RandomItemId": [
+                                "FLAVORED_ITEM Juice (O)613", // apple juice
+                                "FLAVORED_ITEM Juice (O)635", // orange juice
+                                "(O)395", // coffee
+
+                                "(O)194", // fried egg
+                                "(O)229", // tortilla
+                                "(O)205", // fried mushroom
+                                "(O)196", // salad
+                                "(O)241", // survival burger
+                                "(O)206", // pizza
+                                "(O)610", // fruit salad
+
+                                "(O)613", // apple
+                                "(O)91", // banana
+                                "(O)635", // orange
+                                "(O)832", // pineapple
+                                "(O)724", // maple syrup
+                                "(O)233", // ice cream
+                                "(O)223", // cookie
+                                "(O)612" // cranberry candy
+                            ],
+                            "Condition": "RANDOM 0.2 @addDailyLuck"
+                        }
+                    ]
+                },
+                "{{MainModId}}_GiftShop": {
+                    "Items": [
+                        // select gift shop items
+                        {
+                            "Id": "ExpensiveGifts",
+                            "RandomItemId": [
+                                "(P)6", // grass skirt
+                                "(S)1134", // bikini top
+                                "(S)1297", // island bikini
+                                "(S)1186", // holiday shirt
+                                "(S)1296", // tropical sunrise shirt
+                                "(S)1193", // ocean shirt
+                                "(S)1204", // vacation shirt
+                                "(S)1212", // sunset shirt
+                                "(S)1105", // Joja shirt
+                                "(S)1260" // rain coat
+                            ],
+                            "Condition": "RANDOM 0.05"
+                        },
+                        {
+                            "Id": "Wood",
+                            "ItemId": "(O)388",
+                            "Condition": "RANDOM 0.1"
+                        },
+                        {
+                            "Id": "CommonGifts",
+                            "RandomItemId": [
+                                "(H)88", // sunglasses
+                                "(H)55", // fishing hat
+                                "(H)54", // floppy beanie
+                                "(H)89", // goggles
+                                "(H)68", // propeller hat
+                                "(P)1" // shorts
+                            ],
+                            "Condition": "RANDOM 0.2"
+                        }
+                    ]
+                },
+                "{{MainModId}}_TicketArea": {
+                    "Items": [
+                        {
+                            "Id": "MovieTicket",
+                            "ItemId": "(O)809",
+                            "Condition": "RANDOM 0.05, PLAYER_HAS_MAIL Host ccMovieTheater"
                         }
                     ]
                 }
@@ -97,7 +200,9 @@
             "Action": "EditData",
             "Target": "Strings/StringsFromMaps",
             "Entries": {
-                "{{MainModId}}_TransitAreaDoors": "{{i18n: location.transit-area-doors}}"
+                "{{MainModId}}_TransitAreaDoors": "{{i18n: location.transit-area-doors}}",
+                "{{MainModId}}_EmployeeLockers": "{{i18n: location.employee-lockers}}",
+                "{{MainModId}}_EmployeeFridge": "{{i18n: location.employee-fridge}}"
             }
         },
 
@@ -122,6 +227,18 @@
                 "{{MainModId}}_Tiles/9/7": "1/1/up/highback_chair/9/7/false/Maps\\{{MainModId}}_Tiles",
                 "{{MainModId}}_Tiles/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles",
 
+                // cafeteria 2-tile white stool
+                "{{MainModId}}_Tiles/7/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 2-tile purple stool
+                "{{MainModId}}_Tiles/8/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 1-tile white stool
+                "{{MainModId}}_Tiles/9/20": "1/1/down/stool short/-1/-1/false",
+
+                // cafeteria 1-tile purple stool
+                "{{MainModId}}_Tiles/10/20": "1/1/down/stool short/-1/-1/false",
+
                 /*********
                 ** HACK for SMAPI 4.1.10 and earlier
                 ** The game's Data/ChairTiles logic is hardcoded to assume a file extension, so the key for
@@ -142,7 +259,19 @@
                 // bench facing up
                 "Pathoschild/8/7": "1/1/up/custom 0.25 0 0.1/8/7/false/Maps\\{{MainModId}}_Tiles",
                 "Pathoschild/9/7": "1/1/up/highback_chair/9/7/false/Maps\\{{MainModId}}_Tiles",
-                "Pathoschild/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles"
+                "Pathoschild/10/7": "1/1/up/custom -0.25 0 0.1/9/7/false/Maps\\{{MainModId}}_Tiles",
+
+                // cafeteria 2-tile white stool
+                "Pathoschild/7/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 2-tile purple stool
+                "Pathoschild/8/20": "1/1/down/stool tall/-1/-1/false",
+
+                // cafeteria 1-tile white stool
+                "Pathoschild/9/20": "1/1/down/stool short/-1/-1/false",
+
+                // cafeteria 1-tile purple stool
+                "Pathoschild/10/20": "1/1/down/stool short/-1/-1/false"
             }
         },
 

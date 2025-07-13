@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <RootNamespace>Pathoschild.Stardew.CentralStation</RootNamespace>
 
     <IgnoreModFilePaths>assets/.paths.png, assets/.spring_outdoorsTileSheet.png, assets/.spring_outdoorsTileSheet2.png, assets/.spring_Shadows.png</IgnoreModFilePaths>
@@ -11,7 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ContentPacks Include="[CP] CentralStation" Version="$(Version)" />
+    <ContentPacks
+      Include="[CP] CentralStation"
+      Version="$(Version)"
+      IgnoreModFilePaths="assets/desert_festival_tilesheet.png, assets/Festivals.png, assets/MovieTheater_TileSheet.png, assets/paths.png, assets/pirates_tilesheet.png, assets/townInterior.png, assets/walls_and_floors.png"
+    />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

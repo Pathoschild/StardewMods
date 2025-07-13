@@ -3,10 +3,12 @@
 
 ## Contents
 * [FAQs](#faqs)
-* [Extensibility for modders](#extensibility-for-modders)
-  * [APIs](#apis)
-  * [Chest automation options](#chest-automation-options)
+* [Basic extensibility for mod authors](#basic-extensibility-for-mod-authors)
+  * [Custom chest types](#custom-chest-types)
   * [Custom chest capacity](#custom-chest-capacity)
+  * [Chest automation options](#chest-automation-options)
+* [Advanced extensibility for mod authors](#advanced-extensibility-for-mod-authors)
+  * [APIs](#apis)
   * [Patch Automate](#patch-automate)
 * [Implementation details](#technical-details)
   * [Core concepts](#core-concepts)
@@ -80,7 +82,24 @@ If you don't want Chests Anywhere's functionality, you have a few options:
   can ask for help in [#making-mods on Discord](https://smapi.io/community#Discord) if you're
   interested.
 
-## Extensibility for modders
+## Basic extensibility for mod authors
+### Custom chest types
+Automate automatically recognizes the vanilla chests as storage containers. To add a new chest type to Automate, you
+need to:
+1. use the `Chest` object type;
+2. and add the `automate_storage` context tag to its [object data](https://stardewvalleywiki.com/Modding:Objects).
+
+This will also let players configure the chest in the config UI automatically.
+
+### Custom chest capacity
+Automate uses the value returned by `chest.GetActualCapacity()`. You can override or patch that method, and Automate
+will update automatically.
+
+### Chest automation options
+You can change how Automate uses an individual chest by editing its `modData` field (e.g. to hide it from Automate). See
+[_mod integrations_ in the Chests Anywhere docs](../../ChestsAnywhere/docs/README.md#mod-integrations) for more info.
+
+## Advanced extensibility for mod authors
 See _[core concepts](#core-concepts)_ before reading this section.
 
 ### APIs
@@ -98,11 +117,15 @@ To access the API:
    ```
 3. Use the API to extend Automate (see below).
 
-#### Add connectors, containers, and machines
+#### Add connectors and machines
 You can add automatables by implementing an `IAutomationFactory`. Automate will handle the core
 logic (like finding entities, linking automatables into groups, etc); you just need to return the
 automatable for a given entity. You can't change the automation for an existing automatable though;
 if Automate already has an automatable for an entity, it won't call your factory.
+
+> [!TIP]
+> To add new chest items as storage, see [_add custom chest types_](#add-custom-chest-types) instead if
+> possible. Chests added through an automation factory won't be configurable by the player.
 
 First, let's create a basic machine that transmutes an iron bar into gold in two hours:
 
@@ -262,14 +285,6 @@ automate.AddFactory(new MyAutomationFactory());
 
 That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
 your custom machine to its normal automation.
-
-### Chest automation options
-You can change how Automate uses a chest by editing its `modData` field. See [_mod integrations_ in
-the Chests Anywhere docs](../ChestsAnywhere/README.md#mod-integrations) for more info.
-
-### Custom chest capacity
-Automate uses the value returned by `chest.GetActualCapacity()`. You can override or patch that
-method, and Automate will update automatically.
 
 ### Patch Automate
 When all else fails, you can patch Automate's logic

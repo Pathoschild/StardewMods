@@ -278,8 +278,17 @@ internal class BuildingSubject : BaseSubject
     /// <remarks>Derived from <see cref="Building.drawInMenu"/>, modified to draw within the target size.</remarks>
     public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
     {
+        float scale = Math.Min(
+            size.X / this.SourceRectangle.Width,
+            size.Y / this.SourceRectangle.Height
+        );
+
+        float actualWidth = this.SourceRectangle.Width * scale;
+        if (actualWidth < size.X)
+            position.X += (int)((size.X - actualWidth) / 2);
+
         Building target = this.Target;
-        spriteBatch.Draw(target.texture.Value, position, this.SourceRectangle, target.color, 0.0f, Vector2.Zero, size.X / this.SourceRectangle.Width, SpriteEffects.None, 0.89f);
+        spriteBatch.Draw(target.texture.Value, position, this.SourceRectangle, target.color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.89f);
         return true;
     }
 

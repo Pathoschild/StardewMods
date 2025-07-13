@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.Profiler;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -71,6 +72,9 @@ internal class PatchManager
         [ContextUpdateType.All] = []
     };
 
+    /// <summary>The integration with the Profiler mod, if it's installed.</summary>
+    private readonly ProfilerIntegration? Profiler;
+
     /// <summary>A low-level content manager which is detached from SMAPI's content API, used to check whether an asset exists in the base game's content folder.</summary>
     private readonly LocalizedContentManager RawFileContentManager;
 
@@ -82,12 +86,16 @@ internal class PatchManager
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="tokenManager">Manages the available contextual tokens.</param>
     /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-    public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators)
+    /// <param name="profiler">The integration with the Profiler mod.</param>
+    public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators, ProfilerIntegration profiler)
     {
         this.Monitor = monitor;
         this.TokenManager = tokenManager;
         this.AssetValidators = assetValidators;
         this.RawFileContentManager = new LocalizedContentManager(Game1.content.ServiceProvider, Game1.content.RootDirectory);
+        this.Profiler = profiler.IsLoaded
+            ? profiler
+            : null; // lets us avoid allocating arguments if Profiler isn't loaded
     }
 
     /****
@@ -549,6 +557,8 @@ internal class PatchManager
     private T? ApplyLoad<T>(LoadPatch patch, IAssetName assetName)
         where T : notnull
     {
+        using IDisposable? _ = this.Profiler?.RecordSection(patch.ContentPack.Manifest.UniqueID, "ApplyLoad", patch.Path.ToString());
+
         if (this.Monitor.IsVerbose)
             this.Monitor.Log($"Patch \"{patch.Path}\" loaded {assetName}.");
 
@@ -603,6 +613,8 @@ internal class PatchManager
     {
         foreach (IPatch patch in patches)
         {
+            using IDisposable? _ = this.Profiler?.RecordSection(patch.ContentPack.Manifest.UniqueID, "ApplyEdit", patch.Path.ToString());
+
             if (this.Monitor.IsVerbose)
                 this.Monitor.Log($"Applied patch \"{patch.Path}\" to {asset.Name}.");
 

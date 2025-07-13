@@ -36,9 +36,18 @@
     "config.junimo-huts.move-into-chests": "Sposta dai capanni Junimo alle casse",
     "config.junimo-huts.move-into-huts": "Sposta dalle casse ai capanni Junimo",
 
+    // per-chest settings
+    "config.title.chest-settings": "Impostazioni baule",
+    "config.default-chest-override.name": "Comportamento predefinito",
+    "config.default-chest-override.desc": "Scegli se i bauli devono essere abilitati o disabilitati per impostazione predefinita (tranne quelli impostati di seguito). I bauli abilitati automatizzeranno le macchine collegate, mentre quelli disabilitati saranno completamente ignorati.",
+    "config.chest-override.desc": "Scegli se gli oggetti {{chestName}} posizionati devono essere abilitati come bauli. Vedi i consigli su '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Predefinito",
+    "config.chest-override.values.enabled": "Abilita",
+    "config.chest-override.values.disabled": "Disabilita",
+
     // per-machine settings
     "config.title.machine-settings": "Comportamento di: {{machineName}}",
-    "config.machine-settings-enabled.Name": "Abilitata",
+    "config.machine-settings-enabled.name": "Abilitata",
     "config.machine-settings-enabled.desc": "Scegli se abilitare l'automazione di: {{machineName}}.",
     "config.machine-settings-priority.name": "Priorità",
     "config.machine-settings-priority.desc": "L'ordine di priorità con cui le macchine: {{machineName}} dovrebbero essere processate rispetto ad altre macchine. Le macchine hanno una priorità predefinita di 0, con valori più alti processati per primi.",
