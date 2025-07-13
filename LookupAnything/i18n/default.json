@@ -185,6 +185,7 @@
     "animal.produce-ready": "Produce ready",
     "animal.growth": "Growth",
     "animal.sells-for": "Sells for",
+    "animal.golden-cracker": "Given animal cracker",
 
     // values
     "animal.complaints.hungry": "wasn't fed yesterday",
@@ -242,6 +243,7 @@
     "building.fish-pond.population": "Population",
     "building.fish-pond.drops": "Drops",
     "building.fish-pond.quests": "Quests",
+    "building.fish-pond.golden-cracker": "Given animal cracker",
 
     // values
     "building.fish-pond.population.empty": "Add a fish to start this pond",
