@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed a broken warp and layering issue in 1.4.0 (thanks to Kisaa!).
+
 ## 1.4.0
 Released 06 June 2025 for SMAPI 4.3.1 or later.
 
