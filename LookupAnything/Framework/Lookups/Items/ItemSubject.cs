@@ -16,6 +16,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
 using StardewValley.Constants;
 using StardewValley.Extensions;
 using StardewValley.GameData.Crops;
@@ -23,6 +24,7 @@ using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Movies;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
+using StardewValley.Network;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.TokenizableStrings;
@@ -839,6 +841,16 @@ internal class ItemSubject : BaseSubject
                 .ToArray();
             if (quests.Any())
                 neededFor.Add(I18n.Item_NeededFor_Quests(quests: I18n.List(quests)));
+        }
+
+        // trash bear
+        {
+            TrashBear? trashBear = Game1.getCharacterFromName<TrashBear>("TrashBear", mustBeVillager: false);
+            if (trashBear != null && !NetWorldState.checkAnywhereForWorldStateID("trashBearDone") &&
+                obj.QualifiedItemId == ItemRegistry.QualifyItemId(trashBear.itemWantedIndex))
+            {
+                neededFor.Add(I18n.Item_NeededFor_TrashBear());
+            }
         }
 
         // yield
