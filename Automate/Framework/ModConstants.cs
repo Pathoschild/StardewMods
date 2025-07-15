@@ -12,8 +12,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             return
             [
                 "130", // chest,
+                "216", // mini-fridge
                 "232", // stone chest
-                "256", // Junimo chest,
+                "256", // Junimo chest
                 "BigChest",
                 "BigStoneChest"
             ];
