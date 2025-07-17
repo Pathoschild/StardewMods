@@ -156,7 +156,6 @@
     "tourist.blackgull-pirate.1": "Heiliges Kanonenrohr! Wo sind die anderen?",
     "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord...",
 
-    // "Bett-Tasche" isn’t really a thing in German, but it’s the literal translation of "bed bag". Maybe "Schlafsack"(sleeping bag) would fit better.
     "tourist.bag-dog.1": "(Sie ist auf einem Abenteuer.)",
     "tourist.bag-dog.2": "(Sie macht gerade eine Pause in ihrer tragbaren Bett-Tasche.)"
 }
