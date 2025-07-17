@@ -95,9 +95,8 @@
     "location.cola-machine.3": "(Irgendwie hast du das Gefühl, der Cola-Automat will dir helfen.)",
 
     // employee lounge
-    // TODO
-    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
-    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+    "location.employee-lockers": "Die Mitarbeiterspinde sind nicht verschlossen, aber du spürst, dass dich etwas beobachtet.",
+    "location.employee-fridge": "Die Mittagessen der Mitarbeitenden. Es wäre unhöflich, sich daran zu bedienen.",
 
     /*********
     ** Tourist dialogue
@@ -157,7 +156,7 @@
     "tourist.blackgull-pirate.1": "Heiliges Kanonenrohr! Wo sind die anderen?",
     "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord...",
 
-    // TODO
-    "tourist.bag-dog.1": "(She's on an adventure.)",
-    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)"
+    // "Bett-Tasche" isn’t really a thing in German, but it’s the literal translation of "bed bag". Maybe "Schlafsack"(sleeping bag) would fit better.
+    "tourist.bag-dog.1": "(Sie ist auf einem Abenteuer.)",
+    "tourist.bag-dog.2": "(Sie macht gerade eine Pause in ihrer tragbaren Bett-Tasche.)"
 }
