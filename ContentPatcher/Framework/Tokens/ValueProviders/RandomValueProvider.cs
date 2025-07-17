@@ -49,7 +49,8 @@ internal class RandomValueProvider : BaseValueProvider
 
         // get random number for input
         string seedString = input.GetRawArgumentValue("key") ?? input.TokenString!.Path;
-        int randomNumber = new Random(unchecked(this.BaseSeed + this.GetDeterministicHashCode(seedString))).Next();
+        int seed = Utility.CreateRandomSeed(this.BaseSeed, Game1.hash.GetDeterministicHashCode(seedString));
+        int randomNumber = new Random(seed).Next();
 
         // choose value
         return InvariantSets.FromValue(input.PositionalArgs[randomNumber % input.PositionalArgs.Length]);
@@ -77,38 +78,15 @@ internal class RandomValueProvider : BaseValueProvider
         // title.
 
         int daysSinceStart = SDate.Now().DaysSinceStart;
-        int uniqueId = (int)Game1.uniqueIDForThisGame;
+        ulong uniqueId = Game1.uniqueIDForThisGame;
 
         if (!Context.IsWorldReady && SaveGame.loaded != null)
         {
             SaveGame save = SaveGame.loaded;
             daysSinceStart = new SDate(save.dayOfMonth, save.currentSeason, save.year).DaysSinceStart;
-            uniqueId = (int)save.uniqueIDForThisGame;
+            uniqueId = save.uniqueIDForThisGame;
         }
 
-        return unchecked(daysSinceStart + uniqueId);
+        return Utility.CreateRandomSeed(daysSinceStart, uniqueId);
     }
-
-    /// <summary>Get a deterministic hash code for a given string.</summary>
-    /// <param name="str">The string to hash.</param>
-    /// <remarks>This ensures that the same hash code is generated across multiple players in multiplayer, so randomization is in sync. Derived from <a href="https://andrewlock.net/why-is-string-gethashcode-different-each-time-i-run-my-program-in-net-core/#a-deterministic-gethashcode-implementation">code by Andrew Lock</a>.</remarks>
-    private int GetDeterministicHashCode(string str)
-    {
-        unchecked
-        {
-            int hash1 = (5381 << 16) + 5381;
-            int hash2 = hash1;
-
-            for (int i = 0; i < str.Length; i += 2)
-            {
-                hash1 = ((hash1 << 5) + hash1) ^ str[i];
-                if (i == str.Length - 1)
-                    break;
-                hash2 = ((hash2 << 5) + hash2) ^ str[i + 1];
-            }
-
-            return hash1 + (hash2 * 1566083941);
-        }
-    }
-
 }
