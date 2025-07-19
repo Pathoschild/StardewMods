@@ -60,7 +60,7 @@
 只有一个值的令牌最适合以占位符形式使用，但多值的令牌也可以用（显示为以逗号分割的列表）。
 
 #### 条件<a name="conditions"></a>
-你可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
+您可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
 
 每个条件里含有：
 * 一个含有[令牌](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
@@ -86,12 +86,12 @@
 ### 令牌类型<a name="token-types"></a>
 令牌有很多类型，但使用方式都一样。
 
-你不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
+您不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
 
 令牌类型包括（从最常用到最罕见）：
 * [全局令牌](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的令牌。
 * [设置令牌](#config-tokens)是玩家在模组设置选项中可选的值。
-* [动态令牌](#dynamic-tokens)是你定义的值，用来重复利用某些值或利用多个简单令牌构造复杂的令牌。
+* [动态令牌](#dynamic-tokens)是您定义的值，用来重复利用某些值或利用多个简单令牌构造复杂的令牌。
 * _(高级)_ [局部令牌](#local-tokens)和动态令牌类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
 * _(高级)_ [模组提供令牌](#mod-provided-tokens)由玩家安装的其他模组提供。
 
@@ -195,7 +195,7 @@ Content Patcher里的令牌是[集合](https://zh.wikipedia.org/wiki/集合_(数
 `Sun`       | 晴天 (包括节日或者婚礼)。 如果没有指定其它值，这将是默认天气。
 `Rain`      | 没有雷电的雨天。
 `Storm`     | 有雷电的雨天。
-`GreenRain` | [苔雨天](https://zh.stardewvalleywiki.com/天气#苔雨)。
+`GreenRain` | [苔雨天](https://wiki.biligame.com/stardewvalley/天气#苔雨)。
 `Snow`      | 下雪。
 `Wind`      | 起风了，参杂着可见碎片（比如：春天的樱花和秋天的枯叶）。
 _自定义天气_    | 模组自定义的天气，需使用ID表示。
@@ -229,7 +229,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>DailyLuck</td>
 <td>
 
-这个[运气](https://zh.stardewvalleywiki.com/运气)需指定[当前或特定玩家](#target-player)。
+这个[运气](https://wiki.biligame.com/stardewvalley/运气)需指定[当前或特定玩家](#target-player)。
 
 这是一个处于-0.1和0.1之间的小数值。它 **不能** 用
 `{{Range}}`令牌比较，它会产生一系列整数值。这个数值只能在使用
@@ -249,7 +249,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>FarmhouseUpgrade</td>
 <td>
 
-[农舍等级](https://zh.stardewvalleywiki.com/农舍#升级)需指定[当前或特定玩家](#target-player)。正常值为0（初始农舍），1（增加厨房），2（增加婴儿房），和3（增加地窖）。其他模组可能会增加超过这个级别的等级。
+[农舍等级](https://wiki.biligame.com/stardewvalley/农舍#升级)需指定[当前或特定玩家](#target-player)。正常值为0（初始农舍），1（增加厨房），2（增加婴儿房），和3（增加地窖）。其他模组可能会增加超过这个级别的等级。
 
 </td>
 <td><a href="#FarmhouseUpgrade">#</a></td>
@@ -260,7 +260,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>
 
 [当前或特定玩家](#target-player)的任务列表中的任务ID。
-参见[任务数据](https://zh.stardewvalleywiki.com/模组:任务数据)获取有效的任务ID。
+参见[任务数据](https://wiki.biligame.com/stardewvalley/模组:任务数据)获取有效的任务ID。
 
 </td>
 <td><a href="#HasActiveQuest">#</a></td>
@@ -271,7 +271,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>
 
 [当前或特定玩家](#target-player)钓到的鱼的ID。
-另见[物品ID](https://zh.stardewvalleywiki.com/模组:物体)
+另见[物品ID](https://wiki.biligame.com/stardewvalley/模组:物体)
 
 </td>
 <td><a href="#HasCaughtFish">#</a></td>
@@ -281,7 +281,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasConversationTopic</td>
 <td>
 
-[当前或特定玩家](#target-player)正在进行的[对话主题](https://zh.stardewvalleywiki.com/模组:对话#对话主题)。
+[当前或特定玩家](#target-player)正在进行的[对话主题](https://wiki.biligame.com/stardewvalley/模组:对话#对话主题)。
 
 </td>
 <td><a href="#HasConversationTopic">#</a></td>
@@ -291,7 +291,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasCookingRecipe</td>
 <td>
 
-[当前或特定玩家](#target-player)学过的[菜谱](https://zh.stardewvalleywiki.com/烹饪)。
+[当前或特定玩家](#target-player)学过的[菜谱](https://wiki.biligame.com/stardewvalley/烹饪)。
 
 </td>
 <td><a href="#HasCookingRecipe">#</a></td>
@@ -301,7 +301,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasCraftingRecipe</td>
 <td>
 
-[当前或特定玩家](#target-player)学过的[合成制造品](https://zh.stardewvalleywiki.com/打造)。
+[当前或特定玩家](#target-player)学过的[合成制造品](https://wiki.biligame.com/stardewvalley/打造)。
 
 </td>
 <td><a href="#HasCraftingRecipe">#</a></td>
@@ -311,7 +311,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasDialogueAnswer</td>
 <td>
 
-[当前或特定玩家](#target-player)在问题中选过的[回答ID](https://zh.stardewvalleywiki.com/模组:对话#回答ID)。
+[当前或特定玩家](#target-player)在问题中选过的[回答ID](https://wiki.biligame.com/stardewvalley/模组:对话#回答ID)。
 
 </td>
 <td><a href="#HasDialogueAnswer">#</a></td>
@@ -327,7 +327,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 * 非信件邮件ID（用于追踪游戏信息的）；
 * 世界状态ID。
 
-另见[维基上的可用ID列表](https://zh.stardewvalleywiki.com/模组:信件数据#列表)。
+另见[维基上的可用ID列表](https://wiki.biligame.com/stardewvalley/模组:信件数据#列表)。
 
 </td>
 <td><a href="#HasFlag">#</a></td>
@@ -337,7 +337,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasProfession</td>
 <td>
 
-[当前或特定玩家](#target-player)学过的[技能](https://zh.stardewvalleywiki.com/技能)。
+[当前或特定玩家](#target-player)学过的[技能](https://wiki.biligame.com/stardewvalley/技能)。
 
 可能的值有：
 
@@ -369,7 +369,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 
 [当前或特定玩家](#target-player)看过的事件的ID。与 `Data/Events` 里事件的ID匹配。
 
-你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)来查看游戏里的事件ID。
+您可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)来查看游戏里的事件ID。
 
 </td>
 <td><a href="#HasSeenEvent">#</a></td>
@@ -381,7 +381,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 
 [当前或特定玩家](#target-player)去过的地点的内部ID，与 `Data/Locations` 里的地点ID匹配。
 
-你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)查看更多地点ID。
+您可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)查看更多地点ID。
 
 </td>
 <td><a href="#HasVisitedLocation">#</a></td>
@@ -391,7 +391,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td>HasWalletItem</td>
 <td>
 
-当前玩家的[钱包里的特殊物品](https://zh.stardewvalleywiki.com/特殊物品与能力)。
+当前玩家的[钱包里的特殊物品](https://wiki.biligame.com/stardewvalley/特殊物品与能力)。
 
 可能的值为：
 
@@ -402,10 +402,10 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 `ClubCard`（会员卡）                | 解锁沙漠俱乐部。
 `KeyToTheTown` （小镇钥匙）            | 允许玩家在绝大多数时间内无视建筑物开关门时间段进入小镇上的任何建筑物。
 `SpecialCharm` （特殊的魅力）            | 永久提升每天的运气。
-`SkullKey` （头骨钥匙）                | 解锁[骷髅洞穴](https://zh.stardewvalleywiki.com/骷髅洞穴)和星之果实餐吧里的祝尼魔赛车游戏机。
+`SkullKey` （头骨钥匙）                | 解锁[骷髅洞穴](https://wiki.biligame.com/stardewvalley/骷髅洞穴)和星之果实餐吧里的祝尼魔赛车游戏机。
 `MagnifyingGlass` （放大镜）         | 获得找到秘密纸条的能力。
 `DarkTalisman` （黑暗护身符）            | 解锁巫婆沼泽。
-`MagicInk` （魔法墨水）                | 解锁[魔法建筑](https://zh.stardewvalleywiki.com/法师塔#建筑)和[黑暗神龛](https://zh.stardewvalleywiki.com/女巫小屋#神龛)。
+`MagicInk` （魔法墨水）                | 解锁[魔法建筑](https://wiki.biligame.com/stardewvalley/法师塔#建筑)和[黑暗神龛](https://wiki.biligame.com/stardewvalley/女巫小屋#神龛)。
 `BearsKnowledge` （熊的知识）          | 提升美洲大树莓及黑莓3倍的售出价格。
 `SpringOnionMastery` （青葱技术）      | 提升大葱5倍的售出价格。
 
@@ -448,9 +448,9 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 可能的值有：
 
 * `Default` （就在小镇里）；
-* `Desert` （在[沙漠](https://zh.stardewvalleywiki.com/沙漠)）；
-* `Island` （在[姜岛](https://zh.stardewvalleywiki.com/姜岛)）；
-* 或者 `Data/LocationContexts` 里的[自定义地点ID](https://zh.stardewvalleywiki.com/模组:迁移至游戏本体1.6#自定义地点)。
+* `Desert` （在[沙漠](https://wiki.biligame.com/stardewvalley/沙漠)）；
+* `Island` （在[姜岛](https://wiki.biligame.com/stardewvalley/姜岛)）；
+* 或者 `Data/LocationContexts` 里的[自定义地点ID](https://wiki.biligame.com/stardewvalley/模组:迁移至游戏本体1.6#自定义地点)。
 
 ℹ 使用这个令牌前请参考 _[更新速率](../author-guide.md#update-rate)_ 。
 
@@ -462,7 +462,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
-[当前或特定玩家](#target-player)所在地点的内部ID，比如 `FarmHouse` 或者 `Town`。你可以用
+[当前或特定玩家](#target-player)所在地点的内部ID，比如 `FarmHouse` 或者 `Town`。您可以用
 [调试模式](https://www.nexusmods.com/stardewvalley/mods/679)或者[`patch
 summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 
@@ -566,7 +566,7 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 [当前或特定玩家](#target-player)孩子的名字和性别（`Female` 或者 `Male`）。
 
 按出生顺序排列，可用[`valueAt` 参数](#valueAt)指定。比如 
-`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是你最年长的孩子的名字和性别。
+`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是您最年长的孩子的名字和性别。
 
 </td>
 <td><a href="#ChildNames">#</a></td>
@@ -650,7 +650,7 @@ Divorced | 玩家和角色结婚然后又离了。
 <td>FarmCave</td>
 <td>
 
-[农场洞穴](https://zh.stardewvalleywiki.com/山洞)的类型。可取值：`None`（无）， `Bats`（蝙蝠洞），
+[农场洞穴](https://wiki.biligame.com/stardewvalley/山洞)的类型。可取值：`None`（无）， `Bats`（蝙蝠洞），
 `Mushrooms`（蘑菇洞）。
 
 </td>
@@ -692,7 +692,7 @@ _无效类型_ | `Farm`
 <td>FarmType</td>
 <td>
 
-[农场类型](https://zh.stardewvalleywiki.com/农场#农场地图)。有以下取值：
+[农场类型](https://wiki.biligame.com/stardewvalley/农场#农场地图)。有以下取值：
 
 值 | 描述
 ----- | -----------
@@ -989,7 +989,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 获取内容包文件夹中存在的第一个文件路径，给定文件路径列表。可指定任意数量的文件。
 
-每个文件路径必须相对于内容包主文件夹，且不能包含`../`（也就是只能读取你这个模组文件夹里面的东西）。
+每个文件路径必须相对于内容包主文件夹，且不能包含`../`（也就是只能读取您这个模组文件夹里面的东西）。
 
 例如：
 
@@ -1102,7 +1102,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 当前内容包的唯一ID（`manifest.json`的`UniqueID`字段）。
 
-通常用于构建[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID)。
+通常用于构建[唯一字符串ID](https://wiki.biligame.com/stardewvalley/模组:公共数据字段#唯一字符串ID)。
 例如：
 ```json
 "Id": "{{ModId}}_ExampleItem"
@@ -1248,7 +1248,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 }
 ```
 
-注意其他内容包无法定位内部素材键（因此称为内部）。若需允许其他内容包编辑，可使用[`Action: Load`](action-load.md)创建新素材，并使用该素材名。强烈建议使用[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID)以避免冲突：
+注意其他内容包无法定位内部素材键（因此称为内部）。若需允许其他内容包编辑，可使用[`Action: Load`](action-load.md)创建新素材，并使用该素材名。强烈建议使用[唯一字符串ID](https://wiki.biligame.com/stardewvalley/模组:公共数据字段#唯一字符串ID)以避免冲突：
 ```js
 {
     "Format": "2.7.0",
@@ -1856,7 +1856,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 ```
 
 使用模组提供的令牌需满足以下至少一项：
-* 提供令牌的模组是你的内容包的[必需依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)。
+* 提供令牌的模组是您的内容包的[必需依赖](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest#Dependencies_属性)。
 * 或使用令牌的补丁中含有对于令牌提供模组的不可变（不使用任何令牌）`HasMod`条件：
   ```js
   {
@@ -1904,7 +1904,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 
 别名不可与全局令牌或设置令牌重名。
 
-**注意：** 你也可以使用[动态令牌](#dynamic-tokens)给别的令牌取别名：
+**注意：** 您也可以使用[动态令牌](#dynamic-tokens)给别的令牌取别名：
 
 ```js
 {
@@ -1944,7 +1944,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 值     | 含义
 --------- | -------
 `current` | 当前玩家所在区域，默认，无需指定。
-`island`  | [姜岛](https://zh.stardewvalleywiki.com/姜岛).
+`island`  | [姜岛](https://wiki.biligame.com/stardewvalley/姜岛).
 `valley`  | 其他区域。
 
 ### 目标玩家<a name="target-player"></a>

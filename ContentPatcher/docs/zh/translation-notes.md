@@ -1,6 +1,6 @@
 ﻿← [README](README.md)
 
-此文档描述中文翻译的选词
+此文档简要描述译者在进行中文翻译时的选词和部分翻译准则，并非强制性要求，您可以认为这些内容是当前译者的“格式记录”，可供将来的译者参考。
 
 ## 关于此汉化
 
@@ -9,59 +9,72 @@
 - `author-tokens-guide.md` - 已转移到`author-guide/tokens.md`
 
 不汉化以下名词：
-- 任何需要写入模组json的词，如"Action"
+- 任何需要写入模组 json 的词，如 "Action"
 
-Wiki链接换成[中文wiki](https://zh.stardewvalleywiki.com/模组:目录)
+Wiki 链接换成[中文 wiki](https://wiki.biligame.com/stardewvalley/模组:目录)
+
+## 格式和语言风格
+
+- 中文不存在真正的斜体。中文的斜体实际上只是将正方形强行扭曲为平行四边形的伪斜体（Fake Italic），因此应当尽量避免在汉化文档中使用斜体；
+  - 对于关键信息，一般情况下建议使用**加粗**进行替代；对于非关键信息，建议直接移除
+- 中文、英文和数字三者混排并且无空格时视觉感官较差，过于密集的文字会降低可读性，给读者造成压力，一般情况下建议添加空格，减少信息密集度，提高可读性；
+  - 对于汉语文字与英文、数字的混排，需添加空格，例如：Joja 可乐，而非~~Joja可乐~~
+  - 若汉语标点符号与英文、数字相邻，则不用添加空格，例如：1 日、2 日，而非~~1 日、 2 日~~
+- 对于不是用来记录 Markdown 格式的标点符号，应当使用它们的**全角版本**；
+  - 英文环境下，物品列举一般为 a, b, c and d，翻译时应当将**逗号**更换为**顿号**，即 a、b、c 和 d。
+- 对于技术性说明文档，建议使用陈述性书面语体，尽量避免在正文中使用口语化表述。
+
+> 此格式记录部分引用了中文 Wiki 编者 Sizau 的[格式记录](https://wiki.biligame.com/stardewvalley/%E5%B8%AE%E5%8A%A9:%E6%A0%BC%E5%BC%8F)，您也可以参阅该记录并了解部分在 Wiki 编辑中常用的准则（作为参考）。
 
 ## 词汇表
 
-__内容包__: Content Pack
+__内容包__：Content Pack
 
 内容包是给框架模组提供数据的子模组。文档里提到的“内容包”特指Content Patcher的内容包。
 
-__数据素材__: Data Assets
+__数据素材__：Data Assets
 
 素材是游戏数据的组织单位。每一个素材对应一个目标（Target）。
 
-__列表__: List
+__列表__：List
 
 列表是一组没有明确键的非唯一值。列表中的键值对必须写在 `[` 和 `]`之中。
 
-__字典__: Dictionary
+__字典__：Dictionary
 
 字典是包含许多键值对的列表。其中的键必须有唯一ID。同一个字典中的键值对必须写在 `{` 和 `}` 之中。
 
-__模型__: Model
+__模型__：Model
 
-模型是一种预定义的数据结构。对于内容包来说，它和字典相同，只是你不能添加新字段（只能编辑已有字段）。
+模型是一种预定义的数据结构。对于内容包来说，它和字典相同，只是您不能添加新字段（只能编辑已有字段）。
 
-__条目__: Entry
+__条目__：Entry
 
 条目是目标数据中的顶层数据块（即字典中的键值对或列表中的值）。
 
-__字段__: Field
+__字段__：Field
 
 字段是是条目中的一个子块。
 
-__补丁__: Patch
+__补丁__：Patch
 
 一个补丁是`"Changes"`以下的一个条目，类别以`"Action"`字条为准。
 
-__翻译键__: Translation Key/Translation Token
+__翻译键__：Translation Key/Translation Token
 
 翻译系统的tokens和Content Patcher的tokens不是同一个概念，它指的是翻译文档里左手边的键。
 
 英文文档里有混合使用Translation Key和Translation Token，中文翻译统一使用翻译键。
 
-__"local token"__: 局部令牌，专属令牌
+__"local token"__：局部令牌，专属令牌
 
 Content Patcher有两个不同的local tokens概念，翻译中为了区分选了两个不同的词
 * `LocalTokens`字段里出现的令牌是“局部令牌”，仅生效于此补丁或Include的补丁。
 * 每个内容包独有的令牌是“专属令牌”，如`{{ModId}}`，`{{i18n}}`等。这些令牌的值和在不同内容包中不一样。
 
-__上下文__: Context
+__上下文__：Context
 
 计算机术语，在Content Patcher中指某一个范围中令牌的状态，可理解为“当下场景”。
 
 ## 参见<a name="see-also"></a>
-* 其他信息详见[README](README.md)
+* 其他信息请参阅[README](README.md)
