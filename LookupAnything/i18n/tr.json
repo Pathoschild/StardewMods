@@ -185,6 +185,7 @@
     "animal.produce-ready": "Ürün hazır",
     "animal.growth": "Büyüme",
     "animal.sells-for": "Karşılığında sat",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "dün beslenmedi",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "kış için ısıtıcı yok",
     "animal.complaints.not-petted": "bugün henüz sevilmedi",
     "animal.complaints.wild-animal-attack": "gece vahşi hayvanların saldırısına uğradı",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
@@ -356,6 +359,7 @@
     "item.needed-for.gourmet-chef": "gurme şef başarısı (pişir {{recipes}})",
     "item.needed-for.craft-master": "zanaat ustası başarısı (yap {{recipes}})",
     "item.needed-for.quests": "şuanki görevler ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} adet bilinmeyen tarif",
     "item.sells-to.shipping-box": "gönderi kutusu",
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",

@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 2.7.4
+Released 19 July 2025 for SMAPI 4.1.10 or later.
+
+* Fixed `{{Random}}` being less random than intended.
+
 ## 2.7.3
 Released 13 July 2025 for SMAPI 4.1.10 or later.
 

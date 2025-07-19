@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.7.1
+Released 19 July 2025 for SMAPI 4.1.10 or later.
+
+* Improved translations. Thanks to luqasfs (added Portuguese)!
+
 ## 1.7.0
 Released 13 July 2025 for SMAPI 4.1.10 or later.
 

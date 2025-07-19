@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.FarmAnimals;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters;
 
@@ -44,6 +45,7 @@ internal class FarmAnimalSubject : BaseSubject
     public override IEnumerable<ICustomField> GetData()
     {
         FarmAnimal animal = this.Target;
+        FarmAnimalData? animalData = animal.GetAnimalData();
 
         // calculate maturity
         bool isFullyGrown = animal.isAdult();
@@ -51,7 +53,7 @@ internal class FarmAnimalSubject : BaseSubject
         SDate? dayOfMaturity = null;
         if (!isFullyGrown)
         {
-            daysUntilGrown = animal.GetAnimalData().DaysToMature - animal.age.Value;
+            daysUntilGrown = animalData.DaysToMature - animal.age.Value;
             dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
         }
 
@@ -71,6 +73,10 @@ internal class FarmAnimalSubject : BaseSubject
         if (!isFullyGrown)
             yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
         yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+
+        // bonuses
+        if (animalData?.CanEatGoldenCrackers ?? true)
+            yield return new GenericField(I18n.Animal_GoldenCracker(), animal.hasEatenAnimalCracker.Value ? I18n.Animal_GoldenCracker_Applied() : I18n.Animal_GoldenCracker_None());
 
         // internal type
         yield return new GenericField(I18n.InternalId(), animal.type.Value);

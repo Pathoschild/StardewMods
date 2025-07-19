@@ -1,0 +1,29 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // warnings
+    "config.too-complex": "Você tem configurações por local que são muito complexas para editar pelo Generic Mod Config Menu. Você pode editar o arquivo config.json do mod diretamente, ou resetar as configurações do mod para padrão (clicando os botões 'Default' e 'Save', e reabrindo o jogo).",
+
+    // options
+    "config.grow-crops.name": "Cultivo em qualquer lugar",
+    "config.grow-crops.desc": "Define se os cultivos podem ser plantados e crescem em todos os lugares.",
+
+    "config.grow-crops-out-of-season.name": "Cultivo em qualquer estação",
+    "config.grow-crops-out-of-season.desc": "Define se os cultivos crescem normalmente mesmo fora de estação. Só é aplicado se 'cultivar em qualquer lugar' também estiver habilitado",
+
+    "config.use-fruit-trees-seasonal-sprites.name": "Sprites de árvores frutíferas sazonais",
+    "config.use-fruit-trees-seasonal-sprites.desc": "Define se árvores frutíferas devem usar seu sprite sazonal normal (verdade) ou seus sprites de verão (falso) quando 'cultivar em qualquer estação' estiver habilitado.",
+
+    "config.force-till-dirt.name": "Capina qualquer bloco de terra",
+    "config.force-till-dirt.desc": "Define se qualquer bloco de terra é arável com uma enxada, mmesmo se normalmente não seja.",
+
+    "config.force-till-grass.name": "Capina qualquer bloco de grama",
+    "config.force-till-grass.desc": "Define se qualquer bloco de grama é arável com uma enxada, mesmo se normalmente não seja.",
+
+    "config.force-till-stone.name": "Capina qualquer bloco de pedra",
+    "config.force-till-stone.desc": "Define se qualquer bloco de pedra é arável com uma enxada, mesmo se normalmente não seja.",
+
+    "config.force-till-other.name": "Capina qualquer outro bloco",
+    "config.force-till-other.desc": "Define se qualquer bloco que não seja terra, grama ou pedra deve ser arável com uma enxada, mesmo se normalmente não seja."
+}

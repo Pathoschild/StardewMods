@@ -185,6 +185,7 @@
     "animal.produce-ready": "Pronto alla produzione",
     "animal.growth": "Crescita",
     "animal.sells-for": "Valore",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "non è stato nutrito ieri",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "non ha il riscaldamento in inverno",
     "animal.complaints.not-petted": "non è ancora stato accarezzato oggi",
     "animal.complaints.wild-animal-attack": "attaccato da animali selvaggi questa notte",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
@@ -356,6 +359,7 @@
     "item.needed-for.gourmet-chef": "l'achievement 'chef stellato' (cucina {{recipes}})",
     "item.needed-for.craft-master": "l'achievement 'maestro della fabbricazione' (crea {{recipes}})",
     "item.needed-for.quests": "missioni attuali ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} ricette sconosciute",
     "item.sells-to.shipping-box": "Cassetta delle spedizioni",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} necessari)",

@@ -185,6 +185,7 @@
     "animal.produce-ready": "Продукция готова",
     "animal.growth": "Рост",
     "animal.sells-for": "Продаётся за",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "Кушал вчера",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "Не обогревался зимой",
     "animal.complaints.not-petted": "Не проявлена забота сегодня",
     "animal.complaints.wild-animal-attack": "Атакован диким животным этой ночью",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
@@ -356,6 +359,7 @@
     "item.needed-for.gourmet-chef": "Достижение 'Шеф-повар' (приготовьте рецепт: {{recipes}})",
     "item.needed-for.craft-master": "Достижение 'Мастер' (создайте предмет: {{recipes}})",
     "item.needed-for.quests": "текущие квесты ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} неизвестных рецептов",
     "item.sells-to.shipping-box": "Отгрузочный ящик",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",

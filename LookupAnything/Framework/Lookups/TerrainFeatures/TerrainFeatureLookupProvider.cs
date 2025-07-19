@@ -47,7 +47,7 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
 
                 case Tree tree:
                     if (tree.alpha >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
-                        yield return new TreeTarget(this.GameHelper, tree, entityTile, () => this.BuildSubject(tree, entityTile));
+                        yield return new TreeTarget(this.GameHelper, tree, entityTile, () => this.BuildSubject(tree));
                     break;
 
                 case Bush bush: // planted bush
@@ -103,9 +103,8 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
 
     /// <summary>Build a subject.</summary>
     /// <param name="tree">The entity to look up.</param>
-    /// <param name="tile">The tree tile.</param>
-    private ISubject BuildSubject(Tree tree, Vector2 tile)
+    private ISubject BuildSubject(Tree tree)
     {
-        return new TreeSubject(this.Codex, this.GameHelper, tree, tile);
+        return new TreeSubject(this.Codex, this.GameHelper, tree);
     }
 }

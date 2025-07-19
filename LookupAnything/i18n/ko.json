@@ -186,6 +186,7 @@
     "animal.produce-ready": "생산물 준비 완료",
     "animal.growth": "성장 단계",
     "animal.sells-for": "판매 가격: ",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "어제 먹이를 먹지 못함.",
@@ -194,6 +195,8 @@
     "animal.complaints.no-heater": "겨울에 난방기가 없음.",
     "animal.complaints.not-petted": "오늘 쓰다듬 받지 못함.",
     "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
@@ -357,6 +360,7 @@
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
     "item.needed-for.quests": "현재 퀘스트 ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "알 수 없는 레시피 {{count}}개",
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",

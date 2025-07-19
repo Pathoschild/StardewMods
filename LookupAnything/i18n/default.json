@@ -185,6 +185,7 @@
     "animal.produce-ready": "Produce ready",
     "animal.growth": "Growth",
     "animal.sells-for": "Sells for",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "wasn't fed yesterday",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "no heater in winter",
     "animal.complaints.not-petted": "hasn't been petted today",
     "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.",
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.",
 
 
     /*********
@@ -356,6 +359,7 @@
     "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",
     "item.needed-for.craft-master": "craft master achievement (make {{recipes}})",
     "item.needed-for.quests": "current quests ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)",
     "item.unknown-recipes": "{{count}} unknown recipes",
     "item.sells-to.shipping-box": "shipping box",
     "item.recipes-for-ingredient.entry": "{{name}} (needs {{count}})",

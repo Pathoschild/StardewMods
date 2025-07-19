@@ -186,6 +186,7 @@
     "animal.produce-ready": "Produkt gotowy",
     "animal.growth": "Wiek",
     "animal.sells-for": "Sprzedaż za",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "nie było wczoraj karmione",
@@ -194,6 +195,8 @@
     "animal.complaints.no-heater": "brak ogrzewania zimą",
     "animal.complaints.not-petted": "nie zostało dzisiaj pogłaskane",
     "animal.complaints.wild-animal-attack": "zaatakowane przez dzikie zwierzęta w nocy",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
@@ -357,6 +360,7 @@
     "item.needed-for.gourmet-chef": "osiągnięcie smakosz (przyrządź {{recipes}})",
     "item.needed-for.craft-master": "osiągnięcie mistrz rzemieślników (wytwórz {{recipes}})",
     "item.needed-for.quests": "aktualne zadania ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} nieznanych przepisów",
     "item.sells-to.shipping-box": "skrzynka sprzedaży",
     "item.recipes-for-ingredient.entry": "{{name}} (potrzeba {{count}})",

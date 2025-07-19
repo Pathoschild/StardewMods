@@ -92,12 +92,11 @@
     "config.hold-to-activate-key.name": "Zum Aktivieren gedrückt halten",
     "config.hold-to-activate-key.tooltip": "Wenn aktiviert, wird der Traktor nur dann etwas tun, wenn diese Taste gehalten wird. Wenn deaktiviert, arbeitet der Traktor automatisch, während er gefahren wird. ",
 
-    // TODO
-    "config.increase-distance-key.name": "Increase Distance",
-    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+    "config.increase-distance-key.name": "Reichweite erhöhen",
+    "config.increase-distance-key.tooltip": "Erhöht vorübergehend die Reichweite, in der Werkzeuge rund um den Traktor angewendet werden, um eins, bis zum empfohlenen Maximum von {{maxRecommendedValue}} Feldern. Diese Einstellung bleibt bestehen, bis der Spielstand neu geladen wird.",
 
-    "config.reduce-distance-key.name": "Reduce Distance",
-    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+    "config.reduce-distance-key.name": "Reichweite verringern",
+    "config.reduce-distance-key.tooltip": "Verringert vorübergehend die Reichweite, in der Werkzeuge rund um den Traktor angewendet werden, um eins, bis zum empfohlenen Minimum von 1 Feld. Diese Einstellung bleibt bestehen, bis der Spielstand neu geladen wird.",
 
 
     /****
