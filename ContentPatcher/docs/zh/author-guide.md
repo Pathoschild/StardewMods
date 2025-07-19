@@ -78,7 +78,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 
 ### 什么是素材？
 
-**素材（Assets）**是游戏从其 `Content` 文件夹（或从其它模组文件夹）中加载的图像、数据模型或地图。这些是 Content Patcher 允许您更改的内容。
+**素材**（Assets）是游戏从其 `Content` 文件夹（或从其它模组文件夹）中加载的图像、数据模型或地图。这些是 Content Patcher 允许您更改的内容。
 
 素材名称通常不包括 "Content"、[语言代码](#how-do-i-change-assets-in-another-language) 或文件扩展名。例如，`Content/Maps/spring_beach.xnb` 和 `Content/Maps/spring_beach.fr-FR.xnb` 都是相同的 `Maps/spring_beach` 素材。
 
@@ -425,7 +425,7 @@ Content Patcher 为特殊情况添加了自定义 [触发操作](https://wiki.bi
 
 更新频率            | 效果 
 ------------------ | ------ 
-`OnDayStart`       | **（默认）**在游戏中的一天开始时更新。没有该字段的补丁将默认使用此更新频率。 
+`OnDayStart`       | **（默认）** 在游戏中的一天开始时更新。没有该字段的补丁将默认使用此更新频率。 
 `OnLocationChange` | 在玩家传送到另一地图时更新。
 `OnTimeChange`     | 在游戏时间变化时更新。
 多种更新频率         | 您可以指定多个由逗号分隔的值，例如 `"Update": "OnLocationChange, OnTimeChange"`。 
