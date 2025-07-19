@@ -186,6 +186,7 @@
     "animal.produce-ready": "Sản phẩm đã sẵn sàng",
     "animal.growth": "Trưởng thành",
     "animal.sells-for": "Giá bán",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "không được cho ăn hôm qua",
@@ -194,6 +195,8 @@
     "animal.complaints.no-heater": "không có lò sưởi vào mùa đông",
     "animal.complaints.not-petted": "chưa được vuốt ve hôm nay",
     "animal.complaints.wild-animal-attack": "bị tấn công bởi động vật hoang dã vào ban đêm",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********

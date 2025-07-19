@@ -186,6 +186,7 @@
     "animal.produce-ready": "回収可能",
     "animal.growth": "成長",
     "animal.sells-for": "売値",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "昨日エサを食べることができなかった",
@@ -194,6 +195,8 @@
     "animal.complaints.no-heater": "冬なのにヒーターがない",
     "animal.complaints.not-petted": "まだなでられていない",
     "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********

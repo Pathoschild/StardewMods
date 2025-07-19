@@ -185,6 +185,7 @@
     "animal.produce-ready": "Продукция готова",
     "animal.growth": "Рост",
     "animal.sells-for": "Продаётся за",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "Кушал вчера",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "Не обогревался зимой",
     "animal.complaints.not-petted": "Не проявлена забота сегодня",
     "animal.complaints.wild-animal-attack": "Атакован диким животным этой ночью",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
