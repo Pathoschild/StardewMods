@@ -357,6 +357,7 @@
     "item.needed-for.gourmet-chef": "osiągnięcie smakosz (przyrządź {{recipes}})",
     "item.needed-for.craft-master": "osiągnięcie mistrz rzemieślników (wytwórz {{recipes}})",
     "item.needed-for.quests": "aktualne zadania ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} nieznanych przepisów",
     "item.sells-to.shipping-box": "skrzynka sprzedaży",
     "item.recipes-for-ingredient.entry": "{{name}} (potrzeba {{count}})",

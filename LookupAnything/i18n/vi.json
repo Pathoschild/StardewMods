@@ -357,6 +357,7 @@
     "item.needed-for.gourmet-chef": "Thành tựu Đầu Bếp Sành Ăn (nấu {{recipes}})",
     "item.needed-for.craft-master": "Thành tựu Bậc Thầy Chế Tạo (làm {{recipes}})",
     "item.needed-for.quests": "Nhiệm vụ hiện tại ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} công thức chưa biết",
     "item.sells-to.shipping-box": "Thùng bán hàng",
     "item.recipes-for-ingredient.entry": "{{name}} (cần {{count}})",

@@ -844,12 +844,19 @@ internal class ItemSubject : BaseSubject
         }
 
         // trash bear
+        if (!NetWorldState.checkAnywhereForWorldStateID("trashBearDone"))
         {
             TrashBear? trashBear = Game1.getCharacterFromName<TrashBear>("TrashBear", mustBeVillager: false);
-            if (trashBear != null && !NetWorldState.checkAnywhereForWorldStateID("trashBearDone") &&
-                obj.QualifiedItemId == ItemRegistry.QualifyItemId(trashBear.itemWantedIndex))
+
+            if (trashBear is null && Game1.year > 2)
+                trashBear = new TrashBear(); // applies if the player hasn't visited the forest to spawn it, or it isn't here today (e.g. because it's raining)
+
+            if (trashBear is not null)
             {
-                neededFor.Add(I18n.Item_NeededFor_TrashBear());
+                trashBear.updateItemWanted();
+
+                if (ItemRegistry.HasItemId(obj, trashBear.itemWantedIndex))
+                    neededFor.Add(I18n.Item_NeededFor_TrashBear());
             }
         }
 

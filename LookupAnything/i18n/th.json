@@ -358,6 +358,7 @@
     "item.needed-for.gourmet-chef": "ความสำเร็จพ่อครัวหัวป่าก์ (ปรุงอาหาร {{recipes}} เมนู)",
     "item.needed-for.craft-master": "ความสำเร็จนักประดิษฐ์ (สร้าง {{recipes}} อย่าง)",
     "item.needed-for.quests": "เควสปัจจุบัน ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} unknown recipes", // TODO
     "item.sells-to.shipping-box": "กล่องส่งสินค้า",
     "item.recipes-for-ingredient.entry": "{{name}} (ต้องใช้ {{count}})",

@@ -358,6 +358,7 @@
     "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",
     "item.needed-for.craft-master": "succès maître artisant (fabriquer {{recipes}})",
     "item.needed-for.quests": "quêtes en cours ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} recettes inconnues",
     "item.sells-to.shipping-box": "bac d'expédition",
     "item.recipes-for-ingredient.entry": "{{name}} (nécessite {{count}})",

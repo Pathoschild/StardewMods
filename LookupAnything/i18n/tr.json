@@ -356,6 +356,7 @@
     "item.needed-for.gourmet-chef": "gurme şef başarısı (pişir {{recipes}})",
     "item.needed-for.craft-master": "zanaat ustası başarısı (yap {{recipes}})",
     "item.needed-for.quests": "şuanki görevler ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} adet bilinmeyen tarif",
     "item.sells-to.shipping-box": "gönderi kutusu",
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",

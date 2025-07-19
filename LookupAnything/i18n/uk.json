@@ -358,6 +358,7 @@
     "item.needed-for.gourmet-chef": "Досягнення «Шеф-кухар» (Приготуйте страву : {{recipes}})",
     "item.needed-for.craft-master": "Досягнення «Найкращий з ремісників» (Створіть предмет : {{recipes}})",
     "item.needed-for.quests": "Завдання наразі ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} unknown recipes", // TODO
     "item.sells-to.shipping-box": "Ящик для продажу",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} од.)",

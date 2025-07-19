@@ -357,6 +357,7 @@
     "item.needed-for.gourmet-chef": "実績：グルメマスター（{{recipes}}を調理する）",
     "item.needed-for.craft-master": "実績：クラフトマスター（{{recipes}}を作成する）",
     "item.needed-for.quests": "進行中の依頼：({{quests}}）",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "未知のレシピ：{{count}}個",
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}}（{{count}}個必要）",
