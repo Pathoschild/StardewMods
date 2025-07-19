@@ -96,8 +96,7 @@
     "config.increase-distance-key.tooltip": "Erhöht vorübergehend die Reichweite, in der Werkzeuge rund um den Traktor angewendet werden, um eins, bis zum empfohlenen Maximum von {{maxRecommendedValue}} Feldern. Diese Einstellung bleibt bestehen, bis der Spielstand neu geladen wird.",
 
     "config.reduce-distance-key.name": "Reichweite verringern",
-    "config.reduce-distance-key.tooltip": "Verringert vorübergehend die Reichweite, in der Werkzeuge rund um den Traktor angewendet werden, um eins, bis zum empfohlenen Minimum von 1 Feld. Diese Einstellung bleibt bestehen, bis der Spielstand neu geladen wird."
-
+    "config.reduce-distance-key.tooltip": "Verringert vorübergehend die Reichweite, in der Werkzeuge rund um den Traktor angewendet werden, um eins, bis zum empfohlenen Minimum von 1 Feld. Diese Einstellung bleibt bestehen, bis der Spielstand neu geladen wird.",
 
 
     /****

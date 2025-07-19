@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to JanUwU42 (updated German)!
+
 ## 1.4.1
 Released 14 July 2025 for SMAPI 4.3.1 or later.
 
