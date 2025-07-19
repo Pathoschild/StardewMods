@@ -3,9 +3,9 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    "config.title.main-options": "Opções Principais",
+    "config.title.main-options": "Opções principais",
     "config.enabled.name": "Habilitado",
-    "config.enabled.desc": "Se habilitar as funcionalidades de Automatização. Se isso estiver desativado, nenhuma máquina será automatizada e a sobreposição não aparecerá.",
+    "config.enabled.desc": "Define se habilita as funcionalidades de Automatização. Se isso estiver desativado, nenhuma máquina será automatizada e a sobreposição não aparecerá.",
     "config.automation-interval.name": "Intervalo de Automação",
     "config.automation-interval.desc": "O número de ticks entre processos (60 para uma vez por segundo, 120 para cada dois segundos, etc).",
     "config.min-minutes-for-fairy-dust.name": "Minutos mínimos para pó de fada",
@@ -13,13 +13,13 @@
     "config.toggle-overlay-key.name": "Tecla de Interface",
     "config.toggle-overlay-key.desc": "A tecla que abrirá a interface de automação.",
     "config.warn-for-missing-bridge-mod.name": "Aviso para falta de mod de ponte",
-    "config.warn-for-missing-bridge-mod.desc": "Se deve ou não informar ao início caso você tenha instalado um mod de máquina customizada que requer um pacote de estabilidade que não está instalado.",
+    "config.warn-for-missing-bridge-mod.desc": "Define se deve ou não informar erro no início caso você tenha instalado um mod de máquina customizada que requer um pacote de estabilidade que não está instalado.",
 
     // connectors
     "config.title.connectors": "Habilitar Conectores",
-    "config.connector.desc": "Se {{itemName}} interligam máquinas e baús .",
+    "config.connector.desc": "Define se {{itemName}} conecta máquinas e baús .",
     "config.custom-connectors.name": "Conectores Customizados",
-    "config.custom-connectors.desc": "Os nomes em inlgês de conectores que juntarão baús e máquinas. Você pode listar vários usando vírgulas. (Precisa ser em inglês).", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "Os nomes em inglês de conectores que juntarão baús e máquinas. Você pode listar vários usando vírgulas. (Precisa ser em inglês).", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Comportamento das cabanas de Junimo",
@@ -37,19 +37,18 @@
     "config.junimo-huts.move-into-huts": "Mover dos baús para as cabanas de Junimo",
 
     // per-chest settings
-    // TODO
-    "config.title.chest-settings": "Chest settings",
-    "config.default-chest-override.name": "Default behavior",
-    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
-    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
-    "config.chest-override.values.default": "Default",
-    "config.chest-override.values.enabled": "Enable",
-    "config.chest-override.values.disabled": "Disable",
+    "config.title.chest-settings": "Opções de baú",
+    "config.default-chest-override.name": "Comportamento padrão",
+    "config.default-chest-override.desc": "Define se os baús devem estar habilitados ou desabilitados por padrão (exceto os escolhidos abaixo). Baús habilitados automaticamente serão conectados à máquinas, e os desabilitados serão ignorados.",
+    "config.chest-override.desc": "Define se os items de {{chestName}} ser habilitados como baús. Veja a dica em '{{defaultBehaviorField}}'.",
+    "config.chest-override.values.default": "Padrão",
+    "config.chest-override.values.enabled": "Habilitado",
+    "config.chest-override.values.disabled": "Desabilitado",
 
     // per-machine settings
     "config.title.machine-settings": "Configurações de {{machineName}}",
     "config.machine-settings-enabled.name": "Habilitado",
-    "config.machine-settings-enabled.desc": "Se a automação de {{machineName}} deve ser habilitada.",
+    "config.machine-settings-enabled.desc": "Define se a automação de {{machineName}} deve ser habilitada.",
     "config.machine-settings-priority.name": "Prioridade",
     "config.machine-settings-priority.desc": "A ordem de prioridade na qual as máquinas {{machineName}} devem ser processadas em relação a outras máquinas. As máquinas têm uma prioridade padrão de 0, sendo os valores mais altos processados primeiro.",
 
@@ -62,5 +61,5 @@
 
     // special settings for individual machines
     "config.machines.wild-tree.collect-moss.name": "Coletar Musgo",
-    "config.machines.wild-tree.collect-moss.desc": "Se deve coletar musgo das árvores. Por exemplo, manter musgo nas árvores aumentará a qualidade dos cogumelos gerados em troncos de cogumelos próximos."
+    "config.machines.wild-tree.collect-moss.desc": "Define se deve coletar musgo das árvores. Por exemplo, manter musgo nas árvores aumentará a qualidade dos cogumelos gerados em troncos de cogumelos próximos."
 }
