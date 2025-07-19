@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.52.0
+Released 19 July 2025 for SMAPI 4.3.1 or later.
+
 * Added 'Golden animal cracker' field for farm animals and fish ponds (thanks to BarleyZP!).
 * Added trash bear to the item 'needed for' field (thanks to BarleyZP!).
 * Fixed tree lookups incorrectly reporting that growth is blocked for adjacent full-grown trees in some cases.

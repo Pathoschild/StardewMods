@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 2.4.1
+Released 19 July 2025 for SMAPI 4.1.10 or later.
+
 * Fixed mini-fridges not automated in 2.4.0.
 * Improved translations. Thanks to JanUwU42 (updated German) and luqasfs (updated Portuguese)!
 
