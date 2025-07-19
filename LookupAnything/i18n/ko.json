@@ -186,6 +186,7 @@
     "animal.produce-ready": "생산물 준비 완료",
     "animal.growth": "성장 단계",
     "animal.sells-for": "판매 가격: ",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "어제 먹이를 먹지 못함.",
@@ -194,6 +195,8 @@
     "animal.complaints.no-heater": "겨울에 난방기가 없음.",
     "animal.complaints.not-petted": "오늘 쓰다듬 받지 못함.",
     "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********

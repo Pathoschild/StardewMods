@@ -180,9 +180,6 @@ internal class BuildingSubject : BaseSubject
                         // output
                         yield return new ItemIconField(this.GameHelper, I18n.Building_OutputReady(), pond.output.Value, this.Codex);
 
-                        // golden animal cracker
-                        yield return new GenericField(I18n.Building_FishPond_GoldenCracker(), this.Stringify(pond.goldenAnimalCracker.Value));
-
                         // drops
                         float chanceOfAnyDrop = pondData.BaseMinProduceChance >= pondData.BaseMaxProduceChance
                             ? pondData.BaseMinProduceChance
@@ -192,6 +189,9 @@ internal class BuildingSubject : BaseSubject
                         // quests
                         if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
                             yield return new CheckboxListField(I18n.Building_FishPond_Quests(), new CheckboxList(this.GetPopulationGates(pond, pondData)));
+
+                        // golden animal cracker
+                        yield return new GenericField(I18n.Animal_GoldenCracker(), pond.goldenAnimalCracker.Value ? I18n.Animal_GoldenCracker_Applied() : I18n.Animal_GoldenCracker_None());
                     }
                     break;
 

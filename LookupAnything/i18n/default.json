@@ -185,7 +185,7 @@
     "animal.produce-ready": "Produce ready",
     "animal.growth": "Growth",
     "animal.sells-for": "Sells for",
-    "animal.golden-cracker": "Given animal cracker",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "wasn't fed yesterday",
@@ -194,6 +194,8 @@
     "animal.complaints.no-heater": "no heater in winter",
     "animal.complaints.not-petted": "hasn't been petted today",
     "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.",
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.",
 
 
     /*********
@@ -243,7 +245,6 @@
     "building.fish-pond.population": "Population",
     "building.fish-pond.drops": "Drops",
     "building.fish-pond.quests": "Quests",
-    "building.fish-pond.golden-cracker": "Given animal cracker",
 
     // values
     "building.fish-pond.population.empty": "Add a fish to start this pond",

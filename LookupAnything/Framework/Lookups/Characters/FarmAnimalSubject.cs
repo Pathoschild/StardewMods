@@ -53,7 +53,7 @@ internal class FarmAnimalSubject : BaseSubject
         SDate? dayOfMaturity = null;
         if (!isFullyGrown)
         {
-            daysUntilGrown = animal.GetAnimalData().DaysToMature - animal.age.Value;
+            daysUntilGrown = animalData.DaysToMature - animal.age.Value;
             dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
         }
 
@@ -70,11 +70,13 @@ internal class FarmAnimalSubject : BaseSubject
         yield return new GenericField(I18n.Animal_Mood(), animal.getMoodMessage());
         yield return new GenericField(I18n.Animal_Complaints(), this.GetMoodReason(animal));
         yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), CommonHelper.IsItemId(animal.currentProduce.Value, allowZero: false) ? ItemRegistry.Create(animal.currentProduce.Value) : null, this.Codex);
-        if (animalData?.CanEatGoldenCrackers ?? true)
-            yield return new GenericField(I18n.Animal_GoldenCracker(), this.Stringify(animal.hasEatenAnimalCracker.Value));
         if (!isFullyGrown)
             yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
         yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+
+        // bonuses
+        if (animalData?.CanEatGoldenCrackers ?? true)
+            yield return new GenericField(I18n.Animal_GoldenCracker(), animal.hasEatenAnimalCracker.Value ? I18n.Animal_GoldenCracker_Applied() : I18n.Animal_GoldenCracker_None());
 
         // internal type
         yield return new GenericField(I18n.InternalId(), animal.type.Value);

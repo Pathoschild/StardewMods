@@ -185,6 +185,7 @@
     "animal.produce-ready": "Produkt fertig",
     "animal.growth": "Wachstum",
     "animal.sells-for": "Verkaufbar für",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values
     "animal.complaints.hungry": "Wurde gestern nicht gefüttert",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "Keine Heizung im Winter",
     "animal.complaints.not-petted": "Wurde heute noch nicht gestreichelt",
     "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********

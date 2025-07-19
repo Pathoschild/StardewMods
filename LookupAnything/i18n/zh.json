@@ -185,6 +185,7 @@
     "animal.produce-ready": "动物制品",
     "animal.growth": "生长",
     "animal.sells-for": "出售",
+    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
 
     // values (数值)
     "animal.complaints.hungry": "昨天没有喂食",
@@ -193,6 +194,8 @@
     "animal.complaints.no-heater": "冬天没有暖气",
     "animal.complaints.not-petted": "今天还没有被爱抚",
     "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
+    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
+    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
 
 
     /*********
