@@ -360,6 +360,7 @@
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
     "item.needed-for.quests": "현재 퀘스트 ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "알 수 없는 레시피 {{count}}개",
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",

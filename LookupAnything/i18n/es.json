@@ -361,6 +361,7 @@
     "item.needed-for.gourmet-chef": "Logro de ''gourmet chef'' (cocina {{recipes}})",
     "item.needed-for.craft-master": "Logro de ''craft master'' (crea {{recipes}})",
     "item.needed-for.quests": "Mision actual ({{quests}})",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}} unknown recipes", // TODO
     "item.sells-to.shipping-box": "Caja de envío",
     "item.recipes-for-ingredient.entry": "{{name}} (necesita {{count}})",

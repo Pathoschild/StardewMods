@@ -359,6 +359,7 @@
     "item.needed-for.gourmet-chef": "美食大厨成就（烹饪{{recipes}}）",
     "item.needed-for.craft-master": "制造大师成就（制造{{recipes}}）",
     "item.needed-for.quests": "当前任务（{{quests}}）",
+    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
     "item.unknown-recipes": "{{count}}个未知配方",
     "item.sells-to.shipping-box": "出货箱",
     "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
