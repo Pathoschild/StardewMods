@@ -22,7 +22,7 @@
 字段       | 用途
 --------- | -------
 `Action`  | 要进行的更改类型。此操作类型设置为 `EditImage`。
-`Target`  | 要替换的目标[游戏素材名称](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），例如 `Portraits/Abigail`。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
+`Target`  | 要修改的目标[游戏素材名称](../author-guide.md#what-is-an-asset)（或多个由逗号分隔的素材名），例如 `Portraits/Abigail`。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 `FromFile` | 内容包文件夹中用于修补到目标中的文件的相对路径（例如 `assets/dinosaur.png`），或多个逗号分隔的路径。这可以是 `.png` 或 `.xnb` 文件。该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。
 
 </dd>
@@ -32,8 +32,8 @@
 字段         | 用途
 ----------- | -------
 `FromArea`  | <p>源图片中需要复制到目标图片的部分，默认为整个源图片。</p><p>此字段是一个对象，含有左上角点的 X 和 Y 像素坐标以及该区域的像素宽度（Width）和高度（Height）。该对象的字段支持[令牌](../author-guide.md#tokens)。</p>
-`ToArea`    | <p>目标图片中要替换的部分。默认大小与 `FromArea` 相同，锚点位于贴图的左上角。</p><p>此字段是一个对象，含有左上角点的 X 和 Y 像素坐标以及该区域的像素宽度（Width）和高度（Height）。该对象的字段支持[令牌](../author-guide.md#tokens)。</p><p>如果您指定的区域超出了图像的底部，Content Patcher 会自动扩大图像以适应新图像。</p>
-`PatchMode` | <p>如何将 `FromArea` 应用到 `ToArea`。默认为 `Replace`。</p> 可使用的值: <ul><li><code>Replace</code>：用源图像替换目标区域中的每个像素。如果源图像有透明像素，则目标图像将在这些位置变为透明。</li><li><code>Overlay</code>：在目标区域上绘制源图像。如果源图像有透明或半透明像素，则目标图像将“透过”这些像素；不透明像素将替换目标像素。</li></ul>例如，假设您的源图像是具有透明背景的河豚鸡，而目标图像是实心绿色正方形。 以下是它们在不同 `PatchMode` 下的组合：<br />![](../../screenshots/patch-mode-examples.png)
+`ToArea`    | <p>目标图片中要修改的部分。默认大小与 `FromArea` 相同，锚点位于贴图的左上角。</p><p>此字段是一个对象，含有左上角点的 X 和 Y 像素坐标以及该区域的像素宽度（Width）和高度（Height）。该对象的字段支持[令牌](../author-guide.md#tokens)。</p><p>如果您指定的区域超出了图像的底部，Content Patcher 会自动扩大图像以适应新图像。</p>
+`PatchMode` | <p>如何将 `FromArea` 应用到 `ToArea`。默认为 `Replace`。</p> 可使用的值: <ul><li><code>Replace</code>：用源图像修改目标区域中的每个像素。如果源图像有透明像素，则目标图像将在这些位置变为透明。</li><li><code>Overlay</code>：在目标区域上绘制源图像。如果源图像有透明或半透明像素，则目标图像将“透过”这些像素；不透明像素将修改目标像素。</li></ul>例如，假设您的源图像是具有透明背景的河豚鸡，而目标图像是实心绿色正方形。 以下是它们在不同 `PatchMode` 下的组合：<br />![](../../screenshots/patch-mode-examples.png)
 `When`        | （可选）仅在给定的[条件](../author-guide.md#conditions)匹配时应用这个内容补丁。
 `LogName`     | （可选）在日志中显示的补丁名称。这有助于查找错误。如果省略，则默认为类似 `EditImage Animals/Dinosaur` 的名字。
 `Update`      | （可选）补丁字段的更新频率。请参阅[补丁更新频率](../author-guide.md#update-rate)。

@@ -155,13 +155,13 @@ var tokenString = api.ParseTokenString(
 <dt>令牌字符串 API 不是立即可用的。</dt>
 <dd>
 
-令牌字符串 API 需要在 `GameLaunched` 事件发生后两帧（Tick）起才可使用。这和 Content Patcher 的生命周期有关：
+令牌字符串 API 需要在 `GameLaunched` 事件发生后两刻（Tick）起才可使用。这和 Content Patcher 的生命周期有关：
 
 1. `GameLaunched`：其他模组可以注册自定义令牌。
-2. `GameLaunched + 1 帧`：Content Patcher 初始化令牌上下文（包括自定义令牌）。
-3. `GameLaunched + 2 帧`：其他模组可使用令牌字符串 API。
+2. `GameLaunched + 1 刻`：Content Patcher 初始化令牌上下文（包括自定义令牌）。
+3. `GameLaunched + 2 刻`：其他模组可使用令牌字符串 API。
 
-注：此处的“帧”指游戏更新循环中的一刻
+注：此处的“刻”指游戏更新循环中的一刻
 
 </dd>
 <dt>令牌字符串应缓存。</dt>

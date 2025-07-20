@@ -269,7 +269,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 
 `TextOperations` 字段可以编辑一个现有地图属性的值（请参阅[文本操作](../author-guide.md#text-operations)）。
 
-有效的地图属性格式只有 `["MapProperties", "PropertyName"]`，其中 PropertyName 是要更改的地图属性名称。
+`TextOperations` 在此处的 `Target` 路径只允许 `["MapProperties", "PropertyName"]`，其中 PropertyName 是要更改的地图属性名称。
 
 </td>
 </tr>

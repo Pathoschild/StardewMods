@@ -566,7 +566,7 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 [当前或特定玩家](#target-player)孩子的名字和性别（`Female` 或者 `Male`）。
 
 按出生顺序排列，可用[`valueAt` 参数](#valueAt)指定。比如 
-`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是您最年长的孩子的名字和性别。
+`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是最年长的孩子的名字和性别。
 
 </td>
 <td><a href="#ChildNames">#</a></td>
