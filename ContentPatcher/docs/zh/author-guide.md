@@ -262,7 +262,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 <td><code>Include</code></td>
 <td>
 
-`Include` 从另一个 JSON 文件中加载补丁。这只是将内容包组织成多个文件的一种方式，而不是将所有内容都放在一个 `content.json` 中。包含的补丁就像直接在 `content.json` 中一样工作。
+`Include` 从另一个 JSON 文件中加载补丁。这只是将内容包组织成多个文件的一种方式，而不是将所有内容都放在一个 `content.json` 中。包含的补丁和直接放在 `content.json` 中的补丁功能一致
 
 例如，您可以将其与 [Tokens 和条件](#tokens)结合以动态加载文件：
 ```js
@@ -399,7 +399,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 有关更多信息，请参阅 [文本操作文档](author-guide/text-operations.md)。
 
 ### 触发动作<a name="trigger-actions"></a>
-Content Patcher 为特殊情况添加了自定义 [触发操作](https://wiki.biligame.com/stardewvalley/模组:触发动作)，例如更新重命名内容 ID 的旧存档。
+Content Patcher 为特殊情况添加了自定义 [触发操作](https://wiki.biligame.com/stardewvalley/模组:触发动作)，例如将现有存档内容中旧的内置 ID 重命名为新的 ID。
 
 有关更多信息，请参阅 [Content Patcher 的触发操作文档](author-guide/trigger-actions.md)。
 
