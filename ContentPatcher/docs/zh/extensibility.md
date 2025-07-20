@@ -292,4 +292,4 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 ```
 
 ## 参见<a name="see-also"></a>
-* 其他操作和选项请参见[模组作者指南](../author-guide.md)。
+* 其他操作和选项请参见[README](README.md)。

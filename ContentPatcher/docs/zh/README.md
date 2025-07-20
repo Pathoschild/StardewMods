@@ -60,7 +60,7 @@ Content Patcher 在首次运行时会在模组文件夹中创建一个 `config.j
   <td><code>EnableDebugFeatures</code></td>
   <td>
 
-默认为 `false`。是否启用专为内容包模组作者设计的[调试功能](author-guide/troubleshooting.md#debug-mode)。
+默认为 `false`（否）。是否启用专为内容包模组作者设计的[调试功能](author-guide/troubleshooting.md#debug-mode)。
 
   </td>
 </tr>

@@ -134,7 +134,7 @@
 }
 ```
 
-假设您直接使用 `{{i18n: today}}`，那么游戏内将显示为 `"今天是{{DayOfWeek}}"`。您可以像这样传递令牌：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后，文本才能正确地显示为 `"今天是星期一"`。
+假设您直接使用 `{{i18n: today}}`，那么游戏内将显示为 `"今天是{{DayOfWeek}}"`。您可以像这样传递令牌：`{{i18n: today |dayOfWeek={{DayOfWeek}} }}`，这样做以后，文本才能正确地显示为 `"今天是Monday"`。
 
 ### 翻译还可以用来干什么？<a name="what-else-can-i-do-with-translations"></a>
 此功能可以理解为一个文本存储系统，因此您可以利用它做很多事情。
