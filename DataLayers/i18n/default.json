@@ -93,6 +93,9 @@
     "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
     "config.color-schemes.default": "default colors",
 
+    "config.legend-opacity.name": "Legend min. opacity",
+    "config.legend-opacity.desc": "The opacity set on the legend info box on mouse-over.",
+
     // main controls
     "config.toggle-layer-key.name": "Toggle data layers",
     "config.toggle-layer-key.desc": "The key binding which shows or hides the data layer overlay.",

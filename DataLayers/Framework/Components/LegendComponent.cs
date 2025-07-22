@@ -65,13 +65,14 @@ internal class LegendComponent : ClickableComponent
     /// <param name="layers">The data layers to render.</param>
     /// <param name="layerName">The current layer name to display.</param>
     /// <param name="legend">The legend values to display.</param>
-    public LegendComponent(int x, int y, ILayer[] layers, string layerName, LegendEntry[] legend)
+    public LegendComponent(int x, int y, ILayer[] layers, string layerName, LegendEntry[] legend, float minimumOpacity)
         : base(new Rectangle(x, y, 0, 0), nameof(LegendComponent))
     {
         this.LayerName = layerName;
         this.Legend = legend;
         this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
         this.BoxContentWidth = this.GetMaxContentWidth(layers, this.LegendColorSize);
+        this.MinimumOpacity = minimumOpacity;
 
         this.ReinitializeComponents();
     }

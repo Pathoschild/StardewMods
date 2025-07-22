@@ -79,6 +79,9 @@ internal class DataLayerOverlay : BaseOverlay
     /// <summary>Whether the game was paused last time the menu was updated.</summary>
     private bool WasPaused;
 
+    /// <summary>The alpha level set on <see cref="Legend"/> on mouse-over.</summary>
+    private readonly float LegendOpacityOnMouseOver;
+
     /*****
     ** Components
     *****/
@@ -110,7 +113,7 @@ internal class DataLayerOverlay : BaseOverlay
     /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
     /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
     /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
-    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
+    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid, float legendOpacityOnMouseOver)
         : base(events, inputHelper, reflection, assumeUiMode: true)
     {
         if (!layers.Any())
@@ -120,6 +123,7 @@ internal class DataLayerOverlay : BaseOverlay
         this.DrawOverlay = drawOverlay;
         this.CombineOverlappingBorders = combineOverlappingBorders;
         this.ShowGrid = showGrid;
+        this.LegendOpacityOnMouseOver = legendOpacityOnMouseOver;
 
         this.SetLayer(this.Layers.First());
     }
@@ -333,7 +337,7 @@ internal class DataLayerOverlay : BaseOverlay
         Rectangle rightArrow = CommonSprites.Icons.RightArrow;
 
         this.PrevButton = new ClickableTextureComponent(new Rectangle(this.LeftMargin, this.TopMargin + 10, leftArrow.Width, leftArrow.Height), CommonSprites.Icons.Sheet, leftArrow, 1);
-        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries);
+        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries, this.LegendOpacityOnMouseOver);
         this.NextButton = new ClickableTextureComponent(new Rectangle(this.Legend.bounds.Right + this.ArrowPadding, this.TopMargin + 10, rightArrow.Width, rightArrow.Height), CommonSprites.Icons.Sheet, rightArrow, 1);
     }
 

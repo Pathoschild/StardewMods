@@ -20,6 +20,9 @@ internal class ModConfig
     /// <summary>The color scheme in <see cref="ColorScheme.AssetName"/> to use.</summary>
     public string ColorScheme { get; set; } = "Default";
 
+    /// <summary><see cref="Components.LegendComponent.Opacity"/> set when mouse cursor overlaps the component.</summary>
+    public float LegendOpacityOnMouseOver { get; set; } = 0.2f;
+
     /// <summary>The key bindings.</summary>
     public ModConfigKeys Controls { get; set; } = new();
 

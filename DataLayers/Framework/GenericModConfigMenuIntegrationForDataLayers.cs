@@ -61,6 +61,16 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 allowedValues: this.ColorRegistry.SchemeIds.ToArray(),
                 formatAllowedValue: key => I18n.GetByKey($"config.color-schemes.{key}").Default(key)
             )
+            .AddNumberField(
+                name: I18n.Config_LegendOpacity_Name,
+                tooltip: I18n.Config_LegendOpacity_Desc,
+                get: config => config.LegendOpacityOnMouseOver,
+                set: (config, value) => config.LegendOpacityOnMouseOver = value,
+                min: 0,
+                max: 1,
+                interval: 0.05f
+            )
+
 
             .AddSectionTitle(I18n.Config_Section_MainControls)
             .AddKeyBinding(
