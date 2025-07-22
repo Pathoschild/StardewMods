@@ -49,6 +49,11 @@ internal class LegendComponent : ClickableComponent
     /// <summary>The height of the data layer name text.</summary>
     private Point LabelTextSize;
 
+    /// <summary>The current alpha level applied to the top-left boxes when drawn.</summary>
+    private float Opacity = 1;
+
+    /// <summary>The alpha level applied to the top-left boxes on mouse-over.</summary>
+    private readonly float MinimumOpacity = 0.2f;
 
 
     /*********
@@ -81,10 +86,10 @@ internal class LegendComponent : ClickableComponent
 
         // draw overlay label
         {
-            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.LabelTextSize.Y), out Vector2 contentPos, out Rectangle scrollBounds, padding: this.ScrollPadding);
+            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.LabelTextSize.Y), out Vector2 contentPos, out Rectangle scrollBounds, padding: this.ScrollPadding, alpha: this.Opacity);
 
             contentPos += new Vector2((this.BoxContentWidth - this.LabelTextSize.X) / 2f, 0); // center label in box
-            spriteBatch.DrawString(Game1.smallFont, this.LayerName, contentPos, Color.Black);
+            spriteBatch.DrawString(Game1.smallFont, this.LayerName, contentPos, Game1.textColor * this.Opacity);
 
             topOffset += scrollBounds.Height + this.Padding;
         }
@@ -92,17 +97,26 @@ internal class LegendComponent : ClickableComponent
         // draw legend
         if (this.Legend.Any())
         {
-            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _, padding: this.ScrollPadding);
+            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _, padding: this.ScrollPadding, alpha: this.Opacity);
             for (int i = 0; i < this.Legend.Length; i++)
             {
                 LegendEntry value = this.Legend[i];
                 int legendX = (int)contentPos.X;
                 int legendY = (int)(contentPos.Y + i * this.LegendColorSize);
 
-                spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color);
-                spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), Color.Black);
+                spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color * this.Opacity);
+                spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), Game1.textColor * this.Opacity);
             }
         }
+    }
+
+    /// <summary>Update the UI on new tick.</summary>
+    public void Update()
+    {
+        // update opacity
+        bool isHovered = this.bounds.Contains(Game1.getMousePosition(true));
+        float rate = (float)(0.75f / Game1.currentGameTime.ElapsedGameTime.TotalMilliseconds);
+        this.Opacity = Math.Clamp(this.Opacity + rate * (isHovered ? -1 : 1), this.MinimumOpacity, 1f);
     }
 
 

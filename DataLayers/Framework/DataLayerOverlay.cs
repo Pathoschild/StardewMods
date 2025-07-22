@@ -309,6 +309,16 @@ internal class DataLayerOverlay : BaseOverlay
         }
     }
 
+    /// <inheritdoc />
+    protected override void Update()
+    {
+        // update top-left UI when visible
+        if (this.DrawOverlay() && Game1.displayHUD)
+        {
+            this.Legend.Update();
+        }
+    }
+
     /// <summary>Reinitialize the UI components.</summary>
     [MemberNotNull(nameof(DataLayerOverlay.Legend), nameof(DataLayerOverlay.NextButton), nameof(DataLayerOverlay.PrevButton))]
     private void ReinitializeComponents()
