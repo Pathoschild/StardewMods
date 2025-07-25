@@ -159,10 +159,10 @@ For example, let's add some translations for the previous screenshot:
 ```js
 // in i18n/default.json
 {
-    "config.Material.name": "Material",
-    "config.Material.description": "The material style for the billboard background.",
-    "config.Material.values.Wood": "wood",
-    "config.Material.values.Metal": "metal"
+    "config.Material.name": "Material",         // add translation key for the "Material" option
+    "config.Material.description": "The material style for the billboard background.",  // add tooltip for "Material"
+    "config.Material.values.Wood": "wood",      // add translation key for the "Wood" value
+    "config.Material.values.Metal": "metal"     // add translation key for the "Metal" value
 }
 
 // in i18n/fr.json

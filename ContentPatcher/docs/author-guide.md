@@ -246,7 +246,7 @@ For example, if your content pack has an `assets/tuna.png` image with a custom
          "Action": "EditImage",
          "Target": "Maps/springobjects",
          "FromFile": "assets/fish-object.png",
-         "ToArea": { "X": 160, "Y": 80, "Width": 16, "Height": 16 }
+         "ToArea": { "X": 160, "Y": 80, "Width": 16, "Height": 16 } // replace tuna sprites
       }
    ]
 }
@@ -277,7 +277,7 @@ For example, this replaces the town square with a custom version in your content
             "Action": "EditMap",
             "Target": "Maps/Town",
             "FromFile": "assets/town.tmx",
-            "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 }
+            "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 } // replace the town square
         }
     ]
 }
@@ -302,7 +302,7 @@ For example, you can combine this with [tokens and condition](#tokens) to load a
     "Changes": [
         {
             "Action": "Include",
-            "FromFile": "assets/john_{{season}}.json"
+            "FromFile": "assets/john_{{season}}.json" // load a different file based on the current season
         }
     ]
 }
@@ -339,7 +339,7 @@ For example, this gives Abigail a different portrait for each season:
         {
             "Action": "Load",
             "Target": "Portraits/Abigail",
-            "FromFile": "assets/abigail-{{season}}.png"
+            "FromFile": "assets/abigail-{{season}}.png" // load a different portrait based on the current season
         }
     ]
 }
@@ -356,7 +356,7 @@ Or this gives her different seasonal portraits if you're married to her:
             "Target": "Portraits/Abigail",
             "FromFile": "assets/abigail-married.png",
             "When": {
-                "Spouse": "Abigail"
+                "Spouse": "Abigail" // only load this if player married to Abigail
             }
         }
     ]
@@ -386,7 +386,7 @@ For example, you can use config values as [tokens and conditions](#tokens):
             "Action": "Include",
             "FromFile": "assets/john.json",
             "When": {
-                "EnableJohn": true
+                "EnableJohn": true // only include this file if the player enabled John in the config
             }
         }
     ]
@@ -411,7 +411,7 @@ in any Content Patcher field that allows [tokens](#tokens):
             "Action": "EditData",
             "Target": "Characters/Dialogue/MarriageDialogueAbigail",
             "Entries": {
-                "Rainy_Day_4": "{{i18n: rainy-day}}"
+                "Rainy_Day_4": "{{i18n: rainy-day}}" // use the 'rainy-day' translation key
             }
         }
     ]
@@ -461,7 +461,7 @@ fields** when the day starts by default. For example, let's say you have this pa
     "Action": "EditMap",
     "Target": "Maps/Town",
     "SetProperties": {
-        "CurrentTime": "{{Time}}"
+        "CurrentTime": "{{Time}}" // set the current time
     }
 }
 ```
@@ -509,7 +509,7 @@ To target a specific language, you can add a language condition:
    "Target": "LooseSprites/Cursors",
    "FromFile": "assets/cursors.de.png",
    "When": {
-      "Language": "de"
+      "Language": "de" // only load this if the game is in German
    }
 }
 ```
@@ -525,7 +525,7 @@ translation exists:
    "Target": "LooseSprites/Cursors",
    "FromFile": "assets/cursors.{{language}}.png",
    "When": {
-      "HasFile:{{FromFile}}": true
+      "HasFile:{{FromFile}}": true // check if the translated file exists
    }
 },
 
@@ -535,7 +535,7 @@ translation exists:
    "Target": "LooseSprites/Cursors",
    "FromFile": "assets/cursors.png",
    "When": {
-      "HasFile: assets/cursors.{{language}}.png": false
+      "HasFile: assets/cursors.{{language}}.png": false // check if there is no translated version
    }
 },
 ```
