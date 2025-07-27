@@ -16,8 +16,11 @@ internal interface IContainer
     /// <summary>The persisted data for this container.</summary>
     ContainerData Data { get; }
 
-    /// <summary>Whether Automate options can be configured for this chest.</summary>
-    bool CanConfigureAutomate { get; }
+    /// <summary>Whether Automate options can be configured for storing items in this chest.</summary>
+    public bool CanConfigureAutomateStore { get; }
+
+    /// <summary>Whether Automate options can be configured for taking items from this chest.</summary>
+    public bool CanConfigureAutomateTake { get; }
 
 
     /*********

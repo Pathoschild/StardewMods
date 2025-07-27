@@ -40,7 +40,10 @@
     "config.title.chest-settings": "Opções de baú",
     "config.default-chest-override.name": "Comportamento padrão",
     "config.default-chest-override.desc": "Define se os baús devem estar habilitados ou desabilitados por padrão (exceto os escolhidos abaixo). Baús habilitados automaticamente serão conectados à máquinas, e os desabilitados serão ignorados.",
+    "config.chest-override.name": "{{chestName}}",
+    "config.chest-override.name.take-only": "{{chestName}} (take items only)", // TODO
     "config.chest-override.desc": "Define se os items de {{chestName}} ser habilitados como baús. Veja a dica em '{{defaultBehaviorField}}'.",
+    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // TODO // {{description}} contains the previous translation line
     "config.chest-override.values.default": "Padrão",
     "config.chest-override.values.enabled": "Habilitado",
     "config.chest-override.values.disabled": "Desabilitado",

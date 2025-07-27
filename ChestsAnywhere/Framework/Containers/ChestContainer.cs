@@ -33,7 +33,10 @@ internal class ChestContainer : IContainer
     public ContainerData Data { get; }
 
     /// <inheritdoc />
-    public bool CanConfigureAutomate => this.Chest.HasContextTag(AutomateConstants.StorageTag);
+    public bool CanConfigureAutomateStore => this.Chest.HasContextTag(AutomateConstants.StorageTag) && !this.Chest.HasContextTag(AutomateConstants.StorageTakeOnlyTag);
+
+    /// <inheritdoc />
+    public bool CanConfigureAutomateTake => this.Chest.HasContextTag(AutomateConstants.StorageTag);
 
 
     /*********

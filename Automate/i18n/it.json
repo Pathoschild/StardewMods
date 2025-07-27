@@ -40,7 +40,10 @@
     "config.title.chest-settings": "Impostazioni baule",
     "config.default-chest-override.name": "Comportamento predefinito",
     "config.default-chest-override.desc": "Scegli se i bauli devono essere abilitati o disabilitati per impostazione predefinita (tranne quelli impostati di seguito). I bauli abilitati automatizzeranno le macchine collegate, mentre quelli disabilitati saranno completamente ignorati.",
+    "config.chest-override.name": "{{chestName}}",
+    "config.chest-override.name.take-only": "{{chestName}} (take items only)", // TODO
     "config.chest-override.desc": "Scegli se gli oggetti {{chestName}} posizionati devono essere abilitati come bauli. Vedi i consigli su '{{defaultBehaviorField}}'.",
+    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // TODO // {{description}} contains the previous translation line
     "config.chest-override.values.default": "Predefinito",
     "config.chest-override.values.enabled": "Abilita",
     "config.chest-override.values.disabled": "Disabilita",

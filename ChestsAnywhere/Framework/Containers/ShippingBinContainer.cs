@@ -44,7 +44,10 @@ internal class ShippingBinContainer : IContainer
     public ContainerData Data { get; }
 
     /// <inheritdoc />
-    public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
+    public bool CanConfigureAutomateStore => false; // Automate can't read the shipping bin settings
+
+    /// <inheritdoc />
+    public bool CanConfigureAutomateTake => false; // Automate can't read the shipping bin settings
 
     /// <summary>The type of shipping bin menu to create.</summary>
     public ShippingBinMode Mode { get; }

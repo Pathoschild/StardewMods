@@ -160,6 +160,16 @@ internal class ModEntry : Mod
                         entry.ContextTags.Add(AutomateConstants.StorageTag);
                     }
                 }
+
+                foreach (string itemId in AutomateConstants.GetTakeOnlyChestItemIds())
+                {
+                    if (assetData.TryGetValue(itemId, out BigCraftableData? entry))
+                    {
+                        entry.ContextTags ??= [];
+                        entry.ContextTags.Add(AutomateConstants.StorageTag);
+                        entry.ContextTags.Add(AutomateConstants.StorageTakeOnlyTag);
+                    }
+                }
             });
         }
     }

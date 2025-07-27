@@ -655,7 +655,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
         this.EditHideChestField = new Checkbox();
 
-        if (this.ShowAutomateOptions && this.Chest.CanConfigureAutomate)
+        if (this.ShowAutomateOptions && this.Chest.CanConfigureAutomateStore)
         {
             this.EditAutomateStore = new SimpleDropdown<AutomateContainerPreference>(
                 this.Reflection,
@@ -665,6 +665,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Disable, I18n.Label_AutomateStoreDisabled())
                 ]
             );
+        }
+        else
+            this.EditAutomateStore = null;
+
+        if (this.ShowAutomateOptions && this.Chest.CanConfigureAutomateTake)
+        {
             this.EditAutomateTake = new SimpleDropdown<AutomateContainerPreference>(
                 this.Reflection,
                 options: [
@@ -675,10 +681,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             );
         }
         else
-        {
-            this.EditAutomateStore = null;
             this.EditAutomateTake = null;
-        }
 
         this.FillForm();
 

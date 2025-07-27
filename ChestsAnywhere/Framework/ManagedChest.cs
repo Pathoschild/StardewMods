@@ -34,8 +34,11 @@ internal class ManagedChest
     /// <summary>The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</summary>
     public object? MapEntity { get; }
 
-    /// <summary>Whether Automate options can be configured for this chest.</summary>
-    public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
+    /// <inheritdoc cref="IContainer.CanConfigureAutomateStore"/>
+    public bool CanConfigureAutomateStore => this.Container.CanConfigureAutomateStore;
+
+    /// <inheritdoc cref="IContainer.CanConfigureAutomateTake"/>
+    public bool CanConfigureAutomateTake => this.Container.CanConfigureAutomateTake;
 
     /// <summary>The user-friendly display name.</summary>
     public string DisplayName => !this.Container.Data.HasDefaultDisplayName() ? this.Container.Data.Name : this.DefaultDisplayName;

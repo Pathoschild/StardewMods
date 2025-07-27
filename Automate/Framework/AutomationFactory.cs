@@ -73,7 +73,7 @@ internal class AutomationFactory : IAutomationFactory
 
                 default:
                     if (chest.HasContextTag(AutomateConstants.StorageTag))
-                        return new ChestContainer(chest, location, tile);
+                        return new ChestContainer(chest, location, tile, isTakeOnly: chest.HasContextTag(AutomateConstants.StorageTakeOnlyTag));
                     break;
             }
         }
