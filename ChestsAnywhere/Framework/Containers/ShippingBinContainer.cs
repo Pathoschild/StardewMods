@@ -72,6 +72,12 @@ internal class ShippingBinContainer : IContainer
     }
 
     /// <inheritdoc />
+    public bool HasContextTag(string tag)
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
     public bool IsSameAs(IContainer? container)
     {
         return

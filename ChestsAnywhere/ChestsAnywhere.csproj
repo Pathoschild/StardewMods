@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Automate\Framework\AutomateConstants.cs" Link="Framework\AutomateConstants.cs" />
     <Compile Include="..\Automate\Framework\AutomateContainerPreference.cs" Link="Framework\AutomateContainerPreference.cs" />
   </ItemGroup>
 

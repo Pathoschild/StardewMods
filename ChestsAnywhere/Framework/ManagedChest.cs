@@ -119,4 +119,11 @@ internal class ManagedChest
     {
         return this.Container.Data.HasDefaultDisplayName();
     }
+
+    /// <summary>Get whether the container has the given context tag.</summary>
+    /// <param name="tag">The context tag to check.</param>
+    public bool HasContextTag(string tag)
+    {
+        return this.Container.HasContextTag(tag);
+    }
 }

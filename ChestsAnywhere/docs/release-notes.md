@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated chest options to support Automate 2.4.0+ configurable chests.
+
 ## 1.28.2
 Released 13 July 2025 for SMAPI 4.1.10 or later.
 

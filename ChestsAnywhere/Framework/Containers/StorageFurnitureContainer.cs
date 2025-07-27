@@ -53,6 +53,12 @@ internal class StorageFurnitureContainer : IContainer
     }
 
     /// <inheritdoc />
+    public bool HasContextTag(string tag)
+    {
+        return this.Furniture.HasContextTag(tag);
+    }
+
+    /// <inheritdoc />
     public bool IsSameAs(IContainer? container)
     {
         return

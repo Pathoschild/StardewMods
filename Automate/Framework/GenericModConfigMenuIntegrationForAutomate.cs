@@ -309,7 +309,7 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         return itemRepo
             .GetAll(ItemRegistry.type_object, includeVariants: false)
             .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false))
-            .Where(match => match.Item.HasContextTag(ModConstants.StorageTag))
+            .Where(match => match.Item.HasContextTag(AutomateConstants.StorageTag))
             .ToDictionary(
                 match => match.Item.QualifiedItemId,
                 match => new Func<string>(() => this.GetTranslatedChestName(match.Item.QualifiedItemId))

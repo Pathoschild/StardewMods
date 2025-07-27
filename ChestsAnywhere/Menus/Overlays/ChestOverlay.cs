@@ -50,7 +50,7 @@ internal class ChestOverlay : BaseChestOverlay
     /// <param name="events">The SMAPI events available for mods.</param>
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
-    /// <param name="showAutomateOptions">Whether to show Automate options.</param>
+    /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
     public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
         : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
     {

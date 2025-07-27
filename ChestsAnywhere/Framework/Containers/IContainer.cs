@@ -27,6 +27,10 @@ internal interface IContainer
     /// <param name="item">The item.</param>
     bool CanAcceptItem(Item item);
 
+    /// <summary>Get whether the container has the given context tag.</summary>
+    /// <param name="tag">The context tag to check.</param>
+    bool HasContextTag(string tag);
+
     /// <summary>Get whether another instance wraps the same underlying container.</summary>
     /// <param name="container">The other container.</param>
     bool IsSameAs(IContainer? container);
