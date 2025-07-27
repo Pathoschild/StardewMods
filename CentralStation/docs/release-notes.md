@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed tourists sometimes overlapping or spawning in the wrong area.
+
 ## 1.4.2
 Released 19 July 2025 for SMAPI 4.3.1 or later.
 
