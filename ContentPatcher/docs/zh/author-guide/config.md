@@ -132,7 +132,7 @@
 
 ![](../../screenshots/config-plain.png)
 
-您可以为配置添加[翻译文件](https://wiki.biligame.com/stardewvalley/模组:翻译模组)，从而提高界面的可读性与易用性。当您创建一个 `i18n/default.json` 后，您可以按照以下格式为您的字段添加翻译键：
+您可以为配置添加[翻译文件](https://zh.stardewvalleywiki.com/模组:翻译模组)，从而提高界面的可读性与易用性。当您创建一个 `i18n/default.json` 后，您可以按照以下格式为您的字段添加翻译键：
 
 键格式                             | 描述
 :------------------------------------- | :----------
@@ -168,7 +168,7 @@
 
 ![](../../screenshots/config-with-translations.png)
 
-请参阅 Wiki 上的[翻译模组](https://wiki.biligame.com/stardewvalley/模组:翻译模组)。
+请参阅 Wiki 上的[翻译模组](https://zh.stardewvalleywiki.com/模组:翻译模组)。
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参见[模组作者指南](../author-guide.md)。

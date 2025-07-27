@@ -46,8 +46,8 @@
 
 格式 | JSON 模式 URL
 ------ | ----------
-[SMAPI: `manifest.json`](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest) | https://smapi.io/schemas/manifest.json
-[SMAPI: 翻译（`i18n` 文件夹）](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Translation) | https://smapi.io/schemas/i18n.json
+[SMAPI: `manifest.json`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest) | https://smapi.io/schemas/manifest.json
+[SMAPI: 翻译（`i18n` 文件夹）](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Translation) | https://smapi.io/schemas/i18n.json
 [Content Patcher: `content.json`](../README.md) | https://smapi.io/schemas/content-patcher.json
 
 ---

@@ -27,7 +27,7 @@
 **只有理解了本页所述的概念，您才能理解其余部分，所以请不要跳过该部分！**
 
 ### 数据素材<a name="data-assets"></a>
-**数据素材**（Data Asset）包括从游戏中加载的时间地点，角色对话等数据。例如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在 [Wiki](https://wiki.biligame.com/stardewvalley/模组:目录) 上有阐述。
+**数据素材**（Data Asset）包括从游戏中加载的时间地点，角色对话等数据。例如 `Data/Objects` 包括游戏内所有物品的数据。每种数据的格式都在 [Wiki](https://zh.stardewvalleywiki.com/模组:目录) 上有阐述。
 
 以下是三种主要的数据素材：
 
@@ -245,7 +245,7 @@
 </dl>
 
 ### 编辑字典<a name="edit-a-dictionary"></a>
-[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。例如，以下操作会[将一个 ID 为](https://wiki.biligame.com/stardewvalley/模组:物品数据) 
+[字典](#data-assets)最简单的编辑方法是创建或覆盖一个条目。例如，以下操作会[将一个 ID 为](https://zh.stardewvalleywiki.com/模组:物品数据) 
 `{{ModId}}_Pufferchick` 的物品添加到 `Data/Objects` 中：
 
 ```js
@@ -492,4 +492,4 @@ ID         | 数据内的[字典键](#edit-a-dictionary)或者[列表键](#edit-
 
 ## 参见<a name="see-also"></a>
 * 其他操作和选项请参见[模组作者指南](../author-guide.md)。
-* Wiki 上的[数据素材格式文档](https://wiki.biligame.com/stardewvalley/模组:目录)
+* Wiki 上的[数据素材格式文档](https://zh.stardewvalleywiki.com/模组:目录)

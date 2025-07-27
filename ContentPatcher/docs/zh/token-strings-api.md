@@ -26,7 +26,7 @@ Content Patcher 拥有一个[令牌系统](author-guide/tokens.md)，它允许�
 
 访问 API 的步骤为：
 
-1. 在 `manifest.json` 将 Content Patcher 设为[**必要依赖**](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest#Dependencies_属性)：
+1. 在 `manifest.json` 将 Content Patcher 设为[**必要依赖**](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)：
    ```js
    "Dependencies": [
       { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
@@ -39,7 +39,7 @@ _译者注：这段似乎没更新，使用 API 只需将 `IContentPatcherAPI.cs
      <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
    </ItemGroup>
    ```
-3. 在您的模组代码中（例如 [`GameLaunched` 事件](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Events#GameLoop.GameLaunched)）中，获取 Content Patcher 的 API：
+3. 在您的模组代码中（例如 [`GameLaunched` 事件](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Events#GameLoop.GameLaunched)）中，获取 Content Patcher 的 API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<ContentPatcher.IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```

@@ -69,7 +69,7 @@ Content Patcher 在首次运行时会在模组文件夹中创建一个 `config.j
   <td><code>Controls</code></td>
   <td>
 
-设置的手柄、键盘和鼠标按键绑定（参见[按键绑定](https://wiki.biligame.com/stardewvalley/模组:使用指南/按键绑定)）。默认的按键绑定为：
+设置的手柄、键盘和鼠标按键绑定（参见[按键绑定](https://zh.stardewvalleywiki.com/模组:使用指南/按键绑定)）。默认的按键绑定为：
 
 * 按 `F3` 显示[调试模式](author-guide/troubleshooting.md#debug-mode)（需启用调试功能）；
 * 按 `LeftControl` 和 `RightControl` 切换调试模式中的贴图。
@@ -83,4 +83,4 @@ Content Patcher 在首次运行时会在模组文件夹中创建一个 `config.j
 ## 参见<a name="see-also"></a>
 * [版本发布说明](../release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
-* [更多帮助](https://wiki.biligame.com/stardewvalley/模组:帮助)
+* [更多帮助](https://zh.stardewvalleywiki.com/模组:帮助)

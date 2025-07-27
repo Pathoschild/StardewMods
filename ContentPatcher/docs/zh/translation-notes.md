@@ -11,7 +11,7 @@
 不汉化以下名词：
 - 任何需要写入模组 json 的词，如 "Action"
 
-Wiki 链接换成[中文 wiki](https://wiki.biligame.com/stardewvalley/模组:目录)
+Wiki 链接换成[中文 wiki](https://zh.stardewvalleywiki.com/模组:目录)
 
 ## 格式和语言风格
 

@@ -46,7 +46,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 
 您还可以对游戏进行动态调整。例如，可以在冬季周末晚上下雪时提高咖啡价格，除非玩家与阿比盖尔结婚。
 
-[Wiki 上的模组制作文档](https://wiki.biligame.com/stardewvalley/模组:目录)通常是为 Content Patcher 内容包作者编写的，所以您可以在那里找到很多示例。
+[Wiki 上的模组制作文档](https://zh.stardewvalleywiki.com/模组:目录)通常是为 Content Patcher 内容包作者编写的，所以您可以在那里找到很多示例。
 
 ### 内容包长什么样？<a name="what-does-a-content-pack-look-like"></a>
 
@@ -82,7 +82,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 
 素材名称通常不包括 "Content"、[语言代码](#how-do-i-change-assets-in-another-language) 或文件扩展名。例如，`Content/Maps/spring_beach.xnb` 和 `Content/Maps/spring_beach.fr-FR.xnb` 都是相同的 `Maps/spring_beach` 素材。
 
-您可以[解压游戏的内容文件](https://wiki.biligame.com/stardewvalley/模组:编辑_XNB_文件#解包游戏文件)以查看它们包含的内容。以下是 `Portraits/Abigail` 包含的内容：
+您可以[解压游戏的内容文件](https://zh.stardewvalleywiki.com/模组:编辑_XNB_文件#解包游戏文件)以查看它们包含的内容。以下是 `Portraits/Abigail` 包含的内容：
 
 ![](../screenshots/sample-asset.png)
 
@@ -100,7 +100,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
        "Version": "1.0.0",
        "Description": "One or two sentences about the mod.",
        "UniqueID": "YourName.YourModName",
-       "UpdateKeys": [], // 将您发布模组时的更新键填写在这里。请参阅 https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Update_checks
+       "UpdateKeys": [], // 将您发布模组时的更新键填写在这里。请参阅 https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Update_checks
        "ContentPackFor": {
            "UniqueID": "Pathoschild.ContentPatcher"
        }
@@ -175,7 +175,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 * 重新排序列表中的条目；
 * 或编辑条目中的单个字段。
 
-例如将苔藓汤的价格改为 80（请参阅[物体字段](https://wiki.biligame.com/stardewvalley/模组:物体)。
+例如将苔藓汤的价格改为 80（请参阅[物体字段](https://zh.stardewvalleywiki.com/模组:物体)。
 ```js
 {
     "Format": "2.7.0",
@@ -208,7 +208,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 * 使用透明度支持覆盖新图像到现有图像上；
 * 或扩展图像大小（例如，向精灵图添加更多精灵）。
 
-例如，如果您的内容包有一个 `assets/tuna.png` 图像，包含自定义的 [金枪鱼](https://wiki.biligame.com/stardewvalley/金枪鱼) 精灵，这会替换游戏内的金枪鱼精灵图：
+例如，如果您的内容包有一个 `assets/tuna.png` 图像，包含自定义的 [金枪鱼](https://zh.stardewvalleywiki.com/金枪鱼) 精灵，这会替换游戏内的金枪鱼精灵图：
 ```js
 {
    "Format": "2.7.0",
@@ -399,7 +399,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 有关更多信息，请参阅 [文本操作文档](author-guide/text-operations.md)。
 
 ### 触发动作<a name="trigger-actions"></a>
-Content Patcher 为特殊情况添加了自定义 [触发操作](https://wiki.biligame.com/stardewvalley/模组:触发动作)，例如将现有存档内容中旧的内置 ID 重命名为新的 ID。
+Content Patcher 为特殊情况添加了自定义 [触发操作](https://zh.stardewvalleywiki.com/模组:触发动作)，例如将现有存档内容中旧的内置 ID 重命名为新的 ID。
 
 有关更多信息，请参阅 [Content Patcher 的触发操作文档](author-guide/trigger-actions.md)。
 
@@ -489,19 +489,19 @@ Content Patcher 为特殊情况添加了自定义 [触发操作](https://wiki.bi
 ### 多个补丁如何交互？<a name="how-do-multiple-patches-interact"></a>
 多个补丁可以应用于同一文件。`Action: Load` 总是先于其他操作之前执行，但除此之外，每个补丁都是按顺序依次应用的。每个补丁完成后，下一个补丁将会把修改过的数据素材作为输入。
 
-在一个内容包内，补丁会按照它们在 `content.json` 中列出的顺序应用。当您有多个内容包时，每个内容包都会按照 SMAPI 加载它们的顺序应用；如果您的内容包依赖另一个内容包，则需要显式地在另一个内容包之后进行补丁，请参阅 [manifest 中的依赖](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Integrations)。
+在一个内容包内，补丁会按照它们在 `content.json` 中列出的顺序应用。当您有多个内容包时，每个内容包都会按照 SMAPI 加载它们的顺序应用；如果您的内容包依赖另一个内容包，则需要显式地在另一个内容包之后进行补丁，请参阅 [manifest 中的依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Integrations)。
 
 ### 已知限制<a name="known-limitations"></a>
 某些游戏素材具有特殊逻辑。这并非 Content Patcher 特有的问题，但为了方便起见在此处进行了记录。
 
  素材  | 注意事项 
  ---- | ------- 
- `Characters/Dialogue/*` | 对话是在每天开始时设置的，因此设置[自定义更新频率](#update-rate)不会影响当天开始后对话的变化。（您可以使用[位置特定的对话键](https://wiki.biligame.com/stardewvalley/模组:对话#地点对话)来绕过这一限制。） 
+ `Characters/Dialogue/*` | 对话是在每天开始时设置的，因此设置[自定义更新频率](#update-rate)不会影响当天开始后对话的变化。（您可以使用[位置特定的对话键](https://zh.stardewvalleywiki.com/模组:对话#地点对话)来绕过这一限制。） 
  `Characters/Farmer/accessories` | 配饰的数量是硬编码的，因此自定义配饰需要替换现有的配饰。
  `Characters/Farmer/skinColors` | 皮肤颜色的值是硬编码的，因此自定义颜色需要替换现有的颜色。
  `Data/SpecialOrders` | 游戏会在**保存游戏前**缓存此素材的一个副本，并在第一次打开会话的特殊订单板时加载一个单独的副本。在有条件地添加或移除特殊订单时要非常小心，因为这可能会在玩家尝试在新列表中接受缓存列表中不存在的特殊订单时导致游戏崩溃。 
- `Maps/*` | 参见 Wiki [地图编辑中的潜在问题](https://wiki.biligame.com/stardewvalley/模组:地图#潜在问题)。 
+ `Maps/*` | 参见 Wiki [地图编辑中的潜在问题](https://zh.stardewvalleywiki.com/模组:地图#潜在问题)。 
 
 ## 参见<a name="see-also"></a>
 * [README](README.md) 中的其他信息
-* [帮助](https://wiki.biligame.com/stardewvalley/模组:帮助)
+* [帮助](https://zh.stardewvalleywiki.com/模组:帮助)

@@ -2,7 +2,7 @@
 
 > [!WARNING]  
 > **此功能已弃用，不应该使用于新内容包。**  
-> 1.6 的新模组应该使用游戏内置的 `Data/Locations` 来添加自定义地点，请参阅[模组：地点数据](https://wiki.biligame.com/stardewvalley/模组:地点数据)。
+> 1.6 的新模组应该使用游戏内置的 `Data/Locations` 来添加自定义地点，请参阅[模组：地点数据](https://zh.stardewvalleywiki.com/模组:地点数据)。
 
 ----
 
@@ -29,8 +29,8 @@
 
 虽然地图和地点经常互换使用，代码里的“地图（map）”和“地点（location）”是两个不同的概念。区别对于理解此功能的工作方式至关重要：
 
-* [**地图**](https://wiki.biligame.com/stardewvalley/模组:地图)是一种描述图块、分布、图块表和地图/图块属性的素材资源。每当您加载游戏和每次模组更改地图时，整个地图会重新加载。
-* [**地点**](https://wiki.biligame.com/stardewvalley/模组:制作指南/游戏基本架构#GameLocation_et_al)是游戏代码的一部分，用于管理某区域及其内部的所有对象（包括非地图实体，如玩家）。地点会被写入存档文件，并且仅在加载存档文件时加载。
+* [**地图**](https://zh.stardewvalleywiki.com/模组:地图)是一种描述图块、分布、图块表和地图/图块属性的素材资源。每当您加载游戏和每次模组更改地图时，整个地图会重新加载。
+* [**地点**](https://zh.stardewvalleywiki.com/模组:制作指南/游戏基本架构#GameLocation_et_al)是游戏代码的一部分，用于管理某区域及其内部的所有对象（包括非地图实体，如玩家）。地点会被写入存档文件，并且仅在加载存档文件时加载。
 
 换句话说，**地点**（游戏代码）包含**地图**（从 `Content` 加载的素材）：
 
@@ -70,7 +70,7 @@
 
 此名字：
 * 必须仅包含字母、数字或下划线。
-* 必须以您的模组的 [Manifest `UniqueId`](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest)作为开头
+* 必须以您的模组的 [Manifest `UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)作为开头
   （例如 `Your.ModId_`）以防止命名冲突。出于旧版支持原因，您也可以用 `Custom_` 作为开头，但不推荐。
 * 必须**具有唯一性**，所以强烈建议使用模组 ID 作为前缀。如果两个内容包添加了 `Name` 值相同的地点，那么两个地点都无法生效，并抛出错误提示。如果玩家此时忽略该提示并保存游戏，地点内的所有实体对象都将会永久丢失。
 
@@ -146,7 +146,7 @@
 ### 游戏中如何抵达我的自定义地点？<a name="how-do-i-get-to-my-location-in-game"></a>
 
 `CustomLocations`仅添加地点。不要忘记给玩家进入地点的方法，如用[`EditMap`](action-editmap.md)添加传送。测试时可用`debug warp <location name>` [console
-command](https://wiki.biligame.com/stardewvalley/模组:控制台命令#控制台命令)
+command](https://zh.stardewvalleywiki.com/模组:控制台命令#控制台命令)
 
 ### 地点可以添加条件吗?<a name="can-i-make-the-location-conditional"></a>
 

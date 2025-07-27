@@ -20,7 +20,7 @@
 ### 什么是地图？<a name="what-is-a-map"></a>
 一个地图素材描述游戏内某个区域的的地形（水、悬崖、地面）、地形特征（灌木）、建筑、路径和特定区域的触发器。在您到达某个区域的边缘或进入建筑物时屏幕变黑时，意味着您正在两个地图间切换。
 
-**请参阅 Wiki 上的[模组：地图](https://wiki.biligame.com/stardewvalley/模组:地图)**以更详细的了解地图和进阶概念。
+**请参阅 Wiki 上的[模组：地图](https://zh.stardewvalleywiki.com/模组:地图)**以更详细的了解地图和进阶概念。
 
 ## 用法<a name="usage"></a>
 ### 概述<a name="overview"></a>
@@ -252,7 +252,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 </td>
 <td>
 
-在 [`NPCWarp` 或 `Warp` 地图属性](https://wiki.biligame.com/stardewvalley/模组:地图#传送和地图位置)里添加新的传送点，请仅在必要时创建该字段。如果多个传送点被添加到了同一图块上，那么最后添加的传送点将会生效。
+在 [`NPCWarp` 或 `Warp` 地图属性](https://zh.stardewvalleywiki.com/模组:地图#传送和地图位置)里添加新的传送点，请仅在必要时创建该字段。如果多个传送点被添加到了同一图块上，那么最后添加的传送点将会生效。
 
 该字段支持[令牌](../author-guide.md#tokens)。
 
@@ -275,7 +275,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 </tr>
 </table>
 
-例如，此补丁更改农场洞穴的 `Outdoors` 地图属性，并增加一个传送点（传送格式请参阅 Wiki 上的[地图说明文档](https://wiki.biligame.com/stardewvalley/模组:地图)）
+例如，此补丁更改农场洞穴的 `Outdoors` 地图属性，并增加一个传送点（传送格式请参阅 Wiki 上的[地图说明文档](https://zh.stardewvalleywiki.com/模组:地图)）
 ```js
 {
     "Format": "2.7.0",
@@ -325,8 +325,8 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 
 字段 | 用途
 ----- | -------
-`Layer` | (必填) 需更改的图块所在的[地图图层](https://wiki.biligame.com/stardewvalley/模组:地图#基本概念)。
-`Position` | (必填) 需更改的图块所在的[图块坐标](https://wiki.biligame.com/stardewvalley/模组:地图#地块坐标)。您可以使用用 [Debug Mode 模组](https://www.nexusmods.com/stardewvalley/mods/679)在游戏内查看坐标。
+`Layer` | (必填) 需更改的图块所在的[地图图层](https://zh.stardewvalleywiki.com/模组:地图#基本概念)。
+`Position` | (必填) 需更改的图块所在的[图块坐标](https://zh.stardewvalleywiki.com/模组:地图#地块坐标)。您可以使用用 [Debug Mode 模组](https://www.nexusmods.com/stardewvalley/mods/679)在游戏内查看坐标。
 `SetTilesheet` | (新增图块时必填，其他情况可选) 指定此图块的图块集 ID。
 `SetIndex` | (新增图块时必填，其他情况可选) 指定此图块在图块集里的索引编号。
 `SetProperties` | 要新增或移除的图块属性时，会和并到所有现有的图块属性中。若要删除属性，将值设置为 `null`（不能使用带有双引号的`"null"`！）。

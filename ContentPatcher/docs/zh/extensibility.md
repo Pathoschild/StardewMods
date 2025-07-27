@@ -20,7 +20,7 @@
 
 ## 简介<a name="introduction"></a>
 
-您的 SMAPI 模组可以使用 Content Patcher 的[模组 API](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Integrations#模组API)来添加自定义令牌。自定义令牌的前缀为提供它们的模组，如`your-mod-id/SomeTokenName`。
+您的 SMAPI 模组可以使用 Content Patcher 的[模组 API](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Integrations#模组API)来添加自定义令牌。自定义令牌的前缀为提供它们的模组，如`your-mod-id/SomeTokenName`。
 
 您可以使用这两种 API：
 
@@ -33,7 +33,7 @@
 
 访问 API 的步骤为：
 
-1. 将 Content Patcher 设为 [`manifest.json` 中的依赖](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest#Dependencies_属性):
+1. 将 Content Patcher 设为 [`manifest.json` 中的依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性):
 
    ```js
    "Dependencies": [
@@ -42,7 +42,7 @@
    ```
 
 2. 把 [`IContentPatcherAPI`](../../IContentPatcherAPI.cs) 复制到您模组里，然后删除**任何您不需要用到的方法，这主要是为了考虑未来版本的兼容性**。
-3. 在您的模组代码中（如 [`GameLaunched` 事件](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Events#GameLoop.GameLaunched)中）获取 Content Patcher 的 API：
+3. 在您的模组代码中（如 [`GameLaunched` 事件](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Events#GameLoop.GameLaunched)中）获取 Content Patcher 的 API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```

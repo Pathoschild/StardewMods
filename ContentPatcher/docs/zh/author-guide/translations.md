@@ -18,7 +18,7 @@
 
 您可以将本地化翻译文件存储在内容包的 `i18n` 子目录下，然后用 `i18n` 令牌来调用翻译文本。当某个语言没有翻译时，Content Patcher 会自动使用默认翻译文本。
 
-翻译文件的格式请参阅 Wiki 上 [i18n 文件夹](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Translation#i18n_文件夹)的文档。文件中的翻译令牌必须显式提供给 i18n 令牌（请参阅下文）。
+翻译文件的格式请参阅 Wiki 上 [i18n 文件夹](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Translation#i18n_文件夹)的文档。文件中的翻译令牌必须显式提供给 i18n 令牌（请参阅下文）。
 
 您可以通过在补丁中添加 `{{i18n: <键>}}` 令牌来使用翻译，把 `<键>` 替换成 `i18n` 文档里需调用的翻译键（请参阅下文示例）。您可以为 `i18n` 提供以下参数：
 
@@ -120,7 +120,7 @@
 ```
 
 ## 限制
-* [性别判断](https://wiki.biligame.com/stardewvalley/模组:对话#性别判断)仅在将文本传递给游戏时有效（例如通过对话），因为游戏会解析它们。
+* [性别判断](https://zh.stardewvalleywiki.com/模组:对话#性别判断)仅在将文本传递给游戏时有效（例如通过对话），因为游戏会解析它们。
 
 ## 常见问题<a name="faqs"></a>
 ### 我可以在 `i18n` 文件里使用令牌吗?<a name="can-i-use-content-patcher-tokens-in-i18n-files"></a>
@@ -175,4 +175,4 @@
 
 ## 参见 <a name="see-also"></a>
 * 其他操作和选项请参见[模组作者指南](../author-guide.md)
-* 更多信息请参考 Wiki 上的[翻译模组](https://wiki.biligame.com/stardewvalley/模组:翻译模组)文档
+* 更多信息请参考 Wiki 上的[翻译模组](https://zh.stardewvalleywiki.com/模组:翻译模组)文档

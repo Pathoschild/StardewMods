@@ -82,7 +82,7 @@
 </dl>
 
 ### 示例<a name="examples"></a>
-此补丁将阿比盖尔的肖像替换为您提供的图片（请参阅[模组：NPC 数据](https://wiki.biligame.com/stardewvalley/模组:NPC数据)）：
+此补丁将阿比盖尔的肖像替换为您提供的图片（请参阅[模组：NPC 数据](https://zh.stardewvalleywiki.com/模组:NPC数据)）：
 ```js
 {
     "Format": "2.7.0",

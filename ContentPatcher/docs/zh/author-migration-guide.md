@@ -104,7 +104,7 @@
 <ul>
 <li>
 
-游戏本身的内容更改请参阅[迁移至游戏本体 1.6](https://wiki.biligame.com/stardewvalley/模组:迁移至游戏本体1.6)。
+游戏本身的内容更改请参阅[迁移至游戏本体 1.6](https://zh.stardewvalleywiki.com/模组:迁移至游戏本体1.6)。
 
 </li>
 <li>
@@ -114,7 +114,7 @@
 </li>
 <li>
 
-[`CustomLocations`](author-guide/custom-locations.md) 已弃用。您应该将自定义地点添加到 1.6 版游戏本体的[新的 `Data/Locations` 素材](https://wiki.biligame.com/stardewvalley/模组:地点数据)。
+[`CustomLocations`](author-guide/custom-locations.md) 已弃用。您应该将自定义地点添加到 1.6 版游戏本体的[新的 `Data/Locations` 素材](https://zh.stardewvalleywiki.com/模组:地点数据)。
 
 例如，如果您有一个自定义位置如下：
 
@@ -152,9 +152,9 @@
 ]
 ```
 
-游戏使用标准的[唯一字符串 ID](https://wiki.biligame.com/stardewvalley/模组:公共数据字段#唯一字符串ID) 格式作为地点名称。以上示例使用了新格式（`{{ModId}}_AbigailCloset`）并把旧名字（`Custom_ExampleMod_AbigailCloset`）添加到 `FormerLocationNames` 字段中，以便将此地点在现有存档中自动迁移为新的名称。
+游戏使用标准的[唯一字符串 ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID) 格式作为地点名称。以上示例使用了新格式（`{{ModId}}_AbigailCloset`）并把旧名字（`Custom_ExampleMod_AbigailCloset`）添加到 `FormerLocationNames` 字段中，以便将此地点在现有存档中自动迁移为新的名称。
 
-Content Patcher 会自动将 {{ModId}} 替换为您的模组 [Manifest 中的 `UniqueId`](https://wiki.biligame.com/stardewvalley/模组:制作指南/APIs/Manifest)。
+Content Patcher 会自动将 {{ModId}} 替换为您的模组 [Manifest 中的 `UniqueId`](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest)。
 
 **已知限制：**
 * 您不能直接将 `TMXL Map Toolkit` 提供的地点迁移到 `Data/Locations`。如果您需要继续支持 `TMXL`，您可以继续使用依旧支持 `TMXL` 地点的 `CustomLocations`，然后使用 `EditData` 来编辑 `Data/Locations` 来更改您地点的数据。
@@ -278,4 +278,4 @@ Content Patcher 会自动将 {{ModId}} 替换为您的模组 [Manifest 中的 `U
 
 ## 参见<a name="see-also"></a>
 * 其他信息请参阅[README](README.md)
-* [寻求帮助](https://wiki.biligame.com/stardewvalley/模组:帮助)
+* [寻求帮助](https://zh.stardewvalleywiki.com/模组:帮助)
