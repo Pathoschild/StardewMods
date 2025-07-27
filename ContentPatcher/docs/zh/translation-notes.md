@@ -24,7 +24,7 @@ Wiki 链接换成[中文 wiki](https://zh.stardewvalleywiki.com/模组:目录)
   - 英文环境下，物品列举一般为 a, b, c and d，翻译时应当将**逗号**更换为**顿号**，即 a、b、c 和 d。
 - 对于技术性说明文档，建议使用陈述性书面语体，尽量避免在正文中使用口语化表述。
 
-> 此格式记录部分引用了中文 Wiki 编者 Sizau 的[格式记录](https://wiki.biligame.com/stardewvalley/%E5%B8%AE%E5%8A%A9:%E6%A0%BC%E5%BC%8F)，您也可以参阅该记录并了解部分在 Wiki 编辑中常用的准则（作为参考）。
+> 此格式记录部分引用了中文 Wiki 的[格式记录](https://wiki.biligame.com/stardewvalley/%E5%B8%AE%E5%8A%A9:%E6%A0%BC%E5%BC%8F)，您也可以参阅该记录并了解部分在 Wiki 编辑中常用的准则（作为参考）。
 
 ## 词汇表
 
