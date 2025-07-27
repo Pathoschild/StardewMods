@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Pathoschild.Stardew.Automate.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -32,7 +33,10 @@ internal class ChestContainer : IContainer
     public ContainerData Data { get; }
 
     /// <inheritdoc />
-    public bool CanConfigureAutomate => this.Chest.SpecialChestType != Chest.SpecialChestTypes.JunimoChest && this.Chest.SpecialChestType != Chest.SpecialChestTypes.MiniShippingBin;
+    public bool CanConfigureAutomateStore => this.Chest.HasContextTag(AutomateConstants.StorageTag) && !this.Chest.HasContextTag(AutomateConstants.StorageTakeOnlyTag);
+
+    /// <inheritdoc />
+    public bool CanConfigureAutomateTake => this.Chest.HasContextTag(AutomateConstants.StorageTag);
 
 
     /*********
@@ -54,6 +58,12 @@ internal class ChestContainer : IContainer
     public bool CanAcceptItem(Item item)
     {
         return InventoryMenu.highlightAllItems(item);
+    }
+
+    /// <inheritdoc />
+    public bool HasContextTag(string tag)
+    {
+        return this.Chest.HasContextTag(tag);
     }
 
     /// <inheritdoc />

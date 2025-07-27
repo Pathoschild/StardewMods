@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.5.0
+Released 27 July 2025 for SMAPI 4.3.1 or later.
+
+* Added various custom travel-related decor in the gift shop, which you can use to decorate your farmhouse or other locations.
+* Adjusted tourist positions to avoid small tourists being hidden behind decor.
+* Fixed tourists sometimes overlapping or spawning in the wrong area.
+
 ## 1.4.2
 Released 19 July 2025 for SMAPI 4.3.1 or later.
 

@@ -26,6 +26,9 @@ internal class ChestContainer : IContainer
     /// <summary>The underlying chest.</summary>
     private readonly Chest Chest;
 
+    /// <summary>Whether the chest type only allows retrieving items.</summary>
+    private readonly bool IsTakeOnly;
+
 
     /*********
     ** Accessors
@@ -65,14 +68,16 @@ internal class ChestContainer : IContainer
     /// <param name="chest">The underlying chest.</param>
     /// <param name="location">The location which contains the container.</param>
     /// <param name="tile">The tile area covered by the container.</param>
+    /// <param name="isTakeOnly">Whether the chest type only allows retrieving items.</param>
     /// <param name="migrateLegacyOptions">Whether to migrate legacy chest options, if applicable.</param>
     [SuppressMessage("SMAPI.CommonErrors", "AvoidImplicitNetFieldCast", Justification = "We're deliberately referencing the net list here.")]
-    public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool migrateLegacyOptions = true)
+    public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool isTakeOnly = false, bool migrateLegacyOptions = true)
     {
         this.Chest = chest;
         this.Location = location;
         this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
         this.InventoryReferenceId = this.GetInventory();
+        this.IsTakeOnly = isTakeOnly;
 
         if (migrateLegacyOptions)
             this.MigrateLegacyOptions();
@@ -81,7 +86,7 @@ internal class ChestContainer : IContainer
     /// <inheritdoc />
     public void Store(ITrackedStack stack)
     {
-        if (stack.Count <= 0 || this.Chest.SpecialChestType == Chest.SpecialChestTypes.AutoLoader)
+        if (stack.Count <= 0 || this.IsTakeOnly)
             return;
 
         IList<Item?> inventory = this.GetInventory();

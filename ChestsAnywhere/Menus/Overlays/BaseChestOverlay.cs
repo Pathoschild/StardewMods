@@ -34,7 +34,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>The selected chest.</summary>
     private readonly ManagedChest Chest;
 
-    /// <summary>Whether to show Automate options.</summary>
+    /// <summary>Whether to show Automate options if applicable for this chest type.</summary>
     private readonly bool ShowAutomateOptions;
 
     /// <summary>The number of draw cycles since the menu was initialized.</summary>
@@ -104,11 +104,11 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>A checkbox which indicates whether to hide the chest.</summary>
     private Checkbox EditHideChestField;
 
-    /// <summary>A dropdown which configures how Automate stores items in this chest.</summary>
-    private SimpleDropdown<AutomateContainerPreference> EditAutomateStorage;
+    /// <summary>A dropdown which configures how Automate stores items in this chest, if applicable.</summary>
+    private SimpleDropdown<AutomateContainerPreference>? EditAutomateStore;
 
-    /// <summary>A dropdown which configures how Automate takes items from this chest.</summary>
-    private SimpleDropdown<AutomateContainerPreference> EditAutomateFetch;
+    /// <summary>A dropdown which configures how Automate takes items from this chest, if applicable.</summary>
+    private SimpleDropdown<AutomateContainerPreference>? EditAutomateTake;
 
     /// <summary>The clickable area which saves the edit form.</summary>
     private ClickableComponent EditSaveButtonArea;
@@ -194,7 +194,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <param name="events">The SMAPI events available for mods.</param>
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
-    /// <param name="showAutomateOptions">Whether to show Automate options.</param>
+    /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
     /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
     protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive)
         : base(events, input, reflection, keepAlive, assumeUiMode: true)
@@ -297,18 +297,21 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
             // Automate options
             // note: must be drawn in reverse order (including the buttons), so dropdowns overlay the elements below them
-            if (this.ShowAutomateOptions)
+            if (this.EditAutomateStore != null || this.EditAutomateTake != null)
             {
+                int storageDropdownHeight = this.EditAutomateStore?.Bounds.Height ?? 0;
+                int fetchDropdownHeight = this.EditAutomateTake?.Bounds.Height ?? 0;
+
                 // label
                 topOffset += padding;
                 topOffset += batch.DrawTextBlock(Game1.smallFont, I18n.Label_AutomateOptions(), new Vector2(bounds.X + padding, bounds.Y + topOffset), wrapWidth: bounds.Width - bounds.X - padding, bold: true).Y;
 
                 // buttons
-                DrawButtons(yOffset: this.EditAutomateStorage.Bounds.Height + this.EditAutomateFetch.Bounds.Height + padding);
+                DrawButtons(yOffset: storageDropdownHeight + fetchDropdownHeight + padding);
 
                 // dropdowns
-                this.EditAutomateFetch.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset + this.EditAutomateStorage.Bounds.Height);
-                this.EditAutomateStorage.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset);
+                this.EditAutomateTake?.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset + storageDropdownHeight);
+                this.EditAutomateStore?.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset);
             }
             else
                 DrawButtons(yOffset: 0);
@@ -472,7 +475,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     this.EditHideChestField.Toggle();
 
                 // Automate options
-                else if (this.EditAutomateStorage.TryClick(x, y) || this.EditAutomateFetch.TryClick(x, y))
+                else if (this.EditAutomateStore?.TryClick(x, y) is true || this.EditAutomateTake?.TryClick(x, y) is true)
                 {
                     // handled internally
                 }
@@ -577,8 +580,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
             case Element.EditForm:
                 this.EditExitButton.tryHover(x, y);
-                this.EditAutomateStorage.TryHover(x, y);
-                this.EditAutomateFetch.TryHover(x, y);
+                this.EditAutomateStore?.TryHover(x, y);
+                this.EditAutomateTake?.TryHover(x, y);
                 return true;
 
             case Element.ChestList:
@@ -602,8 +605,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         nameof(BaseChestOverlay.EditCategoryField),
         nameof(BaseChestOverlay.EditOrderField),
         nameof(BaseChestOverlay.EditHideChestField),
-        nameof(BaseChestOverlay.EditAutomateStorage),
-        nameof(BaseChestOverlay.EditAutomateFetch),
         nameof(BaseChestOverlay.EditSaveButtonArea),
         nameof(BaseChestOverlay.EditResetButtonArea),
         nameof(BaseChestOverlay.EditExitButton)
@@ -653,22 +654,35 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
         this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
         this.EditHideChestField = new Checkbox();
-        this.EditAutomateStorage = new SimpleDropdown<AutomateContainerPreference>(
-            this.Reflection,
-            options: [
-                new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateStore()),
+
+        if (this.ShowAutomateOptions && this.Chest.CanConfigureAutomateStore)
+        {
+            this.EditAutomateStore = new SimpleDropdown<AutomateContainerPreference>(
+                this.Reflection,
+                options: [
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateStore()),
                     new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Prefer, I18n.Label_AutomateStoreFirst()),
                     new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Disable, I18n.Label_AutomateStoreDisabled())
-            ]
-        );
-        this.EditAutomateFetch = new SimpleDropdown<AutomateContainerPreference>(
-            this.Reflection,
-            options: [
-                new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateTake()),
+                ]
+            );
+        }
+        else
+            this.EditAutomateStore = null;
+
+        if (this.ShowAutomateOptions && this.Chest.CanConfigureAutomateTake)
+        {
+            this.EditAutomateTake = new SimpleDropdown<AutomateContainerPreference>(
+                this.Reflection,
+                options: [
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateTake()),
                     new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Prefer, I18n.Label_AutomateTakeFirst()),
                     new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Disable, I18n.Label_AutomateTakeDisabled())
-            ]
-        );
+                ]
+            );
+        }
+        else
+            this.EditAutomateTake = null;
+
         this.FillForm();
 
         this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
@@ -696,8 +710,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.EditCategoryField.Text = this.Chest.DisplayCategory;
         this.EditOrderField.Text = this.Chest.Order?.ToString() ?? string.Empty;
         this.EditHideChestField.Value = this.Chest.IsIgnored;
-        this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
-        this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
+        this.EditAutomateStore?.TrySelect(this.Chest.AutomateStoreItems);
+        this.EditAutomateTake?.TrySelect(this.Chest.AutomateTakeItems);
     }
 
     /// <summary>Reset the edit form to the default values.</summary>
@@ -718,9 +732,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         }
 
         // update chest
-        AutomateContainerPreference automateStore = this.EditAutomateStorage.SelectedKey;
-        AutomateContainerPreference automateTake = this.EditAutomateFetch.SelectedKey;
-        bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
+        AutomateContainerPreference automateStore = this.EditAutomateStore?.SelectedKey ?? this.Chest.AutomateStoreItems;
+        AutomateContainerPreference automateTake = this.EditAutomateTake?.SelectedKey ?? this.Chest.AutomateTakeItems;
+        bool automateChanged = automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems;
         this.Chest.Update(
             name: this.EditNameField.Text,
             category: this.EditCategoryField.Text,
@@ -840,8 +854,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.EditCategoryField.Text = this.Chest.DisplayCategory;
         this.EditOrderField.Text = this.Chest.Order?.ToString() ?? string.Empty;
         this.EditHideChestField.Value = this.Chest.IsIgnored;
-        this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
-        this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
+        this.EditAutomateStore?.TrySelect(this.Chest.AutomateStoreItems);
+        this.EditAutomateTake?.TrySelect(this.Chest.AutomateTakeItems);
 
         this.ActiveElement = Element.EditForm;
     }
@@ -892,7 +906,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <param name="label">The translation for the checkbox label.</param>
     /// <param name="color">The text color to draw.</param>
     /// <param name="bounds">The button's outer bounds.</param>
-    private Vector2 DrawButton(SpriteBatch batch, SpriteFont font, ClickableComponent clickArea, int x, int y, string label, in Color color, out Rectangle bounds)
+    private void DrawButton(SpriteBatch batch, SpriteFont font, ClickableComponent clickArea, int x, int y, string label, in Color color, out Rectangle bounds)
     {
         // get text
         Vector2 labelSize = font.MeasureString(label);
@@ -905,6 +919,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         clickArea.bounds = bounds;
 
         // return size
-        return new Vector2(bounds.Width, bounds.Height);
+        //return new Vector2(bounds.Width, bounds.Height);
     }
 }

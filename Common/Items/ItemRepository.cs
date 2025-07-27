@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using StardewValley;
-using StardewValley.GameData.FishPonds;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -173,6 +172,8 @@ internal class ItemRepository
         string id = item.ItemId;
 
         // by category
+        bool createdJuice = false;
+        bool createdPickle = false;
         switch (item.Category)
         {
             // fish
@@ -192,76 +193,54 @@ internal class ItemRepository
             // greens
             case SObject.GreensCategory:
                 yield return this.TryCreate(itemType.Identifier, $"342/{id}", _ => objectDataDefinition.CreateFlavoredPickle(item));
+                createdPickle = true;
+
+                if (item.Edibility > 0 && !item.HasContextTag("edible_mushroom"))
+                {
+                    yield return this.TryCreate(itemType.Identifier, $"350/{id}", _ => objectDataDefinition.CreateFlavoredJuice(item));
+                    createdJuice = true;
+                }
+
                 break;
 
             // vegetable products
             case SObject.VegetableCategory:
                 yield return this.TryCreate(itemType.Identifier, $"350/{id}", _ => objectDataDefinition.CreateFlavoredJuice(item));
+                createdJuice = true;
+
                 yield return this.TryCreate(itemType.Identifier, $"342/{id}", _ => objectDataDefinition.CreateFlavoredPickle(item));
+                createdPickle = true;
                 break;
 
             // flower honey
             case SObject.flowersCategory:
                 yield return this.TryCreate(itemType.Identifier, $"340/{id}", _ => objectDataDefinition.CreateFlavoredHoney(item));
                 break;
-
-            // roe and aged roe (derived from FishPond.GetFishProduce)
-            case SObject.sellAtFishShopCategory when item.QualifiedItemId == "(O)812":
-                {
-                    this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
-
-                    foreach (string key in Game1.objectData.Keys)
-                    {
-                        // get input
-                        SObject? input = this.TryCreate(itemType.Identifier, key, p => new SObject(p.Id, 1))?.Item as SObject;
-                        if (input == null)
-                            continue;
-
-                        HashSet<string> inputTags = input.GetContextTags();
-                        if (!inputTags.Any())
-                            continue;
-
-                        // check if roe-producing fish
-                        if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
-                            continue;
-
-                        // create roe
-                        SearchableItem? roe = this.TryCreate(itemType.Identifier, $"812/{input.ItemId}", _ => objectDataDefinition.CreateFlavoredRoe(input));
-                        yield return roe;
-
-                        // create aged roe
-                        if (roe?.Item is SObject roeObj && input.QualifiedItemId != "(O)698") // skip aged sturgeon roe (which is a separate caviar item)
-                            yield return this.TryCreate(itemType.Identifier, $"447/{input.ItemId}", _ => objectDataDefinition.CreateFlavoredAgedRoe(roeObj));
-                    }
-                }
-                break;
         }
 
         // by context tag
-        if (item.HasContextTag("preserves_pickle") && item.Category is not (SObject.GreensCategory or SObject.VegetableCategory))
-            yield return this.TryCreate(itemType.Identifier, $"342/{id}", _ => objectDataDefinition.CreateFlavoredPickle(item));
-
-        if (item.HasContextTag("edible_mushroom"))
-            yield return this.TryCreate(itemType.Identifier, $"DriedMushrooms/{id}", _ => objectDataDefinition.CreateFlavoredDriedMushroom(item));
-    }
-
-    /// <summary>Get optimized lookups to match items which produce roe in a fish pond.</summary>
-    /// <param name="simpleTags">A lookup of simple singular tags which match a roe-producing fish.</param>
-    /// <param name="complexTags">A list of tag sets which match roe-producing fish.</param>
-    private void GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags)
-    {
-        simpleTags = [];
-        complexTags = [];
-
-        foreach (FishPondData data in this.TryLoad(() => DataLoader.FishPondData(Game1.content)))
         {
-            if (data.ProducedItems.All(p => p.ItemId is not ("812" or "(O)812")))
-                continue; // doesn't produce roe
+            // roe + aged roe
+            if (item.HasContextTag("fish_has_roe"))
+            {
+                SearchableItem? roe = this.TryCreate(itemType.Identifier, $"812/{item.ItemId}", _ => objectDataDefinition.CreateFlavoredRoe(item));
+                yield return roe;
 
-            if (data.RequiredTags.Count == 1 && !data.RequiredTags[0].StartsWith("!"))
-                simpleTags.Add(data.RequiredTags[0]);
-            else
-                complexTags.Add(data.RequiredTags);
+                if (roe?.Item is SObject roeObj && item.QualifiedItemId != "(O)698") // skip aged sturgeon roe (which is a separate caviar item)
+                    yield return this.TryCreate(itemType.Identifier, $"447/{item.ItemId}", _ => objectDataDefinition.CreateFlavoredAgedRoe(roeObj));
+            }
+
+            // juice
+            if (!createdJuice && item.HasContextTag("keg_juice"))
+                yield return this.TryCreate(itemType.Identifier, $"350/{id}", _ => objectDataDefinition.CreateFlavoredJuice(item));
+
+            // pickles
+            if (!createdPickle && item.HasContextTag("preserves_pickle") && item.Category is not (SObject.GreensCategory or SObject.VegetableCategory))
+                yield return this.TryCreate(itemType.Identifier, $"342/{id}", _ => objectDataDefinition.CreateFlavoredPickle(item));
+
+            // dried mushrooms
+            if (item.HasContextTag("edible_mushroom"))
+                yield return this.TryCreate(itemType.Identifier, $"DriedMushrooms/{id}", _ => objectDataDefinition.CreateFlavoredDriedMushroom(item));
         }
     }
 
@@ -290,7 +269,7 @@ internal class ItemRepository
     {
         try
         {
-            SearchableItem item = new SearchableItem(type, key, createItem);
+            SearchableItem item = new(type, key, createItem);
             item.Item.getDescription(); // force-load item data, so it crashes here if it's invalid
 
             if (item.Item.Name is null or "Error Item")

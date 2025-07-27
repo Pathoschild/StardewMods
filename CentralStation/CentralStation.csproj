@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.4.2</Version>
+    <Version>1.5.0</Version>
     <RootNamespace>Pathoschild.Stardew.CentralStation</RootNamespace>
 
-    <IgnoreModFilePaths>assets/.paths.png, assets/.spring_outdoorsTileSheet.png, assets/.spring_outdoorsTileSheet2.png, assets/.spring_Shadows.png</IgnoreModFilePaths>
+    <IgnoreModFilePaths>assets/maps/.paths.png, assets/maps/.spring_outdoorsTileSheet.png, assets/maps/.spring_outdoorsTileSheet2.png, assets/maps/.spring_Shadows.png</IgnoreModFilePaths>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +14,7 @@
     <ContentPacks
       Include="[CP] CentralStation"
       Version="$(Version)"
-      IgnoreModFilePaths="assets/desert_festival_tilesheet.png, assets/Festivals.png, assets/MovieTheater_TileSheet.png, assets/paths.png, assets/pirates_tilesheet.png, assets/townInterior.png, assets/walls_and_floors.png"
+      IgnoreModFilePaths="assets/maps/desert_festival_tilesheet.png, assets/maps/Festivals.png, assets/maps/MovieTheater_TileSheet.png, assets/maps/paths.png, assets/maps/pirates_tilesheet.png, assets/maps/townInterior.png, assets/maps/walls_and_floors.png"
     />
   </ItemGroup>
 

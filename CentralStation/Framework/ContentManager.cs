@@ -628,7 +628,7 @@ internal class ContentManager
         {
             for (int y = area.Y, maxY = area.Bottom - 1; y <= maxY; y++)
             {
-                for (int x = 0, maxX = area.Right - 1; x <= maxX; x++)
+                for (int x = area.X, maxX = area.Right - 1; x <= maxX; x++)
                 {
                     // check preconditions
                     if (pathsLayer.Tiles[x, y]?.TileIndex is not 7) // red circle marks spawn points

@@ -10,7 +10,7 @@
         {
             "Action": "Load",
             "Target": "Mods/{{MainModId}}/TicketMachine",
-            "FromFile": "assets/ticketMachine.tmx"
+            "FromFile": "assets/maps/ticketMachine.tmx"
         }
     ]
 }

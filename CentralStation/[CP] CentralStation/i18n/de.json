@@ -157,5 +157,31 @@
     "tourist.blackgull-pirate.2": "Wir gehn' jeden Moment an Bord...",
 
     "tourist.bag-dog.1": "(Sie ist auf einem Abenteuer.)",
-    "tourist.bag-dog.2": "(Sie macht gerade eine Pause in ihrer tragbaren Bett-Tasche.)"
+    "tourist.bag-dog.2": "(Sie macht gerade eine Pause in ihrer tragbaren Bett-Tasche.)",
+
+
+    /*********
+    ** Furniture
+    *********/
+    // TODO
+    // calendars
+    "furniture.calendar-city.name": "City Calendar",
+    "furniture.calendar-nature.name": "Nature Calendar",
+
+    // wall decor
+    "furniture.clock.name": "Clock",
+    "furniture.transit-map.name": "Transit Map",
+    "furniture.travel-pictures.name": "Travel Pictures",
+    "furniture.welcome-sign.name": "Welcome Sign",
+
+    // rugs
+    "furniture.posh-rug.name": "Posh Rug",
+
+    // general decor
+    "furniture.board-sign.name": "Board Sign",
+    "furniture.postbox.name": "Postbox",
+    "furniture.suitcase-blue.name": "Blue Suitcase",
+    "furniture.suitcase-pink.name": "Pink Suitcase",
+    "furniture.trash-can.name": "Trash Can",
+    "furniture.trash-can-messy.name": "Messy Trash Can"
 }

@@ -60,7 +60,7 @@
 只有一个值的令牌最适合以占位符形式使用，但多值的令牌也可以用（显示为以逗号分割的列表）。
 
 #### 条件<a name="conditions"></a>
-你可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
+您可以用`When`字段给补丁添加生效条件，`When`里字段可包含多个条件。
 
 每个条件里含有：
 * 一个含有[令牌](#introduction)的键，不需要双大括号，如`Season`或`HasValue:{{spouse}}`。此键不区分大小写。
@@ -86,12 +86,12 @@
 ### 令牌类型<a name="token-types"></a>
 令牌有很多类型，但使用方式都一样。
 
-你不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
+您不需要学会所有令牌。每一种令牌有不同的目的，而大部分内容包只用一两种令牌。
 
 令牌类型包括（从最常用到最罕见）：
 * [全局令牌](#global-tokens)是各种常见的值，如季节，天气，友情等。这些是Content Patcher自带的令牌。
 * [设置令牌](#config-tokens)是玩家在模组设置选项中可选的值。
-* [动态令牌](#dynamic-tokens)是你定义的值，用来重复利用某些值或利用多个简单令牌构造复杂的令牌。
+* [动态令牌](#dynamic-tokens)是您定义的值，用来重复利用某些值或利用多个简单令牌构造复杂的令牌。
 * _(高级)_ [局部令牌](#local-tokens)和动态令牌类似，但仅限于一个补丁（或一个`Include`中的补丁）而不是整个内容包。主要用来重复使用很多类似的补丁。
 * _(高级)_ [模组提供令牌](#mod-provided-tokens)由玩家安装的其他模组提供。
 
@@ -369,7 +369,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 
 [当前或特定玩家](#target-player)看过的事件的ID。与 `Data/Events` 里事件的ID匹配。
 
-你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)来查看游戏里的事件ID。
+您可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)来查看游戏里的事件ID。
 
 </td>
 <td><a href="#HasSeenEvent">#</a></td>
@@ -381,7 +381,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 
 [当前或特定玩家](#target-player)去过的地点的内部ID，与 `Data/Locations` 里的地点ID匹配。
 
-你可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)查看更多地点ID。
+您可以用[调试模式](https://www.nexusmods.com/stardewvalley/mods/679)查看更多地点ID。
 
 </td>
 <td><a href="#HasVisitedLocation">#</a></td>
@@ -462,7 +462,7 @@ _自定义天气_    | 模组自定义的天气，需使用ID表示。
 <td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
-[当前或特定玩家](#target-player)所在地点的内部ID，比如 `FarmHouse` 或者 `Town`。你可以用
+[当前或特定玩家](#target-player)所在地点的内部ID，比如 `FarmHouse` 或者 `Town`。您可以用
 [调试模式](https://www.nexusmods.com/stardewvalley/mods/679)或者[`patch
 summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 
@@ -566,7 +566,7 @@ summary`](../author-guide.md#patch-summary)查看地点的内部ID。
 [当前或特定玩家](#target-player)孩子的名字和性别（`Female` 或者 `Male`）。
 
 按出生顺序排列，可用[`valueAt` 参数](#valueAt)指定。比如 
-`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是你最年长的孩子的名字和性别。
+`{{ChildNames |valueAt=0}}` 和 `{{ChildGenders |valueAt=0}}` 分别是最年长的孩子的名字和性别。
 
 </td>
 <td><a href="#ChildNames">#</a></td>
@@ -989,7 +989,7 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 
 获取内容包文件夹中存在的第一个文件路径，给定文件路径列表。可指定任意数量的文件。
 
-每个文件路径必须相对于内容包主文件夹，且不能包含`../`（也就是只能读取你这个模组文件夹里面的东西）。
+每个文件路径必须相对于内容包主文件夹，且不能包含`../`（也就是只能读取您这个模组文件夹里面的东西）。
 
 例如：
 
@@ -1856,7 +1856,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 ```
 
 使用模组提供的令牌需满足以下至少一项：
-* 提供令牌的模组是你的内容包的[必需依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)。
+* 提供令牌的模组是您的内容包的[必需依赖](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)。
 * 或使用令牌的补丁中含有对于令牌提供模组的不可变（不使用任何令牌）`HasMod`条件：
   ```js
   {
@@ -1904,7 +1904,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 
 别名不可与全局令牌或设置令牌重名。
 
-**注意：** 你也可以使用[动态令牌](#dynamic-tokens)给别的令牌取别名：
+**注意：** 您也可以使用[动态令牌](#dynamic-tokens)给别的令牌取别名：
 
 ```js
 {

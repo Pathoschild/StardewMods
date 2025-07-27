@@ -29,7 +29,10 @@ internal class StorageFurnitureContainer : IContainer
     public ContainerData Data { get; }
 
     /// <inheritdoc />
-    public bool CanConfigureAutomate { get; } = false; // Automate doesn't support storage containers
+    public bool CanConfigureAutomateStore => false; // Automate doesn't support storage containers
+
+    /// <inheritdoc />
+    public bool CanConfigureAutomateTake => false; // Automate doesn't support storage containers
 
 
     /*********
@@ -50,6 +53,12 @@ internal class StorageFurnitureContainer : IContainer
     public bool CanAcceptItem(Item item)
     {
         return StorageFurnitureContainer.DresserCategories.Contains(item.Category);
+    }
+
+    /// <inheritdoc />
+    public bool HasContextTag(string tag)
+    {
+        return this.Furniture.HasContextTag(tag);
     }
 
     /// <inheritdoc />

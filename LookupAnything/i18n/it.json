@@ -185,7 +185,7 @@
     "animal.produce-ready": "Pronto alla produzione",
     "animal.growth": "Crescita",
     "animal.sells-for": "Valore",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Cracker per animali dorato", // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "non è stato nutrito ieri",
@@ -194,8 +194,8 @@
     "animal.complaints.no-heater": "non ha il riscaldamento in inverno",
     "animal.complaints.not-petted": "non è ancora stato accarezzato oggi",
     "animal.complaints.wild-animal-attack": "attaccato da animali selvaggi questa notte",
-    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
-    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
+    "animal.golden-cracker.none": "Nessuno. Aggiungi un cracker per animali dorato per raddoppiare gli oggetti prodotti.",
+    "animal.golden-cracker.applied": "Applicato; gli oggetti prodotti ora verranno raddoppiati.",
 
 
     /*********
@@ -359,7 +359,7 @@
     "item.needed-for.gourmet-chef": "l'achievement 'chef stellato' (cucina {{recipes}})",
     "item.needed-for.craft-master": "l'achievement 'maestro della fabbricazione' (crea {{recipes}})",
     "item.needed-for.quests": "missioni attuali ({{quests}})",
-    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
+    "item.needed-for.trash-bear": "orso della spazzatura (consegnane uno)",
     "item.unknown-recipes": "{{count}} ricette sconosciute",
     "item.sells-to.shipping-box": "Cassetta delle spedizioni",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} necessari)",

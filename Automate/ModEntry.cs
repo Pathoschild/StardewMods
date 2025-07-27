@@ -152,12 +152,22 @@ internal class ModEntry : Mod
             {
                 IDictionary<string, BigCraftableData> assetData = asset.AsDictionary<string, BigCraftableData>().Data;
 
-                foreach (string itemId in ModConstants.GetDefaultChestItemIds())
+                foreach (string itemId in AutomateConstants.GetDefaultChestItemIds())
                 {
                     if (assetData.TryGetValue(itemId, out BigCraftableData? entry))
                     {
                         entry.ContextTags ??= [];
-                        entry.ContextTags.Add(ModConstants.StorageTag);
+                        entry.ContextTags.Add(AutomateConstants.StorageTag);
+                    }
+                }
+
+                foreach (string itemId in AutomateConstants.GetTakeOnlyChestItemIds())
+                {
+                    if (assetData.TryGetValue(itemId, out BigCraftableData? entry))
+                    {
+                        entry.ContextTags ??= [];
+                        entry.ContextTags.Add(AutomateConstants.StorageTag);
+                        entry.ContextTags.Add(AutomateConstants.StorageTakeOnlyTag);
                     }
                 }
             });

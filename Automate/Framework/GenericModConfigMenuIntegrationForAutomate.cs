@@ -144,11 +144,22 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         );
 
         // per-storage settings
-        foreach ((string itemId, Func<string> getName) in this.GetChestIds())
+        foreach (ChestType chestType in this.GetChestTypes())
         {
+            Func<string> getName = chestType.DisplayName;
+            string itemId = chestType.QualifiedItemId;
+
             menu.AddDropdown(
-                name: getName,
-                tooltip: () => I18n.Config_ChestOverride_Desc(chestName: getName(), defaultBehaviorField: I18n.Config_DefaultChestOverride_Name()),
+                name: () => chestType.IsTakeOnly
+                    ? I18n.Config_ChestOverride_Name_TakeOnly(chestName: getName())
+                    : I18n.Config_ChestOverride_Name(chestName: getName()),
+                tooltip: () =>
+                {
+                    string description = I18n.Config_ChestOverride_Desc(chestName: getName(), defaultBehaviorField: I18n.Config_DefaultChestOverride_Name());
+                    if (chestType.IsTakeOnly)
+                        description = I18n.Config_ChestOverride_Desc_TakeOnly(description: description);
+                    return description;
+                },
                 get: config => this.GetChestOverride(config, itemId)?.Enabled.ToString() ?? string.Empty,
                 set: (config, value) =>
                 {
@@ -303,17 +314,26 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     ** Chest overrides
     ****/
     /// <summary>Get the chest IDs and display names to show in the config UI.</summary>
-    private Dictionary<string,Func<string>> GetChestIds()
+    private IEnumerable<ChestType> GetChestTypes()
     {
         var itemRepo = new ItemRepository();
-        return itemRepo
+        var itemEntries = itemRepo
             .GetAll(ItemRegistry.type_object, includeVariants: false)
-            .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false))
-            .Where(match => match.Item.HasContextTag(ModConstants.StorageTag))
-            .ToDictionary(
-                match => match.Item.QualifiedItemId,
-                match => new Func<string>(() => this.GetTranslatedChestName(match.Item.QualifiedItemId))
+            .Concat(itemRepo.GetAll(ItemRegistry.type_bigCraftable, includeVariants: false));
+
+        foreach (SearchableItem entry in itemEntries)
+        {
+            if (!entry.Item.HasContextTag(AutomateConstants.StorageTag))
+                continue;
+
+            string itemId = entry.Item.QualifiedItemId;
+
+            yield return new ChestType(
+                QualifiedItemId: itemId,
+                DisplayName: () => this.GetTranslatedChestName(itemId),
+                IsTakeOnly: entry.Item.HasContextTag(AutomateConstants.StorageTakeOnlyTag)
             );
+        }
     }
 
     /// <summary>Get the translated display name for a chest.</summary>
@@ -493,4 +513,10 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         else
             config.MachineOverrides[name] = options;
     }
+
+    /// <summary>A chest type which can be configured.</summary>
+    /// <param name="QualifiedItemId">The unique qualified item ID for the chest type.</param>
+    /// <param name="DisplayName">The display name for the chest type.</param>
+    /// <param name="IsTakeOnly">Whether items can only be retrieved from this chest type.</param>
+    private record ChestType(string QualifiedItemId, Func<string> DisplayName, bool IsTakeOnly);
 }
