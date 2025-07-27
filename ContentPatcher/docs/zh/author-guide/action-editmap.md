@@ -29,7 +29,7 @@
 由于三者差异较大，因此下文将分为三个部分详细描述这三种类型的更改，但它们仍可以在同一个补丁中组合使用。在这种情况下，字段按以下顺序应用：`FromFile`、`MapTiles`、`MapProperties`、`AddNpcWarps`、`AddWarps` 和 `TextOperations`。
 
 ### 公共字段<a name="common-fields"></a>
-一个 `EditImage` 补丁由 `Changes`（请参阅下文[示例](#examples)）下的一个模型组成。不论更改类型是什么，都需要使用这些字段。
+一个 `EditMap` 补丁由 `Changes`（请参阅下文[示例](#examples)）下的一个模型组成。不论更改类型是什么，都需要使用这些字段。
 
 <dl>
 <dt>必填字段：</dt>
@@ -87,7 +87,7 @@
   <td><code>TargetLocale</code></td>
   <td>
 
-（可选）素材名称中要匹配的地区代码，例如设置 `"TargetLocale": "fr-FR"` 将会只编辑法语的素材（例如 `Data/Achievements.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
+（可选）素材名称中要匹配的地区代码，例如设置 `"TargetLocale": "fr-FR"` 将会只编辑法语的素材（例如 `Maps/Town.fr-FR`）。可以为空，只有只编辑没有地域区分的基本素材。
 
 如果省略，则将应用于所有素材，不论其是否存在本地化。
 

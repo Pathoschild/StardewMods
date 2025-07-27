@@ -39,7 +39,7 @@ Content Patcher 拥有一个[条件系统](author-guide/tokens.md)。内容包�
    ]
    ```
 2. 在您模组的 `.csproj` 里添加对 `ContentPatcher.dll` 的引用。同时将此引用设置为 `Private="False"` 以确保它不被复制到您的模组文件夹中：
-_译者注：这段似乎没更新，使用 API 只需将 `IContentPatcherAPI.cs` 和 `IManagedTokenString.cs` 复制到您自己模组中即可。_
+_译者注：这段似乎没更新，使用 API 只需将 `IContentPatcherAPI.cs` 和 `IManagedConditions.cs` 复制到您自己模组中即可。_
    ```xml
    <ItemGroup>
      <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
@@ -203,7 +203,7 @@ var conditions = api.ParseConditions(
 <dt>条件应缓存。</dt>
 <dd>
 
-通过 API 运行条件解析令牌字符串是一个相对昂贵的操作。如果您需要频繁使用相同的令牌字符串，请尽可能保存并重复使用同一个 `IManagedTokenString` 实例。
+通过 API 运行条件解析令牌字符串是一个相对昂贵的操作。如果您需要频繁使用相同的令牌字符串，请尽可能保存并重复使用同一个 `IManagedConditions` 实例。
 
 </dd>
 <dt>条件不会自动更新。</dt>
