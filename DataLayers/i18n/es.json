@@ -77,51 +77,49 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
     // section names
-    "config.section.main-options": "Main options",
-    "config.section.main-controls": "Main controls",
-    "config.section.layer": "'{{LayerName}}' layer", // {{LayerName}} is the layer name set above.
+    "config.section.main-options": "Opciones principales",
+    "config.section.main-controls": "Controles principales",
+    "config.section.layer": "'{{LayerName}}' Capa", // {{LayerName}} es el nombre de la capa definido anteriormente.
 
     // main options
-    "config.show-grid.name": "Show grid",
-    "config.show-grid.desc": "Whether to show a tile grid when a layer is open.",
+    "config.show-grid.name": "Mostrar cuadrícula",
+    "config.show-grid.desc": "Muestra una cuadrícula de casillas cuando una capa está activa.",
 
-    "config.combine-borders.name": "Combine overlapping borders",
-    "config.combine-borders.desc": "When two groups of the same color overlap, whether to draw one border around their combined edge instead of their individual borders.",
+    "config.combine-borders.name": "Combinar bordes superpuestos",
+    "config.combine-borders.desc": "Cuando dos grupos del mismo color se superponen, dibuja un solo borde alrededor del borde combinado en lugar de bordes individuales.",
 
-    "config.color-scheme.name": "Color scheme",
-    "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
-    "config.color-schemes.default": "default colors",
+    "config.color-scheme.name": "Esquema de colores",
+    "config.color-schene.desc": "El esquema de colores a aplicar, que cambia los colores en todas las capas de datos.",
+    "config.color-schemes.default": "colores predeterminados",
 
     // main controls
-    "config.toggle-layer-key.name": "Toggle data layers",
-    "config.toggle-layer-key.desc": "The key binding which shows or hides the data layer overlay.",
+    "config.toggle-layer-key.name": "Alternar capas de datos",
+    "config.toggle-layer-key.desc": "Tecla que muestra u oculta la superposición de capas de datos.",
 
-    "config.prev-layer-key.name": "Previous layer key",
-    "config.prev-layer-key.desc": "The key binding which cycles backwards through the available data layers.",
+    "config.prev-layer-key.name": "Tecla de capa anterior",
+    "config.prev-layer-key.desc": "Tecla para retroceder entre las capas de datos disponibles.",
 
-    "config.next-layer-key.name": "Next layer key",
-    "config.next-layer-key.desc": "The key binding which cycles forward through the available data layers.",
+    "config.next-layer-key.name": "Tecla de capa siguiente",
+    "config.next-layer-key.desc": "Tecla para avanzar entre las capas de datos disponibles.",
 
     // data layers
-    "config.layer-enabled.name": "Enabled",
-    "config.layer-enabled.desc": "Whether this layer should be available in-game.",
+    "config.layer-enabled.name": "Habilitada",
+    "config.layer-enabled.desc": "Define si esta capa estará disponible en el juego.",
 
-    "config.layer-update-on-view-change.name": "Update when view changes",
-    "config.layer-update-on-view-change.desc": "Whether the drawn layer info should be updated when a new part of the world moves into view, regardless of the 'updates per second' setting.",
+    "config.layer-update-on-view-change.name": "Actualizar al cambiar la vista",
+    "config.layer-update-on-view-change.desc": "Actualiza la información de la capa al moverse a una nueva parte del mundo, independientemente de la configuración de 'actualizaciones por segundo'.",
 
-    "config.layer-updates-per-second.name": "Updates per second",
-    "config.layer-updates-per-second.desc": "How often the layer should update when it's being displayed, as a number per second. Setting this to a higher value than the default may cause lag. Default {{defaultValue}}.",
+    "config.layer-updates-per-second.name": "Actualizaciones por segundo",
+    "config.layer-updates-per-second.desc": "Frecuencia de actualización de la capa mientras se muestra, en veces por segundo. Un valor mayor al predeterminado puede causar lag. Valor predeterminado {{defaultValue}}.",
 
-    "config.layer-shortcut.name": "Shortcut key",
-    "config.layer-shortcut.desc": "The key binding which selects this layer when the overlay is open.",
+    "config.layer-shortcut.name": "Tecla de acceso directo",
+    "config.layer-shortcut.desc": "Tecla que selecciona esta capa cuando la superposición está activa.",
 
 
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.toggle-data-layers.name": "Data Layers",
-    "icon.toggle-data-layers.desc": "Toggle Data Layers"
+    "icon.toggle-data-layers.name": "Capas de datos",
+    "icon.toggle-data-layers.desc": "Alternar capas de datos"
 }
