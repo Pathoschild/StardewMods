@@ -200,7 +200,7 @@ To add your own tourists:
        "Target": "Mods/Pathoschild.CentralStation/Tourists",
        "Entries": {
            "{{ModId}}": {
-               "FromMap": "{{InternalAssetKey: assets/tourists.tmx}}",
+               "FromMap": "{{InternalAssetKey: assets/maps/tourists.tmx}}",
                "Tourists": {
                    "Child": {
                        "Index": 0,

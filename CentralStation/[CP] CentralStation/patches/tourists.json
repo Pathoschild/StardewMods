@@ -20,7 +20,7 @@
             "Target": "Mods/{{MainModId}}/Tourists",
             "Entries": {
                 "{{MainModId}}": {
-                    "FromMap": "{{InternalAssetKey: assets/tourists.tmx}}",
+                    "FromMap": "{{InternalAssetKey: assets/maps/tourists.tmx}}",
                     "Tourists": {
                         // Stardew Valley Festival NPCs
                         "YoungBoy": {

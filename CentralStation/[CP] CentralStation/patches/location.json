@@ -23,17 +23,17 @@
         {
             "Action": "Load",
             "Target": "Maps/{{MainModId}}",
-            "FromFile": "assets/centralStation.tmx"
+            "FromFile": "assets/maps/centralStation.tmx"
         },
         {
             "Action": "Load",
             "Target": "Maps/{{MainModId}}_EmptyWoodPedestal",
-            "FromFile": "assets/centralStation_emptyWoodPedestal.tmx"
+            "FromFile": "assets/maps/centralStation_emptyWoodPedestal.tmx"
         },
         {
             "Action": "Load",
             "Target": "Maps/{{MainModId}}_Tiles",
-            "FromFile": "assets/.Pathoschild.CentralStation_Tiles.png"
+            "FromFile": "assets/maps/.Pathoschild.CentralStation_Tiles.png"
         },
 
         // add to world map

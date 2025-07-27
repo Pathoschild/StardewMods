@@ -26,13 +26,13 @@ _ReSharper*/
 *.nuget.targets
 
 # vanilla map tilesheets
-CentralStation/\[CP\] CentralStation/assets/desert_festival_tilesheet.png
-CentralStation/\[CP\] CentralStation/assets/Festivals.png
-CentralStation/\[CP\] CentralStation/assets/MovieTheater_TileSheet.png
-CentralStation/\[CP\] CentralStation/assets/paths.png
-CentralStation/\[CP\] CentralStation/assets/pirates_tilesheet.png
-CentralStation/\[CP\] CentralStation/assets/townInterior.png
-CentralStation/\[CP\] CentralStation/assets/walls_and_floors.png
+CentralStation/\[CP\] CentralStation/assets/maps/desert_festival_tilesheet.png
+CentralStation/\[CP\] CentralStation/assets/maps/Festivals.png
+CentralStation/\[CP\] CentralStation/assets/maps/MovieTheater_TileSheet.png
+CentralStation/\[CP\] CentralStation/assets/maps/paths.png
+CentralStation/\[CP\] CentralStation/assets/maps/pirates_tilesheet.png
+CentralStation/\[CP\] CentralStation/assets/maps/townInterior.png
+CentralStation/\[CP\] CentralStation/assets/maps/walls_and_floors.png
 
 SmallBeachFarm/assets/paths.png
 SmallBeachFarm/assets/spring_beach.png
