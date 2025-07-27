@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Fixed errors in split-screen mode in some cases if `Random` is initialized too early.
 * Improved [Chinese documentation](zh/README.md) (thanks to SummerFleur2997 with review by mushymato!).
 
 ## 2.7.4

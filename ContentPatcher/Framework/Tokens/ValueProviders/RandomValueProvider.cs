@@ -87,6 +87,6 @@ internal class RandomValueProvider : BaseValueProvider
             uniqueId = save.uniqueIDForThisGame;
         }
 
-        return Utility.CreateRandomSeed(daysSinceStart, uniqueId);
+        return Game1.hash.GetDeterministicHashCode(daysSinceStart, (int)(uniqueId % int.MaxValue)); // don't use Utility.CreateRandomSeed, which fails if the player isn't initialized yet
     }
 }
