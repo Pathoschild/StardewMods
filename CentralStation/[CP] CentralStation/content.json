@@ -14,7 +14,7 @@
         // add content
         {
             "Action": "Include",
-            "FromFile": "patches/destinations.json, patches/location.json, patches/shops.json, patches/ticketMachine.json, patches/tourists.json"
+            "FromFile": "patches/destinations.json, patches/items.json, patches/location.json, patches/shops.json, patches/ticketMachine.json, patches/tourists.json"
         },
 
         // add translations for C# mod

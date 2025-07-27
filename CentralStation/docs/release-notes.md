@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added various custom travel-related decor in the gift shop, which you can use to decorate your farmhouse or other locations.
 * Fixed tourists sometimes overlapping or spawning in the wrong area.
 
 ## 1.4.2

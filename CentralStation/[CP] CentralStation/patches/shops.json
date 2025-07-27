@@ -179,6 +179,70 @@
                         }
                     ],
                     "Items": [
+                        // calendars
+                        {
+                            "Id": "CityCalendar",
+                            "ItemId": "{{MainModId}}_CityCalendar"
+                        },
+                        {
+                            "Id": "NatureCalendar",
+                            "ItemId": "{{MainModId}}_NatureCalendar"
+                        },
+
+                        // wall decor
+                        {
+                            "Id": "WelcomeSign",
+                            "ItemId": "{{MainModId}}_WelcomeSign"
+                        },
+                        {
+                            "Id": "TransitMap",
+                            "ItemId": "{{MainModId}}_TransitMap"
+                        },
+                        {
+                            "Id": "TravelPictures",
+                            "ItemId": "{{MainModId}}_TravelPictures"
+                        },
+                        {
+                            "Id": "ClockA",
+                            "ItemId": "{{MainModId}}_ClockA"
+                        },
+                        {
+                            "Id": "ClockB",
+                            "ItemId": "{{MainModId}}_ClockB"
+                        },
+
+                        // rugs
+                        {
+                            "Id": "PoshRug",
+                            "ItemId": "{{MainModId}}_PoshRug"
+                        },
+
+                        // general decor
+                        {
+                            "Id": "TrashCan",
+                            "ItemId": "{{MainModId}}_TrashCan"
+                        },
+                        {
+                            "Id": "MessyTrashCan",
+                            "ItemId": "{{MainModId}}_MessyTrashCan"
+                        },
+                        {
+                            "Id": "BlueSuitcase",
+                            "ItemId": "{{MainModId}}_BlueSuitcase"
+                        },
+                        {
+                            "Id": "PinkSuitcase",
+                            "ItemId": "{{MainModId}}_PinkSuitcase"
+                        },
+                        {
+                            "Id": "Postbox",
+                            "ItemId": "{{MainModId}}_Postbox"
+                        },
+                        {
+                            "Id": "BoardSign",
+                            "ItemId": "{{MainModId}}_BoardSign"
+                        },
+
                         // hats
                         {
                             "Id": "Sunglasses",

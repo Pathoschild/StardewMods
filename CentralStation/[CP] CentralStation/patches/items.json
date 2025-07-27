@@ -1,0 +1,46 @@
+﻿/*
+
+    This file adds the custom items sold by Central Station shops.
+
+*/
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+
+    "Changes": [
+        // add item data
+        {
+            "Action": "EditData",
+            "Target": "Data/Furniture",
+            "Entries": {
+                // calendars
+                "{{MainModId}}_CityCalendar": "{{MainModId}}_CityCalendar/painting/1 2/1 2/1/1000/0/{{i18n:furniture.calendar-city.name}}/7/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_NatureCalendar": "{{MainModId}}_NatureCalendar/painting/1 2/1 2/1/1000/0/{{i18n:furniture.calendar-nature.name}}/8/Mods\\{{MainModId}}\\Furniture/true",
+
+                // wall decor
+                "{{MainModId}}_WelcomeSign": "{{MainModId}}_WelcomeSign/painting/3 2/3 2/1/2000/2/{{i18n:furniture.welcome-sign.name}}/0/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_TransitMap": "{{MainModId}}_TransitMap/painting/3 2/3 2/1/2000/0/{{i18n:furniture.transit-map.name}}/3/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_TravelPictures": "{{MainModId}}_TravelPictures/painting/1 2/1 2/1/1000/0/{{i18n:furniture.travel-pictures.name}}/6/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_ClockA": "{{MainModId}}_ClockA/painting/1 1/1 1/1/1000/0/{{i18n:furniture.clock.name}}/9/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_ClockB": "{{MainModId}}_ClockB/painting/1 1/1 1/1/1000/0/{{i18n:furniture.clock.name}}/19/Mods\\{{MainModId}}\\Furniture/true",
+
+                // rugs
+                "{{MainModId}}_PoshRug": "{{MainModId}}_PoshRug/rug/3 2/3 2/1/5000/0/{{i18n:furniture.posh-rug.name}}/20/Mods\\{{MainModId}}\\Furniture/true",
+
+                // general decor
+                "{{MainModId}}_TrashCan": "{{MainModId}}_TrashCan/decor/1 2/1 1/1/1000/2/{{i18n:furniture.trash-can.name}}/40/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_MessyTrashCan": "{{MainModId}}_MessyTrashCan/decor/1 2/1 1/1/1000/2/{{i18n:furniture.trash-can-messy.name}}/41/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_BlueSuitcase": "{{MainModId}}_BlueSuitcase/decor/1 2/1 1/1/1000/2/{{i18n:furniture.suitcase-blue.name}}/42/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_PinkSuitcase": "{{MainModId}}_PinkSuitcase/decor/1 2/1 1/1/1000/2/{{i18n:furniture.suitcase-pink.name}}/43/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_Postbox": "{{MainModId}}_Postbox/decor/1 2/1 1/1/3000/2/{{i18n:furniture.postbox.name}}/44/Mods\\{{MainModId}}\\Furniture/true",
+                "{{MainModId}}_BoardSign": "{{MainModId}}_BoardSign/decor/1 2/1 1/1/2000/2/{{i18n:furniture.board-sign.name}}/45/Mods\\{{MainModId}}\\Furniture/true"
+            }
+        },
+
+        // load sprites
+        {
+            "Action": "Load",
+            "Target": "Mods/{{MainModId}}/Furniture",
+            "FromFile": "assets/furniture.png"
+        }
+    ]
+}

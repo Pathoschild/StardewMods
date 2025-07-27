@@ -158,5 +158,31 @@
     "tourist.blackgull-pirate.2": "Ci imbarcheremo da un momento all'altro...",
 
     "tourist.bag-dog.1": "(Sta vivendo un'avventura.)",
-    "tourist.bag-dog.2": "(Sta facendo una pausa nella sua borsa letto portatile.)"
+    "tourist.bag-dog.2": "(Sta facendo una pausa nella sua borsa letto portatile.)",
+
+
+    /*********
+    ** Furniture
+    *********/
+    // TODO
+    // calendars
+    "furniture.calendar-city.name": "City Calendar",
+    "furniture.calendar-nature.name": "Nature Calendar",
+
+    // wall decor
+    "furniture.clock.name": "Clock",
+    "furniture.transit-map.name": "Transit Map",
+    "furniture.travel-pictures.name": "Travel Pictures",
+    "furniture.welcome-sign.name": "Welcome Sign",
+
+    // rugs
+    "furniture.posh-rug.name": "Posh Rug",
+
+    // general decor
+    "furniture.board-sign.name": "Board Sign",
+    "furniture.postbox.name": "Postbox",
+    "furniture.suitcase-blue.name": "Blue Suitcase",
+    "furniture.suitcase-pink.name": "Pink Suitcase",
+    "furniture.trash-can.name": "Trash Can",
+    "furniture.trash-can-messy.name": "Messy Trash Can"
 }
