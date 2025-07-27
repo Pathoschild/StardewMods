@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.52.1
+Released 27 July 2025 for SMAPI 4.3.1 or later.
+
 * Fixed search UI not showing some newer juice/pickle/roe items.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 

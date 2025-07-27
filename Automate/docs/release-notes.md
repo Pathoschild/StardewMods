@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 2.4.2
+Released 27 July 2025 for SMAPI 4.1.10 or later.
+
 * Fixed hoppers not automated in 2.4.0+.
 
 ## 2.4.1

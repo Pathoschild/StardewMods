@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.28.2</Version>
+    <Version>1.28.3</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
   </PropertyGroup>
 
