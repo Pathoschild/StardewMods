@@ -164,25 +164,24 @@
     /*********
     ** Furniture
     *********/
-    // TODO
     // calendars
-    "furniture.calendar-city.name": "City Calendar",
-    "furniture.calendar-nature.name": "Nature Calendar",
+    "furniture.calendar-city.name": "Calendario cittadino",
+    "furniture.calendar-nature.name": "Calendario naturale",
 
     // wall decor
-    "furniture.clock.name": "Clock",
-    "furniture.transit-map.name": "Transit Map",
-    "furniture.travel-pictures.name": "Travel Pictures",
-    "furniture.welcome-sign.name": "Welcome Sign",
+    "furniture.clock.name": "Orologio",
+    "furniture.transit-map.name": "Mappa dei trasporti",
+    "furniture.travel-pictures.name": "Foto di viaggio",
+    "furniture.welcome-sign.name": "Cartello di benvenuto",
 
     // rugs
-    "furniture.posh-rug.name": "Posh Rug",
+    "furniture.posh-rug.name": "Tappeto signorile",
 
     // general decor
-    "furniture.board-sign.name": "Board Sign",
-    "furniture.postbox.name": "Postbox",
-    "furniture.suitcase-blue.name": "Blue Suitcase",
-    "furniture.suitcase-pink.name": "Pink Suitcase",
-    "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can"
+    "furniture.board-sign.name": "Cartello",
+    "furniture.postbox.name": "Cassetta postale",
+    "furniture.suitcase-blue.name": "Valigia blu",
+    "furniture.suitcase-pink.name": "Valigia rosa",
+    "furniture.trash-can.name": "Cestino dei rifiuti",
+    "furniture.trash-can-messy.name": "Cestino dei rifiuti incasinato"
 }
