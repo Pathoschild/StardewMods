@@ -35,13 +35,8 @@ To access the API:
       { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
    ]
    ```
-2. Add a reference to the Content Patcher DLL in your mod's `.csproj` file. Make sure you set
-   `Private="False"`, so the DLL isn't added to your mod folder:
-   ```xml
-   <ItemGroup>
-     <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
-   </ItemGroup>
-   ```
+2. Copy [`IContentPatcherAPI`](../IContentPatcherAPI.cs) and [`IManagedTokenString`](../IManagedTokenString.cs)
+   into your mod code, and **delete any methods you won't need for future compatibility**.
 3. Somewhere in your mod code (e.g. in the [`GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)),
    get a reference to Content Patcher's API:
    ```c#
