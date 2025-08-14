@@ -19,5 +19,12 @@ public enum MigrateIdType
     Mail,
 
     /// <summary>Migrate songs-heard cue names.</summary>
-    Songs
+    Songs,
+
+    /// <summary>Migrate farm animals.</summary>
+    FarmAnimals,
+
+    /// <summary>Migrate buildings.</summary>
+    Buildings,
+
 }
