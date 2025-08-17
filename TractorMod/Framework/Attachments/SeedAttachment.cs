@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
@@ -37,12 +39,20 @@ internal class SeedAttachment : BaseAttachment
         this.Reflection = reflection;
     }
 
+    private bool IsNormalSeed(Item? item)
+    {
+        return item is { Category: SObject.SeedsCategory, Stack: > 0 };
+    }
+
+    private bool IsTreeSeed(Item? item)
+    {
+        return item != null && SObject.isWildTreeSeed(item.ItemId);
+    }
+
     /// <inheritdoc />
     public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
     {
-        return
-            this.Config.Enable
-            && item is { Category: SObject.SeedsCategory, Stack: > 0 };
+        return this.Config.Enable && (this.IsNormalSeed(item) || this.IsTreeSeed(item));
     }
 
     /// <inheritdoc />
@@ -51,24 +61,44 @@ internal class SeedAttachment : BaseAttachment
         if (item is not { Stack: > 0 })
             return false;
 
-        // get dirt
-        if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out IndoorPot? pot) || dirt.crop != null || pot?.bush.Value is not null)
-            return false;
-
-        // ignore if there's a giant crop, meteorite, etc covering the tile
-        if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile, this.Reflection))
-            return false;
-
-        // sow seeds
-        bool sowed = dirt.plant(item.ItemId, player, false);
-        if (sowed)
+        if (this.IsTreeSeed(item))
         {
-            this.ConsumeItem(player, item);
-
-            if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ItemId, player, true))
-                this.ConsumeItem(enricher, fertilizer);
+            if (item.canBePlacedHere(location, tile))
+            {
+                string treeType = Tree.ResolveTreeTypeFromSeed(item.QualifiedItemId);
+                if (treeType != null)
+                {
+                    Game1.stats.Increment("wildtreesplanted");
+                    location.terrainFeatures.Remove(tile);
+                    location.terrainFeatures.Add(tile, new Tree(treeType, 0));
+                    location.playSound("dirtyHit");
+                    this.ConsumeItem(player, item);
+                    return true;
+                }
+            }
         }
-        return sowed;
+        else if (this.IsNormalSeed(item))
+        {
+            // get dirt
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out IndoorPot? pot) || dirt.crop != null || pot?.bush.Value is not null)
+                return false;
+
+            // ignore if there's a giant crop, meteorite, etc covering the tile
+            if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile, this.Reflection))
+                return false;
+
+            // sow seeds
+            bool sowed = dirt.plant(item.ItemId, player, false);
+            if (sowed)
+            {
+                this.ConsumeItem(player, item);
+
+                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ItemId, player, true))
+                    this.ConsumeItem(enricher, fertilizer);
+            }
+            return sowed;
+        }
+        return false;
     }
 
 
