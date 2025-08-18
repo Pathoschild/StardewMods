@@ -390,7 +390,7 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
             )
 
-            // scythe
+            // seeds
             .AddSectionTitle(I18n.Config_Seeds)
             .AddCheckbox(
                 name: I18n.Config_Seeds_Name,
