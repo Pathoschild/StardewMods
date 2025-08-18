@@ -407,8 +407,8 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
             .AddCheckbox(
                 name: I18n.Config_UseFertilizerForPlantingTrees_Name,
                 tooltip: I18n.Config_UseFertilizerForPlantingTrees_Tooltip,
-                get: config => config.StandardAttachments.Seeds.UseFertilizerForPlantingTrees,
-                set: (config, value) => config.StandardAttachments.Seeds.UseFertilizerForPlantingTrees = value
+                get: config => config.StandardAttachments.Seeds.UseFertilizerWhenPlantingTrees,
+                set: (config, value) => config.StandardAttachments.Seeds.UseFertilizerWhenPlantingTrees = value
             )
 
             // melee blunt weapons

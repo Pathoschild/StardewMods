@@ -66,7 +66,7 @@ internal class SeedAttachment : BaseAttachment
             if (obj.canBePlacedHere(location, tile) && obj.placementAction(location, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), player))
             {
                 this.ConsumeItem(player, item);
-                if (this.Config.UseFertilizerForPlantingTrees && location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
+                if (this.Config.UseFertilizerWhenPlantingTrees && location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
                 {
                     Item? fertilizer = player.Items.GetById("(O)805").FirstOrDefault();
                     if (fertilizer != null && feature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize())
