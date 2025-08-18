@@ -20,6 +20,7 @@
     "config.hoe": "Hoe Features",
     "config.pickaxe": "Pickaxe Features",
     "config.scythe": "Scythe Features",
+    "config.seeds": "Seed Features",
     "config.melee-blunt": "Melee Blunt Weapons Features",
     "config.melee-dagger": "Melee Dagger Features",
     "config.melee-sword": "Melee Sword Features",
@@ -249,7 +250,7 @@
     "config.tree-seeds.name": "Enable Tree Seeds",
     "config.tree-seeds.tooltip": "Whether to plant tree seeds.",
 
-    "config.use-fertilizer-for-planting-trees.name": "Apply tree fertilizer.",
+    "config.use-fertilizer-for-planting-trees.name": "Apply tree fertilizer",
     "config.use-fertilizer-for-planting-trees.tooltip": "Whether to apply tree fertilizer if available in inventory upon planting tree seeds.",
 
     "config.seed-bags.name": "Enable Seed Bags",

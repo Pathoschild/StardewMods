@@ -391,7 +391,7 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
             )
 
             // scythe
-            .AddSectionTitle(I18n.Config_Scythe)
+            .AddSectionTitle(I18n.Config_Seeds)
             .AddCheckbox(
                 name: I18n.Config_Seeds_Name,
                 tooltip: I18n.Config_Seeds_Tooltip,
