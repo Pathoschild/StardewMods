@@ -39,16 +39,6 @@ internal class SeedAttachment : BaseAttachment
         this.Reflection = reflection;
     }
 
-    private bool IsSeed(Item? item)
-    {
-        return item is { Category: SObject.SeedsCategory, Stack: > 0 };
-    }
-
-    private bool IsTreeSeed(Item? item)
-    {
-        return item != null && SObject.isWildTreeSeed(item.ItemId);
-    }
-
     /// <inheritdoc />
     public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
     {
@@ -118,6 +108,22 @@ internal class SeedAttachment : BaseAttachment
         fertilizer = entry?.fertilizer;
         enricher = entry?.enricher;
         return entry != null;
+    }
+
+    /// <summary>Whether the given item is a seed</summary>
+    /// <param name="item">The item to be checked</param>
+    /// <returns>Returns whether the item is a seed</returns>
+    private bool IsSeed(Item? item)
+    {
+        return item is { Category: SObject.SeedsCategory, Stack: > 0 };
+    }
+
+    /// <summary>Whether the given item is a tree seed</summary>
+    /// <param name="item">The item to be checked</param>
+    /// <returns>Returns whether the item is a tree seed</returns>
+    private bool IsTreeSeed(Item? item)
+    {
+        return item != null && SObject.isWildTreeSeed(item.ItemId);
     }
 
     /// <summary>Get the enricher and fertilizer in range of the given tile, if any.</summary>
