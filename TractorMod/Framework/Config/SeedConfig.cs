@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to enable planting seeds.</summary>
         public bool EnableSeeds { get; set; } = true;
 
-        /// <summary>Whether to be able to plant tree seeds.</summary>
+        /// <summary>Whether to enable planting tree seeds.</summary>
         public bool EnableTreeSeeds { get; set; } = false;
 
         /// <summary>Whether to use tree fertilizer from inventory when planting trees.</summary>
