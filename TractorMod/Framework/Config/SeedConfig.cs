@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
     internal class SeedConfig
     {
-        /// <summary>Whether to enable the attachment.</summary>
+        /// <summary>Whether to enable planting seeds.</summary>
         public bool EnableSeeds { get; set; } = true;
 
         /// <summary>Whether to be able to plant tree seeds.</summary>
