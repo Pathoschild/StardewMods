@@ -38,7 +38,7 @@ internal class StandardAttachmentsConfig
     public ScytheConfig Scythe { get; set; } = new();
 
     /// <summary>Configuration for the seeds attachment.</summary>
-    public GenericAttachmentConfig Seeds { get; set; } = new();
+    public SeedConfig Seeds { get; set; } = new();
 
     /// <summary>Configuration for the shears attachment.</summary>
     public GenericAttachmentConfig Shears { get; set; } = new();
@@ -73,7 +73,7 @@ internal class StandardAttachmentsConfig
         this.MeleeSword ??= new MeleeSwordConfig();
         this.PickAxe ??= new PickAxeConfig();
         this.Scythe ??= new ScytheConfig();
-        this.Seeds ??= new GenericAttachmentConfig();
+        this.Seeds ??= new SeedConfig();
         this.Shears ??= new GenericAttachmentConfig();
         this.Slingshot ??= new GenericAttachmentConfig { Enable = false };
         this.WateringCan ??= new GenericAttachmentConfig();

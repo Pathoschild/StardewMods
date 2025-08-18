@@ -19,7 +19,7 @@ internal class SeedAttachment : BaseAttachment
     ** Fields
     *********/
     /// <summary>The attachment settings.</summary>
-    private readonly GenericAttachmentConfig Config;
+    private readonly SeedConfig Config;
 
     /// <summary>Simplifies access to private code.</summary>
     private readonly IReflectionHelper Reflection;
@@ -32,14 +32,14 @@ internal class SeedAttachment : BaseAttachment
     /// <param name="config">The attachment settings.</param>
     /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
-    public SeedAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+    public SeedAttachment(SeedConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
         : base(modRegistry)
     {
         this.Config = config;
         this.Reflection = reflection;
     }
 
-    private bool IsNormalSeed(Item? item)
+    private bool IsSeed(Item? item)
     {
         return item is { Category: SObject.SeedsCategory, Stack: > 0 };
     }
@@ -52,7 +52,7 @@ internal class SeedAttachment : BaseAttachment
     /// <inheritdoc />
     public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
     {
-        return this.Config.Enable && (this.IsNormalSeed(item) || this.IsTreeSeed(item));
+        return (this.Config.EnableSeeds || this.Config.EnableTreeSeeds) && this.IsSeed(item);
     }
 
     /// <inheritdoc />
@@ -61,23 +61,23 @@ internal class SeedAttachment : BaseAttachment
         if (item is not { Stack: > 0 })
             return false;
 
-        if (this.IsTreeSeed(item))
+        if (this.Config.EnableTreeSeeds && this.IsTreeSeed(item) && item is SObject obj)
         {
-            if (item.canBePlacedHere(location, tile))
+            if (obj.canBePlacedHere(location, tile) && obj.placementAction(location, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), player))
             {
-                string treeType = Tree.ResolveTreeTypeFromSeed(item.QualifiedItemId);
-                if (treeType != null)
+                this.ConsumeItem(player, item);
+                if (this.Config.UseFertilizerForPlantingTrees && location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
                 {
-                    Game1.stats.Increment("wildtreesplanted");
-                    location.terrainFeatures.Remove(tile);
-                    location.terrainFeatures.Add(tile, new Tree(treeType, 0));
-                    location.playSound("dirtyHit");
-                    this.ConsumeItem(player, item);
-                    return true;
+                    Item? fertilizer = player.Items.GetById("(O)805").FirstOrDefault();
+                    if (fertilizer != null && feature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize())
+                    {
+                        this.ConsumeItem(player, fertilizer);
+                    }
                 }
+                return true;
             }
         }
-        else if (this.IsNormalSeed(item))
+        else if (this.Config.EnableSeeds && this.IsSeed(item))
         {
             // get dirt
             if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out IndoorPot? pot) || dirt.crop != null || pot?.bush.Value is not null)

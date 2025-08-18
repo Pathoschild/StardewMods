@@ -246,6 +246,12 @@
     "config.seeds.name": "Enable Seeds",
     "config.seeds.tooltip": "Whether to plant seeds.",
 
+    "config.tree-seeds.name": "Enable Tree Seeds",
+    "config.tree-seeds.tooltip": "Whether to plant tree seeds.",
+
+    "config.use-fertilizer-for-planting-trees.name": "Apply tree fertilizer.",
+    "config.use-fertilizer-for-planting-trees.tooltip": "Whether to apply tree fertilizer if available in inventory upon planting tree seeds.",
+
     "config.seed-bags.name": "Enable Seed Bags",
     "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
 

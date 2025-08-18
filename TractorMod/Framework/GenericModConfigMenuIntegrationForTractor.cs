@@ -390,6 +390,27 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
             )
 
+            // scythe
+            .AddSectionTitle(I18n.Config_Scythe)
+            .AddCheckbox(
+                name: I18n.Config_Seeds_Name,
+                tooltip: I18n.Config_Seeds_Tooltip,
+                get: config => config.StandardAttachments.Seeds.EnableSeeds,
+                set: (config, value) => config.StandardAttachments.Seeds.EnableSeeds = value
+            )
+            .AddCheckbox(
+                name: I18n.Config_TreeSeeds_Name,
+                tooltip: I18n.Config_TreeSeeds_Tooltip,
+                get: config => config.StandardAttachments.Seeds.EnableTreeSeeds,
+                set: (config, value) => config.StandardAttachments.Seeds.EnableTreeSeeds = value
+            )
+            .AddCheckbox(
+                name: I18n.Config_UseFertilizerForPlantingTrees_Name,
+                tooltip: I18n.Config_UseFertilizerForPlantingTrees_Tooltip,
+                get: config => config.StandardAttachments.Seeds.UseFertilizerForPlantingTrees,
+                set: (config, value) => config.StandardAttachments.Seeds.UseFertilizerForPlantingTrees = value
+            )
+
             // melee blunt weapons
             .AddSectionTitle(I18n.Config_MeleeBlunt)
             .AddCheckbox(
@@ -478,12 +499,6 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 tooltip: I18n.Config_GrassStarters_Tooltip,
                 get: config => config.StandardAttachments.GrassStarter.Enable,
                 set: (config, value) => config.StandardAttachments.GrassStarter.Enable = value
-            )
-            .AddCheckbox(
-                name: I18n.Config_Seeds_Name,
-                tooltip: I18n.Config_Seeds_Tooltip,
-                get: config => config.StandardAttachments.Seeds.Enable,
-                set: (config, value) => config.StandardAttachments.Seeds.Enable = value
             )
             .AddCheckbox(
                 name: I18n.Config_SeedBags_Name,
