@@ -208,7 +208,7 @@ internal class ModEntry : Mod
         }
         else
         {
-            this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.LayerRegistry.GetLayers(), this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid, this.Config.LegendOpacityOnMouseOver);
+            this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.LayerRegistry.GetLayers(), this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid, this.Config.LegendAlphaOnHover);
             this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
         }
     }

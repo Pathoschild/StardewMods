@@ -62,10 +62,10 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 formatAllowedValue: key => I18n.GetByKey($"config.color-schemes.{key}").Default(key)
             )
             .AddNumberField(
-                name: I18n.Config_LegendOpacity_Name,
-                tooltip: I18n.Config_LegendOpacity_Desc,
-                get: config => config.LegendOpacityOnMouseOver,
-                set: (config, value) => config.LegendOpacityOnMouseOver = value,
+                name: I18n.Config_LegendAlphaOnHover_Name,
+                tooltip: I18n.Config_LegendAlphaOnHover_Desc,
+                get: config => config.LegendAlphaOnHover,
+                set: (config, value) => config.LegendAlphaOnHover = value,
                 min: 0,
                 max: 1,
                 interval: 0.05f

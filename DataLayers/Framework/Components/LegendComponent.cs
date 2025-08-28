@@ -49,11 +49,11 @@ internal class LegendComponent : ClickableComponent
     /// <summary>The height of the data layer name text.</summary>
     private Point LabelTextSize;
 
-    /// <summary>The current alpha level applied to the top-left boxes when drawn.</summary>
-    private float Opacity = 1;
+    /// <summary>The current opacity to set for the top-left boxes when drawn, as a value between 0 (transparent) and 1 (opaque).</summary>
+    private float Alpha = 1;
 
-    /// <summary>The alpha level applied to the top-left boxes on mouse-over.</summary>
-    private readonly float MinimumOpacity = 0.2f;
+    /// <summary>The opacity to set for the top-left boxes when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</summary>
+    private readonly float AlphaOnHover;
 
 
     /*********
@@ -65,14 +65,16 @@ internal class LegendComponent : ClickableComponent
     /// <param name="layers">The data layers to render.</param>
     /// <param name="layerName">The current layer name to display.</param>
     /// <param name="legend">The legend values to display.</param>
-    public LegendComponent(int x, int y, ILayer[] layers, string layerName, LegendEntry[] legend, float minimumOpacity)
+    /// <param name="alphaOnHover">The opacity to set for the top-left boxes when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</param>
+    public LegendComponent(int x, int y, ILayer[] layers, string layerName, LegendEntry[] legend, float alphaOnHover)
         : base(new Rectangle(x, y, 0, 0), nameof(LegendComponent))
     {
         this.LayerName = layerName;
         this.Legend = legend;
+        this.AlphaOnHover = alphaOnHover;
+
         this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
         this.BoxContentWidth = this.GetMaxContentWidth(layers, this.LegendColorSize);
-        this.MinimumOpacity = minimumOpacity;
 
         this.ReinitializeComponents();
     }
@@ -84,7 +86,7 @@ internal class LegendComponent : ClickableComponent
         // precalculate values
         int leftOffset = this.bounds.X;
         int topOffset = this.bounds.Y;
-        float alpha = this.Opacity;
+        float alpha = this.Alpha;
         Color textColor = alpha < 1
             ? Game1.textColor * alpha
             : Game1.textColor;
@@ -121,7 +123,7 @@ internal class LegendComponent : ClickableComponent
         // update opacity
         bool isHovered = this.bounds.Contains(Game1.getMousePosition(true));
         float rate = (float)(0.75f / Game1.currentGameTime.ElapsedGameTime.TotalMilliseconds);
-        this.Opacity = Math.Clamp(this.Opacity + rate * (isHovered ? -1 : 1), this.MinimumOpacity, 1f);
+        this.Alpha = Math.Clamp(this.Alpha + rate * (isHovered ? -1 : 1), this.AlphaOnHover, 1f);
     }
 
 
