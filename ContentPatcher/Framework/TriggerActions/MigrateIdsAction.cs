@@ -7,8 +7,8 @@ using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Delegates;
+using StardewValley.Extensions;
 using StardewValley.GameData.Buildings;
-using StardewValley.GameData.FarmAnimals;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Triggers;
 using SObject = StardewValley.Object;
@@ -78,7 +78,7 @@ internal class MigrateIdsAction
         switch (type)
         {
             case MigrateIdType.Buildings:
-                return this.TryMigrateBuildings(players, mapIds, out error);
+                return this.TryMigrateBuildings(mapIds, out error);
 
             case MigrateIdType.CookingRecipes:
                 return this.TryMigrateCookingRecipeIds(players, mapIds, out error);
@@ -90,7 +90,7 @@ internal class MigrateIdsAction
                 return this.TryMigrateEventIds(players, mapIds, out error);
 
             case MigrateIdType.FarmAnimals:
-                return this.TryMigrateFarmAnimals(players, mapIds, out error);
+                return this.TryMigrateFarmAnimals(mapIds, out error);
 
             case MigrateIdType.Items:
                 return this.TryMigrateItemIds(mapIds, out error);
@@ -112,33 +112,34 @@ internal class MigrateIdsAction
     ** Private methods
     *********/
     /// <summary>Try to migrate buildings.</summary>
-    private bool TryMigrateBuildings(Farmer[] players, Dictionary<string, string> mapIds, out string? error)
+    /// <param name="mapIds">The old and new IDs to map.</param>
+    /// <param name="error">An error indicating why the migration failed.</param>
+    private bool TryMigrateBuildings(Dictionary<string, string> mapIds, out string? error)
     {
-        Dictionary<string, BuildingData> buildingData = DataLoader.Buildings(Game1.content);
-        Dictionary<string, (string, BuildingData)> mappedBuildingData = [];
-        foreach ((string oldId, string newId) in mapIds)
+        // filter & validate
+        mapIds.RemoveWhere(pair => Game1.buildingData.ContainsKey(pair.Key));
+        foreach (string newId in mapIds.Values)
         {
-            if (buildingData.TryGetValue(newId, out BuildingData? bldData))
+            if (!Game1.buildingData.ContainsKey(newId))
             {
-                mappedBuildingData[oldId] = new(newId, bldData);
+                error = $"the new building type \"{newId}\" doesn't match an existing building";
+                return false;
             }
         }
-        // mapToNewBuildings = mapIds.Where(kv => buildingData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
 
+        // apply
         Utility.ForEachBuilding(building =>
         {
-            if (building.buildingType.Value == null
-                || !mappedBuildingData.TryGetValue(building.buildingType.Value, out (string, BuildingData) newTypeAndData))
+            if (building.buildingType.Value is {} oldType && mapIds.TryGetValue(oldType, out string? newType) && Game1.buildingData.TryGetValue(newType, out BuildingData? newData))
             {
-                return true;
-            }
+                building.buildingType.Value = newType;
 
-            if (building.GetIndoors() is not null && newTypeAndData.Item2.IndoorMap == null)
-            {
-                building.indoors.Value = null;
-                building.nonInstancedIndoorsName.Value = null;
+                if (building.GetIndoors() is not null && newData.IndoorMap == null)
+                {
+                    building.indoors.Value = null;
+                    building.nonInstancedIndoorsName.Value = null;
+                }
             }
-            building.buildingType.Value = newTypeAndData.Item1;
 
             return true;
         });
@@ -225,32 +226,33 @@ internal class MigrateIdsAction
     }
 
     /// <summary>Try to migrate farm animals.</summary>
-    private bool TryMigrateFarmAnimals(IEnumerable<Farmer> players, IDictionary<string, string> mapIds, [NotNullWhen(false)] out string? error)
+    /// <param name="mapIds">The old and new IDs to map.</param>
+    /// <param name="error">An error indicating why the migration failed.</param>
+    private bool TryMigrateFarmAnimals(IDictionary<string, string> mapIds, [NotNullWhen(false)] out string? error)
     {
-        Dictionary<string, FarmAnimalData> farmAnimalData = DataLoader.FarmAnimals(Game1.content);
-        mapIds = mapIds.Where(kv => farmAnimalData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
-
-        Utility.ForEachBuilding(building =>
+        // validate & filter
+        mapIds.RemoveWhere(pair => Game1.farmAnimalData.ContainsKey(pair.Key));
+        foreach (string newId in mapIds.Values)
         {
-            if (building.GetIndoors() is not AnimalHouse house)
+            if (!Game1.farmAnimalData.ContainsKey(newId))
             {
-                return true;
+                error = $"the new farm animal type \"{newId}\" doesn't match an existing animal";
+                return false;
             }
-            GameLocation parentLocation = building.GetParentLocation();
-            foreach (long animalId in house.animalsThatLiveHere)
+        }
+
+        // apply
+        Utility.ForEachLocation(location =>
+        {
+            foreach (FarmAnimal animal in location.animals.Values)
             {
-                if (!house.animals.TryGetValue(animalId, out FarmAnimal animal)
-                    && !parentLocation.animals.TryGetValue(animalId, out animal))
+                if (animal.type.Value != null && mapIds.TryGetValue(animal.type.Value, out string? newType))
                 {
-                    continue;
+                    animal.type.Value = newType;
+                    animal.ReloadTextureIfNeeded(forceReload: true);
                 }
-                if (animal.type.Value == null || !mapIds.TryGetValue(animal.type.Value, out string? newType))
-                {
-                    continue;
-                }
-                animal.type.Value = newType;
-                animal.ReloadTextureIfNeeded(forceReload: true);
             }
+
             return true;
         });
 

@@ -3,7 +3,7 @@ namespace ContentPatcher.Framework.TriggerActions;
 /// <summary>A data ID type which can be migrated using <see cref="MigrateIdsAction"/>.</summary>
 public enum MigrateIdType
 {
-    /// <summary>Migrate buildings.</summary>
+    /// <summary>Migrate building types.</summary>
     Buildings,
 
     /// <summary>Migrate cooking recipe IDs.</summary>
@@ -15,7 +15,7 @@ public enum MigrateIdType
     /// <summary>Migrate event IDs.</summary>
     Events,
 
-    /// <summary>Migrate farm animals.</summary>
+    /// <summary>Migrate farm animal types.</summary>
     FarmAnimals,
 
     /// <summary>Migrate item local IDs.</summary>
