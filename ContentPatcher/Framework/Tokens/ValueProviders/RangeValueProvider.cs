@@ -23,6 +23,7 @@ internal class RangeValueProvider : BaseValueProvider
         : base(ConditionType.Range, mayReturnMultipleValuesForRoot: true, isDeterministicForInput: true)
     {
         this.EnableInputArguments(required: true, mayReturnMultipleValues: true, maxPositionalArgs: 2);
+        this.ValidNamedArguments = InvariantSets.FromValue("step");
         this.MarkReady(true);
     }
 
@@ -42,7 +43,7 @@ internal class RangeValueProvider : BaseValueProvider
         {
             return
                 base.TryValidateInput(input, out error)
-                && this.TryParseRange(input, out _, out _, out error);
+                && this.TryParseRange(input, out _, out _, out _, out error);
         }
 
         return true;
@@ -53,8 +54,8 @@ internal class RangeValueProvider : BaseValueProvider
     {
         this.AssertInput(input);
 
-        return this.TryParseRange(input, out int min, out int max, out _)
-            ? Enumerable.Range(start: min, count: max - min + 1).Select(p => p.ToString())
+        return this.TryParseRange(input, out int min, out int max, out int step, out _)
+            ? Enumerable.Range(start: 0, count: (max - min) / step + 1).Select(p => (min + step * p).ToString())
             : InvariantSets.Empty; // error will be shown in validation
     }
 
@@ -62,15 +63,17 @@ internal class RangeValueProvider : BaseValueProvider
     /*********
     ** Private methods
     *********/
-    /// <summary>Parse the numeric min/max values from a range specifier if it's valid.</summary>
+    /// <summary>Parse the numeric min/max values and step value from a range specifier if it's valid.</summary>
     /// <param name="input">The input arguments containing the range specifier.</param>
     /// <param name="min">The parsed min value, if valid.</param>
     /// <param name="max">The parsed max value, if valid.</param>
+    /// <param name="step">The parsed step value, if valid.</param>
     /// <param name="error">The error indicating why the range is invalid, if applicable.</param>
-    private bool TryParseRange(IInputArguments input, out int min, out int max, [NotNullWhen(false)] out string? error)
+    private bool TryParseRange(IInputArguments input, out int min, out int max, out int step, [NotNullWhen(false)] out string? error)
     {
         min = 0;
         max = 0;
+        step = 1;
 
         // check if input provided
         if (!input.HasPositionalArgs)
@@ -86,11 +89,19 @@ internal class RangeValueProvider : BaseValueProvider
         if (!int.TryParse(input.PositionalArgs[1], out max))
             return this.ParseError(input, $"can't parse max value '{input.PositionalArgs[1]}' as an integer", out error);
 
+        // parse step value if it exists
+        if (input.NamedArgs.TryGetValue("step", out IInputArgumentValue? stepArg) && !int.TryParse(stepArg.Raw, out step))
+            return this.ParseError(input, $"can't parse step argument '{stepArg.Raw}' as an integer", out error);
+
+        // validate step
+        if (step <= 0)
+            return this.ParseError(input, $"step argument must be a positive integer greater than 0", out error);
+
         // validate range
         if (min > max)
             return this.ParseError(input, $"min value '{min}' can't be greater than max value '{max}'", out error);
 
-        int count = (max - min) + 1;
+        int count = (max - min) / step + 1;
         if (count > RangeValueProvider.MaxCount)
             return this.ParseError(input, $"range can't exceed {RangeValueProvider.MaxCount} numbers (specified range would contain {count} numbers)", out error);
 
