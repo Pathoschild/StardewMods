@@ -77,6 +77,9 @@ internal class MigrateIdsAction
         Farmer[] players = Game1.getAllFarmers().ToArray();
         switch (type)
         {
+            case MigrateIdType.Buildings:
+                return this.TryMigrateBuildings(players, mapIds, out error);
+
             case MigrateIdType.CookingRecipes:
                 return this.TryMigrateCookingRecipeIds(players, mapIds, out error);
 
@@ -86,6 +89,9 @@ internal class MigrateIdsAction
             case MigrateIdType.Events:
                 return this.TryMigrateEventIds(players, mapIds, out error);
 
+            case MigrateIdType.FarmAnimals:
+                return this.TryMigrateFarmAnimals(players, mapIds, out error);
+
             case MigrateIdType.Items:
                 return this.TryMigrateItemIds(mapIds, out error);
 
@@ -94,12 +100,6 @@ internal class MigrateIdsAction
 
             case MigrateIdType.Songs:
                 return this.TryMigrateSongIds(players, mapIds, out error);
-
-            case MigrateIdType.FarmAnimals:
-                return this.TryMigrateFarmAnimals(players, mapIds, out error);
-
-            case MigrateIdType.Buildings:
-                return this.TryMigrateBuildings(players, mapIds, out error);
 
             default:
                 error = $"required index 1 has unknown ID type '{type}'";
@@ -111,6 +111,42 @@ internal class MigrateIdsAction
     /*********
     ** Private methods
     *********/
+    /// <summary>Try to migrate buildings.</summary>
+    private bool TryMigrateBuildings(Farmer[] players, Dictionary<string, string> mapIds, out string? error)
+    {
+        Dictionary<string, BuildingData> buildingData = DataLoader.Buildings(Game1.content);
+        Dictionary<string, (string, BuildingData)> mappedBuildingData = [];
+        foreach ((string oldId, string newId) in mapIds)
+        {
+            if (buildingData.TryGetValue(newId, out BuildingData? bldData))
+            {
+                mappedBuildingData[oldId] = new(newId, bldData);
+            }
+        }
+        // mapToNewBuildings = mapIds.Where(kv => buildingData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
+
+        Utility.ForEachBuilding(building =>
+        {
+            if (building.buildingType.Value == null
+                || !mappedBuildingData.TryGetValue(building.buildingType.Value, out (string, BuildingData) newTypeAndData))
+            {
+                return true;
+            }
+
+            if (building.GetIndoors() is not null && newTypeAndData.Item2.IndoorMap == null)
+            {
+                building.indoors.Value = null;
+                building.nonInstancedIndoorsName.Value = null;
+            }
+            building.buildingType.Value = newTypeAndData.Item1;
+
+            return true;
+        });
+
+        error = null;
+        return true;
+    }
+
     /// <summary>Try to migrate cooking recipe IDs.</summary>
     /// <param name="players">The players to edit.</param>
     /// <param name="mapIds">The old and new IDs to map.</param>
@@ -183,6 +219,40 @@ internal class MigrateIdsAction
                 }
             }
         }
+
+        error = null;
+        return true;
+    }
+
+    /// <summary>Try to migrate farm animals.</summary>
+    private bool TryMigrateFarmAnimals(IEnumerable<Farmer> players, IDictionary<string, string> mapIds, [NotNullWhen(false)] out string? error)
+    {
+        Dictionary<string, FarmAnimalData> farmAnimalData = DataLoader.FarmAnimals(Game1.content);
+        mapIds = mapIds.Where(kv => farmAnimalData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
+
+        Utility.ForEachBuilding(building =>
+        {
+            if (building.GetIndoors() is not AnimalHouse house)
+            {
+                return true;
+            }
+            GameLocation parentLocation = building.GetParentLocation();
+            foreach (long animalId in house.animalsThatLiveHere)
+            {
+                if (!house.animals.TryGetValue(animalId, out FarmAnimal animal)
+                    && !parentLocation.animals.TryGetValue(animalId, out animal))
+                {
+                    continue;
+                }
+                if (animal.type.Value == null || !mapIds.TryGetValue(animal.type.Value, out string? newType))
+                {
+                    continue;
+                }
+                animal.type.Value = newType;
+                animal.ReloadTextureIfNeeded(forceReload: true);
+            }
+            return true;
+        });
 
         error = null;
         return true;
@@ -398,76 +468,6 @@ internal class MigrateIdsAction
                 }
             }
         }
-
-        error = null;
-        return true;
-    }
-
-    /// <summary>Try to migrate farm animals.</summary>
-    private bool TryMigrateFarmAnimals(IEnumerable<Farmer> players, IDictionary<string, string> mapIds, [NotNullWhen(false)] out string? error)
-    {
-        Dictionary<string, FarmAnimalData> farmAnimalData = DataLoader.FarmAnimals(Game1.content);
-        mapIds = mapIds.Where(kv => farmAnimalData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
-
-        Utility.ForEachBuilding(building =>
-        {
-            if (building.GetIndoors() is not AnimalHouse house)
-            {
-                return true;
-            }
-            GameLocation parentLocation = building.GetParentLocation();
-            foreach (long animalId in house.animalsThatLiveHere)
-            {
-                if (!house.animals.TryGetValue(animalId, out FarmAnimal animal)
-                    && !parentLocation.animals.TryGetValue(animalId, out animal))
-                {
-                    continue;
-                }
-                if (animal.type.Value == null || !mapIds.TryGetValue(animal.type.Value, out string? newType))
-                {
-                    continue;
-                }
-                animal.type.Value = newType;
-                animal.ReloadTextureIfNeeded(forceReload: true);
-            }
-            return true;
-        });
-
-        error = null;
-        return true;
-    }
-
-    /// <summary>Try to migrate buildings.</summary>
-    private bool TryMigrateBuildings(Farmer[] players, Dictionary<string, string> mapIds, out string? error)
-    {
-        Dictionary<string, BuildingData> buildingData = DataLoader.Buildings(Game1.content);
-        Dictionary<string, (string, BuildingData)> mappedBuildingData = [];
-        foreach ((string oldId, string newId) in mapIds)
-        {
-            if (buildingData.TryGetValue(newId, out BuildingData? bldData))
-            {
-                mappedBuildingData[oldId] = new(newId, bldData);
-            }
-        }
-        // mapToNewBuildings = mapIds.Where(kv => buildingData.ContainsKey(kv.Value)).ToDictionary(kv => kv.Key, kv => kv.Value);
-
-        Utility.ForEachBuilding(building =>
-        {
-            if (building.buildingType.Value == null
-                || !mappedBuildingData.TryGetValue(building.buildingType.Value, out (string, BuildingData) newTypeAndData))
-            {
-                return true;
-            }
-
-            if (building.GetIndoors() is not null && newTypeAndData.Item2.IndoorMap == null)
-            {
-                building.indoors.Value = null;
-                building.nonInstancedIndoorsName.Value = null;
-            }
-            building.buildingType.Value = newTypeAndData.Item1;
-
-            return true;
-        });
 
         error = null;
         return true;
