@@ -13,6 +13,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.TokenizableStrings;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.ChestsAnywhere;
@@ -424,19 +425,62 @@ internal class ChestFactory
     /// <param name="location">The in-game location.</param>
     private string GetCategory(GameLocation location)
     {
-        // cabin with owner
-        if (location is Cabin cabin)
-        {
-            return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
-                ? I18n.DefaultCategory_OwnedCabin(owner: cabin.owner?.Name ?? string.Empty)
-                : I18n.DefaultCategory_UnownedCabin();
-        }
+        string name = this.GetLocationDisplayName(location);
 
-        // else location name
-        string name = location.GetDisplayName() ?? location.Name;
         if (name.Length > Constant.MaxDefaultCategoryLength)
             name = name[..(Constant.MaxDefaultCategoryLength - 3)] + "...";
+
         return name;
+    }
+
+    /// <summary>Get the raw translated display name for a location.</summary>
+    /// <param name="location">The in-game location.</param>
+    private string GetLocationDisplayName(GameLocation location)
+    {
+        // display name
+        {
+            string name = location.GetDisplayName();
+            if (name != null)
+                return name;
+        }
+
+        // specific types
+        switch (location)
+        {
+            case Cabin cabin:
+                return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
+                    ? I18n.DefaultCategory_CabinOwned(owner: cabin.owner.Name ?? string.Empty)
+                    : I18n.DefaultCategory_CabinUnowned();
+
+            case FarmHouse { Name: "FarmHouse" }:
+                return I18n.DefaultCategory_Farmhouse();
+
+            case IslandFarmHouse { Name: "IslandFarmHouse" }:
+                return I18n.DefaultCategory_IslandFarmhouse();
+
+            case Cellar:
+                {
+                    // extract cellar number
+                    int cellarNumber = 1;
+                    if (!location.Name.StartsWith("Cellar") || (location.Name.Length > 6 && !int.TryParse(location.Name[6..], out cellarNumber)))
+                        break;
+
+                    // get owner
+                    return Game1.player.team.cellarAssignments.TryGetValue(cellarNumber, out long ownerId) && Game1.GetPlayer(ownerId) is { } owner
+                        ? I18n.DefaultCategory_CellarOwned(owner: owner.Name)
+                        : I18n.DefaultCategory_CellarUnowned(cellarNumber: cellarNumber);
+                }
+        }
+
+        // building interior
+        {
+            string name = TokenParser.ParseText(location.ParentBuilding?.GetData()?.Name);
+            if (name != null)
+                return name;
+        }
+
+        // else raw name
+        return location.Name;
     }
 
     /// <summary>Get whether it's safe to show a color picker for the given chest.</summary>

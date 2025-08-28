@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "取回出货物品",
 
     // default category names
-    "default-category.owned-cabin": "小屋（{{owner}}）",
-    "default-category.unowned-cabin": "小屋（空的）",
+    "default-category.cabin-owned": "小屋（{{owner}}）",
+    "default-category.cabin-unowned": "小屋（空的）",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

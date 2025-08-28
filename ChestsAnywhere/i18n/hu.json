@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "Tárgyak visszaszerzése",
 
     // default category names
-    "default-category.owned-cabin": "Kunyhó ({{owner}})",
-    "default-category.unowned-cabin": "Kunyhó (üres)",
+    "default-category.cabin-owned": "Kunyhó ({{owner}})",
+    "default-category.cabin-unowned": "Kunyhó (üres)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

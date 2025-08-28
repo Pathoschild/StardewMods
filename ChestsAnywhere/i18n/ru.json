@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "Получить предметы",
 
     // default category names
-    "default-category.owned-cabin": "В данном домике проживает {{owner}}.",
-    "default-category.unowned-cabin": "Домик (пустой)",
+    "default-category.cabin-owned": "В данном домике проживает {{owner}}.",
+    "default-category.cabin-unowned": "Домик (пустой)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} №{{number}}",
 
     // edit-chest labels

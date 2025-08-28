@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "Прийняті предмети",
 
     // default category names
-    "default-category.owned-cabin": "Будиночок гравця {{owner}}",
-    "default-category.unowned-cabin": "Будиночок (порожній)",
+    "default-category.cabin-owned": "Будиночок гравця {{owner}}",
+    "default-category.cabin-unowned": "Будиночок (порожній)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

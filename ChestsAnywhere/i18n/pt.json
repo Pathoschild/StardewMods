@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "Retirar itens",
 
     // default category names
-    "default-category.owned-cabin": "Cabana ({{owner}})",
-    "default-category.unowned-cabin": "Cabana (vazia)",
+    "default-category.cabin-owned": "Cabana ({{owner}})",
+    "default-category.cabin-unowned": "Cabana (vazia)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

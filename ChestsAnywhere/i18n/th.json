@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "ไอเท็มนำออก",
 
     // default category names
-    "default-category.owned-cabin": "กระท่อม ({{owner}})",
-    "default-category.unowned-cabin": "กระท่อม (ว่าง)",
+    "default-category.cabin-owned": "กระท่อม ({{owner}})",
+    "default-category.cabin-unowned": "กระท่อม (ว่าง)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

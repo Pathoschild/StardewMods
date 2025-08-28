@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "öğeleri geri al",
 
     // default category names
-    "default-category.owned-cabin": "Baraka ({{owner}})",
-    "default-category.unowned-cabin": "Baraka (boş)",
+    "default-category.cabin-owned": "Baraka ({{owner}})",
+    "default-category.cabin-unowned": "Baraka (boş)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
