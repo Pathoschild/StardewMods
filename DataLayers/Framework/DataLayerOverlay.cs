@@ -79,6 +79,9 @@ internal class DataLayerOverlay : BaseOverlay
     /// <summary>Whether the game was paused last time the menu was updated.</summary>
     private bool WasPaused;
 
+    /// <summary>The legend opacity to set when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</summary>
+    private readonly float LegendAlphaOnHover;
+
     /*****
     ** Components
     *****/
@@ -110,7 +113,8 @@ internal class DataLayerOverlay : BaseOverlay
     /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
     /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
     /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
-    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
+    /// <param name="legendAlphaOnHover">The legend opacity to set when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</param>
+    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid, float legendAlphaOnHover)
         : base(events, inputHelper, reflection, assumeUiMode: true)
     {
         if (!layers.Any())
@@ -120,6 +124,7 @@ internal class DataLayerOverlay : BaseOverlay
         this.DrawOverlay = drawOverlay;
         this.CombineOverlappingBorders = combineOverlappingBorders;
         this.ShowGrid = showGrid;
+        this.LegendAlphaOnHover = legendAlphaOnHover;
 
         this.SetLayer(this.Layers.First());
     }
@@ -309,6 +314,14 @@ internal class DataLayerOverlay : BaseOverlay
         }
     }
 
+    /// <inheritdoc />
+    protected override void Update()
+    {
+        // update top-left UI when visible
+        if (this.DrawOverlay() && Game1.displayHUD)
+            this.Legend.Update();
+    }
+
     /// <summary>Reinitialize the UI components.</summary>
     [MemberNotNull(nameof(DataLayerOverlay.Legend), nameof(DataLayerOverlay.NextButton), nameof(DataLayerOverlay.PrevButton))]
     private void ReinitializeComponents()
@@ -323,7 +336,7 @@ internal class DataLayerOverlay : BaseOverlay
         Rectangle rightArrow = CommonSprites.Icons.RightArrow;
 
         this.PrevButton = new ClickableTextureComponent(new Rectangle(this.LeftMargin, this.TopMargin + 10, leftArrow.Width, leftArrow.Height), CommonSprites.Icons.Sheet, leftArrow, 1);
-        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries);
+        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries, this.LegendAlphaOnHover);
         this.NextButton = new ClickableTextureComponent(new Rectangle(this.Legend.bounds.Right + this.ArrowPadding, this.TopMargin + 10, rightArrow.Width, rightArrow.Height), CommonSprites.Icons.Sheet, rightArrow, 1);
     }
 

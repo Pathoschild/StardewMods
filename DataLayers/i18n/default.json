@@ -93,6 +93,9 @@
     "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
     "config.color-schemes.default": "default colors",
 
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+
     // main controls
     "config.toggle-layer-key.name": "Toggle data layers",
     "config.toggle-layer-key.desc": "The key binding which shows or hides the data layer overlay.",
