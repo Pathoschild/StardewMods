@@ -93,6 +93,10 @@
     "config.color-schene.desc": "Lo schema di colori da applicare, che modifica i colori di tutti i livelli di dati.",
     "config.color-schemes.default": "colori predefiniti",
 
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+
     // main controls
     "config.toggle-layer-key.name": "Alterna livelli di dati",
     "config.toggle-layer-key.desc": "Il tasto che mostra o nasconde la sovrapposizione del livello di dati.",

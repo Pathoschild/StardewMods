@@ -93,6 +93,10 @@
     "config.color-schene.desc": "要应用的颜色方案，它可以改变所有数据图层的颜色。",
     "config.color-schemes.default": "默认颜色方案",
 
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+
     // main controls
     "config.toggle-layer-key.name": "打开数据图层快捷键",
     "config.toggle-layer-key.desc": "显示或隐藏数据图层的快捷键。",

@@ -93,6 +93,10 @@
     "config.color-schene.desc": "適用する配色で、すべてのデータレイヤー全体の色を変更する。",
     "config.color-schemes.default": "標準の色",
 
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+
     // main controls
     "config.toggle-layer-key.name": "データレイヤーの切り替え",
     "config.toggle-layer-key.desc": "データレイヤーのオーバーレイを表示または非表示にするキー。",
