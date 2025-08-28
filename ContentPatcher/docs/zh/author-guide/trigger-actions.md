@@ -22,7 +22,7 @@
 <td><code>&lt;类型&gt;</code></td>
 <td>
 
-必须是以下之一：`CookingRecipes`、`CraftingRecipes`、`Events`、`Items`、`Mail`、`Songs`。
+必须是以下之一：`Buildings`、`CookingRecipes`、`CraftingRecipes`、`Events`、`FarmAnimals`、`Items`、`Mail`、`Songs`。
 
 </td>
 </tr>
