@@ -81,16 +81,20 @@ internal class LegendComponent : ClickableComponent
     /// <param name="spriteBatch">The sprite batch being rendered.</param>
     public void Draw(SpriteBatch spriteBatch)
     {
-        // calculate dimensions
+        // precalculate values
         int leftOffset = this.bounds.X;
         int topOffset = this.bounds.Y;
+        float alpha = this.Opacity;
+        Color textColor = alpha < 1
+            ? Game1.textColor * alpha
+            : Game1.textColor;
 
         // draw overlay label
         {
-            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.LabelTextSize.Y), out Vector2 contentPos, out Rectangle scrollBounds, padding: this.ScrollPadding, alpha: this.Opacity);
+            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.LabelTextSize.Y), out Vector2 contentPos, out Rectangle scrollBounds, padding: this.ScrollPadding, alpha: alpha);
 
             contentPos += new Vector2((this.BoxContentWidth - this.LabelTextSize.X) / 2f, 0); // center label in box
-            spriteBatch.DrawString(Game1.smallFont, this.LayerName, contentPos, Game1.textColor * this.Opacity);
+            spriteBatch.DrawString(Game1.smallFont, this.LayerName, contentPos, textColor);
 
             topOffset += scrollBounds.Height + this.Padding;
         }
@@ -98,15 +102,15 @@ internal class LegendComponent : ClickableComponent
         // draw legend
         if (this.Legend.Any())
         {
-            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _, padding: this.ScrollPadding, alpha: this.Opacity);
+            CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _, padding: this.ScrollPadding, alpha: alpha);
             for (int i = 0; i < this.Legend.Length; i++)
             {
                 LegendEntry value = this.Legend[i];
                 int legendX = (int)contentPos.X;
                 int legendY = (int)(contentPos.Y + i * this.LegendColorSize);
 
-                spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color * this.Opacity);
-                spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), Game1.textColor * this.Opacity);
+                spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color * alpha);
+                spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), textColor);
             }
         }
     }
