@@ -60,6 +60,7 @@ internal class ChestFactory
             var locations =
                 (
                     from GameLocation location in this.GetAccessibleLocations()
+                    where range.IsInRange(location)
                     select new
                     {
                         Location = location,
