@@ -138,15 +138,15 @@ Global token values are defined by Content Patcher, so you can use them without 
 
 The festival or wedding happening today. Possible values:
 * `wedding` (current player is getting married);
-* `dance of the moonlight jellies`;
-* `egg festival`;
-* `feast of the winter star`;
-* `festival of ice`;
-* `flower dance`;
-* `luau`;
-* `stardew valley fair`;
-* `spirit's eve`;
-* a custom festival name.
+* `Dance of the Moonlight Jellies`;
+* `Egg Festival`;
+* `Feast of the Winter Star`;
+* `Festival of Ice`;
+* `Flower Dance`;
+* `Luau`;
+* `Spirit's Eve`;
+* `Stardew Valley Fair`;
+* a custom festival name (read from `Data/Festivals/FestivalDates`).
 
 </td>
 <td><a href="#DayEvent">#</a></td>
