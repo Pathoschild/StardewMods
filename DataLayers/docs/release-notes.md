@@ -1,6 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* The legend box now fades when you hover the cursor over it, so you can see what's behind it (thanks to b-b-blueberry!).
+* Fixed legends not using game's text color (thanks to b-b-blueberry!).
+
 ## 1.20.3
 Released 27 July 2025 for SMAPI 4.1.10 or later.
 
@@ -20,7 +24,7 @@ Released 26 March 2025 for SMAPI 4.1.10 or later.
 ## 1.20.0
 Released 26 February 2025 for SMAPI 4.1.10 or later.
 
-- Added [mod API to add custom data layers](author-guide.md) (thanks to collaboration with focustense!).
+* Added [mod API to add custom data layers](author-guide.md) (thanks to collaboration with focustense!).
 
 ## 1.19.1
 Released 11 February 2025 for SMAPI 4.1.10 or later.
