@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed overflow when showing a child's birthday in some cases where the in-game date was moved to the past (thanks to Mushymato!).
+
 ## 1.52.1
 Released 27 July 2025 for SMAPI 4.3.1 or later.
 
