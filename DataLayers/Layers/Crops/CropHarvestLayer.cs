@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
+using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops;
 
 /// <summary>A data layer which shows whether crops are ready to be harvested.</summary>
-internal class CropHarvestLayer : BaseLayer
+internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -51,6 +52,14 @@ internal class CropHarvestLayer : BaseLayer
             new TileGroup(tiles[this.NotReady.Id]),
             new TileGroup(tiles[this.NotEnoughTimeOrDead.Id], outerBorderColor: this.NotEnoughTimeOrDead.Color)
         ];
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item item)
+    {
+        return
+            item is MeleeWeapon tool
+            && tool.isScythe();
     }
 
 

@@ -79,6 +79,12 @@ internal class ModLayer : ILayer
     }
 
     /// <inheritdoc />
+    public bool UpdateMetadata()
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
     public IReadOnlyCollection<TileGroup> Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile)
     {
         this.InitializeIfNeeded();

@@ -11,32 +11,35 @@ internal class ModConfigLayers
     /*********
     ** Accessors
     *********/
+    /// <summary>Settings for the dynamic layer which changes based on the held object.</summary>
+    public LayerConfig AutoLayer { get; set; } = new() { UpdatesPerSecond = 6 };
+
     /// <summary>Settings for the accessible layer.</summary>
     public LayerConfig Accessible { get; set; } = new() { UpdatesPerSecond = 2 };
 
     /// <summary>Settings for the buildable layer.</summary>
-    public LayerConfig Buildable { get; set; } = new() { UpdatesPerSecond = 2 };
+    public LayerConfigWithAutoSupport Buildable { get; set; } = new() { UpdatesPerSecond = 2 };
 
     /// <summary>Settings for the bee house layer.</summary>
-    public LayerConfig CoverageForBeeHouses { get; set; } = new() { UpdatesPerSecond = 60 };
+    public LayerConfigWithAutoSupport CoverageForBeeHouses { get; set; } = new() { UpdatesPerSecond = 60 };
 
     /// <summary>Settings for the Junimo hut layer.</summary>
-    public LayerConfig CoverageForJunimoHuts { get; set; } = new() { UpdatesPerSecond = 60 };
+    public LayerConfigWithAutoSupport CoverageForJunimoHuts { get; set; } = new() { UpdatesPerSecond = 60 };
 
     /// <summary>Settings for the scarecrow layer.</summary>
-    public LayerConfig CoverageForScarecrows { get; set; } = new() { UpdatesPerSecond = 60 };
+    public LayerConfigWithAutoSupport CoverageForScarecrows { get; set; } = new() { UpdatesPerSecond = 60 };
 
     /// <summary>Settings for the sprinkler layer.</summary>
-    public LayerConfig CoverageForSprinklers { get; set; } = new() { UpdatesPerSecond = 60 };
+    public LayerConfigWithAutoSupport CoverageForSprinklers { get; set; } = new() { UpdatesPerSecond = 60 };
 
     /// <summary>Settings for the fertilizer layer.</summary>
-    public LayerConfig CropFertilizer { get; set; } = new() { UpdatesPerSecond = 30 };
+    public LayerConfigWithAutoSupport CropFertilizer { get; set; } = new() { UpdatesPerSecond = 30 };
 
     /// <summary>Settings for the crop harvest layer.</summary>
-    public LayerConfig CropHarvest { get; set; } = new() { UpdatesPerSecond = 2 };
+    public LayerConfigWithAutoSupport CropHarvest { get; set; } = new() { UpdatesPerSecond = 2 };
 
     /// <summary>Settings for the crop water layer.</summary>
-    public LayerConfig CropWater { get; set; } = new() { UpdatesPerSecond = 30 };
+    public LayerConfigWithAutoSupport CropWater { get; set; } = new() { UpdatesPerSecond = 30 };
 
     /// <summary>Settings for the crop paddy water layer.</summary>
     public LayerConfig CropPaddyWater { get; set; } = new() { UpdatesPerSecond = 30 };
@@ -48,7 +51,7 @@ internal class ModConfigLayers
     public LayerConfig TileGrid { get; set; } = new() { UpdatesPerSecond = 1 };
 
     /// <summary>Settings for the tillable layer.</summary>
-    public LayerConfig Tillable { get; set; } = new() { UpdatesPerSecond = 2 };
+    public LayerConfigWithAutoSupport Tillable { get; set; } = new() { UpdatesPerSecond = 2 };
 
 
     /*********
@@ -62,18 +65,18 @@ internal class ModConfigLayers
     public void OnDeserialized(StreamingContext context)
     {
         this.Accessible ??= new LayerConfig { UpdatesPerSecond = 2 };
-        this.Buildable ??= new LayerConfig { UpdatesPerSecond = 2 };
-        this.CoverageForBeeHouses ??= new LayerConfig { UpdatesPerSecond = 60 };
-        this.CoverageForJunimoHuts ??= new LayerConfig { UpdatesPerSecond = 60 };
-        this.CoverageForScarecrows ??= new LayerConfig { UpdatesPerSecond = 60 };
-        this.CoverageForSprinklers ??= new LayerConfig { UpdatesPerSecond = 60 };
-        this.CropFertilizer ??= new LayerConfig { UpdatesPerSecond = 30 };
-        this.CropHarvest ??= new LayerConfig { UpdatesPerSecond = 2 };
-        this.CropWater ??= new LayerConfig { UpdatesPerSecond = 30 };
+        this.Buildable ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };
+        this.CoverageForBeeHouses ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 60 };
+        this.CoverageForJunimoHuts ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 60 };
+        this.CoverageForScarecrows ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 60 };
+        this.CoverageForSprinklers ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 60 };
+        this.CropFertilizer ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 30 };
+        this.CropHarvest ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };
+        this.CropWater ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 30 };
         this.CropPaddyWater ??= new LayerConfig { UpdatesPerSecond = 30 };
         this.Machines ??= new LayerConfig { UpdatesPerSecond = 2 };
         this.TileGrid ??= new LayerConfig { UpdatesPerSecond = 1 };
-        this.Tillable ??= new LayerConfig { UpdatesPerSecond = 2 };
+        this.Tillable ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };
     }
 
     /// <summary>Get whether any layers are enabled.</summary>

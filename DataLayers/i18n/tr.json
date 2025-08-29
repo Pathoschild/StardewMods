@@ -2,6 +2,14 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.active": "Auto ({{layerName}})",
+    "auto.inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Erişilebilir",
     "accessible.clear": "Temizle",
@@ -110,6 +118,10 @@
     // data layers
     "config.layer-enabled.name": "Etkin",
     "config.layer-enabled.desc": "Katmanın oyun içinde erişilebilir olup olmayacağı.",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Görüntü değiştiğinde güncelle",
     "config.layer-update-on-view-change.desc": "'Saniye başına güncelleme' ayarından bağımsız olarak, dünyanın yeni bir kısmı görüntüye geldiğinde çizilen katman bilgilerinin güncellenip güncellenmeyeceği.",

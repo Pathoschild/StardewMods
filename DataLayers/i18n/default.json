@@ -2,6 +2,13 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    "auto.active": "Auto ({{layerName}})",
+    "auto.inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Accessible",
     "accessible.clear": "Clear",
@@ -109,6 +116,9 @@
     // data layers
     "config.layer-enabled.name": "Enabled",
     "config.layer-enabled.desc": "Whether this layer should be available in-game.",
+
+    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Update when view changes",
     "config.layer-update-on-view-change.desc": "Whether the drawn layer info should be updated when a new part of the world moves into view, regardless of the 'updates per second' setting.",

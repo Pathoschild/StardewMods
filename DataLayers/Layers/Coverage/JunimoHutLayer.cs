@@ -11,7 +11,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage;
 
 /// <summary>A data layer which shows Junimo hut coverage.</summary>
-internal class JunimoHutLayer : BaseLayer
+internal class JunimoHutLayer : BaseLayer, IAutoBuildingLayer
 {
     /*********
     ** Fields
@@ -98,6 +98,12 @@ internal class JunimoHutLayer : BaseLayer
         return groups.ToArray();
     }
 
+    /// <inheritdoc />
+    public bool AppliesTo(string? buildingType)
+    {
+        return buildingType == "Junimo Hut";
+    }
+
 
     /*********
     ** Private methods
@@ -113,11 +119,11 @@ internal class JunimoHutLayer : BaseLayer
     private bool IsBuildingHut()
     {
         // vanilla menu
-        if (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.Blueprint.Id == "Junimo Hut")
+        if (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && this.AppliesTo(carpenterMenu.Blueprint.Id))
             return true;
 
         // Pelican Fiber menu
-        if (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.GetBuildMenuBlueprint()?.Id == "Junimo Hut")
+        if (this.Mods.PelicanFiber.IsLoaded && this.AppliesTo(this.Mods.PelicanFiber.GetBuildMenuBlueprint()?.Id))
             return true;
 
         return false;

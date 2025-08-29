@@ -149,7 +149,19 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 tooltip: I18n.Config_LayerEnabled_Desc,
                 get: config => section.GetConfig(config).Enabled,
                 set: (config, value) => section.GetConfig(config).Enabled = value
-            )
+            );
+
+        if (defaultConfig is LayerConfigWithAutoSupport)
+        {
+            menu.AddCheckbox(
+                name: I18n.Config_LayerEnabledForAutoLayer_Name,
+                tooltip: I18n.Config_LayerEnabledForAutoLayer_Desc,
+                get: config => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer,
+                set: (config, value) => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer = value
+            );
+        }
+
+        menu
             .AddCheckbox(
                 name: I18n.Config_LayerUpdateOnViewChange_Name,
                 tooltip: I18n.Config_LayerUpdateOnViewChange_Desc,
@@ -170,6 +182,16 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 get: config => section.GetConfig(config).ShortcutKey,
                 set: (config, value) => section.GetConfig(config).ShortcutKey = value
             );
+    }
+
+    /// <summary>Get a section config with 'auto' layer support.</summary>
+    /// <param name="config">The configuration model to read.</param>
+    /// <param name="section">The section to read.</param>
+    /// <exception cref="InvalidCastException">The selected config doesn't support the 'auto' layer.</exception>
+    private LayerConfigWithAutoSupport GetConfigWithAutoSupport(ModConfig config, LayerConfigSection section)
+    {
+        LayerConfig layerConfig = section.GetConfig(config);
+        return (LayerConfigWithAutoSupport)layerConfig;
     }
 
     /// <summary>A data layer's configuration settings.</summary>

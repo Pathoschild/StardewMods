@@ -11,7 +11,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage;
 
 /// <summary>A data layer which shows sprinkler coverage.</summary>
-internal class SprinklerLayer : BaseLayer
+internal class SprinklerLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -30,6 +30,9 @@ internal class SprinklerLayer : BaseLayer
 
     /// <summary>Handles access to the supported mod integrations.</summary>
     private readonly ModIntegrations Mods;
+
+    /// <summary>Whether the player has any legacy sprinkler mods which don't override methods like <see cref="SObject.IsSprinkler"/> instead.</summary>
+    private readonly bool HasLegacySprinklerMods;
 
 
     /*********
@@ -51,33 +54,37 @@ internal class SprinklerLayer : BaseLayer
             this.Wet = new LegendEntry(I18n.Keys.Sprinklers_Covered, colors.Get(layerId, "Covered", Color.Green)),
             this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, colors.Get(layerId, "NotCovered", Color.Red))
         ];
+        this.HasLegacySprinklerMods = mods.BetterSprinklers.IsLoaded || mods.BetterSprinklersPlus.IsLoaded || mods.LineSprinklers.IsLoaded || mods.SimpleSprinkler.IsLoaded;
 
         // get search radius
         this.SearchRadius = 10;
-        if (mods.BetterSprinklers.IsLoaded)
-            this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
-        if (mods.BetterSprinklersPlus.IsLoaded)
-            this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklersPlus.MaxRadius);
-        if (mods.LineSprinklers.IsLoaded)
-            this.SearchRadius = Math.Max(this.SearchRadius, mods.LineSprinklers.MaxRadius);
+        if (this.HasLegacySprinklerMods)
+        {
+            if (mods.BetterSprinklers.IsLoaded)
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
+            if (mods.BetterSprinklersPlus.IsLoaded)
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklersPlus.MaxRadius);
+            if (mods.LineSprinklers.IsLoaded)
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.LineSprinklers.MaxRadius);
+        }
     }
 
     /// <inheritdoc />
     public override TileGroup[] Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile)
     {
         // get coverage
-        IDictionary<string, Vector2[]> customCoverageBySprinklerId = this.GetCustomSprinklerTiles();
+        Dictionary<string, Vector2[]>? legacyCustomCoverageBySprinklerId = this.GetLegacyCustomSprinklerTiles();
 
         // yield sprinkler coverage
         var covered = new HashSet<Vector2>();
         var groups = new List<TileGroup>();
         foreach (Vector2 origin in visibleArea.Expand(this.SearchRadius).GetTiles())
         {
-            if (!location.objects.TryGetValue(origin, out SObject sprinkler) || !this.IsSprinkler(sprinkler, customCoverageBySprinklerId))
+            if (!location.objects.TryGetValue(origin, out SObject sprinkler) || !this.IsSprinkler(sprinkler, legacyCustomCoverageBySprinklerId))
                 continue;
 
             TileData[] tiles = this
-                .GetCoverage(sprinkler, sprinkler.TileLocation, customCoverageBySprinklerId, isHeld: false, visibleTiles)
+                .GetCoverage(sprinkler, sprinkler.TileLocation, legacyCustomCoverageBySprinklerId, isHeld: false, visibleTiles)
                 .Select(pos => new TileData(pos, this.Wet))
                 .ToArray();
 
@@ -95,15 +102,23 @@ internal class SprinklerLayer : BaseLayer
 
         // yield sprinkler being placed
         SObject heldObj = Game1.player.ActiveObject;
-        if (this.IsSprinkler(heldObj, customCoverageBySprinklerId))
+        if (this.IsSprinkler(heldObj, legacyCustomCoverageBySprinklerId))
         {
             var tiles = this
-                .GetCoverage(heldObj, cursorTile, customCoverageBySprinklerId, isHeld: true, visibleTiles)
+                .GetCoverage(heldObj, cursorTile, legacyCustomCoverageBySprinklerId, isHeld: true, visibleTiles)
                 .Select(pos => new TileData(pos, this.Wet, this.Wet.Color * 0.75f));
             groups.Add(new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false));
         }
 
         return groups.ToArray();
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item item)
+    {
+        return
+            item is SObject obj
+            && this.IsSprinkler(obj, this.GetLegacyCustomSprinklerTiles());
     }
 
 
@@ -119,21 +134,30 @@ internal class SprinklerLayer : BaseLayer
 
     /// <summary>Get whether an object is a sprinkler.</summary>
     /// <param name="sprinkler">The object to check.</param>
-    /// <param name="customCoverageBySprinklerId">The current relative sprinkler coverage by qualified item ID, including any dynamic mod changes.</param>
-    private bool IsSprinkler(SObject? sprinkler, IDictionary<string, Vector2[]> customCoverageBySprinklerId)
+    /// <param name="legacyCustomCoverageBySprinklerId">The relative sprinkler coverage by qualified item ID for legacy custom sprinklers which don't override methods like <see cref="SObject.GetSprinklerTiles"/> instead, if any.</param>
+    private bool IsSprinkler(SObject? sprinkler, Dictionary<string, Vector2[]>? legacyCustomCoverageBySprinklerId)
     {
         return
             sprinkler != null
             && (
                 sprinkler.IsSprinkler()
-                || (sprinkler.bigCraftable.Value && customCoverageBySprinklerId.ContainsKey(sprinkler.QualifiedItemId)) // older custom sprinklers
+
+                // older custom sprinklers
+                || (
+                    legacyCustomCoverageBySprinklerId != null
+                    && sprinkler.bigCraftable.Value
+                    && legacyCustomCoverageBySprinklerId.ContainsKey(sprinkler.QualifiedItemId)
+                )
             );
     }
 
-    /// <summary>Get the current relative sprinkler coverage by qualified item ID, including any dynamic mod changes.</summary>
-    private IDictionary<string, Vector2[]> GetCustomSprinklerTiles()
+    /// <summary>Get the relative sprinkler coverage by qualified item ID for legacy custom sprinklers which don't override methods like <see cref="SObject.GetSprinklerTiles"/> instead, if any.</summary>
+    private Dictionary<string, Vector2[]>? GetLegacyCustomSprinklerTiles()
     {
-        var tilesBySprinklerId = new Dictionary<string, Vector2[]>();
+        if (!this.HasLegacySprinklerMods)
+            return null;
+
+        Dictionary<string, Vector2[]> tilesBySprinklerId = [];
 
         // Better Sprinklers
         if (this.Mods.BetterSprinklers.IsLoaded)
@@ -169,11 +193,11 @@ internal class SprinklerLayer : BaseLayer
     /// <summary>Get a sprinkler tile radius.</summary>
     /// <param name="sprinkler">The sprinkler whose radius to get.</param>
     /// <param name="origin">The sprinkler's tile.</param>
-    /// <param name="customSprinklerRanges">The custom sprinkler ranges centered on (0, 0) indexed by qualified sprinkler ID.</param>
+    /// <param name="legacyCustomSprinklerRanges">The relative sprinkler coverage by qualified item ID for legacy custom sprinklers which don't override methods like <see cref="SObject.GetSprinklerTiles"/> instead, if any.</param>
     /// <param name="isHeld">Whether the player is holding the sprinkler.</param>
     /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
     /// <remarks>Derived from <see cref="SObject.DayUpdate"/>.</remarks>
-    private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, IDictionary<string, Vector2[]> customSprinklerRanges, bool isHeld, IReadOnlySet<Vector2> visibleTiles)
+    private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, Dictionary<string, Vector2[]>? legacyCustomSprinklerRanges, bool isHeld, IReadOnlySet<Vector2> visibleTiles)
     {
         // get vanilla tiles
         IEnumerable<Vector2> tiles = sprinkler.GetSprinklerTiles();
@@ -181,7 +205,7 @@ internal class SprinklerLayer : BaseLayer
             tiles = tiles.Select(tile => tile + origin);
 
         // add custom tiles
-        if (customSprinklerRanges.TryGetValue(sprinkler.QualifiedItemId, out Vector2[]? customTiles))
+        if (legacyCustomSprinklerRanges != null && legacyCustomSprinklerRanges.TryGetValue(sprinkler.QualifiedItemId, out Vector2[]? customTiles))
             tiles = new HashSet<Vector2>(tiles.Concat(customTiles.Select(tile => tile + origin)));
 
         // filter to visible tiles

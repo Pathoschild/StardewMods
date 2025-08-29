@@ -2,6 +2,14 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.active": "Auto ({{layerName}})",
+    "auto.inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Dostępność",
     "accessible.clear": "Wolne",
@@ -94,7 +102,6 @@
     "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
     "config.color-schemes.default": "default colors",
 
-    // TODO
     "config.legend-alpha-on-hover.name": "Legend opacity on hover",
     "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
 
@@ -111,6 +118,9 @@
     // data layers
     "config.layer-enabled.name": "Enabled",
     "config.layer-enabled.desc": "Whether this layer should be available in-game.",
+
+    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Update when view changes",
     "config.layer-update-on-view-change.desc": "Whether the drawn layer info should be updated when a new part of the world moves into view, regardless of the 'updates per second' setting.",

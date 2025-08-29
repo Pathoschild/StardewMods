@@ -2,6 +2,14 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.active": "Auto ({{layerName}})",
+    "auto.inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Accessibilità",
     "accessible.clear": "Libera",
@@ -110,6 +118,10 @@
     // data layers
     "config.layer-enabled.name": "Abilitato",
     "config.layer-enabled.desc": "Scegli se questo livello deve essere disponibile nel gioco.",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Aggiorna quando la visuale cambia",
     "config.layer-update-on-view-change.desc": "Scegli se le informazioni sul livello disegnato devono essere aggiornate quando una nuova parte del mondo viene visualizzata, indipendentemente dall'impostazione 'aggiornamenti al secondo'.",

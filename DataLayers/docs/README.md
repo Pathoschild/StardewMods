@@ -26,6 +26,11 @@ border around that one's range and a green border around the coverage without it
 
 Below are the current data layers.
 
+### Auto
+Automatically chooses an overlay based on context like the item you're holding. You can configure
+which layers can be shown that way.
+> ![](screenshots/auto-layer.png)
+
 ### Accessible
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
 > ![](screenshots/accessible.png)

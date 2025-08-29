@@ -2,6 +2,14 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.active": "Auto ({{layerName}})",
+    "auto.inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "진입가능 여부",
     "accessible.clear": "공간이 빔",
@@ -110,6 +118,10 @@
     // data layers
     "config.layer-enabled.name": "활성화",
     "config.layer-enabled.desc": "이 레이어를 사용할지 여부",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "화면 변경 시 업데이트",
     "config.layer-update-on-view-change.desc": "'초당 업데이트 수' 설정과 관계 없이 게임 화면에 변화가 생기면 레이어 정보가 업데이트 됩니다.",

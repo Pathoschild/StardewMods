@@ -10,7 +10,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops;
 
 /// <summary>A data layer which shows whether crops needs to be watered.</summary>
-internal class CropFertilizerLayer : BaseLayer
+internal class CropFertilizerLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -32,6 +32,45 @@ internal class CropFertilizerLayer : BaseLayer
 
     /// <summary>Whether the Ultimate Fertilizer mod is installed.</summary>
     private readonly bool HasUltimateFertilizer;
+
+    /// <summary>The qualified and unqualified item IDs for fertilizer items.</summary>
+    private readonly HashSet<string> FertilizerItemIds =
+    [
+        HoeDirt.fertilizerLowQualityID,
+        HoeDirt.fertilizerLowQualityQID,
+
+        HoeDirt.fertilizerHighQualityID,
+        HoeDirt.fertilizerHighQualityQID,
+
+        HoeDirt.fertilizerDeluxeQualityID,
+        HoeDirt.fertilizerDeluxeQualityQID
+    ];
+
+    /// <summary>The qualified and unqualified item IDs for retaining soil items.</summary>
+    private readonly HashSet<string> RetainingSoilItemIds =
+    [
+        HoeDirt.waterRetentionSoilID,
+        HoeDirt.waterRetentionSoilQID,
+
+        HoeDirt.waterRetentionSoilDeluxeID,
+        HoeDirt.waterRetentionSoilDeluxeQID,
+
+        HoeDirt.waterRetentionSoilQualityID,
+        HoeDirt.waterRetentionSoilQualityQID
+    ];
+
+    /// <summary>The qualified and unqualified item IDs for speed gro items.</summary>
+    private readonly HashSet<string> SpeedGroItemIds =
+    [
+        HoeDirt.speedGroID,
+        HoeDirt.speedGroQID,
+
+        HoeDirt.superSpeedGroID,
+        HoeDirt.superSpeedGroQID,
+
+        HoeDirt.hyperSpeedGroID,
+        HoeDirt.hyperSpeedGroQID
+    ];
 
 
     /*********
@@ -83,6 +122,16 @@ internal class CropFertilizerLayer : BaseLayer
             }
             .WhereNotNull()
             .ToArray();
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item item)
+    {
+        string itemId = item.QualifiedItemId;
+        return
+            this.FertilizerItemIds.Contains(itemId)
+            || this.RetainingSoilItemIds.Contains(itemId)
+            || this.SpeedGroItemIds.Contains(itemId);
     }
 
 
@@ -146,27 +195,9 @@ internal class CropFertilizerLayer : BaseLayer
             return null;
         return new FertilizedTile(
             tile: tile,
-            hasFertilizer:
-                applied.Contains(HoeDirt.fertilizerLowQualityID)
-                || applied.Contains(HoeDirt.fertilizerLowQualityQID)
-                || applied.Contains(HoeDirt.fertilizerHighQualityID)
-                || applied.Contains(HoeDirt.fertilizerHighQualityQID)
-                || applied.Contains(HoeDirt.fertilizerDeluxeQualityID)
-                || applied.Contains(HoeDirt.fertilizerDeluxeQualityQID),
-            hasRetainingSoil:
-                applied.Contains(HoeDirt.waterRetentionSoilDeluxeID)
-                || applied.Contains(HoeDirt.waterRetentionSoilDeluxeQID)
-                || applied.Contains(HoeDirt.waterRetentionSoilQualityID)
-                || applied.Contains(HoeDirt.waterRetentionSoilQualityQID)
-                || applied.Contains(HoeDirt.waterRetentionSoilDeluxeID)
-                || applied.Contains(HoeDirt.waterRetentionSoilDeluxeQID),
-            hasSpeedGro:
-                applied.Contains(HoeDirt.speedGroID)
-                || applied.Contains(HoeDirt.speedGroQID)
-                || applied.Contains(HoeDirt.superSpeedGroID)
-                || applied.Contains(HoeDirt.superSpeedGroQID)
-                || applied.Contains(HoeDirt.hyperSpeedGroID)
-                || applied.Contains(HoeDirt.hyperSpeedGroQID)
+            hasFertilizer: this.FertilizerItemIds.Overlaps(applied),
+            hasRetainingSoil: this.RetainingSoilItemIds.Overlaps(applied),
+            hasSpeedGro: this.SpeedGroItemIds.Overlaps(applied)
         );
     }
 

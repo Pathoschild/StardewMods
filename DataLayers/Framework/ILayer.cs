@@ -36,6 +36,10 @@ internal interface ILayer
     /*********
     ** Methods
     *********/
+    /// <summary>Update the layer metadata if needed.</summary>
+    /// <returns>Returns whether the layer metadata changed. This will reset the overlay.</returns>
+    bool UpdateMetadata();
+
     /// <summary>Get the updated data layer tiles.</summary>
     /// <param name="location">The current location.</param>
     /// <param name="visibleArea">The tile area currently visible on the screen.</param>

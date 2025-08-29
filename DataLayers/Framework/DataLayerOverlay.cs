@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.DataLayers.Framework.Components;
+using Pathoschild.Stardew.DataLayers.Layers;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -120,7 +121,7 @@ internal class DataLayerOverlay : BaseOverlay
         if (!layers.Any())
             throw new InvalidOperationException("Can't initialize the data layers overlay with no data layers.");
 
-        this.Layers = layers.OrderBy(p => p.Name).ToArray();
+        this.Layers = layers.OrderByDescending(p => p is AutoLayer).ThenBy(p => p.Name).ToArray();
         this.DrawOverlay = drawOverlay;
         this.CombineOverlappingBorders = combineOverlappingBorders;
         this.ShowGrid = showGrid;
@@ -165,7 +166,7 @@ internal class DataLayerOverlay : BaseOverlay
     public void SetLayer(ILayer layer)
     {
         this.CurrentLayer = layer;
-        this.LegendEntries = this.CurrentLayer.Legend.ToArray();
+        this.LegendEntries = this.CurrentLayer.Legend;
         this.TileGroups.Clear();
         this.UpdateCountdown = 0;
 
@@ -317,9 +318,16 @@ internal class DataLayerOverlay : BaseOverlay
     /// <inheritdoc />
     protected override void Update()
     {
-        // update top-left UI when visible
-        if (this.DrawOverlay() && Game1.displayHUD)
-            this.Legend.Update();
+        if (this.DrawOverlay())
+        {
+            // reset layer if needed
+            if (this.CurrentLayer.UpdateMetadata())
+                this.SetLayer(this.CurrentLayer);
+
+            // update top-left UI when visible
+            if (Game1.displayHUD)
+                this.Legend.Update();
+        }
     }
 
     /// <summary>Reinitialize the UI components.</summary>

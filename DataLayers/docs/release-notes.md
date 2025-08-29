@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Added 'auto' layer, which automatically chooses the best overlay for whatever you're holding.
 * The legend box now fades when you hover the cursor over it, so you can see what's behind it (thanks to b-b-blueberry!).
+* Fixed fertilizer layer not highlighting base retaining soil.
 * Fixed legends not using game's text color (thanks to b-b-blueberry!).
 
 ## 1.20.3
