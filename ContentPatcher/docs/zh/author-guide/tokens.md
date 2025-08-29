@@ -795,6 +795,14 @@ _自定义农场ID_ | 模组里自定义农场类型的`ID`。
 }
 ```
 
+You can optionally set a `step` value, which is the amount to increment between each value (default
+1). For example:
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 2, 10 |step=2}}" //等同于"2, 4, 6, 8, 10"
+}
+```
+
 可在单个数值上使用令牌（比如`{{Range:6, {{MaxHearts}}}}`）或者一整个都用令牌（比如
 `{{Range:{{FriendshipRange}}}})`）只要符合`最小值, 最大值`的格式。
 

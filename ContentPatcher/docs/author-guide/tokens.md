@@ -830,7 +830,7 @@ for more info.
 <td>
 
 A list of integers between the specified min/max integers (inclusive). This is mainly meant for
-comparing values; for example:
+comparing values. For example:
 
 ```js
 "When": {
@@ -838,7 +838,15 @@ comparing values; for example:
 }
 ```
 
-You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+You can optionally set a `step` value, which is the amount to increment between each value (default
+1). For example:
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 2, 10 |step=2}}" // equivalent to "2, 4, 6, 8, 10"
+}
+```
+
+You can also use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
 `{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
 
 To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
