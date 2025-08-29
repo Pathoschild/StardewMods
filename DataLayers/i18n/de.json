@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "Ob bei der Überlappung von zwei gleichfarbigen Gruppen anstelle der einzelnen Ränder ein gemeinsamer Rand gezeichnet werden soll.",
 
     "config.color-scheme.name": "Farbschema",
-    "config.color-schene.desc": "Das anzuwendende Farbschema, welches die Farben für alle Datenebenen ändert.",
+    "config.color-scheme.desc": "Das anzuwendende Farbschema, welches die Farben für alle Datenebenen ändert.",
     "config.color-schemes.default": "Standardfarben",
 
     // TODO

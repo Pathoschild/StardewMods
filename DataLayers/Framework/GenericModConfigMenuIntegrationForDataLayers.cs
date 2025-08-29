@@ -55,7 +55,7 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
             )
             .AddDropdown(
                 name: I18n.Config_ColorScheme_Name,
-                tooltip: I18n.Config_ColorSchene_Desc,
+                tooltip: I18n.Config_ColorScheme_Desc,
                 get: config => config.ColorScheme,
                 set: (config, value) => config.ColorScheme = value,
                 allowedValues: this.ColorRegistry.SchemeIds.ToArray(),

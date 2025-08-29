@@ -97,7 +97,7 @@
     "config.combine-borders.desc": "When two groups of the same color overlap, whether to draw one border around their combined edge instead of their individual borders.",
 
     "config.color-scheme.name": "Color scheme",
-    "config.color-schene.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
+    "config.color-scheme.desc": "The color scheme to apply, which changes the colors throughout all the data layers.",
     "config.color-schemes.default": "default colors",
 
     "config.legend-alpha-on-hover.name": "Legend opacity on hover",

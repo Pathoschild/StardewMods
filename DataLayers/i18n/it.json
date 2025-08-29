@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "Quando due gruppi dello stesso colore si sovrappongono, si può scegliere se disegnare un bordo intorno al loro bordo combinato invece dei bordi individuali.",
 
     "config.color-scheme.name": "Schema di colori",
-    "config.color-schene.desc": "Lo schema di colori da applicare, che modifica i colori di tutti i livelli di dati.",
+    "config.color-scheme.desc": "Lo schema di colori da applicare, che modifica i colori di tutti i livelli di dati.",
     "config.color-schemes.default": "colori predefiniti",
 
     // TODO

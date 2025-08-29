@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "같은 색의 두 그룹이 겹칠 때, 각각의 경계선 대신 결합된 가장자리에 하나의 경계선을 그릴지 여부를 설정합니다.",
 
     "config.color-scheme.name": "색 구성",
-    "config.color-schene.desc": "모든 데이터 레이어에 적용할 색 구성을 변경합니다.",
+    "config.color-scheme.desc": "모든 데이터 레이어에 적용할 색 구성을 변경합니다.",
     "config.color-schemes.default": "기본 색상",
 
     // TODO

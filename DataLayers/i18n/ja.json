@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "同じ色の2つのグループが重なっている場合、それぞれのボーダーではなく、組み合わされたエッジの周りに1つのボーダーを描く。",
 
     "config.color-scheme.name": "配色",
-    "config.color-schene.desc": "適用する配色で、すべてのデータレイヤー全体の色を変更する。",
+    "config.color-scheme.desc": "適用する配色で、すべてのデータレイヤー全体の色を変更する。",
     "config.color-schemes.default": "標準の色",
 
     // TODO

@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "Cuando dos grupos del mismo color se superponen, dibuja un solo borde alrededor del borde combinado en lugar de bordes individuales.",
 
     "config.color-scheme.name": "Esquema de colores",
-    "config.color-schene.desc": "El esquema de colores a aplicar, que cambia los colores en todas las capas de datos.",
+    "config.color-scheme.desc": "El esquema de colores a aplicar, que cambia los colores en todas las capas de datos.",
     "config.color-schemes.default": "colores predeterminados",
 
     // TODO

@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "当同一图层中，两个相同颜色的不同信息区域重叠时，是否在它们的组合边缘绘制一个边框，而不是它们各自的边框。",
 
     "config.color-scheme.name": "颜色方案",
-    "config.color-schene.desc": "要应用的颜色方案，它可以改变所有数据图层的颜色。",
+    "config.color-scheme.desc": "要应用的颜色方案，它可以改变所有数据图层的颜色。",
     "config.color-schemes.default": "默认颜色方案",
 
     // TODO

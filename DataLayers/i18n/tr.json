@@ -98,7 +98,7 @@
     "config.combine-borders.desc": "İki adet aynı renkte grup çakışırsa kendi sınırları dışında çakışma alanını gösteren bir sınırın gösterilip gösterilmeyeceği.",
 
     "config.color-scheme.name": "Renk şeması",
-    "config.color-schene.desc": "Tüm veri katmanlarındaki renkleri değiştiren, uygulanacak renk şeması.",
+    "config.color-scheme.desc": "Tüm veri katmanlarındaki renkleri değiştiren, uygulanacak renk şeması.",
     "config.color-schemes.default": "varsayılan renkler",
 
     // TODO
