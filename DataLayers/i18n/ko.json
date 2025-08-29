@@ -7,8 +7,9 @@
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
     // TODO
-    "auto.active": "Auto ({{layerName}})",
-    "auto.inactive": "Auto (nothing to show)",
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
 
     // accessible
     "accessible.name": "진입가능 여부",
@@ -26,6 +27,13 @@
     // coverage: bee houses
     "bee-houses.name": "적용범위: 양봉장",
     "bee-houses.range": "꽃의 범위",
+
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
 
     // coverage: Junimo huts
     "junimo-huts.name": "적용범위: 주니모 오두막",
@@ -120,8 +128,8 @@
     "config.layer-enabled.desc": "이 레이어를 사용할지 여부",
 
     // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "화면 변경 시 업데이트",
     "config.layer-update-on-view-change.desc": "'초당 업데이트 수' 설정과 관계 없이 게임 화면에 변화가 생기면 레이어 정보가 업데이트 됩니다.",

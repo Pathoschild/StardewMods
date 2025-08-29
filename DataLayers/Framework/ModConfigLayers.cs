@@ -23,6 +23,9 @@ internal class ModConfigLayers
     /// <summary>Settings for the bee house layer.</summary>
     public LayerConfigWithAutoSupport CoverageForBeeHouses { get; set; } = new() { UpdatesPerSecond = 60 };
 
+    /// <summary>Settings for the bomb radius layer.</summary>
+    public LayerConfigWithAutoSupport CoverageForBombs { get; set; } = new() { UpdatesPerSecond = 4 };
+
     /// <summary>Settings for the Junimo hut layer.</summary>
     public LayerConfigWithAutoSupport CoverageForJunimoHuts { get; set; } = new() { UpdatesPerSecond = 60 };
 

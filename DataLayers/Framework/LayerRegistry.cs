@@ -158,6 +158,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
             if (layers.Accessible.IsEnabled())
                 yield return new AccessibleLayer(layers.Accessible, colors);
+            if (layers.CoverageForBombs.IsEnabled())
+                yield return new BombLayer(layers.CoverageForBombs, colors);
             if (layers.Buildable.IsEnabled())
                 yield return new BuildableLayer(layers.Buildable, colors);
             if (layers.CoverageForBeeHouses.IsEnabled())
@@ -217,6 +219,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             // placed objects
             if (layers.CoverageForBeeHouses.IsEnabledForAutoLayer())
                 yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
+            if (layers.CoverageForBombs.IsEnabled())
+                yield return new BombLayer(layers.CoverageForBombs, colors);
             if (layers.CoverageForScarecrows.IsEnabledForAutoLayer())
                 yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
             if (layers.CoverageForSprinklers.IsEnabledForAutoLayer())

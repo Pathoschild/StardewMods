@@ -44,8 +44,8 @@ internal class AutoLayer : ILayer
 
     /// <inheritdoc />
     public string Name => this.CurrentLayer != null
-        ? I18n.Auto_Active(layerName: this.CurrentLayer.Name)
-        : I18n.Auto_Inactive();
+        ? I18n.Auto_NameActive(layerName: this.CurrentLayer.Name)
+        : I18n.Auto_NameInactive();
 
     /// <inheritdoc />
     public int UpdateTickRate => this.CurrentLayer?.UpdateTickRate ?? 60;

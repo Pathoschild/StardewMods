@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added 'auto' layer, which automatically chooses the best overlay for whatever you're holding.
+* Added [_Auto_ layer](README.md#auto), which automatically chooses the best overlay for whatever you're holding.
+* Added [_Coverage: Bombs_ layer](#coverage-bombs).
 * The legend box now fades when you hover the cursor over it, so you can see what's behind it (thanks to b-b-blueberry!).
 * Fixed fertilizer layer not highlighting base retaining soil.
 * Fixed legends not using game's text color (thanks to b-b-blueberry!).
@@ -261,7 +262,7 @@ Released 03 July 2020 for SMAPI 3.6.1 or later.
 ## 1.12.0
 Released 02 May 2020 for SMAPI 3.5.0 or later.
 
-* Added tile grid layer (when grid isn't enabled for all layers).
+* Added [tile grid layer](README.md#grid) (when grid isn't enabled for all layers).
 * Fixed translations not updated after changing language until you restart the game.
 * Improved translations. Thanks to Annosz (added Hungarian), BURAKMESE (added Turkish), D0n-A (updated Russian), and misho104 (updated Japanese)!
 
@@ -325,7 +326,7 @@ Released 07 April 2019 for SMAPI 2.11.0 or later.
 ## 1.6.0
 Released 06 April 2019 for SMAPI 2.11.0 or later.
 
-* Added _buildable_ and _tillable_ layers.
+* Added [_Buildable_](README.md#buildable) and [_Tillable_](README.md#tillable) layers.
 * Added support for Line Sprinklers mod.
 * Improved translations. Thanks to binxhlin (updated Chinese), kelvindules (updated Portuguese), and TheOzonO3 (updated Russian)!
 
@@ -337,7 +338,7 @@ Released 05 March 2019 for SMAPI 2.11.0 or later.
 ## 1.5.0
 Released 08 December 2018 for SMAPI 2.9.0 or later.
 
-* Added _machine processing_ layer (requires Automate 1.11+).
+* Added [_Machine Processing_ layer](README.md#machine-processing) (requires Automate 1.11+).
 * Updated for the upcoming SMAPI 3.0.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
@@ -357,7 +358,7 @@ Released 01 August 2018 for SMAPI 2.6.0 or later.
 
 * Renamed to Data Layers due to common confusion about the name Data Maps.
 * Updated for Stardew Valley 1.3 (including multiplayer).
-* Added _crops: ready to harvest_ layer.
+* Added [_Crops: Ready for Harvest_ layer](README.md#crops-ready-for-harvest).
 * Added support for Better Junimos and Prismatic Tools.
 * Improved layers:
   * _accessibility_ now shows farm building door warps;
@@ -369,7 +370,7 @@ Released 01 August 2018 for SMAPI 2.6.0 or later.
 Released 14 February 2018 for SMAPI 2.4.0 or later.
 
 * Updated to SMAPI 2.4.
-* Added _crops: fertilized_ and _crops: watered_ maps. (Thanks to irecinius!)
+* Added [_Crops: Fertilized_](README.md#crops-fertilized) and [_Crops: Watered_](README.md#crops-watered) maps. (Thanks to irecinius!)
 * Added support for hiding individual maps in `config.json`.
 * Improved consistency and sorted by name.
 * Fixed error in the Cobalt integration.
@@ -385,7 +386,7 @@ Released 13 January 2018 for SMAPI 2.3.0 or later.
 ### 1.1.0
 Released 11 January 2018 for SMAPI 2.3.0 or later.
 
-* Added bee house coverage map.
+* Added [_Coverage: Bee Houses_](README.md#coverage-bee-houses) map.
 * Added support for Cobalt's sprinkler.
 * Added support for Simple Sprinkler's custom sprinkler range.
 * Updated Better Sprinklers support.

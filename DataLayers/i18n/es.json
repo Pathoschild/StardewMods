@@ -7,8 +7,9 @@
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
     // TODO
-    "auto.active": "Auto ({{layerName}})",
-    "auto.inactive": "Auto (nothing to show)",
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
 
     // accessible
     "accessible.name": "Accesible",
@@ -26,6 +27,13 @@
     // coverage: bee houses
     "bee-houses.name": "Cobertura: colmenas",
     "bee-houses.range": "Rango de la flor",
+
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Cobertura: cabañas junimo",
@@ -120,8 +128,8 @@
     "config.layer-enabled.desc": "Define si esta capa estará disponible en el juego.",
 
     // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Actualizar al cambiar la vista",
     "config.layer-update-on-view-change.desc": "Actualiza la información de la capa al moverse a una nueva parte del mundo, independientemente de la configuración de 'actualizaciones por segundo'.",

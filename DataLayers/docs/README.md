@@ -27,8 +27,8 @@ border around that one's range and a green border around the coverage without it
 Below are the current data layers.
 
 ### Auto
-Automatically chooses an overlay based on context like the item you're holding. You can configure
-which layers can be shown that way.
+Automatically chooses an overlay based on context like the item you're holding, with live updates
+when that changes. You can configure which layers can be shown that way.
 > ![](screenshots/auto-layer.png)
 
 ### Accessible
@@ -43,6 +43,11 @@ build at Robin's.
 ### Coverage: bee houses
 Shows bee houses' flower search range.
 > ![](screenshots/bee-houses.png)
+
+### Coverage: bombs
+Shows bombs' explosion radius, including the three different effects (where they'll dig, destroy
+objects, and hurt monsters/players).
+> ![](screenshots/bombs.png)
 
 ### Coverage: Junimo huts
 Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo

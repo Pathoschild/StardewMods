@@ -7,8 +7,9 @@
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
     // TODO
-    "auto.active": "Auto ({{layerName}})",
-    "auto.inactive": "Auto (nothing to show)",
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
 
     // accessible (可通行性)
     "accessible.name": "可通行性",
@@ -26,6 +27,13 @@
     // coverage: bee houses (覆盖范围：蜂箱)
     "bee-houses.name": "覆盖范围：蜂房",
     "bee-houses.range": "花朵范围",
+
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
 
     // coverage: Junimo huts (覆盖范围：祝尼魔小屋)
     "junimo-huts.name": "覆盖范围：祝尼魔小屋",
@@ -120,8 +128,8 @@
     "config.layer-enabled.desc": "在游戏中启用此图层",
 
     // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for 'Auto' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the 'Auto' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "视角窗口变化时更新",
     "config.layer-update-on-view-change.desc": "无论“每秒更新次数”设置为多少，当视角窗口发生变化时，立即更新图层信息。",

@@ -95,8 +95,10 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
         // add layer options
         List<LayerConfigSection> configSections = [
             this.GetBuiltInSection(config => config.Layers.Accessible, "accessible"),
+            this.GetBuiltInSection(config => config.Layers.AutoLayer, "auto"),
             this.GetBuiltInSection(config => config.Layers.Buildable, "buildable"),
             this.GetBuiltInSection(config => config.Layers.CoverageForBeeHouses, "bee-houses"),
+            this.GetBuiltInSection(config => config.Layers.CoverageForBombs, "bombs"),
             this.GetBuiltInSection(config => config.Layers.CoverageForJunimoHuts, "junimo-huts"),
             this.GetBuiltInSection(config => config.Layers.CoverageForScarecrows, "scarecrows"),
             this.GetBuiltInSection(config => config.Layers.CoverageForSprinklers, "sprinklers"),
@@ -154,8 +156,8 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
         if (defaultConfig is LayerConfigWithAutoSupport)
         {
             menu.AddCheckbox(
-                name: I18n.Config_LayerEnabledForAutoLayer_Name,
-                tooltip: I18n.Config_LayerEnabledForAutoLayer_Desc,
+                name: () => I18n.Config_LayerEnabledForAutoLayer_Name(autoLayerName: I18n.Auto_Name()),
+                tooltip: () => I18n.Config_LayerEnabledForAutoLayer_Desc(autoLayerName: I18n.Auto_Name()),
                 get: config => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer,
                 set: (config, value) => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer = value
             );
