@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders;
@@ -54,9 +53,18 @@ internal class RangeValueProvider : BaseValueProvider
     {
         this.AssertInput(input);
 
-        return this.TryParseRange(input, out int min, out int max, out int step, out _)
-            ? Enumerable.Range(start: 0, count: (max - min) / step + 1).Select(p => (min + step * p).ToString())
-            : InvariantSets.Empty; // error will be shown in validation
+        if (this.TryParseRange(input, out int min, out int max, out int step, out _))
+        {
+            int count = (max - min) / step + 1;
+            string[] range = new string[count];
+
+            for (int i = 0; i < count; i++)
+                range[i] = (min + step * i).ToString();
+
+            return range;
+        }
+
+        return InvariantSets.Empty; // error will be shown in validation
     }
 
 
