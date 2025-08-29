@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * The [`MigrateIds` trigger action](author-guide/trigger-actions.md#migrateids) can now migrate buildings and farm animals too (thanks to Mushymato!).
+* Added `step` argument for [the `Range` token](author-guide/tokens.md#Range) (thanks to Spiderbuttons!).
 
 ## 2.7.5
 Released 27 July 2025 for SMAPI 4.1.10 or later.
