@@ -1,129 +1,129 @@
 ﻿{
     /*********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (通用模组配置菜单界面)
     *********/
     /****
-    ** 'General Options' section
+    ** 'General Options' section (通用选项)
     ****/
-    "config.general-options": "常规",
+    "config.general-options": "通用选项",
 
-    "config.disable-eat-prompt.name": "禁用吃喝提示",
-    "config.disable-eat-prompt.tooltip": "跳过吃喝时“是否要吃掉XX”的确认提示对话框。",
+    "config.disable-eat-prompt.name": "禁用饮食提示",
+    "config.disable-eat-prompt.tooltip": "跳过饮食时“是否要吃掉XX”的确认提示对话框。",
 
     /****
-    ** 'Player Animation Speeds' section
+    ** 'Player Animation Speeds' section (玩家动画速度)
     ****/
     "config.animation-speeds": "玩家动画速度",
 
-    "config.eat-or-drink.name": "吃东西",
-    "config.eat-or-drink.tooltip": "吃/喝的速度。默认{{defaultValue}}x。",
+    "config.eat-or-drink.name": "饮食",
+    "config.eat-or-drink.tooltip": "饮用和进食的速度。默认{{defaultValue}}倍。",
 
     "config.fish.name": "钓鱼",
-    "config.fish.tooltip": "钓鱼时抛竿和收竿的速度（不包括小游戏）。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+    "config.fish.tooltip": "抛竿和收竿的速度（不包括小游戏）。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍",
 
     "config.harvest.name": "采集",
-    "config.harvest.tooltip": "采集作物或觅食的速度。默认{{defaultValue}}x。",
+    "config.harvest.tooltip": "采集农作物或采集物的速度。默认{{defaultValue}}倍。",
 
     "config.hold-up-item.name": "举起物品",
-    "config.hold-up-item.tooltip": "举起物品的速度。默认{{defaultValue}}x。",
+    "config.hold-up-item.tooltip": "举起物品的速度。默认{{defaultValue}}倍。",
 
     "config.horse-flute.name": "马笛",
-    "config.horse-flute.tooltip": "演奏马笛的速度。默认{{defaultValue}}x。",
+    "config.horse-flute.tooltip": "吹奏马笛的速度。默认{{defaultValue}}倍。",
 
     "config.milk.name": "挤奶",
-    "config.milk.tooltip": "使用挤奶桶的速度。默认{{defaultValue}}x。",
+    "config.milk.tooltip": "使用挤奶桶的速度。默认{{defaultValue}}倍。",
 
     "config.mount.name": "上下马",
-    "config.mount.tooltip": "上/下马的速度，这里的马包括魔改后的马，比如拖拉机。默认{{defaultValue}}x。",
+    "config.mount.tooltip": "上马和下马的速度，这里的马包括魔改后的马，比如拖拉机。默认{{defaultValue}}倍。",
 
     "config.read-book.name": "读书",
-    "config.read-book.tooltip": "读书的速度。默认{{defaultValue}}x。",
+    "config.read-book.tooltip": "阅读书籍的速度。默认{{defaultValue}}倍。",
 
     "config.shear.name": "剪毛",
-    "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}x。",
+    "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}倍。",
 
     "config.slingshot.name": "弹弓",
-    "config.slingshot.tooltip": "拉弹弓的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+    "config.slingshot.tooltip": "拉弹弓的速度。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍。",
 
     "config.tool.name": "工具",
-    "config.tool.tooltip": "使用工具（除去武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+    "config.tool.tooltip": "使用工具（不包括武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍。",
 
     "config.use-totem.name": "图腾",
-    "config.use-totem.tooltip": "使用图腾的速度。默认{{defaultValue}}x。",
+    "config.use-totem.tooltip": "使用图腾的速度。默认{{defaultValue}}倍。",
 
     "config.weapon.name": "武器",
-    "config.weapon.tooltip": "使用武器的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+    "config.weapon.tooltip": "使用武器的速度。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍。",
 
     /****
-    ** 'World Animation Speeds' section
+    ** 'World Animation Speeds' section (世界动画速度)
     ****/
     "config.world-speeds": "世界动画速度",
 
     "config.break-geodes.name": "敲晶球",
-    "config.break-geodes.tooltip": "铁匠破开晶球的速度。默认{{defaultValue}}x。",
+    "config.break-geodes.tooltip": "铁匠敲开晶球的速度。默认{{defaultValue}}倍。",
 
-    "config.bus.name": "公交车",
-    "config.bus.tooltip": "往返沙漠公交车的车速。默认{{defaultValue}}x。",
+    "config.bus.name": "巴士",
+    "config.bus.tooltip": "巴士往返沙漠的速度。默认{{defaultValue}}倍。",
 
     "config.casino-slots.name": "赌场老虎机",
-    "config.casino-slots.tooltip": "赌场老虎机的转速。默认{{defaultValue}}x。",
+    "config.casino-slots.tooltip": "赌场老虎机转动的转速。默认{{defaultValue}}倍。",
 
     "config.fade.name": "淡入淡出",
-    "config.fade.tooltip": "屏幕淡入淡出黑色的速度。默认{{defaultValue}}x。",
+    "config.fade.tooltip": "屏幕淡入淡出的速度。默认{{defaultValue}}倍。",
 
-    "config.fishing-text.name": "钓鱼小游戏内的文字",
-    "config.fishing-text.tooltip": "钓鱼小游戏内部分文字动画的播放速度，例如“上钩了！”和“完美”。默认{{defaultValue}}x。",
+    "config.fishing-text.name": "钓鱼小游戏文字",
+    "config.fishing-text.tooltip": "钓鱼小游戏内部分文字动画的播放速度，例如“上钩了！”和“完美”。默认{{defaultValue}}倍。",
 
     "config.fishing-treasure.name": "钓鱼宝箱",
-    "config.fishing-treasure.tooltip": "钓鱼宝箱打开的速度。默认{{defaultValue}}x。",
+    "config.fishing-treasure.tooltip": "打开钓鱼宝箱的速度。默认{{defaultValue}}倍。",
 
     "config.forge.name": "锻造",
-    "config.forge.tooltip": "锻造的速度。默认{{defaultValue}}x。",
+    "config.forge.tooltip": "锻造台工作的速度。默认{{defaultValue}}倍。",
 
     "config.open-chest.name": "宝箱打开",
-    "config.open-chest.tooltip": "宝箱打开的速度。默认{{defaultValue}}x。",
+    "config.open-chest.tooltip": "打开宝箱的速度。默认{{defaultValue}}倍。",
 
     "config.parrot-express.name": "鹦鹉特快",
-    "config.parrot-express.tooltip": "鹦鹉特快的速度。默认{{defaultValue}}x。",
+    "config.parrot-express.tooltip": "鹦鹉特快的速度。默认{{defaultValue}}倍。",
 
     "config.prize-ticket-machine.name": "兑奖机",
-    "config.prize-ticket-machine.tooltip": "兑奖机兑奖的速度。默认{{defaultValue}}x。",
+    "config.prize-ticket-machine.tooltip": "兑奖机兑奖的速度。默认{{defaultValue}}倍。",
 
-    "config.tailor.name": "裁缝",
-    "config.tailor.tooltip": "裁缝的速度。默认{{defaultValue}}x。",
+    "config.tailor.name": "缝纫机",
+    "config.tailor.tooltip": "缝纫机工作的速度。默认{{defaultValue}}倍。",
 
     "config.tree-fall.name": "树倒下",
-    "config.tree-fall.tooltip": "树被砍倒的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+    "config.tree-fall.tooltip": "砍伐树木后倒下的速度。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍。",
 
-    "config.wheel-spin.name": "转轮盘",
-    "config.wheel-spin.tooltip": "轮盘旋转的速度。默认{{defaultValue}}x。",
+    "config.wheel-spin.name": "转盘",
+    "config.wheel-spin.tooltip": "星露谷展览会轮盘旋转的速度。默认{{defaultValue}}倍。",
 
     /****
-    ** 'UI Animation Speeds' section
+    ** 'UI Animation Speeds' section (UI动画速度)
     ****/
     "config.ui-speeds": "UI动画速度",
 
     "config.dialogue-typing.name": "对话速度",
-    "config.dialogue-typing.tooltip": "对话的速度。默认{{defaultValue}}x。",
+    "config.dialogue-typing.tooltip": "对话的速度。默认{{defaultValue}}倍。",
 
-    "config.open-dialogue-box.name": "对话框打开",
-    "config.open-dialogue-box.tooltip": "对话框打开的速度。默认{{defaultValue}}x。",
+    "config.open-dialogue-box.name": "打开对话框",
+    "config.open-dialogue-box.tooltip": "打开对话框的速度。默认{{defaultValue}}倍。",
 
     "config.shipping-menu.name": "结算界面的转场效果",
-    "config.shipping-menu.tooltip": "结算界面的转场速度。默认{{defaultValue}}x。",
+    "config.shipping-menu.tooltip": "结算界面的转场速度。默认{{defaultValue}}倍。",
 
     "config.title-menu.name": "标题菜单的转场效果",
-    "config.title-menu.tooltip": "标题菜单的转场速度，即新建、加载存档时屏幕切换的速度。默认{{defaultValue}}x。",
+    "config.title-menu.tooltip": "标题菜单的转场速度，即新建、加载存档时屏幕切换的速度。默认{{defaultValue}}倍。",
 
-    "config.load-game-blink.name": "点击存档后的闪烁效果",
-    "config.load-game-blink.tooltip": "加载存档时，点击某个存档后闪烁的速度。默认{{defaultValue}}x。",
+    "config.load-game-blink.name": "加载存档的闪烁效果",
+    "config.load-game-blink.tooltip": "加载存档时，点击某个存档后闪烁的速度。默认{{defaultValue}}倍。",
 
     /****
-    ** 'Experimental' section
+    ** 'Experimental' section (实验性功能)
     ****/
-    "config.experimental": "试验性选项",
-    "config.experimental-warning": "这些选项的功能尚不稳定，可能导致卡死和崩溃等问题。不推荐启用。",
+    "config.experimental": "实验性功能",
+    "config.experimental-warning": "这些选项的功能尚不稳定，可能导致卡顿或崩溃等问题。不推荐启用。",
 
-    "config.event.name": "事件",
-    "config.event.tooltip": "事件的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。"
+    "config.event.name": "事件过场动画",
+    "config.event.tooltip": "事件过场动画的速度。默认{{defaultValue}}倍，建议设置{{suggestedValue}}倍。"
 }

@@ -6,6 +6,7 @@
 * The legend box now fades when you hover the cursor over it, so you can see what's behind it (thanks to b-b-blueberry!).
 * Fixed fertilizer layer not highlighting base retaining soil.
 * Fixed legends not using game's text color (thanks to b-b-blueberry!).
+* Improved translations. Thanks to Fumorisz (updated Chinese)!
 
 ## 1.20.3
 Released 27 July 2025 for SMAPI 4.1.10 or later.

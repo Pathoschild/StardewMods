@@ -6,6 +6,7 @@
   * Cellars are now translated and include the name of the player who owns them.
   * Building interiors now use the translated name for the building, if available.
 * Optimized performance.
+* Improved translations. Thanks to Fumorisz (updated Chinese)!
 
 ## 1.28.3
 Released 27 July 2025 for SMAPI 4.1.10 or later.

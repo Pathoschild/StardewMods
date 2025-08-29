@@ -1,69 +1,68 @@
 ﻿{
     /*********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (通用模组配置菜单界面)
     *********/
-    // main options
+    // main options (主要选项)
     "config.title.main-options": "主要选项",
     "config.enabled.name": "启用",
-    "config.enabled.desc": "是否启用自动化功能。如果禁用此选项，则不会自动运行任何机器，热键也不能使用",
+    "config.enabled.desc": "启用自动化功能，禁用则不会自动运行任何机器，快捷键也不能使用。",
     "config.automation-interval.name": "自动化间隔",
-    "config.automation-interval.desc": "每个自动化进程之间的间隔数（每1秒60，每2秒120，以此类推）。",
+    "config.automation-interval.desc": "每次自动化处理之间的间隔数（60为一秒，120为两秒，以此类推）。",
     "config.min-minutes-for-fairy-dust.name": "仙尘最短分钟数",
     "config.min-minutes-for-fairy-dust.desc": "使用仙尘的最短机器处理时间（分钟）。例如，将其设置为30分钟，意味着如果机器在20分钟内就能完成工作，则不会使用仙尘。",
-    "config.toggle-overlay-key.name": "切换配置键位",
-    "config.toggle-overlay-key.desc": "切换自动化配置的键位",
+    "config.toggle-overlay-key.name": "切换配置键",
+    "config.toggle-overlay-key.desc": "单击此键切换自动化的配置。",
     "config.warn-for-missing-bridge-mod.name": "缺少连接模组警告",
-    "config.warn-for-missing-bridge-mod.desc": "如果你安装了自定义机器模组但未安装其所需要另外安装的兼容性补丁，是否在启动时记录警告",
+    "config.warn-for-missing-bridge-mod.desc": "当您安装了自定义机器模组，但未安装其所需要另外安装的兼容性补丁，则在启动时记录警告。",
 
-    // connectors
+    // connectors (连接器设置)
     "config.title.connectors": "启动连接",
-    "config.connector.desc": "{{itemName}}是否将机器与宝箱连接",
+    "config.connector.desc": "启用时允许{{itemName}}连接机器和箱子",
     "config.custom-connectors.name": "自定义连接",
-    "config.custom-connectors.desc": "将相邻机器连接在一起的物品的确切英文名称，你可以使用逗号列出多个物品（注意逗号的输入法）", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "将相邻机器连接在一起的物品的确切英文名称，您可以使用逗号列出多个物品（注意逗号的输入法）", // note: connector names must be English even when playing in other languages
 
-    // Junimo hut options
+    // Junimo hut options (祝尼魔屋选项)
     "config.title.junimo-huts": "祝尼魔屋行为",
     "config.junimo-hut-gems.name": "宝石类",
-    "config.junimo-hut-gems.desc": "祝尼魔屋应该如何处理宝石类物品。设置为‘自动检测’将会忽略对宝石类物品的处理。",
+    "config.junimo-hut-gems.desc": "祝尼魔屋应该如何处理宝石类物品。如果设置为“自动检测”将会忽略对宝石类物品的处理。",
     "config.junimo-hut-fertilizer.name": "肥料",
-    "config.junimo-hut-fertilizer.desc": "祝尼魔屋应该如何处理肥料物品。如果设置为‘自动检测’并且安装了‘Better Junimos’模组将会忽略对肥料物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
+    "config.junimo-hut-fertilizer.desc": "祝尼魔屋应该如何处理肥料物品。如果设置为“自动检测”并且安装了“Better Junimos”模组将会忽略对肥料物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的箱子内。",
     "config.junimo-hut-seeds.name": "种子",
-    "config.junimo-hut-seeds.desc": "祝尼魔屋应该如何处理种子物品。如果设置为‘自动检测’并且安装了‘Better Junimos’模组将会忽略对种子物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的宝箱内。",
+    "config.junimo-hut-seeds.desc": "祝尼魔屋应该如何处理种子物品。如果设置为“自动检测”并且安装了“Better Junimos”模组将会忽略对种子物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的箱子内。",
 
-    // Junimo hut dropdown values
+    // Junimo hut dropdown values (祝尼魔屋下拉选项)
     "config.junimo-huts.auto-detect": "自动检测",
     "config.junimo-huts.ignore": "忽略这类物品",
-    "config.junimo-huts.move-into-chests": "从祝尼魔屋移动到宝箱内",
-    "config.junimo-huts.move-into-huts": "从宝箱移动到祝尼魔屋内",
+    "config.junimo-huts.move-into-chests": "从祝尼魔屋移动到箱子内",
+    "config.junimo-huts.move-into-huts": "从箱子移动到祝尼魔屋内",
 
-    // per-chest settings
-    // TODO
+    // per-chest settings (箱子设置)
     "config.title.chest-settings": "箱子设置",
     "config.default-chest-override.name": "默认设置",
-    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.default-chest-override.desc": "在默认状态下启用或禁用箱子（以下设置除外）。启用的箱子将自动连接机器，禁用的箱子将被完全忽略。",
     "config.chest-override.name": "{{chestName}}",
-    "config.chest-override.name.take-only": "{{chestName}} (take items only)",
-    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
-    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // {{description}} contains the previous translation line
+    "config.chest-override.name.take-only": "{{chestName}}（仅取出物品）",
+    "config.chest-override.desc": "将放置的{{chestName}}启用为箱子。详见“{{defaultBehaviorField}}”的提示。",
+    "config.chest-override.desc.take-only": "{{description}}（启用时，此类型箱子将只允许从中取出物品。）", // {{description}} contains the previous translation line
     "config.chest-override.values.default": "跟随默认设置",
-    "config.chest-override.values.enabled": "强制启用",
-    "config.chest-override.values.disabled": "强制禁用",
+    "config.chest-override.values.enabled": "启用",
+    "config.chest-override.values.disabled": "禁用",
 
-    // per-machine settings
+    // per-machine settings (机器设置)
     "config.title.machine-settings": "{{machineName}}行为",
     "config.machine-settings-enabled.name": "启用",
-    "config.machine-settings-enabled.desc": "是否启用{{machineName}}自动化。",
+    "config.machine-settings-enabled.desc": "启用{{machineName}}自动化。",
     "config.machine-settings-priority.name": "优先级",
     "config.machine-settings-priority.desc": "相对于其他机器，{{machineName}}机器应处理的优先级顺序。机器默认优先级为0，优先处理更高值。",
 
-    // machine names
+    // machine names (机器名称)
     "config.machines.bush": "灌木丛",
     "config.machines.fruit-tree": "树（果树）",
     "config.machines.trash-can": "垃圾桶",
     "config.machines.wild-tree": "树（野树）",
     "config.machines.feed-hopper": "喂料斗和筒仓",
 
-    // special settings for individual machines
+    // special settings for individual machines (机器特殊设置)
     "config.machines.wild-tree.collect-moss.name": "收集苔藓",
-    "config.machines.wild-tree.collect-moss.desc": "是否采集树上的苔藓。例如，在树上保留苔藓可以提高附近蘑菇树桩的蘑菇品质。"
+    "config.machines.wild-tree.collect-moss.desc": "启用时将采集树上的苔藓。例如，在树上保留苔藓可以提高附近蘑菇树桩的蘑菇品质。"
 }
