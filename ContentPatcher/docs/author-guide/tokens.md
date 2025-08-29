@@ -829,17 +829,24 @@ for more info.
 <td>Range</td>
 <td>
 
-A list of integers between the specified min/max integers (inclusive). You may optionally specify an integer `step` argument to change how much each integer in the resulting list will differ by. This is mainly meant for
-comparing values; for example:
+A list of integers between the specified min/max integers (inclusive). This is mainly meant for
+comparing values. For example:
 
 ```js
 "When": {
    "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
-   "Time": "{{Range: 2000, 2300, step=100}}" // equivalent to "2000, 2100, 2200, 2300"
 }
 ```
 
-You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+You can optionally set a `step` value, which is the amount to increment between each value (default
+1). For example:
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 2, 10 |step=2}}" // equivalent to "2, 4, 6, 8, 10"
+}
+```
+
+You can also use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
 `{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
 
 To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
