@@ -74,6 +74,7 @@ internal class ModEntry : Mod
 
         // load config
         this.Config = this.LoadConfig();
+        Sprites.UpdateSprite(this.Config.Theme.Background);
 
         // load translations
         I18n.Init(helper.Translation);
@@ -261,7 +262,8 @@ internal class ModEntry : Mod
                     scroll: this.Config.ScrollAmount,
                     showDebugFields: this.Config.ShowDataMiningFields,
                     forceFullScreen: this.Config.ForceFullScreen,
-                    showNewPage: this.ShowLookupFor
+                    showNewPage: this.ShowLookupFor,
+                    theme: this.Config.Theme
                 )
             );
         });
@@ -296,7 +298,7 @@ internal class ModEntry : Mod
             return;
 
         this.PushMenu(
-            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount)
+            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount, this.Config.Theme)
         );
     }
 

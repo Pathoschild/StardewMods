@@ -1,4 +1,6 @@
+using System;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.LookupAnything.Components;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
@@ -19,6 +21,30 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
                 tooltip: I18n.Config_ForceFullScreen_Desc,
                 get: config => config.ForceFullScreen,
                 set: (config, value) => config.ForceFullScreen = value
+            )
+
+            // visual options
+            .AddDropdown(
+                name: I18n.Config_MenuBackgroundOption_Name,
+                tooltip: I18n.Config_MenuBackgroundOption_Desc,
+                get: config => config.Theme.Background.ToString(),
+                set: (config, value) =>
+                {
+                    config.Theme.Background = Enum.Parse<MenuBackgroundOption>(value);
+                    Sprites.UpdateSprite(config.Theme.Background);
+                },
+                allowedValues: [
+                    MenuBackgroundOption.LetterBG_A.ToString(),
+                    MenuBackgroundOption.LetterBG_B.ToString(),
+                    MenuBackgroundOption.LetterBG_C.ToString(),
+                    MenuBackgroundOption.LetterBG_D.ToString(),
+                    MenuBackgroundOption.LetterBG_E.ToString(),
+                    MenuBackgroundOption.MenuBox_A.ToString(),
+                    MenuBackgroundOption.MenuBox_B.ToString(),
+                    MenuBackgroundOption.MenuBox_C.ToString(),
+                    MenuBackgroundOption.Plain.ToString(),
+                ],
+                formatAllowedValue: value => value
             )
 
             // progression mode

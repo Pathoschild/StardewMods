@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.Common.Utilities;
+using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
@@ -85,6 +86,9 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether to exit the menu on the next update tick.</summary>
     private bool ExitOnNextTick;
 
+    /// <summary>How to draw the menu.</summary>
+    private readonly ModThemeConfig Theme;
+
 
     /*********
     ** Public methods
@@ -100,7 +104,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="showDebugFields">Whether to display debug fields.</param>
     /// <param name="forceFullScreen">Whether the menu should always be full-screen, instead of centered in the window.</param>
     /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage)
+    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage, ModThemeConfig theme)
     {
         // save data
         this.Subject = subject;
@@ -111,6 +115,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         this.ForceFullScreen = forceFullScreen;
         this.ShowNewPage = showNewPage;
         this.WasHudEnabled = Game1.displayHUD;
+        this.Theme = theme;
 
         // save debug fields
         if (showDebugFields)
@@ -311,12 +316,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
             // outside the clipping area.)
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
-                float scale = this.width >= this.height
-                    ? this.width / (float)Sprites.Letter.Sprite.Width
-                    : this.height / (float)Sprites.Letter.Sprite.Height;
-
                 backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-                backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, Sprites.Letter.Sprite.Size, scale: scale);
+                Sprites.DrawBackground(backgroundBatch, x, y, this.width, this.height, this.Theme.Background);
                 backgroundBatch.End();
             }
 

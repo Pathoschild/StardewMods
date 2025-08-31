@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
@@ -61,6 +62,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The spacing around the scroll buttons.</summary>
     private readonly int ScrollButtonGutter = 15;
 
+    /// <summary>How to draw the menu.</summary>
+    private readonly ModThemeConfig Theme;
 
     /*********
     ** Public methods
@@ -73,13 +76,14 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="showLookup">Show a lookup menu.</param>
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll)
+    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll, ModThemeConfig theme)
     {
         // save data
         this.ShowLookup = showLookup;
         this.Monitor = monitor;
         this.SearchLookup = searchSubjects.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
         this.ScrollAmount = scroll;
+        this.Theme = theme;
 
         // create components
         this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
@@ -208,7 +212,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
         {
             backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-            backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, Sprites.Letter.Sprite.Size, scale: this.width / (float)Sprites.Letter.Sprite.Width);
+            Sprites.DrawBackground(backgroundBatch, x, y, this.width, this.height, this.Theme.Background);
             backgroundBatch.End();
         }
 

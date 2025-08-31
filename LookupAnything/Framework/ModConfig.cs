@@ -65,6 +65,9 @@ internal class ModConfig
     /// <summary>Whether to show recipes involving error items.</summary>
     public bool ShowInvalidRecipes { get; set; } = false;
 
+    /// <summary>How to display the menu background.</summary>
+    public ModThemeConfig Theme { get; set; } = new();
+
 
     /*********
     ** Public methods
@@ -79,5 +82,6 @@ internal class ModConfig
         this.Controls ??= new ModConfigKeys();
         this.ShowGiftTastes ??= new ModGiftTasteConfig();
         this.CollapseLargeFields ??= new ModCollapseLargeFieldsConfig();
+        this.Theme ??= new ModThemeConfig();
     }
 }
