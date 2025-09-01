@@ -1,6 +1,5 @@
-using System;
+using LookupAnything.Framework;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
-using Pathoschild.Stardew.LookupAnything.Components;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
@@ -8,6 +7,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework;
 /// <summary>Registers the mod configuration with Generic Mod Config Menu.</summary>
 internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModConfigMenuIntegrationFor<ModConfig>
 {
+    /// <summary>Current theme manager</summary>
+    public ThemeManager Theme { get; internal set; } = null!;
+
     /// <inheritdoc />
     public void Register(GenericModConfigMenuIntegration<ModConfig> menu, IMonitor monitor)
     {
@@ -23,28 +25,19 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
                 set: (config, value) => config.ForceFullScreen = value
             )
 
-            // visual options
+            // theme options
+            .AddSectionTitle(I18n.Config_Title_Theme)
             .AddDropdown(
-                name: I18n.Config_MenuBackgroundOption_Name,
-                tooltip: I18n.Config_MenuBackgroundOption_Desc,
+                name: I18n.Config_Theme_MenuBackground_Name,
+                tooltip: I18n.Config_Theme_MenuBackground_Desc,
                 get: config => config.Theme.Background.ToString(),
                 set: (config, value) =>
                 {
-                    config.Theme.Background = Enum.Parse<MenuBackgroundOption>(value);
-                    Sprites.UpdateSprite(config.Theme.Background);
+                    config.Theme.Background = value;
+                    this.Theme.CurrentBackgroundKey = value;
                 },
-                allowedValues: [
-                    MenuBackgroundOption.LetterBG_A.ToString(),
-                    MenuBackgroundOption.LetterBG_B.ToString(),
-                    MenuBackgroundOption.LetterBG_C.ToString(),
-                    MenuBackgroundOption.LetterBG_D.ToString(),
-                    MenuBackgroundOption.LetterBG_E.ToString(),
-                    MenuBackgroundOption.MenuBox_A.ToString(),
-                    MenuBackgroundOption.MenuBox_B.ToString(),
-                    MenuBackgroundOption.MenuBox_C.ToString(),
-                    MenuBackgroundOption.Plain.ToString(),
-                ],
-                formatAllowedValue: value => value
+                allowedValues: this.Theme.BackgroundKeys,
+                formatAllowedValue: value => I18n.GetByKey(string.Concat("config.theme.menu-background.value.", value))
             )
 
             // progression mode

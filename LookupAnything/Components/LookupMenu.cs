@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LookupAnything.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -36,7 +37,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     private readonly ICustomField[] Fields;
 
     /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+    private readonly Vector2 AspectRatio = new(LetterBackground.WIDTH, LetterBackground.HEIGHT);
 
     /// <summary>Simplifies access to private game code.</summary>
     private readonly IReflectionHelper Reflection;
@@ -86,8 +87,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether to exit the menu on the next update tick.</summary>
     private bool ExitOnNextTick;
 
-    /// <summary>How to draw the menu.</summary>
-    private readonly ModThemeConfig Theme;
+    /// <summary>Theme manager for menu appearance.</summary>
+    private readonly ThemeManager Theme;
 
 
     /*********
@@ -104,7 +105,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="showDebugFields">Whether to display debug fields.</param>
     /// <param name="forceFullScreen">Whether the menu should always be full-screen, instead of centered in the window.</param>
     /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage, ModThemeConfig theme)
+    /// <param name="theme">Theme manager for menu appearance</param>
+    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage, ThemeManager theme)
     {
         // save data
         this.Subject = subject;
@@ -317,7 +319,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
                 backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-                Sprites.DrawBackground(backgroundBatch, x, y, this.width, this.height, this.Theme.Background);
+                this.Theme.CurrentBackground.DrawBackground(backgroundBatch, x, y, this.width, this.height);
                 backgroundBatch.End();
             }
 

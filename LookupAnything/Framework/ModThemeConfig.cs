@@ -1,8 +1,10 @@
+using LookupAnything.Framework;
+
 namespace Pathoschild.Stardew.LookupAnything.Framework;
 
 /// <summary>As part of <see cref="ModConfig"/>, how to display the menu.</summary>
 internal sealed class ModThemeConfig
 {
-    /// <summary>How to display the menu background.</summary>
-    public MenuBackgroundOption Background { get; set; } = MenuBackgroundOption.LetterBG_A;
+    /// <summary>The chosen background option.</summary>
+    public string Background { get; set; } = ThemeManager.DEFAULT_BACKGROUND;
 }

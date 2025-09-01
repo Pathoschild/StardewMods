@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LookupAnything.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,7 +28,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     private readonly IMonitor Monitor;
 
     /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+    private readonly Vector2 AspectRatio = new(LetterBackground.WIDTH, LetterBackground.HEIGHT);
 
     /// <summary>The clickable 'scroll up' icon.</summary>
     private readonly ClickableTextureComponent ScrollUpButton;
@@ -62,8 +63,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The spacing around the scroll buttons.</summary>
     private readonly int ScrollButtonGutter = 15;
 
-    /// <summary>How to draw the menu.</summary>
-    private readonly ModThemeConfig Theme;
+    /// <param name="theme">Theme manager for menu appearance</param>
+    private readonly ThemeManager Theme;
 
     /*********
     ** Public methods
@@ -76,7 +77,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="showLookup">Show a lookup menu.</param>
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll, ModThemeConfig theme)
+    /// <param name="theme">Theme manager for menu appearance</param>
+    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll, ThemeManager theme)
     {
         // save data
         this.ShowLookup = showLookup;
@@ -212,7 +214,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
         {
             backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-            Sprites.DrawBackground(backgroundBatch, x, y, this.width, this.height, this.Theme.Background);
+            this.Theme.CurrentBackground.DrawBackground(backgroundBatch, x, y, this.width, this.height);
             backgroundBatch.End();
         }
 

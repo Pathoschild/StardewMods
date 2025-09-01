@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using LookupAnything.Framework;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common;
@@ -41,6 +42,9 @@ internal class ModEntry : Mod
     /// <summary>The relative path to the file containing data for the <see cref="Metadata"/> field.</summary>
     private readonly string DatabaseFileName = "assets/data.json";
 
+    /// <summary>Control UI theming</summary>
+    private ThemeManager Theme = null!;
+
     /****
     ** Validation
     ****/
@@ -74,7 +78,8 @@ internal class ModEntry : Mod
 
         // load config
         this.Config = this.LoadConfig();
-        Sprites.UpdateSprite(this.Config.Theme.Background);
+        this.Theme = ThemeManager.FormBaseThemeManager();
+        this.Theme.CurrentBackgroundKey = this.Config.Theme.Background;
 
         // load translations
         I18n.Init(helper.Translation);
@@ -118,7 +123,10 @@ internal class ModEntry : Mod
 
         // add config UI
         this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForLookupAnything(),
+            new GenericModConfigMenuIntegrationForLookupAnything()
+            {
+                Theme = this.Theme
+            },
             get: () => this.Config,
             set: config => this.Config = config
         );
@@ -263,7 +271,7 @@ internal class ModEntry : Mod
                     showDebugFields: this.Config.ShowDataMiningFields,
                     forceFullScreen: this.Config.ForceFullScreen,
                     showNewPage: this.ShowLookupFor,
-                    theme: this.Config.Theme
+                    theme: this.Theme
                 )
             );
         });
@@ -298,7 +306,7 @@ internal class ModEntry : Mod
             return;
 
         this.PushMenu(
-            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount, this.Config.Theme)
+            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount, this.Theme)
         );
     }
 
