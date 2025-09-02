@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to Fumorisz (updated Chinese) and MakinDay (updated Italian)!
+* Improved translations. Thanks to Fumorisz (updated Chinese), MakinDay (updated Italian), and OSHIKAWA (updated Japanese)!
 
 ## 1.5.0
 Released 27 July 2025 for SMAPI 4.3.1 or later.
