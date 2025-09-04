@@ -1240,7 +1240,7 @@ You can optionally set a `step` value, which is the amount to increment between 
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1259,7 +1259,7 @@ You can optionally set a `step` value, which is the amount to increment between 
 注意其他内容包无法定位内部素材键（因此称为内部）。若需允许其他内容包编辑，可使用[`Action: Load`](action-load.md)创建新素材，并使用该素材名。强烈建议使用[唯一字符串ID](https://zh.stardewvalleywiki.com/模组:公共数据字段#唯一字符串ID)以避免冲突：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1292,7 +1292,7 @@ You can optionally set a `step` value, which is the amount to increment between 
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1333,7 +1333,7 @@ You can optionally set a `step` value, which is the amount to increment between 
 
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1732,7 +1732,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 使用`Query`执行查询表达式。可用作占位符或条件，可包含嵌套令牌：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1850,7 +1850,7 @@ _查询表达式_ 是一组可计算为数字，`true`/`false`或文本的算术
 SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../extensibility.md)），用法与Content Patcher的令牌相同。例如，使用Json Assets的令牌：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1868,7 +1868,7 @@ SMAPI模组可添加新令牌供内容包使用（见[_模组拓展性_](../exte
 * 或使用令牌的补丁中含有对于令牌提供模组的不可变（不使用任何令牌）`HasMod`条件：
   ```js
   {
-     "Format": "2.7.0",
+     "Format": "2.8.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1891,7 +1891,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -1916,7 +1916,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "DynamicTokens": [
         {
             "Name": "PufferchickId",

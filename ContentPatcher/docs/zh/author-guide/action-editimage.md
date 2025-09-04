@@ -88,7 +88,7 @@
 这个示例改变某一物品的图标：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditImage",

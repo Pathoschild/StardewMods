@@ -1,9 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.21.0
+Released 03 September 2025 for SMAPI 4.1.10 or later.
+
 * Added [_Auto_ layer](README.md#auto), which automatically chooses the best overlay for whatever you're holding.
-* Added [_Coverage: Bombs_ layer](#coverage-bombs).
+* Added [_Coverage: Bombs_ layer](README.md#coverage-bombs).
 * The legend box now fades when you hover the cursor over it, so you can see what's behind it (thanks to b-b-blueberry!).
 * Fixed fertilizer layer not highlighting base retaining soil.
 * Fixed legends not using game's text color (thanks to b-b-blueberry!).
@@ -376,14 +378,14 @@ Released 14 February 2018 for SMAPI 2.4.0 or later.
 * Fixed error in the Cobalt integration.
 * Improved translations. Thanks to Husky110 (added German) and yuwenlan (added Chinese)!
 
-### 1.2.0
+## 1.2.0
 Released 13 January 2018 for SMAPI 2.3.0 or later.
 
 * Added: point at a scarecrow/sprinkler/etc in its data map to highlight that one's range.
 * Added: two overlapping groups of the same color will now share one border (configurable).
 * Fixed error in Junimo hut map when Pelican Fiber isn't installed.
 
-### 1.1.0
+## 1.1.0
 Released 11 January 2018 for SMAPI 2.3.0 or later.
 
 * Added [_Coverage: Bee Houses_](README.md#coverage-bee-houses) map.
@@ -392,7 +394,7 @@ Released 11 January 2018 for SMAPI 2.3.0 or later.
 * Updated Better Sprinklers support.
 * Fixed deprecated API usage.
 
-### 1.0.0
+## 1.0.0
 Released 26 December 2017 for SMAPI 2.3.0 or later.
 
 * Initial version.

@@ -109,7 +109,7 @@
 
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
 
    "CustomLocations": [
       // 添加新地点；
@@ -164,7 +164,7 @@ Content Patcher 允许您重命名原有地点名。当加载存档时，如果�
 
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "CustomLocations": [
       {
          "Name": "{{ModId}}_AbigailCloset",

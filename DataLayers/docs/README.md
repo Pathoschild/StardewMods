@@ -32,12 +32,13 @@ when that changes. You can configure which layers can be shown that way.
 > ![](screenshots/auto-layer.png)
 
 ### Accessible
-Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
+Shows where you can walk and highlights warp tiles. Useful for finding hidden paths and nooks, or
+testing custom maps.
 > ![](screenshots/accessible.png)
 
 ### Buildable
 Shows where you can construct buildings on the farm. Useful for spotting issues before you try to
-build at Robin's.
+build at Robin's, or testing custom maps.
 > ![](screenshots/buildable.png)
 
 ### Coverage: bee houses

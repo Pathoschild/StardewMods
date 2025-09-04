@@ -37,7 +37,7 @@ To access the API:
 1. Add Content Patcher as [a **required** dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.8.0" }
    ]
    ```
 2. Copy [`IContentPatcherAPI`](../IContentPatcherAPI.cs) and [`IManagedConditions`](../IManagedConditions.cs)

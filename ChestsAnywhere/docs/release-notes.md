@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.29.0
+Released 03 September 2025 for SMAPI 4.1.10 or later.
+
 * In the category dropdown...
   * Cellars are now translated and include the name of the player who owns them.
   * Building interiors now use the translated name for the building, if available.

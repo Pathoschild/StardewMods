@@ -198,7 +198,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 例如，使用自定义地图内的图块替换鹈鹕镇广场：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -278,7 +278,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 例如，此补丁更改农场洞穴的 `Outdoors` 地图属性，并增加一个传送点（传送格式请参阅 Wiki 上的[地图说明文档](https://zh.stardewvalleywiki.com/模组:地图)）
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -339,7 +339,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 例如，此补丁延长农场里通向出货箱的路径，新增一个图块。
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -359,7 +359,7 @@ Content Patcher 会按以下方法处理 `FromFile` 地图内引用的图块集�
 `MapTiles` 的所有子字段都支持[令牌](../author-guide.md#tokens)。例如，此补丁在出货箱前新增一个每天都会随机传送到不同位置的传送点。
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
