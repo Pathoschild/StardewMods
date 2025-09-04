@@ -2,6 +2,15 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Accessibilità",
     "accessible.clear": "Libera",
@@ -18,6 +27,13 @@
     // coverage: bee houses
     "bee-houses.name": "Copertura: Arnie",
     "bee-houses.range": "Raggio fiori",
+
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Copertura: Capanne dei Junimo",
@@ -90,8 +106,12 @@
     "config.combine-borders.desc": "Quando due gruppi dello stesso colore si sovrappongono, si può scegliere se disegnare un bordo intorno al loro bordo combinato invece dei bordi individuali.",
 
     "config.color-scheme.name": "Schema di colori",
-    "config.color-schene.desc": "Lo schema di colori da applicare, che modifica i colori di tutti i livelli di dati.",
+    "config.color-scheme.desc": "Lo schema di colori da applicare, che modifica i colori di tutti i livelli di dati.",
     "config.color-schemes.default": "colori predefiniti",
+
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
 
     // main controls
     "config.toggle-layer-key.name": "Alterna livelli di dati",
@@ -106,6 +126,10 @@
     // data layers
     "config.layer-enabled.name": "Abilitato",
     "config.layer-enabled.desc": "Scegli se questo livello deve essere disponibile nel gioco.",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Aggiorna quando la visuale cambia",
     "config.layer-update-on-view-change.desc": "Scegli se le informazioni sul livello disegnato devono essere aggiornate quando una nuova parte del mondo viene visualizzata, indipendentemente dall'impostazione 'aggiornamenti al secondo'.",

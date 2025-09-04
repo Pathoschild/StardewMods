@@ -24,21 +24,21 @@
     /*********
     ** Shop dialogues
     *********/
-    "food-court.dialogue.1": "食べ物はここで調達しよう！ほとんどは虫を原材料としていません。", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
-    "food-court.dialogue.2": "フードコート最安値を保証します。", // note for translators: this is a joke, since it's the only food shop in the food court.
-    "food-court.dialogue.3": "前回の食品安全検査にはほぼ合格したんだ！",
-    "food-court.dialogue.4": "ああ、お客さんだ。何の用？",
-    "food-court.dialogue.5": "新鮮でアツアツの料理だよ！まあまあ熱いよ。電子レンジで温めればね。", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+    "food-court.dialogue.1": "芋虫のようにお腹が空いたらここへ！原材料に虫は、まぁ、使われてないよ。", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "フードコート最安値を保証。", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "前回の食品安全検査はほぼ通ったよ！",
+    "food-court.dialogue.4": "ああ、お客さんだ。何か用？",
+    "food-court.dialogue.5": "出来立てアツアツだよ！まぁまぁ熱い。電子レンジで温めればね。", // note for translators: this is a joke which implies the food is neither hot nor fresh.
 
-    "gift-shop.dialogue.1": "遠出かな？必要なものは全部揃えておいてね！",
-    "gift-shop.dialogue.2": "家に帰るのかな？お土産を買って帰ろう！",
-    "gift-shop.dialogue.3": "ノベルティシャツのコレクションも充実しています。 (たくさんありすぎるので、ぜひお買い求めください。)",
-    "gift-shop.dialogue.4": "物が多すぎて、どこに収納しようか迷っています。何か買ってください！",
+    "gift-shop.dialogue.1": "遠出ですか？必要なものを必ず全部揃えてください！",
+    "gift-shop.dialogue.2": "ご帰宅ですか？お土産を買って帰りましょう！",
+    "gift-shop.dialogue.3": "ノベルティシャツの商品も充実しています！(たくさんありすぎるから是非お買い求めください)。",
+    "gift-shop.dialogue.4": "収納先がわからない商品であふれているんです。是非何かお買い求めください！",
     "gift-shop.dialogue.5": "寒いところへお出かけですか？防寒具の在庫がありますよ！",
-    "gift-shop.dialogue.6": "このイヤマフを試してみて。どう？本物のキャッスルヴィレッジ産のベルベットだよ！",
-    "gift-shop.dialogue.7": "これはジュエル海を渡ってきた珍しい木材なんだ。他のところでは手に入らないよ。",
+    "gift-shop.dialogue.6": "このイヤーマフを試してみてください。どうです？本物のキャッスル村産のベルベットが使われているんです！",
+    "gift-shop.dialogue.7": "これはジェム海を渡って来た珍しい木材なんです。他のところでは手に入りませんよ。",
 
-    "vendor-shop.dialogue.coming-soon": "小さな看板：\"もうすぐ地元のポップアップショップがオープンします！\"中から作業員が準備をしている音が聞こえてくる。",
+    "vendor-shop.dialogue.coming-soon": "小さな看板に「もうすぐ地元のポップアップショップが開店します！」と書かれている。中で作業員が準備する音が聞こえた。",
 
 
     /*********
@@ -53,19 +53,19 @@
     "books.geography.2": "『グランプルトン林業：第7巻』",
     "books.geography.3": "『ズズシティの夜』",
     "books.geography.4": "『プレーリーアイランドのアライグマ』",
-    "books.geography.5": "『スターデューバレーと趣のある土地』",
+    "books.geography.5": "『スターデューバレーと趣ある土地』",
     "books.geography.6": "サンディ女史著 『フェーンギル共和国の花』",
 
-    "books.history.1": "『スモルアヌ百科事典：文化、歴史、固定観念、推測』",
+    "books.history.1": "『スモルアヌ百科事典：文化、歴史、固定観念、推論』",
     "books.history.2": "M.ラスモディウス著『神秘学入門』",
     "books.history.3": "『侵略者と影：エレメンタル戦争の歴史』",
     "books.history.4": "『凍てつく海の向こうのツンドラの住人たち』",
-    "books.history.5": "『帝国と共和国』：フェーンギル協和国とゴトロ帝国の対立を徹底分析する",
-    "books.history.6": "Z.C.レアクロウ・ソサエティ著 『レアクロウ史の網羅的カタログ』",
+    "books.history.5": "『帝国と共和国』：フェーンギル協和国とゴトロ帝国の対立の徹底分析。",
+    "books.history.6": "Z.C.レアクロウ協会著 『珍しいカカシの歴史完全カタログ』",
 
-    "books.promotional.1": "『信じられないペリカンタウン』ルイス市長による宣伝用チラシだ。",
+    "books.promotional.1": "『素晴らしきかなペリカンタウン』ルイス町長作の宣伝チラシだ。",
 
-    "books.religion.1": "『ヨバの見つけ方』 スターデューバレーの匿名パンフレット",
+    "books.religion.1": "『ヨバの見つけ方』 スターデューバレーから出された匿名冊子",
 
     "books.science.1": "『ジュニモとフェーンギル共和国の民俗学』",
 
@@ -74,19 +74,19 @@
     ** Location flavor text
     *********/
     // message from the transit area doors
-    "location.transit-area-doors": "ドックとホームに戻ります。まずチケットカウンターでチケットを購入してください。",
+    "location.transit-area-doors": "駅のドックとホームに戻ります。まずはチケットカウンターでチケットを購入してください。",
 
     // messages from exit door
-    "location.exit-door.strange-sounds": "...？",
+    "location.exit-door.strange-sounds": "…？",
 
     // rare messages from ticket counter
-    "location.ticket-counter.1": "（チケット売り場を覗き込もうとしたが、色ガラス越しにぼんやりと影が見えるだけだ。）",
+    "location.ticket-counter.1": "（チケット売り場を覗き込もうとしたが、カラーガラス越しにぼんやりと影が見えるだけだ。）",
     "location.ticket-counter.2": "（ガラスの向こうから奇妙なささやき声が聞こえてくる。）",
-    "location.ticket-counter.3": "（今一瞬だけガラスの向こうが見えた気がする。でもなぜか、何を見たのか思い出せない。）",
+    "location.ticket-counter.3": "（突然、一瞬だけカラーガラスの向こうが見える。思い返すが何を見たのか思い出せない。）",
 
     // rare messages from ticket machine
-    "location.ticket-machine.1": "（チケットカウンターから漠然とした不興を感じる。あるいは気のせいかもしれない。）",
-    "location.ticket-machine.2": "（チケットカウンターをスキップすることに漠然とした不安を覚える。）",
+    "location.ticket-machine.1": "（チケットカウンターから微妙に非難を感じる。あるいはただの気のせいかもしれない。）",
+    "location.ticket-machine.2": "（チケットカウンターを飛ばすことに漠然とした不安を覚える。）",
     "location.ticket-machine.3": "（機械が聞いたこともない何十もの目的地をリストアップする。瞬きをすると、通常のリストに戻った。）",
 
     // rare messages from cola machine
@@ -95,96 +95,93 @@
     "location.cola-machine.3": "（どういうわけか、コーラマシンが手助けしたがっているのを感じる。）",
 
     // employee lounge
-    // TODO
-    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
-    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+    "location.employee-lockers": "従業員のロッカーに鍵は掛かってない。だが何者かが見てるような気がする。",
+    "location.employee-fridge": "従業員のランチだ。食べるのは失礼だろう。",
 
 
     /*********
     ** Tourist dialogue
     *********/
-    "tourist.young-boy.1": "やぁ。",
+    "tourist.young-boy.1": "こんにちは。",
     "tourist.young-boy.2": "ママを待ってるんだ。",
-    "tourist.young-boy.3": "知らない人に話しかけちゃいけないんだよ。",
+    "tourist.young-boy.3": "知らない人に話しかけちゃいけないんだ。",
 
-    "tourist.woman-in-black-dress": "いろんな町のお祭り目当てに旅するのが好きなの。仕事の息抜きにもなるしね。",
+    "tourist.woman-in-black-dress": "色んな小さな町のお祭りで旅行するのが好きなの。仕事の息抜きにもなるしね。",
 
     "tourist.man-with-drink.1": "旅行のだいごみは食事だよ。",
     "tourist.man-with-drink.2": "フードコートには行ってみた？正直、ほとんど食べられたものじゃない。でも、これも経験だね！",
 
-    "tourist.man-with-sunglasses": "チケット売り場を覗いてみたか？誰がいるのかよくわからないんだ。#あいつら店主も従業員じゃないみたいだ。",
+    "tourist.man-with-sunglasses": "チケット売り場を覗いてみたか？誰がそこにいるのか全くわからないんだ。#どの店主も従業員じゃない。",
 
     "tourist.man-with-top-hat.1": "やあ、若いの。金持ちになるひけつを知りたいか？",
-    "tourist.man-with-top-hat.2": "一攫千金さ。ギャンブルだよ。カジノではいつも勝つんだ。へへ",
+    "tourist.man-with-top-hat.2": "一攫千金のスキームさ。ギャンブルだよ。カジノに勝てばいいって話だ。へへ",
 
-    "tourist.strong-man": "俺みたいに強いって？石を砕いてみろよ！#でもここには石がない。悲しい。",
+    "tourist.strong-man": "俺みたいに強いだと？石を砕いてみろ！#だがここに石はない。悲しいな。",
 
-    "tourist.desert-racer-man.1": "レースに行ってくるよ！",
-    "tourist.desert-racer-man.2": "ああ、本当にそうだよ。引退して、ようやくレースイベントを直接見に旅行できるようになったんだ。楽しみだ。",
+    "tourist.desert-racer-man.1": "レースへ出かけるよ！",
+    "tourist.desert-racer-man.2": "あぁ、本当だとも。引退してようやく、自分の目でレースイベントを見に行けるんだ。旅行で。#砂漠のレースに行ったことあるかい？とんでもなく楽しいよ。",
 
-    "tourist.desert-scholar-man.1": "やあ、友よ！ズズシティに新しい図書館がオープンしたんだ。",
-    "tourist.desert-scholar-man.2": "探している本がたくさんあるんだよ。図書館にあるといいんだが。",
-    "tourist.desert-scholar-man.3": "もしなくても、きっと新しい本に出会えるよね！",
+    "tourist.desert-scholar-man.1": "ごきげんよう、友よ！新しい図書館がズズシティでオープンしたんだ。",
+    "tourist.desert-scholar-man.2": "私が探している本はたくさんある。そこにあるといいんだが。",
+    "tourist.desert-scholar-man.3": "そうでなくとも、きっと新しい本に出合えるだろう！",
 
-    "tourist.flamingo.1": "...",
-    "tourist.flamingo.2": "...？",
-    "tourist.flamingo.3": "*クラクションの音*",
-    "tourist.flamingo.4": "（彼女にがっつり無視された。）",
+    "tourist.flamingo.1": "…",
+    "tourist.flamingo.2": "…？",
+    "tourist.flamingo.3": "*(威嚇音)*",
+    "tourist.flamingo.4": "（彼女はわざと君を無視している。）",
 
-    "tourist.shrouded-figure": "お金を払えば、家まで送ってあげるよ。#まあ、バスに乗ればいいか。",
+    "tourist.shrouded-figure": "お金を払えば、家まで送ってあげるよ。#まあ、君はバスに乗るだけでいいだろう。",
 
     "tourist.welwick.1": "私の旧友ラスモディウスと話をしたようだね。",
-    "tourist.welwick.2": "あいつの陰謀に巻き込まれていないことを祈るよ。",
+    "tourist.welwick.2": "あいつの陰謀に巻き込まれていないことを祈るよ。ヘッヘッ。",
 
     "tourist.cashier-girl.1": "私は長時間立ちっぱなしで仕事をしているの。疲れるし、自分の時間もほとんどないわ。",
-    "tourist.cashier-girl.2": "家は好きよ。でも、冒険のない人生なんて考えられる？！",
-    "tourist.cashier-girl.3": "無料で行ける場所はたくさんあるの。全部行ってみるつもりよ！",
+    "tourist.cashier-girl.2": "家で休みたいわ。でも冒険のない人生なんて考えられる？！",
+    "tourist.cashier-girl.3": "無料で行ける場所はたくさんあるわ。全部行くつもりよ！",
 
-    "tourist.governor.1": "実に奇妙だな。誰がこの局を運営しているのか誰も知らないんだ。#許可証はすべて提出されたのに、誰もそれを覚えていない。#まあ、このあたりで奇妙なことはこれだけではないがな。",
-    "tourist.governor.2": "ようやく自分も電車に乗れるよ。#今度は妻も連れてこよう。",
+    "tourist.governor.1": "実に変だな。誰もこの駅を運営している者を知らない。#駅の運営に必要な許可書は全て交付されたのに、誰もそのことを覚えていない。#まぁ、この辺りでは奇妙ではないが。",
+    "tourist.governor.2": "ようやく電車に乗ることが出来て嬉しいよ。#次は妻を連れてくるかも。",
 
-    "tourist.lupini.1": "こんにちは、若き${男性^女性^人}$よ。私の最新の絵はご覧いただけたかな？", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
-    "tourist.lupini.2": "新しいギャラリーを開きに行ってくるよ。よかったら君もおいで。",
+    "tourist.lupini.1": "ごきけんよう、若き${青年^女レディ^者}$よ。私の最新作を見たことあるかね？", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
+    "tourist.lupini.2": "新しいギャラリーを開きに行くよ。もしよろしければご一緒にどうぞ。",
 
-    "tourist.red-cap-guy.1": "旅行の素晴らしさは、様々な人々とファッションに出会えることさ。",
+    "tourist.red-cap-guy.1": "旅行の素晴らしさは、様々な人とファッションに出会えることさ。",
     "tourist.red-cap-guy.2": "みんながこんなに違うと、着飾りすぎてるなんて感じないよ！",
 
     "tourist.shorts-man": "ここ、やたらと寒いな。#ギフトショップで防寒具を買おうか...",
 
     "tourist.red-pirate": "（彼は飲み物に夢中で、あなたに気づかない。）",
 
-    "tourist.grim-pirate": "あの線路から聞こえてくるのは、ぞっとするような物語...#駅の奥深くで聞こえたアナウンス...#ああ、電車を逃しちまった。",
+    "tourist.grim-pirate": "かの線路から聞こえてくるのは、ぞっとするような物語...#駅の奥底で聞こえたアナウンス...#ありゃ、電車を逃しちまった。",
 
-    "tourist.blackgull-pirate.1": "おおっと、みんなはどこだ？",
+    "tourist.blackgull-pirate.1": "なんだと！他の連中はどこだ？",
     "tourist.blackgull-pirate.2": "もうすぐ乗船の時間だぞ...",
 
-    // TODO
-    "tourist.bag-dog.1": "(She's on an adventure.)",
-    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)",
+    "tourist.bag-dog.1": "(彼女は冒険中だ)",
+    "tourist.bag-dog.2": "(彼女はキャリーのベッドの中で休んでいる)",
 
 
     /*********
     ** Furniture
     *********/
-    // TODO
     // calendars
-    "furniture.calendar-city.name": "City Calendar",
-    "furniture.calendar-nature.name": "Nature Calendar",
+    "furniture.calendar-city.name": "都会カレンダー",
+    "furniture.calendar-nature.name": "自然カレンダー",
 
     // wall decor
-    "furniture.clock.name": "Clock",
-    "furniture.transit-map.name": "Transit Map",
-    "furniture.travel-pictures.name": "Travel Pictures",
-    "furniture.welcome-sign.name": "Welcome Sign",
+    "furniture.clock.name": "時計",
+    "furniture.transit-map.name": "路線図",
+    "furniture.travel-pictures.name": "旅行写真",
+    "furniture.welcome-sign.name": "ウェルコムボード",
 
     // rugs
-    "furniture.posh-rug.name": "Posh Rug",
+    "furniture.posh-rug.name": "高級ラグ",
 
     // general decor
-    "furniture.board-sign.name": "Board Sign",
-    "furniture.postbox.name": "Postbox",
-    "furniture.suitcase-blue.name": "Blue Suitcase",
-    "furniture.suitcase-pink.name": "Pink Suitcase",
-    "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can"
+    "furniture.board-sign.name": "掲示板ボード",
+    "furniture.postbox.name": "郵便ポスト",
+    "furniture.suitcase-blue.name": "青のスーツケース",
+    "furniture.suitcase-pink.name": "ピンクのスーツケース",
+    "furniture.trash-can.name": "大型ゴミ箱",
+    "furniture.trash-can-messy.name": "散らかった大型ゴミ箱"
 }

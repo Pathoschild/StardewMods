@@ -532,7 +532,7 @@ internal class CharacterSubject : BaseSubject
         {
             // The player probably changed the game date, so the birthday would be before the
             // game started. We'll just drop the year number from the output in that case.
-            return new SDate(Game1.dayOfMonth, Game1.season, 100_000_000)
+            return new SDate(Game1.dayOfMonth, Game1.season, 100_000)
                 .AddDays(-daysOld)
                 .ToLocaleString(withYear: false);
         }

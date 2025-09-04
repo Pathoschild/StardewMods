@@ -61,7 +61,7 @@
 最简单的情况是使用 `Include` 把您的补丁分类到子文件里：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "Include",
@@ -74,7 +74,7 @@
 您也可以将其与令牌和条件结合起来，从而动态地加载文件：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "Include",

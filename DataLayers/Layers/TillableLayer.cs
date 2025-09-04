@@ -4,13 +4,14 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers;
 
 /// <summary>A data layer which shows whether tiles are tillable.</summary>
-internal class TillableLayer : BaseLayer
+internal class TillableLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -57,6 +58,12 @@ internal class TillableLayer : BaseLayer
             new TileGroup(tiles[this.Occupied.Id]),
             new TileGroup(tiles[this.NonTillable.Id])
         ];
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item item)
+    {
+        return item is Hoe;
     }
 
 

@@ -138,15 +138,15 @@ Global token values are defined by Content Patcher, so you can use them without 
 
 The festival or wedding happening today. Possible values:
 * `wedding` (current player is getting married);
-* `dance of the moonlight jellies`;
-* `egg festival`;
-* `feast of the winter star`;
-* `festival of ice`;
-* `flower dance`;
-* `luau`;
-* `stardew valley fair`;
-* `spirit's eve`;
-* a custom festival name.
+* `Dance of the Moonlight Jellies`;
+* `Egg Festival`;
+* `Feast of the Winter Star`;
+* `Festival of Ice`;
+* `Flower Dance`;
+* `Luau`;
+* `Spirit's Eve`;
+* `Stardew Valley Fair`;
+* a custom festival name (read from `Data/Festivals/FestivalDates`).
 
 </td>
 <td><a href="#DayEvent">#</a></td>
@@ -830,7 +830,7 @@ for more info.
 <td>
 
 A list of integers between the specified min/max integers (inclusive). This is mainly meant for
-comparing values; for example:
+comparing values. For example:
 
 ```js
 "When": {
@@ -838,7 +838,15 @@ comparing values; for example:
 }
 ```
 
-You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+You can optionally set a `step` value, which is the amount to increment between each value (default
+1). For example:
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 2, 10 |step=2}}" // equivalent to "2, 4, 6, 8, 10"
+}
+```
+
+You can also use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
 `{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
 
 To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
@@ -1294,7 +1302,7 @@ For example, you can use this to provide the textures for a custom farm type:
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1317,7 +1325,7 @@ ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_
 convention is strongly recommended to avoid conflicts. For example:
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1352,7 +1360,7 @@ For example, you can use config values as tokens and conditions:
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1398,7 +1406,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1835,7 +1843,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1960,7 +1968,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1980,7 +1988,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "2.7.0",
+     "Format": "2.8.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -2006,7 +2014,7 @@ alternate name and the value is the original token name. For example:
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -2032,7 +2040,7 @@ token](#dynamic-tokens):
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "DynamicTokens": [
         {
             "Name": "PufferchickId",

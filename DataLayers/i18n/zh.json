@@ -1,125 +1,149 @@
 ﻿{
     /*********
-    ** Data Layers UI
+    ** Data Layers UI (数据图层界面)
     *********/
-    // accessible
-    "accessible.name": "抵达",
-    "accessible.clear": "可通过",
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
+
+    // accessible (可通行性)
+    "accessible.name": "可通行性",
+    "accessible.clear": "可通行",
     "accessible.occupied": "被占用",
-    "accessible.impassable": "不可通过",
+    "accessible.impassable": "不可通行",
     "accessible.warp": "传送点",
 
-    // buildable
-    "buildable.name": "建造",
-    "buildable.buildable": "可以",
+    // buildable (可建造)
+    "buildable.name": "可建造区域",
+    "buildable.buildable": "可建造",
     "buildable.occupied": "被占用",
-    "buildable.not-buildable": "不可以",
+    "buildable.not-buildable": "不可建造",
 
-    // coverage: bee houses
+    // coverage: bee houses (覆盖范围：蜂箱)
     "bee-houses.name": "覆盖范围：蜂房",
-    "bee-houses.range": "鲜花范围",
+    "bee-houses.range": "花朵范围",
 
-    // coverage: Junimo huts
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
+
+    // coverage: Junimo huts (覆盖范围：祝尼魔小屋)
     "junimo-huts.name": "覆盖范围：祝尼魔小屋",
     "junimo-huts.can-harvest": "可自动收获",
-    "junimo-huts.cannot-harvest": "无法自动收获",
+    "junimo-huts.cannot-harvest": "不可自动收获",
 
-    // coverage: scarecrows
+    // coverage: scarecrows (覆盖范围：稻草人)
     "scarecrows.name": "覆盖范围：稻草人",
     "scarecrows.protected": "受保护",
     "scarecrows.exposed": "未受保护",
 
-    // coverage: sprinklers
+    // coverage: sprinklers (覆盖范围：洒水器)
     "sprinklers.name": "覆盖范围：洒水器",
     "sprinklers.covered": "已覆盖",
-    "sprinklers.dry-crops": "作物干燥",
+    "sprinklers.dry-crops": "作物未浇水",
 
-    // crops: harvest
+    // crops: harvest (作物：收获)
     "crop-harvest.name": "作物：收获",
     "crop-harvest.ready": "可收获",
     "crop-harvest.not-ready": "不可收获",
-    "crop-harvest.not-enough-time-or-dead": "时间不足(或已枯萎)",
+    "crop-harvest.not-enough-time-or-dead": "时间不足（或已枯萎）",
 
-    // crops: watered
+    // crops: watered (作物：浇水)
     "crop-water.name": "作物：浇水",
     "crop-water.watered": "已浇水",
     "crop-water.dry": "未浇水",
 
-    // crops: water for paddy crops
-    "crop-paddy-water.name": "作物：稻田栽培",
-    "crop-paddy-water.in-range": "靠近水",
-    "crop-paddy-water.not-in-range": "旱地",
+    // crops: water for paddy crops (作物：稻苗)
+    "crop-paddy-water.name": "作物：稻苗",
+    "crop-paddy-water.in-range": "水源内",
+    "crop-paddy-water.not-in-range": "干旱地",
 
-    // crops: fertilized
+    // crops: fertilized (作物：施肥)
     "crop-fertilizer.name": "作物：施肥",
     "crop-fertilizer.fertilizer": "肥料",
     "crop-fertilizer.retaining-soil": "保湿土壤",
     "crop-fertilizer.speed-gro": "生长激素",
-    "crop-fertilizer.multiple": "多重肥料",
+    "crop-fertilizer.multiple": "多种肥料",
 
-    // machine processing
-    "machines.name": "机器运转",
-    "machines.empty": "空的",
-    "machines.processing": "运转中",
+    // machine processing (机器运行状态)
+    "machines.name": "机器运行状态",
+    "machines.empty": "空闲",
+    "machines.processing": "处理中",
     "machines.finished": "已完成",
 
-    // tile grid
+    // tile grid (网格)
     "grid.name": "网格",
 
-    // tillable
-    "tillable.name": "能否耕地",
-    "tillable.tillable": "可耕地",
-    "tillable.tilled": "耕种",
+    // tillable (可耕地)
+    "tillable.name": "可耕地",
+    "tillable.tillable": "可耕作",
+    "tillable.tilled": "已耕作",
     "tillable.occupied": "被占用",
-    "tillable.not-tillable": "不可耕地",
+    "tillable.not-tillable": "不可耕作",
 
 
     /*********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (通用模组配置菜单界面)
     *********/
-    // section names
+    // section names (分区名称)
     "config.section.main-options": "主要选项",
-    "config.section.main-controls": "主要控件",
+    "config.section.main-controls": "主要控制",
     "config.section.layer": "'{{LayerName}}'图层", // {{LayerName}} is the layer name set above.
 
-    // main options
+    // main options (主要选项)
     "config.show-grid.name": "显示网格",
-    "config.show-grid.desc": "打开图层时是否显示网格。",
+    "config.show-grid.desc": "开启图层时显示网格。",
 
     "config.combine-borders.name": "合并重叠边框",
-    "config.combine-borders.desc": "当同一图层中，两个相同颜色的不同信息区域重叠时，是否在它们的组合边缘绘制一个边框，而不是它们各自的边框。",
+    "config.combine-borders.desc": "当同一图层中，两个相同颜色的不同信息区域重叠时，在它们的组合边缘绘制一个边框，而不是它们各自的边框。",
 
     "config.color-scheme.name": "颜色方案",
-    "config.color-schene.desc": "要应用的颜色方案，它可以改变所有数据图层的颜色。",
+    "config.color-scheme.desc": "要应用的颜色方案，它可以改变所有数据图层的颜色。",
     "config.color-schemes.default": "默认颜色方案",
 
-    // main controls
-    "config.toggle-layer-key.name": "打开数据图层快捷键",
-    "config.toggle-layer-key.desc": "显示或隐藏数据图层的快捷键。",
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
 
-    "config.prev-layer-key.name": "上一个图层快捷键",
-    "config.prev-layer-key.desc": "当数据图层显示时，切换上一个图层的快捷键。",
+    // main controls (按键绑定)
+    "config.toggle-layer-key.name": "打开数据图层",
+    "config.toggle-layer-key.desc": "单击此键显示或隐藏数据图层。",
 
-    "config.next-layer-key.name": "下一个图层快捷键",
-    "config.next-layer-key.desc": "当数据图层显示时，切换下一个图层的快捷键。",
+    "config.prev-layer-key.name": "上一个图层",
+    "config.prev-layer-key.desc": "当数据图层显示时，单击此键切换上一个图层。",
 
-    // data layers
+    "config.next-layer-key.name": "下一个图层",
+    "config.next-layer-key.desc": "当数据图层显示时，单击此键切换下一个图层。",
+
+    // data layers (数据图层设置)
     "config.layer-enabled.name": "启用",
-    "config.layer-enabled.desc": "在游戏中是否显示该图层。",
+    "config.layer-enabled.desc": "在游戏中启用此图层",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "视角窗口变化时更新",
-    "config.layer-update-on-view-change.desc": "无论“每秒更新次数”设置为多少，当视角窗口发生变化时，是否立即更新图层信息。",
+    "config.layer-update-on-view-change.desc": "无论“每秒更新次数”设置为多少，当视角窗口发生变化时，立即更新图层信息。",
 
     "config.layer-updates-per-second.name": "每秒更新次数",
-    "config.layer-updates-per-second.desc": "数据图层每秒更新的次数。将此值设为高于默认值可能会导致图层信息显示延迟。默认值 {{defaultValue}}.",
+    "config.layer-updates-per-second.desc": "数据图层每秒更新的次数。将此值设为高于默认值可能会导致图层信息显示延迟。默认值{{defaultValue}}。",
 
     "config.layer-shortcut.name": "快捷键",
     "config.layer-shortcut.desc": "当数据图层显示时，快速切换到该图层的快捷键。",
 
 
     /*********
-    ** Iconic Framework icon
+    ** Iconic Framework icon (Iconic Framework 图标)
     *********/
     "icon.toggle-data-layers.name": "数据图层",
-    "icon.toggle-data-layers.desc": "切换数据图层"
+    "icon.toggle-data-layers.desc": "切换数据图层显示。"
 }

@@ -250,7 +250,7 @@
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -277,7 +277,7 @@
 
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -295,7 +295,7 @@
 您可以通过把字段设为 `null` 的方式删除某个条目。例如，下列事件删除了一个事件，同时使用新的条件重新创建它：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -339,7 +339,7 @@
 为了在内容包中编辑该音乐条目，您必须使用它的 ID：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -363,7 +363,7 @@
 列表的顺序通常非常重要（例如，游戏会使用 `Data\MoviesReactions` 的第一个条件适合的条目来匹配 NPC 反应。）您可以用 `MoveEntries` 字段来更改顺序。例如，此示例逐一使用 `MoveEntries` 操作来移动 `Abigail` 条目：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -421,7 +421,7 @@ ID         | 数据内的[字典键](#edit-a-dictionary)或者[列表键](#edit-
 然后我们即可像数据素材一样在列表中添加/替换/删除条目。
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -476,7 +476,7 @@ ID         | 数据内的[字典键](#edit-a-dictionary)或者[列表键](#edit-
 
 ```json
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",

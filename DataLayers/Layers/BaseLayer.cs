@@ -41,6 +41,12 @@ internal abstract class BaseLayer : ILayer
     ** Public methods
     *********/
     /// <inheritdoc />
+    public bool UpdateMetadata()
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
     public abstract IReadOnlyCollection<TileGroup> Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile);
 
 

@@ -55,12 +55,22 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
             )
             .AddDropdown(
                 name: I18n.Config_ColorScheme_Name,
-                tooltip: I18n.Config_ColorSchene_Desc,
+                tooltip: I18n.Config_ColorScheme_Desc,
                 get: config => config.ColorScheme,
                 set: (config, value) => config.ColorScheme = value,
                 allowedValues: this.ColorRegistry.SchemeIds.ToArray(),
                 formatAllowedValue: key => I18n.GetByKey($"config.color-schemes.{key}").Default(key)
             )
+            .AddNumberField(
+                name: I18n.Config_LegendAlphaOnHover_Name,
+                tooltip: I18n.Config_LegendAlphaOnHover_Desc,
+                get: config => config.LegendAlphaOnHover,
+                set: (config, value) => config.LegendAlphaOnHover = value,
+                min: 0,
+                max: 1,
+                interval: 0.05f
+            )
+
 
             .AddSectionTitle(I18n.Config_Section_MainControls)
             .AddKeyBinding(
@@ -85,8 +95,10 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
         // add layer options
         List<LayerConfigSection> configSections = [
             this.GetBuiltInSection(config => config.Layers.Accessible, "accessible"),
+            this.GetBuiltInSection(config => config.Layers.AutoLayer, "auto"),
             this.GetBuiltInSection(config => config.Layers.Buildable, "buildable"),
             this.GetBuiltInSection(config => config.Layers.CoverageForBeeHouses, "bee-houses"),
+            this.GetBuiltInSection(config => config.Layers.CoverageForBombs, "bombs"),
             this.GetBuiltInSection(config => config.Layers.CoverageForJunimoHuts, "junimo-huts"),
             this.GetBuiltInSection(config => config.Layers.CoverageForScarecrows, "scarecrows"),
             this.GetBuiltInSection(config => config.Layers.CoverageForSprinklers, "sprinklers"),
@@ -139,7 +151,19 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 tooltip: I18n.Config_LayerEnabled_Desc,
                 get: config => section.GetConfig(config).Enabled,
                 set: (config, value) => section.GetConfig(config).Enabled = value
-            )
+            );
+
+        if (defaultConfig is LayerConfigWithAutoSupport)
+        {
+            menu.AddCheckbox(
+                name: () => I18n.Config_LayerEnabledForAutoLayer_Name(autoLayerName: I18n.Auto_Name()),
+                tooltip: () => I18n.Config_LayerEnabledForAutoLayer_Desc(autoLayerName: I18n.Auto_Name()),
+                get: config => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer,
+                set: (config, value) => this.GetConfigWithAutoSupport(config, section).EnabledForAutoLayer = value
+            );
+        }
+
+        menu
             .AddCheckbox(
                 name: I18n.Config_LayerUpdateOnViewChange_Name,
                 tooltip: I18n.Config_LayerUpdateOnViewChange_Desc,
@@ -160,6 +184,16 @@ internal class GenericModConfigMenuIntegrationForDataLayers : IGenericModConfigM
                 get: config => section.GetConfig(config).ShortcutKey,
                 set: (config, value) => section.GetConfig(config).ShortcutKey = value
             );
+    }
+
+    /// <summary>Get a section config with 'auto' layer support.</summary>
+    /// <param name="config">The configuration model to read.</param>
+    /// <param name="section">The section to read.</param>
+    /// <exception cref="InvalidCastException">The selected config doesn't support the 'auto' layer.</exception>
+    private LayerConfigWithAutoSupport GetConfigWithAutoSupport(ModConfig config, LayerConfigSection section)
+    {
+        LayerConfig layerConfig = section.GetConfig(config);
+        return (LayerConfigWithAutoSupport)layerConfig;
     }
 
     /// <summary>A data layer's configuration settings.</summary>

@@ -224,7 +224,7 @@ Here's how that would be merged with each patch mode (black areas are the empty 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -310,7 +310,7 @@ For example, this changes the `Outdoors` map property for the farm cave and adds
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -371,7 +371,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -392,7 +392,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",

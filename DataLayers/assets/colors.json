@@ -21,6 +21,10 @@
         "BeeHouseCoverage_Covered": "Green",
         "BeeHouseCoverage_Selected": "Blue",
 
+        "BombCoverage_Dig": "Red",
+        "BombCoverage_Explosion": "Magenta",
+        "BombCoverage_Shockwave": "Black",
+
         "JunimoHutCoverage_Covered": "Green",
         "JunimoHutCoverage_NotCovered": "Red",
         "JunimoHutCoverage_Selected": "Blue",

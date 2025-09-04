@@ -1,35 +1,39 @@
 ﻿{
     /**********
-    ** Chest UI
+    ** Chest UI (箱子界面)
     **********/
-    // default chest names
+    // default chest names (默认箱子名称)
     "default-name.fridge": "冰箱",
     "default-name.other": "{{name}} #{{number}}",
     "default-name.shipping-bin.store": "添加出货物品",
     "default-name.shipping-bin.take": "取回出货物品",
 
-    // default category names
-    "default-category.owned-cabin": "小屋（{{owner}}）",
-    "default-category.unowned-cabin": "小屋（空的）",
+    // default category names (默认类别名称)
+    "default-category.cabin-owned": "小屋（{{owner}}）",
+    "default-category.cabin-unowned": "小屋（空的）",
+    "default-category.cellar-owned": "地窖（{{owner}}）",
+    "default-category.cellar-unowned": "地窖 #{{cellarNumber}}",
+    "default-category.farmhouse": "农舍",
+    "default-category.island-farmhouse": "姜岛农舍",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
-    // edit-chest labels
+    // edit-chest labels (编辑箱子标签)
     "label.location": "位置",
-    "label.location.tile": "地格 {{x}}, {{y}}",
+    "label.location.tile": "坐标 {{x}}, {{y}}",
     "label.name": "名称",
     "label.category": "分类",
     "label.order": "顺序",
     "label.hide-chest": "隐藏此箱子",
-    "label.hide-chest-hidden": "隐藏此箱子（你需要亲自找到该箱子撤销隐藏！）",
+    "label.hide-chest-hidden": "隐藏此箱子（您需要亲自找到该箱子撤销隐藏！）",
     "label.automate-options": "自动化设置",
-    "label.automate-store": "把物品放在这个箱子里",
-    "label.automate-store-first": "优先把物品放在这个箱子里",
-    "label.automate-store-disabled": "不要把物品放在这个箱子里",
-    "label.automate-take": "从这个箱子里拿取物品",
-    "label.automate-take-first": "优先从这个箱子里拿取物品",
-    "label.automate-take-disabled": "不要从这个箱子里拿取物品",
+    "label.automate-store": "把物品存入这个箱子里",
+    "label.automate-store-first": "优先把物品存入这个箱子里",
+    "label.automate-store-disabled": "不要把物品存入这个箱子里",
+    "label.automate-take": "从这个箱子里取出物品",
+    "label.automate-take-first": "优先从这个箱子里取出物品",
+    "label.automate-take-disabled": "不要从这个箱子里取出物品",
 
-    // button labels
+    // button labels (按钮标签)
     "button.edit-chest": "编辑箱子",
     "button.sort-inventory": "整理",
     "button.save": "保存",
@@ -37,38 +41,38 @@
 
 
     /**********
-    ** Errors
+    ** Errors (报错)
     **********/
-    "errors.disabled-from-here": "你无法在当前位置访问这个箱子",
+    "errors.disabled-from-here": "您无法在当前位置访问这个箱子",
     "errors.no-chests": "当前没有可用箱子",
     "errors.no-chests-in-location": "当前区域没有可用箱子",
     "errors.no-chests-in-range": "范围内没有可用箱子",
 
 
     /**********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (通用模组配置菜单界面)
     **********/
     /****
-    ** general options
+    ** general options (常规选项)
     ****/
     "config.title.general-options": "常规选项",
 
     "config.show-hover-tooltips.name": "显示工具菜单",
-    "config.show-hover-tooltips.desc": "当你指向箱子时，是否在工具提示中显示箱子名称。",
+    "config.show-hover-tooltips.desc": "启用时，当您指向箱子时，会在工具提示中显示箱子名称。",
 
     "config.enable-shipping-bin.name": "启用出货箱",
-    "config.enable-shipping-bin.desc": "是否能够访问出货箱。",
+    "config.enable-shipping-bin.desc": "启用时允许您访问出货箱。",
 
-    "config.enable-sprinkler-attachments.name": "启用洒水器附件",
-    "config.enable-sprinkler-attachments.desc": "是否允许使用洒水器附件（如 增益器）。",
+    "config.enable-sprinkler-attachments.name": "启用洒水器部件",
+    "config.enable-sprinkler-attachments.desc": "启用时允许您访问洒水器部件（如：施肥器）。",
 
     "config.add-organize-player-items.name": "添加背包整理按钮",
-    "config.add-organize-player-items.desc": "始终显示背包整理按钮",
+    "config.add-organize-player-items.desc": "始终显示背包整理按钮。",
 
     /****
-    ** remote access
+    ** remote access (远程访问)
     ****/
-    "config.title.remote-access": "远程访问箱子设置",
+    "config.title.remote-access": "远程访问",
 
     "config.range.name": "箱子显示范围",
     "config.range.desc": "箱子可通过菜单访问的范围。",
@@ -81,55 +85,55 @@
     "config.disable-mines.desc": "是否在矿井或骷髅洞穴中禁用远程访问箱子的功能。",
 
     "config.disable-custom-names.name": "在某个位置时禁用",
-    "config.disable-custom-names.desc": "用于在某个位置时禁用远程访问箱子的功能。填写时请使用该位置的内部名称（如调试模式Mod所示）。可以用半角逗号列出多个。",
+    "config.disable-custom-names.desc": "用于在某个位置时禁用远程访问箱子的功能。填写时请使用该位置的内部名称（如调试模式模组所示）。可以用半角逗号列出多个。",
 
     /****
-    ** open menu hotkey
+    ** open menu hotkey (开启界面快捷键)
     ****/
-    "config.title.open-menu-hotkey": "用于打开箱子UI的热键",
+    "config.title.open-menu-hotkey": "快捷开启箱子界面",
 
-    "config.toggle-ui-key.name": "切换UI",
-    "config.toggle-ui-key.desc": "显示或隐藏箱子UI的按键",
+    "config.toggle-ui-key.name": "开关界面",
+    "config.toggle-ui-key.desc": "单击此键开启或关闭箱子界面。",
 
     "config.reopen-last-chest.name": "自动打开最后开过的箱子",
-    "config.reopen-last-chest.desc": "当你按下“切换UI”按钮时，是否重新打开当前游戏会话中你自己上次选择的箱子。",
+    "config.reopen-last-chest.desc": "当您按下“开关界面”的快捷键时，重新打开当前游戏会话中您自己上次选择的箱子。",
 
     "config.default-category.name": "默认类别",
-    "config.default-category.desc": "当你按下“切换界面”按钮时，默认显示此类别中的箱子（如果已设置）。此设置在启用“自动打开最后开过的箱子”之后生效。",
+    "config.default-category.desc": "当您按下“开关界面”的快捷键时，默认显示此类别中的箱子（如果已设置）。此设置在启用“自动打开最后开过的箱子”之后生效。",
 
     /****
-    ** controls when chest UI is open
+    ** controls when chest UI is open (箱子打开时的控制)
     ****/
-    "config.title.menu-controls": "箱子UI打开时控制设置",
+    "config.title.menu-controls": "箱子界面相关控制",
 
     "config.edit-chest.name": "编辑箱子",
-    "config.edit-chest.desc": "编辑当前箱子选项的按键。",
+    "config.edit-chest.desc": "单击此键编辑当前箱子选项。",
 
     "config.sort-items.name": "整理背包物品",
-    "config.sort-items.desc": "当打开任意箱子时，整理背包物品的按键",
+    "config.sort-items.desc": "当打开任意箱子时，单击此键整理背包物品。",
 
     "config.navigate-prev-chest.name": "导航：上一个箱子",
-    "config.navigate-prev-chest.desc": "在菜单打开时导航到上一个箱子的按键",
+    "config.navigate-prev-chest.desc": "当箱子界面已打开时，单击此键导航到上一个箱子。",
 
     "config.navigate-next-chest.name": "导航：下一个箱子",
-    "config.navigate-next-chest.desc": "菜单打开时导航到下一个箱子的按键",
+    "config.navigate-next-chest.desc": "当箱子界面已打开时，单击此键导航到下一个箱子。",
 
     "config.navigate-prev-category.name": "导航：上一个分类",
-    "config.navigate-prev-category.desc": "在菜单打开时导航到上一个分类的按键",
+    "config.navigate-prev-category.desc": "当箱子界面已打开时，单击此键导航到上一个分类。",
 
     "config.navigate-next-category.name": "导航：下一个分类",
-    "config.navigate-next-category.desc": "在菜单打开时导航到下一个分类的按键",
+    "config.navigate-next-category.desc": "当箱子界面已打开时，单击此键导航到下一个分类。",
 
     "config.hold-to-scroll-categories.name": "按住以滚动分类",
-    "config.hold-to-scroll-categories.desc": "按住时，可以用鼠标滚轮滚动分类的下拉菜单",
+    "config.hold-to-scroll-categories.desc": "按住此键时，可用鼠标滚轮滚动分类的下拉菜单。",
 
     "config.hold-to-scroll-chests.name": "按住以滚动箱子",
-    "config.hold-to-scroll-chests.desc": "按住时，可以用鼠标滚轮滚动箱子的下拉菜单",
+    "config.hold-to-scroll-chests.desc": "按住此键时，可用鼠标滚轮滚动箱子的下拉菜单。",
 
 
     /*********
-    ** Iconic Framework icon
+    ** Iconic Framework icon (框架图标)
     *********/
-    "icon.open-menu.name": "打开宝箱",
-    "icon.open-menu.desc": "任意地点打开宝箱"
+    "icon.open-menu.name": "打开箱子",
+    "icon.open-menu.desc": "在任意地点打开箱子。"
 }

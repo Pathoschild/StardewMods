@@ -35,16 +35,10 @@ Content Patcher 拥有一个[条件系统](author-guide/tokens.md)。内容包�
 1. 在 `manifest.json` 将 Content Patcher 设为[**必要依赖**](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)：
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.7.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.8.0" }
    ]
    ```
-2. 在您模组的 `.csproj` 里添加对 `ContentPatcher.dll` 的引用。同时将此引用设置为 `Private="False"` 以确保它不被复制到您的模组文件夹中：
-_译者注：这段似乎没更新，使用 API 只需将 `IContentPatcherAPI.cs` 和 `IManagedConditions.cs` 复制到您自己模组中即可。_
-   ```xml
-   <ItemGroup>
-     <Reference Include="ContentPatcher" HintPath="$(GameModsPath)\ContentPatcher\ContentPatcher.dll" Private="False" />
-   </ItemGroup>
-   ```
+2. 把 [`IContentPatcherAPI`](../../IContentPatcherAPI.cs) 和 [`IManagedConditions`](../IManagedConditions.cs) 复制到您模组里，然后删除**任何您不需要用到的方法，这主要是为了考虑未来版本的兼容性**。
 3. 在您的模组代码中（例如 [`GameLaunched` 事件](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Events#GameLoop.GameLaunched)）中，获取 Content Patcher 的 API：
    ```c#
    var api = this.Helper.ModRegistry.GetApi<ContentPatcher.IContentPatcherAPI>("Pathoschild.ContentPatcher");

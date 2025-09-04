@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Delegates;
+using StardewValley.Extensions;
+using StardewValley.GameData.Buildings;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Triggers;
 using SObject = StardewValley.Object;
@@ -75,6 +77,9 @@ internal class MigrateIdsAction
         Farmer[] players = Game1.getAllFarmers().ToArray();
         switch (type)
         {
+            case MigrateIdType.Buildings:
+                return this.TryMigrateBuildings(mapIds, out error);
+
             case MigrateIdType.CookingRecipes:
                 return this.TryMigrateCookingRecipeIds(players, mapIds, out error);
 
@@ -83,6 +88,9 @@ internal class MigrateIdsAction
 
             case MigrateIdType.Events:
                 return this.TryMigrateEventIds(players, mapIds, out error);
+
+            case MigrateIdType.FarmAnimals:
+                return this.TryMigrateFarmAnimals(mapIds, out error);
 
             case MigrateIdType.Items:
                 return this.TryMigrateItemIds(mapIds, out error);
@@ -103,6 +111,43 @@ internal class MigrateIdsAction
     /*********
     ** Private methods
     *********/
+    /// <summary>Try to migrate buildings.</summary>
+    /// <param name="mapIds">The old and new IDs to map.</param>
+    /// <param name="error">An error indicating why the migration failed.</param>
+    private bool TryMigrateBuildings(Dictionary<string, string> mapIds, out string? error)
+    {
+        // filter & validate
+        mapIds.RemoveWhere(pair => Game1.buildingData.ContainsKey(pair.Key));
+        foreach (string newId in mapIds.Values)
+        {
+            if (!Game1.buildingData.ContainsKey(newId))
+            {
+                error = $"the new building type \"{newId}\" doesn't match an existing building";
+                return false;
+            }
+        }
+
+        // apply
+        Utility.ForEachBuilding(building =>
+        {
+            if (building.buildingType.Value is {} oldType && mapIds.TryGetValue(oldType, out string? newType) && Game1.buildingData.TryGetValue(newType, out BuildingData? newData))
+            {
+                building.buildingType.Value = newType;
+
+                if (building.GetIndoors() is not null && newData.IndoorMap == null)
+                {
+                    building.indoors.Value = null;
+                    building.nonInstancedIndoorsName.Value = null;
+                }
+            }
+
+            return true;
+        });
+
+        error = null;
+        return true;
+    }
+
     /// <summary>Try to migrate cooking recipe IDs.</summary>
     /// <param name="players">The players to edit.</param>
     /// <param name="mapIds">The old and new IDs to map.</param>
@@ -175,6 +220,41 @@ internal class MigrateIdsAction
                 }
             }
         }
+
+        error = null;
+        return true;
+    }
+
+    /// <summary>Try to migrate farm animals.</summary>
+    /// <param name="mapIds">The old and new IDs to map.</param>
+    /// <param name="error">An error indicating why the migration failed.</param>
+    private bool TryMigrateFarmAnimals(IDictionary<string, string> mapIds, [NotNullWhen(false)] out string? error)
+    {
+        // validate & filter
+        mapIds.RemoveWhere(pair => Game1.farmAnimalData.ContainsKey(pair.Key));
+        foreach (string newId in mapIds.Values)
+        {
+            if (!Game1.farmAnimalData.ContainsKey(newId))
+            {
+                error = $"the new farm animal type \"{newId}\" doesn't match an existing animal";
+                return false;
+            }
+        }
+
+        // apply
+        Utility.ForEachLocation(location =>
+        {
+            foreach (FarmAnimal animal in location.animals.Values)
+            {
+                if (animal.type.Value != null && mapIds.TryGetValue(animal.type.Value, out string? newType))
+                {
+                    animal.type.Value = newType;
+                    animal.ReloadTextureIfNeeded(forceReload: true);
+                }
+            }
+
+            return true;
+        });
 
         error = null;
         return true;

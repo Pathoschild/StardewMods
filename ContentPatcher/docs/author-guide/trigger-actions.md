@@ -25,7 +25,7 @@ The argument format is `<type> [<old id> <new id>]+`:
 <td><code>&lt;type&gt;</code></td>
 <td>
 
-One of `CookingRecipes`, `CraftingRecipes`, `Events`, `Items`, `Mail`, or `Songs`.
+One of `Buildings`, `CookingRecipes`, `CraftingRecipes`, `Events`, `FarmAnimals`, `Items`, `Mail`, or `Songs`.
 
 </td>
 </tr>

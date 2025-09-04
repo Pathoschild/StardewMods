@@ -2,6 +2,15 @@
     /*********
     ** Data Layers UI
     *********/
+    // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
+    // TODO
+    "auto.name": "Auto",
+    "auto.name-active": "Auto ({{layerName}})",
+    "auto.name-inactive": "Auto (nothing to show)",
+
     // accessible
     "accessible.name": "Belegung",
     "accessible.clear": "Frei",
@@ -18,6 +27,13 @@
     // coverage: bee houses
     "bee-houses.name": "Abdeckung: Bienenhäuser",
     "bee-houses.range": "Blumenreichweite",
+
+    // coverage: bombs
+    // TODO
+    "bombs.name": "Coverage: Bombs",
+    "bombs.dig": "Dig Radius",
+    "bombs.explosion": "Destroy Object Radius",
+    "bombs.shockwave": "Shockwave Radius",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Abdeckung: Junimo-Hütten",
@@ -90,8 +106,12 @@
     "config.combine-borders.desc": "Ob bei der Überlappung von zwei gleichfarbigen Gruppen anstelle der einzelnen Ränder ein gemeinsamer Rand gezeichnet werden soll.",
 
     "config.color-scheme.name": "Farbschema",
-    "config.color-schene.desc": "Das anzuwendende Farbschema, welches die Farben für alle Datenebenen ändert.",
+    "config.color-scheme.desc": "Das anzuwendende Farbschema, welches die Farben für alle Datenebenen ändert.",
     "config.color-schemes.default": "Standardfarben",
+
+    // TODO
+    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
+    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
 
     // main controls
     "config.toggle-layer-key.name": "Toggle data layers",
@@ -106,6 +126,10 @@
     // data layers
     "config.layer-enabled.name": "Aktiviert",
     "config.layer-enabled.desc": "Ob diese Ebene im Spiel verfügbar sein soll.",
+
+    // TODO
+    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
+    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
 
     "config.layer-update-on-view-change.name": "Aktualisieren, wenn sich die Ansicht ändert",
     "config.layer-update-on-view-change.desc": "Ob die Informationen über die gezeichnete Ebene aktualisiert werden sollen, wenn ein neuer Teil der Welt in die Sicht kommt, unabhängig von der Einstellung „Aktualisierungen pro Sekunde“.",

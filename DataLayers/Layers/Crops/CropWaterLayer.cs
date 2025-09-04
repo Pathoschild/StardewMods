@@ -4,11 +4,12 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops;
 
 /// <summary>A data layer which shows whether crops needs to be watered.</summary>
-internal class CropWaterLayer : BaseLayer
+internal class CropWaterLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -44,6 +45,12 @@ internal class CropWaterLayer : BaseLayer
             this.GetGroup(location, visibleTiles, HoeDirt.watered, this.Watered),
             this.GetGroup(location, visibleTiles, HoeDirt.dry, this.Dry)
         ];
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item item)
+    {
+        return item is WateringCan;
     }
 
 

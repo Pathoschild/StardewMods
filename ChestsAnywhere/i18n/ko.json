@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "아이템 회수",
 
     // default category names
-    "default-category.owned-cabin": "오두막 ({{owner}})",
-    "default-category.unowned-cabin": "오두막 (비어있음)",
+    "default-category.cabin-owned": "오두막 ({{owner}})",
+    "default-category.cabin-unowned": "오두막 (비어있음)",
+    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
+    "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

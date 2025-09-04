@@ -8,7 +8,7 @@ using StardewValley.Buildings;
 namespace Pathoschild.Stardew.DataLayers.Layers;
 
 /// <summary>A data layer which shows whether tiles can be built on.</summary>
-internal class BuildableLayer : BaseLayer
+internal class BuildableLayer : BaseLayer, IAutoBuildingLayer
 {
     /*********
     ** Fields
@@ -52,6 +52,12 @@ internal class BuildableLayer : BaseLayer
             new TileGroup(buildableTiles[true], outerBorderColor: this.Buildable.Color),
             new TileGroup(buildableTiles[false])
         ];
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(string buildingType)
+    {
+        return true;
     }
 
 

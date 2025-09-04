@@ -63,7 +63,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，以下是一个 `content.json`，它使用您自己的图像替换阿比盖尔的肖像：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "Load",
@@ -110,7 +110,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 5. 创建一个 `content.json` 文件，内容如下：
    ```js
    {
-       "Format": "2.7.0",
+       "Format": "2.8.0",
        "Changes": [
            // 这里面是您要更改的内容
        ]
@@ -122,7 +122,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 ### 格式版本<a name="format-version"></a>
 `Format` 字段是您设计内容包所使用的 Content Patcher 版本。此字段用于保持内容包与未来版本的兼容性。
 
-您应该始终使用最新格式版本（当前为 `2.7.0`）以启用最新功能、避免使用被弃用的代码、减少加载模组的时间。
+您应该始终使用最新格式版本（当前为 `2.8.0`）以启用最新功能、避免使用被弃用的代码、减少加载模组的时间。
 
 ### 更改<a name="changes"></a>
 `Changes` 字段描述了您想在游戏中更改的内容。列表中的每个条目都被称为**补丁**，每个补丁都描述了一个特定的操作：编辑图像、更改对话等。您可以列出任意数量的补丁，也可以对同一文件应用多个补丁（它们将按所列的顺序依次应用）。
@@ -147,7 +147,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，如果您有一个 `assets/abigail.png` 图像，包含自定义的阿比盖尔肖像，这会更改她的游戏内肖像：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "Load",
@@ -178,7 +178,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如将苔藓汤的价格改为 80（请参阅[物体字段](https://zh.stardewvalleywiki.com/模组:物体)。
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -211,7 +211,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，如果您的内容包有一个 `assets/tuna.png` 图像，包含自定义的 [金枪鱼](https://zh.stardewvalleywiki.com/金枪鱼) 精灵，这会替换游戏内的金枪鱼精灵图：
 ```js
 {
-   "Format": "2.7.0",
+   "Format": "2.8.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -242,7 +242,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，将鹈鹕镇广场替换为自定义的样式：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -267,7 +267,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，您可以将其与 [Tokens 和条件](#tokens)结合以动态加载文件：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "Include",
@@ -299,7 +299,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，这让阿比盖尔在每个季节都有不同的肖像：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "Load",
@@ -313,7 +313,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 或者当玩家与她结婚后，使用不同的肖像：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "Load",
@@ -335,7 +335,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，您可以使用配置值作为 [Tokens 和条件](#tokens)：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -362,7 +362,7 @@ Content Patcher 可让您只使用 JSON 文件来更改游戏内容。JSON 只�
 例如，如果您的 `i18n` 文件包含键为 `rainy-day` 的翻译，您可以在任何支持[Tokens 和条件](#tokens) 的任何 Content Patcher 字段中访问它：
 ```js
 {
-    "Format": "2.7.0",
+    "Format": "2.8.0",
     "Changes": [
         {
             "Action": "EditData",

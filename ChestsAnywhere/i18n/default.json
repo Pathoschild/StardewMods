@@ -9,8 +9,12 @@
     "default-name.shipping-bin.take": "retrieve items",
 
     // default category names
-    "default-category.owned-cabin": "Cabin ({{owner}})",
-    "default-category.unowned-cabin": "Cabin (empty)",
+    "default-category.cabin-owned": "Cabin ({{owner}})",
+    "default-category.cabin-unowned": "Cabin (empty)",
+    "default-category.cellar-owned": "Cellar ({{owner}})",
+    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}",
+    "default-category.farmhouse": "Farmhouse",
+    "default-category.island-farmhouse": "Island Farmhouse",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

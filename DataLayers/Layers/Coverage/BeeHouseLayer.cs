@@ -10,7 +10,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage;
 
 /// <summary>A data layer which shows bee house coverage.</summary>
-internal class BeeHouseLayer : BaseLayer
+internal class BeeHouseLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -55,7 +55,7 @@ internal class BeeHouseLayer : BaseLayer
         var groups = new List<TileGroup>();
         foreach (Vector2 origin in visibleArea.Expand(this.MaxRadius).GetTiles())
         {
-            if (!location.objects.TryGetValue(origin, out SObject beeHouse) || !this.IsBeeHouse(beeHouse))
+            if (!location.objects.TryGetValue(origin, out SObject beeHouse) || !this.AppliesTo(beeHouse))
                 continue;
 
             TileData[] tiles = this
@@ -68,7 +68,7 @@ internal class BeeHouseLayer : BaseLayer
 
         // yield bee house being placed
         SObject heldObj = Game1.player.ActiveObject;
-        if (this.IsBeeHouse(heldObj))
+        if (this.AppliesTo(heldObj))
         {
             var tiles = this
                 .GetCoverage(location, cursorTile, visibleTiles)
@@ -79,17 +79,19 @@ internal class BeeHouseLayer : BaseLayer
         return groups.ToArray();
     }
 
+    /// <inheritdoc />
+    public bool AppliesTo(Item? item)
+    {
+        return
+            item?.Name == "Bee House"
+            && item is SObject obj
+            && obj.bigCraftable.Value;
+    }
+
 
     /*********
     ** Private methods
     *********/
-    /// <summary>Get whether a map object is a bee house.</summary>
-    /// <param name="obj">The map object.</param>
-    private bool IsBeeHouse(SObject? obj)
-    {
-        return obj != null && obj.bigCraftable.Value && obj.Name == "Bee House";
-    }
-
     /// <summary>Get a bee house tile radius.</summary>
     /// <param name="location">The bee house's location.</param>
     /// <param name="origin">The bee house's tile.</param>

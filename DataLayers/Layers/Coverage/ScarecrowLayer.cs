@@ -10,7 +10,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage;
 
 /// <summary>A data layer which shows scarecrow coverage.</summary>
-internal class ScarecrowLayer : BaseLayer
+internal class ScarecrowLayer : BaseLayer, IAutoItemLayer
 {
     /*********
     ** Fields
@@ -54,7 +54,7 @@ internal class ScarecrowLayer : BaseLayer
         var groups = new List<TileGroup>();
         foreach (Vector2 origin in visibleArea.Expand(this.MaxSearchRadius).GetTiles())
         {
-            if (!location.objects.TryGetValue(origin, out SObject scarecrow) || !scarecrow.IsScarecrow())
+            if (!location.objects.TryGetValue(origin, out SObject scarecrow) || !this.AppliesTo(scarecrow))
                 continue;
 
             TileData[] tiles = this
@@ -76,7 +76,7 @@ internal class ScarecrowLayer : BaseLayer
 
         // yield scarecrow being placed
         SObject heldObj = Game1.player.ActiveObject;
-        if (heldObj?.IsScarecrow() == true)
+        if (this.AppliesTo(heldObj))
         {
             var tiles = this
                 .GetCoverage(heldObj, visibleArea, cursorTile)
@@ -85,6 +85,14 @@ internal class ScarecrowLayer : BaseLayer
         }
 
         return groups.ToArray();
+    }
+
+    /// <inheritdoc />
+    public bool AppliesTo(Item? item)
+    {
+        return
+            item is SObject obj
+            && obj.IsScarecrow();
     }
 
 

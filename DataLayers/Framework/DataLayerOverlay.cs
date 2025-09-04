@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.DataLayers.Framework.Components;
+using Pathoschild.Stardew.DataLayers.Layers;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -79,6 +80,9 @@ internal class DataLayerOverlay : BaseOverlay
     /// <summary>Whether the game was paused last time the menu was updated.</summary>
     private bool WasPaused;
 
+    /// <summary>The legend opacity to set when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</summary>
+    private readonly float LegendAlphaOnHover;
+
     /*****
     ** Components
     *****/
@@ -110,16 +114,18 @@ internal class DataLayerOverlay : BaseOverlay
     /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
     /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
     /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
-    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
+    /// <param name="legendAlphaOnHover">The legend opacity to set when the cursor overlaps it, as a value between 0 (transparent) and 1 (opaque).</param>
+    public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IReadOnlyList<ILayer> layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid, float legendAlphaOnHover)
         : base(events, inputHelper, reflection, assumeUiMode: true)
     {
         if (!layers.Any())
             throw new InvalidOperationException("Can't initialize the data layers overlay with no data layers.");
 
-        this.Layers = layers.OrderBy(p => p.Name).ToArray();
+        this.Layers = layers.OrderByDescending(p => p is AutoLayer).ThenBy(p => p.Name).ToArray();
         this.DrawOverlay = drawOverlay;
         this.CombineOverlappingBorders = combineOverlappingBorders;
         this.ShowGrid = showGrid;
+        this.LegendAlphaOnHover = legendAlphaOnHover;
 
         this.SetLayer(this.Layers.First());
     }
@@ -160,7 +166,7 @@ internal class DataLayerOverlay : BaseOverlay
     public void SetLayer(ILayer layer)
     {
         this.CurrentLayer = layer;
-        this.LegendEntries = this.CurrentLayer.Legend.ToArray();
+        this.LegendEntries = this.CurrentLayer.Legend;
         this.TileGroups.Clear();
         this.UpdateCountdown = 0;
 
@@ -309,6 +315,21 @@ internal class DataLayerOverlay : BaseOverlay
         }
     }
 
+    /// <inheritdoc />
+    protected override void Update()
+    {
+        if (this.DrawOverlay())
+        {
+            // reset layer if needed
+            if (this.CurrentLayer.UpdateMetadata())
+                this.SetLayer(this.CurrentLayer);
+
+            // update top-left UI when visible
+            if (Game1.displayHUD)
+                this.Legend.Update();
+        }
+    }
+
     /// <summary>Reinitialize the UI components.</summary>
     [MemberNotNull(nameof(DataLayerOverlay.Legend), nameof(DataLayerOverlay.NextButton), nameof(DataLayerOverlay.PrevButton))]
     private void ReinitializeComponents()
@@ -323,7 +344,7 @@ internal class DataLayerOverlay : BaseOverlay
         Rectangle rightArrow = CommonSprites.Icons.RightArrow;
 
         this.PrevButton = new ClickableTextureComponent(new Rectangle(this.LeftMargin, this.TopMargin + 10, leftArrow.Width, leftArrow.Height), CommonSprites.Icons.Sheet, leftArrow, 1);
-        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries);
+        this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries, this.LegendAlphaOnHover);
         this.NextButton = new ClickableTextureComponent(new Rectangle(this.Legend.bounds.Right + this.ArrowPadding, this.TopMargin + 10, rightArrow.Width, rightArrow.Height), CommonSprites.Icons.Sheet, rightArrow, 1);
     }
 
