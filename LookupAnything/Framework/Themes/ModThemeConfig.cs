@@ -1,6 +1,4 @@
-using LookupAnything.Framework;
-
-namespace Pathoschild.Stardew.LookupAnything.Framework;
+namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
 /// <summary>As part of <see cref="ModConfig"/>, how to display the menu.</summary>
 internal sealed class ModThemeConfig

@@ -1,9 +1,8 @@
 
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework;
 
-namespace LookupAnything.Framework;
+namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
 /// <summary>Enum, which kind of IMenuBackground to create</summary>
 internal enum MenuBackgroundCategory

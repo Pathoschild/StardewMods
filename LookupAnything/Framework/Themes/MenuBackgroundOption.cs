@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.Stardew.LookupAnything.Framework;
+namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
 /// <summary>General menu background description</summary>
 public interface IMenuBackground

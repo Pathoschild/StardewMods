@@ -1,5 +1,5 @@
-using LookupAnything.Framework;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
