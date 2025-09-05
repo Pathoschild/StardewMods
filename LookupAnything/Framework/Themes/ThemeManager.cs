@@ -1,9 +1,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
@@ -16,11 +18,12 @@ internal record ThemeManager
     internal const string DEFAULT_BACKGROUND = "Letter_TornPaper";
     private const string LetterBG = "LooseSprites\\letterBG";
     private const string MenuTiles = "Maps\\MenuTiles";
+    private const string Asset_Themes = "Pathoschild.LookupAnything/Themes";
 
     /// <summary>Theme data asset</summary>
     private Dictionary<string, ThemeData>? ThemeDataCached;
 
-    internal Dictionary<string, ThemeData> ThemeData => this.ThemeDataCached ??= this.Helper.GameContent.Load<Dictionary<string, ThemeData>>(this.AssetName_ThemeData);
+    internal Dictionary<string, ThemeData> ThemeData => this.ThemeDataCached ??= Game1.content.Load<Dictionary<string, ThemeData>>(Asset_Themes);
 
     /// <summary>Current background key inner field</summary>
     private string CurrentTheme = DEFAULT_BACKGROUND;
@@ -44,9 +47,6 @@ internal record ThemeManager
     /// <summary>Get background keys for GMCM purposes</summary>
     internal string[] BackgroundKeys => [.. this.ThemeData.Keys];
 
-    /// <summary>Default menu background option</summary>
-    internal IAssetName AssetName_ThemeData;
-
     /// <summary>Mod helper instance</summary>
     private readonly IModHelper Helper;
 
@@ -57,7 +57,6 @@ internal record ThemeManager
         this.Helper = Helper;
         this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
         this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
-        this.AssetName_ThemeData = Helper.GameContent.ParseAssetName("Pathoschild.LookupAnything/Themes");
     }
 
     /// <summary>
@@ -83,7 +82,7 @@ internal record ThemeManager
     /// <param name="e"></param>
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (e.Name == this.AssetName_ThemeData)
+        if (e.Name.IsEquivalentTo(Asset_Themes))
         {
             e.LoadFrom(GetBuiltInBackgrounds, AssetLoadPriority.Exclusive);
         }
@@ -94,7 +93,7 @@ internal record ThemeManager
     /// <param name="e"></param>
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
-        if (e.Names.Contains(this.AssetName_ThemeData))
+        if (e.Names.Any(name => name.IsEquivalentTo(Asset_Themes)))
         {
             this.CurrentBackgroundImpl = null;
             this.ThemeDataCached = null;
