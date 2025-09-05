@@ -35,9 +35,6 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The data to display for this subject.</summary>
     private readonly ICustomField[] Fields;
 
-    /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(LetterBackground.WIDTH, LetterBackground.HEIGHT);
-
     /// <summary>Simplifies access to private game code.</summary>
     private readonly IReflectionHelper Reflection;
 
@@ -472,7 +469,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         else
         {
             this.width = Math.Min(Game1.tileSize * 20, viewport.X);
-            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+            this.height = Math.Min((int)(this.Theme.CurrentBackground.AspectRatio * this.width), viewport.Y);
 
             Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
             this.xPositionOnScreen = (int)origin.X;

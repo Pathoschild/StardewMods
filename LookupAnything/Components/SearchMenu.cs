@@ -26,9 +26,6 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Encapsulates logging and monitoring.</summary>
     private readonly IMonitor Monitor;
 
-    /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(LetterBackground.WIDTH, LetterBackground.HEIGHT);
-
     /// <summary>The clickable 'scroll up' icon.</summary>
     private readonly ClickableTextureComponent ScrollUpButton;
 
@@ -389,7 +386,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // update size
         this.width = Math.Min(Game1.tileSize * 14, viewport.X);
-        this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+        this.height = Math.Min((int)(this.Theme.CurrentBackground.AspectRatio * this.width), viewport.Y);
 
         // update position
         Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);

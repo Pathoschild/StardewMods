@@ -78,11 +78,13 @@ internal class ModEntry : Mod
 
         // load config
         this.Config = this.LoadConfig();
-        this.Theme = ThemeManager.FormBaseThemeManager();
-        this.Theme.CurrentBackgroundKey = this.Config.Theme.Background;
 
         // load translations
         I18n.Init(helper.Translation);
+
+        // load themes
+        this.Theme = new(this.Helper);
+        this.Theme.SetCurrentTheme(this.Config.Theme.Background);
 
         // load & validate database
         this.Metadata = this.LoadMetadata();

@@ -34,10 +34,10 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
                 set: (config, value) =>
                 {
                     config.Theme.Background = value;
-                    this.Theme.CurrentBackgroundKey = value;
+                    this.Theme.SetCurrentTheme(value);
                 },
                 allowedValues: this.Theme.BackgroundKeys,
-                formatAllowedValue: value => I18n.GetByKey(string.Concat("config.theme.menu-background.value.", value))
+                formatAllowedValue: this.Theme.GetDisplayName
             )
 
             // progression mode
