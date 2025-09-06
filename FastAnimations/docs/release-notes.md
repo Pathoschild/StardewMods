@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed the 'fade' animation speed affecting fades in events.
+
 ## 1.15.2
 Released 03 September 2025 for SMAPI 4.2.0 or later.
 

@@ -21,6 +21,7 @@ internal sealed class FadeHandler : BaseAnimationHandler
     {
         return
             Game1.fadeToBlack
+            && Game1.CurrentEvent is null // don't change fades in events, which (a) can cause freezes and (b) can change the impact of the cutscene
             && Game1.activeClickableMenu is null // e.g. when you arrive in a location by mine cart, the festival won't start on fade-in if the mine cart dialogue hasn't finished closing yet
             && this.ApplySkipsWhile(() =>
             {
