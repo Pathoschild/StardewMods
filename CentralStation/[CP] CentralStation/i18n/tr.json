@@ -31,7 +31,7 @@
     "food-court.dialogue.5": "Taze ve sıcak yiyeceklerimiz var! Yani, sıcak. Mikrodalgaya atılırsa.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
 
     "gift-shop.dialogue.1": "Uzaklara mı gidiyorsun? İhtiyacın olabilecek her şeyi yanına aldığından emin ol!",
-    "gift-shop.dialogue.2": "Eve mi dönüyorsun? Grab some souvenirs to bring back!",
+    "gift-shop.dialogue.2": "Eve mi dönüyorsun? Dönüşte götürmek için birkaç hediyelik eşya al!",
     "gift-shop.dialogue.3": "Yenilikçi gömleklerden oluşan geniş bir koleksiyonumuz bulunmakta. (Çok fazlalar, lütfen birkaç tane al.)",
     "gift-shop.dialogue.4": "O kadar çok şeyimiz var ki tüm bunları nereye koyacağımızı hiç bilmiyorum. Lütfen bir şeyler al!",
     "gift-shop.dialogue.5": "Soğuk bir yere mi gidiyorsun? Mağazamızda birtakım kışlıklar var!",
@@ -95,9 +95,8 @@
     "location.cola-machine.3": "(Bir şekilde kola makinesinin yardım etmek istediğini hissediyorsun.)",
 
     // employee lounge
-    // TODO
-    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
-    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+    "location.employee-lockers": "Çalışanların dolapları kilitli değil ancak bir şey seni izliyormuş gibi geliyor.",
+    "location.employee-fridge": "Çalışanların öğle yemekleri. Ortak olmak kabalık olur.",
 
 
     /*********
@@ -158,33 +157,31 @@
     "tourist.blackgull-pirate.1": "Titret beni keresteler! Diğerleri neredeler?",
     "tourist.blackgull-pirate.2": "Kara göründü...",
 
-    // TODO
-    "tourist.bag-dog.1": "(She's on an adventure.)",
-    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)",
+    "tourist.bag-dog.1": "(Bir maceraya atılmış.)",
+    "tourist.bag-dog.2": "(Taşınabilir yataklı çantasına sadece bir mola veriyor.)",
 
 
     /*********
     ** Furniture
     *********/
-    // TODO
     // calendars
-    "furniture.calendar-city.name": "City Calendar",
-    "furniture.calendar-nature.name": "Nature Calendar",
+    "furniture.calendar-city.name": "Şehir Takvimi",
+    "furniture.calendar-nature.name": "Doğa Takvimi",
 
     // wall decor
-    "furniture.clock.name": "Clock",
-    "furniture.transit-map.name": "Transit Map",
-    "furniture.travel-pictures.name": "Travel Pictures",
-    "furniture.welcome-sign.name": "Welcome Sign",
+    "furniture.clock.name": "Duvar Saati",
+    "furniture.transit-map.name": "Ulaşım Haritası",
+    "furniture.travel-pictures.name": "Seyahat Resimleri",
+    "furniture.welcome-sign.name": "Hoş Geldiniz Tabelası",
 
     // rugs
-    "furniture.posh-rug.name": "Posh Rug",
+    "furniture.posh-rug.name": "Sosyetik Kilim",
 
     // general decor
-    "furniture.board-sign.name": "Board Sign",
-    "furniture.postbox.name": "Postbox",
-    "furniture.suitcase-blue.name": "Blue Suitcase",
-    "furniture.suitcase-pink.name": "Pink Suitcase",
-    "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can"
+    "furniture.board-sign.name": "Ahşap Tabela",
+    "furniture.postbox.name": "Posta Kutusu",
+    "furniture.suitcase-blue.name": "Mavi Bavul",
+    "furniture.suitcase-pink.name": "Pembe Bavul",
+    "furniture.trash-can.name": "Çöp Kutusu",
+    "furniture.trash-can-messy.name": "Kirli Çöp Kutusu"
 }
