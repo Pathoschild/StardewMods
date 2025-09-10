@@ -103,6 +103,7 @@ internal class ModEntry : Mod
         helper.Events.Display.RenderedHud += this.OnRenderedHud;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
     }
 
 
@@ -123,16 +124,6 @@ internal class ModEntry : Mod
         this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
-        // add config UI
-        this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForLookupAnything()
-            {
-                Theme = this.Theme
-            },
-            get: () => this.Config,
-            set: config => this.Config = config
-        );
-
         // add Iconic Framework integration
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
         if (iconicFramework.IsLoaded)
@@ -146,6 +137,28 @@ internal class ModEntry : Mod
                 onRightClick: this.TryToggleSearch
             );
         }
+    }
+
+    /// <summary>
+    /// Add config menu 3 ticks after launch to account for content edits to theme data
+    /// Note: conditional edits to the asset made after this point will not appear on GMCM
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
+    {
+        if (Game1.ticks < 3)
+            return;
+        // add config UI
+        this.AddGenericModConfigMenu(
+        new GenericModConfigMenuIntegrationForLookupAnything()
+        {
+            Theme = this.Theme
+        },
+        get: () => this.Config,
+        set: config => this.Config = config
+    );
+        this.Helper.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
     }
 
     /// <inheritdoc cref="IGameLoopEvents.DayStarted" />
