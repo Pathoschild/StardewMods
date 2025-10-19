@@ -183,5 +183,13 @@
     "furniture.suitcase-blue.name": "Valigia blu",
     "furniture.suitcase-pink.name": "Valigia rosa",
     "furniture.trash-can.name": "Cestino dei rifiuti",
-    "furniture.trash-can-messy.name": "Cestino dei rifiuti incasinato"
+    "furniture.trash-can-messy.name": "Cestino dei rifiuti incasinato",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // TODO
+    "config.require-pam-bus.name": "Require Pam's bus",
+    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
 }

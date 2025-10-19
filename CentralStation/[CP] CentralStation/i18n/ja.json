@@ -183,5 +183,13 @@
     "furniture.suitcase-blue.name": "青のスーツケース",
     "furniture.suitcase-pink.name": "ピンクのスーツケース",
     "furniture.trash-can.name": "大型ゴミ箱",
-    "furniture.trash-can-messy.name": "散らかった大型ゴミ箱"
+    "furniture.trash-can-messy.name": "散らかった大型ゴミ箱",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // TODO
+    "config.require-pam-bus.name": "Require Pam's bus",
+    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
 }

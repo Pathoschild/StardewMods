@@ -28,8 +28,12 @@
             "Target": "Mods/{{MainModId}}/InternalTranslations",
             "Priority": "Early",
             "Entries": {
+                // destination names
                 "destinations.from-bus-locations-mod": "{{i18n: destinations.from-bus-locations-mod}}",
                 "destinations.from-train-station-mod": "{{i18n: destinations.from-train-station-mod}}",
+
+                // rare messages in Central Station
+                "location.exit-door.strange-sounds": "{{i18n: location.exit-door.strange-sounds}}",
 
                 "location.ticket-counter.1": "{{i18n: location.ticket-counter.1}}",
                 "location.ticket-counter.2": "{{i18n: location.ticket-counter.2}}",
@@ -43,10 +47,12 @@
                 "location.cola-machine.2": "{{i18n: location.cola-machine.2}}",
                 "location.cola-machine.3": "{{i18n: location.cola-machine.3}}",
 
-                "location.exit-door": "{{i18n: location.exit-door}}",
-                "location.exit-door.strange-sounds": "{{i18n: location.exit-door.strange-sounds}}",
+                // shop dialogues
+                "vendor-shop.dialogue.coming-soon": "{{i18n: vendor-shop.dialogue.coming-soon}}",
 
-                "vendor-shop.dialogue.coming-soon": "{{i18n: vendor-shop.dialogue.coming-soon}}"
+                // config UI
+                "config.require-pam-bus.name": "{{i18n: config.require-pam-bus.name}}",
+                "config.require-pam-bus.desc": "{{i18n: config.require-pam-bus.desc}}"
             }
         }
     ]

@@ -183,5 +183,13 @@
     "furniture.suitcase-blue.name": "Mavi Bavul",
     "furniture.suitcase-pink.name": "Pembe Bavul",
     "furniture.trash-can.name": "Çöp Kutusu",
-    "furniture.trash-can-messy.name": "Kirli Çöp Kutusu"
+    "furniture.trash-can-messy.name": "Kirli Çöp Kutusu",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // TODO
+    "config.require-pam-bus.name": "Require Pam's bus",
+    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
 }

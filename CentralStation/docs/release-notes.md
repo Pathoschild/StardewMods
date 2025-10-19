@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added option to require Pam's bus to depart from the Stardew Valley bus stop.
 * Improved translations. Thanks to Lexith (updated Turkish)!
 
 ## 1.5.1

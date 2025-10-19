@@ -39,6 +39,9 @@ internal class ContentManager
     /// <summary>Encapsulates monitoring and logging.</summary>
     private readonly IMonitor Monitor;
 
+    /// <summary>The mod configuration.</summary>
+    private readonly Func<ModConfig> Config;
+
     /// <summary>The messages shown when the player clicks a bookshelf.</summary>
     private readonly LiveMessageQueue BookshelfMessages;
 
@@ -59,11 +62,13 @@ internal class ContentManager
     /// <param name="contentHelper">The SMAPI API for loading and managing content assets.</param>
     /// <param name="modRegistry">The SMAPI API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    public ContentManager(IGameContentHelper contentHelper, IModRegistry modRegistry, IMonitor monitor)
+    /// <param name="config">The mod configuration.</param>
+    public ContentManager(IGameContentHelper contentHelper, IModRegistry modRegistry, IMonitor monitor, Func<ModConfig> config)
     {
         this.ContentHelper = contentHelper;
         this.ModRegistry = modRegistry;
         this.Monitor = monitor;
+        this.Config = config;
 
         this.BookshelfMessages = new LiveMessageQueue(loop: true, shuffle: true, this.GetBookshelfMessages);
     }
@@ -403,6 +408,14 @@ internal class ContentManager
     /*********
     ** Private methods
     *********/
+    /// <summary>Whether the ticket machine is available at the Stardew Valley bus stop.</summary>
+    private bool HomeBusStopHasTicketMachine()
+    {
+        return
+            !this.Config().RequirePamBus
+            || Game1.MasterPlayer.hasOrWillReceiveMail("ccVault");
+    }
+
     /// <summary>Add the Central Station action properties for vanilla or legacy ticket machines.</summary>
     /// <param name="location">The location whose map to change.</param>
     private void ConvertPreviousTicketMachines(GameLocation location)
@@ -445,7 +458,7 @@ internal class ContentManager
                 }
 
                 // add to bus stop
-                if (isBusStop && tile.TileIndex is 1057 && tile.TileSheet?.Id is "outdoors")
+                if (isBusStop && tile.TileIndex is 1057 && tile.TileSheet?.Id is "outdoors" && this.HomeBusStopHasTicketMachine())
                     this.TryAddTicketMachine(map, x, y, StopNetworks.Bus);
             }
         }
@@ -702,6 +715,9 @@ internal class ContentManager
     /// <param name="asset">The map asset to edit.</param>
     private void EditBusStopMap(IAssetDataForMap asset)
     {
+        if (!this.HomeBusStopHasTicketMachine())
+            return;
+
         // replace ticket machine
         // This reduces headaches due to the vanilla game's hardcode tile index checks applying before Central Station's action property
         Layer? layer = asset.Data.GetLayer("Buildings");

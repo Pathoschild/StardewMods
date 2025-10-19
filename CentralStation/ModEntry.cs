@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using Pathoschild.Stardew.CentralStation.Framework;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
 using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -35,6 +36,9 @@ internal class ModEntry : Mod
     /// <summary>Whether the Bus Locations mod is installed, regardless of whether it has any stops loaded.</summary>
     private bool HasBusLocationsMod;
 
+    /// <summary>The mod configuration.</summary>
+    private ModConfig Config = null!; // set in Entry
+
     /// <summary>Whether the player received a free item from a cola machine since they arrived in the Central Station.</summary>
     private readonly PerScreen<bool> GotRareColaDrop = new();
 
@@ -53,8 +57,9 @@ internal class ModEntry : Mod
             return;
 
         // init
-        this.ContentManager = new(helper.GameContent, helper.ModRegistry, this.Monitor);
-        this.StopManager = new Lazy<StopManager>(() => new(this.ContentManager, this.Monitor, helper.ModRegistry)); // must be lazy since we can't access mod-provided APIs in Entry
+        this.Config = helper.ReadConfig<ModConfig>();
+        this.ContentManager = new ContentManager(helper.GameContent, helper.ModRegistry, this.Monitor, () => this.Config);
+        this.StopManager = new Lazy<StopManager>(() => new StopManager(this.ContentManager, this.Monitor, helper.ModRegistry, () => this.Config)); // must be lazy since we can't access mod-provided APIs in Entry
         this.HasBusLocationsMod = helper.ModRegistry.IsLoaded(BusLocationsStopProvider.ModId);
 
         // hook events
@@ -376,7 +381,23 @@ internal class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched" />
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        // load content packs
         this.LoadReassignedContentPacks();
+
+        // add config UI
+        this.AddGenericModConfigMenu(
+            new GenericModConfigMenuIntegrationForCentralStation(this.ContentManager.GetTranslation),
+            get: () => this.Config,
+            set: config => this.Config = config,
+            onSaved: this.OnConfigChanged
+        );
+    }
+
+    /// <summary>Handle the mod settings being edited through Generic Mod Config Menu.</summary>
+    private void OnConfigChanged()
+    {
+        // reapply 'require Pam bus' option
+        this.Helper.GameContent.InvalidateCache("Maps/BusStop");
     }
 
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
