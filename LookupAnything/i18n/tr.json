@@ -712,8 +712,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Ana seçenekler",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Tam ekranı zorla",
     "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
 

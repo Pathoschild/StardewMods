@@ -84,7 +84,7 @@ internal class ModEntry : Mod
 
         // load theme
         this.Theme = new ThemeManager(this.Helper.Events, this.Helper.GameContent);
-        this.Theme.SetCurrentTheme(this.Config.Theme.ThemeId);
+        this.Theme.SetCurrentTheme(this.Config.ThemeId);
 
         // load & validate database
         this.Metadata = this.LoadMetadata();

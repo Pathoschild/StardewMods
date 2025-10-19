@@ -712,8 +712,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Hauptoptionen",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Erzwinge Vollbild",
     "config.force-full-screen.desc": "Legt fest, ob das Menü immer als Vollbild angezeigt werden soll, anstatt in der Mitte des Fensters. Dies ist vor allem bei der Anzeige von Data Mining Feldern nützlich.",
 

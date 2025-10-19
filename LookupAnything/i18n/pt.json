@@ -714,8 +714,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Opções principais",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Forçar tela cheia",
     "config.force-full-screen.desc": "Se o menu deve estar sempre em tela cheia, em vez de centralizado na janela. Isso é útil principalmente ao visualizar campos de mineração de dados.",
 

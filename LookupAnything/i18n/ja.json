@@ -713,8 +713,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "メインオプション",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "フルスクリーン表示",
     "config.force-full-screen.desc": "メニューを画面中央ではなく、フルスクリーンで表示。これは主に、データマイニングのフィールドを表示するときに便利です。",
 

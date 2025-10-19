@@ -712,12 +712,7 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Main options",
-    "config.force-full-screen.name": "Force full screen",
-    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
-
-    // themes
+    // appearance
     "config.title.appearance": "Appearance",
 
     "config.theme.menu-background.name": "Visual theme",
@@ -730,6 +725,9 @@
     "config.theme.menu-background.values.MenuBox_Border": "MenuBox: Border",
     "config.theme.menu-background.values.MenuBox_Inset": "MenuBox: Inset",
     "config.theme.menu-background.values.MenuBox_Raised": "MenuBox: Raised",
+
+    "config.force-full-screen.name": "Force full screen",
+    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
 
     // progression mode
     "config.title.progression": "Progression mode",

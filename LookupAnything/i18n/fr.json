@@ -714,8 +714,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Options principales",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Forcer le plein écran",
     "config.force-full-screen.desc": "Si le menu doit toujours être en plein écran, au lieu d'être centré dans la fenêtre. Ceci est principalement utile lors de l'affichage des champs d'exploration de données.",
 

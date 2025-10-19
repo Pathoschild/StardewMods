@@ -712,8 +712,9 @@
     /*********
     ** Generic Mod Config Menu UI (通用模组管理菜单界面)
     *********/
-    // main options (主要选项)
-    "config.title.main-options": "常规",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "强制全屏",
     "config.force-full-screen.desc": "是否全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
 

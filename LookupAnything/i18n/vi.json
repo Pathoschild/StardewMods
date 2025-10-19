@@ -713,8 +713,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Tùy chọn chính",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Toàn màn hình",
     "config.force-full-screen.desc": "Menu có luôn luôn ở chế độ toàn màn hình hay không, thay vì hiển thị ở giữa cửa sổ. Điều này chủ yếu hữu ích khi xem các trường dữ liệu khai thác.",
 

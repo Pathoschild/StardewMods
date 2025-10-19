@@ -31,28 +31,25 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
         menu
             .Register()
 
-            // main options
-            .AddSectionTitle(I18n.Config_Title_MainOptions)
-            .AddCheckbox(
-                name: I18n.Config_ForceFullScreen_Name,
-                tooltip: I18n.Config_ForceFullScreen_Desc,
-                get: config => config.ForceFullScreen,
-                set: (config, value) => config.ForceFullScreen = value
-            )
-
             // appearance
             .AddSectionTitle(I18n.Config_Title_Appearance)
             .AddDropdown(
                 name: I18n.Config_Theme_MenuBackground_Name,
                 tooltip: I18n.Config_Theme_MenuBackground_Desc,
-                get: config => config.Theme.ThemeId,
+                get: config => config.ThemeId,
                 set: (config, value) =>
                 {
-                    config.Theme.ThemeId = value;
+                    config.ThemeId = value;
                     this.Theme.SetCurrentTheme(value);
                 },
                 allowedValues: this.Theme.GetAvailableThemeIds().ToArray(),
                 formatAllowedValue: this.Theme.GetDisplayName
+            )
+            .AddCheckbox(
+                name: I18n.Config_ForceFullScreen_Name,
+                tooltip: I18n.Config_ForceFullScreen_Desc,
+                get: config => config.ForceFullScreen,
+                set: (config, value) => config.ForceFullScreen = value
             )
 
             // progression mode

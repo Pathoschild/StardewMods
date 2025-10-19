@@ -12,6 +12,15 @@ internal class ModConfig
     ** Accessors
     *********/
     /****
+    ** Appearance
+    ****/
+    /// <summary>The visual theme to apply to the menu.</summary>
+    public string ThemeId { get; set; } = ThemeManager.DefaultThemeId;
+
+    /// <summary>Whether the menu should always be full-screen, instead of centered in the window.</summary>
+    public bool ForceFullScreen { get; set; } = false;
+
+    /****
     ** Common settings
     ****/
     /// <summary>The key bindings.</summary>
@@ -54,9 +63,6 @@ internal class ModConfig
     /// <summary>Whether to include map tiles as lookup targets.</summary>
     public bool EnableTileLookups { get; set; }
 
-    /// <summary>Whether the menu should always be full-screen, instead of centered in the window.</summary>
-    public bool ForceFullScreen { get; set; } = false;
-
     /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
     public int ScrollAmount { get; set; } = 160;
 
@@ -65,9 +71,6 @@ internal class ModConfig
 
     /// <summary>Whether to show recipes involving error items.</summary>
     public bool ShowInvalidRecipes { get; set; } = false;
-
-    /// <summary>The visual theme to apply to the menu.</summary>
-    public ModThemeConfig Theme { get; set; } = new();
 
 
     /*********
@@ -83,6 +86,6 @@ internal class ModConfig
         this.Controls ??= new ModConfigKeys();
         this.ShowGiftTastes ??= new ModGiftTasteConfig();
         this.CollapseLargeFields ??= new ModCollapseLargeFieldsConfig();
-        this.Theme ??= new ModThemeConfig();
+        this.ThemeId ??= ThemeManager.DefaultThemeId;
     }
 }

@@ -713,8 +713,9 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Opcje główne",
+    // appearance
+    "config.title.appearance": "Appearance", // TODO
+
     "config.force-full-screen.name": "Wymuś pełny ekran",
     "config.force-full-screen.desc": "Czy interfejs podglądu powinien być zawsze pełnoekranowy, a nie wyśrodkowany w oknie. Jest to przydatne głównie podczas przeglądania pól data miningu.",
 
