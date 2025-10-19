@@ -13,7 +13,7 @@ public sealed class ThemeData
     ** Metadata
     ****/
     /// <summary>A translated display name shown in UIs.</summary>
-    public string DisplayName { get; set; } = I18n.Config_Theme_MenuBackground_Values_LetterTornPaper();
+    public string DisplayName { get; set; } = I18n.Config_Theme_Values_Parchment();
 
     /****
     ** Background

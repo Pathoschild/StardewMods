@@ -34,8 +34,8 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
             // appearance
             .AddSectionTitle(I18n.Config_Title_Appearance)
             .AddDropdown(
-                name: I18n.Config_Theme_MenuBackground_Name,
-                tooltip: I18n.Config_Theme_MenuBackground_Desc,
+                name: I18n.Config_Theme_Name,
+                tooltip: I18n.Config_Theme_Desc,
                 get: config => config.ThemeId,
                 set: (config, value) =>
                 {

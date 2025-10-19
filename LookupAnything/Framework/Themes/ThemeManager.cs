@@ -18,10 +18,10 @@ internal record ThemeManager
     ** Constants
     ****/
     /// <summary>The default theme ID.</summary>
-    internal const string DefaultThemeId = "Letter_TornPaper";
+    internal const string DefaultThemeId = "Parchment";
 
-    /// <summary>The asset name for the default 'torn paper' background.</summary>
-    private const string TornPaperBackgroundAssetName = "LooseSprites\\letterBG";
+    /// <summary>The asset name for the default 'parchment' background.</summary>
+    private const string ParchmentBackgroundAssetName = "LooseSprites\\letterBG";
 
     /// <summary>The asset name for the menu box background.</summary>
     private const string MenuBoxBackgroundAssetName = "Maps\\MenuTiles";
@@ -142,39 +142,24 @@ internal record ThemeManager
     {
         return new Dictionary<string, ThemeData>
         {
-            ["Plain"] = new()
-            {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_Plain(),
-                BackgroundType = MenuBackgroundType.PlainColor,
-                BackgroundColor = "Wheat",
-                BorderColor = "BurlyWood",
-                BackgroundPadding = 8
-            },
             [DefaultThemeId] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterTornPaper(),
+                DisplayName = I18n.Config_Theme_Values_Parchment(),
                 BackgroundType = MenuBackgroundType.FixedSprite,
-                BackgroundTexture = TornPaperBackgroundAssetName,
+                BackgroundTexture = ParchmentBackgroundAssetName,
                 BackgroundSourceRect = new Rectangle(0, 0, 320, 180)
             },
-            ["Letter_Notepad"] = new()
+            ["Joja"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterNotepad(),
+                DisplayName = I18n.Config_Theme_Values_Joja(),
                 BackgroundType = MenuBackgroundType.FixedSprite,
-                BackgroundTexture = TornPaperBackgroundAssetName,
-                BackgroundSourceRect = new Rectangle(320, 0, 320, 180)
-            },
-            ["Letter_Joja"] = new()
-            {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterJoja(),
-                BackgroundType = MenuBackgroundType.FixedSprite,
-                BackgroundTexture = TornPaperBackgroundAssetName,
+                BackgroundTexture = ParchmentBackgroundAssetName,
                 BackgroundSourceRect = new Rectangle(0, 204, 320, 180),
                 BackgroundPadding = 48
             },
             ["MenuBox_Border"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxBorder(),
+                DisplayName = I18n.Config_Theme_Values_MenuBoxBorder(),
                 BackgroundType = MenuBackgroundType.MenuBox,
                 BackgroundTexture = MenuBoxBackgroundAssetName,
                 BackgroundSourceRect = new Rectangle(0, 256, 60, 60),
@@ -182,7 +167,7 @@ internal record ThemeManager
             },
             ["MenuBox_Inset"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxInset(),
+                DisplayName = I18n.Config_Theme_Values_MenuBoxInset(),
                 BackgroundType = MenuBackgroundType.MenuBox,
                 BackgroundTexture = MenuBoxBackgroundAssetName,
                 BackgroundSourceRect = new Rectangle(0, 320, 60, 60),
@@ -190,11 +175,19 @@ internal record ThemeManager
             },
             ["MenuBox_Raised"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxRaised(),
+                DisplayName = I18n.Config_Theme_Values_MenuBoxRaised(),
                 BackgroundType = MenuBackgroundType.MenuBox,
                 BackgroundTexture = MenuBoxBackgroundAssetName,
                 BackgroundSourceRect = new Rectangle(60, 320, 60, 60),
                 BackgroundPadding = 4
+            },
+            ["Plain"] = new()
+            {
+                DisplayName = I18n.Config_Theme_Values_Plain(),
+                BackgroundType = MenuBackgroundType.PlainColor,
+                BackgroundColor = "Wheat",
+                BorderColor = "BurlyWood",
+                BackgroundPadding = 8
             }
         };
     }
