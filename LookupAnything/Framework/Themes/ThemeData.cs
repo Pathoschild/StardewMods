@@ -21,7 +21,7 @@ public sealed class ThemeData
     /// <summary>How the menu background should be drawn.</summary>
     public MenuBackgroundType BackgroundType { get; set; } = MenuBackgroundType.FixedSprite;
 
-    /// <summary>The background texture to draw, depending on the <see cref="BackgroundType"/>.</summary>
+    /// <summary>The background texture to draw, if applicable based on the <see cref="BackgroundType"/>.</summary>
     public string BackgroundTexture { get; set; } = "LooseSprites\\letterBG";
 
     /// <summary>The pixel area within the <see cref="BackgroundTexture"/> to draw.</summary>

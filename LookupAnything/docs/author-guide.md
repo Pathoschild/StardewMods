@@ -1,61 +1,148 @@
 ﻿← [README](README.md)
 
-This page helps mod authors integrate with Lookup Anything and describes how to add new UI themes via Content Patcher. **See the [main README](README.md) for other
-info.**
+This page helps mod authors integrate with Lookup Anything. **See the [main README](README.md) for other info.**
 
 ## Contents
-* [Show your mod in the 'Added by mod' field](#added-by-mod)
-* [Add a UI theme via Content Patcher](#new-ui-theme)
+* [Support for mod content](#support-for-mod-content)
+  * ['Added by mod' field](#added-by-mod-field)
+  * [Nested items](#nested-items)
+  * [Hovered content in custom menus](#hovered-content-in-custom-menus)
+* [Add a UI theme](#add-a-ui-theme)
+
+## Support for mod content
+### 'Added by mod' field
+When players look up content in-game (like an item or NPC), the _added by mod_ field shows which mod added it if
+possible.
+
+For this to work, you must apply the standard [unique string ID](https://stardewvalleywiki.com/Modding:Common_data_field_types#Unique_string_ID)
+format (including the mod ID prefix).
+
+### Nested items
+Lookup Anything scans the world to detect items for the 'number owned' and gift taste fields. It
+scans inside standard items recursively; for example, if you have an `Object` with the `heldObject`
+field set to a chest, Lookup Anything will look inside the chest too.
+
+If you have a custom non-`Object` item (e.g. a tool) which contains items, you can add a custom
+`heldObject` field or property with any `Item` type. For example:
+
+```c#
+// store one item
+public Object heldObject;
+
+// store many items
+public Chest heldObject = new Chest();
+```
+
+Lookup Anything will detect the field and search inside it too.
+
+### Hovered content in custom menus
+Lookup Anything detects when the cursor is over an item or NPC in standard menus.
+
+For custom menus, you can add one or both of these fields:
+* a `HoveredItem` field with any `Item` type:
+  ```c#
+  public Object HoveredItem;
+  ```
+* and/or a `HoveredNpc` field with any `NPC` type:
+  ```c#
+  public NPC HoveredNpc;
+  ```
+
+If present, Lookup Anything will handle them automatically.
+
+## Add a UI theme
+Lookup Anything uses visual themes to change its menu appearance.
+
+You can add UI themes by editing the `Mods/Pathoschild.LookupAnything/Themes` asset. Any theme in
+that asset will appear in the config UI for Lookup Anything.
+
+The asset consists of a `string` → model lookup, where...
+- The key is a unique ID for the theme.
+- The value is a model with the fields listed below.
+
+<table>
+<tr>
+<th>field</th>
+<th>effect</th>
+</tr>
+
+<tr>
+<td><code>DisplayName</code></td>
+<td>A translated display name shown in UIs.</td>
+</tr>
 
 
-## Show your mod in the 'Added by mod' field <a name="added-by-mod"></a>
+<tr>
+<td><code>BackgroundType</code></td>
+<td>
 
-Lookup Anything has a field 'Added by mod' which displays which mod added a given item/NPC/farm animal/building/tree/fruit tree/movie snack.
-The mod name is determined by inspecting the (unqualified) internal ID of a subject for a `<ModId>_` prefix, then checking that against the loaded mods.
+How the menu background should be drawn. Default `FixedSprite`.
 
-For example, if your mod is named "The Great Pufferfish Escapade" with mod ID "YourName.PufferfishEscapade" and you had these objects added via `Data/Objects`:
+The possible values are:
+* `FixedSprite`: draw a texture background sprite over the entire area.
+* `MenuBox`: draw a menu box by taking specific sprites from the texture background for the corners, edges, and center.
+* `PlainColor`: draw a plain colored background with no texture.
 
-- `YourName.PufferfishEscapade_Thingy`: Lookup Anything will show "Added by mod: The Great Pufferfish Escapade".
-- `YourName.PufferfishEscapade.Thingy`: Lookup Anything will NOT show "Added by mod".
-- `Thingy`: Lookup Anything will NOT show "Added by mod".
+</td>
+</tr>
 
-## Add a UI theme via Content Patcher <a name="new-ui-theme"></a>
+<tr>
+<td><code>BackgroundTexture</code></td>
+<td>The background texture to draw, if applicable based on the <code>BackgroundType</code>.</td>
+</tr>
 
-You can add new UI themes to Lookup Anything by editing the asset named `Mods/Pathoschild.LookupAnything/Themes`.
-The player will be able to select your theme via config.
+<tr>
+<td><code>BackgroundSourceRect</code></td>
+<td>The pixel area within the <code>BackgroundTexture</code> to draw.</td>
+</tr>
 
-Example, using Content Patcher:
+<tr>
+<td><code>BackgroundColor</code></td>
+<td>
+
+The [color code](https://stardewvalleywiki.com/Modding:Common_data_field_types#Color) for the background (default
+`White`).
+
+The effect depends on the `BackgroundType`:
+
+* `FixedSprite` and `MenuBox`: applied as a tint to the background texture (where `White` means no tint).
+* `PlainColor`: the color to use as the background.
+
+</td>
+</tr>
+
+<tr>
+<td><code>BackgroundPadding</code></td>
+<td>The pixel spacing between the edge of the <code>BackgroundTexture</code> and the inner content. Default 0.</td>
+</tr>
+
+<tr>
+<td><code>BorderColor</code></td>
+<td>
+
+The [color code](https://stardewvalleywiki.com/Modding:Common_data_field_types#Color) for the border drawn around the background
+(default `Black`).
+
+</td>
+</tr>
+
+</table>
+
+For example, [using Content Patcher](https://stardewvalleywiki.com/Modding:Content_Patcher):
 
 ```js
 {
     "Action": "EditData",
     "Target": "Mods/Pathoschild.LookupAnything/Themes",
     "Entries": {
-        // The key should be unique
         "{{ModId}}_MenuBox_Purple": {
-            // This name will appear in Lookup Anything's GMCM
-            "DisplayName": "MenuBox: Purple",
-            // There are 3 kinds of background display
-            // - PlainColor: solid BackgroundColor bordered by BorderColor
-            // - FixedSprite: a fixed texture whose aspect ratio is respected
-            // - MenuBox: a texture that will be sliced and expanded while keeping the border as they are
+            "DisplayName": "Menu box (purple)",
             "BackgroundCategory": "MenuBox",
-            // Background texture asset, can be vanilla texture or custom texture
-            "BackgroundTexture": "Maps\\MenuTilesUncolored",
-            // Area of background texture to use for this theme
-            "BackgroundSourceRect": {
-                "X": 0,
-                "Y": 256,
-                "Width": 60,
-                "Height": 60
-            },
-            // Color used for the background draw, this can be named color or hex or rgba
+            "BackgroundTexture": "Maps/MenuTilesUncolored",
+            "BackgroundSourceRect": { "X": 0, "Y": 256, "Width": 60, "Height": 60 },
             "BackgroundColor": "Purple",
-            // Color used for the border draw when BackgroundCategory=PlainColor, this can be named color or hex or rgba
-            "BorderColor": "Black",
-            // Padding around the background's edges and the body 
             "BackgroundPadding": 4
-        },
+        }
     }
 }
 ```
