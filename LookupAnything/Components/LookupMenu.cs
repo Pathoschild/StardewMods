@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -28,17 +29,17 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Encapsulates logging and monitoring.</summary>
     private readonly IMonitor Monitor;
 
+    /// <summary>Simplifies access to private game code.</summary>
+    private readonly IReflectionHelper Reflection;
+
+    /// <summary>The theme to apply for the menu appearance.</summary>
+    private readonly ThemeManager Theme;
+
     /// <summary>A callback which shows a new lookup for a given subject.</summary>
     private readonly Action<ISubject> ShowNewPage;
 
     /// <summary>The data to display for this subject.</summary>
     private readonly ICustomField[] Fields;
-
-    /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
-
-    /// <summary>Simplifies access to private game code.</summary>
-    private readonly IReflectionHelper Reflection;
 
     /// <summary>The amount to scroll long content on each up/down scroll.</summary>
     private readonly int ScrollAmount;
@@ -96,17 +97,19 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="subject">The metadata to display.</param>
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
     /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+    /// <param name="theme">The theme to apply for the menu appearance.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
     /// <param name="showDebugFields">Whether to display debug fields.</param>
     /// <param name="forceFullScreen">Whether the menu should always be full-screen, instead of centered in the window.</param>
     /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage)
+    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, ThemeManager theme, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage)
     {
         // save data
         this.Subject = subject;
         this.Fields = subject.GetData().Where(p => p.HasValue).ToArray();
         this.Monitor = monitor;
         this.Reflection = reflectionHelper;
+        this.Theme = theme;
         this.ScrollAmount = scroll;
         this.ForceFullScreen = forceFullScreen;
         this.ShowNewPage = showNewPage;
@@ -311,12 +314,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
             // outside the clipping area.)
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
-                float scale = this.width >= this.height
-                    ? this.width / (float)Sprites.Letter.Sprite.Width
-                    : this.height / (float)Sprites.Letter.Sprite.Height;
-
                 backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-                backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, Sprites.Letter.Sprite.Size, scale: scale);
+                this.Theme.Background.Draw(backgroundBatch, x, y, this.width, this.height);
                 backgroundBatch.End();
             }
 
@@ -470,7 +469,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         else
         {
             this.width = Math.Min(Game1.tileSize * 20, viewport.X);
-            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+            this.height = Math.Min((int)(this.Theme.Background.AspectRatio * this.width), viewport.Y);
 
             Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
             this.xPositionOnScreen = (int)origin.X;

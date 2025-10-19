@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -25,8 +26,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Encapsulates logging and monitoring.</summary>
     private readonly IMonitor Monitor;
 
-    /// <summary>The aspect ratio of the page background.</summary>
-    private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+    /// <summary>The theme to apply for the menu appearance.</summary>
+    private readonly ThemeManager Theme;
 
     /// <summary>The clickable 'scroll up' icon.</summary>
     private readonly ClickableTextureComponent ScrollUpButton;
@@ -72,12 +73,14 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="searchSubjects">The subjects available to search.</param>
     /// <param name="showLookup">Show a lookup menu.</param>
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
+    /// <param name="theme">The theme to apply for the menu appearance.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll)
+    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, ThemeManager theme, int scroll)
     {
         // save data
         this.ShowLookup = showLookup;
         this.Monitor = monitor;
+        this.Theme = theme;
         this.SearchLookup = searchSubjects.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
         this.ScrollAmount = scroll;
 
@@ -208,7 +211,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
         {
             backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-            backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, Sprites.Letter.Sprite.Size, scale: this.width / (float)Sprites.Letter.Sprite.Width);
+            this.Theme.Background.Draw(backgroundBatch, x, y, this.width, this.height);
             backgroundBatch.End();
         }
 
@@ -384,7 +387,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // update size
         this.width = Math.Min(Game1.tileSize * 14, viewport.X);
-        this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+        this.height = Math.Min((int)(this.Theme.Background.AspectRatio * this.width), viewport.Y);
 
         // update position
         Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);

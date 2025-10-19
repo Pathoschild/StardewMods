@@ -12,6 +12,7 @@ using Pathoschild.Stardew.Common.Integrations.IconicFramework;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -51,6 +52,9 @@ internal class ModEntry : Mod
     /****
     ** State
     ****/
+    /// <summary>Manages the theme for the menu appearance.</summary>
+    private ThemeManager Theme = null!;
+
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private GameHelper? GameHelper;
 
@@ -77,6 +81,10 @@ internal class ModEntry : Mod
 
         // load translations
         I18n.Init(helper.Translation);
+
+        // load theme
+        this.Theme = new ThemeManager(this.Helper.Events, this.Helper.GameContent);
+        this.Theme.SetCurrentTheme(this.Config.ThemeId);
 
         // load & validate database
         this.Metadata = this.LoadMetadata();
@@ -116,11 +124,8 @@ internal class ModEntry : Mod
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
         // add config UI
-        this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForLookupAnything(),
-            get: () => this.Config,
-            set: config => this.Config = config
-        );
+        this.RegisterConfigMenu();
+        this.Theme.OnThemeDataChanged += this.RegisterConfigMenu;
 
         // add Iconic Framework integration
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
@@ -258,6 +263,7 @@ internal class ModEntry : Mod
                     subject: subject,
                     monitor: this.Monitor,
                     reflectionHelper: this.Helper.Reflection,
+                    theme: this.Theme,
                     scroll: this.Config.ScrollAmount,
                     showDebugFields: this.Config.ShowDataMiningFields,
                     forceFullScreen: this.Config.ForceFullScreen,
@@ -296,7 +302,7 @@ internal class ModEntry : Mod
             return;
 
         this.PushMenu(
-            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount)
+            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, this.Theme, scroll: this.Config.ScrollAmount)
         );
     }
 
@@ -343,6 +349,16 @@ internal class ModEntry : Mod
 
         // load config
         return this.Helper.ReadConfig<ModConfig>();
+    }
+
+    /// <summary>Register or reset the config UI.</summary>
+    private void RegisterConfigMenu()
+    {
+        this.AddGenericModConfigMenu(
+            new GenericModConfigMenuIntegrationForLookupAnything(this.Theme),
+            get: () => this.Config,
+            set: config => this.Config = config
+        );
     }
 
     /// <summary>Get the most relevant subject under the player's cursor.</summary>

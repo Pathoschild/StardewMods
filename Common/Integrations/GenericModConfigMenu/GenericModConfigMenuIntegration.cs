@@ -50,6 +50,7 @@ internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration<IGener
     {
         this.AssertLoaded();
 
+        this.ModApi.Unregister(this.ConsumerManifest);
         this.ModApi.Register(this.ConsumerManifest, this.Reset, this.SaveAndApply, titleScreenOnly);
 
         return this;
