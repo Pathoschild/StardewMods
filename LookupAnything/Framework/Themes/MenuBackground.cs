@@ -7,84 +7,86 @@ using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
-
-/// <summary>Standard menu background implementation</summary>
-public class MenuBackground : IMenuBackground
+/// <summary>A normalized background to apply based on the raw theme data.</summary>
+public class MenuBackground
 {
-    public Texture2D Texture { get; private set; }
-    public Rectangle SourceRect { get; private set; }
-    public Color PrimaryColor { get; private set; }
-    public Color SecondaryColor { get; private set; }
-    public float AspectRatio { get; private set; }
-
-    /// <summary>Data for this background</summary>
+    /*********
+    ** Fields
+    *********/
+    /// <summary>The underlying theme data.</summary>
     private readonly ThemeData Data;
 
+
+    /*********
+    ** Accessors
+    *********/
+    /// <summary>The loaded background texture to draw.</summary>
+    public Texture2D Texture { get; }
+
+    /// <summary>The pixel area within the <see cref="Texture"/> to draw.</summary>
+    public Rectangle SourceRect { get; }
+
+    /// <summary>The background color tint.</summary>
+    public Color BackgroundColor { get; }
+
+    /// <summary>The border color tint.</summary>
+    public Color BorderColor { get; }
+
+    /// <summary>The aspect ratio of the <see cref="SourceRect"/>.</summary>
+    public float AspectRatio { get; }
+
+
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="content">The game content API from which to load the background texture.</param>
+    /// <param name="data">The underlying theme data.</param>
     public MenuBackground(IGameContentHelper content, ThemeData data)
     {
         this.Data = data;
         this.Texture = content.Load<Texture2D>(data.BackgroundTexture);
-        if (data.BackgroundSourceRect.IsEmpty)
-        {
-            this.SourceRect = this.Texture.Bounds;
-        }
-        else
-        {
-            this.SourceRect = data.BackgroundSourceRect;
-        }
-        this.PrimaryColor = Utility.StringToColor(data.BackgroundPrimaryColor) ?? Color.White;
-        this.SecondaryColor = Utility.StringToColor(data.BackgroundSecondaryColor) ?? Color.Black;
-
-        if (this.Data.BackgroundCategory == MenuBackgroundCategory.FixedSprite)
-        {
-            this.AspectRatio = (float)this.SourceRect.Height / this.SourceRect.Width;
-        }
-        else
-        {
-            this.AspectRatio = 180f / 320;
-        }
-
+        this.SourceRect = data.BackgroundSourceRect.IsEmpty ? this.Texture.Bounds : data.BackgroundSourceRect;
+        this.BackgroundColor = Utility.StringToColor(data.BackgroundColor) ?? Color.White;
+        this.BorderColor = Utility.StringToColor(data.BorderColor) ?? Color.Black;
+        this.AspectRatio = this.Data.BackgroundType == MenuBackgroundType.FixedSprite
+            ? (float)this.SourceRect.Height / this.SourceRect.Width
+            : this.AspectRatio = 180f / 320;
     }
 
-    public void DrawBackground(SpriteBatch b, int x, int y, int width, int height)
+    /// <summary>Draw the menu background to the screen.</summary>
+    /// <param name="spriteBatch">The sprite batch being drawn.</param>
+    /// <param name="x">The left X pixel position at which to start drawing the background.</param>
+    /// <param name="y">The top Y pixel position at which to start drawing the background.</param>
+    /// <param name="width">The pixel width within which to draw the background.</param>
+    /// <param name="height">The pixel height within which to draw the background.</param>
+    public void Draw(SpriteBatch spriteBatch, int x, int y, int width, int height)
     {
         int bgPad = this.Data.BackgroundPadding;
         x -= bgPad;
         width += bgPad * 2;
 
-        switch (this.Data.BackgroundCategory)
+        switch (this.Data.BackgroundType)
         {
-            case MenuBackgroundCategory.PlainColor:
+            case MenuBackgroundType.PlainColor:
                 y -= bgPad;
                 height += bgPad;
-                Utility.DrawSquare(b, new(x, y, width, height), bgPad, this.SecondaryColor, this.PrimaryColor);
+                Utility.DrawSquare(spriteBatch, new Rectangle(x, y, width, height), bgPad, this.BorderColor, this.BackgroundColor);
                 break;
-            case MenuBackgroundCategory.FixedSprite:
+
+            case MenuBackgroundType.FixedSprite:
                 {
                     y -= (int)(bgPad * this.AspectRatio);
                     height += (int)(bgPad * 2 * this.AspectRatio);
                     float scale = width >= height ? width / (float)this.SourceRect.Width : height / (float)this.SourceRect.Height;
-                    b.DrawSprite(
-                        this.Texture, this.SourceRect,
-                        x, y,
-                        this.SourceRect.Size,
-                        color: this.PrimaryColor,
-                        scale: scale
-                    );
+                    spriteBatch.DrawSprite(this.Texture, this.SourceRect, x, y, this.SourceRect.Size, color: this.BackgroundColor, scale: scale);
                 }
                 break;
-            case MenuBackgroundCategory.MenuBox:
+
+            case MenuBackgroundType.MenuBox:
                 y -= bgPad;
                 height += bgPad;
-                IClickableMenu.drawTextureBox(
-                    b,
-                    this.Texture,
-                    this.SourceRect,
-                    x, y,
-                    width,
-                    height,
-                    this.PrimaryColor
-                );
+                IClickableMenu.drawTextureBox(spriteBatch, this.Texture, this.SourceRect, x, y, width, height, this.BackgroundColor);
                 break;
         }
     }

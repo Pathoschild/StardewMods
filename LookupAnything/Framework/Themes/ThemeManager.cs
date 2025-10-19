@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,174 +8,194 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
-
-/// <summary>manage how the menu looks</summary>
-/// <param name="Backgrounds"></param>
+/// <summary>Manages the menu appearance.</summary>
 internal record ThemeManager
 {
-    /// <summary>Default menu background option</summary>
-    internal const string DEFAULT_BACKGROUND = "Letter_TornPaper";
-    private const string LetterBG = "LooseSprites\\letterBG";
-    private const string MenuTiles = "Maps\\MenuTiles";
-    private const string Asset_Themes = "Pathoschild.LookupAnything/Themes";
+    /*********
+    ** Fields
+    *********/
+    /****
+    ** Constants
+    ****/
+    /// <summary>The default theme ID.</summary>
+    internal const string DefaultThemeId = "Letter_TornPaper";
 
-    /// <summary>Theme data asset</summary>
-    private Dictionary<string, ThemeData>? ThemeDataCached;
+    /// <summary>The asset name for the default 'torn paper' background.</summary>
+    private const string TornPaperBackgroundAssetName = "LooseSprites\\letterBG";
 
-    internal Dictionary<string, ThemeData> ThemeData => this.ThemeDataCached ??= Game1.content.Load<Dictionary<string, ThemeData>>(Asset_Themes);
+    /// <summary>The asset name for the menu box background.</summary>
+    private const string MenuBoxBackgroundAssetName = "Maps\\MenuTiles";
 
-    /// <summary>Current background key inner field</summary>
-    private string CurrentTheme = DEFAULT_BACKGROUND;
+    /// <summary>The asset name for the theme data.</summary>
+    private const string DataAssetName = "Mods/Pathoschild.LookupAnything/Themes";
 
-    /// <summary>Currently chosen menu background</summary>
-    private IMenuBackground? CurrentBackgroundImpl;
+    /****
+    ** State
+    ****/
+    /// <summary>The SMAPI content API with which to manage assets.</summary>
+    private readonly IGameContentHelper GameContent;
 
-    /// <summary>The current <see cref="IMenuBackground"/> instance</summary>
-    internal IMenuBackground CurrentBackground
+    /// <summary>The backing field for <see cref="ThemeData"/>.</summary>
+    private Dictionary<string, ThemeData>? ThemeDataImpl;
+
+    /// <summary>The available theme data.</summary>
+    private Dictionary<string, ThemeData> ThemeData => this.ThemeDataImpl ??= Game1.content.Load<Dictionary<string, ThemeData>>(DataAssetName);
+
+    /// <summary>The backing field for <see cref="Background"/>.</summary>
+    private MenuBackground? BackgroundImpl;
+
+
+
+    /*********
+    ** Accessors
+    *********/
+    /// <summary>The selected theme ID.</summary>
+    public string ThemeId { get; private set; } = DefaultThemeId;
+
+    /// <summary>The theme background settings.</summary>
+    public MenuBackground Background
     {
         get
         {
-            if (this.CurrentBackgroundImpl == null)
-            {
-                this.SetCurrentTheme(this.CurrentTheme);
-            }
-            return this.CurrentBackgroundImpl!;
+            if (this.BackgroundImpl == null)
+                this.SetCurrentTheme(this.ThemeId);
+
+            return this.BackgroundImpl!;
         }
     }
-
-    /// <summary>Get background keys for GMCM purposes</summary>
-    internal string[] BackgroundKeys => [.. this.ThemeData.Keys];
-
-    /// <summary>Mod helper instance</summary>
-    private readonly IModHelper Helper;
 
     /// <summary>An event called when the theme asset is invalidated.</summary>
     public event Action? OnThemeDataChanged;
 
-    /// <summary>Create new theme manager instance</summary>
-    /// <param name="Helper"></param>
-    internal ThemeManager(IModHelper Helper)
+
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="events">The SMAPI events API with which to manage assets.</param>
+    /// <param name="gameContent">The SMAPI content API with which to manage assets.</param>
+    public ThemeManager(IModEvents events, IGameContentHelper gameContent)
     {
-        this.Helper = Helper;
-        this.Helper.Events.Content.AssetRequested += this.OnAssetRequested;
-        this.Helper.Events.Content.AssetsInvalidated += this.OnAssetInvalidated;
+        this.GameContent = gameContent;
+
+        events.Content.AssetRequested += this.OnAssetRequested;
+        events.Content.AssetsInvalidated += this.OnAssetInvalidated;
     }
 
-    /// <summary>
-    /// Set current background this also updates <see cref="CurrentBackground"/>
-    /// Rejects any value that is not a key of <see cref="ThemeDataCached"/>
-    /// </summary>
-    internal void SetCurrentTheme(string value)
+    /// <summary>Get the available theme IDs.</summary>
+    public IEnumerable<string> GetAvailableThemeIds()
     {
-        if (this.ThemeData.TryGetValue(value, out ThemeData? theme))
+        return this.ThemeData.Keys;
+    }
+
+    /// <summary>Get the display name for a theme.</summary>
+    /// <param name="themeId">The theme ID.</param>
+    public string GetDisplayName(string themeId)
+    {
+        return this.ThemeData.GetValueOrDefault(themeId)?.DisplayName ?? themeId;
+    }
+
+    /// <summary>Set the current theme.</summary>
+    /// <param name="themeId">The theme ID to select.</param>
+    /// <remarks>Setting an invalid theme ID will switch to the default theme instead.</remarks>
+    public void SetCurrentTheme(string themeId)
+    {
+        if (this.ThemeData.TryGetValue(themeId, out ThemeData? theme))
         {
-            this.CurrentTheme = value;
-            this.CurrentBackgroundImpl = new MenuBackground(this.Helper.GameContent, theme);
+            this.ThemeId = themeId;
+            this.BackgroundImpl = new MenuBackground(this.GameContent, theme);
         }
         else
         {
-            this.CurrentTheme = DEFAULT_BACKGROUND;
-            this.CurrentBackgroundImpl = new MenuBackground(this.Helper.GameContent, this.ThemeData[DEFAULT_BACKGROUND]);
+            this.ThemeId = DefaultThemeId;
+            this.BackgroundImpl = new MenuBackground(this.GameContent, this.ThemeData[DefaultThemeId]);
         }
     }
 
-    /// <summary>Populate menu theme data</summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Load the theme data when requested.</summary>
+    /// <inheritdoc cref="IContentEvents.AssetRequested" />
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
-        if (e.Name.IsEquivalentTo(Asset_Themes))
-        {
+        if (e.Name.IsEquivalentTo(DataAssetName))
             e.LoadFrom(GetBuiltInBackgrounds, AssetLoadPriority.Exclusive);
-        }
     }
 
-    /// <summary>Clear cached <see cref="ThemeDataCached"/> and <see cref="CurrentBackgroundImpl"/> on invalidate</summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <summary>Reset the cached theme data when the asset is invalidated.</summary>
+    /// <inheritdoc cref="IContentEvents.AssetsInvalidated" />
     private void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
     {
-        if (e.Names.Any(name => name.IsEquivalentTo(Asset_Themes)))
+        if (e.Names.Any(name => name.IsEquivalentTo(DataAssetName)))
         {
-            this.CurrentBackgroundImpl = null;
-            this.ThemeDataCached = null;
+            this.BackgroundImpl = null;
+            this.ThemeDataImpl = null;
 
             this.OnThemeDataChanged?.Invoke();
         }
     }
 
-    /// <summary>Populate default values of theme asset</summary>
-    /// <returns></returns>
+    /// <summary>Get the themes provided by the base mod.</summary>
     private static Dictionary<string, ThemeData> GetBuiltInBackgrounds()
     {
-        return new()
+        return new Dictionary<string, ThemeData>
         {
-            ["Plain"] = new ThemeData()
+            ["Plain"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_Plain(),
-                BackgroundCategory = MenuBackgroundCategory.PlainColor,
-                BackgroundPrimaryColor = "Wheat",
-                BackgroundSecondaryColor = "BurlyWood",
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_Plain(),
+                BackgroundType = MenuBackgroundType.PlainColor,
+                BackgroundColor = "Wheat",
+                BorderColor = "BurlyWood",
                 BackgroundPadding = 8
             },
-            ["Letter_TornPaper"] = new ThemeData()
+            [DefaultThemeId] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_LetterTornPaper(),
-                BackgroundCategory = MenuBackgroundCategory.FixedSprite,
-                BackgroundTexture = LetterBG,
-                BackgroundSourceRect = new(0, 0, 320, 180)
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterTornPaper(),
+                BackgroundType = MenuBackgroundType.FixedSprite,
+                BackgroundTexture = TornPaperBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(0, 0, 320, 180)
             },
-            ["Letter_Notepad"] = new ThemeData()
+            ["Letter_Notepad"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_LetterNotepad(),
-                BackgroundCategory = MenuBackgroundCategory.FixedSprite,
-                BackgroundTexture = LetterBG,
-                BackgroundSourceRect = new(320, 0, 320, 180)
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterNotepad(),
+                BackgroundType = MenuBackgroundType.FixedSprite,
+                BackgroundTexture = TornPaperBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(320, 0, 320, 180)
             },
-            ["Letter_Joja"] = new ThemeData()
+            ["Letter_Joja"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_LetterJoja(),
-                BackgroundCategory = MenuBackgroundCategory.FixedSprite,
-                BackgroundTexture = LetterBG,
-                BackgroundSourceRect = new(0, 204, 320, 180),
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_LetterJoja(),
+                BackgroundType = MenuBackgroundType.FixedSprite,
+                BackgroundTexture = TornPaperBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(0, 204, 320, 180),
                 BackgroundPadding = 48
             },
-            ["MenuBox_Border"] = new ThemeData()
+            ["MenuBox_Border"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_MenuBoxBorder(),
-                BackgroundCategory = MenuBackgroundCategory.MenuBox,
-                BackgroundTexture = MenuTiles,
-                BackgroundSourceRect = new(0, 256, 60, 60),
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxBorder(),
+                BackgroundType = MenuBackgroundType.MenuBox,
+                BackgroundTexture = MenuBoxBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(0, 256, 60, 60),
                 BackgroundPadding = 4
             },
-            ["MenuBox_Inset"] = new ThemeData()
+            ["MenuBox_Inset"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_MenuBoxInset(),
-                BackgroundCategory = MenuBackgroundCategory.MenuBox,
-                BackgroundTexture = MenuTiles,
-                BackgroundSourceRect = new(0, 320, 60, 60),
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxInset(),
+                BackgroundType = MenuBackgroundType.MenuBox,
+                BackgroundTexture = MenuBoxBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(0, 320, 60, 60),
                 BackgroundPadding = 4
             },
-            ["MenuBox_Raised"] = new ThemeData()
+            ["MenuBox_Raised"] = new()
             {
-                DisplayName = I18n.Config_Theme_MenuBackground_Value_MenuBoxRaised(),
-                BackgroundCategory = MenuBackgroundCategory.MenuBox,
-                BackgroundTexture = MenuTiles,
-                BackgroundSourceRect = new(60, 320, 60, 60),
+                DisplayName = I18n.Config_Theme_MenuBackground_Values_MenuBoxRaised(),
+                BackgroundType = MenuBackgroundType.MenuBox,
+                BackgroundTexture = MenuBoxBackgroundAssetName,
+                BackgroundSourceRect = new Rectangle(60, 320, 60, 60),
                 BackgroundPadding = 4
             }
         };
-    }
-
-    /// <summary>Get display name for a theme key</summary>
-    /// <param name="themeKey"></param>
-    /// <returns></returns>
-    internal string GetDisplayName(string themeKey)
-    {
-        if (this.ThemeData.TryGetValue(themeKey, out ThemeData? theme))
-        {
-            return theme.DisplayName ?? themeKey;
-        }
-        return themeKey;
     }
 }

@@ -26,6 +26,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Encapsulates logging and monitoring.</summary>
     private readonly IMonitor Monitor;
 
+    /// <summary>The theme to apply for the menu appearance.</summary>
+    private readonly ThemeManager Theme;
+
     /// <summary>The clickable 'scroll up' icon.</summary>
     private readonly ClickableTextureComponent ScrollUpButton;
 
@@ -59,8 +62,6 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The spacing around the scroll buttons.</summary>
     private readonly int ScrollButtonGutter = 15;
 
-    /// <param name="theme">Theme manager for menu appearance</param>
-    private readonly ThemeManager Theme;
 
     /*********
     ** Public methods
@@ -72,16 +73,16 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="searchSubjects">The subjects available to search.</param>
     /// <param name="showLookup">Show a lookup menu.</param>
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
+    /// <param name="theme">The theme to apply for the menu appearance.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    /// <param name="theme">Theme manager for menu appearance</param>
-    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll, ThemeManager theme)
+    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, ThemeManager theme, int scroll)
     {
         // save data
         this.ShowLookup = showLookup;
         this.Monitor = monitor;
+        this.Theme = theme;
         this.SearchLookup = searchSubjects.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
         this.ScrollAmount = scroll;
-        this.Theme = theme;
 
         // create components
         this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
@@ -210,7 +211,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
         {
             backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
-            this.Theme.CurrentBackground.DrawBackground(backgroundBatch, x, y, this.width, this.height);
+            this.Theme.Background.Draw(backgroundBatch, x, y, this.width, this.height);
             backgroundBatch.End();
         }
 
@@ -386,7 +387,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // update size
         this.width = Math.Min(Game1.tileSize * 14, viewport.X);
-        this.height = Math.Min((int)(this.Theme.CurrentBackground.AspectRatio * this.width), viewport.Y);
+        this.height = Math.Min((int)(this.Theme.Background.AspectRatio * this.width), viewport.Y);
 
         // update position
         Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);

@@ -718,23 +718,24 @@
     "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
 
     // themes
-    "config.title.theme": "Theme", // TODO
-    "config.theme.menu-background.name": "Menu Background", // TODO
-    "config.theme.menu-background.desc": "Changes the look of the menu background", // TODO
-    // see ThemeManager.GetBuiltInBackgrounds
-    "config.theme.menu-background.value.Plain": "Plain",
-    "config.theme.menu-background.value.Letter_TornPaper": "Letter: TornPaper",
-    "config.theme.menu-background.value.Letter_Notepad": "Letter: Notepad",
-    "config.theme.menu-background.value.Letter_Joja": "Letter: Joja",
-    "config.theme.menu-background.value.MenuBox_Border": "MenuBox: Border",
-    "config.theme.menu-background.value.MenuBox_Inset": "MenuBox: Inset",
-    "config.theme.menu-background.value.MenuBox_Raised": "MenuBox: Raised",
+    "config.title.appearance": "Appearance",
+
+    "config.theme.menu-background.name": "Visual theme",
+    "config.theme.menu-background.desc": "The appearance to apply for the lookup and search menu.",
+
+    "config.theme.menu-background.values.Plain": "Plain",
+    "config.theme.menu-background.values.Letter_TornPaper": "Letter: Torn Paper",
+    "config.theme.menu-background.values.Letter_Notepad": "Letter: Notepad",
+    "config.theme.menu-background.values.Letter_Joja": "Letter: Joja",
+    "config.theme.menu-background.values.MenuBox_Border": "MenuBox: Border",
+    "config.theme.menu-background.values.MenuBox_Inset": "MenuBox: Inset",
+    "config.theme.menu-background.values.MenuBox_Raised": "MenuBox: Raised",
 
     // progression mode
     "config.title.progression": "Progression mode",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.",
 
     "config.progression.show-unknown-gift-tastes.name": "Show unknown gift tastes",
     "config.progression.show-unknown-gift-tastes.desc": "Whether to show gift tastes you haven't learned about in-game yet (e.g. from dialogue text or experimenting).",

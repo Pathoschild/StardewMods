@@ -66,7 +66,7 @@ internal class ModConfig
     /// <summary>Whether to show recipes involving error items.</summary>
     public bool ShowInvalidRecipes { get; set; } = false;
 
-    /// <summary>How to display the menu background.</summary>
+    /// <summary>The visual theme to apply to the menu.</summary>
     public ModThemeConfig Theme { get; set; } = new();
 
 

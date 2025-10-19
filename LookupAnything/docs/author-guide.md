@@ -21,7 +21,7 @@ For example, if your mod is named "The Great Pufferfish Escapade" with mod ID "Y
 
 ## Add a UI theme via Content Patcher <a name="new-ui-theme"></a>
 
-You can add new UI themes to Lookup Anything by editing the asset named `Pathoschild.LookupAnything/Themes`.
+You can add new UI themes to Lookup Anything by editing the asset named `Mods/Pathoschild.LookupAnything/Themes`.
 The player will be able to select your theme via config.
 
 Example, using Content Patcher:
@@ -29,14 +29,14 @@ Example, using Content Patcher:
 ```js
 {
     "Action": "EditData",
-    "Target": "Pathoschild.LookupAnything/Themes",
+    "Target": "Mods/Pathoschild.LookupAnything/Themes",
     "Entries": {
         // The key should be unique
         "{{ModId}}_MenuBox_Purple": {
             // This name will appear in Lookup Anything's GMCM
             "DisplayName": "MenuBox: Purple",
             // There are 3 kinds of background display
-            // - PlainColor: solid BackgroundPrimaryColor bordered by BackgroundSecondaryColor
+            // - PlainColor: solid BackgroundColor bordered by BorderColor
             // - FixedSprite: a fixed texture whose aspect ratio is respected
             // - MenuBox: a texture that will be sliced and expanded while keeping the border as they are
             "BackgroundCategory": "MenuBox",
@@ -50,9 +50,9 @@ Example, using Content Patcher:
                 "Height": 60
             },
             // Color used for the background draw, this can be named color or hex or rgba
-            "BackgroundPrimaryColor": "Purple",
+            "BackgroundColor": "Purple",
             // Color used for the border draw when BackgroundCategory=PlainColor, this can be named color or hex or rgba
-            "BackgroundSecondaryColor": "Black",
+            "BorderColor": "Black",
             // Padding around the background's edges and the body 
             "BackgroundPadding": 4
         },

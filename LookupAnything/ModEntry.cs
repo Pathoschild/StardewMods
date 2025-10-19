@@ -42,9 +42,6 @@ internal class ModEntry : Mod
     /// <summary>The relative path to the file containing data for the <see cref="Metadata"/> field.</summary>
     private readonly string DatabaseFileName = "assets/data.json";
 
-    /// <summary>Control UI theming</summary>
-    private ThemeManager Theme = null!;
-
     /****
     ** Validation
     ****/
@@ -55,6 +52,9 @@ internal class ModEntry : Mod
     /****
     ** State
     ****/
+    /// <summary>Manages the theme for the menu appearance.</summary>
+    private ThemeManager Theme = null!;
+
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     private GameHelper? GameHelper;
 
@@ -82,9 +82,9 @@ internal class ModEntry : Mod
         // load translations
         I18n.Init(helper.Translation);
 
-        // load themes
-        this.Theme = new(this.Helper);
-        this.Theme.SetCurrentTheme(this.Config.Theme.Background);
+        // load theme
+        this.Theme = new ThemeManager(this.Helper.Events, this.Helper.GameContent);
+        this.Theme.SetCurrentTheme(this.Config.Theme.ThemeId);
 
         // load & validate database
         this.Metadata = this.LoadMetadata();
@@ -263,11 +263,11 @@ internal class ModEntry : Mod
                     subject: subject,
                     monitor: this.Monitor,
                     reflectionHelper: this.Helper.Reflection,
+                    theme: this.Theme,
                     scroll: this.Config.ScrollAmount,
                     showDebugFields: this.Config.ShowDataMiningFields,
                     forceFullScreen: this.Config.ForceFullScreen,
-                    showNewPage: this.ShowLookupFor,
-                    theme: this.Theme
+                    showNewPage: this.ShowLookupFor
                 )
             );
         });
@@ -302,7 +302,7 @@ internal class ModEntry : Mod
             return;
 
         this.PushMenu(
-            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount, this.Theme)
+            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, this.Theme, scroll: this.Config.ScrollAmount)
         );
     }
 
@@ -355,10 +355,7 @@ internal class ModEntry : Mod
     private void RegisterConfigMenu()
     {
         this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForLookupAnything
-            {
-                Theme = this.Theme
-            },
+            new GenericModConfigMenuIntegrationForLookupAnything(this.Theme),
             get: () => this.Config,
             set: config => this.Config = config
         );
