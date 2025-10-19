@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* You can choose between multiple visual themes in [the mod settings](README.md#configure), and [mod authors can add custom themes](author-guide.md) (thanks to Mushymato!).
+
 ## 1.52.2
 Released 03 September 2025 for SMAPI 4.3.1 or later.
 
