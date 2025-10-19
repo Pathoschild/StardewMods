@@ -50,6 +50,9 @@ internal record ThemeManager
     /// <summary>Mod helper instance</summary>
     private readonly IModHelper Helper;
 
+    /// <summary>An event called when the theme asset is invalidated.</summary>
+    public event Action? OnThemeDataChanged;
+
     /// <summary>Create new theme manager instance</summary>
     /// <param name="Helper"></param>
     internal ThemeManager(IModHelper Helper)
@@ -97,6 +100,8 @@ internal record ThemeManager
         {
             this.CurrentBackgroundImpl = null;
             this.ThemeDataCached = null;
+
+            this.OnThemeDataChanged?.Invoke();
         }
     }
 

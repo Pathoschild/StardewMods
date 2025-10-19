@@ -1,4 +1,4 @@
-← [README](README.md)
+﻿← [README](README.md)
 
 This page helps mod authors integrate with Lookup Anything and describes how to add new UI themes via Content Patcher. **See the [main README](README.md) for other
 info.**
@@ -25,11 +25,6 @@ You can add new UI themes to Lookup Anything by editing the asset named `Pathosc
 The player will be able to select your theme via config.
 
 Example, using Content Patcher:
-
-> [!WARNING]
-> In the EditData which adds the entry of your theme, do not use any content patcher tokens
-> that are not ready on the main menu, such as {{season}}.
-> Otherwise, your theme will not appear in Lookup Anything's GMCM.
 
 ```js
 {
