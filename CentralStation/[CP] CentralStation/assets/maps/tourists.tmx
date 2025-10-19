@@ -505,4 +505,101 @@
 0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="36" name="Buildings">
+  <object id="254" name="TileData" x="48" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Lupini,tourist.lupini.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="255" name="TileData" x="64" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Red Cap Guy,tourist.red-cap-guy.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="256" name="TileData" x="80" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Shorts Man,tourist.shorts-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="259" name="TileData" x="32" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Governor,tourist.governor.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="260" name="TileData" x="16" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Cashier Girl,tourist.cashier-girl.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="261" name="TileData" x="0" y="80" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Welwick,tourist.welwick.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="262" name="TileData" x="0" y="112" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Red Pirate,tourist.red-pirate.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="263" name="TileData" x="16" y="112" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Grim Pirate,tourist.grim-pirate.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="264" name="TileData" x="32" y="112" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Blackgull Pirate,tourist.blackgull-pirate.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="265" name="TileData" x="0" y="48" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Desert Racer,tourist.desert-racer-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="266" name="TileData" x="16" y="48" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Desert Scholar,tourist.desert-scholar-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="267" name="TileData" x="32" y="48" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Flamingo,tourist.flamingo.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="268" name="TileData" x="48" y="48" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Shrouded Figure,tourist.shrouded-figure.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="270" name="TileData" x="0" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Young Boy,tourist.young-boy.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="273" name="TileData" x="16" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Woman in black dress,tourist.black-dress-woman.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="274" name="TileData" x="32" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Man with a drink,tourist.drink-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="275" name="TileData" x="48" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Sunglasses Man,tourist.sunglasses-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="276" name="TileData" x="64" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Man with top hat,tourist.top-hat-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+  <object id="277" name="TileData" x="80" y="16" width="16" height="16">
+   <properties>
+    <property name="TileDesc" value="npcs,Strong Man,tourist.strong-man.name,Pathoschild.CentralStation.Content"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

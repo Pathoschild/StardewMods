@@ -159,7 +159,30 @@
 
     "tourist.bag-dog.1": "(She's on an adventure.)",
     "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)",
-
+    
+    /*********
+    ** Tourist Names
+    *********/
+    "tourist.young-boy.name": "Young Boy",
+    "tourist.black-dress-woman.name": "Woman in black dress with purple hair",
+    "tourist.drink-man.name": "Man with a drink",
+    "tourist.sunglasses-man.name": "Man with sunglasses",
+    "tourist.top-hat-man.name": "Man with top hat",
+    "tourist.strong-man.name": "Strong Man",
+    "tourist.desert-racer-man.name": "Desert Racer",
+    "tourist.desert-scholar-man.name": "Desert Scholar",
+    "tourist.flamingo.name": "Flamingo",
+    "tourist.shrouded-figure.name": "Shrouded Figure",
+    "tourist.welwick.name": "Welwick",
+    "tourist.cashier-girl.name": "Cashier Girl",
+    "tourist.governor.name": "Governor",
+    "tourist.lupini.name": "Lupini",
+    "tourist.red-cap-guy.name": "Red Cap Guy",
+    "tourist.shorts-man.name": "Shorts Man",
+    "tourist.red-pirate.name": "Red Pirate",
+    "tourist.grim-pirate.name": "Grim Pirate",
+    "tourist.blackgull-pirate.name": "Blackgull Pirate",
+    "tourist.bag-dog.name": "Bag Dog",
 
     /*********
     ** Furniture
@@ -183,5 +206,40 @@
     "furniture.suitcase-blue.name": "Blue Suitcase",
     "furniture.suitcase-pink.name": "Pink Suitcase",
     "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can"
+    "furniture.trash-can-messy.name": "Messy Trash Can",
+    
+    /*********
+    ** Tile
+    *********/
+    "tile.ticket-machine.name": "Ticket Machine",
+    "tile.ticket-counter.name": "Ticket Counter",
+    "tile.gift-shop.name": "Gift Shop",
+    "tile.food-court.name": "Food Court",
+    "tile.vendor-shop.name": "Vendor Shop",
+    "tile.staff-room-employee-locker-1.name" : "Employee Locker 1",
+    "tile.staff-room-employee-locker-2.name" : "Open Employee Locker 2",
+    "tile.staff-room-employee-fridge.name" : "Employee Fridge",
+    "tile.staff-room-door.name": "Staff Room Door",
+    "tile.central-station-warp.name": "Central Station",
+    "tile.exit-door.name": "Exit Door",
+    "tile.transit-area-doors.name": "Transit Area Doors",
+    "tile.piano.name": "Piano",
+    "tile.green-stool.name": "Green Stool",
+
+    // Joja Cola Mahcines
+    "tile.joja-cola-machine-1.name": "Joja Cola Machine 1",
+    "tile.joja-cola-machine-2.name": "Joja Cola Machine 2",
+
+    // Garbage Cans
+    "tile.garbage-can-1.name": "Garbage Can 1",
+    "tile.garbage-can-2.name": "Garbage Can 2",
+    "tile.garbage-can-3.name": "Garbage Can 3",
+
+    // Bookshelfs
+    "tile.bookshelf-1.name": "Bookshelf 1",
+    "tile.bookshelf-2.name": "Bookshelf 2",
+    "tile.bookshelf-3.name": "Bookshelf 3",
+    "tile.bookshelf-4.name": "Bookshelf 4",
+    "tile.bookshelf-5.name": "Bookshelf 5",
+    "tile.bookshelf-6.name": "Bookshelf 6"
 }
