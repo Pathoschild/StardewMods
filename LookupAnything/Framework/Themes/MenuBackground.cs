@@ -62,30 +62,30 @@ public class MenuBackground
     /// <param name="height">The pixel height within which to draw the background.</param>
     public void Draw(SpriteBatch spriteBatch, int x, int y, int width, int height)
     {
-        int bgPad = this.Data.BackgroundPadding;
-        x -= bgPad;
-        width += bgPad * 2;
+        int padding = this.Data.BackgroundPadding;
+        x -= padding;
+        width += padding * 2;
 
         switch (this.Data.BackgroundType)
         {
             case MenuBackgroundType.PlainColor:
-                y -= bgPad;
-                height += bgPad;
-                Utility.DrawSquare(spriteBatch, new Rectangle(x, y, width, height), bgPad, this.BorderColor, this.BackgroundColor);
+                y -= padding;
+                height += padding;
+                Utility.DrawSquare(spriteBatch, new Rectangle(x, y, width, height), padding, this.BorderColor, this.BackgroundColor);
                 break;
 
             case MenuBackgroundType.FixedSprite:
                 {
-                    y -= (int)(bgPad * this.AspectRatio);
-                    height += (int)(bgPad * 2 * this.AspectRatio);
+                    y -= (int)(padding * this.AspectRatio);
+                    height += (int)(padding * 2 * this.AspectRatio);
                     float scale = width >= height ? width / (float)this.SourceRect.Width : height / (float)this.SourceRect.Height;
                     spriteBatch.DrawSprite(this.Texture, this.SourceRect, x, y, this.SourceRect.Size, color: this.BackgroundColor, scale: scale);
                 }
                 break;
 
             case MenuBackgroundType.MenuBox:
-                y -= bgPad;
-                height += bgPad;
+                y -= padding;
+                height += padding;
                 IClickableMenu.drawTextureBox(spriteBatch, this.Texture, this.SourceRect, x, y, width, height, this.BackgroundColor);
                 break;
         }

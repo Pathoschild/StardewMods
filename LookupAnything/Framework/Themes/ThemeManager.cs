@@ -21,10 +21,10 @@ internal record ThemeManager
     internal const string DefaultThemeId = "Parchment";
 
     /// <summary>The asset name for the default 'parchment' background.</summary>
-    private const string ParchmentBackgroundAssetName = "LooseSprites\\letterBG";
+    private const string ParchmentBackgroundAssetName = "LooseSprites/letterBG";
 
     /// <summary>The asset name for the menu box background.</summary>
-    private const string MenuBoxBackgroundAssetName = "Maps\\MenuTiles";
+    private const string MenuBoxBackgroundAssetName = "Maps/MenuTiles";
 
     /// <summary>The asset name for the theme data.</summary>
     private const string DataAssetName = "Mods/Pathoschild.LookupAnything/Themes";
@@ -121,7 +121,7 @@ internal record ThemeManager
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         if (e.Name.IsEquivalentTo(DataAssetName))
-            e.LoadFrom(GetBuiltInBackgrounds, AssetLoadPriority.Exclusive);
+            e.LoadFrom(GetDefaultThemes, AssetLoadPriority.Exclusive);
     }
 
     /// <summary>Reset the cached theme data when the asset is invalidated.</summary>
@@ -138,7 +138,7 @@ internal record ThemeManager
     }
 
     /// <summary>Get the themes provided by the base mod.</summary>
-    private static Dictionary<string, ThemeData> GetBuiltInBackgrounds()
+    private static Dictionary<string, ThemeData> GetDefaultThemes()
     {
         return new Dictionary<string, ThemeData>
         {

@@ -19,10 +19,10 @@ public sealed class ThemeData
     ** Background
     ****/
     /// <summary>How the menu background should be drawn.</summary>
-    public MenuBackgroundType BackgroundType { get; set; } = MenuBackgroundType.FixedSprite;
+    public MenuBackgroundType BackgroundType { get; set; }
 
     /// <summary>The background texture to draw, if applicable based on the <see cref="BackgroundType"/>.</summary>
-    public string BackgroundTexture { get; set; } = "LooseSprites\\letterBG";
+    public string BackgroundTexture { get; set; } = "LooseSprites/letterBG";
 
     /// <summary>The pixel area within the <see cref="BackgroundTexture"/> to draw.</summary>
     public Rectangle BackgroundSourceRect { get; set; }
@@ -31,7 +31,7 @@ public sealed class ThemeData
     public string BackgroundColor { get; set; } = "White";
 
     /// <summary>The pixel spacing between the edge of the <see cref="BackgroundTexture"/> and the inner content.</summary>
-    public int BackgroundPadding { get; set; } = 0;
+    public int BackgroundPadding { get; set; }
 
     /****
     ** Border
