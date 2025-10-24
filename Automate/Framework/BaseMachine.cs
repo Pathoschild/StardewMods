@@ -108,11 +108,12 @@ internal abstract class BaseMachine : IMachine
 
     /// <summary>Get a tracked stack for an item, if it's not null.</summary>
     /// <param name="item">The item to track.</param>
+    /// <param name="onReduced">The callback invoked when the stack size is reduced (including reduced to zero).</param>
     /// <param name="onEmpty">The callback invoked when the stack is empty.</param>
-    protected ITrackedStack? GetTracked(Item? item, Action<TrackedItem, Item>? onEmpty = null)
+    protected ITrackedStack? GetTracked(Item? item, Action<TrackedItem, Item>? onReduced = null, Action<TrackedItem, Item>? onEmpty = null)
     {
         return item != null
-            ? new TrackedItem(item, onEmpty: onEmpty)
+            ? new TrackedItem(item, onReduced: onReduced, onEmpty: onEmpty)
             : null;
     }
 

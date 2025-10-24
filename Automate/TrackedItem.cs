@@ -19,9 +19,6 @@ public class TrackedItem : ITrackedStack
     /// <summary>The callback invoked when the stack is empty.</summary>
     protected readonly Action<TrackedItem, Item>? OnEmpty;
 
-    /// <summary>The last stack size handlers were notified of.</summary>
-    private int LastCount;
-
 
     /*********
     ** Accessors
@@ -34,6 +31,9 @@ public class TrackedItem : ITrackedStack
 
     /// <inheritdoc />
     public int Count { get; private set; }
+
+    /// <summary>The <see cref="Count"/> for which <see cref="OnReduced"/> was last called (or the initial value if this is the first call).</summary>
+    public int LastCount { get; private set; }
 
 
     /*********
@@ -86,12 +86,13 @@ public class TrackedItem : ITrackedStack
         // skip if not reduced
         if (this.Count >= this.LastCount)
             return;
-        this.LastCount = this.Count;
 
         // notify handlers
         this.OnReduced?.Invoke(this, this.Item);
         if (this.Count <= 0)
             this.OnEmpty?.Invoke(this, this.Item);
+
+        this.LastCount = this.Count;
     }
 
     /// <summary>Create a new stack of the given item.</summary>

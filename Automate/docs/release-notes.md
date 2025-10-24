@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some machine stats not updated correctly.
+
 ## 2.4.3
 Released 03 September 2025 for SMAPI 4.1.10 or later.
 

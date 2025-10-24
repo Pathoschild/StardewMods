@@ -96,7 +96,7 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
         }
 
         // get output
-        return this.GetTracked(this.Machine.heldObject.Value, onEmpty: this.OnOutputCollected);
+        return this.GetTracked(this.Machine.heldObject.Value, onReduced: this.OnOutputCollected);
     }
 
 
@@ -113,37 +113,43 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
         MachineData? machineData = machine.GetMachineData();
 
         // update stats
-        MachineDataUtility.UpdateStats(machineData?.StatsToIncrementWhenHarvested, item, item.Stack);
+        int numberCollected = Math.Max(1, trackedStack.LastCount - trackedStack.Count);
+        bool empty = trackedStack.Count < 1;
+        MachineDataUtility.UpdateStats(machineData?.StatsToIncrementWhenHarvested, item, numberCollected);
 
-        // reset machine data
-        // This needs to happen before the OutputCollected check, which may start producing a new output.
-        machine.heldObject.Value = null;
-        machine.readyForHarvest.Value = false;
-        machine.showNextIndex.Value = false;
-        machine.ResetParentSheetIndex();
-
-        // apply OutputCollected rule
-        if (MachineDataUtility.TryGetMachineOutputRule(machine, machineData, MachineOutputTrigger.OutputCollected, item.getOne(), null, machine.Location, out MachineOutputRule outputCollectedRule, out _, out _, out _))
-            machine.OutputMachine(machineData, outputCollectedRule, machine.lastInputItem.Value, null, machine.Location, false);
-
-        // update tapper
-        if (machine.IsTapper())
+        // reset when empty
+        if (empty)
         {
-            if (machine.Location.terrainFeatures.TryGetValue(machine.TileLocation, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
-                tree.UpdateTapperProduct(machine, item as SObject);
-        }
+            // reset machine data
+            // This needs to happen before the OutputCollected check, which may start producing a new output.
+            machine.heldObject.Value = null;
+            machine.readyForHarvest.Value = false;
+            machine.showNextIndex.Value = false;
+            machine.ResetParentSheetIndex();
 
-        // grant any experience
-        if (machineData?.ExperienceGainOnHarvest != null)
-        {
-            string[] expSplit = machineData.ExperienceGainOnHarvest.Split(' ');
-            for (int i = 0; i < expSplit.Length - 1; i += 2)
+            // apply OutputCollected rule
+            if (MachineDataUtility.TryGetMachineOutputRule(machine, machineData, MachineOutputTrigger.OutputCollected, item.getOne(), null, machine.Location, out MachineOutputRule outputCollectedRule, out _, out _, out _))
+                machine.OutputMachine(machineData, outputCollectedRule, machine.lastInputItem.Value, null, machine.Location, false);
+
+            // update tapper
+            if (machine.IsTapper())
             {
-                int skill = Farmer.getSkillNumberFromName(expSplit[i]);
-                if (skill != -1 && expSplit.Length > i + 1)
+                if (machine.Location.terrainFeatures.TryGetValue(machine.TileLocation, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
+                    tree.UpdateTapperProduct(machine, item as SObject);
+            }
+
+            // grant any experience
+            if (machineData?.ExperienceGainOnHarvest != null)
+            {
+                string[] expSplit = machineData.ExperienceGainOnHarvest.Split(' ');
+                for (int i = 0; i < expSplit.Length - 1; i += 2)
                 {
-                    if (int.TryParse(expSplit[i + 1], out int amount))
-                        Game1.player.gainExperience(skill, amount);
+                    int skill = Farmer.getSkillNumberFromName(expSplit[i]);
+                    if (skill != -1 && expSplit.Length > i + 1)
+                    {
+                        if (int.TryParse(expSplit[i + 1], out int amount))
+                            Game1.player.gainExperience(skill, amount);
+                    }
                 }
             }
         }
