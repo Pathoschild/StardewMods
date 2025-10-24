@@ -104,9 +104,10 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
     ** Private methods
     *********/
     /// <summary>Reset the machine, so it's ready to accept a new input.</summary>
-    /// <param name="item">The output item that was taken.</param>
+    /// <param name="trackedStack">The tracked item stack which was reduced.</param>
+    /// <param name="item">The item that was taken.</param>
     /// <remarks>This implementation is based on <see cref="SObject.CheckForActionOnMachine"/>.</remarks>
-    protected void OnOutputCollected(Item item)
+    protected void OnOutputCollected(TrackedItem trackedStack, Item item)
     {
         SObject machine = this.Machine;
         MachineData? machineData = machine.GetMachineData();

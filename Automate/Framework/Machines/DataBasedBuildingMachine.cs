@@ -87,7 +87,7 @@ internal class DataBasedBuildingMachine : BaseMachineForBuilding<Building>
             foreach (Item item in output.Items)
             {
                 if (item is not null)
-                    return this.GetTracked(item, onEmpty: taken => this.OnOutputTaken(output, taken));
+                    return this.GetTracked(item, onEmpty: (_, taken) => this.OnOutputTaken(output, taken));
             }
         }
 

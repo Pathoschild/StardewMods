@@ -99,8 +99,9 @@ internal class BushMachine : BaseMachine<Bush>
     ** Private methods
     *********/
     /// <summary>Reset the machine so it's ready to accept a new input.</summary>
+    /// <param name="trackedStack">The tracked item stack that was reduced.</param>
     /// <param name="item">The output item that was taken.</param>
-    private void OnOutputReduced(Item item)
+    private void OnOutputReduced(ITrackedStack trackedStack, Item item)
     {
         this.Machine.tileSheetOffset.Value = 0;
         this.Machine.setUpSourceRect();

@@ -65,8 +65,9 @@ internal abstract class GenericObjectMachine<TMachine> : BaseMachine<TMachine> w
     }
 
     /// <summary>Reset the machine so it's ready to accept a new input.</summary>
+    /// <param name="trackedStack">The tracked item stack that was reduced.</param>
     /// <param name="item">The output item that was taken.</param>
-    protected void GenericReset(Item item)
+    protected void GenericReset(ITrackedStack trackedStack, Item item)
     {
         this.Machine.heldObject.Value = null;
         this.Machine.readyForHarvest.Value = false;

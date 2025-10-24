@@ -54,8 +54,9 @@ internal class AutoGrabberMachine : GenericObjectMachine<SObject>
     }
 
     /// <summary>Remove an output item once it's been taken.</summary>
+    /// <param name="trackedStack">The tracked item stack that was reduced.</param>
     /// <param name="item">The removed item.</param>
-    private void OnOutputTaken(Item item)
+    private void OnOutputTaken(ITrackedStack trackedStack, Item item)
     {
         if (this.TryGetOutputChest(out Chest? output))
         {

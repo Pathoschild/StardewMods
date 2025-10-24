@@ -201,7 +201,7 @@ internal class ChestContainer : IContainer
 
         try
         {
-            return new TrackedItem(item, onEmpty: i => this.GetInventory().Remove(i));
+            return new TrackedItem(item, onEmpty: (_, taken) => this.GetInventory().Remove(taken));
         }
         catch (KeyNotFoundException)
         {
