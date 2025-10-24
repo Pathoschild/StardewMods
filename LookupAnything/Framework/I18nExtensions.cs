@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -105,6 +106,7 @@ internal partial class I18n
             case null:
                 return null;
 
+
             /****
             ** .NET types
             ****/
@@ -127,7 +129,12 @@ internal partial class I18n
             ** MonoGame types
             ****/
             case Color color:
-                return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
+                return color.A < 255
+                    ? $"#{Convert.ToHexString([color.R, color.G, color.B, color.A])}"
+                    : $"#{Convert.ToHexString([color.R, color.G, color.B])}";
+
+            case Point point:
+                return $"({point.X}, {point.Y})";
 
             case Vector2 vector:
                 return $"({vector.X}, {vector.Y})";
@@ -147,6 +154,9 @@ internal partial class I18n
             ****/
             case AnimatedSprite sprite:
                 return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
+
+            case Item item:
+                return $"({item} {item.QualifiedItemId})";
 
             case MarriageDialogueReference dialogue:
                 return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
@@ -210,17 +220,30 @@ internal partial class I18n
             ** Heuristic fallbacks
             ****/
             default:
-                // key/value pair
                 {
                     Type type = value.GetType();
+
+                    // net dictionary
+                    if (value is INetSerializable)
+                    {
+                        object? dict = type.GetProperty("FieldDict")?.GetValue(value);
+                        if (dict != null)
+                            return I18n.Stringify(dict);
+                    }
+
                     if (type.IsGenericType)
                     {
                         Type genericType = type.GetGenericTypeDefinition();
-                        if (genericType == typeof(NetDictionary<,,,,>))
+
+                        // net ref
+                        if (genericType == typeof(NetRef<>))
                         {
-                            object? dict = type.GetProperty("FieldDict")?.GetValue(value);
-                            return I18n.Stringify(dict);
+                            PropertyInfo? refValue = type.GetProperty(nameof(NetRef<NetString>.Value));
+                            if (refValue != null)
+                                return I18n.Stringify(refValue.GetValue(value));
                         }
+
+                        // key/value pair
                         if (genericType == typeof(KeyValuePair<,>))
                         {
                             string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key))?.GetValue(value));
@@ -228,17 +251,17 @@ internal partial class I18n
                             return $"({k}: {v})";
                         }
                     }
-                }
 
-                // enumerable
-                if (value is IEnumerable array and not string)
-                {
-                    string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "<null>").ToArray()!;
-                    return "(" + I18n.List(values) + ")";
-                }
+                    // enumerable
+                    if (value is IEnumerable array and not string)
+                    {
+                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "(null)").ToArray()!;
+                        return "[" + I18n.List(values) + "]";
+                    }
 
-                // anything else
-                return value.ToString();
+                    // anything else
+                    return value.ToString();
+                }
         }
     }
 }
