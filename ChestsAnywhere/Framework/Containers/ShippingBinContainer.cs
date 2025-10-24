@@ -5,7 +5,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Inventories;
 using StardewValley.Menus;
-using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 
@@ -175,7 +174,7 @@ internal class ShippingBinContainer : IContainer
     /// <param name="item">The item taken.</param>
     /// <param name="player">The player taking the item.</param>
     /// <remarks>This implementation replicates <see cref="StardewValley.Objects.Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
-    private void GrabItemFromInventoryImpl(Item item, SFarmer player)
+    private void GrabItemFromInventoryImpl(Item item, Farmer player)
     {
         // normalize
         if (item.Stack == 0)
@@ -212,7 +211,7 @@ internal class ShippingBinContainer : IContainer
     /// <summary>Add an item to the player inventory from the container.</summary>
     /// <param name="item">The item taken.</param>
     /// <param name="player">The player taking the item.</param>
-    private void GrabItemFromContainerImpl(Item item, SFarmer player)
+    private void GrabItemFromContainerImpl(Item item, Farmer player)
     {
         if (!player.couldInventoryAcceptThisItem(item))
             return;
