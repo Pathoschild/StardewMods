@@ -265,7 +265,7 @@ internal class ModEntry : Mod
                     reflectionHelper: this.Helper.Reflection,
                     theme: this.Theme,
                     scroll: this.Config.ScrollAmount,
-                    showDebugFields: this.Config.ShowDataMiningFields,
+                    showDataMinedValues: this.Config.ShowDataMiningFields,
                     forceFullScreen: this.Config.ForceFullScreen,
                     showNewPage: this.ShowLookupFor
                 )

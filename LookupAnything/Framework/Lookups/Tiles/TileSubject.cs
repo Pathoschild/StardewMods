@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using xTile.Layers;
@@ -135,7 +135,7 @@ internal class TileSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         string mapTileLabel = "map tile";
         string locationLabel = I18n.Tile_GameLocation();
@@ -144,13 +144,13 @@ internal class TileSubject : BaseSubject
         Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
         foreach (Tile tile in tiles)
         {
-            foreach (IDebugField field in this.GetDebugFieldsFrom(tile))
-                yield return new GenericDebugField($"{tile.Layer.Id}::{field.Label}", field.Value, field.HasValue) { OverrideCategory = mapTileLabel };
+            foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(tile))
+                yield return new GenericDataMinedValue($"{tile.Layer.Id}::{field.Label}", field.Value, field.HasValue) { OverrideCategory = mapTileLabel };
         }
 
         // location
-        foreach (IDebugField field in this.GetDebugFieldsFrom(this.Location))
-            yield return new GenericDebugField(field.Label, field.Value, field.HasValue, field.IsPinned) { OverrideCategory = locationLabel };
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(this.Location))
+            yield return new GenericDataMinedValue(field.Label, field.Value, field.HasValue, field.IsPinned) { OverrideCategory = locationLabel };
     }
 
     /// <inheritdoc />

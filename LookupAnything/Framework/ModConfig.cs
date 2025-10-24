@@ -66,7 +66,7 @@ internal class ModConfig
     /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
     public int ScrollAmount { get; set; } = 160;
 
-    /// <summary>Whether to show advanced data mining fields.</summary>
+    /// <summary>Whether to show raw data mined values.</summary>
     public bool ShowDataMiningFields { get; set; }
 
     /// <summary>Whether to show recipes involving error items.</summary>

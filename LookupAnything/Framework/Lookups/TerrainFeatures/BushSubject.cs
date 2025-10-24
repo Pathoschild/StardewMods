@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -121,17 +121,17 @@ internal class BushSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         Bush target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("health", target.health, pinned: true);
-        yield return new GenericDebugField("is town bush", this.Stringify(target.townBush.Value), pinned: true);
-        yield return new GenericDebugField("is in bloom", this.Stringify(target.inBloom()), pinned: true);
+        yield return new GenericDataMinedValue("health", target.health, pinned: true);
+        yield return new GenericDataMinedValue("is town bush", this.Stringify(target.townBush.Value), pinned: true);
+        yield return new GenericDataMinedValue("is in bloom", this.Stringify(target.inBloom()), pinned: true);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 

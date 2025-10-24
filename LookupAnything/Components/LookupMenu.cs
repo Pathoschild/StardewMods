@@ -99,10 +99,10 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="reflectionHelper">Simplifies access to private game code.</param>
     /// <param name="theme">The theme to apply for the menu appearance.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    /// <param name="showDebugFields">Whether to display debug fields.</param>
+    /// <param name="showDataMinedValues">Whether to show data mined values.</param>
     /// <param name="forceFullScreen">Whether the menu should always be full-screen, instead of centered in the window.</param>
     /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, ThemeManager theme, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage)
+    public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, ThemeManager theme, int scroll, bool showDataMinedValues, bool forceFullScreen, Action<ISubject> showNewPage)
     {
         // save data
         this.Subject = subject;
@@ -115,13 +115,13 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         this.ShowNewPage = showNewPage;
         this.WasHudEnabled = Game1.displayHUD;
 
-        // save debug fields
-        if (showDebugFields)
+        // save data mined values
+        if (showDataMinedValues)
         {
             this.Fields = this.Fields
                 .Concat(
                     subject
-                        .GetDebugFields()
+                        .GetDataMinedValues()
                         .GroupBy(p =>
                         {
                             if (p.IsPinned)

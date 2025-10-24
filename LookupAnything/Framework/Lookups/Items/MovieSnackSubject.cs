@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
 using StardewValley;
@@ -58,9 +58,9 @@ internal class MovieSnackSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
-        foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(this.Target))
             yield return field;
     }
 

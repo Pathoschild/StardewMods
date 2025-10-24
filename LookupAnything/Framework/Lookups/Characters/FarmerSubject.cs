@@ -5,7 +5,7 @@ using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.GameData;
@@ -89,17 +89,17 @@ internal class FarmerSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         Farmer target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("immunity", target.Immunity, pinned: true);
-        yield return new GenericDebugField("defense", target.buffs.Defense, pinned: true);
-        yield return new GenericDebugField("magnetic radius", target.MagneticRadius, pinned: true);
+        yield return new GenericDataMinedValue("immunity", target.Immunity, pinned: true);
+        yield return new GenericDataMinedValue("defense", target.buffs.Defense, pinned: true);
+        yield return new GenericDataMinedValue("magnetic radius", target.MagneticRadius, pinned: true);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 

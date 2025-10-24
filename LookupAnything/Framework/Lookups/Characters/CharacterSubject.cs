@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
@@ -168,24 +168,24 @@ internal class CharacterSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         NPC target = this.Target;
         Pet? pet = target as Pet;
 
         // pinned fields
-        yield return new GenericDebugField("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
-        yield return new GenericDebugField("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
+        yield return new GenericDataMinedValue("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
+        yield return new GenericDataMinedValue("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
         if (Game1.player.friendshipData.ContainsKey(target.Name))
         {
             FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, target, Game1.player.friendshipData[target.Name]);
-            yield return new GenericDebugField("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
+            yield return new GenericDataMinedValue("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
         }
         if (pet != null)
-            yield return new GenericDebugField("friendship", $"{pet.friendshipTowardFarmer} of {Pet.maxFriendship})", pinned: true);
+            yield return new GenericDataMinedValue("friendship", $"{pet.friendshipTowardFarmer} of {Pet.maxFriendship})", pinned: true);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 

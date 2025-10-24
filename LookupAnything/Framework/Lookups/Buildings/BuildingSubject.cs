@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
@@ -262,18 +262,18 @@ internal class BuildingSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         Building target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("building type", target.buildingType.Value, pinned: true);
-        yield return new GenericDebugField("days of construction left", target.daysOfConstructionLeft.Value, pinned: true);
-        yield return new GenericDebugField("indoors name", target.GetIndoorsName(), pinned: true);
-        yield return new GenericDebugField("indoors type", target.GetIndoorsType().ToString(), pinned: true);
+        yield return new GenericDataMinedValue("building type", target.buildingType.Value, pinned: true);
+        yield return new GenericDataMinedValue("days of construction left", target.daysOfConstructionLeft.Value, pinned: true);
+        yield return new GenericDataMinedValue("indoors name", target.GetIndoorsName(), pinned: true);
+        yield return new GenericDataMinedValue("indoors type", target.GetIndoorsType().ToString(), pinned: true);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 

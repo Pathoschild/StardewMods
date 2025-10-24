@@ -9,7 +9,7 @@ using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
@@ -430,35 +430,35 @@ internal class ItemSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         Item target = this.Target;
         SObject? obj = target as SObject;
         Crop? crop = this.FromCrop ?? this.SeedForCrop;
 
         // pinned fields
-        yield return new GenericDebugField("item ID", target.QualifiedItemId, pinned: true);
-        yield return new GenericDebugField("sprite index", target.ParentSheetIndex, pinned: true);
-        yield return new GenericDebugField("category", $"{target.Category} ({target.getCategoryName()})", pinned: true);
+        yield return new GenericDataMinedValue("item ID", target.QualifiedItemId, pinned: true);
+        yield return new GenericDataMinedValue("sprite index", target.ParentSheetIndex, pinned: true);
+        yield return new GenericDataMinedValue("category", $"{target.Category} ({target.getCategoryName()})", pinned: true);
         if (obj != null)
         {
-            yield return new GenericDebugField("edibility", obj.Edibility, pinned: true);
-            yield return new GenericDebugField("item type", obj.Type, pinned: true);
+            yield return new GenericDataMinedValue("edibility", obj.Edibility, pinned: true);
+            yield return new GenericDataMinedValue("item type", obj.Type, pinned: true);
         }
         if (crop != null)
         {
-            yield return new GenericDebugField("crop fully grown", this.Stringify(crop.fullyGrown.Value), pinned: true);
-            yield return new GenericDebugField("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
+            yield return new GenericDataMinedValue("crop fully grown", this.Stringify(crop.fullyGrown.Value), pinned: true);
+            yield return new GenericDataMinedValue("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
         }
-        yield return new GenericDebugField("context tags", I18n.List(target.GetContextTags().OrderBy(p => p, new HumanSortComparer())), pinned: true);
+        yield return new GenericDataMinedValue("context tags", I18n.List(target.GetContextTags().OrderBy(p => p, new HumanSortComparer())), pinned: true);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
         if (crop != null)
         {
-            foreach (IDebugField field in this.GetDebugFieldsFrom(crop))
-                yield return new GenericDebugField($"crop::{field.Label}", field.Value, field.HasValue, field.IsPinned);
+            foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(crop))
+                yield return new GenericDataMinedValue($"crop::{field.Label}", field.Value, field.HasValue, field.IsPinned);
         }
     }
 
