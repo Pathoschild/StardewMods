@@ -13,7 +13,7 @@ internal class PinnedDataMinedValue : GenericDataMinedValue
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, string? value, bool? hasValue = null)
-        : base(label, value, hasValue)
+        : base(null, label, value, hasValue)
     {
         this.ParentFieldName = I18n.DataMining_Name_Pinned();
     }
@@ -23,7 +23,7 @@ internal class PinnedDataMinedValue : GenericDataMinedValue
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, int value, bool? hasValue = null)
-        : base(label, value.ToString(CultureInfo.InvariantCulture), hasValue)
+        : base(null, label, value.ToString(CultureInfo.InvariantCulture), hasValue)
     {
         this.ParentFieldName = I18n.DataMining_Name_Pinned();
     }
@@ -33,7 +33,7 @@ internal class PinnedDataMinedValue : GenericDataMinedValue
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, float value, bool? hasValue = null)
-        : base(label, value.ToString(CultureInfo.InvariantCulture), hasValue)
+        : base(null, label, value.ToString(CultureInfo.InvariantCulture), hasValue)
     {
         this.ParentFieldName = I18n.DataMining_Name_Pinned();
     }

@@ -458,7 +458,7 @@ internal class ItemSubject : BaseSubject
         if (crop != null)
         {
             foreach (IDataMinedValue entry in this.GetDataMinedValuesFrom(crop))
-                yield return new GenericDataMinedValue($"crop::{entry.Label}", entry.Value, entry.HasValue) { ParentFieldName = entry.ParentFieldName };
+                yield return new GenericDataMinedValue(entry.Section, entry.Label, entry.Value, entry.HasValue) { ParentFieldName = entry.ParentFieldName };
         }
     }
 

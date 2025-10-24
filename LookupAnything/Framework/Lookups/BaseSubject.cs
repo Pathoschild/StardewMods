@@ -134,7 +134,7 @@ internal abstract class BaseSubject : ISubject
 
                 // add field
                 seenValues[field.Name] = field.Value;
-                yield return new GenericDataMinedValue($"{type.Name}::{field.Name}", field.Value);
+                yield return new GenericDataMinedValue(type.FullName, field.Name, field.Value);
             }
         }
     }

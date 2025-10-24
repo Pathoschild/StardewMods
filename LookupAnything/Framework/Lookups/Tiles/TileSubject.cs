@@ -145,12 +145,12 @@ internal class TileSubject : BaseSubject
         foreach (Tile tile in tiles)
         {
             foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(tile))
-                yield return new GenericDataMinedValue($"{tile.Layer.Id}::{field.Label}", field.Value, field.HasValue) { ParentFieldName = tileFieldName };
+                yield return new GenericDataMinedValue(tile.Layer.Id, field.Label, field.Value, field.HasValue) { ParentFieldName = tileFieldName };
         }
 
         // location
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(this.Location))
-            yield return new GenericDataMinedValue(field.Label, field.Value, field.HasValue) { ParentFieldName = locationFieldLabel };
+            yield return new GenericDataMinedValue(field.Section, field.Label, field.Value, field.HasValue) { ParentFieldName = locationFieldLabel };
     }
 
     /// <inheritdoc />

@@ -10,6 +10,9 @@ internal class GenericDataMinedValue : IDataMinedValue
     ** Accessors
     *********/
     /// <inheritdoc />
+    public string? Section { get; }
+
+    /// <inheritdoc />
     public string Label { get; protected set; }
 
     /// <inheritdoc />
@@ -27,27 +30,31 @@ internal class GenericDataMinedValue : IDataMinedValue
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
+    /// <param name="section"><inheritdoc cref="Section" path="/summary"/></param>
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    public GenericDataMinedValue(string label, string? value, bool? hasValue = null)
+    public GenericDataMinedValue(string? section, string label, string? value, bool? hasValue = null)
     {
+        this.Section = section;
         this.Label = label;
         this.Value = value;
         this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
     }
 
     /// <summary>Construct an instance.</summary>
+    /// <param name="section"><inheritdoc cref="Section" path="/summary"/></param>
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    public GenericDataMinedValue(string label, int value, bool? hasValue = null)
-        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
+    public GenericDataMinedValue(string? section, string label, int value, bool? hasValue = null)
+        : this(section, label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 
     /// <summary>Construct an instance.</summary>
+    /// <param name="section"><inheritdoc cref="Section" path="/summary"/></param>
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    public GenericDataMinedValue(string label, float value, bool? hasValue = null)
-        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
+    public GenericDataMinedValue(string? section, string label, float value, bool? hasValue = null)
+        : this(section, label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 }

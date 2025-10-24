@@ -8,6 +8,9 @@ internal interface IDataMinedValue
     /*********
     ** Accessors
     *********/
+    /// <summary>A translated section header with which to group related fields, if any.</summary>
+    string? Section { get; }
+
     /// <summary>A short name for the value.</summary>
     string Label { get; }
 
