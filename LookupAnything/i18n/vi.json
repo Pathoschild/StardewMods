@@ -650,7 +650,6 @@
     // labels
     "tile.title": "Ô bản đồ ({{x}}, {{y}})",
     "tile.description": "Vị trí 1 ô trên bản đồ. Điều này hiển thị khi bạn đã bật tile lookups trong configuration.",
-    "tile.game-location": "Vị trí",
     "tile.map-name": "Tên bản đồ",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -708,6 +707,16 @@
     "tree.stages.bush": "cây con",
     "tree.stages.smallTree": "cây vừa",
     "tree.stages.tree": "cây lớn",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

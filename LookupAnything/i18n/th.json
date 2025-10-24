@@ -653,7 +653,6 @@
     // labels
     "tile.title": "Map tile ({{x}}, {{y}})",
     "tile.description": "ตำแหน่งไทล์บนแผนที่ สิ่งนี้แสดงขึ้นเนื่องจากคุณเปิดใช้งานการค้นหาไทล์ในการกำหนดค่า",
-    "tile.game-location": "ตำแหน่งที่ตั้ง",
     "tile.map-name": "ชื่อแผนที่",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -711,6 +710,16 @@
     "tree.stages.bush": "พุ่มไม้",
     "tree.stages.smallTree": "ไม้ต้นขนาดเล็ก",
     "tree.stages.tree": "ต้นไม้",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

@@ -651,7 +651,6 @@
     // labels
     "tile.title": "Об'єкт ({{x}}, {{y}})",
     "tile.description": "Позиція клітини на мапі. Це відображається, бо ви ввімкнули перегляд клітин у файлі сурисування моду.",
-    "tile.game-location": "Назва локації",
     "tile.map-name": "Назва мапи",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -709,6 +708,16 @@
     "tree.stages.bush": "Кущ",
     "tree.stages.smallTree": "Маленьке дерево",
     "tree.stages.tree": "Дерево",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

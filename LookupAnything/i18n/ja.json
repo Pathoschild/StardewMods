@@ -650,7 +650,6 @@
     // labels
     "tile.title": "マップタイル ({{x}}, {{y}})",
     "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
-    "tile.game-location": "場所",
     "tile.map-name": "マップ名",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -708,6 +707,16 @@
     "tree.stages.bush": "茂み",
     "tree.stages.smallTree": "小さな木",
     "tree.stages.tree": "成木",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

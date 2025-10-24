@@ -143,9 +143,9 @@ internal class FruitTreeSubject : BaseSubject
         FruitTree target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("mature in", $"{target.daysUntilMature} days", pinned: true);
-        yield return new GenericDataMinedValue("growth stage", target.growthStage.Value, pinned: true);
-        yield return new GenericDataMinedValue("health", target.health.Value, pinned: true);
+        yield return new PinnedDataMinedValue("mature in", $"{target.daysUntilMature} days");
+        yield return new PinnedDataMinedValue("growth stage", target.growthStage.Value);
+        yield return new PinnedDataMinedValue("health", target.health.Value);
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

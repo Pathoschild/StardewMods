@@ -94,9 +94,9 @@ internal class FarmerSubject : BaseSubject
         Farmer target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("immunity", target.Immunity, pinned: true);
-        yield return new GenericDataMinedValue("defense", target.buffs.Defense, pinned: true);
-        yield return new GenericDataMinedValue("magnetic radius", target.MagneticRadius, pinned: true);
+        yield return new PinnedDataMinedValue("immunity", target.Immunity);
+        yield return new PinnedDataMinedValue("defense", target.buffs.Defense);
+        yield return new PinnedDataMinedValue("magnetic radius", target.MagneticRadius);
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

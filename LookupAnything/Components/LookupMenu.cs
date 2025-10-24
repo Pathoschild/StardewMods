@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.Common.Utilities;
+using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
@@ -118,20 +119,14 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
         // save data mined values
         if (showDataMinedValues)
         {
+            string defaultFieldName = I18n.DataMining_Name();
+
             this.Fields = this.Fields
                 .Concat(
                     subject
                         .GetDataMinedValues()
-                        .GroupBy(p =>
-                        {
-                            if (p.IsPinned)
-                                return "debug (pinned)";
-                            if (p.OverrideCategory != null)
-                                return $"debug ({p.OverrideCategory})";
-                            return "debug (raw)";
-                        })
-                        .OrderByDescending(p => p.Key == "debug (pinned)")
-                        .Select(p => (ICustomField)new DataMiningField(p.Key, p))
+                        .GroupBy(p => p.ParentFieldName ?? defaultFieldName)
+                        .Select(ICustomField (group) => new DataMiningField(group.Key, group))
                 )
                 .ToArray();
         }

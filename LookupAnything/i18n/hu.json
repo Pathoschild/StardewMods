@@ -660,7 +660,6 @@
     // labels
     "tile.title": "Térkép Elem ({{x}}, {{y}})",
     "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
-    "tile.game-location": "Location", // TODO
     "tile.map-name": "Térkép neve",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -718,6 +717,16 @@
     "tree.stages.bush": "bokor",
     "tree.stages.smallTree": "kicsi fa",
     "tree.stages.tree": "fa",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

@@ -649,7 +649,6 @@
     // labels
     "tile.title": "Tassello della mappa ({{x}}, {{y}})",
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
-    "tile.game-location": "Posizione",
     "tile.map-name": "Nome mappa",
     "tile.map-properties": "Proprietà della mappa",
     "tile.layer-tile": "Tassello {{layer}}",
@@ -707,6 +706,16 @@
     "tree.stages.bush": "cespuglio",
     "tree.stages.smallTree": "piccolo albero",
     "tree.stages.tree": "albero",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

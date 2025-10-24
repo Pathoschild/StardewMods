@@ -174,15 +174,15 @@ internal class CharacterSubject : BaseSubject
         Pet? pet = target as Pet;
 
         // pinned fields
-        yield return new GenericDataMinedValue("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
-        yield return new GenericDataMinedValue("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
+        yield return new PinnedDataMinedValue("facing direction", this.Stringify((FacingDirection)target.FacingDirection));
+        yield return new PinnedDataMinedValue("walking towards player", this.Stringify(target.IsWalkingTowardPlayer));
         if (Game1.player.friendshipData.ContainsKey(target.Name))
         {
             FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, target, Game1.player.friendshipData[target.Name]);
-            yield return new GenericDataMinedValue("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
+            yield return new PinnedDataMinedValue("friendship", $"{friendship.Points} (max {friendship.MaxPoints})");
         }
         if (pet != null)
-            yield return new GenericDataMinedValue("friendship", $"{pet.friendshipTowardFarmer} of {Pet.maxFriendship})", pinned: true);
+            yield return new PinnedDataMinedValue("friendship", $"{pet.friendshipTowardFarmer} of {Pet.maxFriendship})");
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

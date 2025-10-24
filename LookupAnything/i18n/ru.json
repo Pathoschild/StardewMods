@@ -649,7 +649,6 @@
     // labels
     "tile.title": "Объект ({{x}}, {{y}})",
     "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
-    "tile.game-location": "Локация",
     "tile.map-name": "Название локации",
     "tile.map-properties": "Свойства локации",
     "tile.layer-tile": "{{layer}} клетки",
@@ -707,6 +706,16 @@
     "tree.stages.bush": "Куст",
     "tree.stages.smallTree": "Малое дерево",
     "tree.stages.tree": "Дерево",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

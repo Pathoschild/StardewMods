@@ -649,7 +649,6 @@
     // labels
     "tile.title": "Map tile ({{x}}, {{y}})",
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
-    "tile.game-location": "Location",
     "tile.map-name": "Map name",
     "tile.map-properties": "Map properties",
     "tile.layer-tile": "{{layer}} tile",
@@ -707,6 +706,15 @@
     "tree.stages.bush": "bush",
     "tree.stages.smallTree": "small tree",
     "tree.stages.tree": "tree",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

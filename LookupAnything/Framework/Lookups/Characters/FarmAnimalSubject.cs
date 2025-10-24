@@ -88,10 +88,10 @@ internal class FarmAnimalSubject : BaseSubject
         FarmAnimal target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("age", $"{target.age} days", pinned: true);
-        yield return new GenericDataMinedValue("friendship", $"{target.friendshipTowardFarmer} (max {this.Constants.AnimalMaxHappiness})", pinned: true);
-        yield return new GenericDataMinedValue("fullness", this.Stringify(target.fullness.Value), pinned: true);
-        yield return new GenericDataMinedValue("happiness", this.Stringify(target.happiness.Value), pinned: true);
+        yield return new PinnedDataMinedValue("age", $"{target.age} days");
+        yield return new PinnedDataMinedValue("friendship", $"{target.friendshipTowardFarmer} (max {this.Constants.AnimalMaxHappiness})");
+        yield return new PinnedDataMinedValue("fullness", this.Stringify(target.fullness.Value));
+        yield return new PinnedDataMinedValue("happiness", this.Stringify(target.happiness.Value));
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

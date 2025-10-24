@@ -651,7 +651,6 @@
     // labels
     "tile.title": "Bloco ({{x}}, {{y}})",
     "tile.description": "A posição de um bloco no mapa. Isso é exibido porque você ativou as pesquisas de blocos na configuração",
-    "tile.game-location": "Localização",
     "tile.map-name": "Nome do mapa",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -709,6 +708,16 @@
     "tree.stages.bush": "Matinho",
     "tree.stages.smallTree": "Árvore pequena",
     "tree.stages.tree": "Árvore",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

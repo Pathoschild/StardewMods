@@ -20,10 +20,7 @@ internal class GenericDataMinedValue : IDataMinedValue
     public bool HasValue { get; protected set; }
 
     /// <inheritdoc />
-    public bool IsPinned { get; protected set; }
-
-    /// <inheritdoc />
-    public string? OverrideCategory { get; set; }
+    public string? ParentFieldName { get; set; }
 
 
     /*********
@@ -33,28 +30,24 @@ internal class GenericDataMinedValue : IDataMinedValue
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    /// <param name="pinned"><inheritdoc cref="pinned" path="/summary"/></param>
-    public GenericDataMinedValue(string label, string? value, bool? hasValue = null, bool pinned = false)
+    public GenericDataMinedValue(string label, string? value, bool? hasValue = null)
     {
         this.Label = label;
         this.Value = value;
         this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
-        this.IsPinned = pinned;
     }
 
     /// <summary>Construct an instance.</summary>
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    /// <param name="pinned"><inheritdoc cref="pinned" path="/summary"/></param>
-    public GenericDataMinedValue(string label, int value, bool? hasValue = null, bool pinned = false)
-        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue, pinned) { }
+    public GenericDataMinedValue(string label, int value, bool? hasValue = null)
+        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 
     /// <summary>Construct an instance.</summary>
     /// <param name="label"><inheritdoc cref="Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-    /// <param name="pinned"><inheritdoc cref="pinned" path="/summary"/></param>
-    public GenericDataMinedValue(string label, float value, bool? hasValue = null, bool pinned = false)
-        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue, pinned) { }
+    public GenericDataMinedValue(string label, float value, bool? hasValue = null)
+        : this(label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 }

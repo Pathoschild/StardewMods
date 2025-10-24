@@ -651,7 +651,6 @@
     // labels
     "tile.title": "Case de carte ({{x}}, {{y}})",
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
-    "tile.game-location": "Zone",
     "tile.map-name": "Nom de la carte",
     "tile.map-properties": "Propriétés de la carte",
     "tile.layer-tile": "Case du calque '{{layer}}'",
@@ -709,6 +708,16 @@
     "tree.stages.bush": "arbuste",
     "tree.stages.smallTree": "petit arbre",
     "tree.stages.tree": "arbre",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

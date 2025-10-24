@@ -267,10 +267,10 @@ internal class BuildingSubject : BaseSubject
         Building target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("building type", target.buildingType.Value, pinned: true);
-        yield return new GenericDataMinedValue("days of construction left", target.daysOfConstructionLeft.Value, pinned: true);
-        yield return new GenericDataMinedValue("indoors name", target.GetIndoorsName(), pinned: true);
-        yield return new GenericDataMinedValue("indoors type", target.GetIndoorsType().ToString(), pinned: true);
+        yield return new PinnedDataMinedValue("building type", target.buildingType.Value);
+        yield return new PinnedDataMinedValue("days of construction left", target.daysOfConstructionLeft.Value);
+        yield return new PinnedDataMinedValue("indoors name", target.GetIndoorsName());
+        yield return new PinnedDataMinedValue("indoors type", target.GetIndoorsType().ToString());
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

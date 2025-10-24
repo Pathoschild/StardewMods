@@ -649,7 +649,6 @@
     // labels
     "tile.title": "Kartenkachel ({{x}}, {{y}})",
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
-    "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
     "tile.map-properties": "Karteneigenschaften",
     "tile.layer-tile": "{{layer}} Kachel",
@@ -707,6 +706,16 @@
     "tree.stages.bush": "Busch",
     "tree.stages.smallTree": "Kleiner Baum",
     "tree.stages.tree": "Baum",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

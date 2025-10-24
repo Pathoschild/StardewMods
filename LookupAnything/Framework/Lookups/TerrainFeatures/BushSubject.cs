@@ -126,9 +126,9 @@ internal class BushSubject : BaseSubject
         Bush target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("health", target.health, pinned: true);
-        yield return new GenericDataMinedValue("is town bush", this.Stringify(target.townBush.Value), pinned: true);
-        yield return new GenericDataMinedValue("is in bloom", this.Stringify(target.inBloom()), pinned: true);
+        yield return new PinnedDataMinedValue("health", target.health);
+        yield return new PinnedDataMinedValue("is town bush", this.Stringify(target.townBush.Value));
+        yield return new PinnedDataMinedValue("is in bloom", this.Stringify(target.inBloom()));
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

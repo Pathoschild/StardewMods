@@ -122,9 +122,9 @@ internal class TreeSubject : BaseSubject
         Tree target = this.Target;
 
         // pinned fields
-        yield return new GenericDataMinedValue("has seed", this.Stringify(target.hasSeed.Value), pinned: true);
-        yield return new GenericDataMinedValue("growth stage", target.growthStage.Value, pinned: true);
-        yield return new GenericDataMinedValue("health", target.health.Value, pinned: true);
+        yield return new PinnedDataMinedValue("has seed", this.Stringify(target.hasSeed.Value));
+        yield return new PinnedDataMinedValue("growth stage", target.growthStage.Value);
+        yield return new PinnedDataMinedValue("health", target.health.Value);
 
         // raw fields
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))

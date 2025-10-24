@@ -649,7 +649,6 @@
     // labels
     "tile.title": "Harita karosu ({{x}}, {{y}})",
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
-    "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
     "tile.map-properties": "Harita Özellikleri",
     "tile.layer-tile": "{{layer}} Karo",
@@ -707,6 +706,16 @@
     "tree.stages.bush": "çalı",
     "tree.stages.smallTree": "ağaççık",
     "tree.stages.tree": "ağaç",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.pinned": "Raw data (pinned)",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
 
 
     /*********

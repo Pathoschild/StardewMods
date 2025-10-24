@@ -437,28 +437,28 @@ internal class ItemSubject : BaseSubject
         Crop? crop = this.FromCrop ?? this.SeedForCrop;
 
         // pinned fields
-        yield return new GenericDataMinedValue("item ID", target.QualifiedItemId, pinned: true);
-        yield return new GenericDataMinedValue("sprite index", target.ParentSheetIndex, pinned: true);
-        yield return new GenericDataMinedValue("category", $"{target.Category} ({target.getCategoryName()})", pinned: true);
+        yield return new PinnedDataMinedValue("item ID", target.QualifiedItemId);
+        yield return new PinnedDataMinedValue("sprite index", target.ParentSheetIndex);
+        yield return new PinnedDataMinedValue("category", $"{target.Category} ({target.getCategoryName()})");
         if (obj != null)
         {
-            yield return new GenericDataMinedValue("edibility", obj.Edibility, pinned: true);
-            yield return new GenericDataMinedValue("item type", obj.Type, pinned: true);
+            yield return new PinnedDataMinedValue("edibility", obj.Edibility);
+            yield return new PinnedDataMinedValue("item type", obj.Type);
         }
         if (crop != null)
         {
-            yield return new GenericDataMinedValue("crop fully grown", this.Stringify(crop.fullyGrown.Value), pinned: true);
-            yield return new GenericDataMinedValue("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
+            yield return new PinnedDataMinedValue("crop fully grown", this.Stringify(crop.fullyGrown.Value));
+            yield return new PinnedDataMinedValue("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)");
         }
-        yield return new GenericDataMinedValue("context tags", I18n.List(target.GetContextTags().OrderBy(p => p, new HumanSortComparer())), pinned: true);
+        yield return new PinnedDataMinedValue("context tags", I18n.List(target.GetContextTags().OrderBy(p => p, new HumanSortComparer())));
 
-        // raw fields
-        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
-            yield return field;
+        // data mined values
+        foreach (IDataMinedValue entry in this.GetDataMinedValuesFrom(target))
+            yield return entry;
         if (crop != null)
         {
-            foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(crop))
-                yield return new GenericDataMinedValue($"crop::{field.Label}", field.Value, field.HasValue, field.IsPinned);
+            foreach (IDataMinedValue entry in this.GetDataMinedValuesFrom(crop))
+                yield return new GenericDataMinedValue($"crop::{entry.Label}", entry.Value, entry.HasValue) { ParentFieldName = entry.ParentFieldName };
         }
     }
 
@@ -872,7 +872,7 @@ internal class ItemSubject : BaseSubject
         if (this.ShowUnknownRecipes)
         {
             // return all recipe names
-            string[] recipeNames = (from recipe in missingRecipes select (string)recipe.DisplayName).ToArray();
+            string[] recipeNames = (from recipe in missingRecipes select recipe.DisplayName).ToArray();
             return I18n.List(recipeNames);
         }
 
@@ -882,7 +882,7 @@ internal class ItemSubject : BaseSubject
         if (knownMissingRecipes.Any())
         {
             // return learned recipe names + count of unlearned recipes
-            string[] knownRecipeNames = (from recipe in knownMissingRecipes select (string)recipe.DisplayName).ToArray();
+            string[] knownRecipeNames = (from recipe in knownMissingRecipes select recipe.DisplayName).ToArray();
             return I18n.List(knownRecipeNames.Append(I18n.Item_UnknownRecipes(unknownMissingRecipeCount)));
         }
 

@@ -137,20 +137,20 @@ internal class TileSubject : BaseSubject
     /// <inheritdoc />
     public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
-        string mapTileLabel = "map tile";
-        string locationLabel = I18n.Tile_GameLocation();
+        string tileFieldName = I18n.DataMining_Name_MapTile();
+        string locationFieldLabel = I18n.DataMining_Name_MapLocation();
 
         // tiles
         Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
         foreach (Tile tile in tiles)
         {
             foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(tile))
-                yield return new GenericDataMinedValue($"{tile.Layer.Id}::{field.Label}", field.Value, field.HasValue) { OverrideCategory = mapTileLabel };
+                yield return new GenericDataMinedValue($"{tile.Layer.Id}::{field.Label}", field.Value, field.HasValue) { ParentFieldName = tileFieldName };
         }
 
         // location
         foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(this.Location))
-            yield return new GenericDataMinedValue(field.Label, field.Value, field.HasValue, field.IsPinned) { OverrideCategory = locationLabel };
+            yield return new GenericDataMinedValue(field.Label, field.Value, field.HasValue) { ParentFieldName = locationFieldLabel };
     }
 
     /// <inheritdoc />
