@@ -13,28 +13,19 @@ internal class PinnedDataMinedValue : GenericDataMinedValue
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, string? value, bool? hasValue = null)
-        : base(null, label, value, hasValue)
-    {
-        this.ParentFieldName = I18n.DataMining_Name_Pinned();
-    }
+        : base(I18n.DataMining_SectionPinned(), label, value, hasValue) { }
 
     /// <summary>Construct an instance.</summary>
     /// <param name="label"><inheritdoc cref="IDataMinedValue.Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, int value, bool? hasValue = null)
-        : base(null, label, value.ToString(CultureInfo.InvariantCulture), hasValue)
-    {
-        this.ParentFieldName = I18n.DataMining_Name_Pinned();
-    }
+        : base(I18n.DataMining_SectionPinned(), label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 
     /// <summary>Construct an instance.</summary>
     /// <param name="label"><inheritdoc cref="IDataMinedValue.Label" path="/summary"/></param>
     /// <param name="value"><inheritdoc cref="IDataMinedValue.Value" path="/summary"/></param>
     /// <param name="hasValue">Whether the value should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
     public PinnedDataMinedValue(string label, float value, bool? hasValue = null)
-        : base(null, label, value.ToString(CultureInfo.InvariantCulture), hasValue)
-    {
-        this.ParentFieldName = I18n.DataMining_Name_Pinned();
-    }
+        : base(I18n.DataMining_SectionPinned(), label, value.ToString(CultureInfo.InvariantCulture), hasValue) { }
 }

@@ -717,9 +717,10 @@
     *********/
     // TODO
     "data-mining.name": "Raw data",
-    "data-mining.name.pinned": "Raw data (pinned)",
     "data-mining.name.map-tile": "Raw data (map tile)",
     "data-mining.name.map-location": "Raw data (location)",
+
+    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*********
