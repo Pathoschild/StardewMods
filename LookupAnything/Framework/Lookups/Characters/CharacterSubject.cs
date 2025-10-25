@@ -210,7 +210,7 @@ internal class CharacterSubject : BaseSubject
         }
 
         // else draw sprite (e.g. for pets)
-        npc.Sprite.draw(spriteBatch, position, 1, 0, 0, Color.White, scale: size.X / npc.Sprite.getWidth());
+        npc.Sprite?.draw(spriteBatch, position, 1, 0, 0, Color.White, scale: size.X / npc.Sprite.getWidth());
         return true;
     }
 
