@@ -20,6 +20,12 @@ internal class SimpleSprinklerIntegration : BaseIntegration<ISimplerSprinklerApi
     public IDictionary<int, Vector2[]> GetNewSprinklerTiles()
     {
         this.AssertLoaded();
-        return this.ModApi.GetNewSprinklerCoverage();
+
+        return
+            this.SafelyCallApi(
+                api => api.GetNewSprinklerCoverage(),
+                "Failed getting sprinkler coverage from {0}."
+            )
+            ?? new Dictionary<int, Vector2[]>();
     }
 }

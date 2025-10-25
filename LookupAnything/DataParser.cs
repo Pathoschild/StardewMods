@@ -602,7 +602,7 @@ internal class DataParser
 
                         // if there are extra outputs added by the Extra Machine Config mod, add them here
                         MachineItemOutput[] allOutputItems = extraMachineConfig.IsLoaded
-                            ? [mainOutputItem, .. extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem, machineData)]
+                            ? [mainOutputItem, .. extraMachineConfig.GetExtraOutputs(entryKey, mainOutputItem, machineData)]
                             : [mainOutputItem];
 
                         foreach (MachineItemOutput outputItem in allOutputItems)
@@ -653,10 +653,10 @@ internal class DataParser
                             // if there are extra fuels added by the Extra Machine Config mod, add them here
                             if (extraMachineConfig.IsLoaded)
                             {
-                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
+                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.GetExtraRequirements(entryKey, outputItem))
                                     ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
 
-                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
+                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.GetExtraTagsRequirements(entryKey, outputItem))
                                     ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
                             }
 

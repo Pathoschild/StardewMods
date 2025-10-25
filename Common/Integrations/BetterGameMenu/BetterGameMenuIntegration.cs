@@ -9,6 +9,9 @@ internal class BetterGameMenuIntegration : BaseIntegration<IBetterGameMenuApi>
     /*********
     ** Public methods
     *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     public BetterGameMenuIntegration(IModRegistry modRegistry, IMonitor monitor)
         : base("BetterGameMenu", "leclair.bettergamemenu", "0.5.2", modRegistry, monitor) { }
 
@@ -16,10 +19,12 @@ internal class BetterGameMenuIntegration : BaseIntegration<IBetterGameMenuApi>
     /// <param name="menu">The game menu to get the page from.</param>
     public IClickableMenu? GetCurrentPage(IClickableMenu? menu)
     {
-        if (this.IsLoaded && menu is not null)
-            return this.ModApi.GetCurrentPage(menu);
+        if (menu is null)
+            return null;
 
-        return null;
+        return this.SafelyCallApi(
+            api => api.GetCurrentPage(menu),
+            "Failed getting game menu page from {0}."
+        );
     }
-
 }

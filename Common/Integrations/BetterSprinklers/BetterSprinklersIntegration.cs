@@ -31,6 +31,12 @@ internal class BetterSprinklersIntegration : BaseIntegration<IBetterSprinklersAp
     public IDictionary<int, Vector2[]> GetSprinklerTiles()
     {
         this.AssertLoaded();
-        return this.ModApi.GetSprinklerCoverage();
+
+        return
+            this.SafelyCallApi(
+                api => api.GetSprinklerCoverage(),
+                "Failed getting sprinkler tiles from {0}."
+            )
+            ?? new Dictionary<int, Vector2[]>();
     }
 }

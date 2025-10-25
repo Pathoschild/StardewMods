@@ -22,7 +22,11 @@ internal class AutomateIntegration : BaseIntegration<IAutomateApi>
     /// <param name="tileArea">The tile area for which to display data.</param>
     public IDictionary<Vector2, int> GetMachineStates(GameLocation location, Rectangle tileArea)
     {
-        this.AssertLoaded();
-        return this.ModApi.GetMachineStates(location, tileArea);
+        return
+            this.SafelyCallApi(
+                api => api.GetMachineStates(location, tileArea),
+                "Failed fetching machine states from {0}."
+            )
+            ?? new Dictionary<Vector2, int>();
     }
 }

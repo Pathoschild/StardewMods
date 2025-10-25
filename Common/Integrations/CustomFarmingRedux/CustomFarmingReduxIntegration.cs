@@ -25,7 +25,11 @@ internal class CustomFarmingReduxIntegration : BaseIntegration<ICustomFarmingApi
     {
         this.AssertLoaded();
 
-        Tuple<Item, Texture2D, Rectangle, Color>? data = this.ModApi.getRealItemAndTexture(obj);
+        Tuple<Item, Texture2D, Rectangle, Color>? data = this.SafelyCallApi(
+            api => api.getRealItemAndTexture(obj),
+            "Failed getting sprite from {0}."
+        );
+
         return data != null
             ? new SpriteInfo(data.Item2, data.Item3)
             : null;

@@ -8,6 +8,7 @@
   * Values are now grouped by full type name, instead of repeating the type on each line.
   * Pinned values are now a section in the main field, instead of a separate field.
   * Improved representation for various value types.
+* Fixed features breaking if an integration with another mod fails.
 
 ## 1.52.2
 Released 03 September 2025 for SMAPI 4.3.1 or later.

@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed some machine stats not updated correctly.
+* Fixed features breaking if an integration with another mod fails.
 
 ## 2.4.3
 Released 03 September 2025 for SMAPI 4.1.10 or later.

@@ -202,7 +202,7 @@ internal class BushSubject : BaseSubject
         customBush = null;
         return
             this.GameHelper.CustomBush.IsLoaded
-            && this.GameHelper.CustomBush.ModApi.TryGetCustomBush(bush, out customBush);
+            && this.GameHelper.CustomBush.TryGetCustomBush(bush, out customBush);
     }
 
     /// <summary>Get bush drops from the Custom Bush mod if applicable.</summary>
@@ -213,7 +213,7 @@ internal class BushSubject : BaseSubject
     {
         CustomBushIntegration customBush = this.GameHelper.CustomBush;
 
-        if (customBush.IsLoaded && customBush.ModApi.TryGetCustomBush(bush, out _, out string? id) && customBush.ModApi.TryGetDrops(id, out IList<ICustomBushDrop>? rawDrops))
+        if (customBush.IsLoaded && customBush.TryGetCustomBush(bush, out string? id) && customBush.TryGetDrops(id, out IList<ICustomBushDrop>? rawDrops))
         {
             drops = new List<ItemDropData>(rawDrops.Count);
 
@@ -233,10 +233,10 @@ internal class BushSubject : BaseSubject
     /// <returns>Returns whether Bush Bloom Mod provided custom schedules.</returns>
     private bool TryGetBushBloomSchedules(Bush bush, [NotNullWhen(true)] out (string UnqualifiedItemId, WorldDate StartDay, WorldDate EndDay)[]? schedule)
     {
-        if (this.GameHelper.BushBloomMod.IsLoaded && this.GameHelper.BushBloomMod.ModApi.IsReady())
+        if (this.GameHelper.BushBloomMod.IsLoaded && this.GameHelper.BushBloomMod.IsReady())
         {
             SDate today = SDate.Now();
-            schedule = this.GameHelper.BushBloomMod.ModApi.GetActiveSchedules(today.Season.ToString(), today.Day, today.Year, bush.Location, bush.Tile);
+            schedule = this.GameHelper.BushBloomMod.GetActiveSchedules(today.Season.ToString(), today.Day, today.Year, bush.Location, bush.Tile);
             return true;
         }
 

@@ -24,13 +24,24 @@ internal class BetterSprinklersPlusIntegration : BaseIntegration<IBetterSprinkle
         : base("Better Sprinklers Plus", "com.CodesThings.BetterSprinklersPlus", "2.6.0", modRegistry, monitor)
     {
         if (base.IsLoaded)
-            this.MaxRadius = this.ModApi.GetMaxGridSize();
+        {
+            this.MaxRadius = this.SafelyCallApi(
+                api => api.GetMaxGridSize(),
+                "Failed fetching max radius from {0}."
+            );
+        }
     }
 
     /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>
     public IDictionary<int, Vector2[]> GetSprinklerTiles()
     {
         this.AssertLoaded();
-        return this.ModApi.GetSprinklerCoverage();
+
+        return
+            this.SafelyCallApi(
+                api => api.GetSprinklerCoverage(),
+                "Failed fetching sprinkler tiles from {0}."
+            )
+            ?? new Dictionary<int, Vector2[]>();
     }
 }

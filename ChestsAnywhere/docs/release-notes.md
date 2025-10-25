@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed features breaking if an integration with another mod fails.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.29.0

@@ -33,7 +33,14 @@ internal class ProducerFrameworkModIntegration : BaseIntegration<IProducerFramew
     {
         this.AssertLoaded();
 
-        return this.ReadRecipes(this.ModApi.GetRecipes());
+        List<Dictionary<string, object?>> recipes =
+            this.SafelyCallApi(
+                api => api.GetRecipes(),
+                "Failed getting recipes from {0}."
+            )
+            ?? [];
+
+        return this.ReadRecipes(recipes);
     }
 
     /// <summary>Get the list of recipes for a machine.</summary>
@@ -43,7 +50,14 @@ internal class ProducerFrameworkModIntegration : BaseIntegration<IProducerFramew
     {
         this.AssertLoaded();
 
-        return this.ReadRecipes(this.ModApi.GetRecipes(machine));
+        List<Dictionary<string, object?>> recipes =
+            this.SafelyCallApi(
+                api => api.GetRecipes(machine),
+                "Failed getting recipes from {0}."
+            )
+            ?? [];
+
+        return this.ReadRecipes(recipes);
     }
 
 
