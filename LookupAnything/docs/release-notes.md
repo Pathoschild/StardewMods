@@ -2,12 +2,13 @@
 
 # Release notes
 ## Upcoming release
-* You can choose between multiple visual themes in [the mod settings](README.md#configure), and [mod authors can add custom themes](author-guide.md) (thanks to Mushymato!).
-* Improved how data mining fields are shown:
-  * The main field labels are now translatable, and renamed from "debug" to "raw data" to better match the associated option.
-  * Values are now grouped by full type name, instead of repeating the type on each line.
+* You can now choose a visual theme in [the mod settings](README.md#configure), and [mod authors can add custom themes](author-guide.md) (thanks to Mushymato!).
+* Improved how data mining values are shown:
+  * Added translation support for the field itself, and renamed it from "debug" to "raw data" to match the associated option.
+  * Values are now grouped into sections by full type name, instead of repeating it on each line.
   * Pinned values are now a section in the main field, instead of a separate field.
   * Improved representation for various value types.
+* Fixed search UI not showing on-screen keyboard when using a controller.
 * Fixed errors when an NPC has a null sprite.
 * Fixed features breaking if an integration with another mod fails.
 

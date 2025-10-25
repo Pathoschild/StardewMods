@@ -44,11 +44,14 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The number of pixels to scroll.</summary>
     private int CurrentScroll;
 
+    /// <summary>The last search text for which results were shown.</summary>
+    private string SearchText = string.Empty;
+
     /// <summary>The subjects available for searching indexed by name.</summary>
     private readonly ILookup<string, ISubject> SearchLookup;
 
     /// <summary>The search input box.</summary>
-    private readonly SearchTextBox SearchTextbox;
+    private readonly TextBox SearchTextbox;
 
     /// <summary>The current search results.</summary>
     private IEnumerable<SearchResultComponent> SearchResults = [];
@@ -85,14 +88,13 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         this.ScrollAmount = scroll;
 
         // create components
-        this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
+        this.SearchTextbox = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black);
         this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, 1);
         this.ScrollDownButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, 1);
 
         // initialise
         this.UpdateLayout();
-        this.SearchTextbox.Select();
-        this.SearchTextbox.OnChanged += (_, text) => this.ReceiveSearchTextboxChanged(text);
+        this.SearchTextbox.Selected = true;
     }
 
     /// <inheritdoc />
@@ -112,8 +114,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             this.exitThisMenu();
 
         // search box
-        else if (this.SearchTextbox.Bounds.Contains(x, y))
-            this.SearchTextbox.Select();
+        else if (x >= this.SearchTextbox.X && x <= this.SearchTextbox.X + this.SearchTextbox.Width && y >= this.SearchTextbox.Y && y <= this.SearchTextbox.Y + this.SearchTextbox.Height)
+            this.SearchTextbox.Selected = true;
 
         // scroll up or down
         else if (this.ScrollUpButton.containsPoint(x, y))
@@ -189,6 +191,20 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     ** Methods
     ****/
     /// <inheritdoc />
+    public override void update(GameTime time)
+    {
+        base.update(time);
+
+        this.SearchTextbox.Update();
+
+        if (this.SearchText != this.SearchTextbox.Text)
+        {
+            this.SearchText = this.SearchTextbox.Text;
+            this.ReceiveSearchTextboxChanged(this.SearchText);
+        }
+    }
+
+    /// <inheritdoc />
     public override void draw(SpriteBatch b)
     {
         // calculate dimensions
@@ -239,9 +255,11 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
                     Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                     topOffset += Math.Max(nameSize.Y, typeSize.Y);
 
-                    this.SearchTextbox.Bounds = new Rectangle(x: x + (int)leftOffset, y: y + (int)topOffset, width: (int)wrapWidth, height: this.SearchTextbox.Bounds.Height);
+                    this.SearchTextbox.X = x + (int)leftOffset;
+                    this.SearchTextbox.Y = y + (int)topOffset;
+                    this.SearchTextbox.Width = (int)wrapWidth;
                     this.SearchTextbox.Draw(contentBatch);
-                    topOffset += this.SearchTextbox.Bounds.Height;
+                    topOffset += this.SearchTextbox.Height;
 
                     int mouseX = Game1.getMouseX();
                     int mouseY = Game1.getMouseY();
@@ -307,7 +325,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        this.SearchTextbox.Dispose();
+        this.SearchTextbox.Selected = false;
     }
 
 
