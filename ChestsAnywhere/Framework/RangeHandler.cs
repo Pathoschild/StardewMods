@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -44,48 +46,64 @@ internal class RangeHandler
         this.WorldAreaZones = new(() => this.GetWorldAreaZones(worldAreas));
     }
 
-    /// <summary>Get whether a location is within range of the player.</summary>
-    /// <param name="location">The location to check.</param>
-    public bool IsInRange(GameLocation location)
+    /// <summary>Get the locations which match this range.</summary>
+    /// <param name="multiplayerApi">The multiplayer API from which to get active locations, if applicable.</param>
+    public IEnumerable<GameLocation> GetLocationsInRange(IMultiplayerHelper multiplayerApi)
     {
-        string? zone = this.GetZone(location, this.Range);
+        switch (this.Range)
+        {
+            case ChestRange.None:
+                return [];
 
-        return
-            zone != null
-            && zone == this.GetZone(Game1.currentLocation, this.Range);
+            case ChestRange.CurrentLocation:
+                {
+                    GameLocation currentLocation = Game1.currentLocation;
+                    return currentLocation != null
+                        ? [currentLocation]
+                        : [];
+                }
+
+            case ChestRange.CurrentWorldArea:
+                {
+                    string currentZone = this.GetZone(Game1.currentLocation);
+                    return this
+                        .GetAllLocations(multiplayerApi)
+                        .Where(location => this.GetZone(location) == currentZone);
+                }
+
+            case ChestRange.Unlimited:
+                return this.GetAllLocations(multiplayerApi);
+
+            default:
+                throw new NotSupportedException($"Unknown range '{this.Range}'.");
+        }
     }
 
 
     /*********
     ** Private methods
     *********/
+    /// <summary>Get all available locations (not only those in range).</summary>
+    /// <param name="multiplayerApi">The multiplayer API from which to get active locations, if applicable.</param>
+    private IEnumerable<GameLocation> GetAllLocations(IMultiplayerHelper multiplayerApi)
+    {
+        return Context.IsMainPlayer
+            ? CommonHelper.GetLocations()
+            : multiplayerApi.GetActiveLocations();
+    }
+
     /// <summary>Get the zone key for a location.</summary>
     /// <param name="location">The location to check.</param>
-    /// <param name="range">The range within which chests should be accessible.</param>
-    private string? GetZone(GameLocation location, ChestRange range)
+    private string GetZone(GameLocation location)
     {
-        switch (range)
+        return location switch
         {
-            case ChestRange.Unlimited:
-                return "*";
-
-            case ChestRange.CurrentWorldArea:
-                return location switch
-                {
-                    MineShaft mine => mine.mineLevel <= 120 ? "Mine" : "SkullCave",
-                    VolcanoDungeon => "VolcanoDungeon",
-                    _ => this.WorldAreaZones.Value.TryGetValue(location, out string? zone) ? zone : location.Name
-                };
-
-            case ChestRange.CurrentLocation:
-                return location.NameOrUniqueName;
-
-            case ChestRange.None:
-                return null;
-
-            default:
-                throw new NotSupportedException($"Unknown range '{range}'.");
-        }
+            MineShaft mine => mine.mineLevel <= 120 ? "Mine" : "SkullCave",
+            VolcanoDungeon => "VolcanoDungeon",
+            _ => this.WorldAreaZones.Value.TryGetValue(location, out string? zone)
+                ? zone
+                : location.Name
+        };
     }
 
     /// <summary>Get a lookup which matches locations to world area zones.</summary>

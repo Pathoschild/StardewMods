@@ -4,7 +4,9 @@ using System.Globalization;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.Common;
+using StardewValley;
 using StardewValley.Mods;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework;
 
@@ -94,6 +96,27 @@ internal class ContainerData
         this.Category = null;
         this.AutomateTakeItems = AutomateContainerPreference.Allow;
         this.AutomateStoreItems = AutomateContainerPreference.Allow;
+    }
+
+    /// <summary>Get whether the player edited a chest's name.</summary>
+    /// <param name="chest">The chest to check.</param>
+    public static bool HasCustomName(SObject chest)
+    {
+        const string nameKey = $"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Name)}";
+
+        return
+            chest.modData.Length > 0
+            && !string.IsNullOrWhiteSpace(chest.modData.GetValueOrDefault(nameKey));
+    }
+
+    /// <summary>Get whether the player edited a chest's name.</summary>
+    /// <param name="location">The chest whose mod data to check.</param>
+    /// <param name="discriminator">The discriminator in the location's mod data for the name.</param>
+    public static bool HasCustomName(GameLocation location, string discriminator)
+    {
+        return
+            location.modData.Length > 0
+            && !string.IsNullOrWhiteSpace(location.modData.GetValueOrDefault($"{ContainerData.GetKeyPrefix(discriminator)}/{nameof(ContainerData.Name)}"));
     }
 
 
