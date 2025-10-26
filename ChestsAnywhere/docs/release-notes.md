@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Optimized performance.
+* Fixed 'sequence contains no elements' errors for some players.
 * Fixed features breaking if an integration with another mod fails.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 

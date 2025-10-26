@@ -61,10 +61,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>The keybind for escaping the active element or menu.</summary>
     private readonly KeybindList EscapeKeybind = KeybindList.Parse($"{SButton.Escape}, {SButton.ControllerB}");
 
-    /// <summary>Whether to show the category dropdown.</summary>
-    [MemberNotNullWhen(true, nameof(BaseChestOverlay.ChestDropdown))]
-    protected bool ShowCategoryDropdown => this.Categories.Length > 1;
-
     /****
     ** Menu management
     ****/
@@ -81,7 +77,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     private readonly SpriteFont Font = Game1.smallFont;
 
     /// <summary>The chest dropdown.</summary>
-    protected Dropdown<ManagedChest> ChestDropdown;
+    protected Dropdown<ManagedChest>? ChestDropdown;
 
     /// <summary>The category dropdown.</summary>
     protected Dropdown<string>? CategoryDropdown;
@@ -230,7 +226,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             float navOpacity = this.CanCloseChest ? 1f : 0.5f;
 
             // dropdowns
-            this.ChestDropdown.Draw(batch, navOpacity);
+            this.ChestDropdown?.Draw(batch, navOpacity);
             this.CategoryDropdown?.Draw(batch, navOpacity);
 
             // edit button
@@ -439,7 +435,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 return false;
 
             case Element.ChestList:
-                this.ChestDropdown.ReceiveScrollWheelAction(amount);
+                this.ChestDropdown?.ReceiveScrollWheelAction(amount);
                 return true;
 
             case Element.CategoryList:
@@ -501,7 +497,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             case Element.ChestList:
                 {
                     // select chest
-                    if (this.ChestDropdown.TryClick(x, y, out bool itemClicked, out bool dropdownToggled))
+                    if (this.ChestDropdown!.TryClick(x, y, out bool itemClicked, out bool dropdownToggled))
                     {
                         if (itemClicked)
                         {
@@ -550,12 +546,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 bool canNavigate = this.CanCloseChest;
                 if (this.EditButton.containsPoint(x, y) && canNavigate)
                     this.OpenEdit();
-                else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
+                else if (this.ChestDropdown?.TryClick(x, y) is true && canNavigate)
                 {
                     this.ChestDropdown.IsExpanded = true;
                     this.ActiveElement = Element.ChestList;
                 }
-                else if (this.CategoryDropdown?.TryClick(x, y) == true && canNavigate)
+                else if (this.CategoryDropdown?.TryClick(x, y) is true && canNavigate)
                 {
                     this.CategoryDropdown.IsExpanded = true;
                     this.ActiveElement = Element.CategoryList;
@@ -599,7 +595,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     *********/
     /// <summary>Initialize the base edit-chest overlay for rendering.</summary>
     [MemberNotNull(
-        nameof(BaseChestOverlay.ChestDropdown),
         nameof(BaseChestOverlay.EditButton),
         nameof(BaseChestOverlay.EditNameField),
         nameof(BaseChestOverlay.EditCategoryField),
@@ -617,7 +612,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         int maxDropdownLabelWidth = (bounds.Width / 2) - 50;
 
         // category dropdown
-        if (this.ShowCategoryDropdown)
+        this.CategoryDropdown = null;
+        if (this.Categories.Length > 1)
         {
             this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category, maxDropdownLabelWidth);
 
@@ -628,15 +624,19 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         }
 
         // chest dropdown
+        this.ChestDropdown = null;
         {
-            ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
-            ManagedChest? selected = ChestFactory.GetBestMatch(chests, this.Chest);
-            this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName, maxDropdownLabelWidth);
-
-            if (Constants.TargetPlatform != GamePlatform.Android)
+            ManagedChest[] chests = this.Chests.Where(chest => chest.DisplayCategory == this.SelectedCategory).ToArray();
+            if (chests.Length > 0)
             {
-                this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + topOffset;
-                this.ChestDropdown.ReinitializeComponents();
+                ManagedChest? selected = ChestFactory.GetBestMatch(chests, this.Chest);
+                this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName, maxDropdownLabelWidth);
+
+                if (Constants.TargetPlatform != GamePlatform.Android)
+                {
+                    this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + topOffset;
+                    this.ChestDropdown.ReinitializeComponents();
+                }
             }
         }
 
@@ -644,7 +644,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         {
             Rectangle sprite = CommonSprites.Icons.SpeechBubble;
             float zoom = Game1.pixelZoom / 2f;
-            Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
+
+            Point iconPos = this.ChestDropdown != null
+                ? new Point(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y)
+                : new Point(0, bounds.Y + topOffset);
+
+            Rectangle buttonBounds = new Rectangle(iconPos.X, iconPos.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
             this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
         }
 
@@ -758,7 +763,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         // close open dropdowns
         if (value != Element.CategoryList && value != Element.ChestList)
         {
-            this.ChestDropdown.IsExpanded = false;
+            if (this.ChestDropdown != null)
+                this.ChestDropdown.IsExpanded = false;
             if (this.CategoryDropdown != null)
                 this.CategoryDropdown.IsExpanded = false;
         }
