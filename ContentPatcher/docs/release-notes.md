@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 2.8.1
+Released 26 October 2025 for SMAPI 4.1.10 or later.
+
 * Fixed features breaking if an integration with another mod fails.
 
 ## 2.8.0

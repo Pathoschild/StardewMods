@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.29.1
+Released 26 October 2025 for SMAPI 4.1.10 or later.
+
 * Optimized performance.
 * Fixed 'sequence contains no elements' errors for some players.
 * Fixed features breaking if an integration with another mod fails.

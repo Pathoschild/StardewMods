@@ -1,14 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.53.0
+Released 26 October 2025 for SMAPI 4.3.1 or later.
+
 * You can now choose a visual theme in [the mod settings](README.md#configure), and [mod authors can add custom themes](author-guide.md) (thanks to Mushymato!).
 * Improved how data mining values are shown:
-  * Added translation support for the field itself, and renamed it from "debug" to "raw data" to match the associated option.
+  * The main field label is now translatable, and renamed from "debug" to "raw data" to match its option.
   * Values are now grouped into sections by full type name, instead of repeating it on each line.
   * Pinned values are now a section in the main field, instead of a separate field.
-  * Improved representation for various value types.
-* Fixed search UI not showing on-screen keyboard when using a controller.
+  * Improved how various value types are displayed.
+* Fixed search UI not showing the on-screen keyboard when using a controller.
 * Fixed errors when an NPC has a null sprite.
 * Fixed features breaking if an integration with another mod fails.
 

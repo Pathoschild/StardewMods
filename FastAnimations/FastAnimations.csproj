@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.15.2</Version>
+    <Version>1.15.3</Version>
     <RootNamespace>Pathoschild.Stardew.FastAnimations</RootNamespace>
   </PropertyGroup>
 
