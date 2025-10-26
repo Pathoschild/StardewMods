@@ -342,9 +342,15 @@ internal static class CommonHelper
     /// <summary>Show an informational message to the player.</summary>
     /// <param name="message">The message to show.</param>
     /// <param name="duration">The number of milliseconds during which to keep the message on the screen before it fades (or <c>null</c> for the default time).</param>
-    public static void ShowInfoMessage(string message, int? duration = null)
+    /// <param name="number">An arbitrary number which identifies this message, if applicable.</param>
+    public static void ShowInfoMessage(string message, int? duration = null, int number = -1)
     {
-        Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type) { noIcon = true, timeLeft = duration ?? HUDMessage.defaultTime });
+        Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type)
+        {
+            noIcon = true,
+            timeLeft = duration ?? HUDMessage.defaultTime,
+            number = number
+        });
     }
 
     /// <summary>Show an error message to the player.</summary>

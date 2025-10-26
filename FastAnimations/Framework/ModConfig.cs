@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework;
 
@@ -8,6 +10,12 @@ internal class ModConfig
     /*********
     ** Accessors
     *********/
+    /****
+    ** Keybinds
+    ****/
+    /// <summary>A keybind which pauses or unpauses all mod features.</summary>
+    public KeybindList PauseModKey { get; set; } = KeybindList.ForSingle(SButton.None);
+
     /****
     ** Player animations
     ****/

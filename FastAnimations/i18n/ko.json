@@ -1,5 +1,13 @@
 ﻿{
     /*********
+    ** In-game messages
+    *********/
+    // TODO
+    "mod-paused": "Fast Animations paused; animations will play at default speed. Press {{keybind}} again to unpause it.",
+    "mod-unpaused": "Fast Animations resumed; animations will play at configured speeds. Press {{keybind}} again to pause it.",
+
+
+    /*********
     ** Generic Mod Config Menu UI
     *********/
     /****
@@ -119,6 +127,18 @@
 
     "config.load-game-blink.name": "게임 불러오기 깜박임",
     "config.load-game-blink.tooltip": "불러오기 창에서 저장 슬롯을 클릭한 후 슬롯이 깜박이는 지연이 발생하는 속도. 기본 값 {{defaultValue}}.",
+
+    /****
+    ** 'Pause Mod' section
+    ****/
+    // TODO
+    "config.pause-mod-section": "Pause mod",
+
+    "config.mod-paused.name": "Paused temporarily",
+    "config.mod-paused.tooltip": "Whether the mod is temporarily paused, so all animations play at the default speed. This only applies during the current session.",
+
+    "config.pause-mod.name": "Pause key",
+    "config.pause-mod.tooltip": "The keybind which temporarily pauses the mod, so all animations play at the default speed. Pressing it again will unpause the mod.",
 
     /****
     ** 'Experimental' section
