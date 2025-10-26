@@ -7,6 +7,7 @@ using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations;
@@ -17,6 +18,9 @@ internal class ModEntry : Mod
     /*********
     ** Fields
     *********/
+    /// <summary>An arbitrary number which identifies the pause/unpause messages from Fast Animations.</summary>
+    private const int MessageId = 918718254;
+
     /// <summary>The mod configuration.</summary>
     private ModConfig Config = null!; // set in Entry
 
@@ -25,6 +29,9 @@ internal class ModEntry : Mod
 
     /// <summary>The <see cref="Handlers"/> filtered to those which need to be updated when the object list changes.</summary>
     private IAnimationHandlerWithObjectList[] HandlersWithObjectList = null!; // set in Entry
+
+    /// <summary>Whether to pause mod features.</summary>
+    private readonly PerScreen<bool> ModPaused = new();
 
 
     /*********
@@ -42,6 +49,7 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+        helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         helper.Events.Player.Warped += this.OnWarped;
         helper.Events.World.ObjectListChanged += this.OnObjectListChanged;
     }
@@ -57,7 +65,10 @@ internal class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.AddGenericModConfigMenu(
-            new GenericModConfigMenuIntegrationForFastAnimations(),
+            new GenericModConfigMenuIntegrationForFastAnimations(
+                isModPaused: () => this.ModPaused.Value,
+                setModPaused: this.SetModPausedWithNotification
+            ),
             get: () => this.Config,
             set: config => this.Config = config,
             onSaved: this.UpdateConfig
@@ -95,7 +106,7 @@ internal class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.UpdateTicked" />
     private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
-        if (!this.Handlers.Any())
+        if (!this.Handlers.Any() || this.ModPaused.Value)
             return;
 
         int playerAnimationId = Game1.player.FarmerSprite.currentSingleAnimation;
@@ -105,6 +116,17 @@ internal class ModEntry : Mod
                 break;
         }
     }
+
+    /// <inheritdoc cref="IInputEvents.ButtonsChanged" />
+    private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+    {
+        if (!Context.IsWorldReady)
+            return;
+
+        if (this.Config.PauseModKey.JustPressed())
+            this.SetModPausedWithNotification(!this.ModPaused.Value);
+    }
+
 
     /****
     ** Methods
@@ -122,6 +144,26 @@ internal class ModEntry : Mod
             foreach (IAnimationHandler handler in this.Handlers)
                 handler.OnNewLocation(location);
         }
+    }
+
+    /// <summary>Set whether the mod features are paused (so animations play at default speeds), and show a HUD notification if it changes.</summary>
+    /// <param name="paused">Whether the mod features should be paused.</param>
+    private void SetModPausedWithNotification(bool paused)
+    {
+        if (this.ModPaused.Value == paused)
+            return;
+
+        // set value
+        this.ModPaused.Value = paused;
+
+        // show UI message
+        string keybind = this.Config.PauseModKey.ToString();
+        string message = paused
+            ? I18n.ModPaused(keybind: keybind)
+            : I18n.ModUnpaused(keybind: keybind);
+
+        Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageId);
+        CommonHelper.ShowInfoMessage(message, duration: 1000, number: ModEntry.MessageId);
     }
 
     /// <summary>Get the enabled animation handlers.</summary>

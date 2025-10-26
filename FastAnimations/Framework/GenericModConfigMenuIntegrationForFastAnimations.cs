@@ -1,3 +1,4 @@
+using System;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
 
@@ -7,8 +8,27 @@ namespace Pathoschild.Stardew.FastAnimations.Framework;
 internal class GenericModConfigMenuIntegrationForFastAnimations : IGenericModConfigMenuIntegrationFor<ModConfig>
 {
     /*********
+    ** Private methods
+    *********/
+    /// <summary>Whether the mod features are currently paused.</summary>
+    private readonly Func<bool> IsModPaused;
+
+    /// <summary>Set whether the mod features are currently paused.</summary>
+    private readonly Action<bool> SetModPaused;
+
+
+    /*********
     ** Public methods
     *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="isModPaused">Whether the mod features are currently paused.</param>
+    /// <param name="setModPaused">Set whether the mod features are currently paused.</param>
+    public GenericModConfigMenuIntegrationForFastAnimations(Func<bool> isModPaused, Action<bool> setModPaused)
+    {
+        this.IsModPaused = isModPaused;
+        this.SetModPaused = setModPaused;
+    }
+
     /// <inheritdoc />
     public void Register(GenericModConfigMenuIntegration<ModConfig> menu, IMonitor monitor)
     {
@@ -279,6 +299,20 @@ internal class GenericModConfigMenuIntegrationForFastAnimations : IGenericModCon
                 set: (config, value) => config.LoadGameBlinkSpeed = value,
                 min: minSpeed,
                 max: maxSpeed
+            )
+
+            .AddSectionTitle(I18n.Config_PauseModSection)
+            .AddCheckbox(
+                name: I18n.Config_ModPaused_Name,
+                tooltip: I18n.Config_ModPaused_Tooltip,
+                get: _ => this.IsModPaused(),
+                set: (_, value) => this.SetModPaused(value)
+            )
+            .AddKeyBinding(
+                name: I18n.Config_PauseMod_Name,
+                tooltip: I18n.Config_PauseMod_Tooltip,
+                get: config => config.PauseModKey,
+                set: (config, value) => config.PauseModKey = value
             )
 
             .AddSectionTitle(I18n.Config_Experimental)
