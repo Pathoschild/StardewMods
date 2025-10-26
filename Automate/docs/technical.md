@@ -84,12 +84,19 @@ If you don't want Chests Anywhere's functionality, you have a few options:
 
 ## Basic extensibility for mod authors
 ### Custom chest types
-Automate automatically recognizes the vanilla chests as storage containers. To add a new chest type to Automate, you
-need to:
-1. use the `Chest` object type;
-2. and add the `automate_storage` context tag to its [object data](https://stardewvalleywiki.com/Modding:Objects).
+Automate will recognize any chest which...
+1. uses the `Chest` object type;
+2. and has these context tags in its [object data](https://stardewvalleywiki.com/Modding:Objects):
 
-This will also let players configure the chest in the config UI automatically.
+   context tag             | effect
+   ----------------------- | ------
+   `automate_storage`      | Indicates that it's a chest which can be used to automate machines.
+   `automate_storage_take` | _(Optional)_ Indicates that Automate can _only_ take items out of this chest, it can't push machine output back into it. It must still have the `automate_storage` context tag too.<br /><br />This is used to restrict the behavior for all chests of this type (e.g. it changes Automate's config UI); see [_chest automation options_](#chest-automation-options) for more granular options.
+
+Automate adds the appropriate context tags to vanilla chests automatically.
+
+Recognized chests are used to automate machines, appear in Automate's config UI, and have
+automation-specific options in Chests Anywhere's edit-chest UI.
 
 ### Custom chest capacity
 Automate uses the value returned by `chest.GetActualCapacity()`. You can override or patch that method, and Automate
