@@ -5,12 +5,11 @@ using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.GameData;
 using StardewValley.Objects;
-using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters;
 
@@ -21,7 +20,7 @@ internal class FarmerSubject : BaseSubject
     ** Fields
     *********/
     /// <summary>The lookup target.</summary>
-    private readonly SFarmer Target;
+    private readonly Farmer Target;
 
     /// <summary>Whether this is being displayed on the load menu, before the save data is fully initialized.</summary>
     private readonly bool IsLoadMenu;
@@ -37,7 +36,7 @@ internal class FarmerSubject : BaseSubject
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="farmer">The lookup target.</param>
     /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialized.</param>
-    public FarmerSubject(GameHelper gameHelper, SFarmer farmer, bool isLoadMenu = false)
+    public FarmerSubject(GameHelper gameHelper, Farmer farmer, bool isLoadMenu = false)
         : base(gameHelper, farmer.Name, null, I18n.Type_Player())
     {
         this.Target = farmer;
@@ -50,7 +49,7 @@ internal class FarmerSubject : BaseSubject
     /// <inheritdoc />
     public override IEnumerable<ICustomField> GetData()
     {
-        SFarmer target = this.Target;
+        Farmer target = this.Target;
 
         // basic info
         yield return new GenericField(I18n.Player_Gender(), target.IsMale ? I18n.Player_Gender_Male() : I18n.Player_Gender_Female());
@@ -66,18 +65,18 @@ internal class FarmerSubject : BaseSubject
         // skills
         int maxSkillPoints = this.Constants.PlayerMaxSkillPoints;
         int[] skillPointsPerLevel = this.Constants.PlayerSkillPointsPerLevel;
-        yield return new SkillBarField(I18n.Player_FarmingSkill(), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
-        yield return new SkillBarField(I18n.Player_MiningSkill(), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
-        yield return new SkillBarField(I18n.Player_ForagingSkill(), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
-        yield return new SkillBarField(I18n.Player_FishingSkill(), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
-        yield return new SkillBarField(I18n.Player_CombatSkill(), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
+        yield return new SkillBarField(I18n.Player_FarmingSkill(), target.experiencePoints[Farmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
+        yield return new SkillBarField(I18n.Player_MiningSkill(), target.experiencePoints[Farmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
+        yield return new SkillBarField(I18n.Player_ForagingSkill(), target.experiencePoints[Farmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
+        yield return new SkillBarField(I18n.Player_FishingSkill(), target.experiencePoints[Farmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
+        yield return new SkillBarField(I18n.Player_CombatSkill(), target.experiencePoints[Farmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
 
         // custom skills
         var spaceCore = this.GameHelper.SpaceCore;
         if (spaceCore.IsLoaded)
         {
-            foreach (string skill in spaceCore.ModApi.GetCustomSkills())
-                yield return new SkillBarField(spaceCore.ModApi.GetDisplayNameOfCustomSkill(skill), spaceCore.ModApi.GetExperienceForCustomSkill(target, skill), maxSkillPoints, skillPointsPerLevel);
+            foreach (string skill in spaceCore.GetCustomSkills())
+                yield return new SkillBarField(spaceCore.GetDisplayNameOfCustomSkill(skill), spaceCore.GetExperienceForCustomSkill(target, skill), maxSkillPoints, skillPointsPerLevel);
         }
 
         // luck
@@ -90,24 +89,24 @@ internal class FarmerSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
-        SFarmer target = this.Target;
+        Farmer target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("immunity", target.Immunity, pinned: true);
-        yield return new GenericDebugField("defense", target.buffs.Defense, pinned: true);
-        yield return new GenericDebugField("magnetic radius", target.MagneticRadius, pinned: true);
+        yield return new PinnedDataMinedValue("immunity", target.Immunity);
+        yield return new PinnedDataMinedValue("defense", target.buffs.Defense);
+        yield return new PinnedDataMinedValue("magnetic radius", target.MagneticRadius);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 
     /// <inheritdoc />
     public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
     {
-        SFarmer target = this.Target;
+        Farmer target = this.Target;
 
         if (this.IsLoadMenu)
             target.FarmerRenderer.draw(spriteBatch, new FarmerSprite.AnimationFrame(0, 0, false, false), 0, new Rectangle(0, 0, 16, 32), position, Vector2.Zero, 0.8f, 2, Color.White, 0.0f, 1f, target);
@@ -143,10 +142,10 @@ internal class FarmerSubject : BaseSubject
     }
 
     /// <summary>Get the human-readable farm type selected by the player.</summary>
-    private string? GetFarmType()
+    private string GetFarmType()
     {
         // get farm type ID
-        string farmTypeId = this.IsLoadMenu
+        string? farmTypeId = this.IsLoadMenu
             ? this.RawSaveData?.Value?.Element("whichFarm")?.Value ?? Game1.GetFarmTypeID()
             : Game1.GetFarmTypeID();
 
@@ -187,7 +186,7 @@ internal class FarmerSubject : BaseSubject
             return this.Target.spouse;
 
         long? spousePlayerID = this.Target.team.GetSpouse(this.Target.UniqueMultiplayerID);
-        SFarmer? spousePlayer = spousePlayerID.HasValue ? Game1.GetPlayer(spousePlayerID.Value) : null;
+        Farmer? spousePlayer = spousePlayerID.HasValue ? Game1.GetPlayer(spousePlayerID.Value) : null;
 
         return spousePlayer?.displayName ?? Game1.player.getSpouse()?.displayName;
     }

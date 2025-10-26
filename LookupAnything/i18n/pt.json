@@ -651,7 +651,6 @@
     // labels
     "tile.title": "Bloco ({{x}}, {{y}})",
     "tile.description": "A posição de um bloco no mapa. Isso é exibido porque você ativou as pesquisas de blocos na configuração",
-    "tile.game-location": "Localização",
     "tile.map-name": "Nome do mapa",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -712,10 +711,33 @@
 
 
     /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
+
+    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Opções principais",
+    // appearance
+    // TODO
+    "config.title.appearance": "Appearance",
+
+    "config.theme.name": "Visual theme",
+    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+
+    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Joja": "Joja",
+    "config.theme.values.MenuBox_Border": "Menu box (border)",
+    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
+    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
+    "config.theme.values.Plain": "Plain",
+
     "config.force-full-screen.name": "Forçar tela cheia",
     "config.force-full-screen.desc": "Se o menu deve estar sempre em tela cheia, em vez de centralizado na janela. Isso é útil principalmente ao visualizar campos de mineração de dados.",
 

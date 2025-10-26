@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -138,17 +138,17 @@ internal class FruitTreeSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         FruitTree target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("mature in", $"{target.daysUntilMature} days", pinned: true);
-        yield return new GenericDebugField("growth stage", target.growthStage.Value, pinned: true);
-        yield return new GenericDebugField("health", target.health.Value, pinned: true);
+        yield return new PinnedDataMinedValue("mature in", $"{target.daysUntilMature} days");
+        yield return new PinnedDataMinedValue("growth stage", target.growthStage.Value);
+        yield return new PinnedDataMinedValue("health", target.health.Value);
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 

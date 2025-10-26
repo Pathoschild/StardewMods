@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.6.0
+Released 26 October 2025 for SMAPI 4.3.1 or later.
+
+* Added option to require Pam's bus repair before you can depart from the Stardew Valley bus stop.
+* Fixed features breaking if an integration with another mod fails.
+* Improved translations. Thanks to Lexith (updated Turkish)!
+
 ## 1.5.1
 Released 03 September 2025 for SMAPI 4.3.1 or later.
 

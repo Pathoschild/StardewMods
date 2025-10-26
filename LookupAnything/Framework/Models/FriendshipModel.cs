@@ -1,7 +1,6 @@
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
-using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models;
 
@@ -84,7 +83,7 @@ internal record FriendshipModel
     /// <param name="npc">The NPC.</param>
     /// <param name="constants">The constant assumptions.</param>
     /// <param name="friendship">The current friendship data.</param>
-    public FriendshipModel(SFarmer player, NPC npc, Friendship friendship, ConstantData constants)
+    public FriendshipModel(Farmer player, NPC npc, Friendship friendship, ConstantData constants)
     {
         bool marriedOrRoommate = friendship.IsMarried();
         bool roommate = friendship.IsRoommate();

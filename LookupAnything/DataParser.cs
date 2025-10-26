@@ -25,7 +25,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TokenizableStrings;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything;
@@ -361,7 +360,7 @@ internal class DataParser
     /// <param name="npc">The NPC.</param>
     /// <param name="friendship">The current friendship data.</param>
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-    public FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Friendship friendship, Metadata metadata)
+    public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship, Metadata metadata)
     {
         return new FriendshipModel(player, npc, friendship, metadata.Constants);
     }
@@ -369,7 +368,7 @@ internal class DataParser
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
     /// <param name="player">The player.</param>
     /// <param name="pet">The pet.</param>
-    public FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
+    public FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
     {
         return new FriendshipModel(pet.friendshipTowardFarmer.Value, Pet.maxFriendship / 10, Pet.maxFriendship);
     }
@@ -378,7 +377,7 @@ internal class DataParser
     /// <param name="player">The player.</param>
     /// <param name="animal">The farm animal.</param>
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-    public FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
+    public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
     {
         return new FriendshipModel(animal.friendshipTowardFarmer.Value, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
     }
@@ -603,7 +602,7 @@ internal class DataParser
 
                         // if there are extra outputs added by the Extra Machine Config mod, add them here
                         MachineItemOutput[] allOutputItems = extraMachineConfig.IsLoaded
-                            ? [mainOutputItem, .. extraMachineConfig.ModApi.GetExtraOutputs(mainOutputItem, machineData)]
+                            ? [mainOutputItem, .. extraMachineConfig.GetExtraOutputs(entryKey, mainOutputItem, machineData)]
                             : [mainOutputItem];
 
                         foreach (MachineItemOutput outputItem in allOutputItems)
@@ -654,10 +653,10 @@ internal class DataParser
                             // if there are extra fuels added by the Extra Machine Config mod, add them here
                             if (extraMachineConfig.IsLoaded)
                             {
-                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.ModApi.GetExtraRequirements(outputItem))
+                                foreach ((string extraItemId, int extraCount) in extraMachineConfig.GetExtraRequirements(entryKey, outputItem))
                                     ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, extraItemId, extraCount));
 
-                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.ModApi.GetExtraTagsRequirements(outputItem))
+                                foreach ((string extraContextTags, int extraCount) in extraMachineConfig.GetExtraTagsRequirements(entryKey, outputItem))
                                     ingredients.Add(new RecipeIngredientModel(RecipeType.MachineInput, null, extraCount, extraContextTags.Split(",")));
                             }
 
@@ -785,7 +784,7 @@ internal class DataParser
                             select new RecipeModel(
                                 key: null,
                                 type: RecipeType.BuildingInput,
-                                displayType: TokenParser.ParseText(buildingData?.Name) ?? buildingType,
+                                displayType: TokenParser.ParseText(buildingData.Name) ?? buildingType,
                                 ingredients,
                                 goldPrice: 0,
                                 item: _ => ItemRegistry.Create(result.Item.QualifiedItemId),

@@ -4,7 +4,7 @@
     <Version>1.0.0</Version>
     <RootNamespace>Pathoschild.Stardew.Tests.Mods</RootNamespace>
 
-    <EnableGameDebugging>false</EnableGameDebugging>
+    <EnableGameDebugging>False</EnableGameDebugging>
     <EnableModDeploy>False</EnableModDeploy>
     <EnableModZip>False</EnableModZip>
     <BundleExtraAssemblies>All</BundleExtraAssemblies>

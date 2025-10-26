@@ -649,7 +649,6 @@
     // labels (标签)
     "tile.title": "贴图 ({{x}}, {{y}})",
     "tile.description": "地图上此位置的贴图。显示此信息是因为你在设置中启用了贴图查询功能。",
-    "tile.game-location": "位置",
     "tile.map-name": "地图名",
     "tile.map-properties": "地图属性",
     "tile.layer-tile": "{{layer}}贴图", // note: this still doesn't work perfectly since the layer name remains untranslated in zh
@@ -710,10 +709,33 @@
 
 
     /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
+
+    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*********
     ** Generic Mod Config Menu UI (通用模组管理菜单界面)
     *********/
-    // main options (主要选项)
-    "config.title.main-options": "常规",
+    // appearance
+    // TODO
+    "config.title.appearance": "Appearance",
+
+    "config.theme.name": "Visual theme",
+    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+
+    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Joja": "Joja",
+    "config.theme.values.MenuBox_Border": "Menu box (border)",
+    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
+    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
+    "config.theme.values.Plain": "Plain",
+
     "config.force-full-screen.name": "强制全屏",
     "config.force-full-screen.desc": "是否全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
 

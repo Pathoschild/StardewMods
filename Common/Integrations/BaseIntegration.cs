@@ -121,4 +121,49 @@ internal abstract class BaseIntegration<TApi> : BaseIntegration
         if (!this.IsLoaded)
             throw new InvalidOperationException($"The {this.Label} integration isn't loaded.");
     }
+
+    /// <summary>Call an API method with error-handling.</summary>
+    /// <param name="callApi">Call the API method.</param>
+    /// <param name="error">A sentence indicating what failed, including '{0}' for the other mod's name (like "Failed fetching outputs from {0}").</param>
+    protected void SafelyCallApi(Action<TApi> callApi, string error)
+    {
+        if (this.IsLoaded)
+        {
+            try
+            {
+                callApi(this.ModApi);
+            }
+            catch (Exception ex)
+            {
+                error = string.Format(error, this.Label);
+
+                this.Monitor.LogOnce($"{error}\n\nTechnical info:\n{ex}", LogLevel.Error);
+            }
+        }
+    }
+
+    /// <summary>Call an API method with error-handling.</summary>
+    /// <typeparam name="TReturn">The API method return value.</typeparam>
+    /// <param name="callApi">Call the API method.</param>
+    /// <param name="defaultValue">The default value to return if the API fails.</param>
+    /// <param name="error">A sentence indicating what failed, including '{0}' for the other mod's name (like "Failed fetching outputs from {0}").</param>
+    [return: NotNullIfNotNull(nameof(defaultValue))]
+    protected TReturn? SafelyCallApi<TReturn>(Func<TApi, TReturn> callApi, string error, TReturn? defaultValue = default)
+    {
+        if (this.IsLoaded)
+        {
+            try
+            {
+                return callApi(this.ModApi);
+            }
+            catch (Exception ex)
+            {
+                error = string.Format(error, this.Label);
+
+                this.Monitor.LogOnce($"{error}\n\nTechnical info:\n{ex}", LogLevel.Error);
+            }
+        }
+
+        return defaultValue;
+    }
 }

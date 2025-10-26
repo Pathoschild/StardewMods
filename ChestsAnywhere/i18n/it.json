@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "Cabina ({{owner}})",
     "default-category.cabin-unowned": "Cabina (vuota)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Cantina ({{owner}})",
+    "default-category.cellar-unowned": "Cantina #{{cellarNumber}}",
+    "default-category.farmhouse": "Casa della fattoria",
+    "default-category.island-farmhouse": "Casa della fattoria sull'isola",
     "default-category.duplicate": "{{locationName}} n.{{number}}",
 
     // edit-chest labels

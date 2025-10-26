@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="TestDataLayersMod/TestDataLayersMod.csproj" />
+    <Project Path="TestMod/TestMod.csproj" />
+    <Project Path="Tests.Common/Tests.Common.csproj" />
+    <Project Path="Tests.Mods/Tests.Mods.csproj" />
+  </Folder>
+  <Project Path="Automate/Automate.csproj" />
+  <Project Path="CentralStation/CentralStation.csproj" />
+  <Project Path="ChestsAnywhere/ChestsAnywhere.csproj" />
+  <Project Path="Common.Patching/.Common.Patching.shproj" Id="49c40e04-5a9f-47da-8906-fa717816e772" />
+  <Project Path="Common/.Common.shproj" Id="b9e9edfc-e98a-4370-994f-40a9f39a0284" />
+  <Project Path="ContentPatcher/ContentPatcher.csproj" />
+  <Project Path="CropsAnytimeAnywhere/CropsAnytimeAnywhere.csproj" />
+  <Project Path="DataLayers/DataLayers.csproj" />
+  <Project Path="DebugMode/DebugMode.csproj" />
+  <Project Path="FastAnimations/FastAnimations.csproj" />
+  <Project Path="HorseFluteAnywhere/HorseFluteAnywhere.csproj" />
+  <Project Path="LookupAnything/LookupAnything.csproj" />
+  <Project Path="NoclipMode/NoclipMode.csproj" />
+  <Project Path="SkipIntro/SkipIntro.csproj" />
+  <Project Path="SmallBeachFarm/SmallBeachFarm.csproj" />
+  <Project Path="TractorMod/TractorMod.csproj" />
+</Solution>

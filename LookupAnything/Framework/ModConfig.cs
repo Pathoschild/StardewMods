@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
 
@@ -10,6 +11,15 @@ internal class ModConfig
     /*********
     ** Accessors
     *********/
+    /****
+    ** Appearance
+    ****/
+    /// <summary>The visual theme to apply to the menu.</summary>
+    public string ThemeId { get; set; } = ThemeManager.DefaultThemeId;
+
+    /// <summary>Whether the menu should always be full-screen, instead of centered in the window.</summary>
+    public bool ForceFullScreen { get; set; } = false;
+
     /****
     ** Common settings
     ****/
@@ -53,13 +63,10 @@ internal class ModConfig
     /// <summary>Whether to include map tiles as lookup targets.</summary>
     public bool EnableTileLookups { get; set; }
 
-    /// <summary>Whether the menu should always be full-screen, instead of centered in the window.</summary>
-    public bool ForceFullScreen { get; set; } = false;
-
     /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
     public int ScrollAmount { get; set; } = 160;
 
-    /// <summary>Whether to show advanced data mining fields.</summary>
+    /// <summary>Whether to show raw data mined values.</summary>
     public bool ShowDataMiningFields { get; set; }
 
     /// <summary>Whether to show recipes involving error items.</summary>
@@ -79,5 +86,6 @@ internal class ModConfig
         this.Controls ??= new ModConfigKeys();
         this.ShowGiftTastes ??= new ModGiftTasteConfig();
         this.CollapseLargeFields ??= new ModCollapseLargeFieldsConfig();
+        this.ThemeId ??= ThemeManager.DefaultThemeId;
     }
 }

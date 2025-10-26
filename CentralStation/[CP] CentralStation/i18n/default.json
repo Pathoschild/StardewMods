@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "This leads back to the dock and platforms. You'll need a ticket from the ticket counter first.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(You try to peer into the ticket booth, but there's just a vague shadow through the tinted glass.)",
     "location.ticket-counter.2": "(You hear strange whispers through the glass.)",
     "location.ticket-counter.3": "(Suddenly you can see through the tinted glass, just for a moment. When you think back, you can't remember what you saw.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(You sense a vague disapproval from the ticket counter. Or maybe you're just imagining it.)",
     "location.ticket-machine.2": "(You get a vague sense of unease for skipping the ticket counter.)",
     "location.ticket-machine.3": "(The machine lists dozens of destinations you've never heard of. You blink and the normal list is back.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(This machine only sells Joja Cola, but something thuds into the pickup tray as you approach.)",
     "location.cola-machine.2": "(You approach the cola machine. Before you can do anything, an item drops with a clunk.)",
     "location.cola-machine.3": "(Somehow you sense the cola machine wants to help.)",
@@ -183,5 +180,12 @@
     "furniture.suitcase-blue.name": "Blue Suitcase",
     "furniture.suitcase-pink.name": "Pink Suitcase",
     "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can"
+    "furniture.trash-can-messy.name": "Messy Trash Can",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-pam-bus.name": "Require Pam's bus",
+    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
 }

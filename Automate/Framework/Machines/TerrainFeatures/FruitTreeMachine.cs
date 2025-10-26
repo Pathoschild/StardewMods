@@ -37,10 +37,10 @@ internal class FruitTreeMachine : BaseMachine<FruitTree>
 
         // if struck by lightning => coal
         if (tree.struckByLightningCountdown.Value > 0)
-            return new TrackedItem(ItemRegistry.Create(SObject.coalQID, tree.fruit.Count), onReduced: _ => tree.fruit.Clear());
+            return new TrackedItem(ItemRegistry.Create(SObject.coalQID, tree.fruit.Count), onReduced: (_, _) => tree.fruit.Clear());
 
         // else => fruit
-        return new TrackedItem(tree.fruit[^1], onReduced: item => tree.fruit.Remove(item));
+        return new TrackedItem(tree.fruit[^1], onReduced: (_, item) => tree.fruit.Remove(item));
     }
 
     /// <inheritdoc />

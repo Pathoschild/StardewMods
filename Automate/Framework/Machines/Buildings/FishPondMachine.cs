@@ -45,8 +45,9 @@ internal class FishPondMachine : BaseMachineForBuilding<FishPond>
     ** Private methods
     *********/
     /// <summary>Remove an output item once it's been taken.</summary>
+    /// <param name="trackedStack">The tracked item stack that was reduced.</param>
     /// <param name="item">The removed item.</param>
-    private void OnOutputTaken(Item item)
+    private void OnOutputTaken(ITrackedStack trackedStack, Item item)
     {
         // clear output
         this.Machine.output.Value = null;

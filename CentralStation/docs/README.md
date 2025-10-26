@@ -50,6 +50,13 @@ you have that use Central Station, the more you can see in the Central Station!
 
 ![](screenshots/central-station.png)
 
+### Configure
+If you install [Generic Mod Config Menu][], you can click the cog button (⚙) on the title screen
+or the "mod options" button at the bottom of the in-game menu to configure the mod. Hover the
+cursor over a field for details.
+
+> ![](screenshots/config-menu.png)
+
 ### Mod compatibility
 There are no known conflicts with other mods.
 
@@ -93,3 +100,5 @@ See the [author guide](author-guide.md) for more info!
 
 ## See also
 * [Release notes](release-notes.md)
+
+[Generic Mod Config Menu]: https://www.nexusmods.com/stardewvalley/mods/5098

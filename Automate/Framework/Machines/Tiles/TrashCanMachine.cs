@@ -43,7 +43,7 @@ internal class TrashCanMachine : BaseMachine
         // get item
         this.Location.TryGetGarbageItem(this.TrashCanId, Game1.MasterPlayer.DailyLuck, out Item? item, out _, out _);
         if (item != null)
-            return new TrackedItem(item, onEmpty: _ => this.MarkChecked());
+            return new TrackedItem(item, onEmpty: (_, _) => this.MarkChecked());
 
         // if nothing is returned, mark trash can checked
         this.MarkChecked();

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>2.5.12</Version>
+    <Version>2.5.13</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
 
     <EnableHarmony>true</EnableHarmony>

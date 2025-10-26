@@ -93,9 +93,10 @@ internal class CrabPotMachine : GenericObjectMachine<CrabPot>
     ** Private methods
     *********/
     /// <summary>Reset the machine, so it's ready to accept a new input.</summary>
+    /// <param name="trackedStack">The tracked item stack that was reduced.</param>
     /// <param name="item">The output item that was taken.</param>
     /// <remarks>XP and achievement logic based on <see cref="CrabPot.checkForAction"/>.</remarks>
-    private void Reset(Item item)
+    private void Reset(ITrackedStack trackedStack, Item item)
     {
         CrabPot pot = this.Machine;
         Farmer owner = this.GetOwner();
@@ -127,7 +128,7 @@ internal class CrabPotMachine : GenericObjectMachine<CrabPot>
         }
 
         // reset pot
-        this.GenericReset(item);
+        this.GenericReset(trackedStack, item);
         pot.tileIndexToShow = 710;
         pot.bait.Value = null;
         pot.lidFlapping = true;

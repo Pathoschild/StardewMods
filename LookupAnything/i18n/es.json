@@ -651,7 +651,6 @@
     // labels
     "tile.title": "Casilla del mapa ({{x}}, {{y}})",
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
-    "tile.game-location": "Locación",
     "tile.map-name": "Nombre del mapa",
     "tile.map-properties": "Map properties", // TODO
     "tile.layer-tile": "{{layer}} tile", // TODO
@@ -713,10 +712,33 @@
 
 
     /*********
+    ** Data mining fields
+    *********/
+    // TODO
+    "data-mining.name": "Raw data",
+    "data-mining.name.map-tile": "Raw data (map tile)",
+    "data-mining.name.map-location": "Raw data (location)",
+
+    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*********
     ** Generic Mod Config Menu UI
     *********/
-    // main options
-    "config.title.main-options": "Opciones principales",
+    // appearance
+    // TODO
+    "config.title.appearance": "Appearance",
+
+    "config.theme.name": "Visual theme",
+    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+
+    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Joja": "Joja",
+    "config.theme.values.MenuBox_Border": "Menu box (border)",
+    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
+    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
+    "config.theme.values.Plain": "Plain",
+
     "config.force-full-screen.name": "Forzar pantalla completa",
     "config.force-full-screen.desc": "Si el menú debe estar siempre a pantalla completa, en lugar de centrado en la ventana. Esto es útil principalmente cuando se visualizan campos de minería de datos.",
 

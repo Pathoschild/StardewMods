@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -121,17 +121,17 @@ internal class BushSubject : BaseSubject
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IDebugField> GetDebugFields()
+    public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
         Bush target = this.Target;
 
         // pinned fields
-        yield return new GenericDebugField("health", target.health, pinned: true);
-        yield return new GenericDebugField("is town bush", this.Stringify(target.townBush.Value), pinned: true);
-        yield return new GenericDebugField("is in bloom", this.Stringify(target.inBloom()), pinned: true);
+        yield return new PinnedDataMinedValue("health", target.health);
+        yield return new PinnedDataMinedValue("is town bush", this.Stringify(target.townBush.Value));
+        yield return new PinnedDataMinedValue("is in bloom", this.Stringify(target.inBloom()));
 
         // raw fields
-        foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+        foreach (IDataMinedValue field in this.GetDataMinedValuesFrom(target))
             yield return field;
     }
 
@@ -202,7 +202,7 @@ internal class BushSubject : BaseSubject
         customBush = null;
         return
             this.GameHelper.CustomBush.IsLoaded
-            && this.GameHelper.CustomBush.ModApi.TryGetCustomBush(bush, out customBush);
+            && this.GameHelper.CustomBush.TryGetCustomBush(bush, out customBush);
     }
 
     /// <summary>Get bush drops from the Custom Bush mod if applicable.</summary>
@@ -213,7 +213,7 @@ internal class BushSubject : BaseSubject
     {
         CustomBushIntegration customBush = this.GameHelper.CustomBush;
 
-        if (customBush.IsLoaded && customBush.ModApi.TryGetCustomBush(bush, out _, out string? id) && customBush.ModApi.TryGetDrops(id, out IList<ICustomBushDrop>? rawDrops))
+        if (customBush.IsLoaded && customBush.TryGetCustomBush(bush, out string? id) && customBush.TryGetDrops(id, out IList<ICustomBushDrop>? rawDrops))
         {
             drops = new List<ItemDropData>(rawDrops.Count);
 
@@ -233,10 +233,10 @@ internal class BushSubject : BaseSubject
     /// <returns>Returns whether Bush Bloom Mod provided custom schedules.</returns>
     private bool TryGetBushBloomSchedules(Bush bush, [NotNullWhen(true)] out (string UnqualifiedItemId, WorldDate StartDay, WorldDate EndDay)[]? schedule)
     {
-        if (this.GameHelper.BushBloomMod.IsLoaded && this.GameHelper.BushBloomMod.ModApi.IsReady())
+        if (this.GameHelper.BushBloomMod.IsLoaded && this.GameHelper.BushBloomMod.IsReady())
         {
             SDate today = SDate.Now();
-            schedule = this.GameHelper.BushBloomMod.ModApi.GetActiveSchedules(today.Season.ToString(), today.Day, today.Year, bush.Location, bush.Tile);
+            schedule = this.GameHelper.BushBloomMod.GetActiveSchedules(today.Season.ToString(), today.Day, today.Year, bush.Location, bush.Tile);
             return true;
         }
 

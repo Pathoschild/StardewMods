@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.3
+Released 26 October 2025 for SMAPI 4.2.0 or later.
+
+* Fixed the 'fade' animation speed affecting fades in events.
+* Fixed features breaking if an integration with another mod fails.
+
 ## 1.15.2
 Released 03 September 2025 for SMAPI 4.2.0 or later.
 

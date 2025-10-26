@@ -49,7 +49,7 @@ internal class ModEntry : Mod
     private BetterGameMenuIntegration? BetterGameMenu;
 
     /// <summary>The cached chest lookup for the last tile checked.</summary>
-    private ChestOnTile? CachedChestOnTile;
+    private readonly PerScreen<ChestOnTile?> CachedChestOnTile = new();
 
 
     /*********
@@ -136,22 +136,19 @@ internal class ModEntry : Mod
         {
             string locationName = Game1.currentLocation.NameOrUniqueName;
             Vector2 tile = Game1.currentCursorTile;
-            ChestOnTile? cached = this.CachedChestOnTile;
+            ChestOnTile? cached = this.CachedChestOnTile.Value;
 
             if (tile != cached?.Tile || locationName != cached.LocationName)
             {
-                this.CachedChestOnTile = cached = new ChestOnTile(
-                    Tile: tile,
-                    LocationName: locationName,
-                    Chest: this.ChestFactory.GetChestFromTile(tile)
-                );
+                ManagedChest? chest = this.ChestFactory.GetChestFromTile(tile, getCategories: false, excludeUnnamed: true);
+                this.CachedChestOnTile.Value = cached = new ChestOnTile(tile, locationName, chest?.DisplayName);
             }
 
-            ManagedChest? cursorChest = cached.Chest;
-            if (cursorChest != null && !cursorChest.HasDefaultName())
+            string? cursorChestName = cached.ChestName;
+            if (cursorChestName != null)
             {
                 Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
-                CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.uiViewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChestName, tooltipPosition, Game1.uiViewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
             }
         }
     }
@@ -356,6 +353,9 @@ internal class ModEntry : Mod
     /// <param name="location">The game location.</param>
     private bool IsDisabledLocation(GameLocation location)
     {
+        if (this.Config.DisabledInLocations.Count == 0)
+            return false;
+
         return
             this.Config.DisabledInLocations.Contains(location.Name)
             || (location is MineShaft && location.Name.StartsWith("UndergroundMine") && this.Config.DisabledInLocations.Contains("UndergroundMine"));
@@ -364,10 +364,23 @@ internal class ModEntry : Mod
     /// <summary>Get the range for the current context.</summary>
     private RangeHandler GetCurrentRange()
     {
-        ChestRange range = this.IsDisabledLocation(Game1.currentLocation)
-            ? ChestRange.None
-            : this.Config.Range;
-        return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
+        if (this.IsDisabledLocation(Game1.currentLocation))
+            return RangeHandler.None;
+
+        switch (this.Config.Range)
+        {
+            case ChestRange.None:
+                return RangeHandler.None;
+
+            case ChestRange.CurrentLocation:
+                return RangeHandler.CurrentLocation;
+
+            case ChestRange.Unlimited:
+                return RangeHandler.Unlimited;
+
+            default:
+                return new RangeHandler(this.Config.Range, this.Data.WorldAreas);
+        }
     }
 
     /// <summary>Get the error translation to show if no chests were found.</summary>
@@ -385,6 +398,6 @@ internal class ModEntry : Mod
     /// <summary>A cached chest on a given tile for displaying labels.</summary>
     /// <param name="Tile">The tile that was last checked.</param>
     /// <param name="LocationName">The location unique name that was last checked.</param>
-    /// <param name="Chest">The chest found on the tile, if any.</param>
-    private record ChestOnTile(Vector2 Tile, string LocationName, ManagedChest? Chest);
+    /// <param name="ChestName">The chest name found on the tile, if any.</param>
+    private record ChestOnTile(Vector2 Tile, string LocationName, string? ChestName);
 }

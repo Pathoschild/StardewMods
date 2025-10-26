@@ -1,4 +1,6 @@
+using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
@@ -6,14 +8,43 @@ namespace Pathoschild.Stardew.LookupAnything.Framework;
 /// <summary>Registers the mod configuration with Generic Mod Config Menu.</summary>
 internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModConfigMenuIntegrationFor<ModConfig>
 {
+    /*********
+    ** Fields
+    *********/
+    /// <summary>Manages the theme for the menu appearance.</summary>
+    private readonly ThemeManager Theme;
+
+
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="theme">Manages the theme for the menu appearance.</param>
+    public GenericModConfigMenuIntegrationForLookupAnything(ThemeManager theme)
+    {
+        this.Theme = theme;
+    }
+
     /// <inheritdoc />
     public void Register(GenericModConfigMenuIntegration<ModConfig> menu, IMonitor monitor)
     {
         menu
             .Register()
 
-            // main options
-            .AddSectionTitle(I18n.Config_Title_MainOptions)
+            // appearance
+            .AddSectionTitle(I18n.Config_Title_Appearance)
+            .AddDropdown(
+                name: I18n.Config_Theme_Name,
+                tooltip: I18n.Config_Theme_Desc,
+                get: config => config.ThemeId,
+                set: (config, value) =>
+                {
+                    config.ThemeId = value;
+                    this.Theme.SetCurrentTheme(value);
+                },
+                allowedValues: this.Theme.GetAvailableThemeIds().ToArray(),
+                formatAllowedValue: this.Theme.GetDisplayName
+            )
             .AddCheckbox(
                 name: I18n.Config_ForceFullScreen_Name,
                 tooltip: I18n.Config_ForceFullScreen_Desc,

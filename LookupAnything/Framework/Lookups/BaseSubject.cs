@@ -6,7 +6,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -32,30 +32,26 @@ internal abstract class BaseSubject : ISubject
     /*********
     ** Accessors
     *********/
-    /// <summary>The display name.</summary>
+    /// <inheritdoc />
     public string Name { get; protected set; }
 
-    /// <summary>The object description (if applicable).</summary>
+    /// <inheritdoc />
     public string? Description { get; protected set; }
 
-    /// <summary>The object type.</summary>
+    /// <inheritdoc />
     public string? Type { get; protected set; }
 
 
     /*********
     ** Public methods
     *********/
-    /// <summary>Get the data to display for this subject.</summary>
+    /// <inheritdoc />
     public abstract IEnumerable<ICustomField> GetData();
 
-    /// <summary>Get raw debug data to display for this subject.</summary>
-    public abstract IEnumerable<IDebugField> GetDebugFields();
+    /// <inheritdoc />
+    public abstract IEnumerable<IDataMinedValue> GetDataMinedValues();
 
-    /// <summary>Draw the subject portrait (if available).</summary>
-    /// <param name="spriteBatch">The sprite batch being drawn.</param>
-    /// <param name="position">The position at which to draw.</param>
-    /// <param name="size">The size of the portrait to draw.</param>
-    /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
+    /// <inheritdoc />
     public abstract bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size);
 
 
@@ -93,9 +89,9 @@ internal abstract class BaseSubject : ISubject
         this.Type = type;
     }
 
-    /// <summary>Get all debug fields by reflecting over an instance.</summary>
+    /// <summary>Get all data mined values by reflecting over an instance.</summary>
     /// <param name="obj">The object instance over which to reflect.</param>
-    protected IEnumerable<IDebugField> GetDebugFieldsFrom(object? obj)
+    protected IEnumerable<IDataMinedValue> GetDataMinedValuesFrom(object? obj)
     {
         if (obj == null)
             yield break;
@@ -138,7 +134,7 @@ internal abstract class BaseSubject : ISubject
 
                 // add field
                 seenValues[field.Name] = field.Value;
-                yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
+                yield return new GenericDataMinedValue(type.FullName, field.Name, field.Value);
             }
         }
     }

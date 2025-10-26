@@ -14,13 +14,10 @@ public class TrackedItem : ITrackedStack
     private readonly Item Item;
 
     /// <summary>The callback invoked when the stack size is reduced (including reduced to zero).</summary>
-    protected readonly Action<Item>? OnReduced;
+    protected readonly Action<TrackedItem, Item>? OnReduced;
 
     /// <summary>The callback invoked when the stack is empty.</summary>
-    protected readonly Action<Item>? OnEmpty;
-
-    /// <summary>The last stack size handlers were notified of.</summary>
-    private int LastCount;
+    protected readonly Action<TrackedItem, Item>? OnEmpty;
 
 
     /*********
@@ -35,6 +32,9 @@ public class TrackedItem : ITrackedStack
     /// <inheritdoc />
     public int Count { get; private set; }
 
+    /// <summary>The <see cref="Count"/> for which <see cref="OnReduced"/> was last called (or the initial value if this is the first call).</summary>
+    public int LastCount { get; private set; }
+
 
     /*********
     ** Public methods
@@ -43,7 +43,7 @@ public class TrackedItem : ITrackedStack
     /// <param name="item">The item stack.</param>
     /// <param name="onReduced">The callback invoked when the stack size is reduced (including reduced to zero).</param>
     /// <param name="onEmpty">The callback invoked when the stack is empty.</param>
-    public TrackedItem(Item item, Action<Item>? onReduced = null, Action<Item>? onEmpty = null)
+    public TrackedItem(Item item, Action<TrackedItem, Item>? onReduced = null, Action<TrackedItem, Item>? onEmpty = null)
     {
         this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
         this.Type = item.TypeDefinitionId;
@@ -86,12 +86,13 @@ public class TrackedItem : ITrackedStack
         // skip if not reduced
         if (this.Count >= this.LastCount)
             return;
-        this.LastCount = this.Count;
 
         // notify handlers
-        this.OnReduced?.Invoke(this.Item);
+        this.OnReduced?.Invoke(this, this.Item);
         if (this.Count <= 0)
-            this.OnEmpty?.Invoke(this.Item);
+            this.OnEmpty?.Invoke(this, this.Item);
+
+        this.LastCount = this.Count;
     }
 
     /// <summary>Create a new stack of the given item.</summary>

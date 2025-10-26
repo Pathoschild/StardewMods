@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.21.1
+Released 26 October 2025 for SMAPI 4.1.10 or later.
+
+* Fixed features breaking if an integration with another mod fails.
+* Improved translations. Thanks to MakinDay (updated Italian)!
+
 ## 1.21.0
 Released 03 September 2025 for SMAPI 4.1.10 or later.
 

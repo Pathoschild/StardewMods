@@ -24,13 +24,24 @@ internal class LineSprinklersIntegration : BaseIntegration<ILineSprinklersApi>
         : base("Line Sprinklers", "hootless.LineSprinklers", "1.1.0", modRegistry, monitor)
     {
         if (base.IsLoaded)
-            this.MaxRadius = this.ModApi.GetMaxGridSize();
+        {
+            this.MaxRadius = this.SafelyCallApi(
+                api => api.GetMaxGridSize(),
+                "Failed getting max grid size from {0}."
+            );
+        }
     }
 
     /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>
     public IDictionary<int, Vector2[]> GetSprinklerTiles()
     {
         this.AssertLoaded();
-        return this.ModApi.GetSprinklerCoverage();
+
+        return
+            this.SafelyCallApi(
+                api => api.GetSprinklerCoverage(),
+                "Failed getting sprinkler tiles from {0}."
+            )
+            ?? new Dictionary<int, Vector2[]>();
     }
 }

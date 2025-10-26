@@ -19,6 +19,11 @@ internal class ProfilerIntegration : BaseIntegration<IProfilerApi>
     /// <inheritdoc cref="IProfilerApi.RecordSection"/>
     public IDisposable? RecordSection(string modId, string eventType, string details)
     {
-        return this.ModApi?.RecordSection(modId, eventType, details);
+        this.AssertLoaded();
+
+        return this.SafelyCallApi(
+            api => api.RecordSection(modId, eventType, details),
+            "Failed recording section with {0}."
+        );
     }
 }

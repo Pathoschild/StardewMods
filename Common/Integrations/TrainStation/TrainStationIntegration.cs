@@ -21,6 +21,11 @@ internal class TrainStationIntegration : BaseIntegration<ITrainStationApi>
     {
         this.AssertLoaded();
 
-        return this.ModApi.GetAvailableStops(isBoat);
+        return
+            this.SafelyCallApi(
+                api => api.GetAvailableStops(isBoat),
+                "Failed getting stops from {0}."
+            )
+            ?? [];
     }
 }

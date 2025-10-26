@@ -27,6 +27,9 @@ internal class IconicFrameworkIntegration : BaseIntegration<IIconicFrameworkApi>
     {
         this.AssertLoaded();
 
-        this.ModApi.AddToolbarIcon(texturePath, sourceRect, getTitle, getDescription, onClick, onRightClick);
+        this.SafelyCallApi(
+            api => api.AddToolbarIcon(texturePath, sourceRect, getTitle, getDescription, onClick, onRightClick),
+            "Failed adding toolbar icon from {0}."
+        );
     }
 }

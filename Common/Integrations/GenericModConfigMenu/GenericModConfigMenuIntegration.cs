@@ -50,6 +50,7 @@ internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration<IGener
     {
         this.AssertLoaded();
 
+        this.ModApi.Unregister(this.ConsumerManifest);
         this.ModApi.Register(this.ConsumerManifest, this.Reset, this.SaveAndApply, titleScreenOnly);
 
         return this;
@@ -264,6 +265,15 @@ internal static class GenericModConfigMenuIntegration
 
         GenericModConfigMenuIntegration<TConfig> api = new(mod.Helper.ModRegistry, mod.Monitor, mod.ModManifest, get, Reset, SaveAndApply);
         if (api.IsLoaded)
-            configMenu.Register(api, mod.Monitor);
+        {
+            try
+            {
+                configMenu.Register(api, mod.Monitor);
+            }
+            catch (Exception ex)
+            {
+                mod.Monitor.LogOnce($"Failed registering config menu with Generic Mod Config Menu.\n\nTechnical info:\n{ex}", LogLevel.Error);
+            }
+        }
     }
 }

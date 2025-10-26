@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -105,7 +106,70 @@ internal partial class I18n
             case null:
                 return null;
 
-            // net types
+
+            /****
+            ** .NET types
+            ****/
+            case bool boolean:
+                return boolean ? I18n.Generic_Yes() : I18n.Generic_No();
+
+            case TimeSpan span:
+                {
+                    List<string> parts = [];
+                    if (span.Days > 0)
+                        parts.Add(I18n.Generic_Days(span.Days));
+                    if (span.Hours > 0)
+                        parts.Add(I18n.Generic_Hours(span.Hours));
+                    if (span.Minutes > 0)
+                        parts.Add(I18n.Generic_Minutes(span.Minutes));
+                    return I18n.List(parts);
+                }
+
+            /****
+            ** MonoGame types
+            ****/
+            case Color color:
+                return color.A < 255
+                    ? $"#{Convert.ToHexString([color.R, color.G, color.B, color.A])}"
+                    : $"#{Convert.ToHexString([color.R, color.G, color.B])}";
+
+            case Point point:
+                return $"({point.X}, {point.Y})";
+
+            case Vector2 vector:
+                return $"({vector.X}, {vector.Y})";
+
+            case Rectangle rect:
+                return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
+
+
+            /****
+            ** SMAPI types
+            ****/
+            case SDate date:
+                return date.ToLocaleString(withYear: date.Year != Game1.year);
+
+            /****
+            ** Game types
+            ****/
+            case AnimatedSprite sprite:
+                return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
+
+            case Item item:
+                return $"({item} {item.QualifiedItemId})";
+
+            case MarriageDialogueReference dialogue:
+                return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
+
+            case ModDataDictionary data when data.Any():
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine();
+                    foreach (var pair in data.Pairs.OrderBy(p => p.Key))
+                        str.AppendLine($"- {pair.Key}: {pair.Value}");
+                    return str.ToString().TrimEnd();
+                }
+
             case NetBool net:
                 return I18n.Stringify(net.Value);
             case NetByte net:
@@ -137,43 +201,6 @@ internal partial class I18n
             case NetVector2 net:
                 return I18n.Stringify(net.Value);
 
-            // core types
-            case bool boolean:
-                return boolean ? I18n.Generic_Yes() : I18n.Generic_No();
-            case Color color:
-                return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
-            case SDate date:
-                return date.ToLocaleString(withYear: date.Year != Game1.year);
-            case TimeSpan span:
-                {
-                    List<string> parts = [];
-                    if (span.Days > 0)
-                        parts.Add(I18n.Generic_Days(span.Days));
-                    if (span.Hours > 0)
-                        parts.Add(I18n.Generic_Hours(span.Hours));
-                    if (span.Minutes > 0)
-                        parts.Add(I18n.Generic_Minutes(span.Minutes));
-                    return I18n.List(parts);
-                }
-            case Vector2 vector:
-                return $"({vector.X}, {vector.Y})";
-            case Rectangle rect:
-                return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
-
-            // game types
-            case AnimatedSprite sprite:
-                return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
-            case MarriageDialogueReference dialogue:
-                return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
-            case ModDataDictionary data when data.Any():
-                {
-                    StringBuilder str = new StringBuilder();
-                    str.AppendLine();
-                    foreach (var pair in data.Pairs.OrderBy(p => p.Key))
-                        str.AppendLine($"- {pair.Key}: {pair.Value}");
-                    return str.ToString().TrimEnd();
-                }
-
             case SchedulePathDescription schedulePath:
                 return $"{schedulePath.time / 100:00}:{schedulePath.time % 100:00} {schedulePath.targetLocationName} ({schedulePath.targetTile.X}, {schedulePath.targetTile.Y}) {schedulePath.facingDirection} {schedulePath.endOfRouteMessage}";
 
@@ -185,28 +212,38 @@ internal partial class I18n
                         str.AppendLine($"- {key}: {I18n.Stringify(statValue)}");
                     return str.ToString().TrimEnd();
                 }
+
             case Warp warp:
                 return $"([{warp.X}, {warp.Y}] to {warp.TargetName}[{warp.TargetX}, {warp.TargetY}])";
 
-            // enumerable
-            case IEnumerable array when value is not string:
-                {
-                    string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "<null>").ToArray()!;
-                    return "(" + I18n.List(values) + ")";
-                }
-
+            /****
+            ** Heuristic fallbacks
+            ****/
             default:
-                // key/value pair
                 {
                     Type type = value.GetType();
+
+                    // net dictionary
+                    if (value is INetSerializable)
+                    {
+                        object? dict = type.GetProperty("FieldDict")?.GetValue(value);
+                        if (dict != null)
+                            return I18n.Stringify(dict);
+                    }
+
                     if (type.IsGenericType)
                     {
                         Type genericType = type.GetGenericTypeDefinition();
-                        if (genericType == typeof(NetDictionary<,,,,>))
+
+                        // net ref
+                        if (genericType == typeof(NetRef<>))
                         {
-                            object? dict = type.GetProperty("FieldDict")?.GetValue(value);
-                            return I18n.Stringify(dict);
+                            PropertyInfo? refValue = type.GetProperty(nameof(NetRef<NetString>.Value));
+                            if (refValue != null)
+                                return I18n.Stringify(refValue.GetValue(value));
                         }
+
+                        // key/value pair
                         if (genericType == typeof(KeyValuePair<,>))
                         {
                             string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key))?.GetValue(value));
@@ -214,10 +251,17 @@ internal partial class I18n
                             return $"({k}: {v})";
                         }
                     }
-                }
 
-                // anything else
-                return value.ToString();
+                    // enumerable
+                    if (value is IEnumerable array and not string)
+                    {
+                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "(null)").ToArray()!;
+                        return "[" + I18n.List(values) + "]";
+                    }
+
+                    // anything else
+                    return value.ToString();
+                }
         }
     }
 }

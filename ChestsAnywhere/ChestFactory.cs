@@ -48,124 +48,141 @@ internal class ChestFactory
 
     /// <summary>Get all player chests.</summary>
     /// <param name="range">Determines whether given locations are in range of the player for remote chest access.</param>
+    /// <param name="onlyTile">If set, only get chests at this tile position.</param>
     /// <param name="excludeHidden">Whether to exclude chests marked as hidden.</param>
+    /// <param name="excludeUnnamed">Whether to exclude chests which don't have a custom name.</param>
     /// <param name="alwaysInclude">A chest to include even if it would normally be hidden.</param>
-    public IEnumerable<ManagedChest> GetChests(RangeHandler range, bool excludeHidden = false, ManagedChest? alwaysInclude = null)
+    /// <param name="getCategories">Whether to generate the chest categories.</param>
+    public IEnumerable<ManagedChest> GetChests(RangeHandler range, Vector2? onlyTile = null, bool excludeHidden = false, bool excludeUnnamed = false, ManagedChest? alwaysInclude = null, bool getCategories = true)
     {
         ModConfig config = this.Config();
 
         IEnumerable<ManagedChest> Search()
         {
-            // get location info
-            var locations =
-                (
-                    from GameLocation location in this.GetAccessibleLocations()
-                    where range.IsInRange(location)
-                    select new
-                    {
-                        Location = location,
-                        Category = this.GetCategory(location)
-                    }
-                )
-                .ToArray();
-            IDictionary<string, int> defaultCategories = locations
-                .GroupBy(p => p.Category)
-                .Where(p => p.Count() > 1)
-                .ToDictionary(p => p.Key, _ => 0);
+            bool searchTile = onlyTile.HasValue;
+            int searchX = (int)(onlyTile?.X ?? 0);
+            int searchY = (int)(onlyTile?.Y ?? 0);
 
-            // find chests
-            foreach (var entry in locations)
+            Dictionary<string, int>? defaultCategories = getCategories ? [] : null;
+            Dictionary<string, int> nameCounts = [];
+
+            foreach (GameLocation location in range.GetLocationsInRange(this.Multiplayer))
             {
-                Dictionary<string, int> nameCounts = [];
+                nameCounts.Clear();
 
-                // get info
-                GameLocation location = entry.Location;
-                string category = defaultCategories.ContainsKey(entry.Category)
-                    ? I18n.DefaultCategory_Duplicate(locationName: entry.Category, number: ++defaultCategories[entry.Category])
-                    : entry.Category;
-
-                // chests in location
-                foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
+                // get category
+                string category;
+                if (getCategories)
                 {
-                    Vector2 tile = pair.Key;
-                    SObject obj = pair.Value;
+                    category = this.GetCategory(location);
+                    if (!defaultCategories!.TryAdd(category, 0))
+                        category = I18n.DefaultCategory_Duplicate(locationName: category, number: ++defaultCategories[category]);
+                }
+                else
+                    category = string.Empty;
 
-                    // chests
-                    if (obj is Chest chest && chest.playerChest.Value)
+                // search objects
+                {
+                    if (searchTile)
                     {
-                        yield return new ManagedChest(
-                            container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location)),
-                            location: location,
-                            tile: tile,
-                            mapEntity: chest,
-                            defaultDisplayName: this.GetDisambiguatedDefaultName(chest.DisplayName, nameCounts),
-                            defaultCategory: category
-                        );
+                        if (location.Objects.TryGetValue(onlyTile!.Value, out SObject obj) && GetChest(onlyTile.Value, obj) is { } chest)
+                            yield return chest;
                     }
-
-                    // auto-grabbers
-                    else if (obj.QualifiedItemId == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
+                    else
                     {
-                        yield return new ManagedChest(
-                            container: new AutoGrabberContainer(obj, grabberChest, context: obj),
-                            location: location,
-                            tile: tile,
-                            mapEntity: obj,
-                            defaultDisplayName: this.GetDisambiguatedDefaultName(obj.DisplayName, nameCounts),
-                            defaultCategory: category
-                        );
-                    }
-
-                    // sprinkler attachments
-                    else if (config.EnableSprinklerAttachments && obj.IsSprinkler() && obj.heldObject.Value is { } attachment)
-                    {
-                        Chest? attachmentChest = (attachment as Chest) ?? (attachment.heldObject.Value as Chest);
-                        if (attachmentChest is not null)
+                        foreach ((Vector2 tile, SObject obj) in location.Objects.Pairs)
                         {
-                            string displayName = attachment.DisplayName;
-                            if (displayName == ItemRegistry.GetDataOrErrorItem("(O)130").DisplayName) // if the display name is just "Chest", show the sprinkler name
-                                displayName = obj.DisplayName;
-
-                            yield return new ManagedChest(
-                                container: new ChestContainer(attachmentChest, context: attachmentChest, showColorPicker: false),
+                            if (GetChest(tile, obj) is { } chest)
+                                yield return chest;
+                        }
+                    }
+                    ManagedChest? GetChest(Vector2 tile, SObject obj)
+                    {
+                        // chests
+                        if (obj is Chest chest && chest.playerChest.Value && (!excludeUnnamed || ContainerData.HasCustomName(chest)))
+                        {
+                            return new ManagedChest(
+                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location)),
                                 location: location,
                                 tile: tile,
-                                mapEntity: obj,
-                                defaultDisplayName: this.GetDisambiguatedDefaultName(displayName, nameCounts),
+                                mapEntity: chest,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(chest.DisplayName, nameCounts),
                                 defaultCategory: category
                             );
                         }
+
+                        // auto-grabbers
+                        if (obj.QualifiedItemId == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest && (!excludeUnnamed || ContainerData.HasCustomName(obj)))
+                        {
+                            return new ManagedChest(
+                                container: new AutoGrabberContainer(obj, grabberChest, context: obj),
+                                location: location,
+                                tile: tile,
+                                mapEntity: obj,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(obj.DisplayName, nameCounts),
+                                defaultCategory: category
+                            );
+                        }
+
+                        // sprinkler attachments
+                        if (config.EnableSprinklerAttachments && obj.IsSprinkler() && obj.heldObject.Value is { } attachment)
+                        {
+                            Chest? attachmentChest = (attachment as Chest) ?? (attachment.heldObject.Value as Chest);
+                            if (attachmentChest is not null && (!excludeUnnamed || ContainerData.HasCustomName(attachment)))
+                            {
+                                string defaultDisplayName = attachment.DisplayName;
+                                if (defaultDisplayName == ItemRegistry.GetDataOrErrorItem("(O)130").DisplayName) // if the display name is just "Chest", show the sprinkler name
+                                    defaultDisplayName = obj.DisplayName;
+
+                                return new ManagedChest(
+                                    container: new ChestContainer(attachmentChest, context: attachmentChest, showColorPicker: false),
+                                    location: location,
+                                    tile: tile,
+                                    mapEntity: obj,
+                                    defaultDisplayName: this.GetDisambiguatedDefaultName(defaultDisplayName, nameCounts),
+                                    defaultCategory: category
+                                );
+                            }
+                        }
+
+                        return null;
                     }
                 }
 
-                // farmhouse fridge
+                // search farmhouse fridge
+                if (
+                    this.TryGetStaticFridge(location, out Chest? fridge, out Point fridgeTile)
+                    && (!searchTile || (fridgeTile.X == searchX && fridgeTile.Y == searchY))
+                    && (!excludeUnnamed || ContainerData.HasCustomName(fridge))
+                )
                 {
-                    Chest? fridge = this.GetStaticFridge(location);
-                    if (fridge != null)
-                    {
-                        yield return new ManagedChest(
-                            container: new ChestContainer(fridge, context: fridge, showColorPicker: false),
-                            location: location,
-                            tile: Vector2.Zero,
-                            mapEntity: null,
-                            defaultDisplayName: I18n.DefaultName_Fridge(),
-                            defaultCategory: category
-                        );
-                    }
+                    yield return new ManagedChest(
+                        container: new ChestContainer(fridge, context: fridge, showColorPicker: false),
+                        location: location,
+                        tile: Vector2.Zero,
+                        mapEntity: null,
+                        defaultDisplayName: I18n.DefaultName_Fridge(),
+                        defaultCategory: category
+                    );
                 }
 
-                // dressers
+                // search storage furniture
                 foreach (Furniture rawFurniture in location.furniture)
                 {
                     if (rawFurniture is not StorageFurniture furniture)
                         continue;
 
+                    // apply filters
+                    if (searchTile && furniture.TileLocation != onlyTile)
+                        continue;
+                    if (excludeUnnamed && !ContainerData.HasCustomName(furniture))
+                        continue;
                     if (furniture.QualifiedItemId == "(F)CCFishTank" && location is CommunityCenter)
                         continue; // temporary fish tank
 
-                    var container = new StorageFurnitureContainer(furniture);
+                    // build chest
                     yield return new ManagedChest(
-                        container: container,
+                        container: new StorageFurnitureContainer(furniture),
                         location,
                         furniture.TileLocation,
                         mapEntity: furniture,
@@ -174,62 +191,61 @@ internal class ChestFactory
                     );
                 }
 
-                // buildings
+                // search buildings
+                bool foundShippingBin = false; // all shipping bins are the same inventory, so only list it once
                 foreach (Building building in location.buildings)
                 {
-                    if (building is JunimoHut hut)
+                    switch (building)
                     {
-                        yield return new ManagedChest(
-                            container: new JunimoHutContainer(hut),
-                            location: location,
-                            tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
-                            mapEntity: building,
-                            defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetString("Strings\\Buildings:JunimoHut_Name"), nameCounts),
-                            defaultCategory: category
-                        );
+                        case JunimoHut hut:
+                            // apply filters
+                            if (searchTile && !this.BuildingContainsTile(hut, onlyTile!.Value))
+                                break;
+                            if (excludeUnnamed && !ContainerData.HasCustomName(hut.GetOutputChest()))
+                                break;
+
+                            // build chest
+                            yield return new ManagedChest(
+                                container: new JunimoHutContainer(hut),
+                                location: location,
+                                tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
+                                mapEntity: hut,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetString("Strings\\Buildings:JunimoHut_Name"), nameCounts),
+                                defaultCategory: category
+                            );
+                            break;
+
+                        case ShippingBin bin when !foundShippingBin:
+                            // apply filters
+                            if (searchTile && !this.BuildingContainsTile(bin, onlyTile!.Value))
+                                break;
+                            if (excludeUnnamed && !ContainerData.HasCustomName(location, discriminator: ShippingBinContainer.ModDataDiscriminator))
+                                break;
+
+                            // build chest
+                            foreach (ManagedChest chest in this.CreateShippingBin(location, category))
+                                yield return chest;
+                            foundShippingBin = true;
+                            break;
                     }
                 }
 
-                // shipping bin
-                if (this.HasShippingBin(location))
+                // check for static shipping bin
+                if (
+                    !foundShippingBin
+                    && this.HasShippingBin(location)
+                    && !searchTile // if we're searching by tile, either (a) it's already been found above or (b) it has no tile to match
+                    && (!excludeUnnamed || ContainerData.HasCustomName(location, discriminator: ShippingBinContainer.ModDataDiscriminator))
+                )
                 {
-                    string shippingBinLabel = GameI18n.GetString("Strings\\Buildings:ShippingBin_Name");
-
-                    if (Constants.TargetPlatform == GamePlatform.Android)
-                    {
-                        yield return new ManagedChest(
-                            container: new ShippingBinContainer(location, ShippingBinMode.MobileStore),
-                            location: location,
-                            tile: Vector2.Zero,
-                            mapEntity: null,
-                            defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
-                            defaultCategory: category
-                        );
-                        yield return new ManagedChest(
-                            container: new ShippingBinContainer(location, ShippingBinMode.MobileTake),
-                            location: location,
-                            tile: Vector2.Zero,
-                            mapEntity: null,
-                            defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
-                            defaultCategory: category
-                        );
-                    }
-                    else
-                    {
-                        yield return new ManagedChest(
-                            container: new ShippingBinContainer(location, ShippingBinMode.Normal),
-                            location: location,
-                            tile: Vector2.Zero,
-                            mapEntity: null,
-                            defaultDisplayName: shippingBinLabel,
-                            defaultCategory: category
-                        );
-                    }
+                    foreach (ManagedChest chest in this.CreateShippingBin(location, category))
+                        yield return chest;
                 }
             }
         }
 
-        return Search()
+        return
+            Search()
             .OrderBy(chest => chest.Order ?? int.MaxValue)
             .ThenBy(chest => chest.DisplayName, HumanSortComparer.DefaultIgnoreCase)
             .Where(chest =>
@@ -240,18 +256,20 @@ internal class ChestFactory
                     && chest.Tile == alwaysInclude.Tile
                 )
                 || (
-                    (!excludeHidden || !chest.IsIgnored)
-                    && range.IsInRange(chest.Location)
+                    !excludeHidden
+                    || !chest.IsIgnored
                 )
             );
     }
 
     /// <summary>Get the player chest on the specified tile (if any).</summary>
     /// <param name="tile">The tile to check.</param>
-    public ManagedChest? GetChestFromTile(Vector2 tile)
+    /// <param name="getCategories">Whether to generate the chest categories.</param>
+    /// <param name="excludeUnnamed">Whether to exclude chests which don't have a custom name.</param>
+    public ManagedChest? GetChestFromTile(Vector2 tile, bool getCategories = true, bool excludeUnnamed = false)
     {
         return this
-            .GetChests(RangeHandler.CurrentLocation())
+            .GetChests(RangeHandler.CurrentLocation, tile, getCategories: getCategories, excludeUnnamed: excludeUnnamed)
             .FirstOrDefault(chest => chest.Tile == tile);
     }
 
@@ -285,7 +303,7 @@ internal class ChestFactory
 
         // get chest from inventory
         return ChestFactory.GetBestMatch(
-            chests: this.GetChests(RangeHandler.Unlimited()),
+            chests: this.GetChests(RangeHandler.Unlimited),
             inventory: inventory,
             location: forLocation,
             tile: tile,
@@ -333,14 +351,6 @@ internal class ChestFactory
     /*********
     ** Private methods
     *********/
-    /// <summary>Get the locations which are accessible to the current player (regardless of settings).</summary>
-    private IEnumerable<GameLocation> GetAccessibleLocations()
-    {
-        return Context.IsMainPlayer
-            ? CommonHelper.GetLocations()
-            : this.Multiplayer.GetActiveLocations();
-    }
-
     /// <summary>Get the inventory for a chest.</summary>
     /// <param name="chest">The chest instance.</param>
     [return: NotNullIfNotNull("chest")]
@@ -499,19 +509,90 @@ internal class ChestFactory
             && object.ReferenceEquals(obj, chest);
     }
 
+    /// <summary>Get whether a building contains the given tile position.</summary>
+    /// <param name="building">The building to check.</param>
+    /// <param name="tile">The tile position to check.</param>
+    private bool BuildingContainsTile(Building building, Vector2 tile)
+    {
+        int buildingX = building.tileX.Value;
+        int buildingY = building.tileY.Value;
+
+        return
+            tile.X >= buildingX
+            && tile.X <= buildingX + building.tilesWide.Value - 1
+            && tile.Y >= buildingY
+            && tile.Y <= buildingY + building.tilesHigh.Value - 1;
+    }
+
+    /// <summary>Create a managed chest for the shipping bin.</summary>
+    /// <param name="location">The location with the shipping bin.</param>
+    /// <param name="category">The shipping bin's category.</param>
+    private IEnumerable<ManagedChest> CreateShippingBin(GameLocation location, string category)
+    {
+        string shippingBinLabel = GameI18n.GetString("Strings\\Buildings:ShippingBin_Name");
+
+        if (Constants.TargetPlatform == GamePlatform.Android)
+        {
+            yield return new ManagedChest(
+                container: new ShippingBinContainer(location, ShippingBinMode.MobileStore),
+                location: location,
+                tile: Vector2.Zero,
+                mapEntity: null,
+                defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
+                defaultCategory: category
+            );
+            yield return new ManagedChest(
+                container: new ShippingBinContainer(location, ShippingBinMode.MobileTake),
+                location: location,
+                tile: Vector2.Zero,
+                mapEntity: null,
+                defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
+                defaultCategory: category
+            );
+        }
+        else
+        {
+            yield return new ManagedChest(
+                container: new ShippingBinContainer(location, ShippingBinMode.Normal),
+                location: location,
+                tile: Vector2.Zero,
+                mapEntity: null,
+                defaultDisplayName: shippingBinLabel,
+                defaultCategory: category
+            );
+        }
+    }
+
     /// <summary>Get the static fridge for a location, if any.</summary>
     /// <param name="location">The location to check.</param>
-    private Chest? GetStaticFridge(GameLocation location)
+    /// <param name="fridge">The fridge instance, if found.</param>
+    /// <param name="tile">The fridge's tile position, if found.</param>
+    private bool TryGetStaticFridge(GameLocation location, [NotNullWhen(true)] out Chest? fridge, out Point tile)
     {
-        // main farmhouse or cabin
-        if (location is FarmHouse house && house.fridgePosition != Point.Zero)
-            return house.fridge.Value;
+        switch (location)
+        {
+            case FarmHouse house:
+                if (house.fridgePosition != Point.Zero)
+                {
+                    fridge = house.fridge.Value;
+                    tile = house.fridgePosition;
+                    return true;
+                }
+                break;
 
-        // island farmhouse
-        if (location is IslandFarmHouse islandHouse && islandHouse.visited.Value)
-            return islandHouse.fridge.Value;
+            case IslandFarmHouse house:
+                if (house.visited.Value)
+                {
+                    fridge = house.fridge.Value;
+                    tile = house.fridgePosition;
+                    return true;
+                }
+                break;
+        }
 
-        return null;
+        fridge = null;
+        tile = Point.Zero;
+        return false;
     }
 
     /// <summary>Whether the location has a predefined shipping bin.</summary>
