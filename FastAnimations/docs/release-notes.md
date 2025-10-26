@@ -1,8 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added optional 'pause mod' keybind, which lets you temporarily disable all fast animations (e.g. during an event).
+## 1.16.0
+Released 26 October 2025 for SMAPI 4.2.0 or later.
+
+* Added optional 'pause mod' keybind.  
+  _This lets you temporarily disable all fast animations (e.g. during an event)._
 
 ## 1.15.3
 Released 26 October 2025 for SMAPI 4.2.0 or later.
