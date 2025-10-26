@@ -356,6 +356,9 @@ internal class ModEntry : Mod
     /// <param name="location">The game location.</param>
     private bool IsDisabledLocation(GameLocation location)
     {
+        if (this.Config.DisabledInLocations.Count == 0)
+            return false;
+
         return
             this.Config.DisabledInLocations.Contains(location.Name)
             || (location is MineShaft && location.Name.StartsWith("UndergroundMine") && this.Config.DisabledInLocations.Contains("UndergroundMine"));
@@ -364,10 +367,23 @@ internal class ModEntry : Mod
     /// <summary>Get the range for the current context.</summary>
     private RangeHandler GetCurrentRange()
     {
-        ChestRange range = this.IsDisabledLocation(Game1.currentLocation)
-            ? ChestRange.None
-            : this.Config.Range;
-        return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
+        if (this.IsDisabledLocation(Game1.currentLocation))
+            return RangeHandler.None;
+
+        switch (this.Config.Range)
+        {
+            case ChestRange.None:
+                return RangeHandler.None;
+
+            case ChestRange.CurrentLocation:
+                return RangeHandler.CurrentLocation;
+
+            case ChestRange.Unlimited:
+                return RangeHandler.Unlimited;
+
+            default:
+                return new RangeHandler(this.Config.Range, this.Data.WorldAreas);
+        }
     }
 
     /// <summary>Get the error translation to show if no chests were found.</summary>

@@ -251,7 +251,7 @@ internal class ChestFactory
     public ManagedChest? GetChestFromTile(Vector2 tile)
     {
         return this
-            .GetChests(RangeHandler.CurrentLocation())
+            .GetChests(RangeHandler.CurrentLocation)
             .FirstOrDefault(chest => chest.Tile == tile);
     }
 
@@ -285,7 +285,7 @@ internal class ChestFactory
 
         // get chest from inventory
         return ChestFactory.GetBestMatch(
-            chests: this.GetChests(RangeHandler.Unlimited()),
+            chests: this.GetChests(RangeHandler.Unlimited),
             inventory: inventory,
             location: forLocation,
             tile: tile,

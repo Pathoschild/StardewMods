@@ -15,26 +15,33 @@ internal class RangeHandler
     /// <summary>The range within which chests should be accessible.</summary>
     private readonly ChestRange Range;
 
-    /// <summary>The player's current zone.</summary>
-    private readonly string? CurrentZone;
-
     /// <summary>A location => zone lookup if <see cref="Range"/> is <see cref="ChestRange.CurrentWorldArea"/>.</summary>
-    private readonly Lazy<IDictionary<GameLocation, string>> WorldAreaZones;
+    private readonly Lazy<Dictionary<GameLocation, string>> WorldAreaZones;
+
+
+    /*********
+    ** Accessors
+    *********/
+    /// <summary>A range handler which disables remote access.</summary>
+    public static readonly RangeHandler None = new(ChestRange.None, null);
+
+    /// <summary>A range handler which restricts access to the current location.</summary>
+    public static readonly RangeHandler CurrentLocation = new(ChestRange.CurrentLocation, null);
+
+    /// <summary>A range handler which doesn't restrict the range.</summary>
+    public static readonly RangeHandler Unlimited = new(ChestRange.Unlimited, null);
 
 
     /*********
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
-    /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
     /// <param name="range">The range within which chests should be accessible.</param>
-    /// <param name="currentLocation">The player's current location.</param>
-    public RangeHandler(IDictionary<string, HashSet<string>>? worldAreas, ChestRange range, GameLocation currentLocation)
+    /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
+    public RangeHandler(ChestRange range, IDictionary<string, HashSet<string>>? worldAreas)
     {
         this.Range = range;
-
         this.WorldAreaZones = new(() => this.GetWorldAreaZones(worldAreas));
-        this.CurrentZone = this.GetZone(currentLocation, range);
     }
 
     /// <summary>Get whether a location is within range of the player.</summary>
@@ -42,26 +49,10 @@ internal class RangeHandler
     public bool IsInRange(GameLocation location)
     {
         string? zone = this.GetZone(location, this.Range);
-        return zone != null && zone == this.CurrentZone;
-    }
 
-    /// <summary>Get a range handler which doesn't restrict the range.</summary>
-    public static RangeHandler Unlimited()
-    {
-        return new RangeHandler(null, ChestRange.Unlimited, Game1.currentLocation);
-    }
-
-    /// <summary>Get a range handler which restricts access to the current location.</summary>
-    public static RangeHandler CurrentLocation()
-    {
-        return new RangeHandler(null, ChestRange.CurrentLocation, Game1.currentLocation);
-    }
-
-    /// <summary>Get a range handler which restricts access to a specific location.</summary>
-    /// <param name="location">The specific location.</param>
-    public static RangeHandler SpecificLocation(GameLocation location)
-    {
-        return new RangeHandler(null, ChestRange.CurrentLocation, location); // special case for migrating data
+        return
+            zone != null
+            && zone == this.GetZone(Game1.currentLocation, this.Range);
     }
 
 
@@ -99,7 +90,7 @@ internal class RangeHandler
 
     /// <summary>Get a lookup which matches locations to world area zones.</summary>
     /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
-    private IDictionary<GameLocation, string> GetWorldAreaZones(IDictionary<string, HashSet<string>>? worldAreas)
+    private Dictionary<GameLocation, string> GetWorldAreaZones(IDictionary<string, HashSet<string>>? worldAreas)
     {
         Dictionary<GameLocation, string> zones = [];
 
