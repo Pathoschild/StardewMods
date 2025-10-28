@@ -113,7 +113,7 @@ internal abstract class BaseMachine : IMachine
     protected ITrackedStack? GetTracked(Item? item, Action<TrackedItem, Item>? onReduced = null, Action<TrackedItem, Item>? onEmpty = null)
     {
         return item != null
-            ? new TrackedItem(item, onReduced: onReduced, onEmpty: onEmpty)
+            ? new TrackedItem(item).OnReduced(onReduced).OnEmpty(onEmpty)
             : null;
     }
 
