@@ -57,12 +57,12 @@ internal class BushMachine : BaseMachine<Bush>
 
         // tea bush
         if (this.Machine.size.Value == Bush.greenTeaBush)
-            return new TrackedItem(ItemRegistry.Create(itemId), onReduced: this.OnOutputReduced);
+            return new TrackedItem(ItemRegistry.Create(itemId)).OnReduced(this.OnOutputReduced);
 
         // berry bush
         int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
         int count = 1 + Game1.player.ForagingLevel / 4;
-        return new TrackedItem(ItemRegistry.Create(itemId, count, quality), onReduced: this.OnOutputReduced);
+        return new TrackedItem(ItemRegistry.Create(itemId, count, quality)).OnReduced(this.OnOutputReduced);
     }
 
     /// <inheritdoc />

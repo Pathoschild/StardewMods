@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some automation bridge mods broken in Automate 2.4.4.
+
 ## 2.4.4
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

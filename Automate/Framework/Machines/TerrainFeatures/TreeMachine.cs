@@ -81,7 +81,7 @@ internal class TreeMachine : BaseMachine<Tree>
         {
             Item? mossDrop = this.MossDrop.Value;
             if (mossDrop is not null)
-                return new TrackedItem(mossDrop, onEmpty: (_, _) => tree.hasMoss.Value = false);
+                return new TrackedItem(mossDrop).OnEmpty((_, _) => tree.hasMoss.Value = false);
         }
 
         // seeds
@@ -90,7 +90,7 @@ internal class TreeMachine : BaseMachine<Tree>
             Stack<Item> seedDrops = this.SeedDrops.Value;
             if (seedDrops.TryPeek(out Item? nextSeed))
             {
-                return new TrackedItem(nextSeed, onEmpty: (_, _) =>
+                return new TrackedItem(nextSeed).OnEmpty((_, _) =>
                 {
                     if (seedDrops.Count > 0)
                         seedDrops.Pop();
