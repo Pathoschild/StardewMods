@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using Pathoschild.Stardew.DataLayers.Layers;
 using Pathoschild.Stardew.DataLayers.Layers.Coverage;
 using Pathoschild.Stardew.DataLayers.Layers.Crops;

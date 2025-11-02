@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
 
-namespace Pathoschild.Stardew.DataLayers.Framework;
+namespace Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 
 /// <summary>Configures the settings for each data layer.</summary>
 internal class ModConfigLayers

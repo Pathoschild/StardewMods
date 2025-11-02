@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 

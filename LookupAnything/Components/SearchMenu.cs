@@ -255,9 +255,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
                     Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                     topOffset += Math.Max(nameSize.Y, typeSize.Y);
 
-                    this.SearchTextbox.X = x + (int)leftOffset;
-                    this.SearchTextbox.Y = y + (int)topOffset;
-                    this.SearchTextbox.Width = (int)wrapWidth;
+                    //this.SearchTextbox.X = x + (int)leftOffset;
+                    //this.SearchTextbox.Y = y + (int)topOffset;
+                    //this.SearchTextbox.Width = (int)wrapWidth;
                     this.SearchTextbox.Draw(contentBatch);
                     topOffset += this.SearchTextbox.Height;
 
@@ -325,7 +325,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        this.SearchTextbox.Selected = false;
+        //this.SearchTextbox.Selected = false;
     }
 
 

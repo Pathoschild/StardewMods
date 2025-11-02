@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
 
-namespace Pathoschild.Stardew.DataLayers.Framework;
+namespace Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 
 /// <summary>The parsed mod configuration.</summary>
 internal class ModConfig

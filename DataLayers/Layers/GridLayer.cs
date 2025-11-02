@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
 
 namespace Pathoschild.Stardew.DataLayers.Layers;

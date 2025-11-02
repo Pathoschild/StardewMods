@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataLayers.Framework;
