@@ -20,6 +20,12 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /*********
     ** Properties
     *********/
+    /// <summary>The spacing around the search result area.</summary>
+    private const int SearchResultGutter = 15;
+
+    /// <summary>The spacing around the scroll buttons.</summary>
+    private const int ScrollButtonGutter = 15;
+
     /// <summary>Show a lookup menu.</summary>
     private readonly Action<ISubject> ShowLookup;
 
@@ -37,6 +43,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
     /// <summary>The amount to scroll long content on each up/down scroll.</summary>
     private readonly int ScrollAmount;
+
+    /// <summary>Whether the next update tick is the first one.</summary>
+    private bool IsFirstTick = true;
 
     /// <summary>The maximum pixels to scroll.</summary>
     private int MaxScroll;
@@ -58,12 +67,6 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
     /// <summary>The pixel area containing search results.</summary>
     private Rectangle SearchResultArea;
-
-    /// <summary>The spacing around the search result area.</summary>
-    private readonly int SearchResultGutter = 15;
-
-    /// <summary>The spacing around the scroll buttons.</summary>
-    private readonly int ScrollButtonGutter = 15;
 
 
     /*********
@@ -94,7 +97,6 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // initialise
         this.UpdateLayout();
-        this.SearchTextbox.Selected = true;
     }
 
     /// <inheritdoc />
@@ -115,7 +117,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // search box
         else if (x >= this.SearchTextbox.X && x <= this.SearchTextbox.X + this.SearchTextbox.Width && y >= this.SearchTextbox.Y && y <= this.SearchTextbox.Y + this.SearchTextbox.Height)
-            this.SearchTextbox.Selected = true;
+            this.SelectSearchBox();
 
         // scroll up or down
         else if (this.ScrollUpButton.containsPoint(x, y))
@@ -195,8 +197,14 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     {
         base.update(time);
 
-        this.SearchTextbox.Update();
+        // select text box
+        if (this.IsFirstTick)
+        {
+            this.SelectSearchBox();
+            this.IsFirstTick = false;
+        }
 
+        // handle search
         if (this.SearchText != this.SearchTextbox.Text)
         {
             this.SearchText = this.SearchTextbox.Text;
@@ -210,8 +218,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         // calculate dimensions
         int x = this.xPositionOnScreen;
         int y = this.yPositionOnScreen;
-        int gutter = this.SearchResultGutter;
-        float leftOffset = gutter;
+        const int gutter = SearchMenu.SearchResultGutter;
+        const float leftOffset = gutter;
         float topOffset = gutter;
         float contentHeight = this.SearchResultArea.Height;
 
@@ -332,6 +340,16 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /*********
     ** Private methods
     *********/
+    /// <summary>Set the cursor in the search box, and show the on-screen keyboard if needed.</summary>
+    /// <remarks>Derived from <see cref="TextBox.Update"/>, but doesn't require that the cursor be over the field.</remarks>
+    private void SelectSearchBox()
+    {
+        this.SearchTextbox.Selected = true;
+
+        if (Game1.options.gamepadControls && !Game1.lastCursorMotionWasMouse)
+            Game1.showTextEntry(this.SearchTextbox);
+    }
+
     /// <inheritdoc />
     public void ScrollUp(int? amount = null)
     {
@@ -411,7 +429,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
         int x = this.xPositionOnScreen = (int)origin.X;
         int y = this.yPositionOnScreen = (int)origin.Y;
-        int searchGutter = this.SearchResultGutter;
+        const int searchGutter = SearchMenu.SearchResultGutter;
         float contentWidth = this.width - searchGutter * 2;
         float contentHeight = this.height - searchGutter * 2;
 
@@ -419,7 +437,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         this.SearchResultArea = new Rectangle(x + searchGutter, y + searchGutter, (int)contentWidth, (int)contentHeight);
 
         // update up/down buttons
-        int scrollGutter = this.ScrollButtonGutter;
+        const int scrollGutter = SearchMenu.ScrollButtonGutter;
         this.ScrollUpButton.bounds = new Rectangle(x + scrollGutter, (int)(y + contentHeight - CommonSprites.Icons.UpArrow.Height - scrollGutter - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.UpArrow.Height, CommonSprites.Icons.UpArrow.Width);
         this.ScrollDownButton.bounds = new Rectangle(x + scrollGutter, (int)(y + contentHeight - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.DownArrow.Height, CommonSprites.Icons.DownArrow.Width);
 
