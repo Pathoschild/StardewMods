@@ -189,7 +189,6 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
     "config.require-pam-bus.name": "Richiede l'autobus di Pam",
     "config.require-pam-bus.desc": "Scegli se dover riparare l'autobus di Pam prima di partire dalla fermata dell'autobus di Stardew Valley. Se non è necessario, puoi prendere l'autobus per la stazione centrale (ma non per il deserto) prima che venga riparato."
 }
