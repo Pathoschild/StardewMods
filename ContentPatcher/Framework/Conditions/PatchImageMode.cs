@@ -9,5 +9,8 @@ public enum PatchImageMode
     Replace = PatchMode.Replace,
 
     /// <summary>Draw the new content over the original content, so the original content shows through any transparent or semi-transparent pixels.</summary>
-    Overlay = PatchMode.Overlay
+    Overlay = PatchMode.Overlay,
+
+    /// <summary>Masks the original content so that the alpha value of every pixel in the new content gets subtracted from the corresponding pixel in the original content.</summary>
+    Mask = PatchMode.Mask
 }
