@@ -12,9 +12,9 @@
     "destinations.stardew-valley": "Долина Стард'ю",
 
     // default stops when shown in Central Station menu
-    "destinations.stardew-valley.boat": "Долина стард'ю - Причал",
-    "destinations.stardew-valley.bus": "Долина стард'ю - Автобусна зупинка",
-    "destinations.stardew-valley.train": "Долина стард'ю - Залізниця",
+    "destinations.stardew-valley.boat": "Долина Стард'ю - Причал",
+    "destinations.stardew-valley.bus": "Долина Стард'ю - Автобусна зупинка",
+    "destinations.stardew-valley.train": "Долина Стард'ю - Залізниця",
 
     // stops from other mods
     "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
