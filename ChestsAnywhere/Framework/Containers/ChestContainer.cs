@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -134,6 +137,38 @@ internal class ChestContainer : IContainer
         this.Data.ToModData(this.Chest.modData);
     }
 
+    /// <summary>A shared spritebatch used to render a chest texture</summary>
+    protected static readonly SpriteBatch ChestIconBatch = new(Game1.graphics.GraphicsDevice);
+
+    /// <summary>The rendered chest icon</summary>
+    private RenderTarget2D? RenderedChestIcon;
+
+    /// <summary>The rendered chest icon</summary>
+    private Color? LastRenderedPlayerChoiceColor;
+
+    /// <inheritdoc />
+    public virtual bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
+    {
+        if (this.RenderedChestIcon != null && this.Chest.playerChoiceColor.Value == this.LastRenderedPlayerChoiceColor)
+        {
+            texture = this.RenderedChestIcon;
+            sourceRect = this.RenderedChestIcon.Bounds;
+            scale = 1f;
+            return true;
+        }
+        this.RenderedChestIcon = new(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+        Game1.SetRenderTarget(this.RenderedChestIcon);
+        ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+        Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
+        this.Chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
+        ChestIconBatch.End();
+        Game1.SetRenderTarget(null);
+        this.LastRenderedPlayerChoiceColor = this.Chest.playerChoiceColor.Value;
+        texture = this.RenderedChestIcon;
+        sourceRect = this.RenderedChestIcon.Bounds;
+        scale = 1f;
+        return true;
+    }
 
     /*********
     ** Protected methods

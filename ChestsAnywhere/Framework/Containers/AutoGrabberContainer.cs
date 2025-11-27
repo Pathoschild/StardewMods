@@ -1,3 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -13,7 +18,6 @@ internal class AutoGrabberContainer : ChestContainer
     /// <summary>The underlying auto-grabber.</summary>
     private readonly SObject AutoGrabber;
 
-
     /*********
     ** Public methods
     *********/
@@ -27,6 +31,15 @@ internal class AutoGrabberContainer : ChestContainer
         this.AutoGrabber = autoGrabber;
     }
 
+    /// <inheritdoc />
+    public override bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
+    {
+        ParsedItemData parsedItemData = ItemRegistry.GetData(this.AutoGrabber.QualifiedItemId);
+        texture = parsedItemData.GetTexture();
+        sourceRect = parsedItemData.GetSourceRect();
+        scale = 4f;
+        return true;
+    }
 
     /*********
     ** Private methods

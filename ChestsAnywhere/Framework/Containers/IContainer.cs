@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -21,7 +24,6 @@ internal interface IContainer
 
     /// <summary>Whether Automate options can be configured for taking items from this chest.</summary>
     public bool CanConfigureAutomateTake { get; }
-
 
     /*********
     ** Public methods
@@ -48,4 +50,7 @@ internal interface IContainer
 
     /// <summary>Persist the container data.</summary>
     void SaveData();
+
+    /// <summary>Get a texture that can be drawn to represent the</summary>
+    bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale);
 }
