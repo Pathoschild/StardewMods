@@ -99,6 +99,9 @@
     "config.toggle-ui-key.name": "Toggle UI",
     "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
 
+    "config.reopen-search-menu.name": "Reopen search menu",
+    "config.reopen-search-menu.desc": "When you press the 'toggle UI' button, whether to reopen the search menu instead of a chest.",
+
     "config.reopen-last-chest.name": "Reopen last chest",
     "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.",
 
@@ -134,6 +137,11 @@
     "config.hold-to-scroll-chests.name": "Hold to scroll chests",
     "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
 
+    "config.open-search-menu.name": "Open Search Menu",
+    "config.open-search-menu.desc": "The keys which, when pressed, opens the search menu for all chests.",
+
+    "config.search-menu-preview.name": "Search Menu Preview Chest",
+    "config.search-menu-preview.desc": "The keys which, when held, previews the contents of chest being hovered over.",
 
     /*********
     ** Iconic Framework icon

@@ -100,6 +100,12 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 set: (config, value) => config.Controls.Toggle = value
             )
             .AddCheckbox(
+                name: I18n.Config_ReopenSearchMenu_Name,
+                tooltip: I18n.Config_ReopenSearchMenu_Desc,
+                get: config => config.ReopenSearchMenu,
+                set: (config, value) => config.ReopenSearchMenu = value
+            )
+            .AddCheckbox(
                 name: I18n.Config_ReopenLastChest_Name,
                 tooltip: I18n.Config_ReopenLastChest_Desc,
                 get: config => config.ReopenLastChest,
@@ -161,6 +167,18 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 tooltip: I18n.Config_HoldToScrollChests_Desc,
                 get: config => config.Controls.HoldToMouseWheelScrollChests,
                 set: (config, value) => config.Controls.HoldToMouseWheelScrollChests = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_OpenSearchMenu_Name,
+                tooltip: I18n.Config_OpenSearchMenu_Desc,
+                get: config => config.Controls.OpenSearchMenu,
+                set: (config, value) => config.Controls.OpenSearchMenu = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_SearchMenuPreview_Name,
+                tooltip: I18n.Config_SearchMenuPreview_Desc,
+                get: config => config.Controls.SearchMenuPreviewChest,
+                set: (config, value) => config.Controls.SearchMenuPreviewChest = value
             );
     }
 }

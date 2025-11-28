@@ -160,7 +160,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Open the search menu</summary>
     private void ShowChestSearch()
     {
-        Game1.activeClickableMenu = new ChestSearchMenu(this.Chests, this.Menu, this.Keys.SearchMenuPreviewChest);
+        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys);
     }
 
     /// <summary>Sort the player's inventory.</summary>
@@ -360,6 +360,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     if (canNavigate)
                         this.Exit();
                 }
+                else if (keys.OpenSearchMenu.JustPressed() && canNavigate)
+                    this.ShowChestSearch();
                 else if (keys.PrevChest.JustPressed() && canNavigate)
                     this.SelectPreviousChest();
                 else if (keys.NextChest.JustPressed() && canNavigate)
@@ -368,8 +370,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     this.SelectPreviousCategory();
                 else if (keys.NextCategory.JustPressed() && canNavigate)
                     this.SelectNextCategory();
-                else if (keys.OpenSearchMenu.JustPressed() && canNavigate)
-                    this.ShowChestSearch();
                 else if (keys.EditChest.JustPressed() && canNavigate)
                     this.OpenEdit();
                 else if (keys.SortItems.JustPressed())
