@@ -7,9 +7,10 @@ using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 
-/// <summary>A search box, which is a <see cref="ValidatedTextBox"/> with a label and a match predicate implementation</summary>
+/// <summary>A search box, which is a <see cref="ValidatedTextBox"/> with a label and a match predicate</summary>
 /// <param name="Label">String label</param>
 /// <param name="Box">Text box component</param>
+/// <param name="MatchesFunc">Chest match predicate</param>
 internal record ChestSearchBox(string Label, ValidatedTextBox Box, Func<ManagedChest, string, bool> MatchesFunc)
 {
     /// <summary>Last known value of textbox</summary>
@@ -39,6 +40,9 @@ internal record ChestSearchBox(string Label, ValidatedTextBox Box, Func<ManagedC
         return true;
     }
 
+    /// <summary>Invokes <see cref="MatchesFunc"/> on current value</summary>
+    /// <param name="chest">Managed chest to check</param>
+    /// <returns>whether chest matches predicate</returns>
     internal bool Matches(ManagedChest chest)
     {
         return this.MatchesFunc(chest, this.LastValue);

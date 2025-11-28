@@ -176,6 +176,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
         base.snapToDefaultClickableComponent();
     }
 
+    /// <inheritdoc/>
     protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
     {
         if (oldID >= 100 && oldID < 100 + ColCount)
