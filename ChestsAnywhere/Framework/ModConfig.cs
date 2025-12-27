@@ -41,7 +41,7 @@ internal class ModConfig
     /****
     ** Hotkey to open chest UI
     ****/
-    /// <summary>When the player press the 'toggle UI' button, whether to reopen the search menu instead of a chest.</summary>
+    /// <summary>When the player press the 'toggle UI' hotkey, whether to reopen the search menu instead of a chest.</summary>
     public bool ReopenSearchMenu { get; set; } = false;
 
     /// <summary>When the player presses the 'toggle UI' hotkey, whether to reopen the last chest that was selected directly in the current session.</summary>

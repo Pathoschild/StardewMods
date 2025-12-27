@@ -8,7 +8,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 /// <summary>A storage container for an in-game Junimo huts.</summary>
 internal class JunimoHutContainer : ChestContainer
 {
-    private readonly JunimoHut junimoHut;
+    /*********
+    ** Fields
+    *********/
+    /// <summary>Junimo hut instance.</summary>
+    private readonly JunimoHut JunimoHut;
 
     /*********
     ** Public methods
@@ -18,14 +22,14 @@ internal class JunimoHutContainer : ChestContainer
     public JunimoHutContainer(JunimoHut junimoHut)
         : base(junimoHut.GetOutputChest(), context: junimoHut, showColorPicker: false)
     {
-        this.junimoHut = junimoHut;
+        this.JunimoHut = junimoHut;
     }
 
     /// <inheritdoc />
     public override bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
     {
-        texture = this.junimoHut.texture.Value;
-        sourceRect = this.junimoHut.getSourceRectForMenu() ?? this.junimoHut.getSourceRect();
+        texture = this.JunimoHut.texture.Value;
+        sourceRect = this.JunimoHut.getSourceRectForMenu() ?? this.JunimoHut.getSourceRect();
         scale = 4f * (32f / sourceRect.Height);
         return true;
     }

@@ -18,6 +18,7 @@ internal record ChestSearchBox(string Label, ValidatedTextBox Box, Func<ManagedC
     /// <summary>The last tick when LastValue was checked</summary>
     private int LastCheckedTick = -1;
 
+    /// <summary>Clickable component bounds used to activate/deactivate this search box</summary>
     internal ClickableComponent Clickable = new(Box.GetBounds(), Label) { ScreenReaderText = Label };
 
     /// <summary>Whether the last value is valid</summary>
