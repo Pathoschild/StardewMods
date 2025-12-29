@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "Baraka ({{owner}})",
     "default-category.cabin-unowned": "Baraka (boş)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Kiler ({{owner}})",
+    "default-category.cellar-unowned": "Kiler #{{cellarNumber}}",
+    "default-category.farmhouse": "Çiftlik Evi",
+    "default-category.island-farmhouse": "Ada Evi",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -109,9 +109,8 @@
     "config.edit-chest.name": "Sandığı düzenle",
     "config.edit-chest.desc": "Mevcut sandık için seçenekleri düzenleyen tuşlar.",
 
-    // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "Envanterdeki Nesneleri Sırala",
+    "config.sort-items.desc": "Menü açıkken oyuncunun envanterindeki nesneleri sıralayan tuşlar",
 
     "config.navigate-prev-chest.name": "Gezin: önceki sandık",
     "config.navigate-prev-chest.desc": "Menü açıkken bir önceki sandığa giden tuşlar.",
