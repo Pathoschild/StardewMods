@@ -5,9 +5,12 @@ namespace ContentPatcher.Framework.Conditions;
 /// <summary>Indicates how an image should be patched.</summary>
 public enum PatchImageMode
 {
-    /// <summary>Erase the original content within the area before drawing the new content.</summary>
+    /// <inheritdoc cref="PatchMode.Replace" />
     Replace = PatchMode.Replace,
 
-    /// <summary>Draw the new content over the original content, so the original content shows through any transparent or semi-transparent pixels.</summary>
-    Overlay = PatchMode.Overlay
+    /// <inheritdoc cref="PatchMode.Overlay" />
+    Overlay = PatchMode.Overlay,
+
+    /// <inheritdoc cref="PatchMode.Mask" />
+    Mask = PatchMode.Mask
 }
