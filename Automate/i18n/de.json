@@ -41,9 +41,9 @@
     "config.default-chest-override.name": "Standardverhalten",
     "config.default-chest-override.desc": "Ob Truhen standardmäßig aktiviert oder deaktiviert sein sollen (außer den unten festgelegten). Aktivierte Truhen automatisieren verbundene Maschinen, während deaktivierte vollständig ignoriert werden.",
     "config.chest-override.name": "{{chestName}}",
-    "config.chest-override.name.take-only": "{{chestName}} (take items only)", // TODO
+    "config.chest-override.name.take-only": "{{chestName}} (nur Gegenstände nehmen)",
     "config.chest-override.desc": "Ob platzierte {{chestName}} Objekte als Truhen aktiviert werden sollen. Siehe den Tooltip bei '{{defaultBehaviorField}}'.",
-    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // TODO // {{description}} contains the previous translation line
+    "config.chest-override.desc.take-only": "{{description}} (Wenn aktiviert, erlaubt dieser Truhentyp nur die Entnahme von Gegenständen aus der Truhe.)", // {{description}} contains the previous translation line
     "config.chest-override.values.default": "Standard",
     "config.chest-override.values.enabled": "Aktiviert",
     "config.chest-override.values.disabled": "Deaktiviert",

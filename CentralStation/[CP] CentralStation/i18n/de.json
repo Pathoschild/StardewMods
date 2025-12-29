@@ -163,33 +163,31 @@
     /*********
     ** Furniture
     *********/
-    // TODO
     // calendars
-    "furniture.calendar-city.name": "City Calendar",
-    "furniture.calendar-nature.name": "Nature Calendar",
+    "furniture.calendar-city.name": "Stadt Kalendar",
+    "furniture.calendar-nature.name": "Natur Kalendar",
 
     // wall decor
-    "furniture.clock.name": "Clock",
-    "furniture.transit-map.name": "Transit Map",
-    "furniture.travel-pictures.name": "Travel Pictures",
-    "furniture.welcome-sign.name": "Welcome Sign",
+    "furniture.clock.name": "Uhr",
+    "furniture.transit-map.name": "Verkehrsnetzplan",
+    "furniture.travel-pictures.name": "Reisefotos",
+    "furniture.welcome-sign.name": "Wilkommensschild",
 
     // rugs
-    "furniture.posh-rug.name": "Posh Rug",
+    "furniture.posh-rug.name": "Eleganter Teppich",
 
     // general decor
-    "furniture.board-sign.name": "Board Sign",
-    "furniture.postbox.name": "Postbox",
-    "furniture.suitcase-blue.name": "Blue Suitcase",
-    "furniture.suitcase-pink.name": "Pink Suitcase",
-    "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can",
+    "furniture.board-sign.name": "Aushangtafel",
+    "furniture.postbox.name": "Briefkasten",
+    "furniture.suitcase-blue.name": "Blauer Koffer",
+    "furniture.suitcase-pink.name": "Pinker Koffer",
+    "furniture.trash-can.name": "Mülleimer",
+    "furniture.trash-can-messy.name": "Unordentlicher Mülleimer",
 
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.require-pam-bus.name": "Require Pam's bus",
-    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
+    "config.require-pam-bus.name": "Pam's Bus erforderlich",
+    "config.require-pam-bus.desc": "Ob Pams Bus repariert sein muss, bevor du von der Bushaltestelle im Sternentautal abfahren kannst. Wenn nicht erforderlich, kannst du zum Hauptbahnhof fahren (aber nicht in die Wüste), bevor der Bus repariert ist."
 }
