@@ -9,6 +9,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Added [`PatchMode: Mask`](author-guide/action-editimage.md) to apply transparency masks to images (thanks to 
+PinkSerenity!).
+
 ## 2.8.1
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

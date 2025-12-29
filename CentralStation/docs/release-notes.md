@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Aapodot (updated Spanish), EnderFS (added Ukrainian), JanUwU42 (updated German), and MakinDay (updated Italian)!
+
 ## 1.6.0
 Released 26 October 2025 for SMAPI 4.3.1 or later.
 
