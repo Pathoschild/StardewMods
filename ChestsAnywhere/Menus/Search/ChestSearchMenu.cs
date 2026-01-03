@@ -348,8 +348,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
 
     public override void receiveKeyPress(Keys key)
     {
-        // ignore input if a search box is selected
-        if (this.SearchBoxes.Any(searchBox => searchBox.TextBox.Selected))
+        // ignore text input if a search box is selected
+        if (key != Keys.Escape && this.SearchBoxes.Any(searchBox => searchBox.TextBox.Selected))
             return;
 
         // default behavior
