@@ -28,12 +28,6 @@ internal class ChestContainer : IContainer
     /// <summary>Whether to show the chest color picker.</summary>
     private readonly bool ShowColorPicker;
 
-    /// <summary>The cached chest icon.</summary>
-    private RenderTarget2D? RenderedChestIcon;
-
-    /// <summary>The last chest color for which the <see cref="RenderedChestIcon"/> was cached.</summary>
-    private Color? LastRenderedPlayerChoiceColor;
-
 
     /*********
     ** Accessors
@@ -149,27 +143,21 @@ internal class ChestContainer : IContainer
     /// <inheritdoc />
     public virtual bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
     {
-        // generate icon
-        if (this.RenderedChestIcon is null || this.Chest.playerChoiceColor.Value != this.LastRenderedPlayerChoiceColor)
-        {
-            Chest chest = this.Chest;
-            var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+        Chest chest = this.Chest;
 
-            Game1.SetRenderTarget(icon);
-            ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-            Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
-            chest.fixLidFrame();
-            chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
-            ChestIconBatch.End();
-            Game1.SetRenderTarget(null);
+        // generate icon texture
+        var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+        Game1.SetRenderTarget(icon);
+        ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+        Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
+        chest.fixLidFrame();
+        chest.draw(ChestIconBatch, 0, 64, local: true);
+        ChestIconBatch.End();
+        Game1.SetRenderTarget(null);
 
-            this.RenderedChestIcon = icon;
-            this.LastRenderedPlayerChoiceColor = chest.playerChoiceColor.Value;
-        }
-
-        // return cached icon
-        texture = this.RenderedChestIcon;
-        sourceRect = this.RenderedChestIcon.Bounds;
+        // set values
+        texture = icon;
+        sourceRect = icon.Bounds;
         scale = 1;
         return true;
     }

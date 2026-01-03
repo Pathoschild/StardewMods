@@ -28,8 +28,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The number of chest rows to show at once.</summary>
     private const int RowCount = 7;
 
-    /// <summary>The number of chest columns to show at once.</summary>
-    private const int ColCount = 4;
+    /// <summary>The number of chests to show in each row.</summary>
+    private const int ChestsPerRow = 4;
 
     /// <summary>The pixel width of each chest result.</summary>
     private const int CellWidth = 312;
@@ -59,11 +59,16 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The configured key bindings.</summary>
     private readonly KeybindList PreviewKey;
 
-    /// <summary>The chest search result components.</summary>
-    private readonly List<ChestSearchMenuCell> ChestCells = [];
+    /// <summary>The pool of chest search result components.</summary>
+    /// <remarks>Most code should use <see cref="VisibleChestCells"/> instead.</remarks>
+    private readonly ChestSearchMenuCell[] ChestCellPool;
 
     /// <summary>The chests which match the current search.</summary>
-    private readonly List<ManagedChest> MatchedChests = [];
+    private readonly List<ManagedChest> VisibleChests;
+
+    /// <summary>The chest cells which match the current search.</summary>
+    /// <remarks>This is updated via <see cref="UpdateVisibleCells"/>.</remarks>
+    private readonly List<ChestSearchMenuCell> VisibleChestCells = [];
 
     /// <summary>The search box which matches chest names.</summary>
     private readonly ChestSearchBox NameSearchBox;
@@ -98,18 +103,16 @@ internal sealed class ChestSearchMenu : IClickableMenu
         : base(
             x: Game1.viewport.X + 96,
             y: Game1.viewport.Y + 96,
-            width: CellWidth * ColCount + Margin * 2,
+            width: CellWidth * ChestsPerRow + Margin * 2,
             height: SearchBarHeight + CellHeight * RowCount + Margin * 2,
             showUpperRightCloseButton: true
         )
     {
+        // init
         this.Chests = chests;
+        this.VisibleChests = chests.ToList();
         this.PreviewKey = keys.SearchMenuPreviewChest;
         this.exitFunction = () => currentChest.OpenMenu();
-
-        // prebake target chest icons
-        foreach (ManagedChest chest in this.Chests)
-            chest.Container.TryGetIcon(out _, out _, out _);
 
         // get position
         Vector2 position = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
@@ -117,24 +120,27 @@ internal sealed class ChestSearchMenu : IClickableMenu
         this.yPositionOnScreen = (int)position.Y;
 
         // create search result cells
+        this.ChestCellPool = new ChestSearchMenuCell[RowCount * ChestsPerRow];
         for (int row = 0; row < RowCount; row++)
         {
-            for (int col = 0; col < ColCount; col++)
+            for (int col = 0; col < ChestsPerRow; col++)
             {
-                int myID = 100 + (row * ColCount) + col;
-                ChestSearchMenuCell chestSearchMenuCell = new(new(0, 0, CellWidth, CellHeight), $"ChestSearchMenuCell_{row}_{col}", Margin + CellWidth * col, Margin + SearchBarHeight + CellHeight * row)
+                int i = (row * ChestsPerRow) + col;
+                int myID = 100 + i;
+
+                ChestSearchMenuCell chestSearchMenuCell = new(new Rectangle(0, 0, CellWidth, CellHeight), $"ChestSearchMenuCell_{row}_{col}", Margin + CellWidth * col, Margin + SearchBarHeight + CellHeight * row)
                 {
                     myID = myID,
-                    upNeighborID = row > 0 ? myID - ColCount : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+                    upNeighborID = row > 0 ? myID - ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
                     upNeighborImmutable = true,
                     leftNeighborID = col > 0 ? myID - 1 : ClickableComponent.ID_ignore,
-                    rightNeighborID = col < ColCount - 1 ? myID + 1 : ClickableComponent.ID_ignore,
+                    rightNeighborID = col < ChestsPerRow - 1 ? myID + 1 : ClickableComponent.ID_ignore,
                     downNeighborID =
-                        row < RowCount - 1 ? myID + ColCount : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+                        row < RowCount - 1 ? myID + ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
                     downNeighborImmutable = true,
                 };
                 chestSearchMenuCell.Reposition(this.xPositionOnScreen, this.yPositionOnScreen);
-                this.ChestCells.Add(chestSearchMenuCell);
+                this.ChestCellPool[i] = chestSearchMenuCell;
             }
         }
 
@@ -167,7 +173,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
             this.SearchItemsInChest
         );
         this.ItemSearchBox.Clickable.myID = 1002;
-        this.ItemSearchBox.Clickable.downNeighborID = 101 + ColCount / 2;
+        this.ItemSearchBox.Clickable.downNeighborID = 101 + ChestsPerRow / 2;
         this.ItemSearchBox.Clickable.leftNeighborID = 1001;
         this.ItemSearchBox.Clickable.rightNeighborID = upperRightCloseButton_ID;
 
@@ -188,13 +194,16 @@ internal sealed class ChestSearchMenu : IClickableMenu
             this.populateClickableComponentList();
             this.snapToDefaultClickableComponent();
         }
+
+        // set initial results
+        this.UpdateVisibleCells();
     }
 
     /// <inheritdoc />
     public override void populateClickableComponentList()
     {
         this.allClickableComponents = [this.upperRightCloseButton, this.NameSearchBox.Clickable, this.ItemSearchBox.Clickable];
-        this.allClickableComponents.AddRange(this.ChestCells);
+        this.allClickableComponents.AddRange(this.ChestCellPool);
     }
 
     /// <inheritdoc />
@@ -207,15 +216,15 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <inheritdoc />
     protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
     {
-        if (oldID is >= 100 and < 100 + ColCount)
+        if (oldID is >= 100 and < 100 + ChestsPerRow)
         {
             if (!this.ScrollGrid(1))
             {
-                this.currentlySnappedComponent = this.getComponentWithID(oldID < 101 + ColCount / 2 ? 1001 : 1002);
+                this.currentlySnappedComponent = this.getComponentWithID(oldID < 101 + ChestsPerRow / 2 ? 1001 : 1002);
                 this.snapCursorToCurrentSnappedComponent();
             }
         }
-        else if (oldID >= 100 + ColCount * (RowCount - 1))
+        else if (oldID >= 100 + ChestsPerRow * (RowCount - 1))
             this.ScrollGrid(-1);
         else
             base.customSnapBehavior(direction, oldRegion, oldID);
@@ -224,7 +233,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <inheritdoc />
     public override void update(GameTime time)
     {
-        this.RecheckSearchState();
+        this.ApplySearchIfChanged();
+
         base.update(time);
     }
 
@@ -248,8 +258,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
         }
 
         // draw chest cells
-        foreach ((ChestSearchMenuCell cell, ManagedChest chest) in this.IterateVisibleChestCells())
-            cell.Draw(b, chest);
+        foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
+            cell.Draw(b);
 
         // draw item preview tooltip
         if (this.HoverItems != null)
@@ -333,11 +343,11 @@ internal sealed class ChestSearchMenu : IClickableMenu
         }
 
         // open chest
-        foreach ((ChestSearchMenuCell cell, ManagedChest chest) in this.IterateVisibleChestCells())
+        foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
         {
             if (cell.bounds.Contains(x, y))
             {
-                chest.OpenMenu();
+                cell.Chest!.OpenMenu();
                 return;
             }
         }
@@ -362,11 +372,11 @@ internal sealed class ChestSearchMenu : IClickableMenu
         // set items for item preview tooltip
         if (this.ItemSearchBox.HasValue)
         {
-            foreach ((ChestSearchMenuCell cell, ManagedChest chest) in this.IterateVisibleChestCells())
+            foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
             {
                 if (cell.bounds.Contains(x, y))
                 {
-                    if (this.MatchedItemsInChest.TryGetValue(chest, out IList<Item?>? matchedItems))
+                    if (this.MatchedItemsInChest.TryGetValue(cell.Chest!, out IList<Item?>? matchedItems))
                         this.HoverItems = matchedItems;
                     return;
                 }
@@ -374,11 +384,11 @@ internal sealed class ChestSearchMenu : IClickableMenu
         }
         else if (this.PreviewKey.IsDown())
         {
-            foreach ((ChestSearchMenuCell cell, ManagedChest chest) in this.IterateVisibleChestCells())
+            foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
             {
                 if (cell.bounds.Contains(x, y))
                 {
-                    this.HoverItems = chest.Container.Inventory;
+                    this.HoverItems = cell.Chest!.Container.Inventory;
                     return;
                 }
             }
@@ -400,21 +410,29 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <param name="direction">The direction to scroll, where &gt;0 is up and &lt;0 is down.</param>
     private bool ScrollGrid(int direction)
     {
-        bool scrolled = false;
-        if (direction > 0 && this.ScrollIndex >= ColCount)
+        direction = Math.Clamp(direction, -1, 1);
+
+        // scroll
+        bool scrolled;
         {
-            this.ScrollIndex -= ColCount;
-            scrolled = true;
-        }
-        else if (direction < 0 && this.ScrollIndex < Math.Max(0, (this.HasAppliedSearch ? this.MatchedChests.Count : this.Chests.Length) - this.ChestCells.Count))
-        {
-            this.ScrollIndex += ColCount;
-            scrolled = true;
+            int oldIndex = this.ScrollIndex;
+            int newRawIndex = oldIndex + (-direction * ChestsPerRow);
+
+            int totalRows = (int)Math.Ceiling((this.VisibleChests.Count * 1f) / ChestsPerRow);
+            int max = Math.Max(0, totalRows * ChestsPerRow - (RowCount * ChestsPerRow));
+
+            this.ScrollIndex = Math.Clamp(newRawIndex, 0, max);
+
+            scrolled = this.ScrollIndex != oldIndex;
         }
 
+        // update on scroll
         if (scrolled)
+        {
             Game1.playSound("shiny4");
 
+            this.UpdateVisibleCells();
+        }
         return scrolled;
     }
 
@@ -435,10 +453,10 @@ internal sealed class ChestSearchMenu : IClickableMenu
         return chestMatchedItems.Count > 0;
     }
 
-    /// <summary>Update the search state based on whether any search boxes have search terms.</summary>
-    private void RecheckSearchState()
+    /// <summary>Update the search state and displayed results if the search text changed.</summary>
+    private void ApplySearchIfChanged()
     {
-        // update search text
+        // get search boxes to apply
         bool searchChanged = false;
         List<ChestSearchBox> applySearchBoxes = [];
         foreach (ChestSearchBox searchBox in this.SearchBoxes)
@@ -451,7 +469,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
         // update matched chests
         if (searchChanged)
         {
-            this.MatchedChests.Clear();
+            this.VisibleChests.Clear();
 
             if (applySearchBoxes.Contains(this.ItemSearchBox))
                 this.MatchedItemsInChest.Clear();
@@ -461,8 +479,10 @@ internal sealed class ChestSearchMenu : IClickableMenu
                 foreach (ManagedChest chest in this.Chests)
                 {
                     if (applySearchBoxes.All(searchBox => searchBox.Matches(chest)))
-                        this.MatchedChests.Add(chest);
+                        this.VisibleChests.Add(chest);
                 }
+
+                this.UpdateVisibleCells();
             }
         }
 
@@ -473,23 +493,27 @@ internal sealed class ChestSearchMenu : IClickableMenu
         this.HasAppliedSearch = newSearchState;
     }
 
-    /// <summary>Iterate the visible search results.</summary>
-    private IEnumerable<(ChestSearchMenuCell, ManagedChest)> IterateVisibleChestCells()
+    /// <summary>Reset the cached <see cref="VisibleChestCells"/> to match the <see cref="VisibleChests"/> and <see cref="ScrollIndex"/>.</summary>
+    private void UpdateVisibleCells()
     {
-        IList<ManagedChest> chests;
-        int length;
-        if (this.HasAppliedSearch)
+        this.VisibleChestCells.Clear();
+
+        int slotIndex = 0;
+
+        for (int chestIndex = this.ScrollIndex; chestIndex < this.VisibleChests.Count; chestIndex++)
         {
-            length = Math.Min(this.ChestCells.Count, this.MatchedChests.Count - this.ScrollIndex);
-            chests = this.MatchedChests;
-        }
-        else
-        {
-            length = Math.Min(this.ChestCells.Count, this.Chests.Length - this.ScrollIndex);
-            chests = this.Chests;
+            if (slotIndex >= this.ChestCellPool.Length)
+                break;
+
+            ChestSearchMenuCell cell = this.ChestCellPool[slotIndex];
+            cell.visible = true;
+            cell.SetChest(this.VisibleChests[chestIndex]);
+            this.VisibleChestCells.Add(cell);
+
+            slotIndex++;
         }
 
-        for (int i = 0; i < length; i++)
-            yield return (this.ChestCells[i], chests[this.ScrollIndex + i]);
+        for (int i = slotIndex; i < this.ChestCellPool.Length; i++)
+            this.ChestCellPool[i].visible = false;
     }
 }

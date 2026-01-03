@@ -25,6 +25,16 @@ internal class ChestSearchMenuCell : ClickableComponent
     /// <summary>The Y pixel position at which to draw this cell, relative to the search menu's <see cref="IClickableMenu.yPositionOnScreen"/> value.</summary>
     private readonly int BaseY;
 
+    /// <summary>The icon to draw for the chest, if loaded.</summary>
+    private (Texture2D? Texture, Rectangle SourceRect, float Scale)? LoadedIcon;
+
+
+    /*********
+    ** Accessors
+    *********/
+    /// <summary>The chest shown in this cell, if any.</summary>
+    public ManagedChest? Chest { get; private set; }
+
 
     /*********
     ** Public methods
@@ -50,14 +60,31 @@ internal class ChestSearchMenuCell : ClickableComponent
         this.bounds.Y = this.BaseY + yPositionOnScreen;
     }
 
+    /// <summary>Set the chest drawn in this cell.</summary>
+    /// <param name="chest">The chest to draw.</param>
+    public void SetChest(ManagedChest chest)
+    {
+        if (this.Chest is null || !this.Chest.Container.IsSameAs(chest.Container))
+            this.LoadedIcon = null;
+
+        this.Chest = chest;
+    }
+
     /// <summary>Draw the cell to the screen.</summary>
     /// <param name="spriteBatch">The sprite batch being drawn.</param>
-    /// <param name="chest">The chest to draw in the cell.</param>
-    public virtual void Draw(SpriteBatch spriteBatch, ManagedChest chest)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
-        if (!this.visible)
+        if (!this.visible || this.Chest is not { } chest)
             return;
 
+        // load chest icon
+        {
+            this.LoadedIcon ??= chest.Container.TryGetIcon(out Texture2D? texture, out Rectangle sourceRect, out float iconScale)
+                ? (texture, sourceRect, iconScale)
+                : (null, Rectangle.Empty, 1f);
+        }
+
+        // draw cell background
         IClickableMenu.drawTextureBox(
             b: spriteBatch,
             texture: Game1.menuTexture,
@@ -70,27 +97,29 @@ internal class ChestSearchMenuCell : ClickableComponent
             drawShadow: false
         );
 
+        // draw chest icon
         int offsetX = this.bounds.X + Padding * 2;
-        if (chest.Container.TryGetIcon(out Texture2D? texture, out Rectangle sourceRect, out float iconScale))
+        if (this.LoadedIcon is { Texture: not null } icon)
         {
-            spriteBatch.Draw(texture, new Vector2(offsetX, this.bounds.Y + Padding), sourceRect, Color.White, 0, Vector2.Zero, iconScale / 2, SpriteEffects.None, layerDepth: 0.9f);
-            offsetX += (int)(sourceRect.Width * iconScale / 2 + Padding);
+            spriteBatch.Draw(icon.Texture, new Vector2(offsetX, this.bounds.Y + Padding), icon.SourceRect, Color.White, 0, Vector2.Zero, icon.Scale / 2, SpriteEffects.None, layerDepth: 0.9f);
+            offsetX += (int)(icon.SourceRect.Width * icon.Scale / 2 + Padding);
         }
         else
             offsetX += 16 + Padding;
 
+        // draw label
         Utility.drawTextWithShadow(
             b: spriteBatch,
             text: chest.DisplayCategory,
             font: Game1.smallFont,
-            position: new(offsetX, this.bounds.Y + Padding + 4),
+            position: new Vector2(offsetX, this.bounds.Y + Padding + 4),
             color: Game1.textColor
         );
         Utility.drawTextWithShadow(
             b: spriteBatch,
             text: chest.DisplayName,
             font: Game1.smallFont,
-            position: new(offsetX, this.bounds.Y + Padding + Game1.smallFont.LineSpacing),
+            position: new Vector2(offsetX, this.bounds.Y + Padding + Game1.smallFont.LineSpacing),
             color: Game1.textColor
         );
 
