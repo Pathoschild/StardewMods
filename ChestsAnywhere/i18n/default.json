@@ -135,10 +135,10 @@
     "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
 
     "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "The keys which, when pressed, opens the search menu for all chests.",
+    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
 
     "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "The keys which, when held, previews the contents of chest being hovered over.",
+    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
 
 
     /*********
