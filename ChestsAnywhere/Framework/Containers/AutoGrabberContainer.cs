@@ -38,7 +38,7 @@ internal class AutoGrabberContainer : ChestContainer
         ParsedItemData parsedItemData = ItemRegistry.GetData(this.AutoGrabber.QualifiedItemId);
         texture = parsedItemData.GetTexture();
         sourceRect = parsedItemData.GetSourceRect();
-        scale = 4;
+        scale = Game1.pixelZoom;
         return true;
     }
 

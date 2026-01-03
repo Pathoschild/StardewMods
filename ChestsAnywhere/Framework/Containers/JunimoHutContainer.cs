@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 using StardewValley.Buildings;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
@@ -31,7 +32,7 @@ internal class JunimoHutContainer : ChestContainer
     {
         texture = this.JunimoHut.texture.Value;
         sourceRect = this.JunimoHut.getSourceRectForMenu() ?? this.JunimoHut.getSourceRect();
-        scale = 4f * (32f / sourceRect.Height);
+        scale = Game1.pixelZoom * (32f / sourceRect.Height);
         return true;
     }
 }

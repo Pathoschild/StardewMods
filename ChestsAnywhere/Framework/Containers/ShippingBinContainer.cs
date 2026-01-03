@@ -174,7 +174,7 @@ internal class ShippingBinContainer : IContainer
     {
         texture = Game1.content.Load<Texture2D>("Buildings/Shipping Bin");
         sourceRect = texture.Bounds;
-        scale = 4f * (32f / sourceRect.Height);
+        scale = Game1.pixelZoom * (32f / sourceRect.Height);
         return true;
     }
 

@@ -107,12 +107,9 @@ internal class StorageFurnitureContainer : IContainer
         texture = parsedItemData.GetTexture();
         sourceRect = this.Furniture.sourceRect.Value;
 
-        scale = Math.Min(
-            4f * (32f / sourceRect.Height),
-            4f * (32f / sourceRect.Width)
-        );
-        if (scale > 4)
-            scale = 4;
+        scale = Game1.pixelZoom * (32f / Math.Max(sourceRect.Height, sourceRect.Width));
+        if (scale > Game1.pixelZoom)
+            scale = Game1.pixelZoom;
 
         return true;
     }
