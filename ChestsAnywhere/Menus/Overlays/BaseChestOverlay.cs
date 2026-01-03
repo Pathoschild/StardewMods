@@ -156,8 +156,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /*********
     ** Public methods
     *********/
-
-    /// <summary>Open the search menu</summary>
+    /// <summary>Open the search menu.</summary>
     private void ShowChestSearch()
     {
         Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys);
@@ -184,6 +183,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.OnChestSelected = null;
         base.Dispose();
     }
+
 
     /*********
     ** Protected methods

@@ -105,7 +105,7 @@ internal class StorageFurnitureContainer : IContainer
         ParsedItemData parsedItemData = ItemRegistry.GetData(this.Furniture.QualifiedItemId);
         texture = parsedItemData.GetTexture();
         sourceRect = this.Furniture.sourceRect.Value;
-        scale = 4f;
+        scale = 4;
         return false;
     }
 }

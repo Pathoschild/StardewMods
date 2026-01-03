@@ -19,11 +19,20 @@ internal class ChestContainer : IContainer
     /// <summary>The in-game chest.</summary>
     internal readonly Chest Chest;
 
+    /// <summary>A shared sprite batch used to render a chest texture.</summary>
+    private static readonly SpriteBatch ChestIconBatch = new(Game1.graphics.GraphicsDevice);
+
     /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
     private readonly object Context;
 
     /// <summary>Whether to show the chest color picker.</summary>
     private readonly bool ShowColorPicker;
+
+    /// <summary>The cached chest icon.</summary>
+    private RenderTarget2D? RenderedChestIcon;
+
+    /// <summary>The last chest color for which the <see cref="RenderedChestIcon"/> was cached.</summary>
+    private Color? LastRenderedPlayerChoiceColor;
 
 
     /*********
@@ -137,15 +146,6 @@ internal class ChestContainer : IContainer
         this.Data.ToModData(this.Chest.modData);
     }
 
-    /// <summary>A shared spritebatch used to render a chest texture</summary>
-    protected static readonly SpriteBatch ChestIconBatch = new(Game1.graphics.GraphicsDevice);
-
-    /// <summary>The rendered chest icon</summary>
-    private RenderTarget2D? RenderedChestIcon;
-
-    /// <summary>The rendered chest icon</summary>
-    private Color? LastRenderedPlayerChoiceColor;
-
     /// <inheritdoc />
     public virtual bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
     {
@@ -153,7 +153,7 @@ internal class ChestContainer : IContainer
         {
             texture = this.RenderedChestIcon;
             sourceRect = this.RenderedChestIcon.Bounds;
-            scale = 1f;
+            scale = 1;
             return true;
         }
         this.RenderedChestIcon = new(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
@@ -166,9 +166,10 @@ internal class ChestContainer : IContainer
         this.LastRenderedPlayerChoiceColor = this.Chest.playerChoiceColor.Value;
         texture = this.RenderedChestIcon;
         sourceRect = this.RenderedChestIcon.Bounds;
-        scale = 1f;
+        scale = 1;
         return true;
     }
+
 
     /*********
     ** Protected methods

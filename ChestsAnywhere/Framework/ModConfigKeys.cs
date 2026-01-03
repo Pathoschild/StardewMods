@@ -39,11 +39,12 @@ internal class ModConfigKeys
     /// <summary>The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</summary>
     public KeybindList HoldToMouseWheelScrollCategories { get; set; } = new(SButton.LeftAlt);
 
-    /// <summary>The keys which opens the chest search menu.</summary>
-    public KeybindList OpenSearchMenu { get; set; } = KeybindList.Parse($"{SButton.LeftControl}+{SButton.F}, {SButton.LeftStick}");
+    /// <summary>The keys which open the chest search menu.</summary>
+    public KeybindList OpenSearchMenu { get; set; } = KeybindList.Parse($"{SButton.LeftControl} + {SButton.F}, {SButton.LeftStick}");
 
-    /// <summary>The keys which opens the chest search menu.</summary>
+    /// <summary>The keys which show a preview of the chest contents while on the search menu.</summary>
     public KeybindList SearchMenuPreviewChest { get; set; } = KeybindList.Parse($"{SButton.Tab}, {SButton.LeftTrigger}");
+
 
     /*********
     ** Public methods

@@ -18,6 +18,7 @@ internal class AutoGrabberContainer : ChestContainer
     /// <summary>The underlying auto-grabber.</summary>
     private readonly SObject AutoGrabber;
 
+
     /*********
     ** Public methods
     *********/
@@ -37,9 +38,10 @@ internal class AutoGrabberContainer : ChestContainer
         ParsedItemData parsedItemData = ItemRegistry.GetData(this.AutoGrabber.QualifiedItemId);
         texture = parsedItemData.GetTexture();
         sourceRect = parsedItemData.GetSourceRect();
-        scale = 4f;
+        scale = 4;
         return true;
     }
+
 
     /*********
     ** Private methods

@@ -11,8 +11,9 @@ internal class JunimoHutContainer : ChestContainer
     /*********
     ** Fields
     *********/
-    /// <summary>Junimo hut instance.</summary>
+    /// <summary>The underlying Junimo hut.</summary>
     private readonly JunimoHut JunimoHut;
+
 
     /*********
     ** Public methods

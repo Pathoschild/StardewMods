@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Inventories;
 using StardewValley.Menus;
 
@@ -178,6 +177,7 @@ internal class ShippingBinContainer : IContainer
         scale = 4f * (32f / sourceRect.Height);
         return true;
     }
+
 
     /*********
     ** Private methods

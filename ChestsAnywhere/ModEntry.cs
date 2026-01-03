@@ -299,13 +299,9 @@ internal class ModEntry : Mod
 
         // render menu
         if (this.Config.ReopenSearchMenu)
-        {
             Game1.activeClickableMenu = new ChestSearchMenu(selectedChest, chests, this.Keys);
-        }
         else
-        {
             selectedChest.OpenMenu();
-        }
     }
 
     /// <summary>Get the default chest to open when opening the menu.</summary>
