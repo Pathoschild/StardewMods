@@ -149,21 +149,23 @@ internal class ChestContainer : IContainer
     /// <inheritdoc />
     public virtual bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
     {
-        if (this.RenderedChestIcon != null && this.Chest.playerChoiceColor.Value == this.LastRenderedPlayerChoiceColor)
+        // generate icon
+        if (this.RenderedChestIcon is null || this.Chest.playerChoiceColor.Value != this.LastRenderedPlayerChoiceColor)
         {
-            texture = this.RenderedChestIcon;
-            sourceRect = this.RenderedChestIcon.Bounds;
-            scale = 1;
-            return true;
+            var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+
+            Game1.SetRenderTarget(icon);
+            ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+            Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
+            this.Chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
+            ChestIconBatch.End();
+            Game1.SetRenderTarget(null);
+
+            this.RenderedChestIcon = icon;
+            this.LastRenderedPlayerChoiceColor = this.Chest.playerChoiceColor.Value;
         }
-        this.RenderedChestIcon = new(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-        Game1.SetRenderTarget(this.RenderedChestIcon);
-        ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-        Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
-        this.Chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
-        ChestIconBatch.End();
-        Game1.SetRenderTarget(null);
-        this.LastRenderedPlayerChoiceColor = this.Chest.playerChoiceColor.Value;
+
+        // return cached icon
         texture = this.RenderedChestIcon;
         sourceRect = this.RenderedChestIcon.Bounds;
         scale = 1;

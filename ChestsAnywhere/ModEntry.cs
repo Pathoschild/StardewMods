@@ -172,9 +172,6 @@ internal class ModEntry : Mod
         if (!Context.IsWorldReady)
             return;
 
-        if (Game1.activeClickableMenu is ChestSearchMenu)
-            return;
-
         try
         {
             ModConfigKeys keys = this.Keys;
