@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -48,4 +51,11 @@ internal interface IContainer
 
     /// <summary>Persist the container data.</summary>
     void SaveData();
+
+    /// <summary>Try to get an icon for the chest for the search UI.</summary>
+    /// <param name="texture">The texture containing the icon.</param>
+    /// <param name="sourceRect">The pixel area within the <paramref name="texture"/> containing the icon.</param>
+    /// <param name="scale">The default scale at which to draw the icon.</param>
+    /// <returns>Returns <c>true</c> if an icon was returned, else <c>false</c>.</returns>
+    bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale);
 }

@@ -246,8 +246,6 @@ internal class ChestFactory
 
         return
             Search()
-            .OrderBy(chest => chest.Order ?? int.MaxValue)
-            .ThenBy(chest => chest.DisplayName, HumanSortComparer.DefaultIgnoreCase)
             .Where(chest =>
                 (
                     alwaysInclude != null
@@ -259,7 +257,10 @@ internal class ChestFactory
                     !excludeHidden
                     || !chest.IsIgnored
                 )
-            );
+            )
+            .OrderBy(chest => chest.Order ?? int.MaxValue)
+            .ThenBy(chest => chest.DisplayCategory, HumanSortComparer.DefaultIgnoreCase)
+            .ThenBy(chest => chest.DisplayName, HumanSortComparer.DefaultIgnoreCase);
     }
 
     /// <summary>Get the player chest on the specified tile (if any).</summary>

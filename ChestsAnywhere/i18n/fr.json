@@ -131,6 +131,13 @@
     "config.hold-to-scroll-chests.name": "Maintenir pour faire défiler les coffres",
     "config.hold-to-scroll-chests.desc": "Les touches qui, lorsqu'elles sont maintenues, permettent de faire défiler la liste déroulante des coffres avec la molette de la souris.",
 
+    // TODO
+    "config.open-search-menu.name": "Open Search Menu",
+    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+
+    "config.search-menu-preview.name": "Search Menu Preview Chest",
+    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+
 
     /*********
     ** Iconic Framework icon

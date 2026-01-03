@@ -161,6 +161,18 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 tooltip: I18n.Config_HoldToScrollChests_Desc,
                 get: config => config.Controls.HoldToMouseWheelScrollChests,
                 set: (config, value) => config.Controls.HoldToMouseWheelScrollChests = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_OpenSearchMenu_Name,
+                tooltip: I18n.Config_OpenSearchMenu_Desc,
+                get: config => config.Controls.OpenSearchMenu,
+                set: (config, value) => config.Controls.OpenSearchMenu = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_SearchMenuPreview_Name,
+                tooltip: I18n.Config_SearchMenuPreview_Desc,
+                get: config => config.Controls.SearchMenuPreviewChest,
+                set: (config, value) => config.Controls.SearchMenuPreviewChest = value
             );
     }
 }
