@@ -39,6 +39,11 @@
     "button.save": "Mentés",
     "button.reset": "Visszaállítás",
 
+    // chest search menu
+    // TODO
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
+
 
     /**********
     ** Errors

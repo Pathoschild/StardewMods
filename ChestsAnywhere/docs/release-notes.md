@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added chest search (thanks to Mushymato!).  
+  _While a chest is open, press `Control + F` or left controller stick to search all chests by name or item.
 * Improved translations. Thanks to JanUwU42 (updated German)!
 
 ## 1.29.1

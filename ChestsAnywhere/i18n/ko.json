@@ -39,6 +39,11 @@
     "button.save": "저장",
     "button.reset": "초기화",
 
+    // chest search menu
+    // TODO
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
+
 
     /**********
     ** Errors

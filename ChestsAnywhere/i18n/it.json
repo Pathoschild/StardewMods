@@ -39,6 +39,11 @@
     "button.save": "salva",
     "button.reset": "ripristina",
 
+    // chest search menu
+    // TODO
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
+
 
     /**********
     ** Errors

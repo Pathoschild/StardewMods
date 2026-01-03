@@ -39,6 +39,11 @@
     "button.save": "salvar",
     "button.reset": "padrão",
 
+    // chest search menu
+    // TODO
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
+
 
     /**********
     ** Errors

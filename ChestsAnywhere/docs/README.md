@@ -28,6 +28,9 @@ This will show a form where you can...
 * set the sort order in the chest list;
 * or hide the chest from the chest list.
 
+**Search chests** by pressing `left control` + `F` while viewing a chest. You can search by chest
+name or for item names within the chests.
+
 **Point at a chest** in the world to see its name in a tooltip.
 
 **Open the shipping bin** to view the items in the shipping bin. This lets you retrieve items
