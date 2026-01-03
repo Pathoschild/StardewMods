@@ -152,17 +152,19 @@ internal class ChestContainer : IContainer
         // generate icon
         if (this.RenderedChestIcon is null || this.Chest.playerChoiceColor.Value != this.LastRenderedPlayerChoiceColor)
         {
+            Chest chest = this.Chest;
             var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, 64, 128, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
 
             Game1.SetRenderTarget(icon);
             ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
-            this.Chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
+            chest.fixLidFrame();
+            chest.draw(ChestIconBatch, 0, 64, 1f, local: true);
             ChestIconBatch.End();
             Game1.SetRenderTarget(null);
 
             this.RenderedChestIcon = icon;
-            this.LastRenderedPlayerChoiceColor = this.Chest.playerChoiceColor.Value;
+            this.LastRenderedPlayerChoiceColor = chest.playerChoiceColor.Value;
         }
 
         // return cached icon
