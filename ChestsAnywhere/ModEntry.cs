@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
-using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
@@ -295,10 +294,7 @@ internal class ModEntry : Mod
         }
 
         // render menu
-        if (this.Config.ReopenSearchMenu)
-            Game1.activeClickableMenu = new ChestSearchMenu(selectedChest, chests, this.Keys);
-        else
-            selectedChest.OpenMenu();
+        selectedChest.OpenMenu();
     }
 
     /// <summary>Get the default chest to open when opening the menu.</summary>

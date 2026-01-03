@@ -100,12 +100,6 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 set: (config, value) => config.Controls.Toggle = value
             )
             .AddCheckbox(
-                name: I18n.Config_ReopenSearchMenu_Name,
-                tooltip: I18n.Config_ReopenSearchMenu_Desc,
-                get: config => config.ReopenSearchMenu,
-                set: (config, value) => config.ReopenSearchMenu = value
-            )
-            .AddCheckbox(
                 name: I18n.Config_ReopenLastChest_Name,
                 tooltip: I18n.Config_ReopenLastChest_Desc,
                 get: config => config.ReopenLastChest,
