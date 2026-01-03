@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -105,7 +106,14 @@ internal class StorageFurnitureContainer : IContainer
         ParsedItemData parsedItemData = ItemRegistry.GetData(this.Furniture.QualifiedItemId);
         texture = parsedItemData.GetTexture();
         sourceRect = this.Furniture.sourceRect.Value;
-        scale = 4;
-        return false;
+
+        scale = Math.Min(
+            4f * (32f / sourceRect.Height),
+            4f * (32f / sourceRect.Width)
+        );
+        if (scale > 4)
+            scale = 4;
+
+        return true;
     }
 }
