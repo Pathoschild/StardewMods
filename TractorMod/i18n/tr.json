@@ -93,10 +93,11 @@
     "config.hold-to-activate-key.tooltip": "Belirtilirse, traktör yalnızca siz bu düğmeyi basılı tutarken bir şey yapacaktır. Hiçbir şey belirtilmezse, siz onu sürerken traktör otomatik olarak çalışacaktır. ",
 
     "config.increase-distance-key.name": "Mesafeyi Arttır",
-    "config.increase-distance-key.tooltip": "Traktörün etrafında aletlerin uygulandığı mesafeyi önerilen maksimum değere kadar ( {{maxRecommendedValue}} ) geçici olarak bir arttırır. Bu durum bu oyun kaydından çıkana kadar devam eder.",
-
+    "config.increase-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 arttırır. Bu artış en fazla önerilen maksimum değere kadar ( {{maxRecommendedValue}} ) çıkar. Bu durum oyun kaydından çıkana kadar devam eder.",
+     
     "config.reduce-distance-key.name": "Mesafeyi Azalt",
-    "config.reduce-distance-key.tooltip": "Traktörün etrafında aletlerin uygulandığı mesafeyi önerilen minimum değere kadar ( 1 ) geçici olarak bir azaltır. Bu durum bu oyun kaydından çıkana kadar devam eder.",
+    "config.reduce-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 azaltır. Bu azaltma en az önerilen minimum değere kadar ( 1 ) iner. Bu durum oyun kaydından çıkana kadar devam eder.",
+     
 
 
     /****
