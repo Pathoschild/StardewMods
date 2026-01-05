@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed visual layering issue with food on tables.
 * Improved translations. Thanks to Aapodot (updated Spanish), EnderFS (added Ukrainian), JanUwU42 (updated German), and MakinDay (updated Italian)!
 
 ## 1.6.0
