@@ -37,17 +37,16 @@
     "config.junimo-huts.move-into-huts": "Sandıklardan Junimo kulübelerine taşı",
 
     // per-chest settings
-    // TODO
-    "config.title.chest-settings": "Chest settings",
-    "config.default-chest-override.name": "Default behavior",
-    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.title.chest-settings": "Sandık Ayarları",
+    "config.default-chest-override.name": "Varsayılan Davranış",
+    "config.default-chest-override.desc": "Sandığın varsayılan olarak etkin olup olmayacağını belirtir (Aşağıdaki sekme hariç). Etkin sandıklar otomatik olarak makinelere bağlanır. Etkin olmayanlar tamamen görmezden gelinir.",
     "config.chest-override.name": "{{chestName}}",
-    "config.chest-override.name.take-only": "{{chestName}} (take items only)",
-    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
-    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // {{description}} contains the previous translation line
-    "config.chest-override.values.default": "Default",
-    "config.chest-override.values.enabled": "Enable",
-    "config.chest-override.values.disabled": "Disable",
+    "config.chest-override.name.take-only": "{{chestName}} (Sadece eşyaları alır)",
+    "config.chest-override.desc": "Yerleştirilen {{chestName}} eşyalarının sandık işlevi görüp görmeyeceği. '{{defaultBehaviorField}}' açıklamasını inceleyin.",
+    "config.chest-override.desc.take-only": "{{description}} (Etkin olduğunda, bu sandık tipi sadece eşyaların alınabileceği bir sandık olur.)", // {{description}} contains the previous translation line
+    "config.chest-override.values.default": "Varsayılan",
+    "config.chest-override.values.enabled": "Etkin",
+    "config.chest-override.values.disabled": "Etkin değil",
 
     // per-machine settings
     "config.title.machine-settings": "{{machineName}} Ayarları",
