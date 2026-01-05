@@ -179,6 +179,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
             if (layers.CropHarvest.IsEnabled())
                 yield return new CropHarvestLayer(layers.CropHarvest, colors);
+            if (layers.FishingDepth.IsEnabled())
+                yield return new FishingDepthLayer(layers.FishingDepth, colors);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
                 yield return new MachineLayer(layers.Machines, colors, mods);
             if (layers.Tillable.IsEnabled())

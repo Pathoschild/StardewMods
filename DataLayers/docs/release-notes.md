@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added [_Fishing Depth_ layer](README.md#fishing-depth). (This is also selected by the [_Auto_ layer](README.md#auto) when holding a fishing rod.)
 * The _Crops: Ready to Harvest_ layer now also highlights bushes, trees, and fruit trees which can be harvested.
 * Improved translations. Thanks to JanUwU42 (updated German)!
 

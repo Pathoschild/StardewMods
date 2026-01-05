@@ -47,6 +47,9 @@ internal class ModConfigLayers
     /// <summary>Settings for the crop paddy water layer.</summary>
     public LayerConfig CropPaddyWater { get; set; } = new() { UpdatesPerSecond = 30 };
 
+    /// <summary>Settings for the fishing depth layer.</summary>
+    public LayerConfigWithAutoSupport FishingDepth { get; set; } = new() { UpdatesPerSecond = 2 };
+
     /// <summary>Settings for the machine processing layer.</summary>
     public LayerConfig Machines { get; set; } = new() { UpdatesPerSecond = 2 };
 
@@ -77,6 +80,7 @@ internal class ModConfigLayers
         this.CropHarvest ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };
         this.CropWater ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 30 };
         this.CropPaddyWater ??= new LayerConfig { UpdatesPerSecond = 30 };
+        this.FishingDepth ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };
         this.Machines ??= new LayerConfig { UpdatesPerSecond = 2 };
         this.TileGrid ??= new LayerConfig { UpdatesPerSecond = 1 };
         this.Tillable ??= new LayerConfigWithAutoSupport { UpdatesPerSecond = 2 };

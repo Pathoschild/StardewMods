@@ -71,6 +71,14 @@
     "crop-fertilizer.speed-gro": "Speed-Gro",
     "crop-fertilizer.multiple": "Multiple Fertilizer Types",
 
+    // fishing depth
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Machine Processing",
     "machines.empty": "Empty",

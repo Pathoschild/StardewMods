@@ -69,6 +69,12 @@
         "Buildable_Occupied": "Orange",
         "Buildable_NotBuildable": "Red",
 
+        "FishingDepth_One": "Red",
+        "FishingDepth_Two": "Coral",
+        "FishingDepth_Three": "Wheat",
+        "FishingDepth_Four": "Yellow",
+        "FishingDepth_Max": "Green",
+
         "MachineProcessing_Empty": "Red",
         "MachineProcessing_Processing": "Orange",
         "MachineProcessing_Finished": "Green",
