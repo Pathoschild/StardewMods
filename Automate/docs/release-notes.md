@@ -2,8 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added full controller navigation support for the search UI.
-* Improved translations. Thanks to JanUwU42 (updated German)!
+* Improved translations. Thanks to JanUwU42 (updated German) and mehmetgorkemarslan (updated Turkish)!
 
 ## 2.4.5
 Released 27 October 2025 for SMAPI 4.1.10 or later.

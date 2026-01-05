@@ -71,6 +71,15 @@
     "crop-fertilizer.speed-gro": "Hızlı-Ek",
     "crop-fertilizer.multiple": "Birden Fazla Gübre Çeşidi",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Makine İşleme",
     "machines.empty": "Boş",

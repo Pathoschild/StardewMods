@@ -4,7 +4,7 @@
 ## Upcoming release
 * Added [_Fishing Depth_ layer](README.md#fishing-depth). (This is also selected by the [_Auto_ layer](README.md#auto) when holding a fishing rod.)
 * The _Crops: Ready to Harvest_ layer now also highlights bushes, trees, and fruit trees which can be harvested.
-* Improved translations. Thanks to JanUwU42 (updated German)!
+* Improved translations. Thanks to JanUwU42 (updated German) and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.21.1
 Released 26 October 2025 for SMAPI 4.1.10 or later.

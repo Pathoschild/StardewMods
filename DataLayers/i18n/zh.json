@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "生长激素",
     "crop-fertilizer.multiple": "多种肥料",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing (机器运行状态)
     "machines.name": "机器运行状态",
     "machines.empty": "空闲",

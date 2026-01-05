@@ -71,6 +71,15 @@
     "crop-fertilizer.speed-gro": "Crescipresto",
     "crop-fertilizer.multiple": "Fertilizzanti multipli",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Processo macchinario",
     "machines.empty": "Vuoto",

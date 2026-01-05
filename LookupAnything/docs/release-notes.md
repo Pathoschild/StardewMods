@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Added full controller navigation support for the search UI.
 * Fixed search UI in 1.53.0 deselecting the search box when the cursor isn't over it.
-* Improved translations. Thanks to JanUwU42 (updated German) and MakinDay (updated Italian)!
+* Improved translations. Thanks to JanUwU42 (updated German), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.53.0
 Released 26 October 2025 for SMAPI 4.3.1 or later.
