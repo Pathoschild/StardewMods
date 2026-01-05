@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* The _Crops: Ready to Harvest_ layer now also highlights bushes, trees, and fruit trees which can be harvested.
 * Improved translations. Thanks to JanUwU42 (updated German)!
 
 ## 1.21.1
