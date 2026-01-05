@@ -29,11 +29,16 @@ internal class SearchResultComponent : ClickableComponent
     /// <summary>Construct an instance.</summary>
     /// <param name="subject">The subject to display.</param>
     /// <param name="index">The search result's index in the list.</param>
-    public SearchResultComponent(ISubject subject, int index)
+    /// <param name="componentId">The component ID for controller navigation.</param>
+    public SearchResultComponent(ISubject subject, int index, int componentId)
         : base(Rectangle.Empty, subject.Name)
     {
         this.Subject = subject;
         this.Index = index;
+
+        this.myID = componentId;
+        this.upNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
+        this.downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
     }
 
     /// <summary>Draw the search result to the screen.</summary>

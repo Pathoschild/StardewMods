@@ -20,6 +20,12 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /*********
     ** Properties
     *********/
+    /// <summary>The controller navigation ID for the search box.</summary>
+    public const int SearchBoxId = 1;
+
+    /// <summary>The controller navigation ID for the first search result.</summary>
+    public const int FirstSearchResultId = 2;
+
     /// <summary>The spacing around the search result area.</summary>
     private const int SearchResultGutter = 15;
 
@@ -62,11 +68,17 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>The search input box.</summary>
     private readonly TextBox SearchTextbox;
 
+    /// <summary>The clickable area representing the search textbox.</summary>
+    private readonly ClickableComponent SearchTextboxClickableArea;
+
     /// <summary>The current search results.</summary>
-    private IEnumerable<SearchResultComponent> SearchResults = [];
+    private SearchResultComponent[] SearchResults = [];
 
     /// <summary>The pixel area containing search results.</summary>
     private Rectangle SearchResultArea;
+
+    /// <summary>Whether to snap to the selected component after the next draw tick.</summary>
+    private bool SnapToSelectedComponent;
 
 
     /*********
@@ -92,18 +104,20 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // create components
         this.SearchTextbox = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black);
+        this.SearchTextboxClickableArea = new ClickableComponent(Rectangle.Empty, "SearchText")
+        {
+            upNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+            downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+            myID = SearchMenu.SearchBoxId
+        };
         this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, 1);
         this.ScrollDownButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, 1);
 
         // initialise
         this.UpdateLayout();
+        this.SnapToSelectedComponent = true;
     }
 
-    /// <inheritdoc />
-    public override bool overrideSnappyMenuCursorMovementBan()
-    {
-        return true; // controller snapping not implemented
-    }
 
     /****
     ** Events
@@ -143,9 +157,28 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <inheritdoc />
     public override void receiveKeyPress(Keys key)
     {
-        // deliberately avoid calling base, which may let another key close the menu
-        if (key.Equals(Keys.Escape))
+        // handle exit
+        if (key == Keys.Escape)
+        {
             this.exitThisMenu();
+            return;
+        }
+
+        // handle controller navigation
+        // (Controller snap navigation is sent as key presses; see 'receiveKeyPress' in Game1.updateActiveMenu.)
+        if (Game1.options.snappyMenus && Game1.options.gamepadControls && Game1.textEntry is null)
+        {
+            bool isMovementKey =
+                Game1.options.doesInputListContain(Game1.options.moveUpButton, key)
+                || Game1.options.doesInputListContain(Game1.options.moveRightButton, key)
+                || Game1.options.doesInputListContain(Game1.options.moveDownButton, key)
+                || Game1.options.doesInputListContain(Game1.options.moveLeftButton, key);
+
+            if (isMovementKey)
+                base.receiveKeyPress(key);
+        }
+
+        // else deliberately avoid calling base, which may let another key close the menu
     }
 
     /// <inheritdoc />
@@ -171,6 +204,31 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             default:
                 base.receiveGamePadButton(button);
                 break;
+        }
+    }
+
+    /// <inheritdoc />
+    public override void performHoverAction(int x, int y)
+    {
+        base.performHoverAction(x, y);
+
+        // If the player scrolls in gamepad mode, set result under the cursor as the active component so navigating
+        // doesn't snap them back to the old scroll position.
+        if (Game1.options.gamepadControls && !Game1.lastCursorMotionWasMouse && (this.currentlySnappedComponent is null || !this.currentlySnappedComponent.containsPoint(x, y)))
+        {
+            if (this.SearchTextboxClickableArea.containsPoint(x, y))
+                this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
+            else
+            {
+                foreach (SearchResultComponent result in this.SearchResults)
+                {
+                    if (result.containsPoint(x, y))
+                    {
+                        this.setCurrentlySnappedComponentTo(result.myID);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -266,6 +324,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
                     this.SearchTextbox.X = x + (int)leftOffset;
                     this.SearchTextbox.Y = y + (int)topOffset;
                     this.SearchTextbox.Width = (int)wrapWidth;
+                    this.SearchTextboxClickableArea.bounds = new Rectangle(this.SearchTextbox.X, this.SearchTextbox.Y, this.SearchTextbox.Width, this.SearchTextbox.Height);
+
                     this.SearchTextbox.Draw(contentBatch);
                     topOffset += this.SearchTextbox.Height;
 
@@ -309,6 +369,13 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
                 // end draw
                 contentBatch.End();
+
+                // move cursor to selected component if needed
+                if (this.SnapToSelectedComponent)
+                {
+                    this.SnapToSelectedComponent = false;
+                    this.snapCursorToCurrentSnappedComponent();
+                }
             }
             catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace?.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle") == true)
             {
@@ -331,6 +398,27 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     }
 
     /// <inheritdoc />
+    public override void populateClickableComponentList()
+    {
+        base.populateClickableComponentList();
+
+        this.allClickableComponents.Add(this.SearchTextboxClickableArea);
+        this.allClickableComponents.AddRange(this.SearchResults);
+    }
+
+    /// <inheritdoc />
+    public void ScrollUp(int? amount = null)
+    {
+        this.Scroll(-(amount ?? this.ScrollAmount));
+    }
+
+    /// <inheritdoc />
+    public void ScrollDown(int? amount = null)
+    {
+        this.Scroll(amount ?? this.ScrollAmount);
+    }
+
+    /// <inheritdoc />
     public void Dispose()
     {
         this.SearchTextbox.Selected = false;
@@ -338,8 +426,66 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
 
     /*********
-    ** Private methods
+    ** Protected methods
     *********/
+    /// <inheritdoc />
+    protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
+    {
+        // snap to next component
+        ClickableComponent? prevSnapped = this.currentlySnappedComponent;
+        switch (oldID)
+        {
+            // from top-right close button
+            case IClickableMenu.upperRightCloseButton_ID:
+                switch (direction)
+                {
+                    case Game1.down:
+                        this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
+                        break;
+                }
+                break;
+
+            // from search box
+            case SearchMenu.SearchBoxId:
+                switch (direction)
+                {
+                    case Game1.up:
+                        this.setCurrentlySnappedComponentTo(IClickableMenu.upperRightCloseButton_ID);
+                        break;
+
+                    case Game1.down when this.SearchResults.Length > 0:
+                        this.setCurrentlySnappedComponentTo(SearchMenu.FirstSearchResultId);
+                        break;
+                }
+                break;
+
+            // from search result
+            case >= SearchMenu.FirstSearchResultId:
+                switch (direction)
+                {
+                    case Game1.up:
+                        if (oldID == SearchMenu.FirstSearchResultId)
+                            this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
+                        else
+                            this.setCurrentlySnappedComponentTo(oldID - 1);
+                        break;
+
+                    case Game1.down:
+                        this.setCurrentlySnappedComponentTo(oldID + 1);
+                        this.currentlySnappedComponent ??= this.SearchResults.Last();
+                        break;
+                }
+                break;
+        }
+
+        // scroll into view if needed
+        if (this.currentlySnappedComponent != null && !object.ReferenceEquals(prevSnapped, this.currentlySnappedComponent))
+        {
+            if (this.ScrollIntoView(this.currentlySnappedComponent))
+                this.SnapToSelectedComponent = true;
+        }
+    }
+
     /// <summary>Set the cursor in the search box, and show the on-screen keyboard if needed.</summary>
     /// <remarks>Derived from <see cref="TextBox.Update"/>, but doesn't require that the cursor be over the field.</remarks>
     private void SelectSearchBox()
@@ -350,16 +496,44 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             Game1.showTextEntry(this.SearchTextbox);
     }
 
-    /// <inheritdoc />
-    public void ScrollUp(int? amount = null)
+    /// <summary>Scroll the menu content by the given amount.</summary>
+    /// <param name="amount">The scroll amount to apply, where negative values scroll up and positive values scroll down.</param>
+    /// <returns>Returns whether the content view was scrolled.</returns>
+    private bool Scroll(int amount)
     {
-        this.CurrentScroll -= amount ?? this.ScrollAmount;
+        int prevScroll = this.CurrentScroll;
+
+        this.CurrentScroll += amount;
+        if (this.CurrentScroll < 0)
+            this.CurrentScroll = 0;
+
+        return this.CurrentScroll != prevScroll;
     }
 
-    /// <inheritdoc />
-    public void ScrollDown(int? amount = null)
+    /// <summary>Scroll until the given component is fully visible within the content area.</summary>
+    /// <param name="component">The search result.</param>
+    /// <returns>Returns whether the content view was scrolled.</returns>
+    private bool ScrollIntoView(ClickableComponent component)
     {
-        this.CurrentScroll += amount ?? this.ScrollAmount;
+        // special case: search box includes the label above it
+        if (component == this.SearchTextboxClickableArea)
+        {
+            int oldScroll = this.CurrentScroll;
+            this.CurrentScroll = 0;
+            return oldScroll != 0;
+        }
+
+        // else check bounds
+        int minVisibleY = this.SearchResultArea.Y;
+        int maxVisibleY = this.SearchResultArea.Bottom;
+        Rectangle bounds = component.bounds;
+
+        if (bounds.Y < minVisibleY)
+            return this.Scroll(-(minVisibleY - bounds.Y));
+        if (bounds.Bottom > maxVisibleY)
+            return this.Scroll(bounds.Bottom - maxVisibleY);
+
+        return false;
     }
 
     /// <summary>Get the search results that may be on screen.</summary>
@@ -412,8 +586,10 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             .Where(entry => words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
             .SelectMany(entry => entry)
             .OrderBy(subject => subject.Name, StringComparer.OrdinalIgnoreCase)
-            .Select((subject, index) => new SearchResultComponent(subject, index))
+            .Select((subject, index) => new SearchResultComponent(subject, index, componentId: SearchMenu.FirstSearchResultId + index))
             .ToArray();
+
+        this.populateClickableComponentList();
     }
 
     /// <summary>Update the layout dimensions based on the current game scale.</summary>
@@ -443,5 +619,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // add close button
         this.initializeUpperRightCloseButton();
+        this.upperRightCloseButton.myID = IClickableMenu.upperRightCloseButton_ID;
+        this.upperRightCloseButton.downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
     }
 }

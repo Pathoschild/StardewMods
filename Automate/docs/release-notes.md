@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added full controller navigation support for the search UI.
 * Improved translations. Thanks to JanUwU42 (updated German)!
 
 ## 2.4.5
