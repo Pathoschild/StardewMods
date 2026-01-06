@@ -5,6 +5,7 @@
 * Added full controller navigation support for the search UI.
 * Added RGB format to color data mining fields.
 * Fixed search UI in 1.53.0 deselecting the search box when the cursor isn't over it.
+* Fixed support for crops with multiple fertilizers applied via Ultimate Fertilizer.
 * Improved translations. Thanks to JanUwU42 (updated German), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.53.0

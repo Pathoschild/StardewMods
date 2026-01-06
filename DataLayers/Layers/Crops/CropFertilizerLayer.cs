@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops;
@@ -30,9 +31,6 @@ internal class CropFertilizerLayer : BaseLayer, IAutoItemLayer
 
     /// <summary>Handles access to the supported mod integrations.</summary>
     private readonly ModIntegrations Mods;
-
-    /// <summary>Whether the Ultimate Fertilizer mod is installed.</summary>
-    private readonly bool HasUltimateFertilizer;
 
     /// <summary>The qualified and unqualified item IDs for fertilizer items.</summary>
     private readonly HashSet<string> FertilizerItemIds =
@@ -92,7 +90,7 @@ internal class CropFertilizerLayer : BaseLayer, IAutoItemLayer
                 this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, colors.Get(layerId, "Fertilizer", Color.Green)),
                 this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, colors.Get(layerId, "RetainingSoil", Color.Blue)),
                 this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, colors.Get(layerId, "SpeedGro", Color.Magenta)),
-                this.Multiple = mods.MultiFertilizer.IsLoaded
+                this.Multiple = mods.MultiFertilizer.IsLoaded || mods.UltimateFertilizer.IsLoaded
                     ? new LegendEntry(I18n.Keys.CropFertilizer_Multiple, colors.Get(layerId, "Multiple", Color.Red))
                     : null
             }
@@ -100,7 +98,6 @@ internal class CropFertilizerLayer : BaseLayer, IAutoItemLayer
             .ToArray();
 
         this.Mods = mods;
-        this.HasUltimateFertilizer = mods.IsModInstalled("fox_white25.ultimate_fertilizer");
     }
 
     /// <inheritdoc />
@@ -180,19 +177,25 @@ internal class CropFertilizerLayer : BaseLayer, IAutoItemLayer
         HashSet<string>? applied = null;
         if (dirt is not null && !this.IsDeadCrop(dirt))
         {
+            // from fertilizer mods
             if (this.Mods.MultiFertilizer.IsLoaded)
-                applied = [.. this.Mods.MultiFertilizer.GetAppliedFertilizers(dirt)];
-            else if (dirt.fertilizer.Value != null)
             {
-                if (this.HasUltimateFertilizer)
-                    applied = [.. dirt.fertilizer.Value.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)]; // Ultimate Fertilizer allows multiple fertilizers
-                else if (CommonHelper.IsItemId(dirt.fertilizer.Value, allowZero: false))
-                    applied = [dirt.fertilizer.Value];
+                applied ??= [];
+                applied.AddRange(this.Mods.MultiFertilizer.GetAppliedFertilizers(dirt));
             }
+            if (this.Mods.UltimateFertilizer.IsLoaded)
+            {
+                applied ??= [];
+                applied.AddRange(this.Mods.UltimateFertilizer.GetAppliedFertilizers(dirt));
+            }
+
+            // else vanilla behavior
+            if (applied?.Count is not > 0 && CommonHelper.IsItemId(dirt.fertilizer.Value, allowZero: false))
+                applied = [dirt.fertilizer.Value];
         }
 
         // get fertilizer info
-        if (applied == null)
+        if (applied?.Count is not > 0)
             return null;
         return new FertilizedTile(
             tile: tile,

@@ -60,6 +60,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\ITrainStationApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\ITrainStationStopModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\TrainStationIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\UltimateFertilizer\UltimateFertilizerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\ItemRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\SearchableItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListExtensions.cs" />
