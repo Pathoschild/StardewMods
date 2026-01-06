@@ -72,13 +72,12 @@
     "crop-fertilizer.multiple": "Birden Fazla Gübre Çeşidi",
 
     // fishing depth
-    // TODO
-    "fishing-depth.name": "Fishing Depth",
-    "fishing-depth.one": "Next to shore",
-    "fishing-depth.two": "Two",
-    "fishing-depth.three": "Three",
-    "fishing-depth.four": "Four",
-    "fishing-depth.max": "Max depth",
+    "fishing-depth.name": "Su Derinliği",
+    "fishing-depth.one": "Kıyının yanında",
+    "fishing-depth.two": "İki",
+    "fishing-depth.three": "Üç",
+    "fishing-depth.four": "Dört",
+    "fishing-depth.max": "Maksimum Derinlik",
 
     // machine processing
     "machines.name": "Makine İşleme",
