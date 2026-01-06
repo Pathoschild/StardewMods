@@ -1,0 +1,191 @@
+﻿//
+// Note for translators:
+// Some lines have a 'note for translators' comment like this one to clarify intent. You generally shouldn't translate
+// the 'note for translators' comments themselves, since they just explain the official intent and aren't shown in-game.
+//
+{
+    /*********
+    ** Destination names
+    *********/
+    // default stops
+    "destinations.central-station": "Центральная станция",
+    "destinations.stardew-valley": "Долина Стардью",
+
+    // default stops when shown in Central Station menu
+    "destinations.stardew-valley.boat": "Долина Стардью - Причал",
+    "destinations.stardew-valley.bus": "Долина Стардью - Автобусная остановка",
+    "destinations.stardew-valley.train": "Долина Стардью - Железная дорога",
+
+    // stops from other mods
+    "destinations.from-bus-locations-mod": "{0} [мод Bus Locations]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [мод Train Station]", // {0} = stop name
+
+
+    /*********
+    ** Shop dialogues
+    *********/
+    "food-court.dialogue.1": "Забирайте свою жратву! По большей части не из жуков.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "Гарантируем самые низкие цены в фуд-корте.", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "Мы почти прошли последнюю проверку пищевой безопасности!",
+    "food-court.dialogue.4": "О, покупатель. Что хотите?",
+    "food-court.dialogue.5": "У нас свежая и горячая еда! Ну, горячая. Если её подогреть в микроволновке.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+
+    "gift-shop.dialogue.1": "Едете далеко? Убедитесь, что у вас есть всё необходимое!",
+    "gift-shop.dialogue.2": "Возвращаетесь домой? Захватите сувениры!",
+    "gift-shop.dialogue.3": "У нас обширная коллекция забавных футболок. (Слишком обширная, пожалуйста, купите что-нибудь.)",
+    "gift-shop.dialogue.4": "У нас так много вещей, что я не знаю, куда их складывать. Пожалуйста, купите что-нибудь!",
+    "gift-shop.dialogue.5": "Едете в холодное место? У нас есть кое-что для холодной погоды!",
+    "gift-shop.dialogue.6": "Попробуйте эти наушники. Чувствуете? Это настоящий бархат из Замковой деревни!",
+    "gift-shop.dialogue.7": "Это редкая древесина с другого конца Самоцветного моря. Очень трудно найти.",
+
+    "vendor-shop.dialogue.coming-soon": "Небольшая вывеска: «Скоро появятся локальные временные магазины!». Вы слышите, как внутри рабочие готовят всё к открытию.",
+
+
+    /*********
+    ** Book titles
+    *********/
+    // Note for translators: this section refers to locations mentioned in the base game (like the Ferngill Republic and Zuzu City).
+    // You can find their translations via the language links on the left of the page at https://stardewvalleywiki.com/Setting.
+    // The 'Z.C. Rarecrow Society' is from a letter; see https://stardewvalleywiki.com/Deluxe_Scarecrow and its language links.
+    "books.cooking.1": "«Вуду-майонез и другие гоблинские деликатесы».",
+
+    "books.geography.1": "«Побережье Фернгилл и что мы там нашли».",
+    "books.geography.2": "«Лесное хозяйство Грэмплтона: Том VII».",
+    "books.geography.3": "«Ночная жизнь города Зузу».",
+    "books.geography.4": "«Еноты Прери-Айленда».",
+    "books.geography.5": "«Долина Стардью и другие живописные места».",
+    "books.geography.6": "«Цветы Фернгиллской Республики» от мисс Сэнди.",
+
+    "books.history.1": "«Энциклопедия смалуану: культура, история, стереотипы и спекуляции».",
+    "books.history.2": "«Введение в оккультизм» от М. Расмодиуса.",
+    "books.history.3": "«Захватчики и тени: история Войн Стихий».",
+    "books.history.4": "«Жители тундры за Ледяным морем».",
+    "books.history.5": "«Империя и Республика»: углублённый анализ конфликта между Фернгилл и Готоро.",
+    "books.history.6": "«Исчерпывающий каталог истории редких пугал» от Общества редких пугал З.К.",
+
+    "books.promotional.1": "«Невероятный Пелликан-Таун», рекламный буклет мэра Льюиса.",
+
+    "books.religion.1": "«Найди Йобу», анонимная брошюра из Долины Стардью.",
+
+    "books.science.1": "«Джунимо и другой фольклор Фернгиллской Республики».",
+
+
+    /*********
+    ** Location flavor text
+    *********/
+    // message from the transit area doors
+    "location.transit-area-doors": "Это ведёт обратно к причалу и платформам. Сначала вам понадобится билет из кассы.",
+
+    // rare messages in Central Station
+    "location.exit-door.strange-sounds": "...?",
+
+    "location.ticket-counter.1": "(Вы пытаетесь заглянуть в билетную кассу, но сквозь тонированное стекло видна лишь неясная тень.)",
+    "location.ticket-counter.2": "(Вы слышите странные шёпоты сквозь стекло.)",
+    "location.ticket-counter.3": "(Внезапно вы видите сквозь тонированное стекло, всего на мгновение. Когда вы вспоминаете, то не можете вспомнить, что видели.)",
+
+    "location.ticket-machine.1": "(Вы чувствуете смутное неодобрение со стороны билетной кассы. Или вам просто кажется.)",
+    "location.ticket-machine.2": "(Вы испытываете смутное беспокойство из-за того, что пропустили кассу.)",
+    "location.ticket-machine.3": "(Автомат перечисляет десятки пунктов назначения, о которых вы никогда не слышали. Вы моргаете, и обычный список возвращается.)",
+
+    "location.cola-machine.1": "(Этот автомат продаёт только Джоджа-колу, но при вашем приближении что-то со стуком падает в лоток.)",
+    "location.cola-machine.2": "(Вы подходите к автомату с колой. Прежде чем вы успеваете что-то сделать, предмет со стуком падает вниз.)",
+    "location.cola-machine.3": "(Каким-то образом вы чувствуете, что автомат с колой хочет помочь.)",
+
+    // employee lounge
+    "location.employee-lockers": "Шкафчики сотрудников не заперты, но вы чувствуете, что за вами наблюдают.",
+    "location.employee-fridge": "Обеды сотрудников. Было бы грубо взять что-то.",
+
+
+    /*********
+    ** Tourist dialogue
+    *********/
+    "tourist.young-boy.1": "Привет.",
+    "tourist.young-boy.2": "Я просто жду маму.",
+    "tourist.young-boy.3": "Мне не положено разговаривать с незнакомцами.",
+
+    "tourist.woman-in-black-dress": "Я обожаю путешествовать на фестивали в маленьких городках. Это отличный перерыв от офиса.",
+
+    "tourist.man-with-drink.1": "Лучшая часть путешествий — это еда.",
+    "tourist.man-with-drink.2": "Вы пробовали еду в фуд-корте? Честно говоря, её почти невозможно есть. Но это часть опыта!",
+
+    "tourist.man-with-sunglasses": "Вы пытались заглянуть в билетную кассу? Я никогда не могу разглядеть, кто там.#И владельцы магазинов тоже не сотрудники.",
+
+    "tourist.man-with-top-hat.1": "Эй, малыш. Хочешь узнать секрет богатства?",
+    "tourist.man-with-top-hat.2": "Схемы быстрого обогащения. Азартные игры. Казино всегда выигрывает, понимаешь? Хех.",
+
+    "tourist.strong-man": "Ты силён, как я? Разбивай камень!#Но здесь нет камня. Грустно.",
+
+    "tourist.desert-racer-man.1": "Я на гонки!",
+    "tourist.desert-racer-man.2": "О, и правда. Теперь, когда я на пенсии, наконец могу поехать и посмотреть гонки воочию.#Вы были на пустынных гонках? Потрясающее развлечение.",
+
+    "tourist.desert-scholar-man.1": "Приветствую, друг! В городе Зузу открывают новую библиотеку.",
+    "tourist.desert-scholar-man.2": "Есть несколько томов, которые я давно искал. Надеюсь, они у них есть.",
+    "tourist.desert-scholar-man.3": "Если нет, уверен, там будут новые тома для изучения!",
+
+    "tourist.flamingo.1": "...",
+    "tourist.flamingo.2": "...?",
+    "tourist.flamingo.3": "*гогочет!*",
+    "tourist.flamingo.4": "(Она старательно вас игнорирует.)",
+
+    "tourist.shrouded-figure": "Я мог бы отправить тебя домой, за цену.#Но ты можешь просто сесть на автобус.",
+
+    "tourist.welwick.1": "Вижу, ты общался с моим старым другом Расмодиусом.",
+    "tourist.welwick.2": "Надеюсь, он не вовлёк тебя в свои схемы, хе-хе.",
+
+    "tourist.cashier-girl.1": "Я работаю долгие часы на ногах. Это изнурительно, и у меня почти нет времени на себя.",
+    "tourist.cashier-girl.2": "Я бы с радостью просто осталась дома и отдохнула. Но что за жизнь без приключений?!",
+    "tourist.cashier-girl.3": "Есть так много мест, куда можно добраться бесплатно. Я собираюсь посетить их все!",
+
+    "tourist.governor.1": "Это очень странно. Никто не знает, кто управляет этой станцией.#Все необходимые разрешения были оформлены, но никто не помнит, как это происходило.#Ну что ж, это не единственная странная вещь в этих краях.",
+    "tourist.governor.2": "Как прекрасно наконец самому сесть на поезд.#Мне определённо стоит в следующий раз взять супругу.",
+
+    "tourist.lupini.1": "Приветствую, юный ${мужчина^леди^человек}. Вы видели мои последние картины?",
+    "tourist.lupini.2": "Я отправляюсь открывать новую галерею. Можете присоединиться, если хотите.",
+
+    "tourist.red-cap-guy.1": "Прелесть путешествий в разнообразии людей и моды.",
+    "tourist.red-cap-guy.2": "Трудно чувствовать себя слишком нарядным, когда все такие разные!",
+
+    "tourist.shorts-man": "Здесь ужасно прохладно.#Может, куплю что-нибудь из зимней одежды в сувенирном магазине...",
+
+    "tourist.red-pirate": "(Он сосредоточен на своём напитке и не замечает вас.)",
+
+    "tourist.grim-pirate": "С тех путей — леденящая душу история...#Объявление, услышанное в глубинах станции...#Ага, я опоздал на поезд.",
+
+    "tourist.blackgull-pirate.1": "Трясёт мою скорлупу! Где остальные?",
+    "tourist.blackgull-pirate.2": "Мы грузимся в любую минуту...",
+
+    "tourist.bag-dog.1": "(Она в приключении.)",
+    "tourist.bag-dog.2": "(Она просто отдыхает в своей переносной лежанке-сумке.)",
+
+
+    /*********
+    ** Furniture
+    *********/
+    // calendars
+    "furniture.calendar-city.name": "Городской календарь",
+    "furniture.calendar-nature.name": "Природный календарь",
+
+    // wall decor
+    "furniture.clock.name": "Часы",
+    "furniture.transit-map.name": "Транспортная карта",
+    "furniture.travel-pictures.name": "Путешественские картины",
+    "furniture.welcome-sign.name": "Приветственный знак",
+
+    // rugs
+    "furniture.posh-rug.name": "Шикарный ковёр",
+
+    // general decor
+    "furniture.board-sign.name": "Доска объявлений",
+    "furniture.postbox.name": "Почтовый ящик",
+    "furniture.suitcase-blue.name": "Синий чемодан",
+    "furniture.suitcase-pink.name": "Розовый чемодан",
+    "furniture.trash-can.name": "Мусорный бак",
+    "furniture.trash-can-messy.name": "Захламлённый мусорный бак",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-pam-bus.name": "Требовать автобус Пэм",
+    "config.require-pam-bus.desc": "Нужно ли чинить автобус Пэм перед отправлением с автобусной остановки Долины Стардью. Если не требуется, вы можете сесть на автобус до Центральной станции (но не до пустыни) до его починки."
+}

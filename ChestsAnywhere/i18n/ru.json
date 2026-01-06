@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "В данном домике проживает {{owner}}.",
     "default-category.cabin-unowned": "Домик (пустой)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Подвал ({{owner}})",
+    "default-category.cellar-unowned": "Подвал #{{cellarNumber}}",
+    "default-category.farmhouse": "Фермерский дом",
+    "default-category.island-farmhouse": "Островной фермерский дом",
     "default-category.duplicate": "{{locationName}} №{{number}}",
 
     // edit-chest labels
@@ -28,7 +28,7 @@
     "label.automate-options": "Опции автоматизации",
     "label.automate-store": "Класть предметы в этот сундук",
     "label.automate-store-first": "Сначала класть предметы в этот сундук",
-    "label.automate-store-disabled": "Никогда не класть предметы в этот суднук",
+    "label.automate-store-disabled": "Никогда не класть предметы в этот сундук",
     "label.automate-take": "Брать предметы из этого сундука",
     "label.automate-take-first": "Сначала брать предметы из этого сундука",
     "label.automate-take-disabled": "Никогда не брать предметы из этого сундука",
@@ -60,85 +60,82 @@
     /****
     ** general options
     ****/
-    // TODO
-    "config.title.general-options": "General options",
+    "config.title.general-options": "Основные настройки",
 
-    "config.show-hover-tooltips.name": "Show hover tooltips",
-    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
+    "config.show-hover-tooltips.name": "Показывать всплывающие подсказки",
+    "config.show-hover-tooltips.desc": "Показывать название сундука во всплывающей подсказке при наведении на него.",
 
-    "config.enable-shipping-bin.name": "Enable shipping bin",
-    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
+    "config.enable-shipping-bin.name": "Включить ящик для отправки",
+    "config.enable-shipping-bin.desc": "Разрешить доступ к ящику для отправки товаров.",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "Включить насадки для разбрызгивателей",
+    "config.enable-sprinkler-attachments.desc": "Разрешить доступ к насадкам для разбрызгивателей, таким как обогатители.",
 
-    "config.add-organize-player-items.name": "Add organize player items button",
-    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
+    "config.add-organize-player-items.name": "Добавить кнопку организации предметов игрока",
+    "config.add-organize-player-items.desc": "Добавить кнопку «организовать» в интерфейсе сундуков для инвентаря игрока.",
 
     /****
     ** remote access
     ****/
-    // TODO
-    "config.title.remote-access": "Remote access",
+    "config.title.remote-access": "Удалённый доступ",
 
-    "config.range.name": "Range",
-    "config.range.desc": "The range at which chests are accessible through the menu.",
-    "config.range.unlimited": "All chests",
-    "config.range.currentWorldArea": "Chests within the current world area",
-    "config.range.currentLocation": "Chests within the current location",
-    "config.range.none": "None (can't access chests remotely)",
+    "config.range.name": "Радиус",
+    "config.range.desc": "Радиус, в пределах которого сундуки доступны через меню.",
+    "config.range.unlimited": "Все сундуки",
+    "config.range.currentWorldArea": "Сундуки в текущей области мира",
+    "config.range.currentLocation": "Сундуки в текущей локации",
+    "config.range.none": "Нет (удалённый доступ невозможен)",
 
-    "config.disable-mines.name": "Disable in mines & skull cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests remotely while in the mines or Skull Cavern.",
+    "config.disable-mines.name": "Отключить в шахтах и Черепных пещерах",
+    "config.disable-mines.desc": "Отключить удалённый доступ к сундукам в шахтах и Черепных пещерах.",
 
-    "config.disable-custom-names.name": "Disable in location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests remotely. You can list multiple with commas.",
+    "config.disable-custom-names.name": "Отключить в локациях",
+    "config.disable-custom-names.desc": "Внутренние имена (как показано в модификации Debug Mode) локаций, в которых отключён удалённый доступ к сундукам. Можно указать несколько через запятую.",
 
     /****
     ** open menu hotkey
     ****/
-    // TODO
-    "config.title.open-menu-hotkey": "Hotkey to open chest UI",
+    "config.title.open-menu-hotkey": "Горячая клавиша открытия меню сундуков",
 
-    "config.toggle-ui-key.name": "Toggle UI",
-    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+    "config.toggle-ui-key.name": "Переключить интерфейс",
+    "config.toggle-ui-key.desc": "Клавиши для показа или скрытия интерфейса сундуков.",
 
-    "config.reopen-last-chest.name": "Reopen last chest",
-    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.",
+    "config.reopen-last-chest.name": "Переоткрыть последний сундук",
+    "config.reopen-last-chest.desc": "При нажатии кнопки «переключить интерфейс» переоткрывать последний сундук, выбранный вами в текущей игровой сессии.",
 
-    "config.default-category.name": "Default category",
-    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.",
+    "config.default-category.name": "Категория по умолчанию",
+    "config.default-category.desc": "При нажатии кнопки «переключить интерфейс» показывать сундуки из этой категории по умолчанию (если установлено). Применяется после «переоткрыть последний сундук».",
 
     /****
     ** controls when chest UI is open
     ****/
+    "config.title.menu-controls": "Управление при открытом меню сундуков",
+
+    "config.edit-chest.name": "Редактировать сундук",
+    "config.edit-chest.desc": "Клавиши для редактирования настроек текущего сундука.",
+
+    "config.sort-items.name": "Сортировать предметы игрока",
+    "config.sort-items.desc": "Клавиши для сортировки предметов в инвентаре игрока при открытом сундуке.",
+
+    "config.navigate-prev-chest.name": "Навигация: предыдущий сундук",
+    "config.navigate-prev-chest.desc": "Клавиши для перехода к предыдущему сундуку при открытом меню.",
+
+    "config.navigate-next-chest.name": "Навигация: следующий сундук",
+    "config.navigate-next-chest.desc": "Клавиши для перехода к следующему сундуку при открытом меню.",
+
+    "config.navigate-prev-category.name": "Навигация: предыдущая категория",
+    "config.navigate-prev-category.desc": "Клавиши для перехода к предыдущей категории при открытом меню.",
+
+    "config.navigate-next-category.name": "Навигация: следующая категория",
+    "config.navigate-next-category.desc": "Клавиши для перехода к следующей категории при открытом меню.",
+
+    "config.hold-to-scroll-categories.name": "Удерживать для прокрутки категорий",
+    "config.hold-to-scroll-categories.desc": "Клавиши, при удержании которых можно прокручивать выпадающий список категорий колёсиком мыши.",
+
+    "config.hold-to-scroll-chests.name": "Удерживать для прокрутки сундуков",
+    "config.hold-to-scroll-chests.desc": "Клавиши, при удержании которых можно прокручивать выпадающий список сундуков колёсиком мыши.",
+
     // TODO
-    "config.title.menu-controls": "Controls when chest UI is open",
-
-    "config.edit-chest.name": "Edit chest",
-    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
-
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
-
-    "config.navigate-prev-chest.name": "Navigate: previous chest",
-    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
-
-    "config.navigate-next-chest.name": "Navigate: next chest",
-    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
-
-    "config.navigate-prev-category.name": "Navigate: previous category",
-    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
-
-    "config.navigate-next-category.name": "Navigate: next category",
-    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
-
-    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
-    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
-
-    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
-
     "config.open-search-menu.name": "Open Search Menu",
     "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
 
@@ -149,7 +146,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.open-menu.name": "Chests Anywhere",
-    "icon.open-menu.desc": "Open Menu"
+    "icon.open-menu.name": "Сундуки повсюду",
+    "icon.open-menu.desc": "Открыть меню"
 }

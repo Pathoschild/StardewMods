@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed visual layering issue with food on tables.
-* Improved translations. Thanks to Aapodot (updated Spanish), EnderFS (added Ukrainian), JanUwU42 (updated German), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
+* Improved translations. Thanks to Aapodot (updated Spanish), EnderFS (added Ukrainian), JanUwU42 (updated German), KrokiKus (added Russian), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
 
 ## 1.6.0
 Released 26 October 2025 for SMAPI 4.3.1 or later.

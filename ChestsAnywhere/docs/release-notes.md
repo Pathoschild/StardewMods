@@ -4,7 +4,7 @@
 ## Upcoming release
 * Added chest search (thanks to Mushymato!).  
   _While a chest is open, press `Control + F` or left controller stick to search all chests by name or item._
-* Improved translations. Thanks to JanUwU42 (updated German) and mehmetgorkemarslan (updated Turkish)!
+* Improved translations. Thanks to JanUwU42 (updated German), KrokiKus (updated Russian), mehmetgorkemarslan (updated Turkish)!
 
 ## 1.29.1
 Released 26 October 2025 for SMAPI 4.1.10 or later.
