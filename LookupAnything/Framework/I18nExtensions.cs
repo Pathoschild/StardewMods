@@ -130,8 +130,8 @@ internal partial class I18n
             ****/
             case Color color:
                 return color.A < 255
-                    ? $"#{Convert.ToHexString([color.R, color.G, color.B, color.A])}"
-                    : $"#{Convert.ToHexString([color.R, color.G, color.B])}";
+                    ? $"RGBA {color.R} {color.G} {color.B} {color.A}, hex #{Convert.ToHexString([color.R, color.G, color.B, color.A])}"
+                    : $"RGB {color.R} {color.G} {color.B}, hex #{Convert.ToHexString([color.R, color.G, color.B])}";
 
             case Point point:
                 return $"({point.X}, {point.Y})";
