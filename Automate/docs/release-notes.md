@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now use [qualified item IDs](https://stardewvalleywiki.com/Modding:Common_data_field_types#Item_ID) in the 'connector names' setting.
 * Improved translations. Thanks to JanUwU42 (updated German) and mehmetgorkemarslan (updated Turkish)!
 
 ## 2.4.5

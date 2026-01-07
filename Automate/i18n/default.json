@@ -19,7 +19,7 @@
     "config.title.connectors": "Enabled connectors",
     "config.connector.desc": "Whether {{itemName}} links machines and chests together.",
     "config.custom-connectors.name": "Custom connectors",
-    "config.custom-connectors.desc": "The exact English names for items which connect adjacent machines together. You can list multiple items with commas.", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Junimo hut behavior",

@@ -19,7 +19,9 @@
     "config.title.connectors": "Etkin bağlayıcılar",
     "config.connector.desc": "{{itemName}}'in makineleri ve sandıkları birbirine bağlayıp bağlamadığı.",
     "config.custom-connectors.name": "Özel bağlayıcılar",
-    "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan öğelerin tam İngilizce adları. Birden çok öğeyi virgülle listeleyebilirsiniz.",
+
+    // TODO
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Junimo kulübesi davranışı",

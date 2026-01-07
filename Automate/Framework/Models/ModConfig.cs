@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewValley.Extensions;
 
@@ -22,8 +23,9 @@ internal class ModConfig
     /// <summary>The key bindings.</summary>
     public ModConfigKeys Controls { get; set; } = new();
 
-    /// <summary>The in-game object names through which machines can connect.</summary>
-    public HashSet<string> ConnectorNames { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>The in-game objects through which machines can connect. This can be the internal name or qualified item ID.</summary>
+    [JsonProperty("ConnectorNames")]
+    public HashSet<string> Connectors { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>How Junimo huts should automate gems.</summary>
     /// <remarks>The <see cref="JunimoHutBehavior.AutoDetect"/> option is equivalent to <see cref="JunimoHutBehavior.Ignore"/>.</remarks>
@@ -69,8 +71,8 @@ internal class ModConfig
     {
         this.Controls ??= new ModConfigKeys();
 
-        this.ConnectorNames = this.ConnectorNames.ToNonNullCaseInsensitive();
-        this.ConnectorNames.RemoveWhere(string.IsNullOrWhiteSpace);
+        this.Connectors = this.Connectors.ToNonNullCaseInsensitive();
+        this.Connectors.RemoveWhere(string.IsNullOrWhiteSpace);
 
         this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
         this.MachineOverrides.RemoveWhere(pair => pair.Value is null);

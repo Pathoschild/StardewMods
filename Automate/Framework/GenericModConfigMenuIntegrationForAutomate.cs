@@ -12,6 +12,7 @@ using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.FloorsAndPaths;
 using StardewValley.ItemTypeDefinitions;
@@ -88,21 +89,21 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
         foreach (FloorPathData entry in Game1.floorPathData.Values.OrderBy(p => GameI18n.GetObjectName(p.ItemId), StringComparer.OrdinalIgnoreCase)) // sort by English display name; it's not ideal, but we can't re-sort when the language is loaded
         {
             string itemId = entry.ItemId;
-            string? internalName = ItemRegistry.GetData(entry.ItemId)?.InternalName;
-            if (internalName is null)
+            ParsedItemData? itemData = ItemRegistry.GetData(entry.ItemId);
+            if (itemData is null)
                 continue;
 
             menu.AddCheckbox(
                 name: () => GameI18n.GetObjectName(itemId),
                 tooltip: () => I18n.Config_Connector_Desc(itemName: GameI18n.GetObjectName(itemId)),
-                get: config => this.HasConnector(config, internalName),
-                set: (config, value) => this.SetConnector(config, internalName, value)
+                get: config => this.HasConnector(config, itemData),
+                set: (config, value) => this.SetConnector(config, itemData, value)
             );
         }
         menu.AddTextbox(
             name: I18n.Config_CustomConnectors_Name,
             tooltip: I18n.Config_CustomConnectors_Desc,
-            get: config => string.Join(", ", config.ConnectorNames.Where(this.IsCustomConnector)),
+            get: config => string.Join(", ", config.Connectors.Where(this.IsCustomConnector)),
             set: (config, value) => this.SetCustomConnectors(config, value.Split(',').Select(p => p.Trim()))
         );
 
@@ -256,14 +257,17 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
     ** Connectors
     ****/
     /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="Game1.floorPathData"/>.</summary>
-    /// <param name="name">The item name.</param>
-    private bool IsCustomConnector(string name)
+    /// <param name="idOrName">The item name.</param>
+    private bool IsCustomConnector(string idOrName)
     {
         foreach (FloorPathData floor in Game1.floorPathData.Values)
         {
-            string? internalName = ItemRegistry.GetData(floor.ItemId)?.InternalName;
+            ParsedItemData? itemData = ItemRegistry.GetData(floor.ItemId);
 
-            if (internalName != null && string.Equals(internalName, name, StringComparison.OrdinalIgnoreCase))
+            if (itemData is null)
+                continue;
+
+            if (idOrName.EqualsIgnoreCase(itemData.QualifiedItemId) || idOrName.EqualsIgnoreCase(itemData.InternalName))
                 return false;
         }
 
@@ -272,41 +276,42 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
 
     /// <summary>Get whether the given item name is enabled as a connector.</summary>
     /// <param name="config">The mod configuration to check.</param>
-    /// <param name="name">The item name.</param>
-    private bool HasConnector(ModConfig config, string name)
+    /// <param name="itemData">The item data.</param>
+    private bool HasConnector(ModConfig config, ParsedItemData itemData)
     {
-        return config.ConnectorNames.Contains(name);
+        return
+            config.Connectors.Contains(itemData.QualifiedItemId)
+            || config.Connectors.Contains(itemData.InternalName);
     }
 
     /// <summary>Set whether the given item name is enabled as a connector.</summary>
     /// <param name="config">The mod configuration to check.</param>
-    /// <param name="name">The item name.</param>
+    /// <param name="itemData">The item data.</param>
     /// <param name="enable">Whether the item should be enabled; else it should be disabled.</param>
-    private void SetConnector(ModConfig config, string name, bool enable)
+    private void SetConnector(ModConfig config, ParsedItemData itemData, bool enable)
     {
-        if (enable)
-            config.ConnectorNames.Add(name);
-        else
-            config.ConnectorNames.Remove(name);
+        config.Connectors.Toggle(itemData.QualifiedItemId, enable);
+
+        config.Connectors.Remove(itemData.InternalName);
     }
 
     /// <summary>Set whether the given item name is enabled as a connector.</summary>
     /// <param name="config">The mod configuration to check.</param>
-    /// <param name="rawNames">The raw connector names to set.</param>
-    private void SetCustomConnectors(ModConfig config, IEnumerable<string> rawNames)
+    /// <param name="rawValues">The raw connector names to set.</param>
+    private void SetCustomConnectors(ModConfig config, IEnumerable<string> rawValues)
     {
-        var names = new HashSet<string>(rawNames);
+        var values = new HashSet<string>(rawValues);
 
-        foreach (string name in config.ConnectorNames)
+        foreach (string idOrName in config.Connectors)
         {
-            if (!names.Contains(name) && this.IsCustomConnector(name))
-                config.ConnectorNames.Remove(name);
+            if (!values.Contains(idOrName) && this.IsCustomConnector(idOrName))
+                config.Connectors.Remove(idOrName);
         }
 
-        foreach (string name in names)
+        foreach (string idOrName in values)
         {
-            if (!string.IsNullOrWhiteSpace(name))
-                config.ConnectorNames.Add(name);
+            if (!string.IsNullOrWhiteSpace(idOrName))
+                config.Connectors.Add(idOrName);
         }
     }
 

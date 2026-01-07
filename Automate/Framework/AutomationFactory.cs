@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Automate.Framework.Storage;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -220,20 +221,25 @@ internal class AutomationFactory : IAutomationFactory
     /// <param name="entity">The in-game entity.</param>
     private bool IsConnector(object entity)
     {
-        var config = this.Config();
+        ModConfig config = this.Config();
 
         switch (entity)
         {
             case Item item:
-                return config.ConnectorNames.Contains(item.Name);
+                return
+                    config.Connectors.Contains(item.QualifiedItemId)
+                    || config.Connectors.Contains(item.Name);
 
             case Flooring floor:
                 string? itemId = floor.GetData()?.ItemId;
-                string? itemName = ItemRegistry.GetData(itemId)?.InternalName;
+                ParsedItemData? itemData = ItemRegistry.GetData(itemId);
 
                 return
-                    !string.IsNullOrWhiteSpace(itemName)
-                    && config.ConnectorNames.Contains(itemName);
+                    itemData != null
+                    && (
+                        config.Connectors.Contains(itemData.QualifiedItemId)
+                        || config.Connectors.Contains(itemData.InternalName)
+                    );
 
             default:
                 return false;
