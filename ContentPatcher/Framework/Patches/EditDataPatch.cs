@@ -224,7 +224,7 @@ internal class EditDataPatch : Patch
                         Type genericType = type.GetGenericTypeDefinition();
                         if (genericType == typeof(List<>) || genericType == typeof(Dictionary<,>))
                         {
-                            object newData = Activator.CreateInstance(type!)!;
+                            object newData = Activator.CreateInstance(type)!;
                             parentEditor.SetEntry(key, newData);
                             data = parentEditor.GetEntry(key);
                         }
@@ -456,8 +456,22 @@ internal class EditDataPatch : Patch
                 JObject obj = new();
                 foreach (EditDataPatchField field in recordGroup)
                     obj[field.FieldKey.Value!] = field.Value?.Value;
+
+                object? entry = editor.GetEntry(key);
+                if (entry is null)
+                {
+                    if (editor.TryInitializeEntry(key))
+                        entry = editor.GetEntry(key);
+
+                    if (entry is null)
+                    {
+                        this.WarnForField($"record '{key}' under {nameof(PatchConfig.Fields)} refers to field which doesn't exist and can't be added.", onWarning);
+                        continue;
+                    }
+                }
+
                 using JsonReader reader = obj.CreateReader();
-                EditDataPatch.JsonSerializer.Value.Populate(reader, editor.GetEntry(key)!);
+                EditDataPatch.JsonSerializer.Value.Populate(reader, entry);
             }
         }
     }

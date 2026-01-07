@@ -60,6 +60,13 @@ internal class DelimitedStringKeyValueEditor : BaseDataEditor
     }
 
     /// <inheritdoc />
+    public override bool TryInitializeEntry(object key)
+    {
+        this.SetEntry(key, "");
+        return true;
+    }
+
+    /// <inheritdoc />
     public override void SetEntry(object key, object? value)
     {
         // get index
