@@ -40,9 +40,8 @@
     "button.reset": "sıfırla",
 
     // chest search menu
-    // TODO
-    "search-box.chest-name": "Search Chest Name:",
-    "search-box.item-name": "Search Items:",
+    "search-box.chest-name": "Sandık İsmi Ara:",
+    "search-box.item-name": "İtem ara:",
 
 
     /**********
@@ -135,12 +134,12 @@
     "config.hold-to-scroll-chests.name": "Sandıkları kaydırmak için basılı tutun",
     "config.hold-to-scroll-chests.desc": "Basılı tutulduğunda, fare kaydırma tekerleği ile sandıkların aşağı doğru kaydırılmasını sağlayan tuşlar.",
 
-    // TODO
-    "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+    "config.open-search-menu.name": "Arama menüsünü aç",
+    "config.open-search-menu.desc": " Mevcut sandık görüntülenirken, bütün sandıklar için arama menüsünü açan tuşlar.",
 
-    "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+
+    "config.search-menu-preview.name": "Arama menüsü önizlemesi",
+    "config.search-menu-preview.desc": "Arama menüsündeyken, fareyle üzerine gelinen sandığın içeriğinin önizleme araç ipucunu göstermek için basılı tutulacak tuşlar.",
 
 
     /*********
