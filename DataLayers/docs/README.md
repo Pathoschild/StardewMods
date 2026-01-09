@@ -86,9 +86,7 @@ tile, to help with fishing strategy.
 > ![](screenshots/fishing-depth.png)
 
 ### Machine processing
-Shows whether your machines are empty, processing, or finished. (You need to install
-[Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
-work for machines that aren't being automated too.)
+Shows whether your machines are empty, processing, or finished.
 > ![](screenshots/machines.png)
 
 ### Tillable
