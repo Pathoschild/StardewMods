@@ -274,7 +274,7 @@ internal class MachineManager
                 junimoGroupChanged = true;
                 anyChanged = true;
             }
-            else if (active.Any())
+            else if (active.Any() || disabled.Any())
                 anyChanged = true;
         }
 
