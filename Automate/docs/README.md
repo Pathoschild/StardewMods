@@ -382,7 +382,7 @@ Path connectors aren't enabled by default. You can [enable them in the settings]
 ### In multiplayer, who gets XP and whose professions apply?
 A few machines give XP, update player stats, or check player skills based on the player who uses
 them. Since there's no player when they're automated, Automate uses the machine owner (i.e. who
-placed or built the machine) if possible, and defaults to the main player if not.<sup>1</sup>
+placed or built the machine) if possible, and defaults to the main player if not.
 
 More specifically:
 
@@ -396,8 +396,10 @@ shipping bin   | Prices are set by the _online_ player whose professions would m
 trees          | The main player's foraging level applies.
 custom machines | The logic for machines added by other mods is decided by those mods, not Automate.
 
-<small><sup>1</sup> Due to a bug in the game code, the owner is only tracked correctly for crab pots
-and fish ponds.</small>
+The [artisan](https://stardewvalleywiki.com/Skills#Farming) profession applies when the item is
+shipped or sold (not when it's produced). When sold manually, the profession from the selling
+player applies. When sold automatically via Automate, the profession from the main (host) player
+applies.
 
 ### Can I prevent a chest from being automated?
 Yep; see _[in-game settings](#in-game-settings)_.
