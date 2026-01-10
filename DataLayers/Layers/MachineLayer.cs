@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.DataLayers.Layers;
 
@@ -70,23 +71,48 @@ internal class MachineLayer : BaseLayer
     /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
     private IEnumerable<TileData> GetTiles(GameLocation location, Rectangle visibleArea, IReadOnlySet<Vector2> visibleTiles)
     {
-        IDictionary<Vector2, int> machineStates = this.Mods.Automate.GetMachineStates(location, visibleArea);
-        foreach (Vector2 tile in visibleTiles)
+        // get from Automate if installed
+        if (this.Mods.Automate.IsLoaded)
         {
-            LegendEntry? type = null;
-            if (machineStates.TryGetValue(tile, out int state))
+            IDictionary<Vector2, int> machineStates = this.Mods.Automate.GetMachineStates(location, visibleArea);
+            foreach (Vector2 tile in visibleTiles)
             {
-                type = state switch
+                LegendEntry? type = null;
+                if (machineStates.TryGetValue(tile, out int state))
                 {
-                    1 => this.Empty,
-                    2 => this.Processing,
-                    3 => this.Finished,
-                    _ => null
-                };
-            }
+                    type = state switch
+                    {
+                        1 => this.Empty,
+                        2 => this.Processing,
+                        3 => this.Finished,
+                        _ => null
+                    };
+                }
 
-            if (type != null)
-                yield return new TileData(tile, type);
+                if (type != null)
+                    yield return new TileData(tile, type);
+            }
+        }
+
+        // else get standard machines from Data/Machines
+        else
+        {
+            foreach (Vector2 tile in visibleTiles)
+            {
+                // get machine
+                if (!location.objects.TryGetValue(tile, out Object? machine))
+                    continue;
+                if (machine is not CrabPot && !machine.HasContextTag("is_machine"))
+                    continue;
+
+                // get status
+                if (machine.heldObject.Value == null && (machine is not CrabPot crabPot || crabPot.NeedsBait(null)))
+                    yield return new TileData(tile, this.Empty);
+                else if (machine.readyForHarvest.Value)
+                    yield return new TileData(tile, this.Finished);
+                else
+                    yield return new TileData(tile, this.Processing);
+            }
         }
     }
 }
