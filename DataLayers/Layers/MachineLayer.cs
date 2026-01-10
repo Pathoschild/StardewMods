@@ -102,7 +102,7 @@ internal class MachineLayer : BaseLayer
                 // get machine
                 if (!location.objects.TryGetValue(tile, out Object? machine))
                     continue;
-                if (machine is not CrabPot && machine.GetMachineData() is null)
+                if (machine is not CrabPot && !machine.HasContextTag("is_machine"))
                     continue;
 
                 // get status
