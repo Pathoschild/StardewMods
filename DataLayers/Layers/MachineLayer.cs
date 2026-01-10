@@ -71,6 +71,7 @@ internal class MachineLayer : BaseLayer
     /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
     private IEnumerable<TileData> GetTiles(GameLocation location, Rectangle visibleArea, IReadOnlySet<Vector2> visibleTiles)
     {
+        // get from Automate if installed
         if (this.Mods.Automate.IsLoaded)
         {
             IDictionary<Vector2, int> machineStates = this.Mods.Automate.GetMachineStates(location, visibleArea);
@@ -92,27 +93,25 @@ internal class MachineLayer : BaseLayer
                     yield return new TileData(tile, type);
             }
         }
-        // If Automate is not available simply use the vanilla method for machines
+
+        // else get standard machines from Data/Machines
         else
         {
             foreach (Vector2 tile in visibleTiles)
             {
-                if (location.objects.TryGetValue(tile, out var machine)
-                    && (machine is CrabPot || machine.GetMachineData() != null))
-                {
-                    if (machine.heldObject.Value == null && (machine is not CrabPot crabPot || crabPot.NeedsBait(null)))
-                    {
-                        yield return new TileData(tile, this.Empty);
-                    }
-                    else if (machine.readyForHarvest.Value)
-                    {
-                        yield return new TileData(tile, this.Finished);
-                    }
-                    else
-                    {
-                        yield return new TileData(tile, this.Processing);
-                    }
-                }
+                // get machine
+                if (!location.objects.TryGetValue(tile, out Object? machine))
+                    continue;
+                if (machine is not CrabPot && machine.GetMachineData() is null)
+                    continue;
+
+                // get status
+                if (machine.heldObject.Value == null && (machine is not CrabPot crabPot || crabPot.NeedsBait(null)))
+                    yield return new TileData(tile, this.Empty);
+                else if (machine.readyForHarvest.Value)
+                    yield return new TileData(tile, this.Finished);
+                else
+                    yield return new TileData(tile, this.Processing);
             }
         }
     }
