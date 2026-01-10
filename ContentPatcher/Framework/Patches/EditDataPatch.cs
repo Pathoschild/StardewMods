@@ -595,7 +595,9 @@ internal class EditDataPatch : Patch
                     string? value = (string?)editor.GetEntry(key);
 
                     // set value
-                    editor.SetEntry(key, operation.Apply(value));
+                    string? result = operation.Apply(value);
+                    if (result is not null)
+                        editor.SetEntry(key, result);
                 }
                 break;
 
@@ -636,10 +638,9 @@ internal class EditDataPatch : Patch
                         return this.Fail($"field '{rawEntryKey}' > '{rawFieldKey}' has type '{fieldType}', but you can only apply text operations to a text field.", out error);
 
                     // edit value
-                    entryEditor.SetEntry(
-                        fieldKey,
-                        operation.Apply(fieldValue as string ?? "")
-                    );
+                    string? result = operation.Apply(fieldValue as string);
+                    if (result is not null)
+                        entryEditor.SetEntry(fieldKey, result);
                 }
                 break;
 

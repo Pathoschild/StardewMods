@@ -403,7 +403,9 @@ internal class EditMapPatch : Patch
                         : null;
 
                     // apply
-                    target.Properties[key] = operation.Apply(value);
+                    string? result = operation.Apply(value);
+                    if (result is not null)
+                        target.Properties[key] = result;
                 }
                 break;
 
