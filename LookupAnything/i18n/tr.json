@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -68,6 +68,9 @@
     "internal-id": "Dahili ID",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -718,9 +721,9 @@
     "data-mining.section-pinned": "Sabitlendi", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
     "config.title.appearance": "Görünüş",
 
@@ -740,7 +743,7 @@
     // progression mode
     "config.title.progression": "İlerleme modu",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Yakalanmamış balıkların doğma kurallarını göster", 
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Yakalanmamış balıkların doğma kurallarını göster",
     "config.progression.show-uncaught-fish-spawn-rules.desc": "Daha yakalanmamış balıkların doğma kurallarının gösterilip gösterilmeyeceği. Etkinleştirildiğinde, yakalanmayan balıkların doğma kuralları görünür hale gelecek.",
 
     "config.progression.show-unknown-gift-tastes.name": "Bilinmeyen hediye zevklerini göster",
@@ -815,9 +818,9 @@
     "config.toggle-debug.desc": "Hata ayıklama bilgilerinin görüntülenmesini değiştiren tuşlar.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "Her Şeye Bak",
     "icon.toggle-search.desc": "Her Şeye Bak aramasını açar"
 }

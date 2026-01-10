@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -68,6 +68,9 @@
     "internal-id": "ID Interno",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -718,9 +721,9 @@
     "data-mining.section-pinned": "In evidenza", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
     "config.title.appearance": "Aspetto",
 
@@ -815,9 +818,9 @@
     "config.toggle-debug.desc": "I tasti che attivano la visualizzazione delle informazioni di debug.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "Lookup Anything",
     "icon.toggle-search.desc": "Attiva/disattiva ricerca di Lookup Anything"
 }

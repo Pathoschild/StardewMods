@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -69,6 +69,9 @@
     "internal-id": "Internal ID", // TODO
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -721,9 +724,9 @@
     "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
     // TODO
     "config.title.appearance": "Appearance",
@@ -820,9 +823,9 @@
     "config.toggle-debug.desc": "As teclas que alternam a exibição de informações de depuração.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     // TODO
     "icon.toggle-search.name": "Lookup Anything",
     "icon.toggle-search.desc": "Toggle Lookup Anything Search"
