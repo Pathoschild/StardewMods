@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Themes;
 using StardewModdingAPI;
@@ -40,6 +42,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
     /// <summary>The theme to apply for the menu appearance.</summary>
     private readonly ThemeManager Theme;
+
+    /// <summary>The Stardew Access mod integration.</summary>
+    private readonly StardewAccessIntegration StardewAccess;
 
     /// <summary>The clickable 'scroll up' icon.</summary>
     private readonly ClickableTextureComponent ScrollUpButton;
@@ -80,6 +85,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether to snap to the selected component after the next draw tick.</summary>
     private bool SnapToSelectedComponent;
 
+    /// <summary>Whether the on-screen keyboard was open on the last tick.</summary>
+    private bool WasKeyboardOpen;
+
 
     /*********
     ** Public methods
@@ -93,7 +101,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <param name="monitor">Encapsulates logging and monitoring.</param>
     /// <param name="theme">The theme to apply for the menu appearance.</param>
     /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, ThemeManager theme, int scroll)
+    /// <param name="stardewAccess">The Stardew Access mod integration.</param>
+    public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, ThemeManager theme, int scroll, StardewAccessIntegration stardewAccess)
     {
         // save data
         this.ShowLookup = showLookup;
@@ -101,6 +110,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         this.Theme = theme;
         this.SearchLookup = searchSubjects.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
         this.ScrollAmount = scroll;
+        this.StardewAccess = stardewAccess;
 
         // create components
         this.SearchTextbox = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black);
@@ -108,7 +118,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         {
             upNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
             downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
-            myID = SearchMenu.SearchBoxId
+            myID = SearchMenu.SearchBoxId,
+            ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchEmpty()
         };
         this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, 1);
         this.ScrollDownButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, 1);
@@ -116,6 +127,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         // initialise
         this.UpdateLayout();
         this.SnapToSelectedComponent = true;
+        this.StardewAccess.Say(I18n.SearchMenu_ScreenReader_Instructions(), true);
     }
 
 
@@ -267,6 +279,16 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         {
             this.SearchText = this.SearchTextbox.Text;
             this.ReceiveSearchTextboxChanged(this.SearchText);
+        }
+
+        // handle on-screen keyboard
+        bool keyboardOpen = Game1.textEntry is not null;
+        if (keyboardOpen != this.WasKeyboardOpen && this.currentlySnappedComponent?.myID == SearchBoxId)
+        {
+            if (!keyboardOpen)
+                this.StardewAccess.SayMenuElement(this.SearchTextboxClickableArea, interrupt: false); // already narrated if search text changed
+
+            this.WasKeyboardOpen = keyboardOpen;
         }
     }
 
@@ -484,6 +506,10 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             if (this.ScrollIntoView(this.currentlySnappedComponent))
                 this.SnapToSelectedComponent = true;
         }
+
+        // toggle textbox selection
+        if (this.SearchTextbox.Selected && this.currentlySnappedComponent?.myID != SearchBoxId)
+            this.SearchTextbox.Selected = false;
     }
 
     /// <summary>Set the cursor in the search box, and show the on-screen keyboard if needed.</summary>
@@ -586,8 +612,25 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
             .Where(entry => words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
             .SelectMany(entry => entry)
             .OrderBy(subject => subject.Name, StringComparer.OrdinalIgnoreCase)
-            .Select((subject, index) => new SearchResultComponent(subject, index, componentId: SearchMenu.FirstSearchResultId + index))
+            .Select((subject, index) =>
+            {
+                SearchResultComponent result = new SearchResultComponent(subject, index, componentId: SearchMenu.FirstSearchResultId + index);
+                result.ScreenReaderText = result.DisplayText;
+                return result;
+            })
             .ToArray();
+
+        // update screen reader text
+        ClickableComponent searchBox = this.SearchTextboxClickableArea;
+        if (string.IsNullOrWhiteSpace(search))
+            searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchEmpty();
+        else if (this.SearchResults.Length == 0)
+            searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchNoResults(search: search);
+        else
+            searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchResults(search: search, count: this.SearchResults.Length);
+
+        // reset controller snap elements
+        this.StardewAccess.SayMenuElement(searchBox);
 
         this.populateClickableComponentList();
     }

@@ -13,6 +13,7 @@ using Pathoschild.Stardew.Common.Integrations.ExtraMachineConfig;
 using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.Common.Integrations.SpaceCore;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.Integrations.UltimateFertilizer;
 using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -97,6 +98,9 @@ internal class GameHelper
     /// <summary>The SpaceCore integration to get info about its custom skills.</summary>
     public SpaceCoreIntegration SpaceCore { get; }
 
+    /// <summary>The Stardew Access integration.</summary>
+    public StardewAccessIntegration StardewAccess { get; }
+
     /// <summary>The Ultimate Fertilizer integration.</summary>
     public UltimateFertilizerIntegration UltimateFertilizer { get; }
 
@@ -124,6 +128,7 @@ internal class GameHelper
         this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
         this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, monitor);
         this.SpaceCore = new SpaceCoreIntegration(modRegistry, monitor);
+        this.StardewAccess = new StardewAccessIntegration(modRegistry, monitor);
         this.UltimateFertilizer = new UltimateFertilizerIntegration(modRegistry, monitor);
 
         this.ResetCache(monitor);

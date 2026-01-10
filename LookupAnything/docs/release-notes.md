@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added full controller navigation support for the search UI.
+* Added controller snap navigation for the search UI.
+* Added experimental screen reader support for the search UI.
 * Added RGB format to color data mining fields.
 * Fixed search UI in 1.53.0 deselecting the search box when the cursor isn't over it.
 * Fixed support for crops with multiple fertilizers applied via Ultimate Fertilizer.
