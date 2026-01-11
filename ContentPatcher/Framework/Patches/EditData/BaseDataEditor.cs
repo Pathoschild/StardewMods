@@ -37,6 +37,32 @@ internal abstract class BaseDataEditor : IKeyValueEditor
     public abstract void RemoveEntry(object key);
 
     /// <inheritdoc />
+    public virtual bool TryInitializeEntry(object key)
+    {
+        // get type
+        Type? type = this.GetEntryType(key);
+        if (type is null)
+            return false;
+
+        // get initial value
+        object? value;
+        try
+        {
+            value = Activator.CreateInstance(type);
+            if (value is null)
+                return false;
+        }
+        catch
+        {
+            return false;
+        }
+
+        // set
+        this.SetEntry(key, value);
+        return true;
+    }
+
+    /// <inheritdoc />
     public abstract void SetEntry(object key, object value);
 
     /// <inheritdoc />

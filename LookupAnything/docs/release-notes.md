@@ -1,6 +1,18 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.54.0
+Released 11 January 2026 for SMAPI 4.3.1 or later.
+
+* Added achievement lookups.  
+  _Unlock checklists will be added in later versions._
+* Added controller snap navigation for the search UI.
+* Added experimental screen reader support for the search UI.
+* Added RGB format to color data mining fields.
+* Fixed search UI in 1.53.0 deselecting the search box when the cursor isn't over it.
+* Fixed support for crops with multiple fertilizers applied via Ultimate Fertilizer.
+* Improved translations. Thanks to JanUwU42 (updated German), MakinDay (updated Italian), mehmetgorkemarslan (updated Turkish), and SummerFleur2997 (updated Chinese)!
+
 ## 1.53.0
 Released 26 October 2025 for SMAPI 4.3.1 or later.
 

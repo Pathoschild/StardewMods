@@ -626,13 +626,28 @@ internal class ItemSubject : BaseSubject
     /// <param name="dirt">The dirt tile to check.</param>
     private IEnumerable<string> GetAppliedFertilizers(HoeDirt dirt)
     {
+        bool fromMod = false;
+
         if (this.GameHelper.MultiFertilizer.IsLoaded)
-            return this.GameHelper.MultiFertilizer.GetAppliedFertilizers(dirt);
+        {
+            foreach (string itemId in this.GameHelper.MultiFertilizer.GetAppliedFertilizers(dirt))
+            {
+                fromMod = true;
+                yield return itemId;
+            }
+        }
 
-        if (ItemRegistry.QualifyItemId(dirt.fertilizer.Value) != null)
-            return [dirt.fertilizer.Value];
+        if (this.GameHelper.UltimateFertilizer.IsLoaded)
+        {
+            foreach (string itemId in this.GameHelper.UltimateFertilizer.GetAppliedFertilizers(dirt))
+            {
+                fromMod = true;
+                yield return itemId;
+            }
+        }
 
-        return [];
+        if (!fromMod && ItemRegistry.QualifyItemId(dirt.fertilizer.Value) != null)
+            yield return dirt.fertilizer.Value;
     }
 
     /// <summary>Get the custom fields for machine output.</summary>

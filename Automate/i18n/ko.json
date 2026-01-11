@@ -19,7 +19,9 @@
     "config.title.connectors": "연결 활성화",
     "config.connector.desc": "{{itemName}}이(가) 기계와 상자를 서로 연결하는지 여부.",
     "config.custom-connectors.name": "사용자 지정 연결",
-    "config.custom-connectors.desc": "인접한 기계를 서로 연결하는 항목의 정확한 영어 이름 입력.\n여러 항목을 쉼표로 나열할 수 있습니다.", // note: 다른 언어로 재생되는 경우에도 영어여야 합니다.
+
+    // TODO
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages (다른 언어로 재생되는 경우에도 영어여야 합니다)
 
     // Junimo hut options
     "config.title.junimo-huts": "주니모 오두막 동작",

@@ -39,6 +39,11 @@ internal interface IKeyValueEditor
     /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
     void RemoveEntry(object key);
 
+    /// <summary>Try to initialize an empty entry of the expected type.</summary>
+    /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
+    /// <returns>Returns <c>true</c> if the entry was created, or <c>false</c> if the type can't be initialized.</returns>
+    bool TryInitializeEntry(object key);
+
     /// <summary>Replace the value of an entry.</summary>
     /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
     /// <param name="value">The new value to set, already converted to the type returned by <see cref="GetEntryType"/>.</param>

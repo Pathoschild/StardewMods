@@ -1,0 +1,191 @@
+﻿//
+// Note for translators:
+// Some lines have a 'note for translators' comment like this one to clarify intent. You generally shouldn't translate
+// the 'note for translators' comments themselves, since they just explain the official intent and aren't shown in-game.
+//
+{
+    /*********
+    ** Destination names
+    *********/
+    // default stops
+    "destinations.central-station": "Центральна станція",
+    "destinations.stardew-valley": "Долина Стард'ю",
+
+    // default stops when shown in Central Station menu
+    "destinations.stardew-valley.boat": "Долина Стард'ю - Причал",
+    "destinations.stardew-valley.bus": "Долина Стард'ю - Автобусна зупинка",
+    "destinations.stardew-valley.train": "Долина Стард'ю - Залізниця",
+
+    // stops from other mods
+    "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name
+
+
+    /*********
+    ** Shop dialogues
+    *********/
+    "food-court.dialogue.1": "Заморіть черв'ячка! Переважно без справжніх черв'яків.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "Наші ціни — найнижчі на всьому фуд-корті! Гарантуємо!", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "Ми майже пройшли нашу останню інспекцію з харчової безпеки!",
+    "food-court.dialogue.4": "О, клієнт. Чого прийшов?",
+    "food-court.dialogue.5": "Тут усе свіже й гаряче! Ну, як гаряче... Якщо розігріти в мікрохвильовці.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+
+    "gift-shop.dialogue.1": "Далеко зібрався? Подбайте про те, щоб у вас було все необхідне!",
+    "gift-shop.dialogue.2": "Збираєшся додому? Захопи сувенірчиків!",
+    "gift-shop.dialogue.3": "У нас багатий вибір футболок із незвичайними та смішними дизайнами. (Занадто багатий, просимо купіть декілька.)",
+    "gift-shop.dialogue.4": "У нас стільки товару, що ми не знаємо, де його тримати. Просимо, купіть хоч щось!",
+    "gift-shop.dialogue.5": "Вирушаєте на холод? Ми маємо зимовий одяг в асортименті!",
+    "gift-shop.dialogue.6": "Примірте ці зимові навушники. Відчуваєте? Це справжній бархат з Замкового селища!",
+    "gift-shop.dialogue.7": "Це рідкісна деревина, привезена з-за Смарагдового моря. Її дуже важко дістати.",
+
+    "vendor-shop.dialogue.coming-soon": "Еевеличка табличка: \"Незабаром відкриються місцеві магазини!\". Ви чуєте, як робітники всередині готуються до відкриття.",
+
+
+    /*********
+    ** Book titles
+    *********/
+    // Note for translators: this section refers to locations mentioned in the base game (like the Ferngill Republic and Zuzu City).
+    // You can find their translations via the language links on the left of the page at https://stardewvalleywiki.com/Setting.
+    // The 'Z.C. Rarecrow Society' is from a letter; see https://stardewvalleywiki.com/Deluxe_Scarecrow and its language links.
+    "books.cooking.1": "'Майонез безодні та інші гоблінські делікатеси'.",
+
+    "books.geography.1": "'Узбережжя Фернгілл та що ми там знайшли'.",
+    "books.geography.2": "'Лісове господарство Ґрамплтона: Том VII'.",
+    "books.geography.3": "'Нічне життя Зузу-Сіті'.",
+    "books.geography.4": "'Єноти Острова Прерій'.",
+    "books.geography.5": "'Долина Стард'ю та інші самобутні місця'.",
+    "books.geography.6": "'Квіти Республіки Фернгілл' автор: міс Сенді.",
+
+    "books.history.1": "'Енциклопедія Смолуану: культура, історія, стереотипи та домисли'.",
+    "books.history.2": "'Вступ до таємних знань' автор: М. Размодіус.",
+    "books.history.3": "'Загарбники та тіні: історія Елементальних війн'.",
+    "books.history.4": "'Мешканці тундри по той бік Замерзлого моря'.",
+    "books.history.5": "'Імперія та Республіка': поглиблений аналіз конфлікту між державами Фернгілл і Готоро.",
+    "books.history.6": "'Вичерпний каталог історії рідкісних опудал' автор: Товариство рідкісних опудал З.С.",
+
+    "books.promotional.1": "'Неймовірний Пелікан-Таун', рекламна листівка від мера Льюїса.",
+
+    "books.religion.1": "'Шлях до Йоби', анонімна брошура з Долини Стард'ю.",
+
+    "books.science.1": "'Джунімо та інший фольклор Республіки Фернгілл'.",
+
+
+    /*********
+    ** Location flavor text
+    *********/
+    // message from the transit area doors
+    "location.transit-area-doors": "Цей шлях веде назад до причалу та платформ. Спершу вам знадобиться квиток з каси.",
+
+    // rare messages in Central Station
+    "location.exit-door.strange-sounds": "...?",
+
+    "location.ticket-counter.1": "(Ви намагаєтеся зазирнути до квиткової каси, але за тонованим склом видно лише невиразну тінь.)",
+    "location.ticket-counter.2": "(Ви чуєте дивний шепіт крізь скло.)",
+    "location.ticket-counter.3": "(Раптом, лише на мить, ви бачите крізь тоноване скло. Та коли намагаєтеся згадати про це — не можете пригадати побаченого.)",
+
+    "location.ticket-machine.1": "(Ви відчуваєте невиразне несхвалення з боку квиткової каси. Або, можливо, вам це просто здалося.)",
+    "location.ticket-machine.2": "(Ви відчуваєте невиразне занепокоєння через те, що оминули квиткову касу.)",
+    "location.ticket-machine.3": "(Автомат показує десятки напрямків, про які ви ніколи не чули. Ви кліпаєте — і знову бачите звичайний список.)",
+
+    "location.cola-machine.1": "(Цей автомат продає лише Джоджа-Колу, але щойно ви підходите, щось із глухим стукотом падає в лоток.)",
+    "location.cola-machine.2": "(Ви підходите до автомата з колою. Перш ніж ви встигаєте щось зробити, з глухим стукотом випадає предмет.)",
+    "location.cola-machine.3": "(Вас не полишає дивне відчуття, що автомат з колою хоче допомогти.)",
+
+    // employee lounge
+    "location.employee-lockers": "Шафки для персоналу не замкнені, але ви відчуваєте, що за вами щось стежить.",
+    "location.employee-fridge": "Обіди працівників. Пригощатися ними було б неввічливо.",
+
+
+    /*********
+    ** Tourist dialogue
+    *********/
+    "tourist.young-boy.1": "Привіт.",
+    "tourist.young-boy.2": "Я просто чекаю на мою матусю.",
+    "tourist.young-boy.3": "Я не повинен розмовляти з незнайомцями.",
+
+    "tourist.woman-in-black-dress": "Я обожнюю їздити на фестивалі в різні маленькі містечка. Це чудовий відпочинок від офісної роботи.",
+
+    "tourist.man-with-drink.1": "Найкраще в подорожах — це їжа.",
+    "tourist.man-with-drink.2": "Ти вже був на фуд-корті? Чесно кажучи, це ледве їстівне. Але це частина вражень!",
+
+    "tourist.man-with-sunglasses": "Ти пробував зазирати до квиткової каси? Я ніяк не можу розгледіти, хто там.#Власники крамниць теж не є працівниками.",
+
+    "tourist.man-with-top-hat.1": "Ей, ${малий^мала^мале}$. Хочеш знати секрет багатства?", // In this line man with top hat saying 'kid', like 'little one', in english it can be addressed to both boys and girls(if i understand correctly). So i look down the code and find switch for female and male, players. I hope i copy paste it right. 
+    "tourist.man-with-top-hat.2": "Схеми швидкого збагачення. Азартні ігри. Казино завжди у виграші, розумієш, про що я? Хех.",
+
+    "tourist.strong-man": "Ти сильний, як я? Трощити камінь!#Але тут немає каміння. Сумно.",
+
+    "tourist.desert-racer-man.1": "Я вирушаю на перегони!",
+    "tourist.desert-racer-man.2": "О, я й справді туди їду. Тепер, коли я на пенсії, я нарешті можу подорожувати і спостерігати за перегонами на власні очі.#Тобі доводилося бувати на перегонах у пустелі? Чудова розвага.",
+
+    "tourist.desert-scholar-man.1": "Вітаю, друже! У Зузу-Сіті відкривають нову бібліотеку.",
+    "tourist.desert-scholar-man.2": "Я розшукую кілька томів. Сподіваюся, там вони будуть.",
+    "tourist.desert-scholar-man.3": "А якщо ні, я впевнений, що там знайдуться інші нові видання!!",
+
+    "tourist.flamingo.1": "...",
+    "tourist.flamingo.2": "...?",
+    "tourist.flamingo.3": "*Ґа-ґа!*",
+    "tourist.flamingo.4": "(Вона старанно вас ігнорує.)",
+
+    "tourist.shrouded-figure": "Я можу відправити тебе додому... за певну плату.#Але ти можеш просто поїхати автобусом.",
+
+    "tourist.welwick.1": "Бачу, ти спілкуєшся з моїм старим другом Размодіусом.",
+    "tourist.welwick.2": "Сподіваюся, він не втягнув тебе у свої авантюри, хе-хе.",
+
+    "tourist.cashier-girl.1": "Я подовгу працюю на ногах. Це виснажує, і часу на себе майже не залишається.",
+    "tourist.cashier-girl.2": "Так хотілося б просто залишитися вдома й відпочити. Але що то за життя без пригод?!",
+    "tourist.cashier-girl.3": "Є стільки місць, куди можна дістатися безкоштовно. Я збираюся відвідати їх усі!",
+
+    "tourist.governor.1": "Це дуже дивно. Ніхто не знає, хто керує цією станцією.#Усі необхідні дозволи оформлено, але ніхто не пам'ятає, як це сталося.#Ну що ж, це не єдина дивина в цих краях.",
+    "tourist.governor.2": "Так чудово нарешті самому проїхатися поїздом.#Наступного разу треба обов'язково взяти із собою дружину.",
+
+    "tourist.lupini.1": "Вітаю, ${молодий^молода^молодий}$ ${чоловіче^леді^друже}$. ${Ти бачив мої останні картини?^Ти бачила мої останні картини?^Тобі вже траплялися мої останні картини?}$", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players. (Translator) i add two more switches becouse for man and lady i need change one word but for non-binary i need to change it entirely. Hope it's allright.
+    "tourist.lupini.2": "Я вирушаю відкривати нову галерею. Можеш приєднатися, якщо бажаєш.",
+
+    "tourist.red-cap-guy.1": "Найкраще в подорожах — це всі ці різні люди та стилі.",
+    "tourist.red-cap-guy.2": "Важко почуватися занадто ошатним, коли всі такі різні!",
+
+    "tourist.shorts-man": "Тут страшенно холодно.#Може, прикупити щось із зимового одягу в сувенірній крамниці?...",
+
+    "tourist.red-pirate": "(Він зосереджений на своєму напої й не помічає вас.)",
+
+    "tourist.grim-pirate": "Він з тих колій — історія, від якої холоне кров...#Оголошення, що пролунало в самих надрах станції...#Еге ж, я запізнився на поїзд.",
+
+    "tourist.blackgull-pirate.1": "Тисяча чортів! Де всі інші?",
+    "tourist.blackgull-pirate.2": "Ми ж з хвилини на хвилину сходимо на борт...",
+
+    "tourist.bag-dog.1": "(Вона у подорожі.)",
+    "tourist.bag-dog.2": "(Вона просто відпочиває у своєму спальному мішку)",
+
+
+    /*********
+    ** Furniture
+    *********/
+    // calendars
+    "furniture.calendar-city.name": "Міський календар",
+    "furniture.calendar-nature.name": "Природний календар",
+
+    // wall decor
+    "furniture.clock.name": "Годинник",
+    "furniture.transit-map.name": "Карта громадського транспорту",
+    "furniture.travel-pictures.name": "Фотографії з подорожей",
+    "furniture.welcome-sign.name": "Знак «Ласкаво просимо»",
+
+    // rugs
+    "furniture.posh-rug.name": "Розкішний килим",
+
+    // general decor
+    "furniture.board-sign.name": "Табличка",
+    "furniture.postbox.name": "Поштова скринька",
+    "furniture.suitcase-blue.name": "Синя валіза",
+    "furniture.suitcase-pink.name": "Рожева валіза",
+    "furniture.trash-can.name": "Смітник",
+    "furniture.trash-can-messy.name": "Брудний смітник",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-pam-bus.name": "Потрібен автобус Пем",
+    "config.require-pam-bus.desc": "Визначає, чи потрібно відремонтувати автобус Пем перед відправленням із зупинки в Долині Стард'ю. Якщо ця вимога вимкнена, ви зможете поїхати автобусом до Центрального вокзалу (але не в Пустелю) ще до завершення ремонту."
+}

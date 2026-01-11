@@ -84,7 +84,7 @@ internal class BushSubject : BaseSubject
                     : $"{item.DisplayName}: {this.Stringify(firstDay)} - {this.Stringify(lastDay)}";
             }
 
-            yield return new ItemIconListField(this.GameHelper, I18n.Bush_NextHarvest(), itemList, false, item => displayText.GetValueOrDefault(item));
+            yield return new ItemIconListField(this.GameHelper, I18n.Bush_NextHarvest(), itemList, false, formatItemName: item => displayText.GetValueOrDefault(item));
         }
         else
         {

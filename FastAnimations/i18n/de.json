@@ -2,9 +2,8 @@
     /*********
     ** In-game messages
     *********/
-    // TODO
-    "mod-paused": "Fast Animations paused; animations will play at default speed. Press {{keybind}} again to unpause it.",
-    "mod-unpaused": "Fast Animations resumed; animations will play at configured speeds. Press {{keybind}} again to pause it.",
+    "mod-paused": "Fast Animations pausiert; Animationen werden mit der Standardgeschwindigkeit abgespielt. Drücke {{keybind}} erneut, um es fortzusetzen.",
+    "mod-unpaused": "Fast Animations fortgesetzt; Animationen werden mit der eingestellten Geschwindigkeit abgespielt. Drücke {{keybind}} erneut, um es zu pausieren.",
 
 
     /*********
@@ -129,14 +128,13 @@
     /****
     ** 'Pause Mod' section
     ****/
-    // TODO
-    "config.pause-mod-section": "Pause mod",
+    "config.pause-mod-section": "Mod pausieren",
 
-    "config.mod-paused.name": "Paused temporarily",
-    "config.mod-paused.tooltip": "Whether the mod is temporarily paused, so all animations play at the default speed. This only applies during the current session.",
+    "config.mod-paused.name": "Vorübergehend pausiert",
+    "config.mod-paused.tooltip": "Gibt an, ob die Mod vorübergehend pausiert ist, sodass alle Animationen mit der Standardgeschwindigkeit abgespielt werden. Dies gilt nur für die aktuelle Sitzung.",
 
-    "config.pause-mod.name": "Pause key",
-    "config.pause-mod.tooltip": "The keybind which temporarily pauses the mod, so all animations play at the default speed. Pressing it again will unpause the mod.",
+    "config.pause-mod.name": "Pause Taste",
+    "config.pause-mod.tooltip": "Die Taste, mit der die Mod vorübergehend pausiert wird, sodass alle Animationen mit der Standardgeschwindigkeit abgespielt werden. Wird sie erneut gedrückt, wird die Mod fortgesetzt.",
 
     /****
     ** 'Experimental' section

@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -34,6 +34,7 @@
     "generic.show-x-results": "{{count}} sonuçlarını göster",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Bina",
     "type.bush": "Çalı",
     "type.fruit-tree": "Meyve Ağacı",
@@ -65,9 +66,12 @@
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
-    "internal-id": "Internal ID", // TODO
+    "internal-id": "Dahili ID",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -175,6 +179,19 @@
 
 
     /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+
+
+    /*********
     ** Animal lookups
     *********/
     // labels
@@ -185,7 +202,7 @@
     "animal.produce-ready": "Ürün hazır",
     "animal.growth": "Büyüme",
     "animal.sells-for": "Karşılığında sat",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Altın Hayvan Krakeri", // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "dün beslenmedi",
@@ -194,8 +211,8 @@
     "animal.complaints.no-heater": "kış için ısıtıcı yok",
     "animal.complaints.not-petted": "bugün henüz sevilmedi",
     "animal.complaints.wild-animal-attack": "gece vahşi hayvanların saldırısına uğradı",
-    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
-    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
+    "animal.golden-cracker.none": "Yok. Üretimi ikiye katlamak için Altın Hayvan Krakeri kullanın",
+    "animal.golden-cracker.applied": "Uygulandı. Üretilen ürünler artık ikişer tane gelecek",
 
 
     /*********
@@ -334,7 +351,7 @@
     "item.dislikes-this": "Bunu beğenmez",
     "item.hates-this": "Bundan nefret eder",
     "item.needed-for": "Şunun için lazım",
-    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.flavor": "Aroma", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Sahip",
     "item.number-cooked": "Pişmiş",
     "item.number-crafted": "Yapılmış",
@@ -359,7 +376,7 @@
     "item.needed-for.gourmet-chef": "gurme şef başarısı (pişir {{recipes}})",
     "item.needed-for.craft-master": "zanaat ustası başarısı (yap {{recipes}})",
     "item.needed-for.quests": "şuanki görevler ({{quests}})",
-    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
+    "item.needed-for.trash-bear": "Çöp Ayısı (bir tane teslim et)",
     "item.unknown-recipes": "{{count}} adet bilinmeyen tarif",
     "item.sells-to.shipping-box": "gönderi kutusu",
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",
@@ -367,9 +384,9 @@
     "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in 
     "item.recipes-for-machine.too-complex": "Bazı makinelerin işlevleri gösterilemeyecek kadar karmaşık",
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
-    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-owned-flavored.summary": "Elinizde {{count}} adet ({{name}}) veya {{baseCount}} adet ({{baseName}}) var", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "bundan {{count}} tane yaptın",
-    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
+    "item.internal-id.summary": "{{itemId}} (evrensel olarak benzersiz 'nitelikli ID': {{qualifiedItemId}})",
 
 
     /*********
@@ -425,7 +442,7 @@
     "item.fish-spawn-rules.time": "günün saati: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "hava: güneşli",
     "item.fish-spawn-rules.weather-rainy": "hava: yağmurlu",
-    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
+    "item.uncaught-fish": "{{count}} tane yakalanmamış balık",
 
 
     /*********
@@ -522,10 +539,10 @@
     "npc.unowned-gift-taste": "{{count}} sahipsiz öğe",
     "npc.schedule.current-position": "Şu anda şurada: {{locationName}} ({{x}}, {{y}}).",
     "npc.schedule.no-entries": "Hiçbir program yüklenmedi.",
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
+    "npc.schedule.not-following-schedule": "Şuan takvimini takip etmiyor. Bu genellikle NPC özel bir aktivite yapıyor demektir. (ör. Tiyatroda film izliyor).",
     "npc.schedule.entry": "{{time}}: saatinde şurada olacak {{locationName}} ({{x}}, {{y}}).",
-    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
-    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
+    "npc.schedule.farmhand.unknown-position": "Şu anda ana bilgisayarda (host) bilinmeyen bir konumda.",
+    "npc.schedule.farmhand.unknown-schedule": "Çok oyunculu modda NPC'ler oda sahibi (host) tarafından yönetilir, bu nedenle günlük programlarına erişilemiyor.",
 
 
     /*********
@@ -711,30 +728,40 @@
     /*********
     ** Data mining fields
     *********/
+    "data-mining.name": "İşlenmemiş veri",
+    "data-mining.name.map-tile": "İşlenmemiş veri (harita döşemesi)",
+    "data-mining.name.map-location": "İşlenmemiş veri (konum)",
+
+    "data-mining.section-pinned": "Sabitlendi", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
     // TODO
-    "data-mining.name": "Raw data",
-    "data-mining.name.map-tile": "Raw data (map tile)",
-    "data-mining.name.map-location": "Raw data (location)",
+    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
+    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
+    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
+    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
 
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
-
-    /*********
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
-    // TODO
-    "config.title.appearance": "Appearance",
+    "config.title.appearance": "Görünüş",
 
-    "config.theme.name": "Visual theme",
-    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+    "config.theme.name": "Görsel Tema",
+    "config.theme.desc": "Lookup ve Arama menüsüne uygulanacak olan görsel tema",
 
-    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Parchment": "Parşömen",
     "config.theme.values.Joja": "Joja",
-    "config.theme.values.MenuBox_Border": "Menu box (border)",
-    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
-    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
-    "config.theme.values.Plain": "Plain",
+    "config.theme.values.MenuBox_Border": "Menü Kutusu (kenar)",
+    "config.theme.values.MenuBox_Inset": "Menü Kutusu (içe basık)",
+    "config.theme.values.MenuBox_Raised": "Menü Kutusu (kabartmalı)",
+    "config.theme.values.Plain": "Düz",
 
     "config.force-full-screen.name": "Tam ekranı zorla",
     "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
@@ -742,8 +769,8 @@
     // progression mode
     "config.title.progression": "İlerleme modu",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Yakalanmamış balıkların doğma kurallarını göster",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Daha yakalanmamış balıkların doğma kurallarının gösterilip gösterilmeyeceği. Etkinleştirildiğinde, yakalanmayan balıkların doğma kuralları görünür hale gelecek.",
 
     "config.progression.show-unknown-gift-tastes.name": "Bilinmeyen hediye zevklerini göster",
     "config.progression.show-unknown-gift-tastes.desc": "NPC'lerin hediye zevklerini gösterirken bilinmeyenleri gösterip göstermeyeceği. Etkinleştirildiğinde, bilinmeyen hediye zevkleri gösterilecek.",
@@ -817,9 +844,9 @@
     "config.toggle-debug.desc": "Hata ayıklama bilgilerinin görüntülenmesini değiştiren tuşlar.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "Her Şeye Bak",
     "icon.toggle-search.desc": "Her Şeye Bak aramasını açar"
 }

@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
+using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops;
@@ -73,29 +77,141 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     {
         foreach (Vector2 tile in visibleTiles)
         {
-            // get crop
-            Crop? crop = this.GetDirt(location, tile)?.crop;
-            if (crop == null)
-                continue;
+            // crop
+            if (this.GetDirt(location, tile)?.crop is { } crop && this.TryCheckCrop(location, tile, crop, out TileData? tileData))
+                yield return tileData;
 
-            // special case: crop is dead
-            if (crop.dead.Value)
-            {
-                yield return new TileData(tile, this.NotEnoughTimeOrDead);
-                continue;
-            }
+            // indoor pot
+            else if ((location.objects.GetValueOrDefault(tile) as IndoorPot)?.bush.Value is { } potBush && this.TryCheckBush(tile, potBush, out tileData))
+                yield return tileData;
 
-            // yield tile
-            CropDataParser data = new CropDataParser(crop, isPlanted: true);
-            if (data.CropData != null)
+            // terrain feature
+            else if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrainFeature) && this.TryCheckTerrainFeature(tile, terrainFeature, out tileData))
+                yield return tileData;
+        }
+
+        // large terrain features
+        foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+        {
+            if (visibleTiles.Contains(feature.Tile) && this.TryCheckLargeTerrainFeature(feature, out TileData? tileData, out int tileWidth))
             {
-                if (data.CanHarvestNow)
-                    yield return new TileData(tile, this.Ready);
-                else if (!location.SeedsIgnoreSeasonsHere() && !data.Seasons.Contains(data.GetNextHarvest().Season))
-                    yield return new TileData(tile, this.NotEnoughTimeOrDead);
-                else
-                    yield return new TileData(tile, this.NotReady);
+                yield return tileData;
+
+                for (int xOffset = 1; xOffset < tileWidth; xOffset++)
+                    yield return new TileData(new Vector2(feature.Tile.X + xOffset, feature.Tile.Y), tileData.Type, tileData.Color, tileData.DrawOffset);
             }
         }
+    }
+
+    /// <summary>Get the tile data for a bush.</summary>
+    /// <param name="tile">The tile containing the bush.</param>
+    /// <param name="bush">The bush instance.</param>
+    /// <param name="tileData">The tile data if valid.</param>
+    /// <returns>Returns whether the bush is a harvestable type.</returns>
+    private bool TryCheckBush(Vector2 tile, Bush bush, [NotNullWhen(true)] out TileData? tileData)
+    {
+        if (
+            !(bush.size.Value == Bush.mediumBush && !bush.townBush.Value) // berry bush
+            && bush.size.Value != Bush.greenTeaBush // tea bush
+        )
+        {
+            tileData = null;
+            return false;
+        }
+
+        bool ready = bush.tileSheetOffset.Value == 1;
+        tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+        return true;
+    }
+
+    /// <summary>Get the tile data for a crop.</summary>
+    /// <param name="location">The current location.</param>
+    /// <param name="tile">The tile containing the crop.</param>
+    /// <param name="crop">The crop instance.</param>
+    /// <param name="tileData">The tile data if valid.</param>
+    /// <returns>Returns whether the crop is a harvestable type.</returns>
+    private bool TryCheckCrop(GameLocation location, Vector2 tile, Crop crop, [NotNullWhen(true)] out TileData? tileData)
+    {
+        // get data
+        CropDataParser data = new CropDataParser(crop, isPlanted: true);
+        if (data.CropData == null)
+        {
+            tileData = null;
+            return false;
+        }
+
+        // get harvest time
+        if (crop.dead.Value)
+            tileData = new TileData(tile, this.NotEnoughTimeOrDead);
+        else if (data.CanHarvestNow)
+            tileData = new TileData(tile, this.Ready);
+        else if (!location.SeedsIgnoreSeasonsHere() && !data.Seasons.Contains(data.GetNextHarvest().Season))
+            tileData = new TileData(tile, this.NotEnoughTimeOrDead);
+        else
+            tileData = new TileData(tile, this.NotReady);
+        return true;
+    }
+
+    /// <summary>Get the tile data for a terrain feature.</summary>
+    /// <param name="tile">The tile containing the terrain feature.</param>
+    /// <param name="terrainFeature">The terrain feature instance.</param>
+    /// <param name="tileData">The tile data if valid.</param>
+    /// <returns>Returns whether the crop is a harvestable type.</returns>
+    private bool TryCheckTerrainFeature(Vector2 tile, TerrainFeature terrainFeature, [NotNullWhen(true)] out TileData? tileData)
+    {
+        switch (terrainFeature)
+        {
+            case FruitTree fruitTree:
+                if (fruitTree.growthStage.Value >= FruitTree.treeStage)
+                {
+                    bool ready = fruitTree.fruit.Count > 0;
+                    tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+                    return true;
+                }
+                break;
+
+            case Tree tree:
+                if (!tree.stump.Value && tree.growthStage.Value >= Tree.treeStage)
+                {
+                    bool ready =
+                        tree.hasMoss.Value
+                        || (tree.hasSeed.Value && (Game1.IsMultiplayer || Game1.player.ForagingLevel >= 1));
+                    tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+                    return true;
+                }
+                break;
+        }
+
+        tileData = null;
+        return false;
+    }
+
+    /// <summary>Get the tile data for a large terrain feature.</summary>
+    /// <param name="terrainFeature">The terrain feature instance.</param>
+    /// <param name="tileData">The tile data if valid.</param>
+    /// <param name="tileWidth">The terrain feature's tile width.</param>
+    /// <returns>Returns whether the crop is a harvestable type.</returns>
+    private bool TryCheckLargeTerrainFeature(LargeTerrainFeature terrainFeature, [NotNullWhen(true)] out TileData? tileData, out int tileWidth)
+    {
+        switch (terrainFeature)
+        {
+            case Bush bush:
+                if (this.TryCheckBush(terrainFeature.Tile, bush, out tileData))
+                {
+                    tileWidth = bush.size.Value switch
+                    {
+                        Bush.walnutBush or Bush.mediumBush => 2,
+                        Bush.largeBush => 3,
+                        _ => 1
+                    };
+                    return true;
+                }
+
+                break;
+        }
+
+        tileData = null;
+        tileWidth = 0;
+        return false;
     }
 }

@@ -9,6 +9,14 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 2.9.0
+Released 11 January 2026 for SMAPI 4.4.0 or later. See [release highlights](https://www.patreon.com/posts/147984075).
+
+* Added [image transparency masks](author-guide/action-editimage.md) to simplify editing sprites (thanks to PinkSerenity!).
+* Added field auto-initialization when using `Fields` to edit a null parent field.
+* Fixed `TextOperations` applied to a missing field or map property sometimes creating an invalid null one, instead of omitting it.
+* Improved [Chinese documentation](zh/README.md) (thanks to SummerFleur2997!).
+
 ## 2.8.1
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "Тут застосовано «ШвидкоРост».",
     "crop-fertilizer.multiple": "Тут застосовано декілька добрив",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Машинна обробка",
     "machines.empty": "Порожньо",

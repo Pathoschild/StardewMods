@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -15,6 +18,9 @@ internal class ChestContainer : IContainer
     *********/
     /// <summary>The in-game chest.</summary>
     internal readonly Chest Chest;
+
+    /// <summary>A shared sprite batch used to render a chest texture.</summary>
+    private static readonly SpriteBatch ChestIconBatch = new(Game1.graphics.GraphicsDevice);
 
     /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
     private readonly object Context;
@@ -132,6 +138,28 @@ internal class ChestContainer : IContainer
     public void SaveData()
     {
         this.Data.ToModData(this.Chest.modData);
+    }
+
+    /// <inheritdoc />
+    public virtual bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
+    {
+        Chest chest = this.Chest;
+
+        // generate icon texture
+        var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, Game1.tileSize, Game1.tileSize * 2, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+        Game1.SetRenderTarget(icon);
+        ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+        Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
+        chest.fixLidFrame();
+        chest.draw(ChestIconBatch, 0, Game1.tileSize, local: true);
+        ChestIconBatch.End();
+        Game1.SetRenderTarget(null);
+
+        // set values
+        texture = icon;
+        sourceRect = icon.Bounds;
+        scale = 1;
+        return true;
     }
 
 

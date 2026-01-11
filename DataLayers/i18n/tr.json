@@ -6,10 +6,9 @@
     // Note for translators:
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
-    // TODO
-    "auto.name": "Auto",
-    "auto.name-active": "Auto ({{layerName}})",
-    "auto.name-inactive": "Auto (nothing to show)",
+    "auto.name": "Otomatik",
+    "auto.name-active": "Otomatik ({{layerName}})",
+    "auto.name-inactive": "Otomatik (gösterilecek bir şey yok)",
 
     // accessible
     "accessible.name": "Erişilebilir",
@@ -29,11 +28,10 @@
     "bee-houses.range": "Çiçek Aralığı",
 
     // coverage: bombs
-    // TODO
-    "bombs.name": "Coverage: Bombs",
-    "bombs.dig": "Dig Radius",
-    "bombs.explosion": "Destroy Object Radius",
-    "bombs.shockwave": "Shockwave Radius",
+    "bombs.name": "Kapsam: Bombalar",
+    "bombs.dig": "Kazma alanı",
+    "bombs.explosion": "Nesne yok etme alanı",
+    "bombs.shockwave": "Şok dalgası alanı",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Kapsam: Junimo Huts",
@@ -73,6 +71,14 @@
     "crop-fertilizer.speed-gro": "Hızlı-Ek",
     "crop-fertilizer.multiple": "Birden Fazla Gübre Çeşidi",
 
+    // fishing depth
+    "fishing-depth.name": "Su Derinliği",
+    "fishing-depth.one": "Kıyının yanında",
+    "fishing-depth.two": "İki",
+    "fishing-depth.three": "Üç",
+    "fishing-depth.four": "Dört",
+    "fishing-depth.max": "Maksimum Derinlik",
+
     // machine processing
     "machines.name": "Makine İşleme",
     "machines.empty": "Boş",
@@ -109,9 +115,8 @@
     "config.color-scheme.desc": "Tüm veri katmanlarındaki renkleri değiştiren, uygulanacak renk şeması.",
     "config.color-schemes.default": "varsayılan renkler",
 
-    // TODO
-    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
-    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+    "config.legend-alpha-on-hover.name": "Üstüne gelindiğindeki şeffaflık değeri",
+    "config.legend-alpha-on-hover.desc": "Bilgi kutusunun ne kadar saydam olacağını belirtir. 0 (tamamen şeffaf) ile 1 (opak) arasında bir değer alır",
 
     // main controls
     "config.toggle-layer-key.name": "Veri katmanını gizle/göster",
@@ -127,9 +132,8 @@
     "config.layer-enabled.name": "Etkin",
     "config.layer-enabled.desc": "Katmanın oyun içinde erişilebilir olup olmayacağı.",
 
-    // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "'{{autoLayerName}}' katmanları için etkin",
+    "config.layer-enabled-for-auto-layer.desc": "'{{autoLayerName}}' katmanının seçildiği zaman otomatik olarak gösterilip gösterilmeyeceğini belirtir. (Etkisiz halde olsa bile)",
 
     "config.layer-update-on-view-change.name": "Görüntü değiştiğinde güncelle",
     "config.layer-update-on-view-change.desc": "'Saniye başına güncelleme' ayarından bağımsız olarak, dünyanın yeni bir kısmı görüntüye geldiğinde çizilen katman bilgilerinin güncellenip güncellenmeyeceği.",

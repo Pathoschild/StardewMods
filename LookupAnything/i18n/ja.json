@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": "、", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed, even if there's no space
@@ -34,6 +34,7 @@
     "generic.show-x-results": "{{count}}個（詳細確認）",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "建物",
     "type.bush": "茂み",
     "type.fruit-tree": "果樹",
@@ -69,6 +70,9 @@
     "internal-id": "Internal ID", // TODO
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -173,6 +177,19 @@
     "context-tag.egg": "タマゴ（なんでも）",
     "context-tag.large-egg": "大きなタマゴ（なんでも）",
     "context-tag.preserved-item": "{{name}}のもの",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********
@@ -720,9 +737,21 @@
     "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
+    // TODO
+    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
+    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
+    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
+    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
+
+
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
     // TODO
     "config.title.appearance": "Appearance",
@@ -818,9 +847,9 @@
     "config.toggle-debug.desc": "デバッグ情報を表示するためのキー設定。",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     // TODO
     "icon.toggle-search.name": "Lookup Anything",
     "icon.toggle-search.desc": "Toggle Lookup Anything Search"

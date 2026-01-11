@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Inventories;
@@ -164,6 +167,15 @@ internal class ShippingBinContainer : IContainer
     public void SaveData()
     {
         this.Data.ToModData(this.Location.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
+    }
+
+    /// <inheritdoc />
+    public bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
+    {
+        texture = Game1.content.Load<Texture2D>("Buildings/Shipping Bin");
+        sourceRect = texture.Bounds;
+        scale = Game1.pixelZoom * (32f / sourceRect.Height);
+        return true;
     }
 
 

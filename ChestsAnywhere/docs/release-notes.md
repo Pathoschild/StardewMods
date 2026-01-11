@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.30.0
+Released 11 January 2026 for SMAPI 4.1.10 or later.
+
+* Added chest search (thanks to Mushymato!).  
+  _While a chest is open, press `Control + F` or left controller stick to search all chests by name or item._
+* Improved translations. Thanks to JanUwU42 (updated German), KrokiKus (updated Russian), mehmetgorkemarslan (updated Turkish), and SummerFleur2997 (updated Chinese)!
+
 ## 1.29.1
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

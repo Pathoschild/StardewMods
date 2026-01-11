@@ -60,8 +60,8 @@ internal class SummaryCommand : BaseCommand
         // settings
         report.AppendLine("Settings:\n------------------------------");
         report.AppendLine($"   Automation interval: {config.AutomationInterval}");
-        if (config.ConnectorNames.Any())
-            report.AppendLine($"   Connectors: {string.Join(", ", from name in config.ConnectorNames orderby name select $"'{name}'")}");
+        if (config.Connectors.Any())
+            report.AppendLine($"   Connectors: {string.Join(", ", from idOrName in config.Connectors orderby idOrName select $"'{idOrName}'")}");
 
         // per-machine settings
         {

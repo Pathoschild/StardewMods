@@ -6,10 +6,9 @@
     // Note for translators:
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
-    // TODO
     "auto.name": "Auto",
     "auto.name-active": "Auto ({{layerName}})",
-    "auto.name-inactive": "Auto (nothing to show)",
+    "auto.name-inactive": "Auto (nichts anzuzeigen)",
 
     // accessible
     "accessible.name": "Belegung",
@@ -29,11 +28,10 @@
     "bee-houses.range": "Blumenreichweite",
 
     // coverage: bombs
-    // TODO
-    "bombs.name": "Coverage: Bombs",
-    "bombs.dig": "Dig Radius",
-    "bombs.explosion": "Destroy Object Radius",
-    "bombs.shockwave": "Shockwave Radius",
+    "bombs.name": "Abdeckung: Bomben",
+    "bombs.dig": "Grabradius",
+    "bombs.explosion": "Objekt-Zerstörungsradius",
+    "bombs.shockwave": "Schockwellenradius",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Abdeckung: Junimo-Hütten",
@@ -73,6 +71,15 @@
     "crop-fertilizer.speed-gro": "Geschwind-Wachs",
     "crop-fertilizer.multiple": "Mehrere Düngerarten",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Maschinelle Verarbeitung",
     "machines.empty": "Leer",
@@ -109,27 +116,25 @@
     "config.color-scheme.desc": "Das anzuwendende Farbschema, welches die Farben für alle Datenebenen ändert.",
     "config.color-schemes.default": "Standardfarben",
 
-    // TODO
-    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
-    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+    "config.legend-alpha-on-hover.name": "Legenden-Deckkraft beim Darüberfahren",
+    "config.legend-alpha-on-hover.desc": "Wie durchsichtig die Legenden‑Infobox sein soll, wenn sich der Cursor darüber befindet, als Wert zwischen 0 (transparent) und 1 (undurchsichtig).",
 
     // main controls
-    "config.toggle-layer-key.name": "Toggle data layers",
-    "config.toggle-layer-key.desc": "The key binding which shows or hides the data layer overlay.",
+    "config.toggle-layer-key.name": "Datenebenen umschalten",
+    "config.toggle-layer-key.desc": "Die Tastenbelegung, die das Datenebenen‑Overlay ein‑ bzw. ausblendet.",
 
-    "config.prev-layer-key.name": "Previous layer key",
-    "config.prev-layer-key.desc": "The key binding which cycles backwards through the available data layers.",
+    "config.prev-layer-key.name": "Taste vorherige Ebene",
+    "config.prev-layer-key.desc": "Die Tastenbelegung, mit der rückwärts durch die verfügbaren Datenebenen gewechselt wird.",
 
-    "config.next-layer-key.name": "Next layer key",
-    "config.next-layer-key.desc": "The key binding which cycles forward through the available data layers.",
+    "config.next-layer-key.name": "Taste nächste Ebene",
+    "config.next-layer-key.desc": "Die Tastenbelegung, mit der vorwärts durch die verfügbaren Datenebenen gewechselt wird.",
 
     // data layers
     "config.layer-enabled.name": "Aktiviert",
     "config.layer-enabled.desc": "Ob diese Ebene im Spiel verfügbar sein soll.",
 
-    // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "Aktiviert für Ebene '{{autoLayerName}}'",
+    "config.layer-enabled-for-auto-layer.desc": "Ob diese Ebene automatisch angezeigt werden kann, wenn du die Ebene '{{autoLayerName}}' auswählst (auch wenn sie sonst deaktiviert ist).",
 
     "config.layer-update-on-view-change.name": "Aktualisieren, wenn sich die Ansicht ändert",
     "config.layer-update-on-view-change.desc": "Ob die Informationen über die gezeichnete Ebene aktualisiert werden sollen, wenn ein neuer Teil der Welt in die Sicht kommt, unabhängig von der Einstellung „Aktualisierungen pro Sekunde“.",
@@ -138,7 +143,7 @@
     "config.layer-updates-per-second.desc": "Wie oft die Ebene aktualisiert werden soll, wenn sie angezeigt wird, als Zahl pro Sekunde. Wird hier ein höherer Wert als der Standardwert eingestellt, kann es zu Verzögerungen kommen. Standardwert {{defaultValue}}.",
 
     "config.layer-shortcut.name": "Schnellzugriff-Taste",
-    "config.layer-shortcut.desc": "The key binding which selects this layer when the overlay is open.",
+    "config.layer-shortcut.desc": "Tastenbelegung, die diese Ebene auswählt, wenn das Overlay geöffnet ist.",
 
 
     /*********

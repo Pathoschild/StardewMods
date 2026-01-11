@@ -19,7 +19,9 @@
     "config.title.connectors": "Увімкнення з'єднання",
     "config.connector.desc": "{{itemName}} з'єднуватиме машини та скрині разом.",
     "config.custom-connectors.name": "Користувацьке з'єднання",
-    "config.custom-connectors.desc": "Точні англійські назви предметів, які з'єднують сусідні машини разом. Ви можете перерахувати кілька предметів комами.", // note: connector names must be English even when playing in other languages
+
+    // TODO
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Поведінка хатинок джунімо",

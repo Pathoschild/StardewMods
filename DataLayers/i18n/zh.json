@@ -6,10 +6,9 @@
     // Note for translators:
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
-    // TODO
-    "auto.name": "Auto",
-    "auto.name-active": "Auto ({{layerName}})",
-    "auto.name-inactive": "Auto (nothing to show)",
+    "auto.name": "自动",
+    "auto.name-active": "自动（{{layerName}}）",
+    "auto.name-inactive": "自动（无内容显示）",
 
     // accessible (可通行性)
     "accessible.name": "可通行性",
@@ -29,11 +28,10 @@
     "bee-houses.range": "花朵范围",
 
     // coverage: bombs
-    // TODO
-    "bombs.name": "Coverage: Bombs",
-    "bombs.dig": "Dig Radius",
-    "bombs.explosion": "Destroy Object Radius",
-    "bombs.shockwave": "Shockwave Radius",
+    "bombs.name": "覆盖范围：炸弹",
+    "bombs.dig": "土地开垦范围",
+    "bombs.explosion": "摧毁物体范围",
+    "bombs.shockwave": "造成伤害范围",
 
     // coverage: Junimo huts (覆盖范围：祝尼魔小屋)
     "junimo-huts.name": "覆盖范围：祝尼魔小屋",
@@ -72,6 +70,14 @@
     "crop-fertilizer.retaining-soil": "保湿土壤",
     "crop-fertilizer.speed-gro": "生长激素",
     "crop-fertilizer.multiple": "多种肥料",
+
+    // fishing depth
+    "fishing-depth.name": "离岸距离（钓鱼区）",
+    "fishing-depth.one": "1 格（0）",
+    "fishing-depth.two": "2 格（1）",
+    "fishing-depth.three": "3 格（2）",
+    "fishing-depth.four": "4 格（3）",
+    "fishing-depth.max": "5 格以上（5）",
 
     // machine processing (机器运行状态)
     "machines.name": "机器运行状态",
@@ -127,9 +133,8 @@
     "config.layer-enabled.name": "启用",
     "config.layer-enabled.desc": "在游戏中启用此图层",
 
-    // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
+    "config.layer-enabled-for-auto-layer.name": "用于“{{autoLayerName}}”图层",
+    "config.layer-enabled-for-auto-layer.desc": "当选择“{{autoLayerName}}”图层时，此图层是否可以自动显示（即使它在其他情况下被禁用）。",
 
     "config.layer-update-on-view-change.name": "视角窗口变化时更新",
     "config.layer-update-on-view-change.desc": "无论“每秒更新次数”设置为多少，当视角窗口发生变化时，立即更新图层信息。",

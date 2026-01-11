@@ -85,7 +85,7 @@
 此补丁将阿比盖尔的肖像替换为您提供的图片（请参阅[模组：NPC 数据](https://zh.stardewvalleywiki.com/模组:NPC数据)）：
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "Load",
@@ -99,7 +99,7 @@
 同一内容包可以有多个 `Load` 补丁，但是对于同一个 `Target`，只有一个补丁会生效：
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "Load",
@@ -118,7 +118,7 @@
 您可以使用用[令牌](../author-guide.md#tokens)，如 `{{TargetWithoutPath}}`，来同时 `Load` 多个文件。
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "Load",
@@ -132,7 +132,7 @@
 您可以用 `Priority` 实现非必需的 `Load`（例如，当另一个模组先于您的内容包 `Load` 了某素材时，您的内容包仍然可以正常运行）。
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "Load",

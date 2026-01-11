@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "Hütte ({{owner}})",
     "default-category.cabin-unowned": "Hütte (Leer)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Keller ({{owner}})",
+    "default-category.cellar-unowned": "Keller #{{cellarNumber}}",
+    "default-category.farmhouse": "Bauernhaus",
+    "default-category.island-farmhouse": "Insel-Bauernhaus",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -38,6 +38,11 @@
     "button.sort-inventory": "Sortiere Inventar",
     "button.save": "Speichern",
     "button.reset": "Zurücksetzen",
+
+    // chest search menu
+    // TODO
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
 
 
     /**********
@@ -129,6 +134,13 @@
 
     "config.hold-to-scroll-chests.name": "Halten, um Truhen zu scrollen",
     "config.hold-to-scroll-chests.desc": "Die Tasten, die es ermöglichen, das Dropdown-Menü der Truhen mit dem Mausrad zu scrollen, wenn sie gehalten werden.",
+
+    // TODO
+    "config.open-search-menu.name": "Open Search Menu",
+    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+
+    "config.search-menu-preview.name": "Search Menu Preview Chest",
+    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
 
 
     /*********

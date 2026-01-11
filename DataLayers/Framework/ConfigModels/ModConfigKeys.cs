@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
-namespace Pathoschild.Stardew.DataLayers.Framework;
+namespace Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 
 /// <summary>A set of raw key bindings.</summary>
 internal class ModConfigKeys

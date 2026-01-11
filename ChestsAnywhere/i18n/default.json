@@ -39,6 +39,10 @@
     "button.save": "save",
     "button.reset": "reset",
 
+    // chest search menu
+    "search-box.chest-name": "Search Chest Name:",
+    "search-box.item-name": "Search Items:",
+
 
     /**********
     ** Errors
@@ -129,6 +133,12 @@
 
     "config.hold-to-scroll-chests.name": "Hold to scroll chests",
     "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+
+    "config.open-search-menu.name": "Open Search Menu",
+    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+
+    "config.search-menu-preview.name": "Search Menu Preview Chest",
+    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
 
 
     /*********

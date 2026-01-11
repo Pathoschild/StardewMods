@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "Croissance rapide",
     "crop-fertilizer.multiple": "Types d'engrais multiples",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Traitement des Machines",
     "machines.empty": "Vide",

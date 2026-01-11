@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "ปุ๋ยเร่งโต",
     "crop-fertilizer.multiple": "มีปุ๋ยรวมกันหลายชนิด",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "เครื่องจักรกำลังทำงานอยู่มั้ย",
     "machines.empty": "ว่างงาน",

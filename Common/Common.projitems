@@ -57,9 +57,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SpaceCore\ISpaceCoreApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SpaceCore\SpaceCoreIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\StardewAccess\IStardewAccessApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\StardewAccess\StardewAccessIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\ITrainStationApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\ITrainStationStopModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\TrainStation\TrainStationIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\UltimateFertilizer\UltimateFertilizerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\ItemRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\SearchableItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ListExtensions.cs" />

@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "グングンノビール",
     "crop-fertilizer.multiple": "複数の肥料",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "加工設備",
     "machines.empty": "空",

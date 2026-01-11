@@ -19,7 +19,9 @@
     "config.title.connectors": "Đầu nối",
     "config.connector.desc": "Liệu {{itemName}} có liên kết máy và rương với nhau không.",
     "config.custom-connectors.name": "Đầu nối tùy chỉnh",
-    "config.custom-connectors.desc": "Phải là tên tiếng anh cho các mục kết nối các máy liền kề với nhau. Bạn có thể liệt kê nhiều mục bằng dấu phẩy.", // note: connector names must be English even when playing in other languages
+
+    // TODO
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Hành vi của lều Junimo",

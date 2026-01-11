@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -34,6 +34,7 @@
     "generic.show-x-results": "mostra {{count}} risultati",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
@@ -68,6 +69,9 @@
     "internal-id": "ID Interno",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -172,6 +176,19 @@
     "context-tag.egg": "qualsiasi uovo",
     "context-tag.large-egg": "qualsiasi uovo grande",
     "context-tag.preserved-item": "{{name}} conservato",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********
@@ -711,30 +728,40 @@
     /*********
     ** Data mining fields
     *********/
+    "data-mining.name": "Dati grezzi",
+    "data-mining.name.map-tile": "Dati grezzi (tassello mappa)",
+    "data-mining.name.map-location": "Dati grezzi (luogo)",
+
+    "data-mining.section-pinned": "In evidenza", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
     // TODO
-    "data-mining.name": "Raw data",
-    "data-mining.name.map-tile": "Raw data (map tile)",
-    "data-mining.name.map-location": "Raw data (location)",
+    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
+    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
+    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
+    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
 
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
-
-    /*********
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
-    // TODO
-    "config.title.appearance": "Appearance",
+    "config.title.appearance": "Aspetto",
 
-    "config.theme.name": "Visual theme",
-    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+    "config.theme.name": "Tema visivo",
+    "config.theme.desc": "L'aspetto da applicare al menu di ricerca e lookup.",
 
-    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Parchment": "Pergamena",
     "config.theme.values.Joja": "Joja",
-    "config.theme.values.MenuBox_Border": "Menu box (border)",
-    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
-    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
-    "config.theme.values.Plain": "Plain",
+    "config.theme.values.MenuBox_Border": "Casella menu (bordatura)",
+    "config.theme.values.MenuBox_Inset": "Casella menu (inserto)",
+    "config.theme.values.MenuBox_Raised": "Casella menu (in rilievo)",
+    "config.theme.values.Plain": "Semplice",
 
     "config.force-full-screen.name": "Forza schermo intero",
     "config.force-full-screen.desc": "Scegli se il menu deve essere sempre a tutto schermo, invece che centrato nella finestra. Questa opzione è utile soprattutto quando si visualizzano i campi di data mining.",
@@ -817,9 +844,9 @@
     "config.toggle-debug.desc": "I tasti che attivano la visualizzazione delle informazioni di debug.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "Lookup Anything",
     "icon.toggle-search.desc": "Attiva/disattiva ricerca di Lookup Anything"
 }

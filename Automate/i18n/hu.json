@@ -19,7 +19,9 @@
     "config.title.connectors": "Engedélyezett csatlakozók",
     "config.connector.desc": "A(z) {{itemName}} összekapcsolja a gépeket és a ládákat.",
     "config.custom-connectors.name": "Egyedi csatlakozók",
-    "config.custom-connectors.desc": "A szomszédos gépeket összekötő elemek pontos angol neve. Több elemet is felsorolhatsz vesszővel elválasztva.", // Megjegyzés: A csatlakozók neveinek angolnak kell lennie, még akkor is, ha más nyelvet használsz.
+
+    // TODO
+    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options (Junimo kunyhó beállítások)
     "config.title.junimo-huts": "Junimo kunyhó viselkedés",

@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations (通用翻译)
-    *********/
+    *************************************************/
     // language info (语言信息)
     "generic.list-separator": "、", // text between listed values (like ", " in "A, B, C") (所列数值之间的文本 (像 ", " in "A, B, C"))
     "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed, even if there's no space (如果需要,我们可以在字符之后换行文本,即使没有空格)
@@ -34,6 +34,7 @@
     "generic.show-x-results": "显示 {{count}} 个结果",
 
     // types (类别)
+    "type.achievement": "Achievement", // TODO
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
@@ -68,6 +69,9 @@
     "internal-id": "内置ID",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations (数据翻译)
     *********/
@@ -175,6 +179,19 @@
 
 
     /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+
+
+    /*********
     ** Animal lookups (查询动物)
     *********/
     // labels (标签)
@@ -185,7 +202,7 @@
     "animal.produce-ready": "动物制品",
     "animal.growth": "生长",
     "animal.sells-for": "出售",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "金色动物饼干", // also used for fish ponds 
 
     // values (数值)
     "animal.complaints.hungry": "昨天没有喂食",
@@ -194,8 +211,8 @@
     "animal.complaints.no-heater": "冬天没有暖气",
     "animal.complaints.not-petted": "今天还没有被爱抚",
     "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
-    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
-    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
+    "animal.golden-cracker.none": "未使用。使用可使其产出双倍产品。",
+    "animal.golden-cracker.applied": "已使用。将产出双倍产品。",
 
 
     /*********
@@ -359,7 +376,7 @@
     "item.needed-for.gourmet-chef": "美食大厨成就（烹饪{{recipes}}）",
     "item.needed-for.craft-master": "制造大师成就（制造{{recipes}}）",
     "item.needed-for.quests": "当前任务（{{quests}}）",
-    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
+    "item.needed-for.trash-bear": "垃圾清理熊（交付一个）",
     "item.unknown-recipes": "{{count}}个未知配方",
     "item.sells-to.shipping-box": "出货箱",
     "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
@@ -711,33 +728,43 @@
     /*********
     ** Data mining fields
     *********/
-    // TODO
-    "data-mining.name": "Raw data",
-    "data-mining.name.map-tile": "Raw data (map tile)",
-    "data-mining.name.map-location": "Raw data (location)",
+    "data-mining.name": "原始数据",
+    "data-mining.name.map-tile": "原始数据（地图土块）",
+    "data-mining.name.map-location": "原始数据（位置）",
 
+    // TODO
     "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
+    "search-menu.screen-reader.instructions": "Lookup Anything 搜索菜单。搜索框已选中。输入文本以进行搜索。",
+    "search-menu.screen-reader.search-results": "搜索框。已找到关于 “{{search}}” 的 {{count}} 个结果。向下导航以查看结果。",
+    "search-menu.screen-reader.search-no-results": "搜索框。未找到任何关于 “{{search}}” 的结果。",
+    "search-menu.screen-reader.search-empty": "搜索框。当前为空。",
+    "search-menu.screen-reader.result": "{{name}}（{{type}}）。",
+
+
+    /*************************************************
     ** Generic Mod Config Menu UI (通用模组管理菜单界面)
-    *********/
+    *************************************************/
     // appearance
-    // TODO
-    "config.title.appearance": "Appearance",
+    "config.title.appearance": "外观",
 
-    "config.theme.name": "Visual theme",
-    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+    "config.theme.name": "视觉样式",
+    "config.theme.desc": "物品查询与搜索菜单的视觉样式。",
 
-    "config.theme.values.Parchment": "Parchment",
+    "config.theme.values.Parchment": "羊皮纸",
     "config.theme.values.Joja": "Joja",
-    "config.theme.values.MenuBox_Border": "Menu box (border)",
-    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
-    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
-    "config.theme.values.Plain": "Plain",
+    "config.theme.values.MenuBox_Border": "游戏菜单样式（带边框）",
+    "config.theme.values.MenuBox_Inset": "游戏菜单样式（窄边框）",
+    "config.theme.values.MenuBox_Raised": "游戏菜单样式（无边框）",
+    "config.theme.values.Plain": "纯色背景",
 
     "config.force-full-screen.name": "强制全屏",
-    "config.force-full-screen.desc": "是否全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
+    "config.force-full-screen.desc": "是否强制使用全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
 
     // progression mode (进度模式)
     "config.title.progression": "进度模式",
@@ -817,9 +844,9 @@
     "config.toggle-debug.desc": "自定义显示或隐藏调试信息快捷键",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon (图标框架模组显示的图标)
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "查询一切",
     "icon.toggle-search.desc": "切换查询搜索任意内容"
 }

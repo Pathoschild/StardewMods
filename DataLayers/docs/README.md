@@ -80,10 +80,18 @@ change.
 Shows which tiles are close enough to water for paddy crops to get auto-watered and bonus growth.
 > ![](screenshots/crops-paddy-water.png)
 
+### Fishing Depth
+Shows the [fishing depth](https://stardewvalleywiki.com/Fishing#Distance_from_Land) of each water
+tile, to help with fishing strategy.
+> ![](screenshots/fishing-depth.png)
+
 ### Machine processing
-Shows whether your machines are empty, processing, or finished. (You need to install
-[Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
-work for machines that aren't being automated too.)
+Shows whether your machines are empty, processing, or finished.
+
+When [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) is installed, this includes all
+non-standard machine types it supports (e.g. buildings, bushes, trees, machines added via Producer
+Framework Mod, etc).
+
 > ![](screenshots/machines.png)
 
 ### Tillable
@@ -92,7 +100,7 @@ Shows where you can till dirt with your hoe. Useful for planning crop layouts.
 
 ### Grid
 The grid layer shows [tile borders](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Tiles)
-useful for planning layouts, calculating fishing distance, etc:
+useful for planning layouts, etc:
 > ![](screenshots/grid-layer.png)
 
 You can optionally [edit the settings](#configure) to enable the grid for all layers instead:

@@ -5,6 +5,7 @@ using Pathoschild.Stardew.Common.Integrations.LineSprinklers;
 using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
+using Pathoschild.Stardew.Common.Integrations.UltimateFertilizer;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataLayers.Framework;
@@ -43,6 +44,9 @@ internal class ModIntegrations
     /// <summary>Handles access to the Simple Sprinkler mod.</summary>
     public SimpleSprinklerIntegration SimpleSprinkler { get; }
 
+    /// <summary>Handles access to the Ultimate Fertilizer mod.</summary>
+    public UltimateFertilizerIntegration UltimateFertilizer { get; }
+
 
     /*********
     ** Public methods
@@ -62,12 +66,6 @@ internal class ModIntegrations
         this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
         this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
         this.SimpleSprinkler = new SimpleSprinklerIntegration(modRegistry, monitor);
-    }
-
-    /// <summary>Get whether a mod is installed.</summary>
-    /// <param name="id">The unique mod ID to check.</param>
-    public bool IsModInstalled(string id)
-    {
-        return this.ModRegistry.IsLoaded(id);
+        this.UltimateFertilizer = new UltimateFertilizerIntegration(modRegistry, monitor);
     }
 }

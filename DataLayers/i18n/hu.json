@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "Gyorsnövesztő",
     "crop-fertilizer.multiple": "Többféle műtrágya",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Gépi feldolgozás",
     "machines.empty": "Üres",

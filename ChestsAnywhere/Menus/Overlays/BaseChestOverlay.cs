@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.Common.Utilities;
@@ -155,6 +156,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /*********
     ** Public methods
     *********/
+    /// <summary>Open the search menu.</summary>
+    private void ShowChestSearch()
+    {
+        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys);
+    }
+
     /// <summary>Sort the player's inventory.</summary>
     public void SortInventory()
     {
@@ -353,6 +360,8 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     if (canNavigate)
                         this.Exit();
                 }
+                else if (keys.OpenSearchMenu.JustPressed() && canNavigate)
+                    this.ShowChestSearch();
                 else if (keys.PrevChest.JustPressed() && canNavigate)
                     this.SelectPreviousChest();
                 else if (keys.NextChest.JustPressed() && canNavigate)

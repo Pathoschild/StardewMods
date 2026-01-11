@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "Baraka ({{owner}})",
     "default-category.cabin-unowned": "Baraka (boş)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Kiler ({{owner}})",
+    "default-category.cellar-unowned": "Kiler #{{cellarNumber}}",
+    "default-category.farmhouse": "Çiftlik Evi",
+    "default-category.island-farmhouse": "Ada Evi",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -38,6 +38,10 @@
     "button.sort-inventory": "envanteri sırala",
     "button.save": "kaydet",
     "button.reset": "sıfırla",
+
+    // chest search menu
+    "search-box.chest-name": "Sandık İsmi Ara:",
+    "search-box.item-name": "İtem ara:",
 
 
     /**********
@@ -109,9 +113,8 @@
     "config.edit-chest.name": "Sandığı düzenle",
     "config.edit-chest.desc": "Mevcut sandık için seçenekleri düzenleyen tuşlar.",
 
-    // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "Envanterdeki Nesneleri Sırala",
+    "config.sort-items.desc": "Menü açıkken oyuncunun envanterindeki nesneleri sıralayan tuşlar",
 
     "config.navigate-prev-chest.name": "Gezin: önceki sandık",
     "config.navigate-prev-chest.desc": "Menü açıkken bir önceki sandığa giden tuşlar.",
@@ -130,6 +133,13 @@
 
     "config.hold-to-scroll-chests.name": "Sandıkları kaydırmak için basılı tutun",
     "config.hold-to-scroll-chests.desc": "Basılı tutulduğunda, fare kaydırma tekerleği ile sandıkların aşağı doğru kaydırılmasını sağlayan tuşlar.",
+
+    "config.open-search-menu.name": "Arama menüsünü aç",
+    "config.open-search-menu.desc": " Mevcut sandık görüntülenirken, bütün sandıklar için arama menüsünü açan tuşlar.",
+
+
+    "config.search-menu-preview.name": "Arama menüsü önizlemesi",
+    "config.search-menu-preview.desc": "Arama menüsündeyken, fareyle üzerine gelinen sandığın içeriğinin önizleme araç ipucunu göstermek için basılı tutulacak tuşlar.",
 
 
     /*********

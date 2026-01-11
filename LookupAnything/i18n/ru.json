@@ -1,7 +1,7 @@
 ﻿{
-    /*********
+    /*************************************************
     ** Generic translations
-    *********/
+    *************************************************/
     // language info
     "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
     "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
@@ -34,6 +34,7 @@
     "generic.show-x-results": "Показать {{count}} результатов",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Постройка",
     "type.bush": "Куст",
     "type.fruit-tree": "Фруктовое дерево",
@@ -68,6 +69,9 @@
     "internal-id": "Внутренний идентификатор",
 
 
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
     /*********
     ** Data translations
     *********/
@@ -172,6 +176,19 @@
     "context-tag.egg": "любое яйцо",
     "context-tag.large-egg": "любое большое яйцо",
     "context-tag.preserved-item": "сохраненный {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********
@@ -719,9 +736,21 @@
     "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
-    /*********
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
+    // TODO
+    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
+    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
+    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
+    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
+
+
+    /*************************************************
     ** Generic Mod Config Menu UI
-    *********/
+    *************************************************/
     // appearance
     // TODO
     "config.title.appearance": "Appearance",
@@ -817,9 +846,9 @@
     "config.toggle-debug.desc": "Клавиши, переключающие отображение отладочной информации.",
 
 
-    /*********
+    /*************************************************
     ** Iconic Framework icon
-    *********/
+    *************************************************/
     "icon.toggle-search.name": "Lookup Anything",
     "icon.toggle-search.desc": "Переключить поиск Lookup Anything"
 }

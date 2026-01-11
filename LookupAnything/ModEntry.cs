@@ -302,7 +302,7 @@ internal class ModEntry : Mod
             return;
 
         this.PushMenu(
-            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, this.Theme, scroll: this.Config.ScrollAmount)
+            new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, this.Theme, scroll: this.Config.ScrollAmount, this.GameHelper.StardewAccess)
         );
     }
 

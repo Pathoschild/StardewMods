@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -94,5 +98,19 @@ internal class StorageFurnitureContainer : IContainer
     public void SaveData()
     {
         this.Data.ToModData(this.Furniture.modData);
+    }
+
+    /// <inheritdoc />
+    public bool TryGetIcon([NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, out float scale)
+    {
+        ParsedItemData parsedItemData = ItemRegistry.GetData(this.Furniture.QualifiedItemId);
+        texture = parsedItemData.GetTexture();
+        sourceRect = this.Furniture.sourceRect.Value;
+
+        scale = Game1.pixelZoom * (32f / Math.Max(sourceRect.Height, sourceRect.Width));
+        if (scale > Game1.pixelZoom)
+            scale = Game1.pixelZoom;
+
+        return true;
     }
 }

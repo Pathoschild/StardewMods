@@ -13,14 +13,17 @@ internal class SearchResultComponent : ClickableComponent
     /*********
     ** Accessors
     *********/
+    /// <summary>The fixed height for a search result.</summary>
+    public const int FixedHeight = 70;
+
     /// <summary>The subject to display.</summary>
     public ISubject Subject { get; }
 
     /// <summary>The search result's index in the list.</summary>
     public int Index { get; }
 
-    /// <summary>The fixed height for a search result.</summary>
-    public const int FixedHeight = 70;
+    /// <summary>The display text for the result.</summary>
+    public string DisplayText { get; }
 
 
     /*********
@@ -29,11 +32,17 @@ internal class SearchResultComponent : ClickableComponent
     /// <summary>Construct an instance.</summary>
     /// <param name="subject">The subject to display.</param>
     /// <param name="index">The search result's index in the list.</param>
-    public SearchResultComponent(ISubject subject, int index)
+    /// <param name="componentId">The component ID for controller navigation.</param>
+    public SearchResultComponent(ISubject subject, int index, int componentId)
         : base(Rectangle.Empty, subject.Name)
     {
         this.Subject = subject;
         this.Index = index;
+        this.DisplayText = $"{this.Subject.Name} ({this.Subject.Type})";
+
+        this.myID = componentId;
+        this.upNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
+        this.downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
     }
 
     /// <summary>Draw the search result to the screen.</summary>
@@ -56,7 +65,7 @@ internal class SearchResultComponent : ClickableComponent
         if (highlight)
             spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, this.bounds.Height), Color.Beige);
         spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, borderWidth), Color.Black); // border
-        spriteBatch.DrawTextBlock(Game1.smallFont, $"{this.Subject.Name} ({this.Subject.Type})", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
+        spriteBatch.DrawTextBlock(Game1.smallFont, this.DisplayText, new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
         this.Subject.DrawPortrait(spriteBatch, position, new Vector2(iconSize)); // icon
 
         // return size

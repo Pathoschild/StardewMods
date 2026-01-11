@@ -24,7 +24,7 @@
     /*********
     ** Shop dialogues (Diálogos de tiendas)
     *********/
-    "food-court.dialogue.1": "¡Consigue tu comida aquí! En su mayoría no está elanorada con gusanos.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.1": "¡Consigue tu comida aquí! En su mayoría no está elaborada con gusanos.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
     "food-court.dialogue.2": "Precios más bajos garantizados en el patio de comida.", // note for translators: this is a joke, since it's the only food shop in the food court.
     "food-court.dialogue.3": "¡La última inspección de seguridad alimentaria la pasamos, en su mayoría!",
     "food-court.dialogue.4": "Oh, un cliente. ¿Qué deseas?",
@@ -56,14 +56,14 @@
     "books.geography.5": "'Stardew Valley y otros lugares pintorescos'.",
     "books.geography.6": "'Flores de la República Ferngill' por la Srta. Sandy.",
 
-    "books.history.1": "'Enciclopedia del Smoluanu: Cultura, Historia, Estereotipos y Especulaciones'.",
+    "books.history.1": "'Enciclopedia del Smoluanu: Cultura, Historia, Estereotipos y Especulación'.",
     "books.history.2": "'Introducción a lo Arcano' por M. Rasmodius.",
     "books.history.3": "'Invasores y Sombras: una Historia de las Guerras Elementales'.",
     "books.history.4": "'Habitantes de la Tundra Más Allá del Mar Congelado'.",
     "books.history.5": "'Imperio y República': un análisis profundo del conflicto entre las naciones Ferngill y Gotoro.",
     "books.history.6": "'Un Catálogo Exhaustivo de la Historia de Rarecrow' por La Sociedad Z.C. Rarecrow.",
 
-    "books.promotional.1": "'El Increíble Pueblo Pelicano', un folleto promocional del Alcalde Lewis.",
+    "books.promotional.1": "'El Increíble Pueblo Pelícano', un folleto promocional del Alcalde Lewis.",
 
     "books.religion.1": "'Encontrando a Yoba', un folleto anónimo de Stardew Valley.",
 
@@ -95,9 +95,8 @@
     "location.cola-machine.3": "(De alguna manera sientes que la máquina de refrescos quiere ayudarte.)",
 
     // employee lounge
-    // TODO
-    "location.employee-lockers": "The employee lockers aren't locked, but you feel something watching you.",
-    "location.employee-fridge": "The employees' lunches. It'd be rude to partake.",
+    "location.employee-lockers": "Los casilleros de los empleados no están cerrados, pero sientes que algo te observa.",
+    "location.employee-fridge": "Los almuerzos de los empleados. Sería grosero tomar uno de ellos.",
 
 
     /*********
@@ -129,7 +128,7 @@
     "tourist.flamingo.1": "...",
     "tourist.flamingo.2": "...?",
     "tourist.flamingo.3": "*¡Honk!*",
-    "tourist.flamingo.4": "(Ella te ignora estudiadamente.)",
+    "tourist.flamingo.4": "(Te ignora deliberadamente.)",
 
     "tourist.shrouded-figure": "Podría enviarte a casa, por un precio.#Pero puedes tomar el autobús, también.",
 
@@ -141,7 +140,7 @@
     "tourist.cashier-girl.3": "Hay tantos lugares a los que podemos llegar gratis. ¡Voy a visitarlos todos!",
 
     "tourist.governor.1": "Es muy extraño. Nadie sabe quién dirige esta estación.#Todos los permisos estaban presentados, pero nadie recuerda que eso haya sucedido.#Bueno, no es lo único extraño en estos lugares.",
-    "tourist.governor.2": "Qué agradable finalmente viajar en tren por mi mismo. La próxima vez debería traer a mi señora.",
+    "tourist.governor.2": "Qué agradable finalmente viajar en tren por mí mismo. La próxima vez debería traer a mi señora.",
 
     "tourist.lupini.1": "Saludos, ${joven^señorita^persona}$. ¿Has visto mis últimas pinturas?", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
     "tourist.lupini.2": "Voy a abrir una nueva galería. Puedes acompañarme si lo deseas.",
@@ -158,41 +157,39 @@
     "tourist.blackgull-pirate.1": "¡Que el viento me lleve! ¿Dónde están los demás?",
     "tourist.blackgull-pirate.2": "¡Nos estamos subiendo en cualquier minuto...",
 
-    // TODO
-    "tourist.bag-dog.1": "(She's on an adventure.)",
-    "tourist.bag-dog.2": "(She's just taking a break in her portable bed bag.)",
+    "tourist.bag-dog.1": "(Ella está en una aventura.)",
+    "tourist.bag-dog.2": "(Está tomando un descanso en su bolsa-cama portátil.)",
 
 
     /*********
     ** Furniture
     *********/
-    // TODO
     // calendars
-    "furniture.calendar-city.name": "City Calendar",
-    "furniture.calendar-nature.name": "Nature Calendar",
+    "furniture.calendar-city.name": "Calendario urbano",
+    "furniture.calendar-nature.name": "Calendario naturaleza",
 
     // wall decor
-    "furniture.clock.name": "Clock",
-    "furniture.transit-map.name": "Transit Map",
-    "furniture.travel-pictures.name": "Travel Pictures",
-    "furniture.welcome-sign.name": "Welcome Sign",
+    "furniture.clock.name": "Reloj",
+    "furniture.transit-map.name": "Mapa de transporte",
+    "furniture.travel-pictures.name": "Fotos de viajes",
+    "furniture.welcome-sign.name": "Letrero de bienvenida",
 
     // rugs
-    "furniture.posh-rug.name": "Posh Rug",
+    "furniture.posh-rug.name": "Alfombra elegante",
 
     // general decor
-    "furniture.board-sign.name": "Board Sign",
-    "furniture.postbox.name": "Postbox",
-    "furniture.suitcase-blue.name": "Blue Suitcase",
-    "furniture.suitcase-pink.name": "Pink Suitcase",
-    "furniture.trash-can.name": "Trash Can",
-    "furniture.trash-can-messy.name": "Messy Trash Can",
+    "furniture.board-sign.name": "Letrero de tablón",
+    "furniture.postbox.name": "Buzón de correo",
+    "furniture.suitcase-blue.name": "Maleta azul",
+    "furniture.suitcase-pink.name": "Maleta rosa",
+    "furniture.trash-can.name": "Contenedor de basura",
+    "furniture.trash-can-messy.name": "Contenedor de basura sucio",
 
 
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.require-pam-bus.name": "Require Pam's bus",
-    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
+    "config.require-pam-bus.name": "Requerir el autobús de Pam",
+    "config.require-pam-bus.desc": "Activar si es necesario reparar el autobús de Pam antes de partir de la parada de autobús de Stardew Valley. Si no es necesario, puedes tomar el autobús para la Estación Central (pero no el desierto) antes de que sea reparado."
+
 }

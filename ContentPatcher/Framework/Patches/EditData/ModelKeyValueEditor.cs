@@ -79,6 +79,32 @@ internal class ModelKeyValueEditor : BaseDataEditor
     }
 
     /// <inheritdoc />
+    public override bool TryInitializeEntry(object key)
+    {
+        // get entry type
+        Type? type = this.GetEntryType(key);
+        if (type is null)
+            return false;
+
+        // get initial value
+        object? value;
+        try
+        {
+            value = Activator.CreateInstance(type);
+            if (value is null)
+                return false;
+        }
+        catch
+        {
+            return false;
+        }
+
+        // set
+        this.SetEntry(key, value);
+        return true;
+    }
+
+    /// <inheritdoc />
     public override void SetEntry(object key, object? value)
     {
         string name = (string)key;

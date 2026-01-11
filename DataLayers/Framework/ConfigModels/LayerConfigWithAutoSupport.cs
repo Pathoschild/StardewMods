@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.DataLayers.Framework;
+namespace Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 
 /// <summary>Configures the settings for a data layer which can be shown by the 'auto' layer.</summary>
 internal class LayerConfigWithAutoSupport : LayerConfig

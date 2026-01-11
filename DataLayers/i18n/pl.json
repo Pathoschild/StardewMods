@@ -73,6 +73,15 @@
     "crop-fertilizer.speed-gro": "Speed-Gro",
     "crop-fertilizer.multiple": "Wiele Rodzajów Nawozów",
 
+    // fishing depth
+    // TODO
+    "fishing-depth.name": "Fishing Depth",
+    "fishing-depth.one": "Next to shore",
+    "fishing-depth.two": "Two",
+    "fishing-depth.three": "Three",
+    "fishing-depth.four": "Four",
+    "fishing-depth.max": "Max depth",
+
     // machine processing
     "machines.name": "Produkcja Maszynowa",
     "machines.empty": "Pusto",

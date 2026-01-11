@@ -116,7 +116,7 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
             )
             .AddDropdown(
                 name: I18n.Config_ToolUseSoundsLimit_Name,
-                tooltip: () => I18n.Config_ToolUseSoundsLimit_Tooltip(defaultOption: I18n.Config_ToolUseSoundsLimit_Value_OncePerTick(), unlimitedOption: I18n.Config_ToolUseSoundsLimit_Value_Unlimited()),
+                tooltip: () => I18n.Config_ToolUseSoundsLimit_Tooltip(defaultOption: I18n.Config_ToolUseSoundsLimit_Value_OncePerTick(), unlimitedOption: I18n.Config_ToolUseSoundsLimit_Value_Unlimited(), distanceOption: I18n.Config_Distance_Name()),
                 formatAllowedValue: value => I18n.GetByKey($"config.tool-use-sounds-limit.value.{value}"),
                 allowedValues: Enum.GetNames<ToolUseSoundLimit>(),
                 get: config => config.ToolUseSoundLimit.ToString(),
