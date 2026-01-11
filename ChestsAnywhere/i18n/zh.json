@@ -40,9 +40,8 @@
     "button.reset": "重置",
 
     // chest search menu
-    // TODO
-    "search-box.chest-name": "Search Chest Name:",
-    "search-box.item-name": "Search Items:",
+    "search-box.chest-name": "搜索箱子名称：",
+    "search-box.item-name": "搜索物品：",
 
 
     /**********
@@ -135,12 +134,11 @@
     "config.hold-to-scroll-chests.name": "按住以滚动箱子",
     "config.hold-to-scroll-chests.desc": "按住此键时，可用鼠标滚轮滚动箱子的下拉菜单。",
 
-    // TODO
-    "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+    "config.open-search-menu.name": "打开搜索菜单",
+    "config.open-search-menu.desc": "在查看箱子界面时，用于打开所有箱子搜索菜单的快捷键键。",
 
-    "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+    "config.search-menu-preview.name": "搜索菜单预览箱子",
+    "config.search-menu-preview.desc": "在查看搜索界面时，用于显示鼠标悬停处箱子内容预览提示的按键。",
 
 
     /*********
