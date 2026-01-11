@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to JanUwU42 (updated German), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
+* Improved translations. Thanks to JanUwU42 (updated German), MakinDay (updated Italian), mehmetgorkemarslan (updated Turkish), and SummerFleur2997 (updated Chinese)!
 
 ## 1.16.0
 Released 26 October 2025 for SMAPI 4.2.0 or later.

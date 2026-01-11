@@ -97,6 +97,8 @@
 
     "config.reduce-distance-key.name": "减少范围",
     "config.reduce-distance-key.tooltip": "临时减少拖拉机周围工具应用的距离一格，直到达到推荐的最小值 1 格。此设置将在重新加载存档后失效。",
+
+
     /****
     ** Trees & bushes
     ****/

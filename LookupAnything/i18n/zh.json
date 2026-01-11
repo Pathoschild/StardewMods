@@ -718,7 +718,8 @@
     "data-mining.name.map-tile": "原始数据（地图土块）",
     "data-mining.name.map-location": "原始数据（位置）",
 
-    "data-mining.section-pinned": "Pinned", // TODO 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+    // TODO
+    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*************************************************
@@ -730,6 +731,7 @@
     "search-menu.screen-reader.search-no-results": "搜索框。未找到任何关于 “{{search}}” 的结果。",
     "search-menu.screen-reader.search-empty": "搜索框。当前为空。",
     "search-menu.screen-reader.result": "{{name}}（{{type}}）。",
+
 
     /*************************************************
     ** Generic Mod Config Menu UI (通用模组管理菜单界面)
