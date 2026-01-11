@@ -73,12 +73,11 @@
     "config.tractor-volume.name": "引擎音效大小",
     "config.tractor-volume.tooltip": "拖拉机声音效果的大小。默认值：{{defaultValue}}%。",
 
-    // TODO
-    "config.tool-use-sounds-limit.name": "Tool Use Sounds",
-    "config.tool-use-sounds-limit.tooltip": "When applying a tool to many tiles around the tractor, which tool sounds should be played. The default option is '{{defaultOption}}'. Note that '{{unlimitedOption}}' may cause errors with larger ranges.",
-    "config.tool-use-sounds-limit.value.Default": "default",
-    "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied",
-    "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)",
+    "config.tool-use-sounds-limit.name": "使用工具时播放音效",
+    "config.tool-use-sounds-limit.tooltip": "当使用拖拉机对周围的地块使用工具时，应播放哪些工具的声音。默认{{defaultOption}}。请注意，“{{unlimitedOption}}”可能会导致较大范围的错误。",
+    "config.tool-use-sounds-limit.value.Default": "默认",
+    "config.tool-use-sounds-limit.value.OncePerTick": "仅播放首次音效",
+    "config.tool-use-sounds-limit.value.Unlimited": "播放所有音效（不推荐）",
 
 
     /****
@@ -93,14 +92,11 @@
     "config.hold-to-activate-key.name": "按住以激活功能",
     "config.hold-to-activate-key.tooltip": "如果有指定键位，只有按住此键时才能激活拖拉机功能。",
 
-    // TODO
-    "config.increase-distance-key.name": "Increase Distance",
-    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+    "config.increase-distance-key.name": "增加范围",
+    "config.increase-distance-key.tooltip": "临时增加拖拉机周围工具应用的距离一格，直到达到推荐的最大值 {{maxRecommendedValue}} 格。此设置将在重新加载存档后失效。",
 
-    "config.reduce-distance-key.name": "Reduce Distance",
-    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
-
-
+    "config.reduce-distance-key.name": "减少范围",
+    "config.reduce-distance-key.tooltip": "临时减少拖拉机周围工具应用的距离一格，直到达到推荐的最小值 1 格。此设置将在重新加载存档后失效。",
     /****
     ** Trees & bushes
     ****/
