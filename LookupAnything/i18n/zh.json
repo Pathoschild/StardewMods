@@ -714,25 +714,22 @@
     /*********
     ** Data mining fields
     *********/
-    // TODO
-    "data-mining.name": "Raw data",
-    "data-mining.name.map-tile": "Raw data (map tile)",
-    "data-mining.name.map-location": "Raw data (location)",
+    "data-mining.name": "原始数据",
+    "data-mining.name.map-tile": "原始数据（地图土块）",
+    "data-mining.name.map-location": "原始数据（位置）",
 
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+    "data-mining.section-pinned": "Pinned", // TODO 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*************************************************
     ** Search UI
     *************************************************/
     // screen reader text
-    // TODO
-    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
-    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
-    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
-    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
-    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
-
+    "search-menu.screen-reader.instructions": "Lookup Anything 搜索菜单。搜索框已选中。输入文本以进行搜索。",
+    "search-menu.screen-reader.search-results": "搜索框。已找到关于 “{{search}}” 的 {{count}} 个结果。向下导航以查看结果。",
+    "search-menu.screen-reader.search-no-results": "搜索框。未找到任何关于 “{{search}}” 的结果。",
+    "search-menu.screen-reader.search-empty": "搜索框。当前为空。",
+    "search-menu.screen-reader.result": "{{name}}（{{type}}）。",
 
     /*************************************************
     ** Generic Mod Config Menu UI (通用模组管理菜单界面)
