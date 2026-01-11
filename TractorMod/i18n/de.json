@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "Die Lautstärke für die Traktor-Soundeffekte. Standard {{defaultValue}}%.",
 
     "config.tool-use-sounds-limit.name": "Geräusche der Werkzeugnutzung",
-    "config.tool-use-sounds-limit.tooltip": "Welche Werkzeuggeräusche beim Anwenden eines Werkzeugs auf viele Felder rund um den Traktor abgespielt werden sollen. Die Standardoption ist '{{defaultOption}}'. Beachte, dass '{{unlimitedOption}}' bei größeren Bereichen zu Fehlern führen kann.",
+    "config.tool-use-sounds-limit.tooltip": "Welche Werkzeuggeräusche beim Anwenden eines Werkzeugs auf viele Felder rund um den Traktor abgespielt werden sollen. Die Standardoption ist '{{defaultOption}}'. Beachte, dass '{{unlimitedOption}}' bei größeren Bereichen zu Fehlern führen kann.", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
     "config.tool-use-sounds-limit.value.Default": "Standard",
     "config.tool-use-sounds-limit.value.OncePerTick": "Erstes bearbeites Feld",
     "config.tool-use-sounds-limit.value.Unlimited": "Jeden Sound abspielen (nicht empfohlen)",

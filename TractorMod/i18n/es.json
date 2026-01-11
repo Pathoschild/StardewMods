@@ -77,7 +77,7 @@
     "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
 
     "config.tool-use-sounds-limit.name": "Tool Use Sounds",
-    "config.tool-use-sounds-limit.tooltip": "When applying a tool to many tiles around the tractor, which tool sounds should be played. The default option is '{{defaultOption}}'. Note that '{{unlimitedOption}}' may cause errors with larger ranges.",
+    "config.tool-use-sounds-limit.tooltip": "When applying a tool to many tiles around the tractor, which tool sounds should be played. The default option is '{{defaultOption}}'. Note that '{{unlimitedOption}}' may cause errors if the '{{distanceOption}}' option is too high, due to playing too many sounds at once.",
     "config.tool-use-sounds-limit.value.Default": "default",
     "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied",
     "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)",

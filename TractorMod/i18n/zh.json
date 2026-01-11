@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "拖拉机声音效果的大小。默认值：{{defaultValue}}%。",
 
     "config.tool-use-sounds-limit.name": "使用工具时播放音效",
-    "config.tool-use-sounds-limit.tooltip": "当使用拖拉机对周围的地块使用工具时，应播放哪些工具的声音。默认{{defaultOption}}。请注意，“{{unlimitedOption}}”可能会导致较大范围的错误。",
+    "config.tool-use-sounds-limit.tooltip": "当使用拖拉机对周围的地块使用工具时，应播放哪些工具的声音。默认{{defaultOption}}。请注意，“{{unlimitedOption}}”可能会导致较大范围的错误。", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
     "config.tool-use-sounds-limit.value.Default": "默认",
     "config.tool-use-sounds-limit.value.OncePerTick": "仅播放首次音效",
     "config.tool-use-sounds-limit.value.Unlimited": "播放所有音效（不推荐）",

@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "Ses efektlerinin ses seviyesi. Varsayılan: {{defaultValue}}%.",
 
     "config.tool-use-sounds-limit.name": "Kullanılan Araçların Sesleri",
-    "config.tool-use-sounds-limit.tooltip": "Traktör birden çok alana kullanılan araçlardan hangisinin sesinin oynatılacağı. Varsayılan seçenek: '{{defaultOption}}'. '{{unlimitedOption}}' seçeneği büyük alanlarda hatalara sebep olabilir.",
+    "config.tool-use-sounds-limit.tooltip": "Traktör birden çok alana kullanılan araçlardan hangisinin sesinin oynatılacağı. Varsayılan seçenek: '{{defaultOption}}'. '{{unlimitedOption}}' seçeneği büyük alanlarda hatalara sebep olabilir.", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
     "config.tool-use-sounds-limit.value.Default": "Varsayılan",
     "config.tool-use-sounds-limit.value.OncePerTick": "Uygulanan ilk kare",
     "config.tool-use-sounds-limit.value.Unlimited": "Tüm sesleri oynat (tavsiye edilmez)",
@@ -94,10 +94,9 @@
 
     "config.increase-distance-key.name": "Mesafeyi Arttır",
     "config.increase-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 arttırır. Bu artış en fazla önerilen maksimum değere kadar ( {{maxRecommendedValue}} ) çıkar. Bu durum oyun kaydından çıkana kadar devam eder.",
-     
+
     "config.reduce-distance-key.name": "Mesafeyi Azalt",
     "config.reduce-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 azaltır. Bu azaltma en az önerilen minimum değere kadar ( 1 ) iner. Bu durum oyun kaydından çıkana kadar devam eder.",
-     
 
 
     /****

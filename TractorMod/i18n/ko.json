@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "트랙터 소리 효과 볼륨. 기본값 {{defaultValue}}%.",
 
     "config.tool-use-sounds-limit.name": "도구 사용 소리",
-    "config.tool-use-sounds-limit.tooltip": "트랙터 주변의 여러 타일에 도구를 사용할 때 어떤 소리를 재생할지 결정합니다. 기본값은 '{{defaultOption}}' 입니다. '{{unlimitedOption}}'을 적용할 경우 도구 사용 범위가 넓을 때 오류가 발생할 수 있습니다.",
+    "config.tool-use-sounds-limit.tooltip": "트랙터 주변의 여러 타일에 도구를 사용할 때 어떤 소리를 재생할지 결정합니다. 기본값은 '{{defaultOption}}' 입니다. '{{unlimitedOption}}'을 적용할 경우 도구 사용 범위가 넓을 때 오류가 발생할 수 있습니다.", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
     "config.tool-use-sounds-limit.value.Default": "기본값",
     "config.tool-use-sounds-limit.value.OncePerTick": "첫 타일만 재생",
     "config.tool-use-sounds-limit.value.Unlimited": "모든 소리 재생(권장하지 않음)",

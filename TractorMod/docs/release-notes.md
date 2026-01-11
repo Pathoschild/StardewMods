@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Reworded the 'Tool Use Sounds' config tooltip for clarity.
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish) and SummerFleur2997 (updated Chinese)!
 
 ## 4.24.2
