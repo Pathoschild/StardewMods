@@ -29,7 +29,7 @@ Content Patcher 拥有一个[令牌系统](author-guide/tokens.md)，它允许�
 1. 在 `manifest.json` 将 Content Patcher 设为[**必要依赖**](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)：
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.8.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.9.0" }
    ]
    ```
 2. 把 [`IContentPatcherAPI`](../../IContentPatcherAPI.cs) 和 [`IManagedTokenString`](../IManagedConditions.cs) 复制到您模组里，然后删除**任何您不需要用到的方法，这主要是为了考虑未来版本的兼容性**。
@@ -52,7 +52,7 @@ Content Patcher 拥有一个[令牌系统](author-guide/tokens.md)，它允许�
    var tokenString = api.ParseTokenString(
       manifest: this.ModManifest,
       rawValue: rawTokenString,
-      formatVersion: new SemanticVersion("2.8.0")
+      formatVersion: new SemanticVersion("2.9.0")
    );
    ```
 3. 从 `Value` 属性中获取解析后的字符串结果，例如：
@@ -66,7 +66,7 @@ Content Patcher 拥有一个[令牌系统](author-guide/tokens.md)，它允许�
 var tokenString = api.ParseTokenString(
    manifest: this.ModManifest,
    rawValue: rawTokenString,
-   formatVersion: new SemanticVersion("2.8.0"),
+   formatVersion: new SemanticVersion("2.9.0"),
    assumeModIds: new[] { "spacechase0.JsonAssets" }
 );
 ```

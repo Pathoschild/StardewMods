@@ -35,7 +35,7 @@ Content Patcher 拥有一个[条件系统](author-guide/tokens.md)。内容包�
 1. 在 `manifest.json` 将 Content Patcher 设为[**必要依赖**](https://zh.stardewvalleywiki.com/模组:制作指南/APIs/Manifest#Dependencies_属性)：
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.8.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "2.9.0" }
    ]
    ```
 2. 把 [`IContentPatcherAPI`](../../IContentPatcherAPI.cs) 和 [`IManagedConditions`](../IManagedConditions.cs) 复制到您模组里，然后删除**任何您不需要用到的方法，这主要是为了考虑未来版本的兼容性**。

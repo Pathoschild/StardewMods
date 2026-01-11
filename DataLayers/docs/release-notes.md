@@ -1,8 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added [_Fishing Depth_ layer](README.md#fishing-depth). (This is also selected by the [_Auto_ layer](README.md#auto) when holding a fishing rod.)
+## 1.22.0
+Released 11 January 2026 for SMAPI 4.1.10 or later.
+
+* Added [_Fishing Depth_ layer](README.md#fishing-depth).  
+  _This is also shown by the Auto layer when holding a fishing rod._
 * The _Crops: Ready to Harvest_ layer now also highlights bushes, trees, and fruit trees which can be harvested.
 * The _Machine Processing_ layer no longer requires Automate (thanks to zombifier!).
 * Fixed support for crops with multiple fertilizers applied via Ultimate Fertilizer.

@@ -9,10 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Added [`PatchMode: Mask`](author-guide/action-editimage.md) to apply transparency masks to images (thanks to 
-PinkSerenity!).
-* Fixed error when a content pack uses `Fields` to edit a field within a null parent field. Content Patcher will now try to initialize the entry if possible, else log a warning.
+## 2.9.0
+Released 11 January 2026 for SMAPI 4.4.0 or later. See [release highlights](https://www.patreon.com/posts/147984075).
+
+* Added [image transparency masks](author-guide/action-editimage.md) to simplify editing sprites (thanks to PinkSerenity!).
+* Added field auto-initialization when using `Fields` to edit a null parent field.
 * Fixed `TextOperations` applied to a missing field or map property sometimes creating an invalid null one, instead of omitting it.
 * Improved [Chinese documentation](zh/README.md) (thanks to SummerFleur2997!).
 

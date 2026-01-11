@@ -102,7 +102,7 @@
 
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -143,7 +143,7 @@
 
 ```js
 {
-    "Format": "2.8.0",
+    "Format": "2.9.0",
     "Changes": [
         {
             "Action": "EditData",

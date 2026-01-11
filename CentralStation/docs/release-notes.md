@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.6.1
+Released 11 January 2026 for SMAPI 4.3.1 or later.
+
 * Fixed visual layering issue with food on tables.
 * Improved translations. Thanks to Aapodot (updated Spanish), EnderFS (added Ukrainian), JanUwU42 (updated German), KrokiKus (added Russian), MakinDay (updated Italian), and mehmetgorkemarslan (updated Turkish)!
 

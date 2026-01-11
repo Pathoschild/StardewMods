@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 2.5.0
+Released 11 January 2026 for SMAPI 4.1.10 or later.
+
 * You can now use [qualified item IDs](https://stardewvalleywiki.com/Modding:Common_data_field_types#Item_ID) in the 'connector names' setting.
 * Fixed API `GetMachineStates` method returning nothing if the location only contains non-automated machines.
 * Improved translations. Thanks to JanUwU42 (updated German) and mehmetgorkemarslan (updated Turkish)!

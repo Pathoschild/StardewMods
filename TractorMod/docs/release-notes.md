@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.24.3
+Released 11 January 2026 for SMAPI 4.1.10 or later.
+
 * Reworded the 'Tool Use Sounds' config tooltip for clarity.
 * Improved translations. Thanks to mehmetgorkemarslan (updated Turkish) and SummerFleur2997 (updated Chinese)!
 
