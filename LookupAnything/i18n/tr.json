@@ -34,6 +34,7 @@
     "generic.show-x-results": "{{count}} sonuçlarını göster",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Bina",
     "type.bush": "Çalı",
     "type.fruit-tree": "Meyve Ağacı",
@@ -175,6 +176,19 @@
     "context-tag.egg": "herhangi bir yumurta",
     "context-tag.large-egg": "herhangi bir büyük yumurta",
     "context-tag.preserved-item": "konservelenmiş {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

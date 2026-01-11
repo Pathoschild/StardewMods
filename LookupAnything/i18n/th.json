@@ -34,6 +34,7 @@
     "generic.show-x-results": "show {{count}} results", // TODO
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "สิ่งก่อสร้าง",
     "type.bush": "พุ่มไม้",
     "type.fruit-tree": "ต้นผลไม้",
@@ -177,6 +178,19 @@
     "context-tag.egg": "any egg",
     "context-tag.large-egg": "any large egg",
     "context-tag.preserved-item": "preserved {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

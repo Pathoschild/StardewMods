@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Achievements;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items;
@@ -59,6 +60,7 @@ internal class TargetFactory : ISubjectRegistry
             new CharacterLookupProvider(reflection, gameHelper, config, codex),
             new ItemLookupProvider(reflection, gameHelper, config, codex),
             new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
+            new AchievementLookupProvider(reflection, gameHelper),
             new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
         ];
     }

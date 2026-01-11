@@ -34,6 +34,7 @@
     "generic.show-x-results": "hiển thị {{count}} kết quả",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Tòa nhà",
     "type.bush": "Bụi cây",
     "type.fruit-tree": "Cây ăn quả",
@@ -176,6 +177,19 @@
     "context-tag.egg": "bất kì trứng nào",
     "context-tag.large-egg": "bất kì trứng lớn nào",
     "context-tag.preserved-item": "{{name}} được bảo quản",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

@@ -34,6 +34,7 @@
     "generic.show-x-results": "Показать {{count}} результатов",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Постройка",
     "type.bush": "Куст",
     "type.fruit-tree": "Фруктовое дерево",
@@ -175,6 +176,19 @@
     "context-tag.egg": "любое яйцо",
     "context-tag.large-egg": "любое большое яйцо",
     "context-tag.preserved-item": "сохраненный {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

@@ -34,6 +34,7 @@
     "generic.show-x-results": "zeige {{count}} Ergebnisse",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Gebäude",
     "type.bush": "Busch",
     "type.fruit-tree": "Obstbaum",
@@ -175,6 +176,19 @@
     "context-tag.egg": "Beliebige Eier",
     "context-tag.large-egg": "Beliebige große Eier",
     "context-tag.preserved-item": "eingemacht {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

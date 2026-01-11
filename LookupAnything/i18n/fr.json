@@ -34,6 +34,7 @@
     "generic.show-x-results": "montrer {{count}} résultats",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Bâtiment",
     "type.bush": "arbuste",
     "type.fruit-tree": "Arbre fruitier",
@@ -177,6 +178,19 @@
     "context-tag.egg": "n’importe quel œuf",
     "context-tag.large-egg": "n’importe quel œuf large",
     "context-tag.preserved-item": "{{name}} séchés",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

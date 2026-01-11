@@ -34,6 +34,7 @@
     "generic.show-x-results": "{{count}}個（詳細確認）",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "建物",
     "type.bush": "茂み",
     "type.fruit-tree": "果樹",
@@ -176,6 +177,19 @@
     "context-tag.egg": "タマゴ（なんでも）",
     "context-tag.large-egg": "大きなタマゴ（なんでも）",
     "context-tag.preserved-item": "{{name}}のもの",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

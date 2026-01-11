@@ -34,6 +34,7 @@
     "generic.show-x-results": "mostra {{count}} risultati",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
@@ -175,6 +176,19 @@
     "context-tag.egg": "qualsiasi uovo",
     "context-tag.large-egg": "qualsiasi uovo grande",
     "context-tag.preserved-item": "{{name}} conservato",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

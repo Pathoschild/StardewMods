@@ -34,6 +34,7 @@
     "generic.show-x-results": "결과 {{count}}개 보기",
 
     // types 유형
+    "type.achievement": "Achievement", // TODO
     "type.building": "건물",
     "type.bush": "덤불",
     "type.fruit-tree": "과일 나무",
@@ -176,6 +177,19 @@
     "context-tag.egg": "알 (아무거나)",
     "context-tag.large-egg": "큰 알 (아무거나)",
     "context-tag.preserved-item": "보존된 {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

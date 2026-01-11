@@ -34,6 +34,7 @@
     "generic.show-x-results": "pokaż {{count}} wyników",
 
     // types
+    "type.achievement": "Achievement", // TODO
     "type.building": "Budowla",
     "type.bush": "Krzak",
     "type.fruit-tree": "Drzewo Owocowe",
@@ -176,6 +177,19 @@
     "context-tag.egg": "każde jajko",
     "context-tag.large-egg": "każde duże jajko",
     "context-tag.preserved-item": "zakonserwowane: {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********

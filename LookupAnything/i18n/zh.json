@@ -34,6 +34,7 @@
     "generic.show-x-results": "显示 {{count}} 个结果",
 
     // types (类别)
+    "type.achievement": "Achievement", // TODO
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
@@ -175,6 +176,19 @@
     "context-tag.egg": "鸡蛋（任意）",
     "context-tag.large-egg": "大鸡蛋（任意）",
     "context-tag.preserved-item": "由{{name}}生产",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // TODO
+    // labels
+    "achievement.unlocked": "Unlocked",
+    "achievement.hat-shop": "Hat shop",
+
+    // values
+    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
+    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
 
 
     /*********
