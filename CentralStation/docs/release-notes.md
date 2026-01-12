@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error entering Central Station in 1.6.1 when it's night or raining.
+
 ## 1.6.1
 Released 11 January 2026 for SMAPI 4.3.1 or later.
 
