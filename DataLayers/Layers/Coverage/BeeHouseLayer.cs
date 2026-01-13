@@ -83,10 +83,7 @@ internal class BeeHouseLayer : BaseLayer, IAutoItemLayer
     /// <inheritdoc />
     public bool AppliesTo(Item? item)
     {
-        return
-            item?.Name == "Bee House"
-            && item is SObject obj
-            && obj.bigCraftable.Value;
+        return item?.QualifiedItemId == "(BC)10"; // Bee House
     }
 
 

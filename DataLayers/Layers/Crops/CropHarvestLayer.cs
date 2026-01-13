@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -61,9 +62,21 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     /// <inheritdoc />
     public bool AppliesTo(Item item)
     {
-        return
-            item is MeleeWeapon tool
-            && tool.isScythe();
+        switch (item)
+        {
+            // scythe
+            case MeleeWeapon tool:
+                return tool.isScythe();
+
+            // seeds
+            case Object when item.HasTypeObject():
+                return
+                    item.ItemId is "MixedFlowerSeeds" or Crop.mixedSeedsId
+                    || Game1.cropData.ContainsKey(item.ItemId);
+
+            default:
+                return false;
+        }
     }
 
 
