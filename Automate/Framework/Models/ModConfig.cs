@@ -39,6 +39,10 @@ internal class ModConfig
     /// <remarks>The <see cref="JunimoHutBehavior.AutoDetect"/> option is equivalent to <see cref="JunimoHutBehavior.Ignore"/> (if Better Junimos is installed), else <see cref="JunimoHutBehavior.MoveIntoChests"/>.</remarks>
     public JunimoHutBehavior JunimoHutBehaviorForSeeds { get; set; } = JunimoHutBehavior.AutoDetect;
 
+    /// <summary>How Junimo huts should automate specific items.</summary>
+    /// <remarks>Each key is a qualified item ID. If an item matches an entry with any value except <see cref="JunimoHutBehavior.AutoDetect"/>, this overrides the by-category fields like <see cref="JunimoHutBehaviorForSeeds"/>.</remarks>
+    public Dictionary<string, JunimoHutBehavior> JunimoHutBehaviors { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>Whether to collect moss on trees.</summary>
     public bool CollectTreeMoss { get; set; } = true;
 
@@ -74,10 +78,12 @@ internal class ModConfig
         this.Connectors = this.Connectors.ToNonNullCaseInsensitive();
         this.Connectors.RemoveWhere(string.IsNullOrWhiteSpace);
 
-        this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
-        this.MachineOverrides.RemoveWhere(pair => pair.Value is null);
+        this.JunimoHutBehaviors = this.JunimoHutBehaviors.ToNonNullCaseInsensitive();
 
         this.ChestOverrides = this.ChestOverrides.ToNonNullCaseInsensitive();
         this.ChestOverrides.RemoveWhere(pair => pair.Value is null);
+
+        this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
+        this.MachineOverrides.RemoveWhere(pair => pair.Value is null);
     }
 }

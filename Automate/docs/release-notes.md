@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now configure Junimo hut behavior for specific item IDs.
 * Fixed config option for seed behavior in Junimo huts not applied correctly.
 
 ## 2.5.0

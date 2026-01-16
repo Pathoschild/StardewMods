@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "Hạt giống",
     "config.junimo-hut-seeds.desc": "Lều Junimo nên làm gì với các hạt giống. 'Tự động phát hiện' sẽ bỏ qua chúng nếu Better Junimos được cài đặt, nếu không hãy di chuyển chúng từ lều vào các rương được kết nối.",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Tự động phát hiện",
     "config.junimo-huts.ignore": "Lờ chúng đi!",

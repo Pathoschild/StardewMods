@@ -161,7 +161,7 @@ internal class AutomationFactory : IAutomationFactory
                     if (seedBehavior is JunimoHutBehavior.AutoDetect)
                         seedBehavior = this.IsBetterJunimosLoaded ? JunimoHutBehavior.Ignore : JunimoHutBehavior.MoveIntoChests;
 
-                    return new JunimoHutMachine(hut, location, gemBehavior, fertilizerBehavior, seedBehavior);
+                    return new JunimoHutMachine(hut, location, gemBehavior, fertilizerBehavior, seedBehavior, config.JunimoHutBehaviors);
                 }
 
             case ShippingBin bin:

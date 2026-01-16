@@ -130,6 +130,18 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
             get: config => config.JunimoHutBehaviorForSeeds,
             set: (config, value) => config.JunimoHutBehaviorForSeeds = value
         );
+        menu.AddTextbox(
+            name: I18n.Config_JunimoHutMoveItemsIntoHut_Name,
+            tooltip: () => I18n.Config_JunimoHutMoveItemsIntoHut_Desc(gemFieldName: I18n.Config_JunimoHutGems_Name()),
+            get: config => this.GetJunimoHutItemIdsString(config, JunimoHutBehavior.MoveIntoHut),
+            set: (config, value) => this.SetJunimoHutItemIds(config, value, JunimoHutBehavior.MoveIntoHut)
+        );
+        menu.AddTextbox(
+            name: I18n.Config_JunimoHutIgnoreItems_Name,
+            tooltip: () => I18n.Config_JunimoHutIgnoreItems_Desc(gemFieldName: I18n.Config_JunimoHutGems_Name()),
+            get: config => this.GetJunimoHutItemIdsString(config, JunimoHutBehavior.Ignore),
+            set: (config, value) => this.SetJunimoHutItemIds(config, value, JunimoHutBehavior.Ignore)
+        );
 
         // storage settings
         menu.AddSectionTitle(I18n.Config_Title_ChestSettings);
@@ -251,6 +263,41 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
                 _ => "???" // should never happen
             }
         );
+    }
+
+    /// <summary>Get the string representation of a list of Junimo hut behavior item IDs.</summary>
+    /// <param name="config">The mod settings to read.</param>
+    /// <param name="behavior">The behavior for which to list item IDs.</param>
+    private string GetJunimoHutItemIdsString(ModConfig config, JunimoHutBehavior behavior)
+    {
+        List<string> itemIds = [];
+
+        foreach ((string itemId, JunimoHutBehavior itemBehavior) in config.JunimoHutBehaviors)
+        {
+            if (itemBehavior == behavior)
+                itemIds.Add(itemId);
+        }
+
+        return string.Join(", ", itemIds);
+    }
+
+    /// <summary>Set Junimo hut behaviors for the given item IDs.</summary>
+    /// <param name="config">The mod settings to modify.</param>
+    /// <param name="rawItemIds">The raw item IDs as a comma-delimited string.</param>
+    /// <param name="behavior">The behavior to set for listed item IDs.</param>
+    private void SetJunimoHutItemIds(ModConfig config, string rawItemIds, JunimoHutBehavior behavior)
+    {
+        // parse item IDs
+        HashSet<string> itemIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        itemIds.AddRange(rawItemIds.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
+
+        // set behaviors
+        config.JunimoHutBehaviors.RemoveWhere(p => p.Value == behavior);
+        foreach (string itemId in itemIds)
+        {
+            string qualifiedItemId = ItemRegistry.QualifyItemId(itemId) ?? ItemRegistry.ManuallyQualifyItemId(itemId, ItemRegistry.type_object);
+            config.JunimoHutBehaviors[qualifiedItemId] = behavior;
+        }
     }
 
     /****
