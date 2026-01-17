@@ -1,0 +1,105 @@
+name: Build releases
+
+on:
+    push:
+        branches:
+            - develop
+            - stable
+            - build-test
+
+jobs:
+    ##########
+    ## Build release zips
+    ##########
+    build:
+        runs-on: ubuntu-latest
+        outputs:
+            release-files: ${{steps.collect.outputs.files}}
+        steps:
+            - name: Install .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: 6.0.x
+
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Checkout reference assemblies
+              run: git clone --single-branch --depth 1 https://github.com/StardewModders/mod-reference-assemblies.git "$HOME/.steam/steam/steamapps/common/Stardew Valley"
+
+            - name: Build
+              run: dotnet build
+
+            - name: Run tests
+              run: dotnet test --no-build
+
+            - name: Collect release zips
+              id: collect
+              shell: pwsh
+              run: |
+                  # remove test mods
+                  rm _releases/Test*.zip
+
+                  # output JSON list of release zip base names (used to upload each one in the 'upload' job)
+                  $baseFileNames = Get-ChildItem _releases -Filter *.zip | ForEach-Object { $_.BaseName }
+                  $json = $baseFileNames | ConvertTo-Json -Compress
+                  "files=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+            - name: Save release zips for upload
+              uses: actions/upload-artifact@v4
+              with:
+                  name: all_mods # note: this will visible as a build artifact too
+                  path: _releases/*.zip
+                  if-no-files-found: error
+
+
+    ##########
+    ## Upload each zip as a separate artifact
+    ##########
+    upload:
+        needs: build
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                file: ${{fromJson(needs.build.outputs.release-files)}}
+
+        steps:
+            - name: Fetch release zips
+              uses: actions/download-artifact@v4
+              with:
+                  name: all_mods
+                  path: _releases
+
+            - name: Upload ${{matrix.file}}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{matrix.file}}
+                  path: _releases/${{matrix.file}}.zip
+                  compression-level: 9 # best
+                  if-no-files-found: error
+
+
+    ##########
+    ## Build attestations
+    ##########
+    attest:
+        if: github.ref == 'refs/heads/stable'
+        needs: upload
+        runs-on: ubuntu-latest
+        permissions:
+           id-token: write
+           attestations: write
+
+        steps:
+            - name: Fetch builds
+              uses: actions/download-artifact@v4
+              with:
+                  name: all_mods
+                  path: _releases
+
+            - name: Generate artifact attestations
+              uses: actions/attest-build-provenance@v2
+              with:
+                  subject-path: _releases/*.zip
