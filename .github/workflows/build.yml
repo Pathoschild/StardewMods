@@ -52,16 +52,14 @@ jobs:
               run: dotnet test --no-build
 
             #####
-            ## Build list of release zips for upload job
+            ## Export release zips for upload job
             #####
             - name: Collect release zips
               id: collect
               shell: pwsh
               run: |
-                  # output JSON list of release zip base names (used to upload each one in the 'upload' job)
-                  $baseFileNames = Get-ChildItem _releases -Filter *.zip | ForEach-Object { $_.BaseName }
-                  $json = $baseFileNames | ConvertTo-Json -Compress
-                  "files=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+                  Import-Module ./.github/workflows/module/mod-build-utilities.psm1
+                  Export-ModZipList _releases
 
             - name: Save release zips for upload
               uses: actions/upload-artifact@v4
