@@ -16,18 +16,34 @@ jobs:
         outputs:
             release-files: ${{steps.collect.outputs.files}}
         steps:
+            #####
+            ## Fetch code
+            #####
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-tags: false
+
+            - name: Checkout reference assemblies
+              run: git clone --single-branch --depth 1 https://github.com/StardewModders/mod-reference-assemblies.git "$HOME/.steam/steam/steamapps/common/Stardew Valley"
+
+            #####
+            ## Set prerelease versions for non-stable build
+            #####
+            - name: Set prerelease versions
+              if: github.ref != 'refs/heads/stable'
+              shell: pwsh
+              run: |
+                  Import-Module ./.github/workflows/module/mod-build-utilities.psm1
+                  Get-ModProjects -OnlyModZipped | Set-PrereleaseModVersions
+
+            #####
+            ## Build code & run tests
+            #####
             - name: Install .NET
               uses: actions/setup-dotnet@v4
               with:
                   dotnet-version: 6.0.x
-
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-
-            - name: Checkout reference assemblies
-              run: git clone --single-branch --depth 1 https://github.com/StardewModders/mod-reference-assemblies.git "$HOME/.steam/steam/steamapps/common/Stardew Valley"
 
             - name: Build
               run: dotnet build
@@ -35,6 +51,9 @@ jobs:
             - name: Run tests
               run: dotnet test --no-build
 
+            #####
+            ## Build list of release zips for upload job
+            #####
             - name: Collect release zips
               id: collect
               shell: pwsh
