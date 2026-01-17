@@ -39,9 +39,6 @@ jobs:
               id: collect
               shell: pwsh
               run: |
-                  # remove test mods
-                  rm _releases/Test*.zip
-
                   # output JSON list of release zip base names (used to upload each one in the 'upload' job)
                   $baseFileNames = Get-ChildItem _releases -Filter *.zip | ForEach-Object { $_.BaseName }
                   $json = $baseFileNames | ConvertTo-Json -Compress

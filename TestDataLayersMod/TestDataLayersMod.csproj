@@ -2,6 +2,8 @@
   <PropertyGroup>
     <Version>1.0.0</Version>
     <RootNamespace>Pathoschild.Stardew.TestDataLayersMod</RootNamespace>
+
+    <EnableModZip>False</EnableModZip>
   </PropertyGroup>
 
   <ItemGroup>
