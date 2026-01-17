@@ -8,13 +8,12 @@ on:
             - build-test
 
 jobs:
-    ##########
-    ## Build release zips
-    ##########
     build:
+        permissions:
+           id-token: write     # for attestation
+           attestations: write # for attestation
+
         runs-on: ubuntu-latest
-        outputs:
-            release-files: ${{steps.collect.outputs.files}}
         steps:
             #####
             ## Fetch code
@@ -52,68 +51,23 @@ jobs:
               run: dotnet test --no-build
 
             #####
-            ## Export release zips for upload job
+            ## Upload each release zip as an artifact
             #####
-            - name: Collect release zips
-              id: collect
+            - name: Install artifact client
+              uses: lhotari/gh-actions-artifact-client@v2
+
+            - name: Upload artifacts
               shell: pwsh
               run: |
-                  Import-Module ./.github/workflows/module/mod-build-utilities.psm1
-                  Export-ModZipList _releases
+                  foreach ($file in (Get-ChildItem -Path "_releases" -Filter "*.zip")) {
+                      Get-Content $file.FullName -AsByteStream | gh-actions-artifact-client.js upload $file.BaseName
+                  }
 
-            - name: Save release zips for upload
-              uses: actions/upload-artifact@v4
-              with:
-                  name: all_mods # note: this will visible as a build artifact too
-                  path: _releases/*.zip
-                  if-no-files-found: error
-
-
-    ##########
-    ## Upload each zip as a separate artifact
-    ##########
-    upload:
-        needs: build
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                file: ${{fromJson(needs.build.outputs.release-files)}}
-
-        steps:
-            - name: Fetch release zips
-              uses: actions/download-artifact@v4
-              with:
-                  name: all_mods
-                  path: _releases
-
-            - name: Upload ${{matrix.file}}
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ${{matrix.file}}
-                  path: _releases/${{matrix.file}}.zip
-                  compression-level: 9 # best
-                  if-no-files-found: error
-
-
-    ##########
-    ## Build attestations
-    ##########
-    attest:
-        if: github.ref == 'refs/heads/stable'
-        needs: upload
-        runs-on: ubuntu-latest
-        permissions:
-           id-token: write
-           attestations: write
-
-        steps:
-            - name: Fetch builds
-              uses: actions/download-artifact@v4
-              with:
-                  name: all_mods
-                  path: _releases
-
+            #####
+            ## Attest release builds
+            #####
             - name: Generate artifact attestations
+              if: github.ref == 'refs/heads/stable'
               uses: actions/attest-build-provenance@v2
               with:
                   subject-path: _releases/*.zip

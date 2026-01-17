@@ -108,37 +108,4 @@ function Set-PrereleaseModVersions {
     }
 }
 
-<#
-.SYNOPSIS
-Export a GitHub Actions output variable containing the base names for each zip file in a folder.
-This can be used to run a job for each release zip.
-
-.PARAMETER ReleasesPath
-The path containing the release zip files.
-
-.PARAMETER OutputName
-The name of the GitHub Actions output variable to write.
-#>
-function Export-ModZipList {
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory=$false)] [string] $ReleasesPath = "_releases",
-        [Parameter(Mandatory=$false)] [string] $OutputName = "files"
-    )
-
-    if (-not (Test-Path $ReleasesPath)) {
-        Write-Warning "Releases folder '$ReleasesPath' doesn't exist."
-        return
-    }
-
-    # get base names
-    $baseFileNames = Get-ChildItem -Path $ReleasesPath -Filter *.zip | ForEach-Object { $_.BaseName }
-
-    # export to GitHub Actions output
-    $json = $baseFileNames | ConvertTo-Json -Compress
-    "$OutputName=$json" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-
-    Write-Host "Exported $($baseFileNames.Count) release zips to GitHub Actions output '$OutputName'."
-}
-
-Export-ModuleMember -Function Get-ModProjects, Select-ModProjects, Set-PrereleaseModVersions, Export-ModZipList
+Export-ModuleMember -Function Get-ModProjects, Select-ModProjects, Set-PrereleaseModVersions
