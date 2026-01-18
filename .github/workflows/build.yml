@@ -7,8 +7,7 @@ jobs:
            id-token: write     # for attestation
            attestations: write # for attestation
         env:
-            IS_RELEASE: ${{ github.ref == 'refs/heads/stable' }}
-            IS_ALPHA: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/build-test' }}
+            RELEASE_REF: refs/heads/stable # pushes to this branch are treated as public releases
 
         steps:
             - name: Fetch code
@@ -16,17 +15,12 @@ jobs:
               with:
                   fetch-tags: false
 
-            - name: Fetch reference assemblies
-              uses: ./.github/actions/add-reference-assemblies
+            - name: Add build environment
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/add-build-environment@v0
 
             - name: Set prerelease versions
-              uses: ./.github/actions/set-prerelease-versions
-              if: env.IS_ALPHA
-
-            - name: Install .NET
-              uses: actions/setup-dotnet@v4
-              with:
-                  dotnet-version: 6.0.x
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/set-prerelease-versions@v0
+              if: github.ref != env.RELEASE_REF
 
             - name: Build mods
               run: dotnet build
@@ -35,11 +29,7 @@ jobs:
               run: dotnet test --no-build
 
             - name: Upload release zips
-              uses: ./.github/actions/upload-release-artifacts
-              if: env.IS_RELEASE || env.IS_ALPHA
-
-            - name: Generate artifact attestations
-              if: env.IS_RELEASE
-              uses: actions/attest-build-provenance@v2
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/upload-release-artifacts@v0
               with:
-                  subject-path: _releases/*.zip
+                  create_attestations: ${{github.ref == env.RELEASE_REF}}
+                  create_combined_zip: ${{github.ref == env.RELEASE_REF}}
