@@ -1,19 +1,15 @@
 name: Build releases
-
-on:
-    push:
-        branches:
-            - develop
-            - stable
-            - build-test
-
+on: push
 jobs:
     build:
+        runs-on: ubuntu-latest
         permissions:
            id-token: write     # for attestation
            attestations: write # for attestation
+        env:
+            IS_RELEASE: ${{ github.ref == 'refs/heads/stable' }}
+            IS_ALPHA: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/build-test' }}
 
-        runs-on: ubuntu-latest
         steps:
             - name: Fetch code
               uses: actions/checkout@v4
@@ -24,8 +20,8 @@ jobs:
               uses: ./.github/actions/add-reference-assemblies
 
             - name: Set prerelease versions
-              if: github.ref != 'refs/heads/stable'
               uses: ./.github/actions/set-prerelease-versions
+              if: env.IS_ALPHA
 
             - name: Install .NET
               uses: actions/setup-dotnet@v4
@@ -40,9 +36,10 @@ jobs:
 
             - name: Upload release zips
               uses: ./.github/actions/upload-release-artifacts
+              if: env.IS_RELEASE || env.IS_ALPHA
 
             - name: Generate artifact attestations
-              if: github.ref == 'refs/heads/stable'
+              if: env.IS_RELEASE
               uses: actions/attest-build-provenance@v2
               with:
                   subject-path: _releases/*.zip
