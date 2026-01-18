@@ -15,57 +15,32 @@ jobs:
 
         runs-on: ubuntu-latest
         steps:
-            #####
-            ## Fetch code
-            #####
-            - name: Checkout code
+            - name: Fetch code
               uses: actions/checkout@v4
               with:
                   fetch-tags: false
 
-            - name: Checkout reference assemblies
-              run: git clone --single-branch --depth 1 https://github.com/StardewModders/mod-reference-assemblies.git "$HOME/.steam/steam/steamapps/common/Stardew Valley"
+            - name: Fetch reference assemblies
+              uses: ./.github/actions/add-reference-assemblies
 
-            #####
-            ## Set prerelease versions for non-stable build
-            #####
             - name: Set prerelease versions
               if: github.ref != 'refs/heads/stable'
-              shell: pwsh
-              run: |
-                  Import-Module ./.github/workflows/module/mod-build-utilities.psm1
-                  Get-ModProjects -OnlyModZipped | Set-PrereleaseModVersions
+              uses: ./.github/actions/set-prerelease-versions
 
-            #####
-            ## Build code & run tests
-            #####
             - name: Install .NET
               uses: actions/setup-dotnet@v4
               with:
                   dotnet-version: 6.0.x
 
-            - name: Build
+            - name: Build mods
               run: dotnet build
 
             - name: Run tests
               run: dotnet test --no-build
 
-            #####
-            ## Upload each release zip as an artifact
-            #####
-            - name: Install artifact client
-              uses: lhotari/gh-actions-artifact-client@v2
+            - name: Upload release zips
+              uses: ./.github/actions/upload-release-artifacts
 
-            - name: Upload artifacts
-              shell: pwsh
-              run: |
-                  foreach ($file in (Get-ChildItem -Path "_releases" -Filter "*.zip")) {
-                      Get-Content $file.FullName -AsByteStream | gh-actions-artifact-client.js upload $file.BaseName
-                  }
-
-            #####
-            ## Attest release builds
-            #####
             - name: Generate artifact attestations
               if: github.ref == 'refs/heads/stable'
               uses: actions/attest-build-provenance@v2

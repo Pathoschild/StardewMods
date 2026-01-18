@@ -1,0 +1,38 @@
+name: "Add Reference Assemblies"
+description: "Clones the Stardew Valley and SMAPI reference assemblies repo to a standard game path."
+
+inputs:
+    repository:
+        description: "Repository name with owner. Default: `StardewModders/mod-reference-assemblies`."
+        required: false
+        default: "StardewModders/mod-reference-assemblies"
+
+    ref:
+        description: "The branch, tag, or SHA to checkout. Default: `main`."
+        required: false
+        default: "main"
+
+    path:
+        description: "Absolute path to which to clone the repo. Default: `$HOME/.steam/steam/steamapps/common/Stardew Valley`."
+        required: false
+        default: "$HOME/.steam/steam/steamapps/common/Stardew Valley"
+
+runs:
+    using: "composite"
+    steps:
+        # fetch reference assemblies repo
+        - name: Clone repo
+          uses: actions/checkout@v4
+          with:
+              repository: ${{inputs.repository}}
+              ref: ${{inputs.ref}}
+              fetch-tags: false
+              fetch-depth: 1
+              path: "__mod_ref_assemblies" # note: this must be a relative path
+
+        # move into target path
+        - name: Move to target path
+          shell: bash
+          run: |
+              mkdir --parents $(dirname "${{inputs.path}}")
+              mv __mod_ref_assemblies "${{inputs.path}}"
