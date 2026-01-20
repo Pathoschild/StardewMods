@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Common.Integrations.BushBloomMod;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.Common.Integrations.ExtraMachineConfig;
+using Pathoschild.Stardew.Common.Integrations.HaveMoreKids;
 using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.Common.Integrations.SpaceCore;
@@ -92,6 +93,9 @@ internal class GameHelper
     /// <summary>The Extra Machine Config integration.</summary>
     public ExtraMachineConfigIntegration ExtraMachineConfig { get; }
 
+    /// <summary>The Have More Kids integration.</summary>
+    public HaveMoreKidsIntegration HaveMoreKids { get; }
+
     /// <summary>The MultiFertilizer integration.</summary>
     public MultiFertilizerIntegration MultiFertilizer { get; }
 
@@ -125,6 +129,7 @@ internal class GameHelper
         this.CustomBush = new CustomBushIntegration(modRegistry, monitor);
         this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, monitor);
         this.ExtraMachineConfig = new ExtraMachineConfigIntegration(modRegistry, monitor);
+        this.HaveMoreKids = new HaveMoreKidsIntegration(modRegistry, monitor);
         this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
         this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, monitor);
         this.SpaceCore = new SpaceCoreIntegration(modRegistry, monitor);

@@ -233,7 +233,16 @@ internal class CharacterSubject : BaseSubject
         {
             ChildAge stage = (ChildAge)child.Age;
             int daysOld = child.daysOld.Value;
-            int daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
+            int daysToNext;
+            if (this.GameHelper.HaveMoreKids.IsLoaded)
+            {
+                daysToNext = this.GameHelper.HaveMoreKids.GetDaysToNextChildGrowth(child) ?? this.GetDaysToNextChildGrowth(stage, daysOld);
+            }
+            else
+            {
+                daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
+            }
+
             bool isGrown = daysToNext == -1;
             int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
 
@@ -519,6 +528,11 @@ internal class CharacterSubject : BaseSubject
     /// <param name="child">The child instance.</param>
     private string GetChildBirthdayString(Child child)
     {
+        if (this.GameHelper.HaveMoreKids.IsLoaded && this.GameHelper.HaveMoreKids.GetChildBirthdayString(child) is string hmkBirthday)
+        {
+            return hmkBirthday;
+        }
+
         int daysOld = child.daysOld.Value;
 
         try
