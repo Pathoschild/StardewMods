@@ -377,14 +377,7 @@ internal class ItemLookupProvider : BaseLookupProvider
     /// <param name="dirt">The dirt containing the crop, if applicable.</param>
     private ISubject BuildSubject(Crop target, ObjectContext context, HoeDirt? dirt)
     {
-        string indexOfHarvest = target.indexOfHarvest.Value;
-        if (!CommonHelper.IsItemId(indexOfHarvest, allowZero: false) && target.forageCrop.Value)
-        {
-            if (target.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
-                indexOfHarvest = "829";
-            else if (target.whichForageCrop.Value == Crop.forageCrop_springOnion.ToString())
-                indexOfHarvest = "399";
-        }
+        string harvestItemId = this.GetHarvestItemId(target);
 
         ModConfig config = this.Config();
         return new ItemSubject(
@@ -397,12 +390,36 @@ internal class ItemLookupProvider : BaseLookupProvider
             highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
             showGiftTastes: config.ShowGiftTastes,
             collapseFieldsConfig: config.CollapseLargeFields,
-            item: ItemRegistry.Create(indexOfHarvest),
+            item: ItemRegistry.Create(harvestItemId),
             context: context,
             location: dirt?.Location,
             knownQuality: false,
             getCropSubject: this.BuildSubject,
             fromDirt: dirt
         );
+    }
+
+    /// <summary>Get the item ID that can be harvested from a crop.</summary>
+    /// <param name="crop">The crop to check.</param>
+    private string GetHarvestItemId(Crop crop)
+    {
+        // from 'replace with object' field (e.g. Fall Seeds)
+        string harvestItemId = crop.replaceWithObjectOnFullGrown.Value;
+        if (CommonHelper.IsItemId(harvestItemId))
+            return harvestItemId;
+
+        // from 'index of harvest' field
+        harvestItemId = crop.indexOfHarvest.Value;
+        if (CommonHelper.IsItemId(harvestItemId))
+            return harvestItemId;
+
+        // based on forage type
+        if (crop.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
+            return "(O)829";
+        if (crop.whichForageCrop.Value == Crop.forageCrop_springOnion.ToString())
+            return "(O)399";
+
+        // unknown, use index of harvest as-is
+        return crop.indexOfHarvest.Value;
     }
 }

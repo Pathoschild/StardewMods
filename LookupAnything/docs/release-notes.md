@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added integration with Have More Kids (thanks to Mushymato!).
+* Fixed lookups for planted forage crop seeds not showing the item that will actually be produced.
 
 ## 1.54.0
 Released 11 January 2026 for SMAPI 4.3.1 or later.
