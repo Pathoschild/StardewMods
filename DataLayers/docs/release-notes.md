@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * The _Auto_ layer now chooses _Crops: Ready to Harvest_ when holding seeds to simplify finding unplanted spots.
+* Fixed _Crops: Ready to Harvest_ layer not highlighting tea bushes planted in the ground.
 
 ## 1.22.0
 Released 11 January 2026 for SMAPI 4.1.10 or later.
