@@ -150,96 +150,60 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         {
             ModConfigLayers layers = config.Layers;
 
-            if (layers.AutoLayer.Enabled)
+            List<IAutoBuildingLayer> buildingLayers = [];
+            List<IAutoItemLayer> itemLayers = [];
+            foreach (ILayer layer in GetNormalLayers())
             {
-                IAutoBuildingLayer[] buildingLayers = this.GetAutoBuildingLayers(config, colors, mods).ToArray();
-                IAutoItemLayer[] itemLayers = this.GetAutoItemLayers(config, colors, mods).ToArray();
-                yield return new AutoLayer(config, mods, buildingLayers, itemLayers);
+                yield return layer;
+
+                if (layer is IAutoBuildingLayer buildingLayer)
+                    buildingLayers.Add(buildingLayer);
+
+                if (layer is IAutoItemLayer itemLayer)
+                    itemLayers.Add(itemLayer);
             }
 
-            if (layers.Accessible.IsEnabled())
-                yield return new AccessibleLayer(layers.Accessible, colors);
-            if (layers.CoverageForBombs.IsEnabled())
-                yield return new BombLayer(layers.CoverageForBombs, colors);
-            if (layers.Buildable.IsEnabled())
-                yield return new BuildableLayer(layers.Buildable, colors);
-            if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
-            if (layers.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
-            if (layers.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerLayer(layers.CoverageForSprinklers, colors, mods);
-            if (layers.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, colors, mods);
-            if (layers.CropWater.IsEnabled())
-                yield return new CropWaterLayer(layers.CropWater, colors);
-            if (layers.CropPaddyWater.IsEnabled())
-                yield return new CropPaddyWaterLayer(layers.CropPaddyWater, colors);
-            if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
-            if (layers.CropHarvest.IsEnabled())
-                yield return new CropHarvestLayer(layers.CropHarvest, colors);
-            if (layers.FishingDepth.IsEnabled())
-                yield return new FishingDepthLayer(layers.FishingDepth, colors);
-            if (layers.Machines.IsEnabled())
-                yield return new MachineLayer(layers.Machines, colors, mods);
-            if (layers.Tillable.IsEnabled())
-                yield return new TillableLayer(layers.Tillable, colors);
+            if (config.Layers.AutoLayer.Enabled)
+                yield return new AutoLayer(config, mods, buildingLayers.ToArray(), itemLayers.ToArray());
 
-            foreach (ApiDataLayer layer in this.CustomLayers.Values)
-                yield return new ModLayer(layer, config.GetModLayerConfig(layer), colors);
+            IEnumerable<ILayer> GetNormalLayers()
+            {
+                if (layers.Accessible.IsEnabled())
+                    yield return new AccessibleLayer(layers.Accessible, colors);
+                if (layers.CoverageForBombs.IsEnabled())
+                    yield return new BombLayer(layers.CoverageForBombs, colors);
+                if (layers.Buildable.IsEnabled())
+                    yield return new BuildableLayer(layers.Buildable, colors);
+                if (layers.CoverageForBeeHouses.IsEnabled())
+                    yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
+                if (layers.CoverageForScarecrows.IsEnabled())
+                    yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
+                if (layers.CoverageForSprinklers.IsEnabled())
+                    yield return new SprinklerLayer(layers.CoverageForSprinklers, colors, mods);
+                if (layers.CoverageForJunimoHuts.IsEnabled())
+                    yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, colors, mods);
+                if (layers.CropWater.IsEnabled())
+                    yield return new CropWaterLayer(layers.CropWater, colors);
+                if (layers.CropPaddyWater.IsEnabled())
+                    yield return new CropPaddyWaterLayer(layers.CropPaddyWater, colors);
+                if (layers.CropFertilizer.IsEnabled())
+                    yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
+                if (layers.CropHarvest.IsEnabled())
+                    yield return new CropHarvestLayer(layers.CropHarvest, colors);
+                if (layers.FishingDepth.IsEnabled())
+                    yield return new FishingDepthLayer(layers.FishingDepth, colors);
+                if (layers.Machines.IsEnabled())
+                    yield return new MachineLayer(layers.Machines, colors, mods);
+                if (layers.Tillable.IsEnabled())
+                    yield return new TillableLayer(layers.Tillable, colors);
 
-            // add separate grid layer if grid isn't enabled for all layers
-            if (!config.ShowGrid && layers.TileGrid.IsEnabled())
-                yield return new GridLayer(layers.TileGrid);
-        }
+                foreach (ApiDataLayer layer in this.CustomLayers.Values)
+                    yield return new ModLayer(layer, config.GetModLayerConfig(layer), colors);
 
-        /// <summary>Get the building layers which can be shown via the 'auto' layer.</summary>
-        /// <param name="config">The mod config.</param>
-        /// <param name="colors">The color scheme to apply.</param>
-        /// <param name="mods">The loaded mod integrations.</param>
-        private IEnumerable<IAutoBuildingLayer> GetAutoBuildingLayers(ModConfig config, ColorScheme colors, ModIntegrations mods)
-        {
-            ModConfigLayers layers = config.Layers;
-
-            // specific buildings
-            if (layers.CoverageForJunimoHuts.IsEnabledForAutoLayer())
-                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, colors, mods);
-
-            // any other building type
-            if (layers.Buildable.IsEnabledForAutoLayer())
-                yield return new BuildableLayer(layers.Buildable, colors);
-        }
-
-        /// <summary>Get the item layers which can be shown via the 'auto' layer.</summary>
-        /// <param name="config">The mod config.</param>
-        /// <param name="colors">The color scheme to apply.</param>
-        /// <param name="mods">The loaded mod integrations.</param>
-        private IEnumerable<IAutoItemLayer> GetAutoItemLayers(ModConfig config, ColorScheme colors, ModIntegrations mods)
-        {
-            ModConfigLayers layers = config.Layers;
-
-            // placed objects
-            if (layers.CoverageForBeeHouses.IsEnabledForAutoLayer())
-                yield return new BeeHouseLayer(layers.CoverageForBeeHouses, colors);
-            if (layers.CoverageForBombs.IsEnabled())
-                yield return new BombLayer(layers.CoverageForBombs, colors);
-            if (layers.CoverageForScarecrows.IsEnabledForAutoLayer())
-                yield return new ScarecrowLayer(layers.CoverageForScarecrows, colors);
-            if (layers.CoverageForSprinklers.IsEnabledForAutoLayer())
-                yield return new SprinklerLayer(layers.CoverageForSprinklers, colors, mods);
-
-            // fertilizer
-            if (layers.CropFertilizer.IsEnabledForAutoLayer())
-                yield return new CropFertilizerLayer(layers.CropFertilizer, colors, mods);
-
-            // tools
-            if (layers.CropHarvest.IsEnabledForAutoLayer())
-                yield return new CropHarvestLayer(layers.CropHarvest, colors);
-            if (layers.CropWater.IsEnabledForAutoLayer())
-                yield return new CropWaterLayer(layers.CropWater, colors);
-            if (layers.Tillable.IsEnabledForAutoLayer())
-                yield return new TillableLayer(layers.Tillable, colors);
+                // add separate grid layer if grid isn't enabled for all layers
+                if (!config.ShowGrid && layers.TileGrid.IsEnabled())
+                    yield return new GridLayer(layers.TileGrid);
+            }
         }
     }
 }
