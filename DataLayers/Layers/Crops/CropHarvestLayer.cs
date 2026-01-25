@@ -71,7 +71,7 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
             // seeds
             case Object when item.HasTypeObject():
                 return
-                    item.ItemId is "MixedFlowerSeeds" or Crop.mixedSeedsId
+                    item.ItemId is "MixedFlowerSeeds" or Crop.mixedSeedsId or "251"/* Tea Sapling */
                     || Game1.cropData.ContainsKey(item.ItemId);
 
             default:

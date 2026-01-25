@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* The _Auto_ layer now chooses _Crops: Ready to Harvest_ when holding seeds to simplify finding unplanted spots.
+* The _Auto_ layer now chooses _Crops: Ready to Harvest_ when holding seeds or tea saplings.
 * The _Crops: Ready to Harvest_ layer now highlights forage, grabbable spawns like quartz, and all tea bushes.
 
 ## 1.22.0
