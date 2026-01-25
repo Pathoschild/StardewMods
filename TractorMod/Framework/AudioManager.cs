@@ -128,14 +128,30 @@ internal class AudioManager : IDisposable
     /// <summary>Update the volume level for the current audio to match the configured value.</summary>
     public void UpdateVolume()
     {
-        if (this.ActiveSound != null)
-            this.ActiveSound.Volume = this.GetVolume() / 100f;
+        this.ActiveSound?.Volume = this.GetVolume() / 100f;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
         this.StopImmediately();
+    }
+
+    /// <summary>Test whether an audio device is currently available.</summary>
+    /// <param name="directoryPath">The mod's directory path.</param>
+    public static bool TestAudioDeviceAvailable(string directoryPath)
+    {
+        try
+        {
+            string path = Path.Combine(directoryPath, "assets", "audio", "start.ogg");
+            _ = new OggStreamSoundEffect(path);
+
+            return true;
+        }
+        catch (NoAudioHardwareException)
+        {
+            return false;
+        }
     }
 
 

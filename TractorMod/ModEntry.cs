@@ -95,11 +95,16 @@ internal class ModEntry : Mod
         // read config
         this.Config = helper.ReadConfig<ModConfig>();
 
+        // prevent crash due to game bug
+        bool disableAudio = !AudioManager.TestAudioDeviceAvailable(this.Helper.DirectoryPath);
+        if (disableAudio)
+            this.Monitor.Log("Disabled custom tractor audio because no audio device is connected.", LogLevel.Warn);
+
         // init
         I18n.Init(helper.Translation);
         this.AudioManager = new AudioManager(
             directoryPath: this.Helper.DirectoryPath,
-            isActive: () => this.Config.SoundEffects == TractorSoundType.Tractor,
+            isActive: () => this.Config.SoundEffects == TractorSoundType.Tractor && !disableAudio,
             getVolume: () => this.Config.SoundEffectsVolume
         );
         this.TextureManager = new(
