@@ -128,9 +128,26 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
             return true;
         }
 
-        // indoor pot
-        if ((location.objects.GetValueOrDefault(tile) as IndoorPot)?.bush.Value is { } potBush && this.TryCheckBush(tile, potBush, out tileData, out tileWidth))
-            return true;
+        // object
+        if (location.objects.TryGetValue(tile, out Object obj) && obj is not null)
+        {
+            if (obj is IndoorPot pot)
+            {
+                if (pot.bush.Value is { } bush && this.TryCheckBush(tile, bush, out tileData, out tileWidth))
+                    return true;
+
+                tileData = null;
+                tileWidth = 0;
+                return false;
+            }
+
+            if (obj.isForage() || obj is { IsSpawnedObject: true, CanBeGrabbed: true })
+            {
+                tileData = new TileData(tile, this.Ready);
+                tileWidth = 1;
+                return true;
+            }
+        }
 
         // terrain feature
         if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrainFeature) && this.TryCheckTerrainFeature(tile, terrainFeature, out tileData, out tileWidth))
