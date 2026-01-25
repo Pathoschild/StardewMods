@@ -16,26 +16,20 @@ internal class HaveMoreKidsIntegration : BaseIntegration<IHaveMoreKidsAPI>
         : base("HaveMoreKids", "mushymato.HaveMoreKids", "1.1.0", modRegistry, monitor) { }
 
     /// <inheritdoc cref="IHaveMoreKidsAPI.GetDaysToNextChildGrowth" />
-    /// <param name="kid"></param>
-    /// <returns></returns>
     public int? GetDaysToNextChildGrowth(Child kid)
     {
-        return
-            this.SafelyCallApi(
-                api => api.GetDaysToNextChildGrowth(kid),
-                $"Failed getting days to next child growth from '{kid.Name}'."
-            );
+        return this.SafelyCallApi(
+            api => api.GetDaysToNextChildGrowth(kid),
+            $"Failed getting days to next growth for '{kid.Name}' from '{{0}}'."
+        );
     }
 
     /// <inheritdoc cref="IHaveMoreKidsAPI.GetChildBirthdayString" />
-    /// <param name="kid"></param>
-    /// <returns></returns>
     public string? GetChildBirthdayString(Child kid)
     {
-        return
-            this.SafelyCallApi(
-                api => api.GetChildBirthdayString(kid),
-                $"Failed getting birthday string from '{kid.Name}'."
-            );
+        return this.SafelyCallApi(
+            api => api.GetChildBirthdayString(kid),
+            $"Failed getting birthday string for '{kid.Name}' from '{{0}}'."
+        );
     }
 }

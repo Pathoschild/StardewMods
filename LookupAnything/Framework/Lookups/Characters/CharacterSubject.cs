@@ -233,16 +233,7 @@ internal class CharacterSubject : BaseSubject
         {
             ChildAge stage = (ChildAge)child.Age;
             int daysOld = child.daysOld.Value;
-            int daysToNext;
-            if (this.GameHelper.HaveMoreKids.IsLoaded)
-            {
-                daysToNext = this.GameHelper.HaveMoreKids.GetDaysToNextChildGrowth(child) ?? this.GetDaysToNextChildGrowth(stage, daysOld);
-            }
-            else
-            {
-                daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
-            }
-
+            int daysToNext = this.GetDaysToNextChildGrowth(child, stage, daysOld);
             bool isGrown = daysToNext == -1;
             int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
 
@@ -528,13 +519,16 @@ internal class CharacterSubject : BaseSubject
     /// <param name="child">The child instance.</param>
     private string GetChildBirthdayString(Child child)
     {
-        if (this.GameHelper.HaveMoreKids.IsLoaded && this.GameHelper.HaveMoreKids.GetChildBirthdayString(child) is string hmkBirthday)
+        // from Have More Kids
+        if (this.GameHelper.HaveMoreKids.IsLoaded)
         {
-            return hmkBirthday;
+            string? birthday = this.GameHelper.HaveMoreKids.GetChildBirthdayString(child);
+            if (birthday != null)
+                return birthday;
         }
 
+        // else apply vanilla logic
         int daysOld = child.daysOld.Value;
-
         try
         {
             return SDate
@@ -553,12 +547,22 @@ internal class CharacterSubject : BaseSubject
     }
 
     /// <summary>Get the number of days until a child grows to the next stage.</summary>
+    /// <param name="child">The child to check.</param>
     /// <param name="stage">The child's current growth stage.</param>
     /// <param name="daysOld">The child's current age in days.</param>
     /// <returns>Returns a number of days, or <c>-1</c> if the child won't grow any further.</returns>
     /// <remarks>Derived from <see cref="Child.dayUpdate"/>.</remarks>
-    private int GetDaysToNextChildGrowth(ChildAge stage, int daysOld)
+    private int GetDaysToNextChildGrowth(Child child, ChildAge stage, int daysOld)
     {
+        // from Have More Kids
+        if (this.GameHelper.HaveMoreKids.IsLoaded)
+        {
+            int? days = this.GameHelper.HaveMoreKids.GetDaysToNextChildGrowth(child);
+            if (days.HasValue)
+                return days.Value;
+        }
+
+        // else apply vanilla logic
         return stage switch
         {
             ChildAge.Newborn => 13 - daysOld,
