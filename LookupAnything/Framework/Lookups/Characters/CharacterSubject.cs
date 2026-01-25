@@ -558,7 +558,7 @@ internal class CharacterSubject : BaseSubject
         if (this.GameHelper.HaveMoreKids.IsLoaded)
         {
             int? days = this.GameHelper.HaveMoreKids.GetDaysToNextChildGrowth(child);
-            if (days.HasValue)
+            if (days > -1)
                 return days.Value;
         }
 
