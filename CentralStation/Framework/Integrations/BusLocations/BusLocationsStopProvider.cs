@@ -56,13 +56,19 @@ internal class BusLocationsStopProvider : ICustomStopProvider
         if (!contentPack.HasFile("content.json"))
             return false;
 
-        ReassignedContentPackModel data = contentPack.ModContent.Load<ReassignedContentPackModel>("content.json");
-        if (data.MapName is null && data.DestinationX is 0 && data.DestinationY is 0)
-            return false; // not a Bus Locations content pack
+        bool anyValid = false;
 
-        string id = contentPack.Manifest.UniqueID;
-        this.TryAddStop(id, data.DisplayName, data.MapName, data.DestinationX, data.DestinationY, data.ArrivalFacing, data.TicketPrice);
-        return true;
+        foreach (ReassignedContentPackModel data in this.GetRawDestinationsFrom(contentPack))
+        {
+            if (data.MapName is null && data.DestinationX is 0 && data.DestinationY is 0)
+                continue;
+
+            string id = contentPack.Manifest.UniqueID;
+            this.TryAddStop(id, data.DisplayName, data.MapName, data.DestinationX, data.DestinationY, data.ArrivalFacing, data.TicketPrice);
+            anyValid = true;
+        }
+
+        return anyValid;
     }
 
     /// <inheritdoc />
@@ -79,6 +85,26 @@ internal class BusLocationsStopProvider : ICustomStopProvider
     /*********
     ** Private methods
     *********/
+    /// <summary>Get the raw destinations to parse from a content pack.</summary>
+    /// <param name="contentPack">The content pack to read.</param>
+    private IEnumerable<ReassignedContentPackModel> GetRawDestinationsFrom(IContentPack contentPack)
+    {
+        ReassignedContentPackModel data = contentPack.ModContent.Load<ReassignedContentPackModel>("content.json");
+
+        // multiple locations (optional format for Bus Locations Continued by ComradeSean)
+        if (data.Locations is not null)
+        {
+            foreach (ReassignedContentPackModel? location in data.Locations)
+            {
+                if (location != null)
+                    yield return location;
+            }
+        }
+
+        // single location (default format)
+        yield return data;
+    }
+
     /// <summary>Add all the stops provided by the loaded Bus Locations mod, if applicable.</summary>
     /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
@@ -100,9 +126,12 @@ internal class BusLocationsStopProvider : ICustomStopProvider
             }
 
             // get its locations list
-            if (mod.GetType().GetField("Locations", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(mod) is not IEnumerable locations)
+            IEnumerable? locations =
+                mod.GetType().GetField("Locations", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(mod) as IEnumerable // Bus Locations by hootless
+                ?? mod.GetType().GetField("Destinations", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(mod) as IEnumerable; // Bus Locations Continued by ComradeSean
+            if (locations is null)
             {
-                monitor.Log("Can't integrate with the Bus Locations mod because its 'Locations' field wasn't found.", LogLevel.Warn);
+                monitor.Log("Can't integrate with the Bus Locations mod because its 'Locations' or 'Destinations' field wasn't found.", LogLevel.Warn);
                 return;
             }
 

@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added compatibility with Bus Locations Continued, including support for [reassigning its content packs](README.md#reassign-old-content-packs).
+
 ## 1.6.2
 Released 11 January 2026 for SMAPI 4.3.1 or later.
 
