@@ -61,7 +61,7 @@ internal class PickaxeAttachment : BaseAttachment
         tool = tool.AssertNotNull();
 
         // break stones
-        if (this.Config.ClearDebris && tileObj?.IsBreakableStone() == true)
+        if (this.Config.ClearDebris && this.IsBreakableStone(tileObj))
             return this.UseToolOnTile(tool, tile, player, location);
 
         // break flooring & paths
@@ -136,5 +136,15 @@ internal class PickaxeAttachment : BaseAttachment
                 !this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel)
                 || tool.UpgradeLevel >= requiredUpgradeLevel
             );
+    }
+
+    /// <summary>Get whether this is a stone litter item which can be broken by a pickaxe.</summary>
+    /// <param name="obj">The object to check.</param>
+    /// <remarks>Derived from <see cref="SObject.IsBreakableStone"/>, with added support for Calico Egg Stone until that's fixed in 1.6.16.</remarks>
+    private bool IsBreakableStone(SObject? obj)
+    {
+        return
+            obj?.IsBreakableStone() == true
+            || obj?.Name is "CalicoEggStone_0" or "CalicoEggStone_1" or "CalicoEggStone_2";
     }
 }

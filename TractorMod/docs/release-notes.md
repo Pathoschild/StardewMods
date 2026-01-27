@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* When you have no audio device connected, custom tractor sounds are now disabled automatically to avoid an error related to a bug in the base game.
+* Fixed crash when 'tractor sounds' is enabled but you have no audio device connected. The tractor sounds are now disabled automatically in that case.
+* Fixed pickaxe 'clear debris' option not breaking calico egg stones.
 
 ## 4.24.3
 Released 11 January 2026 for SMAPI 4.1.10 or later.
