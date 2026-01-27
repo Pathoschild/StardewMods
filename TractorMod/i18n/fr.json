@@ -177,6 +177,10 @@
     "config.clear-debris.name": "Éliminer les débris",
     "config.clear-debris.tooltip": "Que ce soit pour détruire les débris comme les mauvaises herbes, les brindilles, les souches géantes et les troncs d'arbres tombés.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Éliminer les mauvaises herbes",
     "config.clear-weeds.tooltip": "S'il faut détruire les mauvaises herbes.",
 

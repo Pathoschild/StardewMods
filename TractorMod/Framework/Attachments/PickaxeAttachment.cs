@@ -61,7 +61,7 @@ internal class PickaxeAttachment : BaseAttachment
         tool = tool.AssertNotNull();
 
         // break stones
-        if (this.Config.ClearDebris && this.IsBreakableStone(tileObj))
+        if (this.Config.BreakMineStones && this.IsBreakableStone(tileObj))
             return this.UseToolOnTile(tool, tile, player, location);
 
         // break flooring & paths

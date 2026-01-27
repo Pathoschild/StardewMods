@@ -177,6 +177,10 @@
     "config.clear-debris.name": "Нищити сміття",
     "config.clear-debris.tooltip": "Нищення сміття, такого як бур'яни, гілки, гігантські пні та впалі колоди.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Нищити бур'яни",
     "config.clear-weeds.tooltip": "Нищення бур'янів.",
 

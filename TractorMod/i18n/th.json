@@ -175,6 +175,10 @@
     "config.clear-debris.name": "ขจัดเศษซาก",
     "config.clear-debris.tooltip": "รวมถึงทำลายเศษซาก เช่น วัชพืช กิ่งไม้ ตอไม้ยักษ์ และท่อนซุงที่ร่วงหล่น",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "ขจัดวัชพืช",
     "config.clear-weeds.tooltip": "รวมถึงเป็นการทำลายวัชพืช",
 

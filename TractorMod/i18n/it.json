@@ -170,6 +170,10 @@
     "config.clear-debris.name": "Elimina i detriti",
     "config.clear-debris.tooltip": "Scegli se vuoi distruggere detriti come erbacce, ramoscelli, ceppi giganti e tronchi caduti.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Elimina erbacce",
     "config.clear-weeds.tooltip": "Scegli se vuoi distruggere le erbacce.",
 

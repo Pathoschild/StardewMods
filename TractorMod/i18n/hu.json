@@ -176,6 +176,10 @@
     "config.clear-debris.name": "Törmelékek tisztítása",
     "config.clear-debris.tooltip": "A törmelékek, pl.: gyomok, gallyak, óriási tuskók és kidőlt fatörzsek elpusztítása.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Gyomok takarítása",
     "config.clear-weeds.tooltip": "A gyomok elpusztítása.",
 

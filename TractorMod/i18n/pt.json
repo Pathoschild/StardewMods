@@ -177,6 +177,10 @@
     "config.clear-debris.name": "Limpar Detritos",
     "config.clear-debris.tooltip": "Se deve destruir detritos como ervas daninhas, galhos, tocos gigantes e troncos caídos.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Limpar Ervas Daninhas",
     "config.clear-weeds.tooltip": "Se deve destruir ervas daninhas.",
 

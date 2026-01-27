@@ -171,6 +171,10 @@
     "config.clear-debris.name": "잔해 제거",
     "config.clear-debris.tooltip": "잡초, 잔가지, 거대한 그루터기, 쓰러진 통나무와 같은 잔해를 제거 할 수 있습니다.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "잡초 제거",
     "config.clear-weeds.tooltip": "잡초를 제거 할 수 있습니다.",
 

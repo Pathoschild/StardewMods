@@ -9,5 +9,9 @@
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
 </Project>

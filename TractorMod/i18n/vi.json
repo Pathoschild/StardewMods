@@ -172,6 +172,10 @@
     "config.clear-debris.name": "Dọn dẹp vật cản",
     "config.clear-debris.tooltip": "Có phá hủy các vật cản như cỏ dại, cành cây, gốc cây khổng lồ, và khúc gỗ hay không.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Dọn dẹp Cỏ dại",
     "config.clear-weeds.tooltip": "Có phá hủy cỏ dại hay không.",
 

@@ -170,6 +170,10 @@
     "config.clear-debris.name": "Trümmer beseitigen",
     "config.clear-debris.tooltip": "Ob Unrat wie Unkraut, Zweige, riesige Baumstümpfe und umgestürzte Baumstämme beseitigen.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Unkraut entfernen",
     "config.clear-weeds.tooltip": "Ob Unkraut entfernt werden soll.",
 
