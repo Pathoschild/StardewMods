@@ -61,7 +61,8 @@ internal class PickaxeAttachment : BaseAttachment
         tool = tool.AssertNotNull();
 
         // break stones
-        if (this.Config.BreakMineStones && this.IsBreakableStone(tileObj))
+        bool isBreakableStone = this.IsBreakableStone(tileObj);
+        if (this.Config.BreakMineStones && isBreakableStone)
             return this.UseToolOnTile(tool, tile, player, location);
 
         // break flooring & paths
@@ -70,7 +71,7 @@ internal class PickaxeAttachment : BaseAttachment
 
         // break objects
         bool isMineSpawn = location is MineShaft && tileObj?.IsSpawnedObject == true;
-        if (this.Config.ClearObjects && tileObj != null && !isMineSpawn)
+        if (this.Config.ClearObjects && tileObj != null && !isMineSpawn && !isBreakableStone)
             return this.UseToolOnTile(tool, tile, player, location);
 
         // break mine containers
