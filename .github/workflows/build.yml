@@ -4,10 +4,10 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-           id-token: write     # for attestation
-           attestations: write # for attestation
+           id-token: write
+           attestations: write
         env:
-            RELEASE_REF: refs/heads/stable # pushes to this branch are treated as public releases
+            RELEASE_REF: refs/heads/stable
 
         steps:
             - name: Fetch code
@@ -33,3 +33,9 @@ jobs:
               with:
                   create_attestations: ${{github.ref == env.RELEASE_REF}}
                   create_combined_zip: ${{github.ref == env.RELEASE_REF}}
+
+            - name: Upload LookupAnything DLL
+              uses: actions/upload-artifact@v4
+              with:
+                  name: LookupAnything-dll
+                  path: LookupAnything/bin/**/LookupAnything.dll
