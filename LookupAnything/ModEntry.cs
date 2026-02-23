@@ -67,6 +67,12 @@ internal class ModEntry : Mod
     /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
     private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
 
+    /// <summary>The time of the last tap/click, used for double-tap detection on mobile.</summary>
+    private double LastTapTime = 0;
+
+    /// <summary>Maximum milliseconds between two taps to count as a double-tap.</summary>
+    private const double DoubleTapThresholdMs = 400;
+
 
     /*********
     ** Public methods
@@ -103,6 +109,7 @@ internal class ModEntry : Mod
         helper.Events.Display.RenderedHud += this.OnRenderedHud;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
     }
 
 
@@ -182,6 +189,38 @@ internal class ModEntry : Mod
             if (this.Config.HideOnKeyUp && keys.ToggleLookup.GetState() == SButtonState.Released)
                 this.HideLookup();
         });
+    }
+
+    /// <summary>Handle a button press, detecting double-tap on mobile to trigger lookup.</summary>
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        if (!this.IsDataValid)
+            return;
+
+        // Yalnızca Android/mobil için çift tıklama desteği
+        if (Constants.TargetPlatform != GamePlatform.Android)
+            return;
+
+        // Sol tık / dokunma tespiti
+        if (e.Button != SButton.MouseLeft)
+            return;
+
+        double currentTime = Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
+        double elapsed = currentTime - this.LastTapTime;
+
+        if (elapsed <= DoubleTapThresholdMs && elapsed > 0)
+        {
+            // Çift dokunma algılandı - lookup'ı tetikle
+            this.LastTapTime = 0;
+            this.Monitor.InterceptErrors("handling double-tap lookup", () =>
+            {
+                this.ToggleLookup();
+            });
+        }
+        else
+        {
+            this.LastTapTime = currentTime;
+        }
     }
 
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
