@@ -70,6 +70,9 @@ internal class ModEntry : Mod
     /// <summary>The time of the last tap/click, used for double-tap detection on mobile.</summary>
     private double LastTapTime = 0;
 
+    /// <summary>The screen position of the last tap, used for double-tap detection on mobile.</summary>
+    private Vector2 LastTapPosition = Vector2.Zero;
+
     /// <summary>Maximum milliseconds between two taps to count as a double-tap.</summary>
     private const double DoubleTapThresholdMs = 400;
 
@@ -191,7 +194,7 @@ internal class ModEntry : Mod
         });
     }
 
-    /// <summary>Handle a button press, detecting double-tap on mobile to trigger lookup.</summary>
+    /// <summary>Handle a button press, detecting double-tap on mobile to trigger lookup at tapped position.</summary>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!this.IsDataValid)
@@ -207,19 +210,21 @@ internal class ModEntry : Mod
 
         double currentTime = Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
         double elapsed = currentTime - this.LastTapTime;
+        Vector2 tapPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY());
 
         if (elapsed <= DoubleTapThresholdMs && elapsed > 0)
         {
-            // Çift dokunma algılandı - lookup'ı tetikle
+            // Çift dokunma algılandı - dokunulan konuma göre lookup'ı tetikle
             this.LastTapTime = 0;
             this.Monitor.InterceptErrors("handling double-tap lookup", () =>
             {
-                this.ToggleLookup();
+                this.ShowLookupAtPosition(tapPosition);
             });
         }
         else
         {
             this.LastTapTime = currentTime;
+            this.LastTapPosition = tapPosition;
         }
     }
 
@@ -279,6 +284,68 @@ internal class ModEntry : Mod
                 }
 
                 // show lookup UI
+                this.Monitor.Log(logMessage.ToString());
+                this.ShowLookupFor(subject);
+            }
+            catch
+            {
+                this.Monitor.Log($"{logMessage} an error occurred.");
+                throw;
+            }
+        });
+    }
+
+    /// <summary>Show the lookup UI for the subject at the given screen position (used for mobile double-tap).</summary>
+    /// <param name="screenPosition">The screen position that was tapped.</param>
+    private void ShowLookupAtPosition(Vector2 screenPosition)
+    {
+        if (!this.IsDataValid)
+            return;
+
+        StringBuilder logMessage = new("Received a mobile tap lookup request...");
+        this.Monitor.InterceptErrors("looking that up", () =>
+        {
+            try
+            {
+                Vector2 cursorPos = screenPosition;
+                if (!Game1.uiMode)
+                    cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos);
+
+                ISubject? subject = null;
+
+                // open menu
+                if (Game1.activeClickableMenu != null)
+                {
+                    logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
+                    subject = this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
+                }
+                else
+                {
+                    // HUD under tap
+                    foreach (IClickableMenu menu in Game1.onScreenMenus)
+                    {
+                        if (menu.isWithinBounds((int)cursorPos.X, (int)cursorPos.Y))
+                        {
+                            logMessage.Append($" searching the on-screen '{menu.GetType().Name}' menu...");
+                            subject = this.TargetFactory.GetSubjectFrom(menu, cursorPos);
+                            break;
+                        }
+                    }
+
+                    // world - dokunulan konumu cursor gibi kullan
+                    if (subject == null)
+                    {
+                        logMessage.Append(" searching the world at tap position...");
+                        subject = this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, hasCursor: true);
+                    }
+                }
+
+                if (subject == null)
+                {
+                    this.Monitor.Log($"{logMessage} no target found.");
+                    return;
+                }
+
                 this.Monitor.Log(logMessage.ToString());
                 this.ShowLookupFor(subject);
             }
