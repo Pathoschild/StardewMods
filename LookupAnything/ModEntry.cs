@@ -193,12 +193,9 @@ internal class ModEntry : Mod
 
         if (e.Button != SButton.MouseLeft)
             return;
-
-        if (Game1.activeClickableMenu is LookupMenu)
-        {
-            this.HideLookup();
+      
+        if (Game1.activeClickableMenu != null)
             return;
-        }
 
         double currentTime = Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
         double elapsed = currentTime - this.LastTapTime;
@@ -208,20 +205,6 @@ internal class ModEntry : Mod
         {
             this.LastTapTime = 0;
 
-            if (Game1.activeClickableMenu != null)
-            {
-                this.Monitor.InterceptErrors("handling double-tap lookup in menu", () =>
-                {
-                    Vector2 cursorPos = tapPosition;
-                    if (!Game1.uiMode)
-                        cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos);
-                    ISubject? subject = this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
-                    if (subject != null)
-                        this.ShowLookupFor(subject);
-                });
-            }
-            else
-            {
                 this.Monitor.InterceptErrors("handling double-tap lookup", () =>
                 {
                     this.ShowLookupAtPosition(tapPosition);
