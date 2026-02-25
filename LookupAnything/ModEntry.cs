@@ -210,7 +210,7 @@ internal class ModEntry : Mod
                     this.ShowLookupAtPosition(tapPosition);
                 });
             }
-        }
+            
         else
         {
             this.LastTapTime = currentTime;
