@@ -20,7 +20,7 @@
     "config.connector.desc": "Scegli se {{itemName}} collega tra loro macchinari e bauli.",
     "config.custom-connectors.name": "Connettori personalizzati",
 
-    "config.custom-connectors.desc": "Gli elementi che collegano tra loro macchinari adiacenti. È possibile specificare il nome interno in inglese (ad esempio “Wood Path”) o l'ID qualificato dell'elemento (ad esempio “(O)405”) ed elencare più elementi separandoli con virgole.", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "Gli elementi che collegano tra loro macchinari adiacenti. È possibile specificare il nome interno in inglese (ad esempio \"Wood Path\") o l'ID qualificato dell'elemento (ad esempio “(O)405”) ed elencare più elementi separandoli con virgole.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Comportamento capanno Junimo",
