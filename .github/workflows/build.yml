@@ -41,3 +41,9 @@ jobs:
               with:
                   name: LookupAnything-dll
                   path: LookupAnything/bin/**/LookupAnything.dll
+
+            - name: Upload SkipIntro DLL
+              uses: actions/upload-artifact@v4
+              with:
+                  name: SkipIntro-dll
+                  path: SkipIntro/bin/**/SkipIntro.dll
