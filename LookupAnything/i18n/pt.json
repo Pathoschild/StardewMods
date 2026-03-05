@@ -835,6 +835,13 @@
     "config.hide-on-key-up.desc": "Se deve ocultar a interface de busca ao soltar a tecla de busca.",
     "config.toggle-lookup.name": "Alternar busca",
     "config.toggle-lookup.desc": "As teclas que alternam a interface de busca para algo sob o cursor.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Alternar pesquisa",
     "config.toggle-search.desc": "As teclas que alternam a interface de pesquisa.",
     "config.scroll-up.name": "Rolar para cima",

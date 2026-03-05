@@ -28,6 +28,8 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
     /// <inheritdoc />
     public void Register(GenericModConfigMenuIntegration<ModConfig> menu, IMonitor monitor)
     {
+        bool isAndroid = StardewModdingAPI.Constants.TargetPlatform == GamePlatform.Android;
+
         menu
             .Register()
 
@@ -124,7 +126,7 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
                 set: (config, value) => config.HighlightUnrevealedGiftTastes = value
             )
 
-            // advanced options
+            // collapse fields
             .AddSectionTitle(I18n.Config_Title_CollapseFields)
             .AddCheckbox(
                 name: I18n.Config_CollapseFields_Enabled_Name,
@@ -194,6 +196,12 @@ internal class GenericModConfigMenuIntegrationForLookupAnything : IGenericModCon
 
             // controls
             .AddSectionTitle(I18n.Config_Title_Controls)
+            .AddCheckbox(
+                name: isAndroid ? I18n.Config_ToggleLookupOnDoubleTap_Name : I18n.Config_ToggleLookupOnDoubleClick_Name,
+                tooltip: isAndroid ? I18n.Config_ToggleLookupOnDoubleTap_Description : I18n.Config_ToggleLookupOnDoubleClick_Description,
+                get: config => config.ToggleLookupOnDoubleTap,
+                set: (config, value) => config.ToggleLookupOnDoubleTap = value
+            )
             .AddCheckbox(
                 name: I18n.Config_HideOnKeyUp_Name,
                 tooltip: I18n.Config_HideOnKeyUp_Desc,

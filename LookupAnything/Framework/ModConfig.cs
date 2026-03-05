@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Themes;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework;
 
@@ -25,6 +26,9 @@ internal class ModConfig
     ****/
     /// <summary>The key bindings.</summary>
     public ModConfigKeys Controls { get; set; } = new();
+
+    /// <summary>Whether to toggle the lookup UI by double tapping on the screen (Android) or double-clicking (desktop).</summary>
+    public bool ToggleLookupOnDoubleTap { get; set; } = StardewModdingAPI.Constants.TargetPlatform == GamePlatform.Android;
 
     /// <summary>Whether to show gift tastes which the player hasn't learned about in-game yet (e.g. from dialogue text or experimenting).</summary>
     public bool ShowUnknownGiftTastes { get; set; } = true;

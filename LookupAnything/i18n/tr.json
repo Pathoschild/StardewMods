@@ -830,6 +830,13 @@
     "config.hide-on-key-up.desc": "Arama anahtarını bıraktığınızda arama kullanıcı arabiriminin gizlenip gizlenmeyeceği.",
     "config.toggle-lookup.name": "Aramayı aç/kapat",
     "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Aramayı aç/kapat",
     "config.toggle-search.desc": "Arama arayüzünü değiştiren tuşlar.",
     "config.scroll-up.name": "Yukarı kaydır",

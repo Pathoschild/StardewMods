@@ -64,17 +64,11 @@ internal class ModEntry : Mod
     /// <summary>Draws debug information to the screen.</summary>
     private PerScreen<DebugInterface>? DebugInterface;
 
+    /// <summary>Tracks double taps on Android.</summary>
+    private readonly PerScreen<DoubleTapTracker> DoubleTapTracker = new();
+
     /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
     private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
-
-    /// <summary>The time of the last tap/click, used for double-tap detection on mobile.</summary>
-    private double LastTapTime = 0;
-
-    /// <summary>The screen position of the last tap, used for double-tap detection on mobile.</summary>
-    private Vector2 LastTapPosition = Vector2.Zero;
-
-    /// <summary>Maximum milliseconds between two taps to count as a double-tap.</summary>
-    private const double DoubleTapThresholdMs = 400;
 
 
     /*********
@@ -192,39 +186,26 @@ internal class ModEntry : Mod
                 this.HideLookup();
         });
     }
+
     /// <summary>Handle a button press, detecting double-tap on mobile to trigger lookup at tapped position.</summary>
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!this.IsDataValid)
             return;
 
-        if (Constants.TargetPlatform != GamePlatform.Android)
-            return;
-
-        if (e.Button != SButton.MouseLeft)
-            return;
-
-        if (Game1.activeClickableMenu != null)
-            return;
-
-        double currentTime = Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
-        double elapsed = currentTime - this.LastTapTime;
-        Vector2 tapPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY());
-
-        if (elapsed <= DoubleTapThresholdMs && elapsed > 0)
+        this.Monitor.InterceptErrors("handling double-tap lookup", () =>
         {
-            this.LastTapTime = 0;
+            if (e.Button != SButton.MouseLeft || !this.Config.ToggleLookupOnDoubleTap)
+                return;
 
-            this.Monitor.InterceptErrors("handling double-tap lookup", () =>
+            if (Game1.activeClickableMenu is not (null or LookupMenu))
+                return;
+
+            if (this.DoubleTapTracker.Value.ReceiveButtonPress())
             {
                 this.ShowLookup(LookupCursorMode.ForceCheck);
-            });
-        }
-        else
-        {
-            this.LastTapTime = currentTime;
-            this.LastTapPosition = tapPosition;
-        }
+            }
+        });
     }
 
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />

@@ -836,6 +836,13 @@
     "config.hide-on-key-up.desc": "Приховування інтерфейсу пошуку, коли ви відпускаєте клавішу пошуку.",
     "config.toggle-lookup.name": "Увімкнути пошук",
     "config.toggle-lookup.desc": "Клавіші, які перемикають інтерфейс користувача для пошуку чогось курсором.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Увімкнути пошук",
     "config.toggle-search.desc": "Клавіші, які перемикають інтерфейс пошуку.",
     "config.scroll-up.name": "Прокрутка вгору",
