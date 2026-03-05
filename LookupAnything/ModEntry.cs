@@ -64,7 +64,7 @@ internal class ModEntry : Mod
     /// <summary>Draws debug information to the screen.</summary>
     private PerScreen<DebugInterface>? DebugInterface;
 
-    /// <summary>Tracks double taps on Android.</summary>
+    /// <summary>Tracks double taps (Android) or double-clicks (desktop).</summary>
     private readonly PerScreen<DoubleTapTracker> DoubleTapTracker = new();
 
     /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
@@ -187,7 +187,7 @@ internal class ModEntry : Mod
         });
     }
 
-    /// <summary>Handle a button press, detecting double-tap on mobile to trigger lookup at tapped position.</summary>
+    /// <inheritdoc cref="IInputEvents.ButtonPressed" />
     private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
     {
         if (!this.IsDataValid)

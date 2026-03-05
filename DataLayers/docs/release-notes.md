@@ -6,6 +6,7 @@
   * _Crops: Ready to Harvest_ when holding seeds or tea saplings;
   * _Fishing Depth_ when holding a fishing rod.
 * The _Crops: Ready to Harvest_ layer now highlights forage, grabbable spawns like quartz, and all tea bushes.
+* Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.22.0
 Released 11 January 2026 for SMAPI 4.1.10 or later.

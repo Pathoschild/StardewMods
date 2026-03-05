@@ -4,6 +4,7 @@
 ## Upcoming release
 * You can now configure Junimo hut behavior for specific item IDs.
 * Fixed config option for seed behavior in Junimo huts not applied correctly.
+* Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 2.5.0
 Released 11 January 2026 for SMAPI 4.1.10 or later.

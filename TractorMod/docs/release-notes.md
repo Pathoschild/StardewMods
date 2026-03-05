@@ -5,6 +5,7 @@
 * Fixed crash when 'tractor sounds' is enabled but you have no audio device connected. The tractor sounds are now disabled automatically in that case.
 * Fixed pickaxe 'clear debris' option not breaking calico egg stones.
 * Fixed pickaxe 'break objects' option also affecting mine stones.
+* Improved translations. Thanks to CallMeFabioo (updated Portuguese) and MakinDay (updated Italian)!
 
 ## 4.24.3
 Released 11 January 2026 for SMAPI 4.1.10 or later.

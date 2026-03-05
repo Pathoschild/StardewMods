@@ -2,8 +2,10 @@
 
 # Release notes
 ## Upcoming release
+* You can now double-tap the screen on Android to look up whatever's under the tap (thanks to ferrles124!).
 * Added integration with Have More Kids (thanks to Mushymato!).
 * Fixed lookups for planted forage crop seeds not showing the item that will actually be produced.
+* Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.54.0
 Released 11 January 2026 for SMAPI 4.3.1 or later.
