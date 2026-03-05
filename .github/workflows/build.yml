@@ -1,5 +1,5 @@
 name: Build releases
-on: push
+on: [push, workflow_dispatch]
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -32,4 +32,4 @@ jobs:
               uses: Pathoschild/SMAPI-ModBuildWorkflow/upload-release-artifacts@v0
               with:
                   create_attestations: ${{github.ref == env.RELEASE_REF}}
-                  create_combined_zip: ${{github.ref == env.RELEASE_REF}}
+                  create_combined_zip: "all-mods"
