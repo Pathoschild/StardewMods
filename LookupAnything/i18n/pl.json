@@ -833,6 +833,13 @@
     "config.hide-on-key-up.desc": "Czy chować interfejs podglądu po puszczeniu klawisza podglądu.",
     "config.toggle-lookup.name": "Przełącz podgląd",
     "config.toggle-lookup.desc": "Skrót klawiszowy, który włącza i wyłącza interfejs podglądu dla danej rzeczy pod kursorem.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Przełącz wyszukiwanie",
     "config.toggle-search.desc": "Skrót klawiszowy, który włącza i wyłącza interfejs wyszukiwania.",
     "config.scroll-up.name": "Przesuń w górę",
