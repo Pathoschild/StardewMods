@@ -1,4 +1,4 @@
-﻿{
+{
     /*********
     ** Tractor
     *********/
@@ -14,7 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Opções Principais",
-    "config.audio": "Audio", // TODO
+    "config.audio": "Áudio",
     "config.controls": "Controles",
     "config.axe": "Recursos do Machado",
     "config.hoe": "Recursos da Enxada",
@@ -30,8 +30,7 @@
     /****
     ** Warnings
     ****/
-    // TODO
-    "config.questable-tractor-warning": "You have Questable Tractor installed. That mod works by overriding the tractor settings, so it may reset changes you make here.",
+    "config.questable-tractor-warning": "Você tem o mod Questable Tractor instalado. Esse mod funciona sobrescrevendo as configurações do trator, então ele pode redefinir as alterações que você fizer aqui.",
 
 
     /****
@@ -49,9 +48,8 @@
     "config.build-price.name": "Preço de Construção",
     "config.build-price.tooltip": "O preço em ouro para comprar uma garagem de trator. Padrão {{defaultValue}}g.",
 
-    // TODO
-    "config.require-build-materials.name": "Require Build Materials",
-    "config.require-build-materials.tooltip": "Whether you need to provide materials to build a tractor garage, in addition to the gold price.",
+    "config.require-build-materials.name": "Exigir Materiais de Construção",
+    "config.require-build-materials.tooltip": "Se você precisa fornecer materiais para construir uma garagem de trator, além do preço em ouro.",
 
     "config.can-summon-without-garage.name": "Pode Invocar Sem Garagem",
     "config.can-summon-without-garage.tooltip": "Se você pode invocar um trator temporário sem construir uma garagem primeiro.",
@@ -72,16 +70,14 @@
     "config.tractor-sounds.value.Horse": "sons de cavalo",
     "config.tractor-sounds.value.Tractor": "sons de trator",
 
-    // TODO
-    "config.tractor-volume.name": "Engine Sounds Volume",
-    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
+    "config.tractor-volume.name": "Volume dos Sons do Motor",
+    "config.tractor-volume.tooltip": "O nível de volume para os efeitos sonoros do trator. Padrão {{defaultValue}}%.",
 
-    // TODO
-    "config.tool-use-sounds-limit.name": "Tool Use Sounds",
-    "config.tool-use-sounds-limit.tooltip": "When applying a tool to many tiles around the tractor, which tool sounds should be played. The default option is '{{defaultOption}}'. Note that '{{unlimitedOption}}' may cause errors if the '{{distanceOption}}' option is too high, due to playing too many sounds at once.",
-    "config.tool-use-sounds-limit.value.Default": "default",
-    "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied",
-    "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)",
+    "config.tool-use-sounds-limit.name": "Sons de Uso de Ferramentas",
+    "config.tool-use-sounds-limit.tooltip": "Ao aplicar uma ferramenta em muitos blocos ao redor do trator, quais sons de ferramentas devem ser reproduzidos. A opção padrão é '{{defaultOption}}'. Note que '{{unlimitedOption}}' pode causar erros se a opção '{{distanceOption}}' estiver muito alta, devido a reproduzir muitos sons ao mesmo tempo.",
+    "config.tool-use-sounds-limit.value.Default": "padrão",
+    "config.tool-use-sounds-limit.value.OncePerTick": "primeiro bloco aplicado",
+    "config.tool-use-sounds-limit.value.Unlimited": "reproduzir todos os sons (não recomendado)",
 
 
     /****
@@ -96,12 +92,11 @@
     "config.hold-to-activate-key.name": "Segurar para Ativar",
     "config.hold-to-activate-key.tooltip": "Se especificado, o trator só fará algo enquanto você estiver segurando este botão. Se nada for especificado, o trator funcionará automaticamente enquanto você estiver pilotando.",
 
-    // TODO
-    "config.increase-distance-key.name": "Increase Distance",
-    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+    "config.increase-distance-key.name": "Aumentar Distância",
+    "config.increase-distance-key.tooltip": "Aumentar temporariamente a distância em que as ferramentas são aplicadas ao redor do trator em um bloco, até o máximo recomendado de {{maxRecommendedValue}} blocos. Isso se aplica até você recarregar o jogo.",
 
-    "config.reduce-distance-key.name": "Reduce Distance",
-    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+    "config.reduce-distance-key.name": "Reduzir Distância",
+    "config.reduce-distance-key.tooltip": "Reduzir temporariamente a distância em que as ferramentas são aplicadas ao redor do trator em um bloco, até o mínimo recomendado de 1 bloco. Isso se aplica até você recarregar o jogo.",
 
 
     /****
@@ -134,13 +129,11 @@
     "config.harvest-fruit-trees.name": "Colher Árvores Frutíferas",
     "config.harvest-fruit-trees.tooltip": "Se deve colher árvores frutíferas.",
 
-    // TODO
-    "config.harvest-tree-moss.name": "Harvest Tree Moss",
-    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+    "config.harvest-tree-moss.name": "Colher Musgo de Árvores",
+    "config.harvest-tree-moss.tooltip": "Se deve coletar musgo de árvores.",
 
-    // TODO
-    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
-    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+    "config.harvest-tree-seeds.name": "Colher Sementes de Árvores",
+    "config.harvest-tree-seeds.tooltip": "Se deve coletar sementes de árvores.",
 
 
     /****
@@ -177,9 +170,8 @@
     "config.clear-debris.name": "Limpar Detritos",
     "config.clear-debris.tooltip": "Se deve destruir detritos como ervas daninhas, galhos, tocos gigantes e troncos caídos.",
 
-    // TODO
-    "config.clear-mine-stones.name": "Break Mine Stones",
-    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+    "config.clear-mine-stones.name": "Quebrar Pedras da Mina",
+    "config.clear-mine-stones.tooltip": "Se deve quebrar pedras na mina.",
 
     "config.clear-weeds.name": "Limpar Ervas Daninhas",
     "config.clear-weeds.tooltip": "Se deve destruir ervas daninhas.",
@@ -194,16 +186,14 @@
     "config.dig-artifact-spots.name": "Cavar Locais de Artefatos",
     "config.dig-artifact-spots.tooltip": "Se deve cavar locais de artefatos.",
 
-    // TODO
-    "config.dig-seed-spots.name": "Dig Seed Spots",
-    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
+    "config.dig-seed-spots.name": "Cavar Locais de Sementes",
+    "config.dig-seed-spots.tooltip": "Se deve cavar locais de sementes.",
 
-    "config.clear-dirt-without-fertilizer.name": "Limpar Terra Arada",
-    "config.clear-dirt-without-fertilizer.tooltip": "Se deve limpar a terra arada.",
+    "config.clear-dirt-without-fertilizer.name": "Limpar Terra Arada (Sem Fertilizante)",
+    "config.clear-dirt-without-fertilizer.tooltip": "Se deve limpar terra arada que não tem fertilizante.",
 
-    // TODO
-    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
-    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
+    "config.clear-dirt-with-fertilizer.name": "Limpar Terra Arada (Com Fertilizante)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Se deve limpar terra arada que tem fertilizante.",
 
 
     /****
@@ -273,7 +263,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
     "icon.summon-tractor.name": "Tractor Mod",
-    "icon.summon-tractor.desc": "Summon Tractor"
+    "icon.summon-tractor.desc": "Invocar Trator"
 }
