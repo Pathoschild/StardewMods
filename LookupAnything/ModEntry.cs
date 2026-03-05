@@ -31,7 +31,7 @@ internal class ModEntry : Mod
     ** Configuration
     ****/
     /// <summary>The mod configuration.</summary>
-    private ModConfig Config = null!;
+    private ModConfig Config = null!; // set in Entry
 
     /// <summary>The configured key bindings.</summary>
     private ModConfigKeys Keys => this.Config.Controls;
@@ -75,13 +75,15 @@ internal class ModEntry : Mod
 
     /// <summary>Maximum milliseconds between two taps to count as a double-tap.</summary>
     private const double DoubleTapThresholdMs = 400;
+
+
     /*********
     ** Public methods
     *********/
     /// <inheritdoc />
     public override void Entry(IModHelper helper)
     {
-        CommonHelper.RemoveObsoleteFiles(this, "LookupAnything.pdb");
+        CommonHelper.RemoveObsoleteFiles(this, "LookupAnything.pdb"); // removed in 1.40.0
 
         // load config
         this.Config = this.LoadConfig();
@@ -111,6 +113,8 @@ internal class ModEntry : Mod
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         helper.Events.Input.ButtonPressed += this.OnButtonPressed;
     }
+
+
     /*********
     ** Private methods
     *********/
@@ -123,13 +127,16 @@ internal class ModEntry : Mod
         if (!this.IsDataValid)
             return;
 
+        // initialize functionality
         this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
         this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
+        // add config UI
         this.RegisterConfigMenu();
         this.Theme.OnThemeDataChanged += this.RegisterConfigMenu;
 
+        // add Iconic Framework integration
         IconicFrameworkIntegration iconicFramework = new(this.Helper.ModRegistry, this.Monitor);
         if (iconicFramework.IsLoaded)
         {
@@ -150,6 +157,7 @@ internal class ModEntry : Mod
         if (!this.IsDataValid)
             return;
 
+        // reset low-level cache once per game day (used for expensive queries that don't change within a day)
         this.GameHelper.ResetCache(this.Monitor);
     }
 
@@ -163,6 +171,7 @@ internal class ModEntry : Mod
         {
             ModConfigKeys keys = this.Keys;
 
+            // pressed
             if (keys.ToggleSearch.JustPressed())
                 this.TryToggleSearch();
             else if (keys.ToggleLookup.JustPressed())
@@ -178,6 +187,7 @@ internal class ModEntry : Mod
             else if (keys.ToggleDebug.JustPressed() && Context.IsPlayerFree)
                 this.DebugInterface.Value.Enabled = !this.DebugInterface.Value.Enabled;
 
+            // released
             if (this.Config.HideOnKeyUp && keys.ToggleLookup.GetState() == SButtonState.Released)
                 this.HideLookup();
         });
@@ -193,7 +203,7 @@ internal class ModEntry : Mod
 
         if (e.Button != SButton.MouseLeft)
             return;
-      
+
         if (Game1.activeClickableMenu != null)
             return;
 
@@ -205,12 +215,11 @@ internal class ModEntry : Mod
         {
             this.LastTapTime = 0;
 
-                this.Monitor.InterceptErrors("handling double-tap lookup", () =>
-                {
-                    this.ShowLookupAtPosition(tapPosition);
-                });
-            }
-            
+            this.Monitor.InterceptErrors("handling double-tap lookup", () =>
+            {
+                this.ShowLookupAtPosition(tapPosition);
+            });
+        }
         else
         {
             this.LastTapTime = currentTime;
@@ -221,6 +230,7 @@ internal class ModEntry : Mod
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
     private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
     {
+        // restore the previous menu if it was hidden to show the lookup UI
         this.Monitor.InterceptErrors("restoring the previous menu", () =>
         {
             if (e.NewMenu == null && (e.OldMenu is LookupMenu or SearchMenu) && this.PreviousMenus.Value.Any())
@@ -234,9 +244,11 @@ internal class ModEntry : Mod
         if (!this.IsDataValid)
             return;
 
+        // render debug interface
         if (this.DebugInterface.Value.Enabled)
             this.DebugInterface.Value.Draw(Game1.spriteBatch);
     }
+
     /****
     ** Lookup menu helpers
     ****/
@@ -250,16 +262,19 @@ internal class ModEntry : Mod
     }
 
     /// <summary>Show the lookup UI for the current target.</summary>
+    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
     private void ShowLookup(bool ignoreCursor = false)
     {
         if (!this.IsDataValid)
             return;
 
+        // show menu
         StringBuilder logMessage = new("Received a lookup request...");
         this.Monitor.InterceptErrors("looking that up", () =>
         {
             try
             {
+                // get target
                 ISubject? subject = this.GetSubject(logMessage, ignoreCursor);
                 if (subject == null)
                 {
@@ -267,6 +282,7 @@ internal class ModEntry : Mod
                     return;
                 }
 
+                // show lookup UI
                 this.Monitor.Log(logMessage.ToString());
                 this.ShowLookupFor(subject);
             }
@@ -337,6 +353,7 @@ internal class ModEntry : Mod
     }
 
     /// <summary>Show a lookup menu for the given subject.</summary>
+    /// <param name="subject">The subject to look up.</param>
     internal void ShowLookupFor(ISubject subject)
     {
         this.Monitor.InterceptErrors("looking that up", () =>
@@ -366,6 +383,7 @@ internal class ModEntry : Mod
                 menu.QueueExit();
         });
     }
+
     /****
     ** Search menu helpers
     ****/
@@ -394,7 +412,7 @@ internal class ModEntry : Mod
     {
         if (Game1.activeClickableMenu is SearchMenu)
         {
-            Game1.playSound("bigDeSelect");
+            Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
             Game1.activeClickableMenu = null;
         }
     }
@@ -405,12 +423,14 @@ internal class ModEntry : Mod
     /// <summary>Read the config file, migrating legacy settings if applicable.</summary>
     private ModConfig LoadConfig()
     {
+        // migrate legacy settings
         try
         {
             if (File.Exists(Path.Combine(this.Helper.DirectoryPath, "config.json")))
             {
                 JObject model = this.Helper.ReadConfig<JObject>();
 
+                // merge ToggleLookupInFrontOfPlayer bindings into ToggleLookup
                 JObject? controls = model.Value<JObject?>("Controls");
                 string? toggleLookup = controls?.Value<string>("ToggleLookup");
                 string? toggleLookupInFrontOfPlayer = controls?.Value<string>("ToggleLookupInFrontOfPlayer");
@@ -428,6 +448,7 @@ internal class ModEntry : Mod
             this.Monitor.Log(ex.ToString());
         }
 
+        // load config
         return this.Helper.ReadConfig<ModConfig>();
     }
 
@@ -442,26 +463,31 @@ internal class ModEntry : Mod
     }
 
     /// <summary>Get the most relevant subject under the player's cursor.</summary>
+    /// <param name="logMessage">The log message to which to append search details.</param>
+    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
     private ISubject? GetSubject(StringBuilder logMessage, bool ignoreCursor = false)
     {
         if (!this.IsDataValid)
             return null;
 
+        // get context
         Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
         if (!Game1.uiMode)
-            cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos);
+            cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos); // menus use UI coordinates
 
         bool hasCursor =
             !ignoreCursor
             && Constants.TargetPlatform != GamePlatform.Android
-            && Game1.wasMouseVisibleThisFrame;
+            && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
 
+        // open menu
         if (Game1.activeClickableMenu != null)
         {
             logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
             return this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
         }
 
+        // HUD under cursor
         if (hasCursor)
         {
             foreach (IClickableMenu menu in Game1.onScreenMenus)
@@ -474,17 +500,19 @@ internal class ModEntry : Mod
             }
         }
 
+        // world
         logMessage.Append(" searching the world...");
         return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, hasCursor);
     }
 
     /// <summary>Push a new menu onto the display stack, saving the previous menu if needed.</summary>
+    /// <param name="menu">The menu to show.</param>
     private void PushMenu(IClickableMenu menu)
     {
         if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
         {
             this.PreviousMenus.Value.Push(Game1.activeClickableMenu);
-            this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(menu);
+            this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(menu); // bypass Game1.activeClickableMenu, which disposes the previous menu
         }
         else
             Game1.activeClickableMenu = menu;
@@ -504,11 +532,14 @@ internal class ModEntry : Mod
     }
 
     /// <summary>Get whether a given menu should be restored when the lookup ends.</summary>
+    /// <param name="menu">The menu to check.</param>
     private bool ShouldRestoreMenu(IClickableMenu? menu)
     {
+        // no menu
         if (menu == null)
             return false;
 
+        // if 'hide on key up' is enabled, all lookups should close on key up
         if (this.Config.HideOnKeyUp && menu is LookupMenu)
             return false;
 

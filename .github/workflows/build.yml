@@ -1,15 +1,13 @@
 name: Build releases
-on:
-  push:
-  workflow_dispatch:
+on: push
 jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-           id-token: write
-           attestations: write
+           id-token: write     # for attestation
+           attestations: write # for attestation
         env:
-            RELEASE_REF: refs/heads/stable
+            RELEASE_REF: refs/heads/stable # pushes to this branch are treated as public releases
 
         steps:
             - name: Fetch code
@@ -35,15 +33,3 @@ jobs:
               with:
                   create_attestations: ${{github.ref == env.RELEASE_REF}}
                   create_combined_zip: ${{github.ref == env.RELEASE_REF}}
-
-            - name: Upload LookupAnything DLL
-              uses: actions/upload-artifact@v4
-              with:
-                  name: LookupAnything-dll
-                  path: LookupAnything/bin/**/LookupAnything.dll
-
-            - name: Upload SkipIntro DLL
-              uses: actions/upload-artifact@v4
-              with:
-                  name: SkipIntro-dll
-                  path: SkipIntro/bin/**/SkipIntro.dll
