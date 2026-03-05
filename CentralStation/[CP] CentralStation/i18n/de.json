@@ -189,5 +189,9 @@
     ** Generic Mod Config Menu UI
     *********/
     "config.require-pam-bus.name": "Pam's Bus erforderlich",
-    "config.require-pam-bus.desc": "Ob Pams Bus repariert sein muss, bevor du von der Bushaltestelle im Sternentautal abfahren kannst. Wenn nicht erforderlich, kannst du zum Hauptbahnhof fahren (aber nicht in die Wüste), bevor der Bus repariert ist."
+    "config.require-pam-bus.desc": "Ob Pams Bus repariert sein muss, bevor du von der Bushaltestelle im Sternentautal abfahren kannst. Wenn nicht erforderlich, kannst du zum Hauptbahnhof fahren (aber nicht in die Wüste), bevor der Bus repariert ist.",
+
+    // TODO
+    "config.require-pam.name": "Require Pam",
+    "config.require-pam.desc": "Whether Pam must be standing at the Stardew Valley bus stop before you can depart from there (equivalent to when the mod isn't installed)."
 }

@@ -202,5 +202,9 @@
     *********/
     // TODO
     "config.require-pam-bus.name": "Require Pam's bus",
-    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired."
+    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired.",
+
+    // TODO
+    "config.require-pam.name": "Require Pam",
+    "config.require-pam.desc": "Whether Pam must be standing at the Stardew Valley bus stop before you can depart from there (equivalent to when the mod isn't installed)."
 }

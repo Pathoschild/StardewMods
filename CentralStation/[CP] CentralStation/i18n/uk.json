@@ -187,5 +187,9 @@
     ** Generic Mod Config Menu UI
     *********/
     "config.require-pam-bus.name": "Потрібен автобус Пем",
-    "config.require-pam-bus.desc": "Визначає, чи потрібно відремонтувати автобус Пем перед відправленням із зупинки в Долині Стард'ю. Якщо ця вимога вимкнена, ви зможете поїхати автобусом до Центрального вокзалу (але не в Пустелю) ще до завершення ремонту."
+    "config.require-pam-bus.desc": "Визначає, чи потрібно відремонтувати автобус Пем перед відправленням із зупинки в Долині Стард'ю. Якщо ця вимога вимкнена, ви зможете поїхати автобусом до Центрального вокзалу (але не в Пустелю) ще до завершення ремонту.",
+
+    // TODO
+    "config.require-pam.name": "Require Pam",
+    "config.require-pam.desc": "Whether Pam must be standing at the Stardew Valley bus stop before you can depart from there (equivalent to when the mod isn't installed)."
 }

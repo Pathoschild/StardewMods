@@ -52,7 +52,9 @@
 
                 // config UI
                 "config.require-pam-bus.name": "{{i18n: config.require-pam-bus.name}}",
-                "config.require-pam-bus.desc": "{{i18n: config.require-pam-bus.desc}}"
+                "config.require-pam-bus.desc": "{{i18n: config.require-pam-bus.desc}}",
+                "config.require-pam.name": "{{i18n: config.require-pam.name}}",
+                "config.require-pam.desc": "{{i18n: config.require-pam.desc}}"
             }
         }
     ]

@@ -110,12 +110,25 @@ internal class ModEntry : Mod
     /// <returns>Returns whether the action was handled.</returns>
     private bool OnTicketsAction(GameLocation location, string[] args, Farmer who, Point tile)
     {
+        // parse action
         if (!this.ContentManager.TryParseOptionalSpaceDelimitedNetworks(args, 1, out StopNetworks networks, out string? error, StopNetworks.Train))
         {
             this.Monitor.LogOnce($"Location {location.NameOrUniqueName} has invalid CentralStation property: {error}", LogLevel.Warn);
             return false;
         }
 
+        // require Pam at bus stop if configured
+        if (this.Config.RequirePam && location is BusStop { Name: "BusStop" } && networks == StopNetworks.Bus && !Game1.netWorldState.Value.canDriveYourselfToday.Value)
+        {
+            NPC? pam = location.getCharacterFromName("Pam");
+            if (pam?.TilePoint is not { X: 21, Y: 10 })
+            {
+                Game1.drawObjectDialogue(Game1.content.LoadString("Strings/Locations:BusStop_NoDriver"));
+                return true;
+            }
+        }
+
+        // open menu
         this.OpenMenu(networks);
         return true;
     }
