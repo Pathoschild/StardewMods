@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Pathoschild.Stardew.CentralStation.Framework;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
-using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -33,9 +32,6 @@ internal class ModEntry : Mod
     /// <summary>Manages the available destinations, including destinations provided through other frameworks like Train Station.</summary>
     private Lazy<StopManager> StopManager = null!; // set in Entry
 
-    /// <summary>Whether the Bus Locations mod is installed, regardless of whether it has any stops loaded.</summary>
-    private bool HasBusLocationsMod;
-
     /// <summary>The mod configuration.</summary>
     private ModConfig Config = null!; // set in Entry
 
@@ -60,14 +56,12 @@ internal class ModEntry : Mod
         this.Config = helper.ReadConfig<ModConfig>();
         this.ContentManager = new ContentManager(helper.GameContent, helper.ModRegistry, this.Monitor, () => this.Config);
         this.StopManager = new Lazy<StopManager>(() => new StopManager(this.ContentManager, this.Monitor, helper.ModRegistry, () => this.Config)); // must be lazy since we can't access mod-provided APIs in Entry
-        this.HasBusLocationsMod = helper.ModRegistry.IsLoaded(BusLocationsStopProvider.ModId);
 
         // hook events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
         helper.Events.GameLoop.DayStarted += this.ContentManager.OnDayStarted;
         helper.Events.Content.AssetRequested += this.ContentManager.OnAssetRequested;
         helper.Events.Content.AssetReady += this.ContentManager.OnAssetReady;
-        helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Player.Warped += this.OnWarped;
 
         // hook tile actions
@@ -398,21 +392,6 @@ internal class ModEntry : Mod
     {
         // reapply 'require Pam bus' option
         this.Helper.GameContent.InvalidateCache("Maps/BusStop");
-    }
-
-    /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
-    private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
-    {
-        // Bus Locations handles any action click on the ticket machine coordinates and replaces Central Station's
-        // menu even if it's shown first. Since we include Bus Locations' stops in our menu, reopen ours instead.
-        if (this.HasBusLocationsMod && Game1.currentLocation is BusStop busStop && e.NewMenu is DialogueBox dialogueBox && dialogueBox.dialogues.FirstOrDefault() is "Where would you like to go?" or "Out of service")
-        {
-            busStop.lastQuestionKey = null;
-            busStop.afterQuestion = null;
-            Game1.objectDialoguePortraitPerson = null;
-
-            this.OpenMenu(StopNetworks.Bus);
-        }
     }
 
     /// <inheritdoc cref="IPlayerEvents.Warped" />
