@@ -145,7 +145,7 @@ internal class ModEntry : Mod
                 new Rectangle(330, 357, 7, 13),
                 I18n.Icon_ToggleSearch_Name,
                 I18n.Icon_ToggleSearch_Desc,
-                onClick: () => this.ShowLookup(ignoreCursor: true),
+                onClick: () => this.ShowLookup(LookupCursorMode.Ignore),
                 onRightClick: this.TryToggleSearch
             );
         }
@@ -217,7 +217,7 @@ internal class ModEntry : Mod
 
             this.Monitor.InterceptErrors("handling double-tap lookup", () =>
             {
-                this.ShowLookupAtPosition(tapPosition);
+                this.ShowLookup(LookupCursorMode.ForceCheck);
             });
         }
         else
@@ -253,17 +253,18 @@ internal class ModEntry : Mod
     ** Lookup menu helpers
     ****/
     /// <summary>Show the lookup UI for the current target.</summary>
-    private void ToggleLookup()
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private void ToggleLookup(LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (Game1.activeClickableMenu is LookupMenu)
             this.HideLookup();
         else
-            this.ShowLookup();
+            this.ShowLookup(cursorMode);
     }
 
     /// <summary>Show the lookup UI for the current target.</summary>
-    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
-    private void ShowLookup(bool ignoreCursor = false)
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private void ShowLookup(LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (!this.IsDataValid)
             return;
@@ -275,7 +276,7 @@ internal class ModEntry : Mod
             try
             {
                 // get target
-                ISubject? subject = this.GetSubject(logMessage, ignoreCursor);
+                ISubject? subject = this.GetSubject(logMessage, cursorMode);
                 if (subject == null)
                 {
                     this.Monitor.Log($"{logMessage} no target found.");
@@ -283,64 +284,6 @@ internal class ModEntry : Mod
                 }
 
                 // show lookup UI
-                this.Monitor.Log(logMessage.ToString());
-                this.ShowLookupFor(subject);
-            }
-            catch
-            {
-                this.Monitor.Log($"{logMessage} an error occurred.");
-                throw;
-            }
-        });
-    }
-
-    /// <summary>Show the lookup UI for the subject at the given screen position.</summary>
-    private void ShowLookupAtPosition(Vector2 screenPosition)
-    {
-        if (!this.IsDataValid)
-            return;
-
-        StringBuilder logMessage = new("Received a mobile tap lookup request...");
-        this.Monitor.InterceptErrors("looking that up", () =>
-        {
-            try
-            {
-                Vector2 cursorPos = screenPosition;
-                if (!Game1.uiMode)
-                    cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos);
-
-                ISubject? subject = null;
-
-                if (Game1.activeClickableMenu != null)
-                {
-                    logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
-                    subject = this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
-                }
-                else
-                {
-                    foreach (IClickableMenu menu in Game1.onScreenMenus)
-                    {
-                        if (menu.isWithinBounds((int)cursorPos.X, (int)cursorPos.Y))
-                        {
-                            logMessage.Append($" searching the on-screen '{menu.GetType().Name}' menu...");
-                            subject = this.TargetFactory.GetSubjectFrom(menu, cursorPos);
-                            break;
-                        }
-                    }
-
-                    if (subject == null)
-                    {
-                        logMessage.Append(" searching the world at tap position...");
-                        subject = this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, hasCursor: true);
-                    }
-                }
-
-                if (subject == null)
-                {
-                    this.Monitor.Log($"{logMessage} no target found.");
-                    return;
-                }
-
                 this.Monitor.Log(logMessage.ToString());
                 this.ShowLookupFor(subject);
             }
@@ -464,8 +407,8 @@ internal class ModEntry : Mod
 
     /// <summary>Get the most relevant subject under the player's cursor.</summary>
     /// <param name="logMessage">The log message to which to append search details.</param>
-    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
-    private ISubject? GetSubject(StringBuilder logMessage, bool ignoreCursor = false)
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private ISubject? GetSubject(StringBuilder logMessage, LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (!this.IsDataValid)
             return null;
@@ -475,10 +418,12 @@ internal class ModEntry : Mod
         if (!Game1.uiMode)
             cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos); // menus use UI coordinates
 
-        bool hasCursor =
-            !ignoreCursor
-            && Constants.TargetPlatform != GamePlatform.Android
-            && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
+        bool hasCursor = cursorMode switch
+        {
+            LookupCursorMode.ForceCheck => true,
+            LookupCursorMode.Ignore => false,
+            _ => Constants.TargetPlatform != GamePlatform.Android && Game1.wasMouseVisibleThisFrame // note: only reliable when a menu isn't open
+        };
 
         // open menu
         if (Game1.activeClickableMenu != null)
