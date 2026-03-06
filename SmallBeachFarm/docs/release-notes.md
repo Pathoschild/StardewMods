@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed beach soundtrack not paused while raining when the rain is from some custom mod weathers.
+
 ## 2.5.13
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

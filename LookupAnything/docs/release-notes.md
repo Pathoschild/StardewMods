@@ -4,7 +4,10 @@
 ## Upcoming release
 * You can now double-tap the screen on Android to look up whatever's under the tap (thanks to ferrles124!).
 * Added integration with Have More Kids (thanks to Mushymato!).
-* Fixed lookups for planted forage crop seeds not showing the item that will actually be produced.
+* Fixed item lookups for planted forage crop seeds not showing the item that will actually be produced.
+* Fixed item lookups' fish spawn rule checkboxes not accounting for...
+  - different weather when fishing outside the valley;
+  - some custom mod weathers.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.54.0

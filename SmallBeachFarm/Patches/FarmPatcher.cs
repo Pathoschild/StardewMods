@@ -148,7 +148,7 @@ internal class FarmPatcher : BasePatcher
     /// <summary>Get whether the Small Beach Farm's music should be overridden with the beach sounds.</summary>
     private static bool ShouldUseBeachMusic()
     {
-        return FarmPatcher.Config.UseBeachMusic && !Game1.isRaining;
+        return FarmPatcher.Config.UseBeachMusic && !Game1.IsRainingHere();
     }
 
     /// <summary>Get whether a tile is in the ocean.</summary>

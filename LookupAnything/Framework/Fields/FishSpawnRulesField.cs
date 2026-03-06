@@ -123,9 +123,9 @@ internal class FishSpawnRulesField : CheckboxListField
 
         // weather
         if (spawnRules.Weather == FishSpawnWeather.Sunny)
-            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.IsRainingHere());
         else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.IsRainingHere());
 
         // time of day
         if (spawnRules.TimesOfDay?.Any() == true)
