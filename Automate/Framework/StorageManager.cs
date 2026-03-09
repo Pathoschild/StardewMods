@@ -38,14 +38,14 @@ internal class StorageManager : IStorage
 
         this.InputContainers = containerCollection
             .Where(p => p.StorageAllowed())
-            .OrderBy(p => p.IsJunimoChest) // push items into Junimo chests last
-            .ThenByDescending(p => p.StoragePreferred())
+            .OrderByDescending(p => p.StoragePreferred())
+            .ThenBy(p => p.IsJunimoChest) // push items into Junimo chests last
             .ToArray();
 
         this.OutputContainers = containerCollection
             .Where(p => p.TakingItemsAllowed())
-            .OrderByDescending(p => p.IsJunimoChest) // take items from Junimo chests first
-            .ThenByDescending(p => p.TakingItemsPreferred())
+            .OrderByDescending(p => p.TakingItemsPreferred())
+            .ThenByDescending(p => p.IsJunimoChest) // take items from Junimo chests first
             .ToArray();
     }
 

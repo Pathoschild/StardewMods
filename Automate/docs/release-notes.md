@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * You can now configure Junimo hut behavior for specific item IDs.
+* Chests marked "_put items in this chest first_" and "_Take items from this chest first_" are now used before Junimo chests.
 * Fixed config option for seed behavior in Junimo huts not applied correctly.
 * Fixed chance of automated trees dropping golden crackers being lower than when checked manually.
 * Improved translations. Thanks to MakinDay (updated Italian)!
