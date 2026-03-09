@@ -243,7 +243,7 @@ internal class TreeMachine : BaseMachine<Tree>
         const double chanceModifier = 2;
         Random random = Game1.random;
 
-        double luckMod = Game1.player.team.AverageDailyLuck() * dailyLuckWeight;
+        double luckMod = 1 + Game1.player.team.AverageDailyLuck() * dailyLuckWeight;
 
         if (Game1.player.stats.Get(StatKeys.Mastery(Farmer.farmingSkill)) > 0 && random.NextDouble() < .001 * chanceModifier * luckMod)
             yield return ItemRegistry.Create("(O)GoldenAnimalCracker");

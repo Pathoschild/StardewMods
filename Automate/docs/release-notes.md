@@ -4,6 +4,7 @@
 ## Upcoming release
 * You can now configure Junimo hut behavior for specific item IDs.
 * Fixed config option for seed behavior in Junimo huts not applied correctly.
+* Fixed chance of automated trees dropping golden crackers being lower than when checked manually.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 2.5.0
