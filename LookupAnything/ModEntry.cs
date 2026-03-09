@@ -65,10 +65,10 @@ internal class ModEntry : Mod
     private PerScreen<DebugInterface>? DebugInterface;
 
     /// <summary>Tracks double taps (Android) or double-clicks (desktop).</summary>
-    private readonly PerScreen<DoubleTapTracker> DoubleTapTracker = new();
+    private readonly PerScreen<DoubleTapTracker> DoubleTapTracker = new(() => new DoubleTapTracker());
 
     /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
-    private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
+    private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new Stack<IClickableMenu>());
 
 
     /*********
