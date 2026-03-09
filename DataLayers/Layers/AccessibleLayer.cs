@@ -203,8 +203,8 @@ internal class AccessibleLayer : BaseLayer
             return true;
 
         // check mine ladders/shafts
-        const int ladderID = 173, shaftID = 174;
-        if (location is MineShaft && buildingTile is { TileIndex: ladderID or shaftID } && buildingTile.TileSheet.Id == "mine")
+        const int ladderId = 173, shaftId = 174;
+        if (location is MineShaft && buildingTile is { TileIndex: ladderId or shaftId } && buildingTile.TileSheet.Id == "mine")
             return true;
 
         return false;

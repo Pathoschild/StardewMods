@@ -195,11 +195,11 @@ internal class GameHelper
     ** Data helpers
     ****/
     /// <summary>Get the number of times the player has shipped a given item.</summary>
-    /// <param name="itemID">The item's unqualified ID.</param>
-    public int GetShipped(string itemID)
+    /// <param name="itemId">The item's unqualified ID.</param>
+    public int GetShipped(string itemId)
     {
-        return Game1.player.basicShipped.ContainsKey(itemID)
-            ? Game1.player.basicShipped[itemID]
+        return Game1.player.basicShipped.ContainsKey(itemId)
+            ? Game1.player.basicShipped[itemId]
             : 0;
     }
 

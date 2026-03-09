@@ -21,7 +21,7 @@ public class ModEntry : Mod
     private KeybindList ToggleKey => this.Config.ToggleKey;
 
     /// <summary>An arbitrary number which identifies messages from Noclip Mode.</summary>
-    private const int MessageID = 91871825;
+    private const int MessageId = 91871825;
 
 
     /*********
@@ -77,10 +77,10 @@ public class ModEntry : Mod
             return;
 
         // show message
-        Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageID);
+        Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageId);
         string? keybindStr = keybind.GetKeybindCurrentlyDown()?.ToString();
         string text = noclipEnabled ? I18n.EnabledMessage(keybindStr) : I18n.DisabledMessage(keybindStr);
-        Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageID });
+        Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageId });
     }
 
     /// <summary>Get whether noclip mode can be toggled in the current context.</summary>

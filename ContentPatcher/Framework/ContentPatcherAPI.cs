@@ -22,7 +22,7 @@ public class ContentPatcherAPI : IContentPatcherAPI
     private static readonly Regex ValidNamePattern = new("^[a-z]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>The unique mod ID for Content Patcher.</summary>
-    private readonly string ContentPatcherID;
+    private readonly string ContentPatcherId;
 
     /// <summary>Encapsulates monitoring and logging.</summary>
     private readonly IMonitor Monitor;
@@ -72,16 +72,16 @@ public class ContentPatcherAPI : IContentPatcherAPI
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
-    /// <param name="contentPatcherID">The unique mod ID for Content Patcher.</param>
+    /// <param name="contentPatcherId">The unique mod ID for Content Patcher.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="addModToken">The action to add a mod token.</param>
     /// <param name="isConditionsApiReady">Whether the conditions API is initialized and ready for use.</param>
     /// <param name="parseConditions">Parse raw conditions for an API consumer.</param>
     /// <param name="parseTokenString">Parse a raw token string for an API consumer.</param>
-    internal ContentPatcherAPI(string contentPatcherID, IMonitor monitor, IReflectionHelper reflection, Action<ModProvidedToken> addModToken, Func<bool> isConditionsApiReady, ParseConditionsDelegate parseConditions, ParseTokenStringDelegate parseTokenString)
+    internal ContentPatcherAPI(string contentPatcherId, IMonitor monitor, IReflectionHelper reflection, Action<ModProvidedToken> addModToken, Func<bool> isConditionsApiReady, ParseConditionsDelegate parseConditions, ParseTokenStringDelegate parseTokenString)
     {
-        this.ContentPatcherID = contentPatcherID;
+        this.ContentPatcherId = contentPatcherId;
         this.Monitor = monitor;
         this.Reflection = reflection;
         this.AddModToken = addModToken;
@@ -98,7 +98,7 @@ public class ContentPatcherAPI : IContentPatcherAPI
             throw new InvalidOperationException($"'{manifest.Name}' accessed Content Patcher's conditions API before it was ready to use. (For mod authors: see the documentation on {nameof(IContentPatcherAPI)}.{nameof(IContentPatcherAPI.IsConditionsApiReady)} for details.)");
 
         // validate dependency on Content Patcher
-        if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion? minVersion, canBeOptional: false))
+        if (!manifest.HasDependency(this.ContentPatcherId, out ISemanticVersion? minVersion, canBeOptional: false))
             throw new InvalidOperationException($"'{manifest.Name}' must list Content Patcher as a required dependency in its manifest.json to access the conditions API.");
         if (minVersion == null || minVersion.IsOlderThan("1.22.0"))
             throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 1.22.0 as the minimum required version in its manifest.json to access the conditions API.");
@@ -118,7 +118,7 @@ public class ContentPatcherAPI : IContentPatcherAPI
             throw new InvalidOperationException($"'{manifest.Name}' accessed Content Patcher's token string API before it was ready to use. (For mod authors: see the documentation on {nameof(IContentPatcherAPI)}.{nameof(IContentPatcherAPI.IsConditionsApiReady)} for details.)");
 
         // validate dependency on Content Patcher
-        if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion? minVersion, canBeOptional: false))
+        if (!manifest.HasDependency(this.ContentPatcherId, out ISemanticVersion? minVersion, canBeOptional: false))
             throw new InvalidOperationException($"'{manifest.Name}' must list Content Patcher as a required dependency in its manifest.json to access the token string API.");
         if (minVersion == null || minVersion.IsOlderThan("2.1.0"))
             throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 2.1.0 as the minimum required version in its manifest.json to access the token string API.");
@@ -158,7 +158,7 @@ public class ContentPatcherAPI : IContentPatcherAPI
             this.Monitor.Log($"Rejected token added by {mod.Name} because the token is null.", LogLevel.Error);
             return;
         }
-        if (!mod.HasDependency(this.ContentPatcherID))
+        if (!mod.HasDependency(this.ContentPatcherId))
         {
             this.Monitor.Log($"Rejected token added by {mod.Name} because that mod doesn't list Content Patcher as a dependency.", LogLevel.Error);
             return;

@@ -13,10 +13,10 @@ internal class LegacySaveDataBuilding
     public Vector2 Tile { get; }
 
     /// <summary>The associated tractor ID.</summary>
-    public Guid TractorID { get; }
+    public Guid TractorId { get; }
 
     /// <summary>The associated tractor's hat ID.</summary>
-    public int? TractorHatID { get; }
+    public int? TractorHatId { get; }
 
     /// <summary>The building type.</summary>
     public string Type { get; }
@@ -33,16 +33,16 @@ internal class LegacySaveDataBuilding
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="tile">The building type.</param>
-    /// <param name="tractorID">The associated tractor ID.</param>
-    /// <param name="tractorHatID">The associated tractor's hat ID.</param>
+    /// <param name="tractorId">The associated tractor ID.</param>
+    /// <param name="tractorHatId">The associated tractor's hat ID.</param>
     /// <param name="type">The tile location.</param>
     /// <param name="map">The name of the map containing the building.</param>
     /// <param name="daysOfConstructionLeft">The number of days until construction ends.</param>
-    public LegacySaveDataBuilding(Vector2 tile, Guid tractorID, int? tractorHatID, string type, string map, int daysOfConstructionLeft)
+    public LegacySaveDataBuilding(Vector2 tile, Guid tractorId, int? tractorHatId, string type, string map, int daysOfConstructionLeft)
     {
         this.Tile = tile;
-        this.TractorID = tractorID != Guid.Empty ? tractorID : Guid.NewGuid(); // assign ID for older data
-        this.TractorHatID = tractorHatID;
+        this.TractorId = tractorId != Guid.Empty ? tractorId : Guid.NewGuid(); // assign ID for older data
+        this.TractorHatId = tractorHatId;
         this.Type = type;
         this.Map = map;
         this.DaysOfConstructionLeft = daysOfConstructionLeft;

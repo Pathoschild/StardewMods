@@ -417,8 +417,8 @@ The order is often important for list assets (e.g. the game will use the first e
             "Action": "EditData",
             "Target": "Data/MoviesReactions",
             "MoveEntries": [
-                { "ID": "Abigail", "BeforeID": "Leah" },     // move entry so it's right before Leah
-                { "ID": "Abigail", "AfterID": "Leah" },      // move entry so it's right after Leah
+                { "ID": "Abigail", "BeforeId": "Leah" },     // move entry so it's right before Leah
+                { "ID": "Abigail", "AfterId": "Leah" },      // move entry so it's right after Leah
                 { "ID": "Abigail", "ToPosition": "Top" },    // move entry to the top of the list
                 { "ID": "Abigail", "ToPosition": "Bottom" }, // move entry to the bottom of the list
             ]

@@ -47,7 +47,7 @@ internal class ModEntry : Mod
     private readonly string PublicAssetBasePath = "Mods/Pathoschild.TractorMod";
 
     /// <summary>The message ID for a request to warp a tractor to the given farmhand.</summary>
-    private readonly string RequestTractorMessageID = "TractorRequest";
+    private readonly string RequestTractorMessageId = "TractorRequest";
 
     /****
     ** State
@@ -365,10 +365,10 @@ internal class ModEntry : Mod
             Horse[] horses = e.Added.OfType<Horse>().ToArray();
             if (horses.Any())
             {
-                HashSet<Guid> tractorIDs = [.. this.GetGaragesIn(e.Location).Select(p => p.HorseId)];
+                HashSet<Guid> tractorIds = [.. this.GetGaragesIn(e.Location).Select(p => p.HorseId)];
                 foreach (Horse horse in horses)
                 {
-                    if (tractorIDs.Contains(horse.HorseId) && !TractorManager.IsTractor(horse))
+                    if (tractorIds.Contains(horse.HorseId) && !TractorManager.IsTractor(horse))
                         TractorManager.SetTractorInfo(horse, this.Config.SoundEffects);
                 }
             }
@@ -489,7 +489,7 @@ internal class ModEntry : Mod
     private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
     {
         // tractor request from a farmhand
-        if (e.Type == this.RequestTractorMessageID && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
+        if (e.Type == this.RequestTractorMessageId && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
         {
             Farmer? player = Game1.GetPlayer(e.FromPlayerID);
             if (player is { IsMainPlayer: false })
@@ -572,7 +572,7 @@ internal class ModEntry : Mod
             this.Monitor.Log("Sending tractor request to host player.");
             this.Helper.Multiplayer.SendMessage(
                 message: true,
-                messageType: this.RequestTractorMessageID,
+                messageType: this.RequestTractorMessageId,
                 modIDs: [this.ModManifest.UniqueID],
                 playerIDs: [Game1.MasterPlayer.UniqueMultiplayerID]
             );

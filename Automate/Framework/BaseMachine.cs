@@ -15,7 +15,7 @@ internal abstract class BaseMachine : IMachine
     *********/
     /// <summary>A unique ID for the machine type.</summary>
     /// <remarks>This value should be identical for two machines if they have the exact same behavior and input logic. For example, if one machine in a group can't process input due to missing items, Automate will skip any other empty machines of that type in the same group since it assumes they need the same inputs.</remarks>
-    public string MachineTypeID { get; protected set; }
+    public string MachineTypeId { get; protected set; }
 
     /// <summary>The location which contains the machine.</summary>
     public GameLocation Location { get; }
@@ -94,7 +94,7 @@ internal abstract class BaseMachine : IMachine
     /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
     protected BaseMachine(GameLocation location, in Rectangle tileArea, string? machineTypeId = null)
     {
-        this.MachineTypeID = machineTypeId ?? this.GetDefaultMachineId();
+        this.MachineTypeId = machineTypeId ?? this.GetDefaultMachineId();
         this.Location = location;
         this.TileArea = tileArea;
     }

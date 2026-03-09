@@ -12,10 +12,10 @@ internal class PatchMoveEntryConfig
     public string? ID { get; }
 
     /// <summary>The ID of another entry this one should be inserted before.</summary>
-    public string? BeforeID { get; }
+    public string? BeforeId { get; }
 
     /// <summary>The ID of another entry this one should be inserted after.</summary>
-    public string? AfterID { get; }
+    public string? AfterId { get; }
 
     /// <summary>The position to set.</summary>
     public string? ToPosition { get; }
@@ -26,15 +26,15 @@ internal class PatchMoveEntryConfig
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="id">The entry ID to move.</param>
-    /// <param name="beforeID">The ID of another entry this one should be inserted before.</param>
-    /// <param name="afterID">The ID of another entry this one should be inserted after.</param>
+    /// <param name="beforeId">The ID of another entry this one should be inserted before.</param>
+    /// <param name="afterId">The ID of another entry this one should be inserted after.</param>
     /// <param name="toPosition">The position to set.</param>
     [JsonConstructor]
-    public PatchMoveEntryConfig(string? id, string? beforeID, string? afterID, string? toPosition)
+    public PatchMoveEntryConfig(string? id, string? beforeId, string? afterId, string? toPosition)
     {
         this.ID = id;
-        this.BeforeID = beforeID;
-        this.AfterID = afterID;
+        this.BeforeId = beforeId;
+        this.AfterId = afterId;
         this.ToPosition = toPosition;
     }
 
@@ -43,8 +43,8 @@ internal class PatchMoveEntryConfig
     public PatchMoveEntryConfig(PatchMoveEntryConfig other)
         : this(
             id: other.ID,
-            beforeID: other.BeforeID,
-            afterID: other.AfterID,
+            beforeId: other.BeforeId,
+            afterId: other.AfterId,
             toPosition: other.ToPosition
         )
     { }

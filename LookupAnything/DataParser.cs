@@ -72,10 +72,10 @@ internal class DataParser
                 for (int i = 0; i < ingredientData.Length; i += 3)
                 {
                     int index = i / 3;
-                    string itemID = ArgUtility.Get(ingredientData, i);
+                    string itemId = ArgUtility.Get(ingredientData, i);
                     int stack = ArgUtility.GetInt(ingredientData, i + 1);
                     ItemQuality quality = ArgUtility.GetEnum<ItemQuality>(ingredientData, i + 2);
-                    ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
+                    ingredients.Add(new BundleIngredientModel(index, itemId, stack, quality));
                 }
 
                 // create bundle
@@ -486,7 +486,7 @@ internal class DataParser
                 float chance = ArgUtility.GetFloat(dropFields, i + 1);
                 int maxDrops = 1;
 
-                // if itemID is negative, game randomly drops 1-3
+                // if item ID is negative, game randomly drops 1-3
                 if (int.TryParse(itemId, out int id) && id < 0)
                 {
                     itemId = (-id).ToString();

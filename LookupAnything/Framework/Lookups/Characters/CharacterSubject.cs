@@ -574,10 +574,10 @@ internal class CharacterSubject : BaseSubject
 
     /// <summary>Get the last day when the given player petted the pet.</summary>
     /// <param name="pet">The pet to check.</param>
-    /// <param name="playerID">The unique multiplayer ID for the player to check.</param>
-    private int? GetLastDayPetted(Pet pet, long playerID)
+    /// <param name="playerId">The unique multiplayer ID for the player to check.</param>
+    private int? GetLastDayPetted(Pet pet, long playerId)
     {
-        return pet.lastPetDay.TryGetValue(playerID, out int lastDay)
+        return pet.lastPetDay.TryGetValue(playerId, out int lastDay)
             ? lastDay
             : null;
     }

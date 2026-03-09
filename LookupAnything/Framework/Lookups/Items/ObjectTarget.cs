@@ -95,7 +95,7 @@ internal class ObjectTarget : GenericTarget<SObject>
     /// <remarks>Reverse-engineered from <see cref="Fence.draw(SpriteBatch,int,int,float)"/>.</remarks>
     private Rectangle GetSpritesheetArea(Fence fence, GameLocation location)
     {
-        int spriteID = 1;
+        int spriteId = 1;
         if (fence.health.Value > 1.0)
         {
             int index = 0;
@@ -127,13 +127,13 @@ internal class ObjectTarget : GenericTarget<SObject>
                     return new Rectangle(fence.gatePosition.Value == Fence.gateOpenedPosition ? 24 : 0, 128, 24, 32);
                 if (index == 1500)
                     return new Rectangle(fence.gatePosition.Value == Fence.gateClosedPosition ? 16 : 0, 160, 16, 16);
-                spriteID = Fence.sourceRectForSoloGate;
+                spriteId = Fence.sourceRectForSoloGate;
             }
             else
-                spriteID = Fence.fenceDrawGuide[index];
+                spriteId = Fence.fenceDrawGuide[index];
         }
 
         Texture2D texture = fence.fenceTexture.Value;
-        return new Rectangle(spriteID * Fence.fencePieceWidth % texture.Bounds.Width, spriteID * Fence.fencePieceWidth / texture.Bounds.Width * Fence.fencePieceHeight, Fence.fencePieceWidth, Fence.fencePieceHeight);
+        return new Rectangle(spriteId * Fence.fencePieceWidth % texture.Bounds.Width, spriteId * Fence.fencePieceWidth / texture.Bounds.Width * Fence.fencePieceHeight, Fence.fencePieceWidth, Fence.fencePieceHeight);
     }
 }

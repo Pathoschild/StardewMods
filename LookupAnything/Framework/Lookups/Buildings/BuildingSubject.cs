@@ -321,8 +321,8 @@ internal class BuildingSubject : BaseSubject
         // stable
         if (target is Stable stable)
         {
-            long ownerID = stable.owner.Value;
-            return Game1.GetPlayer(ownerID);
+            long ownerId = stable.owner.Value;
+            return Game1.GetPlayer(ownerId);
         }
 
         // cabin
@@ -429,7 +429,7 @@ internal class BuildingSubject : BaseSubject
                 .Select(drop =>
                 {
                     // build display string
-                    string summary = ItemRegistry.GetDataOrErrorItem(drop.ItemID).DisplayName;
+                    string summary = ItemRegistry.GetDataOrErrorItem(drop.ItemId).DisplayName;
                     if (drop.MinCount != drop.MaxCount)
                         summary += $" ({I18n.Generic_Range(min: drop.MinCount, max: drop.MaxCount)})";
                     else if (drop.MinCount > 1)

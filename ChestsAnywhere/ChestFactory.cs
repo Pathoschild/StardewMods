@@ -25,7 +25,7 @@ internal class ChestFactory
     ** Fields
     *********/
     /// <summary>The qualified item ID for auto-grabbers.</summary>
-    private readonly string AutoGrabberID = "(BC)165";
+    private readonly string AutoGrabberId = "(BC)165";
 
     /// <summary>Provides multiplayer utilities.</summary>
     private readonly IMultiplayerHelper Multiplayer;
@@ -112,7 +112,7 @@ internal class ChestFactory
                         }
 
                         // auto-grabbers
-                        if (obj.QualifiedItemId == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest && (!excludeUnnamed || ContainerData.HasCustomName(obj)))
+                        if (obj.QualifiedItemId == this.AutoGrabberId && obj.heldObject.Value is Chest grabberChest && (!excludeUnnamed || ContainerData.HasCustomName(obj)))
                         {
                             return new ManagedChest(
                                 container: new AutoGrabberContainer(obj, grabberChest, context: obj),
@@ -395,7 +395,7 @@ internal class ChestFactory
                 return this.GetChestInventory(chest);
 
             // auto-grabber
-            case SObject obj when obj.QualifiedItemId == this.AutoGrabberID:
+            case SObject obj when obj.QualifiedItemId == this.AutoGrabberId:
                 return this.GetChestInventory(obj.heldObject.Value as Chest);
 
             // shipping bin

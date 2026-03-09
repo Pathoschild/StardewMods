@@ -203,8 +203,8 @@ internal class ItemLookupProvider : BaseLookupProvider
                     {
                         if (component.containsPoint(cursorX, cursorY))
                         {
-                            string itemID = component.name.Split(' ')[0];
-                            Item item = ItemRegistry.Create(itemID);
+                            string itemId = component.name.Split(' ')[0];
+                            Item item = ItemRegistry.Create(itemId);
                             return this.BuildSubject(item, ObjectContext.Inventory, null, knownQuality: false);
                         }
                     }

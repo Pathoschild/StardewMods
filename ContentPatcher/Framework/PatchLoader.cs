@@ -144,14 +144,14 @@ internal class PatchLoader
     /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
     /// <param name="path">The path to the value from the root content file.</param>
     /// <param name="conditions">The normalized conditions.</param>
-    /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
+    /// <param name="immutableRequiredModIds">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
     /// <param name="error">An error message indicating why normalization failed.</param>
-    public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, out IInvariantSet immutableRequiredModIDs, [NotNullWhen(false)] out string? error)
+    public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, out IInvariantSet immutableRequiredModIds, [NotNullWhen(false)] out string? error)
     {
         // no conditions
         if (raw == null || !raw.Any())
         {
-            immutableRequiredModIDs = InvariantSets.Empty;
+            immutableRequiredModIds = InvariantSets.Empty;
             conditions = [];
             error = null;
             return true;
@@ -164,7 +164,7 @@ internal class PatchLoader
         {
             if (!this.TryParseCondition(key, value, tokenParser, path.With(key), out Condition? condition, ref requiredModIds, out error))
             {
-                immutableRequiredModIDs = InvariantSets.Empty;
+                immutableRequiredModIds = InvariantSets.Empty;
                 conditions = [];
                 return false;
             }
@@ -172,7 +172,7 @@ internal class PatchLoader
             parsed[key] = condition;
         }
 
-        immutableRequiredModIDs = requiredModIds.Lock();
+        immutableRequiredModIds = requiredModIds.Lock();
         conditions = parsed.Values.ToArray();
         error = null;
         return true;
@@ -413,9 +413,9 @@ internal class PatchLoader
 
             // parse conditions
             Condition[] conditions;
-            IInvariantSet immutableRequiredModIDs;
+            IInvariantSet immutableRequiredModIds;
             {
-                if (!this.TryParseConditions(entry.When, tokenParser, path.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string? error))
+                if (!this.TryParseConditions(entry.When, tokenParser, path.With(nameof(entry.When)), out conditions, out immutableRequiredModIds, out string? error))
                     return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}");
             }
 
@@ -427,14 +427,14 @@ internal class PatchLoader
                     if (action != PatchType.Include)
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
                 }
-                else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string? error, out targetAsset, preValidate: token => this.PreValidateFromFileOrTargetToken(nameof(entry.Target), token, prohibitedTokensInFromFileAndTarget)))
+                else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIds, path.With(nameof(entry.Target)), out string? error, out targetAsset, preValidate: token => this.PreValidateFromFileOrTargetToken(nameof(entry.Target), token, prohibitedTokensInFromFileAndTarget)))
                     return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
             }
 
             // patch target asset locale
             IManagedTokenString? targetAssetLocale = null;
             {
-                if (entry.TargetLocale != null && !tokenParser.TryParseString(entry.TargetLocale, immutableRequiredModIDs, path.With(nameof(entry.TargetLocale)), out string? error, out targetAssetLocale))
+                if (entry.TargetLocale != null && !tokenParser.TryParseString(entry.TargetLocale, immutableRequiredModIds, path.With(nameof(entry.TargetLocale)), out string? error, out targetAssetLocale))
                     return TrackSkip($"the {nameof(PatchConfig.TargetLocale)} is invalid: {error}");
             }
 
@@ -442,7 +442,7 @@ internal class PatchLoader
             IManagedTokenString? fromAsset = null;
             if (entry.FromFile != null)
             {
-                if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromFile)), out string? error, out fromAsset, preValidate: token => this.PreValidateFromFileOrTargetToken(nameof(entry.Target), token, prohibitedTokensInFromFileAndTarget)))
+                if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIds, path.With(nameof(entry.FromFile)), out string? error, out fromAsset, preValidate: token => this.PreValidateFromFileOrTargetToken(nameof(entry.Target), token, prohibitedTokensInFromFileAndTarget)))
                     return TrackSkip(error);
             }
 
@@ -459,7 +459,7 @@ internal class PatchLoader
                     if (this.ReservedLocalTokenNames.Contains(name))
                         return TrackSkip($"the {nameof(entry.LocalTokens)} field can't contain a token named '{name}', which is a reserved token name.");
 
-                    if (!tokenParser.TryParseNullableString(value, immutableRequiredModIDs, path.With(nameof(entry.LocalTokens), name), out string? error, out IManagedTokenString? parsed))
+                    if (!tokenParser.TryParseNullableString(value, immutableRequiredModIds, path.With(nameof(entry.LocalTokens), name), out string? error, out IManagedTokenString? parsed))
                         return TrackSkip(error);
 
                     if (parsed != null)
@@ -478,7 +478,7 @@ internal class PatchLoader
                         return TrackSkip($"the {nameof(PatchConfig.Enabled)} field is obsolete and should be removed");
                 }
 
-                if (!this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.Enabled)), out string? error, out enabled))
+                if (!this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIds, path.With(nameof(entry.Enabled)), out string? error, out enabled))
                     return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
             }
 
@@ -589,7 +589,7 @@ internal class PatchLoader
                         // parse data changes
                         bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out List<IManagedTokenString> targetField, [NotNullWhen(false)] out string? setParseError)
                         {
-                            return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, path, out parsedEntries, out parsedFields, out parsedMoveEntries, out targetField, out setParseError);
+                            return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIds, path, out parsedEntries, out parsedFields, out parsedMoveEntries, out targetField, out setParseError);
                         }
                         List<EditDataPatchRecord>? entries = null;
                         List<EditDataPatchField>? fields = null;
@@ -603,7 +603,7 @@ internal class PatchLoader
                             return TrackSkip(error);
 
                         // parse text operations
-                        if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
+                        if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIds, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
                             return TrackSkip(error);
 
                         // save
@@ -647,12 +647,12 @@ internal class PatchLoader
 
                         // read from area
                         TokenRectangle? fromArea = null;
-                        if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out string? error, out fromArea))
+                        if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIds, path.With(nameof(entry.FromArea)), out string? error, out fromArea))
                             return TrackSkip(error);
 
                         // read to area
                         TokenRectangle? toArea = null;
-                        if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
+                        if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIds, path.With(nameof(entry.ToArea)), out error, out toArea))
                             return TrackSkip(error);
 
                         // parse priority
@@ -694,9 +694,9 @@ internal class PatchLoader
                         {
                             LogPathBuilder localPath = path.With(nameof(entry.MapProperties), pair.Key);
 
-                            if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString? key))
+                            if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIds, localPath.With("key"), out error, out IManagedTokenString? key))
                                 return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
-                            if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
+                            if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIds, localPath.With("value"), out error, out IManagedTokenString? value))
                                 return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                             mapProperties.Add(new EditMapPatchProperty(key, value));
@@ -714,21 +714,21 @@ internal class PatchLoader
                             string errorPrefix = $"{nameof(PatchConfig.MapTiles)} > entry #{i + 1}";
 
                             // layer
-                            if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIDs, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString? layer))
+                            if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIds, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString? layer))
                                 return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Layer)} is invalid: {error}");
 
                             // position
-                            if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Position)), out error, out TokenPosition? position))
+                            if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIds, localPath.With(nameof(tile.Position)), out error, out TokenPosition? position))
                                 return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Position)} is invalid: {error}");
 
                             // tilesheet
                             IManagedTokenString? tilesheet = null;
-                            if (tile.SetTilesheet != null && !tokenParser.TryParseString(tile.SetTilesheet, immutableRequiredModIDs, localPath.With(nameof(tile.SetTilesheet)), out error, out tilesheet))
+                            if (tile.SetTilesheet != null && !tokenParser.TryParseString(tile.SetTilesheet, immutableRequiredModIds, localPath.With(nameof(tile.SetTilesheet)), out error, out tilesheet))
                                 return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
 
                             // index
                             IManagedTokenString? setIndex = null;
-                            if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out setIndex))
+                            if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIds, localPath.With(nameof(tile.SetIndex)), out error, out setIndex))
                                 return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
 
                             // properties
@@ -738,9 +738,9 @@ internal class PatchLoader
                                 foreach (var pair in tile.SetProperties)
                                 {
                                     p++;
-                                    if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString? key))
+                                    if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIds, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString? key))
                                         return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
-                                    if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
+                                    if (!tokenParser.TryParseNullableString(pair.Value, immutableRequiredModIds, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
                                         return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
 
                                     tileProperties[key] = value;
@@ -749,7 +749,7 @@ internal class PatchLoader
 
                             // remove
                             IManagedTokenString? remove = null;
-                            if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Remove)), out error, out remove))
+                            if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIds, localPath.With(nameof(tile.Remove)), out error, out remove))
                                 return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Remove)} is invalid: {error}");
 
                             mapTiles.Add(new EditMapPatchTile(
@@ -763,21 +763,21 @@ internal class PatchLoader
                         }
 
                         // parse warps
-                        if (!this.TryParseWarps(entry.AddNpcWarps, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.AddNpcWarps)), out List<IManagedTokenString> addNpcWarps, out string? warpError))
+                        if (!this.TryParseWarps(entry.AddNpcWarps, tokenParser, immutableRequiredModIds, path.With(nameof(entry.AddNpcWarps)), out List<IManagedTokenString> addNpcWarps, out string? warpError))
                             return TrackSkip($"{nameof(entry.AddNpcWarps)} is invalid: {warpError}");
-                        if (!this.TryParseWarps(entry.AddWarps, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.AddWarps)), out List<IManagedTokenString> addWarps, out warpError))
+                        if (!this.TryParseWarps(entry.AddWarps, tokenParser, immutableRequiredModIds, path.With(nameof(entry.AddWarps)), out List<IManagedTokenString> addWarps, out warpError))
                             return TrackSkip($"{nameof(entry.AddWarps)} is invalid: {warpError}");
 
                         // parse text operations
-                        if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
+                        if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIds, path.With(nameof(entry.TextOperations)), out IList<ITextOperation> textOperations, out error))
                             return TrackSkip(error);
 
                         // read from/to asset areas
                         TokenRectangle? fromArea = null;
-                        if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out error, out fromArea))
+                        if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIds, path.With(nameof(entry.FromArea)), out error, out fromArea))
                             return TrackSkip(error);
                         TokenRectangle? toArea = null;
-                        if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
+                        if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIds, path.With(nameof(entry.ToArea)), out error, out toArea))
                             return TrackSkip(error);
 
                         // read patch mode
@@ -1157,24 +1157,24 @@ internal class PatchLoader
                 LogPathBuilder localPath = path.With(nameof(entry.MoveEntries), i++.ToString());
 
                 // validate
-                string?[] targets = [moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition];
+                string?[] targets = [moveEntry.BeforeId, moveEntry.AfterId, moveEntry.ToPosition];
                 if (string.IsNullOrWhiteSpace(moveEntry.ID))
                     return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
                 switch (targets.Count(p => !string.IsNullOrWhiteSpace(p)))
                 {
                     case 0:
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeId)}, or {nameof(PatchMoveEntryConfig.AfterId)}", out error);
                     case > 1:
-                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeId)}, and {nameof(PatchMoveEntryConfig.AfterId)}", out error);
                 }
 
                 // parse IDs
                 if (!tokenParser.TryParseString(moveEntry.ID, assumeModIds, localPath.With(nameof(moveEntry.ID)), out string? idError, out IManagedTokenString? moveId))
                     return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}", out error);
-                if (!tokenParser.TryParseString(moveEntry.BeforeID, assumeModIds, localPath.With(nameof(moveEntry.BeforeID)), out string? beforeIdError, out IManagedTokenString? beforeId))
-                    return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}", out error);
-                if (!tokenParser.TryParseString(moveEntry.AfterID, assumeModIds, localPath.With(nameof(moveEntry.AfterID)), out string? afterIdError, out IManagedTokenString? afterId))
-                    return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}", out error);
+                if (!tokenParser.TryParseString(moveEntry.BeforeId, assumeModIds, localPath.With(nameof(moveEntry.BeforeId)), out string? beforeIdError, out IManagedTokenString? beforeId))
+                    return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeId)} is invalid: {beforeIdError}", out error);
+                if (!tokenParser.TryParseString(moveEntry.AfterId, assumeModIds, localPath.With(nameof(moveEntry.AfterId)), out string? afterIdError, out IManagedTokenString? afterId))
+                    return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterId)} is invalid: {afterIdError}", out error);
 
                 // parse position
                 MoveEntryPosition toPosition = MoveEntryPosition.None;
@@ -1210,9 +1210,9 @@ internal class PatchLoader
     /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
     /// <param name="path">The path to the condition from the root content file.</param>
     /// <param name="condition">The normalized condition.</param>
-    /// <param name="immutableRequiredModIDs">The mod IDs always available when the condition is applied. If the condition has an immutable <see cref="ConditionType.HasMod"/> condition, it'll be added to this list.</param>
+    /// <param name="immutableRequiredModIds">The mod IDs always available when the condition is applied. If the condition has an immutable <see cref="ConditionType.HasMod"/> condition, it'll be added to this list.</param>
     /// <param name="error">An error message indicating why normalization failed.</param>
-    private bool TryParseCondition(string? name, string? value, TokenParser tokenParser, LogPathBuilder path, [NotNullWhen(true)] out Condition? condition, ref MutableInvariantSet immutableRequiredModIDs, [NotNullWhen(false)] out string? error)
+    private bool TryParseCondition(string? name, string? value, TokenParser tokenParser, LogPathBuilder path, [NotNullWhen(true)] out Condition? condition, ref MutableInvariantSet immutableRequiredModIds, [NotNullWhen(false)] out string? error)
     {
         bool Fail(string reason, out string setError, out Condition? setCondition)
         {
@@ -1241,7 +1241,7 @@ internal class PatchLoader
         IInputArguments keyInputArgs = tokenParser.CreateInputArgs(keyInputStr);
 
         // This will validate if the token exists, and if not, is it allowed from HasMod checks
-        if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIDs.GetImmutable(), out error))
+        if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIds.GetImmutable(), out error))
             return Fail(error, out error, out condition);
 
         // get token
@@ -1254,7 +1254,7 @@ internal class PatchLoader
         // parse values
         if (string.IsNullOrWhiteSpace(value))
             return Fail($"can't parse condition {name}: value can't be empty", out error, out condition);
-        if (!tokenParser.TryParseString(value, assumeModIds: immutableRequiredModIDs.GetImmutable(), path.With("value"), out error, out IManagedTokenString? values))
+        if (!tokenParser.TryParseString(value, assumeModIds: immutableRequiredModIds.GetImmutable(), path.With("value"), out error, out IManagedTokenString? values))
             return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
         // validate token keys & values
@@ -1273,12 +1273,12 @@ internal class PatchLoader
             if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue? contains))
             {
                 if (bool.TryParse(condition.Values.Value, out bool required) && required)
-                    immutableRequiredModIDs.AddRange(contains.Parsed);
+                    immutableRequiredModIds.AddRange(contains.Parsed);
             }
 
             // values
             else
-                immutableRequiredModIDs.AddRange(condition.CurrentValues);
+                immutableRequiredModIds.AddRange(condition.CurrentValues);
         }
 
         return true;

@@ -126,17 +126,17 @@ internal sealed class ChestSearchMenu : IClickableMenu
             for (int col = 0; col < ChestsPerRow; col++)
             {
                 int i = (row * ChestsPerRow) + col;
-                int myID = 100 + i;
+                int myId = 100 + i;
 
                 ChestSearchMenuCell chestSearchMenuCell = new(new Rectangle(0, 0, CellWidth, CellHeight), $"ChestSearchMenuCell_{row}_{col}", Margin + CellWidth * col, Margin + SearchBarHeight + CellHeight * row)
                 {
-                    myID = myID,
-                    upNeighborID = row > 0 ? myID - ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+                    myID = myId,
+                    upNeighborID = row > 0 ? myId - ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
                     upNeighborImmutable = true,
-                    leftNeighborID = col > 0 ? myID - 1 : ClickableComponent.ID_ignore,
-                    rightNeighborID = col < ChestsPerRow - 1 ? myID + 1 : ClickableComponent.ID_ignore,
+                    leftNeighborID = col > 0 ? myId - 1 : ClickableComponent.ID_ignore,
+                    rightNeighborID = col < ChestsPerRow - 1 ? myId + 1 : ClickableComponent.ID_ignore,
                     downNeighborID =
-                        row < RowCount - 1 ? myID + ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
+                        row < RowCount - 1 ? myId + ChestsPerRow : ClickableComponent.CUSTOM_SNAP_BEHAVIOR,
                     downNeighborImmutable = true,
                 };
                 chestSearchMenuCell.Reposition(this.xPositionOnScreen, this.yPositionOnScreen);
@@ -214,20 +214,20 @@ internal sealed class ChestSearchMenu : IClickableMenu
     }
 
     /// <inheritdoc />
-    protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
+    protected override void customSnapBehavior(int direction, int oldRegion, int oldId)
     {
-        if (oldID is >= 100 and < 100 + ChestsPerRow)
+        if (oldId is >= 100 and < 100 + ChestsPerRow)
         {
             if (!this.ScrollGrid(1))
             {
-                this.currentlySnappedComponent = this.getComponentWithID(oldID < 101 + ChestsPerRow / 2 ? 1001 : 1002);
+                this.currentlySnappedComponent = this.getComponentWithID(oldId < 101 + ChestsPerRow / 2 ? 1001 : 1002);
                 this.snapCursorToCurrentSnappedComponent();
             }
         }
-        else if (oldID >= 100 + ChestsPerRow * (RowCount - 1))
+        else if (oldId >= 100 + ChestsPerRow * (RowCount - 1))
             this.ScrollGrid(-1);
         else
-            base.customSnapBehavior(direction, oldRegion, oldID);
+            base.customSnapBehavior(direction, oldRegion, oldId);
     }
 
     /// <inheritdoc />

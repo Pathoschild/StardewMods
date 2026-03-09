@@ -2016,7 +2016,7 @@ alternate name and the value is the original token name. For example:
 {
     "Format": "2.9.0",
     "AliasTokenNames": {
-        "ItemID": "spacechase0.jsonAssets/ObjectId",
+        "ItemId": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
     },
     "Changes": [
@@ -2024,7 +2024,7 @@ alternate name and the value is the original token name. For example:
             "Action": "EditData",
             "Target": "Data/NpcGiftTastes",
             "Entries": {
-                "Universal_Love": "74 446 797 373 {{ItemID: pufferchick}}"
+                "Universal_Love": "74 446 797 373 {{ItemId: pufferchick}}"
             }
         }
     ]
