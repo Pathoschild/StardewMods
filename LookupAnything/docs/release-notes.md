@@ -8,6 +8,7 @@
 * Fixed item lookups' fish spawn rule checkboxes not accounting for...
   - different weather when fishing outside the valley;
   - some custom mod weathers.
+* Fixed fruit tree lookups' portrait.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.54.0

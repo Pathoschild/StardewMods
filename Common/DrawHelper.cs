@@ -107,4 +107,50 @@ internal static class DrawHelper
     {
         batch.Draw(CommonHelper.Pixel, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
     }
+
+    /// <summary>Capture arbitrary drawn content into a texture.</summary>
+    /// <param name="draw">Draw the content.</param>
+    /// <param name="pixelWidth">The pixel width of the texture to capture.</param>
+    /// <param name="pixelHeight">The pixel height of the texture to capture.</param>
+    /// <param name="useSpriteBatch">If set, draw using this sprite batch instead of creating a new one. This sprite batch must be in a non-begun state.</param>
+    public static Texture2D RenderToTexture(Action<SpriteBatch> draw, int pixelWidth, int pixelHeight, SpriteBatch? useSpriteBatch = null)
+    {
+        // back up render target
+        RenderTarget2D? wasRenderTarget;
+        {
+            RenderTargetBinding[] wasRenderTargets = Game1.graphics.GraphicsDevice.GetRenderTargets();
+            wasRenderTarget = wasRenderTargets.Length > 0
+                ? wasRenderTargets[0].RenderTarget as RenderTarget2D
+                : null;
+        }
+
+        // capture output
+        SpriteBatch? disposeSpriteBatch = null;
+        RenderTarget2D renderTarget = new RenderTarget2D(Game1.graphics.GraphicsDevice, pixelWidth, pixelHeight, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
+        Game1.SetRenderTarget(renderTarget);
+        try
+        {
+            SpriteBatch renderBatch;
+            if (useSpriteBatch != null)
+                renderBatch = useSpriteBatch;
+            else
+                renderBatch = disposeSpriteBatch = new SpriteBatch(Game1.graphics.GraphicsDevice);
+
+            renderBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+
+            Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
+            draw(renderBatch);
+
+            renderBatch.End();
+
+            return renderTarget;
+        }
+
+        // restore original state
+        finally
+        {
+            Game1.SetRenderTarget(wasRenderTarget);
+            disposeSpriteBatch?.Dispose();
+        }
+    }
 }
