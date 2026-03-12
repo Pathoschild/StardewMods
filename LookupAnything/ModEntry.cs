@@ -123,7 +123,7 @@ internal class ModEntry : Mod
 
         // initialize functionality
         this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-        this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
+        this.TargetFactory = new TargetFactory(this.Monitor, this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
         // add config UI

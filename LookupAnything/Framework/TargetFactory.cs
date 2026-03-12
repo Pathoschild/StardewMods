@@ -46,11 +46,12 @@ internal class TargetFactory : ISubjectRegistry
     ** Constructors
     ****/
     /// <summary>Construct an instance.</summary>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="config">The mod configuration.</param>
     /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-    public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, Func<bool> showRawTileInfo)
+    public TargetFactory(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, Func<bool> showRawTileInfo)
     {
         this.GameHelper = gameHelper;
 
@@ -58,7 +59,7 @@ internal class TargetFactory : ISubjectRegistry
         this.LookupProviders = [
             new BuildingLookupProvider(reflection, gameHelper, config, codex),
             new CharacterLookupProvider(reflection, gameHelper, config, codex),
-            new ItemLookupProvider(reflection, gameHelper, config, codex),
+            new ItemLookupProvider(monitor, reflection, gameHelper, config, codex),
             new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
             new AchievementLookupProvider(reflection, gameHelper),
             new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
