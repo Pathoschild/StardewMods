@@ -60,7 +60,7 @@ internal class ColorField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         // get icon size
         float textHeight = font.MeasureString("ABC").Y;

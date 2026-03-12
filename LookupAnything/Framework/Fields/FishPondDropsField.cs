@@ -57,7 +57,7 @@ internal class FishPondDropsField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         this.LinkTextAreas.Clear();
         float height = 0;
@@ -82,6 +82,9 @@ internal class FishPondDropsField : GenericField
         bool isPrevDropGuaranteed = false;
         foreach (FishPondDrop drop in this.Drops)
         {
+            if (height > visibleHeight)
+                break;
+
             bool disabled = !drop.IsUnlocked || isPrevDropGuaranteed;
 
             // draw group checkbox + requirement

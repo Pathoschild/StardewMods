@@ -50,8 +50,9 @@ internal static class DrawTextHelper
     /// <param name="position">The position at which to draw the text.</param>
     /// <param name="wrapWidth">The width at which to wrap the text.</param>
     /// <param name="scale">The font scale.</param>
+    /// <param name="visibleHeight">The visible height available for drawing. Any content beyond this height won't be visible to the player.</param>
     /// <returns>Returns the text dimensions.</returns>
-    public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, IEnumerable<IFormattedText?>? text, Vector2 position, float wrapWidth, float scale = 1)
+    public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, IEnumerable<IFormattedText?>? text, Vector2 position, float wrapWidth, float scale = 1, float? visibleHeight = null)
     {
         if (text == null)
             return new Vector2(0, 0);
@@ -72,6 +73,9 @@ internal static class DrawTextHelper
         {
             if (snippet?.Text == null)
                 continue;
+
+            if (yOffset > visibleHeight)
+                break;
 
             // build word list
             string[] rawWords = snippet.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -105,6 +109,9 @@ internal static class DrawTextHelper
                         yOffset += lineHeight;
                         blockHeight += lineHeight;
                         isFirstOfLine = true;
+
+                        if (yOffset > visibleHeight)
+                            break;
                     }
 
                     // split within words if needed (e.g. list separators)
@@ -123,6 +130,9 @@ internal static class DrawTextHelper
                             yOffset += lineHeight;
                             blockHeight += lineHeight;
                             isFirstOfLine = true;
+
+                            if (yOffset > visibleHeight)
+                                break;
                         }
                         if (wordPart == Environment.NewLine)
                             continue;

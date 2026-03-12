@@ -31,7 +31,7 @@ internal class CharacterFriendshipField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         FriendshipModel friendship = this.Friendship;
 

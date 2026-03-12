@@ -52,7 +52,7 @@ internal class ItemIconListField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         // get icon size
         float textHeight = font.MeasureString("ABC").Y;
@@ -71,6 +71,9 @@ internal class ItemIconListField : GenericField
         int leftOffset = this.IconIndent;
         foreach ((Item item, SpriteInfo? sprite) in this.Items)
         {
+            if (topOffset > visibleHeight)
+                break;
+
             // draw icon
             spriteBatch.DrawSpriteWithin(sprite, position.X + leftOffset, position.Y + topOffset, iconSize);
             if (this.ShowStackSize && item.Stack > 1)

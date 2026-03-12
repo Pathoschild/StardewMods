@@ -43,7 +43,7 @@ internal class FishSpawnRulesField : CheckboxListField
         : this(label, FishSpawnRulesField.GetConditions(gameHelper, location, tile, fishAreaId, showUncaughtFishSpawnRules).ToArray()) { }
 
     /// <inheritdoc/>
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         float topOffset = 0;
         int hiddenSpawnRulesCount = 0;
@@ -51,15 +51,17 @@ internal class FishSpawnRulesField : CheckboxListField
         // draw checkbox lists
         foreach (CheckboxList checkboxList in this.CheckboxLists)
         {
+            if (topOffset > visibleHeight)
+                break;
+
             if (checkboxList.IsHidden)
                 hiddenSpawnRulesCount++;
             else
-                // draw checkbox list
-                topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
+                topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, visibleHeight).Y;
         }
 
         // draw 'X uncaught fish' message
-        if (hiddenSpawnRulesCount > 0)
+        if (hiddenSpawnRulesCount > 0 && topOffset < visibleHeight)
             topOffset += this.LineHeight + this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, I18n.Item_UncaughtFish(hiddenSpawnRulesCount), Color.Gray).Y;
 
         return new Vector2(wrapWidth, topOffset - this.LineHeight);
