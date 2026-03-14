@@ -1,6 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Noclip Mode downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
+
 ## 1.3.19
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Chests Anywhere downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.30.0

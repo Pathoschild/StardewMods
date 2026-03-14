@@ -16,10 +16,10 @@ jobs:
                   fetch-tags: false
 
             - name: Add build environment
-              uses: Pathoschild/SMAPI-ModBuildWorkflow/add-build-environment@v0
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/add-build-environment@v1
 
             - name: Set prerelease versions
-              uses: Pathoschild/SMAPI-ModBuildWorkflow/set-prerelease-versions@v0
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/set-prerelease-versions@v1
               if: github.ref != env.RELEASE_REF
 
             - name: Build mods
@@ -29,7 +29,7 @@ jobs:
               run: dotnet test --no-build
 
             - name: Upload release zips
-              uses: Pathoschild/SMAPI-ModBuildWorkflow/upload-release-artifacts@v0
+              uses: Pathoschild/SMAPI-ModBuildWorkflow/upload-release-artifacts@v1
               with:
                   create_attestations: ${{github.ref == env.RELEASE_REF}}
                   create_combined_zip: "all-mods"

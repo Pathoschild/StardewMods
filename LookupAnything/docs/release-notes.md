@@ -5,6 +5,8 @@
 * You can now double-tap the screen on Android to look up whatever's under the tap (thanks to ferrles124!).
 * Added integration with Have More Kids (thanks to Mushymato!).
 * Improved performance when viewing lookups with a lot of information shown.
+* Lookup Anything downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
 * Fixed lookups in Better Crafting UI not working for unknown recipes.
 * Fixed item lookups for planted forage crop seeds not showing the item that will actually be produced.
 * Fixed item lookups' fish spawn rule checkboxes not accounting for...
