@@ -826,14 +826,13 @@
     "config.title.controls": "Controlli",
     "config.hide-on-key-up.name": "Nascondi con tasto non premuto",
     "config.hide-on-key-up.desc": "Scegli se nascondere l'interfaccia utente di ricerca quando si rilascia il tasto di ricerca.",
-    "config.toggle-lookup.name": "Attiva lookup",
+    "config.toggle-lookup.name": "Attiva ricerca",
     "config.toggle-lookup.desc": "I tasti che attivano l'interfaccia utente di ricerca per qualcosa sotto il cursore.",
 
-    // TODO
-    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
-    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
-    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
-    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-click.name": "Attiva/disattiva ricerca con doppio clic",
+    "config.toggle-lookup-on-double-click.description": "Scegli se attivare/disattivare l'interfaccia di ricerca cliccando due volte il tasto sinistro del mouse. Se possibile, questa funzione individua la posizione del cursore.",
+    "config.toggle-lookup-on-double-tap.name": "Attiva/disattiva ricerca con doppio tocco",
+    "config.toggle-lookup-on-double-tap.description": "Scegli se attivare/disattivare l'interfaccia di ricerca toccando due volte lo schermo. Se possibile, questa funzione individua la posizione toccata.",
 
     "config.toggle-search.name": "Attiva ricerca",
     "config.toggle-search.desc": "I tasti che attivano l'interfaccia utente di ricerca.",
