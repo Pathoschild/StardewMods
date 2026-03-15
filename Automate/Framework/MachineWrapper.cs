@@ -21,7 +21,7 @@ internal class MachineWrapper : IMachine
 
     /// <summary>A unique ID for the machine type.</summary>
     /// <remarks>This value should be identical for two machines if they have the exact same behavior and input logic. For example, if one machine in a group can't process input due to missing items, Automate will skip any other empty machines of that type in the same group since it assumes they need the same inputs.</remarks>
-    public string MachineTypeId => this.Machine.MachineTypeId;
+    public string MachineTypeID => this.Machine.MachineTypeID;
 
 
     /*********

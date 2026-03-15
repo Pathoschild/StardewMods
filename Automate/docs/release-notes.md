@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error loading Automate integrations in 2.6.0.
+
 ## 2.6.0
 Released 14 March 2026 for SMAPI 4.1.10 or later.
 
