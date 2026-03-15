@@ -312,7 +312,7 @@ internal class ContentManager
                 {
                     if (buildingsLayer.Tiles[x, y]?.Properties?.TryGetValue("Action", out string action) is true && action.StartsWithIgnoreCase(Constant.TicketsAction))
                     {
-                        string foundRawNetwork = ArgUtility.SplitBySpaceAndGet(action, 1, StopNetworks.Train.ToString());
+                        string foundRawNetwork = ArgUtility.SplitBySpaceAndGet(action, 1, nameof(StopNetworks.Train));
                         if (Utility.TryParseEnum(foundRawNetwork, out StopNetworks foundNetwork) && network.HasAnyFlag(foundNetwork))
                         {
                             tile = new Point(x, y);
