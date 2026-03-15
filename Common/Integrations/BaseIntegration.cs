@@ -94,7 +94,7 @@ internal abstract class BaseIntegration<TApi> : BaseIntegration
     public TApi? ModApi { get; }
 
     /// <inheritdoc />
-    [MemberNotNullWhen(true, nameof(BaseIntegration<TApi>.ModApi))]
+    [MemberNotNullWhen(true, nameof(BaseIntegration<>.ModApi))]
     public override bool IsLoaded => this.ModApi != null;
 
 
@@ -115,7 +115,7 @@ internal abstract class BaseIntegration<TApi> : BaseIntegration
     }
 
     /// <inheritdoc />
-    [MemberNotNull(nameof(BaseIntegration<TApi>.ModApi))]
+    [MemberNotNull(nameof(BaseIntegration<>.ModApi))]
     protected override void AssertLoaded()
     {
         if (!this.IsLoaded)

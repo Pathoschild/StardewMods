@@ -27,7 +27,7 @@ internal class ItemIconListField : GenericField
     private readonly bool ShowStackSize;
 
     /// <summary>The pixel indent to apply before each entry in the list.</summary>
-    private readonly int IconIndent = 0;
+    private readonly int IconIndent;
 
 
     /*********

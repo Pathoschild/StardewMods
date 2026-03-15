@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.CentralStation.Framework.Integrations;
@@ -20,9 +19,6 @@ internal class StopManager
 
     /// <summary>Encapsulates monitoring and logging.</summary>
     private readonly IMonitor Monitor;
-
-    /// <summary>The mod configuration.</summary>
-    private readonly Func<ModConfig> Config;
 
     /// <summary>The stop provider which provides compatibility with the Bus Locations mod.</summary>
     private readonly BusLocationsStopProvider BusLocationsProvider;
@@ -52,12 +48,10 @@ internal class StopManager
     /// <param name="contentManager"><inheritdoc cref="ContentManager" path="/summary" /></param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="modRegistry">The SMAPI API for fetching metadata about loaded mods.</param>
-    /// <param name="config">The mod configuration.</param>
-    public StopManager(ContentManager contentManager, IMonitor monitor, IModRegistry modRegistry, Func<ModConfig> config)
+    public StopManager(ContentManager contentManager, IMonitor monitor, IModRegistry modRegistry)
     {
         this.ContentManager = contentManager;
         this.Monitor = monitor;
-        this.Config = config;
 
         this.BusLocationsProvider = new BusLocationsStopProvider(modRegistry, monitor, this.ContentManager.GetTranslation);
         this.TrainStationStopProvider = new TrainStationStopProvider(modRegistry, monitor, this.ContentManager.GetTranslation);

@@ -1,5 +1,3 @@
-using StardewValley.Menus;
-
 namespace Pathoschild.Stardew.Common.Integrations.StardewAccess;
 
 public interface IStardewAccessApi

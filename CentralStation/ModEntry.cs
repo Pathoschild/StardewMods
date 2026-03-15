@@ -55,7 +55,7 @@ internal class ModEntry : Mod
         // init
         this.Config = helper.ReadConfig<ModConfig>();
         this.ContentManager = new ContentManager(helper.GameContent, helper.ModRegistry, this.Monitor, () => this.Config);
-        this.StopManager = new Lazy<StopManager>(() => new StopManager(this.ContentManager, this.Monitor, helper.ModRegistry, () => this.Config)); // must be lazy since we can't access mod-provided APIs in Entry
+        this.StopManager = new Lazy<StopManager>(() => new StopManager(this.ContentManager, this.Monitor, helper.ModRegistry)); // must be lazy since we can't access mod-provided APIs in Entry
 
         // hook events
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

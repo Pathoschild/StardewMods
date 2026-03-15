@@ -103,7 +103,7 @@ internal class RangeValueProvider : BaseValueProvider
 
         // validate step
         if (step <= 0)
-            return this.ParseError(input, $"step argument must be a positive integer greater than 0", out error);
+            return this.ParseError(input, "step argument must be a positive integer greater than 0", out error);
 
         // validate range
         if (min > max)

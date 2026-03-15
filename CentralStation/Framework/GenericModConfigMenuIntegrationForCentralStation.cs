@@ -40,6 +40,6 @@ internal class GenericModConfigMenuIntegrationForCentralStation : IGenericModCon
                 tooltip: () => this.GetTranslation("config.require-pam.desc", []),
                 get: config => config.RequirePam,
                 set: (config, value) => config.RequirePam = value
-            ); ;
+            );
     }
 }

@@ -32,9 +32,8 @@ internal class TokenManager : IContext
     private bool IsFirstUpdate = true;
 
     /// <summary>A cached local context for a content pack.</summary>
-    /// <param name="ContentPack">The content pack for which the context was created.</param>
     /// <param name="Context">The token context containing dynamic tokens and aliases for the content pack.</param>
-    private record CachedContext(IContentPack ContentPack, ModTokenContext Context);
+    private record CachedContext(ModTokenContext Context);
 
 
     /*********
@@ -86,7 +85,7 @@ internal class TokenManager : IContext
         if (!this.LocalTokens.TryGetValue(scope, out CachedContext? cached))
         {
             ModTokenContext context = new ModTokenContext(scope, this);
-            this.LocalTokens[scope] = cached = new CachedContext(pack, context);
+            this.LocalTokens[scope] = cached = new CachedContext(context);
 
             foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
                 context.AddLocalToken(new Token(valueProvider, scope));

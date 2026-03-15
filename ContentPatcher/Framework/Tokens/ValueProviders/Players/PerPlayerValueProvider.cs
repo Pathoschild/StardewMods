@@ -87,8 +87,7 @@ internal class PerPlayerValueProvider : BaseValueProvider
                     // get values
                     long id = player.UniqueMultiplayerID;
                     IInvariantSet newValues = this.FetchValues(player);
-                    if (!this.Values.TryGetValue(id, out IInvariantSet? oldValues))
-                        oldValues = null;
+                    IInvariantSet? oldValues = this.Values.GetValueOrDefault(id);
 
                     // track changes
                     removeIds.Remove(id);

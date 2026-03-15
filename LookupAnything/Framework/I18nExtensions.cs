@@ -238,7 +238,7 @@ internal partial class I18n
                         // net ref
                         if (genericType == typeof(NetRef<>))
                         {
-                            PropertyInfo? refValue = type.GetProperty(nameof(NetRef<NetString>.Value));
+                            PropertyInfo? refValue = type.GetProperty(nameof(NetRef<>.Value));
                             if (refValue != null)
                                 return I18n.Stringify(refValue.GetValue(value));
                         }
@@ -246,8 +246,8 @@ internal partial class I18n
                         // key/value pair
                         if (genericType == typeof(KeyValuePair<,>))
                         {
-                            string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key))?.GetValue(value));
-                            string? v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value))?.GetValue(value));
+                            string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Key))?.GetValue(value));
+                            string? v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Value))?.GetValue(value));
                             return $"({k}: {v})";
                         }
                     }
@@ -255,7 +255,7 @@ internal partial class I18n
                     // enumerable
                     if (value is IEnumerable array and not string)
                     {
-                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "(null)").ToArray()!;
+                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "(null)").ToArray();
                         return "[" + I18n.List(values) + "]";
                     }
 

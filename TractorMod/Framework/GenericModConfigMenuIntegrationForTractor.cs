@@ -505,7 +505,7 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 name: I18n.Config_CustomToolNames_Name,
                 tooltip: I18n.Config_CustomToolNames_Tooltip,
                 get: config => string.Join(", ", config.CustomAttachments),
-                set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
+                set: (config, value) => config.CustomAttachments = value.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
             );
     }
 }
