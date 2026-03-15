@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.3.6
+Released 14 March 2016 for SMAPI 4.1.10 or later.
+
 * Horse Flute Anywhere downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
   _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
 

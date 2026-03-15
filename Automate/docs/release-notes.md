@@ -1,15 +1,17 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* When multiple chests are marked "_put items in this chest first_", the item is placed into the one which already contains the item if possible.
-* Chests marked "_put items in this chest first_" and "_Take items from this chest first_" are now used before Junimo chests.
-* You can now configure Junimo hut behavior for specific item IDs.
+## 2.6.0
+Released 14 March 2026 for SMAPI 4.1.10 or later.
+
+* Added options to configure Junimo hut behavior for specific item IDs.
+* When multiple chests have "_put items in this chest first_" enabled, items are added to the one(s) which already contain that item if possible.
+* Chests which have "_put items in this chest first_" or "_take items from this chest first_" are now used before Junimo chests.
 * Automate downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
   _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
-* Optimized performance.
+* Improved performance.
 * Fixed config option for seed behavior in Junimo huts not applied correctly.
-* Fixed chance of automated trees dropping golden crackers being lower than when checked manually.
+* Fixed trees having a lower chance of producing a golden cracker when automated.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 2.5.0

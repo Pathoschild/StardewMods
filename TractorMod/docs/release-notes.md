@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 4.24.4
+Released 14 March 2016 for SMAPI 4.1.10 or later.
+
 * Tractor Mod downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
   _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
 * Fixed crash when 'tractor sounds' is enabled but you have no audio device connected. The tractor sounds are now disabled automatically in that case.

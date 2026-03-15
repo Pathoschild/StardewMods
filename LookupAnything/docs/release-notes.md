@@ -1,18 +1,20 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.55.0
+Released 14 March 2016 for SMAPI 4.3.1 or later.
+
 * You can now double-tap the screen on Android to look up whatever's under the tap (thanks to ferrles124!).
-* Added integration with Have More Kids (thanks to Mushymato!).
 * Improved performance when viewing lookups with a lot of information shown.
 * Lookup Anything downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
   _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
-* Fixed lookups in Better Crafting UI not working for unknown recipes.
 * Fixed item lookups for planted forage crop seeds not showing the item that will actually be produced.
 * Fixed item lookups' fish spawn rule checkboxes not accounting for...
-  - different weather when fishing outside the valley;
+  - separate weather when fishing outside the valley;
   - some custom mod weathers.
-* Fixed fruit tree lookups' portrait.
+* Fixed item lookups in Better Crafting UI not working for unknown recipes.
+* Fixed NPC lookups for children from Have More Kids (thanks to Mushymato!).
+* Fixed fruit tree lookups' portraits.
 * Improved translations. Thanks to MakinDay (updated Italian)!
 
 ## 1.54.0
