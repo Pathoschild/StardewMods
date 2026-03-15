@@ -26,9 +26,6 @@ internal class Dropdown<TItem> : ClickableComponent
     /// <summary>The maximum width in pixels for the dropdown label.</summary>
     private readonly int? MaxLabelWidth;
 
-    /// <summary>The backing field for <see cref="IsExpanded"/>.</summary>
-    private bool IsExpandedImpl;
-
     /// <summary>Whether the menu is being displayed on Android.</summary>
     private bool IsAndroid => Constants.TargetPlatform == GamePlatform.Android;
 
@@ -42,10 +39,10 @@ internal class Dropdown<TItem> : ClickableComponent
     /// <summary>Whether the dropdown list is expanded.</summary>
     public bool IsExpanded
     {
-        get => this.IsExpandedImpl;
+        get;
         set
         {
-            this.IsExpandedImpl = value;
+            field = value;
             this.downNeighborID = value
                 ? this.List.TopComponentId
                 : this.DefaultDownNeighborId;

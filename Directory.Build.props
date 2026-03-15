@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   <!-- common build settings -->
   <PropertyGroup>
     <Authors>Pathoschild</Authors>
@@ -10,6 +10,6 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ModZipPath Condition="'$(SolutionDir)' != ''">$(SolutionDir)\_releases</ModZipPath>
+    <ModZipPath>$(MSBuildThisFileDirectory)/_releases</ModZipPath>
   </PropertyGroup>
 </Project>

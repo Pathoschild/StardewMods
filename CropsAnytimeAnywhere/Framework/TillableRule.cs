@@ -19,7 +19,7 @@ internal class TillableRule : BaseRule
     /// <summary>Whether to allow tilling stone tiles.</summary>
     public bool Stone { get; }
 
-    /// <summary>Whether to allow tilling other tile types (like paths, indoor floors, etc).</summary>
+    /// <summary>Whether to allow tilling other tile types (like paths or indoor floors).</summary>
     public bool Other { get; }
 
 

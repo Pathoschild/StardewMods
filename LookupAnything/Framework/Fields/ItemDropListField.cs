@@ -70,7 +70,7 @@ internal class ItemDropListField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         if (!this.Drops.Any())
             return spriteBatch.DrawTextBlock(font, this.DefaultText, position, wrapWidth);
@@ -89,6 +89,9 @@ internal class ItemDropListField : GenericField
         Vector2 iconSize = new(font.MeasureString("ABC").Y);
         foreach ((ItemDropData drop, Item item, SpriteInfo? sprite) in this.Drops)
         {
+            if (height > visibleHeight)
+                break;
+
             // get data
             bool isGuaranteed = drop.Probability > .99f;
             bool shouldFade = this.FadeNonGuaranteed && !isGuaranteed;

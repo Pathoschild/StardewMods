@@ -47,10 +47,9 @@ internal class CharacterCustomizationPatcher : BasePatcher
     ** Private methods
     *********/
     /// <summary>A method called via Harmony after <see cref="CharacterCustomization.optionButtonClick"/>.</summary>
-    /// <param name="__instance">The menu instance.</param>
     /// <param name="name">The option name that was clicked.</param>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-    private static void After_OptionButtonClick(CharacterCustomization __instance, string name)
+    private static void After_OptionButtonClick(string name)
     {
         if (name != $"ModFarm_{CharacterCustomizationPatcher.FarmTypeId}")
             return;

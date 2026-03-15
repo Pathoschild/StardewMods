@@ -34,6 +34,12 @@ internal class GenericModConfigMenuIntegrationForCentralStation : IGenericModCon
                 tooltip: () => this.GetTranslation("config.require-pam-bus.desc", []),
                 get: config => config.RequirePamBus,
                 set: (config, value) => config.RequirePamBus = value
+            )
+            .AddCheckbox(
+                name: () => this.GetTranslation("config.require-pam.name", []),
+                tooltip: () => this.GetTranslation("config.require-pam.desc", []),
+                get: config => config.RequirePam,
+                set: (config, value) => config.RequirePam = value
             );
     }
 }

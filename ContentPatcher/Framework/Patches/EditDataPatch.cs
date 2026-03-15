@@ -420,7 +420,7 @@ internal class EditDataPatch : Patch
             object key = editor.ParseKey(recordGroup.Key);
             Type? valueType = editor.GetEntryType(key);
 
-            // skip if doesn't exist
+            // skip if it doesn't exist
             if (!editor.HasEntry(key))
             {
                 this.WarnForField($"there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", onWarning);
@@ -525,15 +525,15 @@ internal class EditDataPatch : Patch
                 anchorKey = moveRecord.ToPosition; // should never be used, but provides a more useful error if it ever happens
                 result = editor.MoveEntry(key, moveRecord.ToPosition);
             }
-            else if (moveRecord.AfterID.IsMeaningful() || moveRecord.BeforeID.IsMeaningful())
+            else if (moveRecord.AfterId.IsMeaningful() || moveRecord.BeforeId.IsMeaningful())
             {
                 // get config
-                bool isAfter = moveRecord.AfterID.IsMeaningful();
-                string rawAnchorKey = (isAfter ? moveRecord.AfterID!.Value : moveRecord.BeforeID!.Value)!;
+                bool isAfter = moveRecord.AfterId.IsMeaningful();
+                string rawAnchorKey = (isAfter ? moveRecord.AfterId!.Value : moveRecord.BeforeId!.Value)!;
                 anchorKey = editor.ParseKey(rawAnchorKey);
 
                 // move entry
-                errorLabel += $" {(isAfter ? nameof(PatchMoveEntryConfig.AfterID) : nameof(PatchMoveEntryConfig.BeforeID))} \"{rawAnchorKey}\"";
+                errorLabel += $" {(isAfter ? nameof(PatchMoveEntryConfig.AfterId) : nameof(PatchMoveEntryConfig.BeforeId))} \"{rawAnchorKey}\"";
                 result = editor.MoveEntry(key, anchorKey, isAfter);
             }
 

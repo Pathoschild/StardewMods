@@ -151,7 +151,7 @@ internal class TileLookupProvider : BaseLookupProvider
     private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, out string[] arguments)
     {
         bool found = this.HasTileProperty(location, tile, name, layer, out string? value);
-        arguments = value?.Split(' ').ToArray() ?? [];
+        arguments = value?.Split(' ') ?? [];
         return found;
     }
 

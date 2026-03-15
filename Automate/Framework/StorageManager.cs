@@ -10,6 +10,13 @@ namespace Pathoschild.Stardew.Automate.Framework;
 internal class StorageManager : IStorage
 {
     /*********
+    ** Fields
+    *********/
+    /// <summary>The index of the first container in <see cref="InputContainers"/> which doesn't match <see cref="ContainerExtensions.StoragePreferred"/>.</summary>
+    private int FirstNonPreferredInput;
+
+
+    /*********
     ** Accessors
     *********/
     /// <inheritdoc />
@@ -38,15 +45,25 @@ internal class StorageManager : IStorage
 
         this.InputContainers = containerCollection
             .Where(p => p.StorageAllowed())
-            .OrderBy(p => p.IsJunimoChest) // push items into Junimo chests last
-            .ThenByDescending(p => p.StoragePreferred())
+            .OrderByDescending(p => p.StoragePreferred())
+            .ThenBy(p => p.IsJunimoChest) // push items into Junimo chests last
             .ToArray();
 
         this.OutputContainers = containerCollection
             .Where(p => p.TakingItemsAllowed())
-            .OrderByDescending(p => p.IsJunimoChest) // take items from Junimo chests first
-            .ThenByDescending(p => p.TakingItemsPreferred())
+            .OrderByDescending(p => p.TakingItemsPreferred())
+            .ThenByDescending(p => p.IsJunimoChest) // take items from Junimo chests first
             .ToArray();
+
+        this.FirstNonPreferredInput = this.InputContainers.Length;
+        for (int i = 0; i < this.InputContainers.Length; i++)
+        {
+            if (!this.InputContainers[i].StoragePreferred())
+            {
+                this.FirstNonPreferredInput = i;
+                break;
+            }
+        }
     }
 
 
@@ -154,43 +171,66 @@ internal class StorageManager : IStorage
     /// <inheritdoc />
     public bool TryPush(ITrackedStack? item)
     {
-        if (item == null || item.Count <= 0)
+        if (item is not { Count: > 0 })
             return false;
 
-        int originalCount = item.Count;
-
-        IContainer[] preferredContainers = this.InputContainers.TakeWhile(p => p.StoragePreferred()).ToArray();
-        IContainer[] otherContainers = this.InputContainers.Skip(preferredContainers.Length).ToArray();
-
-        // push into 'output' chests
-        foreach (IContainer container in preferredContainers)
+        // try chests marked "put items in this chest first"
+        int fallbackStartAt = this.FirstNonPreferredInput;
+        bool pushedToPreferred = false;
+        if (fallbackStartAt > 0 && this.TryPushImpl(item, startAt: 0, endBefore: fallbackStartAt))
         {
-            container.Store(item);
-            if (item.Count <= 0)
+            pushedToPreferred = true;
+            if (item.Count < 1)
                 return true;
         }
 
-        // push into chests that already have this item
-        string itemKey = item.Sample.QualifiedItemId;
-        foreach (IContainer container in otherContainers)
+        // try remaining chests
+        return this.TryPushImpl(item, startAt: fallbackStartAt) || pushedToPreferred;
+    }
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Add item to a container within the given index range without checking the storage-preferred flag.</summary>
+    /// <param name="item">The item stack to push.</param>
+    /// <param name="startAt">The index in <see cref="InputContainers"/> at which to start pushing (inclusive).</param>
+    /// <param name="endBefore">The index in <see cref="InputContainers"/> at which to stop pushing (exclusive), or <c>null</c> to continue to the end of the array.</param>
+    /// <returns>Returns whether at least some of the item stack was received.</returns>
+    private bool TryPushImpl(ITrackedStack item, int startAt, int? endBefore = null)
+    {
+        int originalCount = item.Count;
+        IContainer[] containers = this.InputContainers;
+
+        endBefore ??= containers.Length;
+        if (startAt >= endBefore)
+            return false;
+
+        // add to chests which contain the item
+        string qualifiedItemId = item.Sample.QualifiedItemId;
+        int fallbackStartAt = startAt;
+        for (int i = startAt; i < endBefore; i++)
         {
-            if (container.All(p => p.Sample.QualifiedItemId != itemKey))
+            IContainer container = containers[i];
+            if (!container.Inventory.ContainsId(qualifiedItemId))
                 continue;
 
             container.Store(item);
-            if (item.Count <= 0)
+            if (item.Count < 1)
                 return true;
+
+            if (i == fallbackStartAt)
+                fallbackStartAt++; // we can skip this one too since we just checked it
         }
 
-        // push into first available chest
-        if (item.Count >= 0)
+        // else any chests with enough space
+        for (int i = fallbackStartAt; i < endBefore; i++)
         {
-            foreach (IContainer container in otherContainers)
-            {
-                container.Store(item);
-                if (item.Count <= 0)
-                    return true;
-            }
+            IContainer container = containers[i];
+
+            container.Store(item);
+            if (item.Count < 1)
+                return true;
         }
 
         return item.Count < originalCount;

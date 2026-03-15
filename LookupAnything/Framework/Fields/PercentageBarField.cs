@@ -48,7 +48,7 @@ internal class PercentageBarField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         Vector2 barSize = this.DrawBar(spriteBatch, position, this.CurrentValue / (this.MaxValue * 1f), this.FilledColor, this.EmptyColor, wrapWidth);
         Vector2 textSize = !string.IsNullOrWhiteSpace(this.Text)

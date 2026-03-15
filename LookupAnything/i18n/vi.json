@@ -833,6 +833,13 @@
     "config.hide-on-key-up.desc": "Có ẩn giao diện tra cứu khi bạn thả phím tra cứu hay không.",
     "config.toggle-lookup.name": "Chuyển đổi tra cứu",
     "config.toggle-lookup.desc": "Các phím để chuyển đổi giao diện tra cứu cho một đối tượng dưới con trỏ.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Chuyển đổi tìm kiếm",
     "config.toggle-search.desc": "Các phím để chuyển đổi giao diện tìm kiếm.",
     "config.scroll-up.name": "Cuộn lên",

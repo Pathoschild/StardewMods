@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>4.24.3</Version>
+    <Version>4.24.4</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

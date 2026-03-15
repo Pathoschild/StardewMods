@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "เมล็ด",
     "config.junimo-hut-seeds.desc": "สิ่งที่กระท่อม Junimo ควรทำกับรายการปุ๋ย 'ตรวจจับอัตโนมัติ' จะไม่สนใจพวกเขาหากติดตั้ง Better Junimos ไว้ มิฉะนั้นจะย้ายของจากกระท่อมไปยังหีบที่เชื่อมต่อกันไว้",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "ตรวจจับอัตโนมัติ",
     "config.junimo-huts.ignore": "ละเลยพวกมัน",

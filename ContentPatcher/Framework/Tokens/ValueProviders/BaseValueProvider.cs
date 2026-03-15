@@ -43,7 +43,7 @@ internal abstract class BaseValueProvider : IValueProvider
     public bool IsMutable { get; protected set; } = true;
 
     /// <inheritdoc />
-    public bool IsDeterministicForInput { get; protected set; } = false;
+    public bool IsDeterministicForInput { get; protected set; }
 
     /// <inheritdoc />
     public bool IsReady => this.State.IsReady;

@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "Sementes",
     "config.junimo-hut-seeds.desc": "O que as cabanas de Junimo devem fazer com itens de sementes. 'Auto-detecção' irá ignorá-los se o mod Better Junimos estiver instalado, caso contrário, irá movê-los da cabana para os baús conectados.",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Auto-detecção",
     "config.junimo-huts.ignore": "Ignorá-los",

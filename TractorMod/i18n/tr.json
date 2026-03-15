@@ -170,6 +170,10 @@
     "config.clear-debris.name": "Enkazı Temizle",
     "config.clear-debris.tooltip": "Yabani otlar, dallar, dev kütükler ve düşmüş kütükler gibi kalıntıları yok edip etmeyeceği.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Yabani Otları Temizle ",
     "config.clear-weeds.tooltip": "Yabani otların yok edilip edilmeyeceği.",
 

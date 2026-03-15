@@ -190,5 +190,9 @@
     ** Generic Mod Config Menu UI
     *********/
     "config.require-pam-bus.name": "Pam'in Otobüsü Gerekiyor",
-    "config.require-pam-bus.desc": "Pam'in otobüsünü Stardew Valley durağından ayrılmadan önce tamir etmenizin gerekip gerekmediğini belirler. Eğer zorunlu değilse, otobüs henüz tamir edilmeden Merkez İstasyon'a gidebilirsiniz (ancak Çöl'e gidemezsiniz)."
+    "config.require-pam-bus.desc": "Pam'in otobüsünü Stardew Valley durağından ayrılmadan önce tamir etmenizin gerekip gerekmediğini belirler. Eğer zorunlu değilse, otobüs henüz tamir edilmeden Merkez İstasyon'a gidebilirsiniz (ancak Çöl'e gidemezsiniz).",
+
+    // TODO
+    "config.require-pam.name": "Require Pam",
+    "config.require-pam.desc": "Whether Pam must be standing at the Stardew Valley bus stop before you can depart from there (equivalent to when the mod isn't installed)."
 }

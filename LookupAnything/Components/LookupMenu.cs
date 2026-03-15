@@ -325,6 +325,7 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                     // begin draw
                     device.ScissorRectangle = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
                     contentBatch.Begin(SpriteSortMode.Deferred, this.ContentBlendState, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
+                    float maxDrawY = device.ScissorRectangle.Bottom + contentHeight; // render double height to allow for scroll handling (e.g. PageDown to scroll down one page)
 
                     // scroll view
                     this.CurrentScroll = Math.Max(0, this.CurrentScroll); // don't scroll past top
@@ -380,8 +381,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
                                 else
                                 {
                                     valueSize =
-                                        field.DrawValue(contentBatch, font, valuePosition, valueWidth)
-                                        ?? contentBatch.DrawTextBlock(font, field.Value, valuePosition, valueWidth);
+                                        field.DrawValue(contentBatch, font, valuePosition, valueWidth, maxDrawY - topOffset)
+                                        ?? contentBatch.DrawTextBlock(font, field.Value, valuePosition, valueWidth, visibleHeight: maxDrawY - topOffset);
                                 }
 
                                 // draw table row
@@ -399,6 +400,8 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
 
                                 // update offset
                                 topOffset += Math.Max(labelSize.Y, valueSize.Y);
+                                if (topOffset > maxDrawY)
+                                    break;
                             }
                         }
                     }

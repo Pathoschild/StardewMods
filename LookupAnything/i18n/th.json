@@ -839,6 +839,13 @@
     "config.hide-on-key-up.desc": "จะซ่อน UI การค้นหาเมื่อคุณปล่อยปุ่มที่ใช้ในการค้นหาหรือไม่",
     "config.toggle-lookup.name": "สลับการค้นหา",
     "config.toggle-lookup.desc": "ปุ่มที่สลับ UI การค้นหาสำหรับบางสิ่งภายใต้เคอร์เซอร์",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "สลับการค้นหา",
     "config.toggle-search.desc": "ปุ่มที่สลับ UI การค้นหา",
     "config.scroll-up.name": "เลื่อนขึ้น",

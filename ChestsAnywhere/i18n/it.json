@@ -40,9 +40,8 @@
     "button.reset": "ripristina",
 
     // chest search menu
-    // TODO
-    "search-box.chest-name": "Search Chest Name:",
-    "search-box.item-name": "Search Items:",
+    "search-box.chest-name": "Cerca nome baule:",
+    "search-box.item-name": "Cerca oggetti:",
 
 
     /**********
@@ -135,12 +134,11 @@
     "config.hold-to-scroll-chests.name": "Tieni premuto per scorrere i bauli",
     "config.hold-to-scroll-chests.desc": "I tasti che, se tenuti premuti, consentono di scorrere il menu a tendina dei bauli con la rotella del mouse.",
 
-    // TODO
-    "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+    "config.open-search-menu.name": "Apri menu di ricerca",
+    "config.open-search-menu.desc": "I tasti che aprono il menu di ricerca dei bauli mentre visualizzi l'interfaccia di un baule.",
 
-    "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+    "config.search-menu-preview.name": "Anteprima baule dal menu di ricerca",
+    "config.search-menu-preview.desc": "I tasti che possono essere mantenuti per mostrare un tooltip di anteprima del contenuto del baule su cui si passa con il mouse mentre visualizzi l'interfaccia di ricerca.",
 
 
     /*********

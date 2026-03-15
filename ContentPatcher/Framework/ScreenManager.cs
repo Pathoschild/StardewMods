@@ -290,9 +290,9 @@ internal class ScreenManager
 
                         // parse conditions
                         Condition[] conditions;
-                        IInvariantSet immutableRequiredModIDs;
+                        IInvariantSet immutableRequiredModIds;
                         {
-                            if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string? conditionError))
+                            if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIds, out string? conditionError))
                             {
                                 this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                 continue;
@@ -303,7 +303,7 @@ internal class ScreenManager
                         IManagedTokenString? values;
                         if (!string.IsNullOrWhiteSpace(entry.Value))
                         {
-                            if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, localPath.With(nameof(entry.Value)), out string? valueError, out values))
+                            if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIds, localPath.With(nameof(entry.Value)), out string? valueError, out values))
                             {
                                 LogSkip($"the token value is invalid: {valueError}");
                                 continue;

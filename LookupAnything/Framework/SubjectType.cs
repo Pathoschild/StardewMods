@@ -1,6 +1,6 @@
 namespace Pathoschild.Stardew.LookupAnything.Framework;
 
-/// <summary>The type of an in-game entity for the mod's purposes.</summary>
+/// <summary>An in-game entity type for the mod's purposes.</summary>
 internal enum SubjectType
 {
     /****

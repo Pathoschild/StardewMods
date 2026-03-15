@@ -832,6 +832,13 @@
     "config.hide-on-key-up.desc": "Ob die Lookup-Oberfläche ausgeblendet werden soll, wenn Sie die Lookup-Taste loslassen.",
     "config.toggle-lookup.name": "Lookup umschalten",
     "config.toggle-lookup.desc": "Die Tasten, die die Lookup-Oberfläche für etwas unter dem Cursor umschalten.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "Suche umschalten",
     "config.toggle-search.desc": "Die Tasten, mit denen die Suchoberfläche umgeschaltet wird.",
     "config.scroll-up.name": "Hoch scrollen",

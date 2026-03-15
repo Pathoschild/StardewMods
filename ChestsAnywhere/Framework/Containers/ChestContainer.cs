@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -146,14 +147,16 @@ internal class ChestContainer : IContainer
         Chest chest = this.Chest;
 
         // generate icon texture
-        var icon = new RenderTarget2D(Game1.graphics.GraphicsDevice, Game1.tileSize, Game1.tileSize * 2, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.DiscardContents);
-        Game1.SetRenderTarget(icon);
-        ChestIconBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
-        Game1.graphics.GraphicsDevice.Clear(Color.Transparent);
-        chest.fixLidFrame();
-        chest.draw(ChestIconBatch, 0, Game1.tileSize, local: true);
-        ChestIconBatch.End();
-        Game1.SetRenderTarget(null);
+        Texture2D icon = DrawHelper.RenderToTexture(
+            spriteBatch =>
+            {
+                chest.fixLidFrame();
+                chest.draw(spriteBatch, 0, Game1.tileSize, local: true);
+            },
+            pixelWidth: Game1.tileSize,
+            pixelHeight: Game1.tileSize * 2,
+            useSpriteBatch: ChestContainer.ChestIconBatch
+        );
 
         // set values
         texture = icon;

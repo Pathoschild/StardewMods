@@ -14,7 +14,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Storage;
 
-/// <summary>A in-game chest which can provide or store items.</summary>
+/// <summary>An in-game chest which can provide or store items.</summary>
 internal class ChestContainer : IContainer
 {
     /*********
@@ -91,7 +91,7 @@ internal class ChestContainer : IContainer
 
         IList<Item?> inventory = this.GetInventory();
 
-        // try stack into existing slot
+        // try to stack into existing slot
         foreach (Item? slot in inventory)
         {
             if (slot != null && stack.Sample.canStackWith(slot))
@@ -105,7 +105,7 @@ internal class ChestContainer : IContainer
             }
         }
 
-        // try add to empty slot
+        // try to add to empty slot
         int capacity = this.Chest.GetActualCapacity();
         for (int i = 0; i < capacity && i < inventory.Count; i++)
         {
@@ -116,7 +116,7 @@ internal class ChestContainer : IContainer
             }
         }
 
-        // try add new slot
+        // try to add new slot
         if (inventory.Count < capacity)
             inventory.Add(stack.Take(stack.Count));
     }

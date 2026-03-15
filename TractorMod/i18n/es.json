@@ -176,6 +176,10 @@
     "config.clear-debris.name": "Despejar escombros",
     "config.clear-debris.tooltip": "Si se destruyen restos como maleza, ramitas, tocones gigantes y troncos caídos.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Despejar maleza",
     "config.clear-weeds.tooltip": "Si se destruye la maleza.",
 

@@ -32,9 +32,8 @@ internal class TokenManager : IContext
     private bool IsFirstUpdate = true;
 
     /// <summary>A cached local context for a content pack.</summary>
-    /// <param name="ContentPack">The content pack for which the context was created.</param>
     /// <param name="Context">The token context containing dynamic tokens and aliases for the content pack.</param>
-    private record CachedContext(IContentPack ContentPack, ModTokenContext Context);
+    private record CachedContext(ModTokenContext Context);
 
 
     /*********
@@ -86,7 +85,7 @@ internal class TokenManager : IContext
         if (!this.LocalTokens.TryGetValue(scope, out CachedContext? cached))
         {
             ModTokenContext context = new ModTokenContext(scope, this);
-            this.LocalTokens[scope] = cached = new CachedContext(pack, context);
+            this.LocalTokens[scope] = cached = new CachedContext(context);
 
             foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
                 context.AddLocalToken(new Token(valueProvider, scope));
@@ -96,26 +95,26 @@ internal class TokenManager : IContext
     }
 
     /// <summary>Get the actual name referenced by a token alias.</summary>
-    /// <param name="contentPackID">The content pack ID whose aliases to check.</param>
+    /// <param name="contentPackId">The content pack ID whose aliases to check.</param>
     /// <param name="tokenName">The token name to resolve.</param>
     /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
-    public string ResolveAlias(string contentPackID, string tokenName)
+    public string ResolveAlias(string contentPackId, string tokenName)
     {
-        return this.LocalTokens.TryGetValue(contentPackID, out CachedContext? cached)
+        return this.LocalTokens.TryGetValue(contentPackId, out CachedContext? cached)
             ? cached.Context.ResolveAlias(tokenName)
             : tokenName;
     }
 
     /// <summary>Get the token context for a given mod ID.</summary>
-    /// <param name="contentPackID">The content pack ID to search for.</param>
-    /// <exception cref="KeyNotFoundException">There's no content pack registered with the given <paramref name="contentPackID"/>.</exception>
-    public IContext GetContextFor(string contentPackID)
+    /// <param name="contentPackId">The content pack ID to search for.</param>
+    /// <exception cref="KeyNotFoundException">There's no content pack registered with the given <paramref name="contentPackId"/>.</exception>
+    public IContext GetContextFor(string contentPackId)
     {
-        contentPackID = contentPackID.Trim();
+        contentPackId = contentPackId.Trim();
 
-        return this.LocalTokens.TryGetValue(contentPackID, out CachedContext? cached)
+        return this.LocalTokens.TryGetValue(contentPackId, out CachedContext? cached)
             ? cached.Context
-            : throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
+            : throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackId}'.");
     }
 
     /// <summary>Update the current context.</summary>

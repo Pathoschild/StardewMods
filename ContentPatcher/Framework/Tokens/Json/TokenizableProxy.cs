@@ -3,7 +3,7 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.Json;
 
-/// <summary>Tracks a instance whose value is set by a tokenizable <see cref="TokenString"/>.</summary>
+/// <summary>Tracks an instance whose value is set by a tokenizable <see cref="TokenString"/>.</summary>
 internal class TokenizableProxy : IContextual
 {
     /*********

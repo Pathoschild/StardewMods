@@ -15,7 +15,7 @@ internal class ModEntry : Mod
     /*********
     ** Accessors
     *********/
-    /// <summary>The unique assets for which <see cref="IAssetLoader.CanLoad{T}"/> was called.</summary>
+    /// <summary>The unique assets for which <see cref="IContentEvents.AssetRequested"/> was called.</summary>
     private readonly HashSet<IAssetName> LoadedAssets = [];
 
 

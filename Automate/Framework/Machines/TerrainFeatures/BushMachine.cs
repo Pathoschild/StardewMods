@@ -132,7 +132,7 @@ internal class BushMachine : BaseMachine<Bush>
 
     /// <summary>Update the indoor pot state on load for automation.</summary>
     /// <param name="indoorPot">The indoor pot to update.</param>
-    /// <remarks>Derived from <see cref="IndoorPot.updateWhenCurrentLocation"/>. When an indoor pot is loaded from the save file, the bush it contains isn't updated immediately. Instead it's marked dirty and will call <see cref="Bush.loadSprite"/> when the player first enters the location. For Automate, that means a bush that's already harvested may reset and produce a new harvest for the day.</remarks>
+    /// <remarks>Derived from <see cref="IndoorPot.updateWhenCurrentLocation"/>. When an indoor pot is loaded from the save file, the bush it contains isn't updated immediately. Instead, it's marked dirty and will call <see cref="Bush.loadSprite"/> when the player first enters the location. For Automate, that means a bush that's already harvested may reset and produce a new harvest for the day.</remarks>
     private void UpdateIndoorPotOnLoad(IndoorPot indoorPot)
     {
         if (indoorPot.bushLoadDirty.Value)

@@ -236,7 +236,7 @@ internal class ModTokenContext : IContext
             //
             // Since dynamic token values are affected by the order they're defined (e.g. one
             // dynamic token can use the value of another), only updating the values that
-            // changed isn't trivial. Instead Content Patcher will track which global tokens
+            // changed isn't trivial. Instead, Content Patcher will track which global tokens
             // were used indirectly when deciding which patches to update.
             if (!resetDynamicTokens && updateDynamicTokens != null && this.InterdependentTokens.Count > 0)
             {

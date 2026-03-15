@@ -41,12 +41,12 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
             switch (feature)
             {
                 case FruitTree fruitTree:
-                    if (fruitTree.alpha >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
+                    if (fruitTree.alpha >= 0.8f) // ignore when tree is faded out (so player can look up things behind it)
                         yield return new FruitTreeTarget(this.GameHelper, fruitTree, entityTile, () => this.BuildSubject(fruitTree, entityTile));
                     break;
 
                 case Tree tree:
-                    if (tree.alpha >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
+                    if (tree.alpha >= 0.8f) // ignore when tree is faded out (so player can look up things behind it)
                         yield return new TreeTarget(this.GameHelper, tree, entityTile, () => this.BuildSubject(tree));
                     break;
 

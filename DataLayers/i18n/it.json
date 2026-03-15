@@ -72,13 +72,12 @@
     "crop-fertilizer.multiple": "Fertilizzanti multipli",
 
     // fishing depth
-    // TODO
-    "fishing-depth.name": "Fishing Depth",
-    "fishing-depth.one": "Next to shore",
-    "fishing-depth.two": "Two",
-    "fishing-depth.three": "Three",
-    "fishing-depth.four": "Four",
-    "fishing-depth.max": "Max depth",
+    "fishing-depth.name": "Profondità di pesca",
+    "fishing-depth.one": "Vicino alla riva",
+    "fishing-depth.two": "Due",
+    "fishing-depth.three": "Tre",
+    "fishing-depth.four": "Quattro",
+    "fishing-depth.max": "Profondità massima",
 
     // machine processing
     "machines.name": "Processo macchinario",

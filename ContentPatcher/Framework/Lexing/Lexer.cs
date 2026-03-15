@@ -361,7 +361,7 @@ internal class Lexer
             throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
         // extract input arguments if present
-        // Note: the positional input argument separator (:) is the 'real' separator between
+        // Note: the positional input argument separator (`:`) is the 'real' separator between
         // the token name and input arguments, but a token can skip positional arguments and
         // start named arguments directly like {{TokenName |key=value}}. In that case the ':'
         // is implied, and the '|' separator *is* included in the input arguments string.

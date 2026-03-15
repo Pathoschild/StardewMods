@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "Magvak",
     "config.junimo-hut-seeds.desc": "Mit tegyenek a Junimo kunyhók a magvakkal. Az 'Automatikus felismerés' figyelmen kívül hagyja, ha a 'Better junimos' mod telepítve van, különben áthelyezi a kunyhókból az összekapcsolt ládákba.",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values (Junimo kunyhó legördülő értékek)
     "config.junimo-huts.auto-detect": "Auto felismerés",
     "config.junimo-huts.ignore": "Mellőzve",

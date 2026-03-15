@@ -400,27 +400,27 @@ internal class TokenSaveReader
             yield break;
 
         if (player.eventsSeen.Contains("2120303"))
-            yield return WalletItem.BearsKnowledge.ToString();
+            yield return nameof(WalletItem.BearsKnowledge);
         if (player.hasClubCard)
-            yield return WalletItem.ClubCard.ToString();
+            yield return nameof(WalletItem.ClubCard);
         if (player.hasDarkTalisman)
-            yield return WalletItem.DarkTalisman.ToString();
+            yield return nameof(WalletItem.DarkTalisman);
         if (player.canUnderstandDwarves)
-            yield return WalletItem.DwarvishTranslationGuide.ToString();
+            yield return nameof(WalletItem.DwarvishTranslationGuide);
         if (player.HasTownKey)
-            yield return WalletItem.KeyToTheTown.ToString();
+            yield return nameof(WalletItem.KeyToTheTown);
         if (player.hasMagicInk)
-            yield return WalletItem.MagicInk.ToString();
+            yield return nameof(WalletItem.MagicInk);
         if (player.hasMagnifyingGlass)
-            yield return WalletItem.MagnifyingGlass.ToString();
+            yield return nameof(WalletItem.MagnifyingGlass);
         if (player.hasRustyKey)
-            yield return WalletItem.RustyKey.ToString();
+            yield return nameof(WalletItem.RustyKey);
         if (player.hasSkullKey)
-            yield return WalletItem.SkullKey.ToString();
+            yield return nameof(WalletItem.SkullKey);
         if (player.hasSpecialCharm)
-            yield return WalletItem.SpecialCharm.ToString();
+            yield return nameof(WalletItem.SpecialCharm);
         if (player.eventsSeen.Contains("3910979"))
-            yield return WalletItem.SpringOnionMastery.ToString();
+            yield return nameof(WalletItem.SpringOnionMastery);
     }
 
     /// <summary>Get a player's daily luck value.</summary>
@@ -564,7 +564,7 @@ internal class TokenSaveReader
         if (this.IsBasicInfoLoaded)
         {
             return Game1.whichFarm == Farm.mod_layout
-                ? Game1.whichModFarm?.Id ?? FarmType.Custom.ToString()
+                ? Game1.whichModFarm?.Id ?? nameof(FarmType.Custom)
                 : this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString();
         }
 
@@ -577,7 +577,7 @@ internal class TokenSaveReader
             return farmType;
         }
 
-        return FarmType.Standard.ToString();
+        return nameof(FarmType.Standard);
     }
 
     /// <summary>Get the farm's asset name relative to the game's <c>Content/Maps</c> folder.</summary>

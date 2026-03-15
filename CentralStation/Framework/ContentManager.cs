@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using Pathoschild.Stardew.CentralStation.Framework.Constants;
 using Pathoschild.Stardew.CentralStation.Framework.ContentModels;
+using Pathoschild.Stardew.CentralStation.Framework.Integrations.BusLocations;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -311,7 +312,7 @@ internal class ContentManager
                 {
                     if (buildingsLayer.Tiles[x, y]?.Properties?.TryGetValue("Action", out string action) is true && action.StartsWithIgnoreCase(Constant.TicketsAction))
                     {
-                        string foundRawNetwork = ArgUtility.SplitBySpaceAndGet(action, 1, StopNetworks.Train.ToString());
+                        string foundRawNetwork = ArgUtility.SplitBySpaceAndGet(action, 1, nameof(StopNetworks.Train));
                         if (Utility.TryParseEnum(foundRawNetwork, out StopNetworks foundNetwork) && network.HasAnyFlag(foundNetwork))
                         {
                             tile = new Point(x, y);
@@ -459,7 +460,10 @@ internal class ContentManager
 
                 // add to bus stop
                 if (isBusStop && tile.TileIndex is 1057 && tile.TileSheet?.Id is "outdoors" && this.HomeBusStopHasTicketMachine())
-                    this.TryAddTicketMachine(map, x, y, StopNetworks.Bus);
+                {
+                    int placeAtX = x + this.GetBusStopTicketMachineIndexOffset();
+                    this.TryAddTicketMachine(map, placeAtX, y, StopNetworks.Bus);
+                }
             }
         }
     }
@@ -736,7 +740,10 @@ internal class ContentManager
                         continue;
 
                     if (tile.TileIndex is 1057 && tile.TileSheet?.Id is "outdoors")
-                        this.TryAddTicketMachine(asset, x, y, StopNetworks.Bus);
+                    {
+                        int placeAtX = x + this.GetBusStopTicketMachineIndexOffset();
+                        this.TryAddTicketMachine(asset, placeAtX, y, StopNetworks.Bus);
+                    }
                 }
             }
         }
@@ -797,6 +804,14 @@ internal class ContentManager
         }
 
         tile.Properties["Action"] = $"{Constant.TicketsAction} {networks.ToString().Replace(",", " ")}";
+    }
+
+    /// <summary>A tile X offset to apply to the ticket machine at the bus stop which is based on the tile index.</summary>
+    private int GetBusStopTicketMachineIndexOffset()
+    {
+        return this.ModRegistry.IsLoaded(BusLocationsStopProvider.ModId)
+            ? 1 // Bus Locations overrides any action on the ticket machine tile, so place a duplicate machine so both mods work
+            : 0;
     }
 
     /// <summary>Get the available bookshelf messages from the live asset.</summary>

@@ -833,6 +833,13 @@
     "config.hide-on-key-up.desc": "조회 키를 놓을 때 조회 UI를 숨길지 여부",
     "config.toggle-lookup.name": "조회 전환",
     "config.toggle-lookup.desc": "커서 아래에 있는 항목에 대한 조회 UI를 전환하는 키.",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "검색 전환",
     "config.toggle-search.desc": "검색창 실행 전환하는 키",
     "config.scroll-up.name": "위로 스크롤",

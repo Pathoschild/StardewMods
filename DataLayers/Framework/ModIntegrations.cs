@@ -14,13 +14,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework;
 internal class ModIntegrations
 {
     /*********
-    ** Fields
-    *********/
-    /// <summary>An API for fetching metadata about loaded mods.</summary>
-    private readonly IModRegistry ModRegistry;
-
-
-    /*********
     ** Accessors
     *********/
     /// <summary>Handles access to the Automate mod.</summary>
@@ -57,8 +50,6 @@ internal class ModIntegrations
     /// <param name="reflection">An API for accessing private code.</param>
     public ModIntegrations(IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
     {
-        this.ModRegistry = modRegistry;
-
         this.Automate = new AutomateIntegration(modRegistry, monitor);
         this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
         this.BetterSprinklersPlus = new BetterSprinklersPlusIntegration(modRegistry, monitor);

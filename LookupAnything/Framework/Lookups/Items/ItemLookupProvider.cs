@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,6 +23,9 @@ internal class ItemLookupProvider : BaseLookupProvider
     /*********
     ** Fields
     *********/
+    /// <summary>Encapsulates monitoring and logging.</summary>
+    private readonly IMonitor Monitor;
+
     /// <summary>Provides methods for searching and constructing items.</summary>
     private readonly ItemRepository ItemRepository = new();
 
@@ -36,13 +40,15 @@ internal class ItemLookupProvider : BaseLookupProvider
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="config">The mod configuration.</param>
     /// <param name="codex">Provides subject entries.</param>
-    public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
+    public ItemLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
         : base(reflection, gameHelper)
     {
+        this.Monitor = monitor;
         this.Config = config;
         this.Codex = codex;
     }
@@ -203,8 +209,8 @@ internal class ItemLookupProvider : BaseLookupProvider
                     {
                         if (component.containsPoint(cursorX, cursorY))
                         {
-                            string itemID = component.name.Split(' ')[0];
-                            Item item = ItemRegistry.Create(itemID);
+                            string itemId = component.name.Split(' ')[0];
+                            Item item = ItemRegistry.Create(itemId);
                             return this.BuildSubject(item, ObjectContext.Inventory, null, knownQuality: false);
                         }
                     }
@@ -310,15 +316,13 @@ internal class ItemLookupProvider : BaseLookupProvider
                 break;
 
             /****
-            ** By convention (for mod support)
+            ** Custom mod UIs
             ****/
             default:
                 {
-                    Item? item =
-                        this.Reflection.GetField<Item?>(targetMenu, "hoveredItem", required: false)?.GetValue()
-                        ?? this.Reflection.GetField<Item?>(targetMenu, "HoveredItem", required: false)?.GetValue();
-                    if (item != null)
-                        return this.BuildSubject(item, ObjectContext.Inventory, null);
+                    ISubject? subject = this.GetSubjectFromCustomMenu(targetMenu, cursorX, cursorY);
+                    if (subject != null)
+                        return subject;
                 }
                 break;
         }
@@ -345,6 +349,63 @@ internal class ItemLookupProvider : BaseLookupProvider
     /*********
     ** Private methods
     *********/
+    /// <summary>Get the subject from a custom mod UI, if any.</summary>
+    /// <param name="menu">The active menu or page.</param>
+    /// <param name="cursorX">The cursor's viewport-relative X coordinate.</param>
+    /// <param name="cursorY">The cursor's viewport-relative Y coordinate.</param>
+    private ISubject? GetSubjectFromCustomMenu(IClickableMenu menu, int cursorX, int cursorY)
+    {
+        string menuTypeName = menu.GetType().FullName!;
+        try
+        {
+            // by convention
+            {
+                Item? item =
+                    this.Reflection.GetField<Item?>(menu, "hoveredItem", required: false)?.GetValue()
+                    ?? this.Reflection.GetField<Item?>(menu, "HoveredItem", required: false)?.GetValue();
+                if (item != null)
+                    return this.BuildSubject(item, ObjectContext.Inventory, null);
+            }
+
+            // by custom integration
+            switch (menuTypeName)
+            {
+                /*********
+                ** Better Crafting
+                *********/
+                // cooking/crafting UI
+                case "Leclair.Stardew.BetterCrafting.Menus.BetterCraftingPage":
+                    {
+                        List<ClickableTextureComponent> page = this.Reflection.GetProperty<List<ClickableTextureComponent>>(menu, "CurrentPage").GetValue();
+                        IDictionary componentRecipes = this.Reflection.GetField<IDictionary>(menu, "ComponentRecipes").GetValue();
+
+                        foreach (ClickableTextureComponent component in page)
+                        {
+                            if (component.containsPoint(cursorX, cursorY))
+                            {
+                                object? recipe = componentRecipes[component];
+                                if (recipe is null)
+                                    continue;
+
+                                Item? item = this.Reflection.GetMethod(recipe, "CreateItem", required: true).Invoke<Item?>();
+                                if (item is null)
+                                    continue;
+
+                                return this.BuildSubject(item, ObjectContext.Inventory, null, knownQuality: false);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Monitor.Log($"Couldn't get the item from the current mod menu ({menuTypeName}).\nTechnical details:\n{ex}", LogLevel.Warn);
+        }
+
+        return null;
+    }
+
     /// <summary>Build an item subject.</summary>
     /// <param name="target">The target instance.</param>
     /// <param name="context">The context of the object being looked up.</param>
@@ -377,14 +438,7 @@ internal class ItemLookupProvider : BaseLookupProvider
     /// <param name="dirt">The dirt containing the crop, if applicable.</param>
     private ISubject BuildSubject(Crop target, ObjectContext context, HoeDirt? dirt)
     {
-        string indexOfHarvest = target.indexOfHarvest.Value;
-        if (!CommonHelper.IsItemId(indexOfHarvest, allowZero: false) && target.forageCrop.Value)
-        {
-            if (target.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
-                indexOfHarvest = "829";
-            else if (target.whichForageCrop.Value == Crop.forageCrop_springOnion.ToString())
-                indexOfHarvest = "399";
-        }
+        string harvestItemId = this.GetHarvestItemId(target);
 
         ModConfig config = this.Config();
         return new ItemSubject(
@@ -397,12 +451,36 @@ internal class ItemLookupProvider : BaseLookupProvider
             highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
             showGiftTastes: config.ShowGiftTastes,
             collapseFieldsConfig: config.CollapseLargeFields,
-            item: ItemRegistry.Create(indexOfHarvest),
+            item: ItemRegistry.Create(harvestItemId),
             context: context,
             location: dirt?.Location,
             knownQuality: false,
             getCropSubject: this.BuildSubject,
             fromDirt: dirt
         );
+    }
+
+    /// <summary>Get the item ID that can be harvested from a crop.</summary>
+    /// <param name="crop">The crop to check.</param>
+    private string GetHarvestItemId(Crop crop)
+    {
+        // from 'replace with object' field (e.g. Fall Seeds)
+        string harvestItemId = crop.replaceWithObjectOnFullGrown.Value;
+        if (CommonHelper.IsItemId(harvestItemId))
+            return harvestItemId;
+
+        // from 'index of harvest' field
+        harvestItemId = crop.indexOfHarvest.Value;
+        if (CommonHelper.IsItemId(harvestItemId))
+            return harvestItemId;
+
+        // based on forage type
+        if (crop.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
+            return "(O)829";
+        if (crop.whichForageCrop.Value == Crop.forageCrop_springOnion.ToString())
+            return "(O)399";
+
+        // unknown, use index of harvest as-is
+        return crop.indexOfHarvest.Value;
     }
 }

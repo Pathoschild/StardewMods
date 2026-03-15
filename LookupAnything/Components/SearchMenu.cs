@@ -451,11 +451,11 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     ** Protected methods
     *********/
     /// <inheritdoc />
-    protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
+    protected override void customSnapBehavior(int direction, int oldRegion, int oldId)
     {
         // snap to next component
         ClickableComponent? prevSnapped = this.currentlySnappedComponent;
-        switch (oldID)
+        switch (oldId)
         {
             // from top-right close button
             case IClickableMenu.upperRightCloseButton_ID:
@@ -486,14 +486,14 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
                 switch (direction)
                 {
                     case Game1.up:
-                        if (oldID == SearchMenu.FirstSearchResultId)
+                        if (oldId == SearchMenu.FirstSearchResultId)
                             this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
                         else
-                            this.setCurrentlySnappedComponentTo(oldID - 1);
+                            this.setCurrentlySnappedComponentTo(oldId - 1);
                         break;
 
                     case Game1.down:
-                        this.setCurrentlySnappedComponentTo(oldID + 1);
+                        this.setCurrentlySnappedComponentTo(oldId + 1);
                         this.currentlySnappedComponent ??= this.SearchResults.Last();
                         break;
                 }

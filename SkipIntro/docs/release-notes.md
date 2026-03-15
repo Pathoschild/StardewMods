@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.25
+Released 14 March 2016 for SMAPI 4.1.10 or later.
+
+* Skip Intro downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
+
 ## 1.9.24
 Released 26 October 2025 for SMAPI 4.1.10 or later.
 

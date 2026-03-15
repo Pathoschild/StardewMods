@@ -84,8 +84,6 @@ internal class StorageFurnitureContainer : IContainer
     /// <inheritdoc />
     public IClickableMenu OpenMenu()
     {
-        string shopId = this.Furniture.GetShopMenuContext();
-
         this.Furniture.ShowShopMenu();
 
         if (Game1.activeClickableMenu is ShopMenu shopMenu)

@@ -170,6 +170,9 @@
     "config.clear-debris.name": "Clear Debris",
     "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
 
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Clear Weeds",
     "config.clear-weeds.tooltip": "Whether to destroy weeds.",
 

@@ -261,7 +261,7 @@ internal abstract class BaseAttachment : IAttachment
     /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
     protected FarmAnimal? GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
     {
-        // get best harvestable animal
+        // get the best harvestable animal
         Vector2 useAt = this.GetToolPixelPosition(tile);
         FarmAnimal? animal = Utility.GetBestHarvestableFarmAnimal(
             animals: location.Animals.Values,

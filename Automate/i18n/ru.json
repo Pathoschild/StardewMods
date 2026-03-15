@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "Семена",
     "config.junimo-hut-seeds.desc": "Что должны делать домики Джунимо с семенами. Параметр 'Автоопределение' будет игнорировать их, если установлен мод Better Junimos, в противном случае перенос их из домиков в соединенные сундуки.",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Автоопределение",
     "config.junimo-huts.ignore": "Игнорировать их",

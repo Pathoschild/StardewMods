@@ -261,12 +261,6 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
             // pickaxe
             .AddSectionTitle(I18n.Config_Pickaxe)
             .AddCheckbox(
-                name: I18n.Config_ClearDebris_Name,
-                tooltip: I18n.Config_ClearDebris_Tooltip,
-                get: config => config.StandardAttachments.PickAxe.ClearDebris,
-                set: (config, value) => config.StandardAttachments.PickAxe.ClearDebris = value
-            )
-            .AddCheckbox(
                 name: I18n.Config_ClearDeadCrops_Name,
                 tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                 get: config => config.StandardAttachments.PickAxe.ClearDeadCrops,
@@ -303,16 +297,22 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 set: (config, value) => config.StandardAttachments.PickAxe.ClearBouldersAndMeteorites = value
             )
             .AddCheckbox(
-                name: I18n.Config_BreakObjects_Name,
-                tooltip: I18n.Config_BreakObjects_Tooltip,
-                get: config => config.StandardAttachments.PickAxe.ClearObjects,
-                set: (config, value) => config.StandardAttachments.PickAxe.ClearObjects = value
+                name: I18n.Config_ClearMineStones_Name,
+                tooltip: I18n.Config_ClearMineStones_Tooltip,
+                get: config => config.StandardAttachments.PickAxe.BreakMineStones,
+                set: (config, value) => config.StandardAttachments.PickAxe.BreakMineStones = value
             )
             .AddCheckbox(
                 name: I18n.Config_BreakMineContainers_Name,
                 tooltip: I18n.Config_BreakMineContainers_Tooltip,
                 get: config => config.StandardAttachments.PickAxe.BreakMineContainers,
                 set: (config, value) => config.StandardAttachments.PickAxe.BreakMineContainers = value
+            )
+            .AddCheckbox(
+                name: I18n.Config_BreakObjects_Name,
+                tooltip: I18n.Config_BreakObjects_Tooltip,
+                get: config => config.StandardAttachments.PickAxe.ClearObjects,
+                set: (config, value) => config.StandardAttachments.PickAxe.ClearObjects = value
             )
             .AddCheckbox(
                 name: I18n.Config_HarvestMineSpawns_Name,
@@ -505,7 +505,7 @@ internal class GenericModConfigMenuIntegrationForTractor : IGenericModConfigMenu
                 name: I18n.Config_CustomToolNames_Name,
                 tooltip: I18n.Config_CustomToolNames_Tooltip,
                 get: config => string.Join(", ", config.CustomAttachments),
-                set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
+                set: (config, value) => config.CustomAttachments = value.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
             );
     }
 }

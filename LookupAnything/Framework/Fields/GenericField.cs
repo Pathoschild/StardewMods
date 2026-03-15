@@ -78,7 +78,7 @@ internal class GenericField : ICustomField
     }
 
     /// <inheritdoc />
-    public virtual Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public virtual Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         return null;
     }

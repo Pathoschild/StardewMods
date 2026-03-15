@@ -204,13 +204,13 @@ internal class MachineGroup : IMachineGroup
         ignoreMachines.Clear();
         foreach (IMachine machine in inputReady)
         {
-            if (ignoreMachines.Contains(machine.MachineTypeID))
+            if (ignoreMachines.Contains(machine.MachineTypeId))
                 continue;
 
             try
             {
                 if (!machine.SetInput(storage))
-                    ignoreMachines.Add(machine.MachineTypeID); // if the machine can't process available input, no need to ask every instance of its type
+                    ignoreMachines.Add(machine.MachineTypeId); // if the machine can't process available input, no need to ask every instance of its type
             }
             catch (Exception ex)
             {
@@ -250,7 +250,7 @@ internal class MachineGroup : IMachineGroup
         // special case: machine produced a zero-size stack
         if (stackSize < 1)
         {
-            this.Monitor.Log($"Machine '{machine.MachineTypeID}' at {machine.Location.Name} (tile: {machine.TileArea.X}, {machine.TileArea.Y}) produced an item with ID '{output.Sample.QualifiedItemId}' and {(stackSize == 0 ? "no stack size" : $"stack size {stackSize}")}, so the output will be discarded. This is generally due to another mod breaking machine logic, and isn't related to Automate.", LogLevel.Warn);
+            this.Monitor.Log($"Machine '{machine.MachineTypeId}' at {machine.Location.Name} (tile: {machine.TileArea.X}, {machine.TileArea.Y}) produced an item with ID '{output.Sample.QualifiedItemId}' and {(stackSize == 0 ? "no stack size" : $"stack size {stackSize}")}, so the output will be discarded. This is generally due to another mod breaking machine logic, and isn't related to Automate.", LogLevel.Warn);
             output.Take(1); // trigger on-empty callback
             return true;
         }
@@ -266,7 +266,7 @@ internal class MachineGroup : IMachineGroup
     private void OnMachineCrashed(IMachine machine, string action, double curTime, Exception exception)
     {
         this.Monitor.Log(
-            $"Failed to automate machine '{machine.MachineTypeID}' at {machine.Location.Name} (tile: {machine.TileArea.X}, {machine.TileArea.Y}). An error occurred while {action}. Machine paused for {this.MachinePauseMilliseconds / 1000}s.\n{exception}",
+            $"Failed to automate machine '{machine.MachineTypeId}' at {machine.Location.Name} (tile: {machine.TileArea.X}, {machine.TileArea.Y}). An error occurred while {action}. Machine paused for {this.MachinePauseMilliseconds / 1000}s.\n{exception}",
             LogLevel.Error
         );
 

@@ -43,7 +43,7 @@ internal static class Migrator
         if (!Context.IsMainPlayer)
             return;
 
-        // reset if the the previous migration wasn't saved
+        // reset if the previous migration wasn't saved
         Migrator.OnSaved.Clear();
 
         // get info
@@ -129,7 +129,7 @@ internal static class Migrator
                     Stable? garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.tileX.Value == (int)garageData.Tile.X && p.tileY.Value == (int)garageData.Tile.Y);
                     if (garage == null)
                     {
-                        garage = Migrator.BuildGarage(garageData.TractorID, garageData.Tile);
+                        garage = Migrator.BuildGarage(garageData.TractorId, garageData.Tile);
                         location.buildings.Add(garage);
                     }
                     garage.load();

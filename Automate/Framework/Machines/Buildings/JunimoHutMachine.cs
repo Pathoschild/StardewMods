@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using StardewValley;
 using StardewValley.Buildings;
@@ -13,19 +15,25 @@ internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
     ** Fields
     *********/
     /// <summary>How to handle gems in the hut or connected chests.</summary>
+    /// <remarks>This is never <see cref="JunimoHutBehavior.AutoDetect"/>, since that gets replaced before the machine is constructed.</remarks>
     private readonly JunimoHutBehavior GemBehavior;
 
     /// <summary>How to handle fertilizer in the hut or connected chests.</summary>
+    /// <inheritdoc cref="GemBehavior" path="/remarks" />
     private readonly JunimoHutBehavior FertilizerBehavior;
 
     /// <summary>How to handle seeds in the hut or connected chests.</summary>
+    /// <inheritdoc cref="GemBehavior" path="/remarks" />
     private readonly JunimoHutBehavior SeedBehavior;
 
-    /// <summary>Whether the Junimo hut can automate input.</summary>
-    private readonly bool HasInput;
+    /// <inheritdoc cref="ModConfig.JunimoHutBehaviors" />
+    private readonly Dictionary<string, JunimoHutBehavior> ItemBehavior;
 
-    /// <summary>Whether any items are configured to be skipped when outputting.</summary>
-    private readonly bool HasIgnoredOutput;
+    /// <summary>Whether the mod settings specify any items which should be moved into the Junimo hut.</summary>
+    private readonly bool HasInputRules;
+
+    /// <summary>Whether the mod settings specify any items which should <strong>not</strong> be moved into a connected chest.</summary>
+    private readonly bool HasIgnoreOutputRules;
 
     /// <summary>The Junimo hut's output chest.</summary>
     private Chest Output => this.Machine.GetOutputChest();
@@ -36,25 +44,30 @@ internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="hut">The underlying Junimo hut.</param>
-    /// <param name="location">The location which contains the machine.</param>
-    /// <param name="gemBehavior">How to handle gems in the hut or connected chests.</param>
-    /// <param name="fertilizerBehavior">How to handle fertilizer in the hut or connected chests.</param>
-    /// <param name="seedBehavior">How to handle seeds in the hut or connected chests.</param>
-    public JunimoHutMachine(JunimoHut hut, GameLocation location, JunimoHutBehavior gemBehavior, JunimoHutBehavior fertilizerBehavior, JunimoHutBehavior seedBehavior)
+    /// <param name="location"><inheritdoc cref="BaseMachine.Location" path="/summary" /></param>
+    /// <param name="gemBehavior"><inheritdoc cref="GemBehavior" path="/summary" /></param>
+    /// <param name="fertilizerBehavior"><inheritdoc cref="FertilizerBehavior" path="/summary" /></param>
+    /// <param name="seedBehavior"><inheritdoc cref="SeedBehavior" path="/summary" /></param>
+    /// <param name="itemBehavior"><inheritdoc cref="ItemBehavior" path="/summary" /></param>
+    public JunimoHutMachine(JunimoHut hut, GameLocation location, JunimoHutBehavior gemBehavior, JunimoHutBehavior fertilizerBehavior, JunimoHutBehavior seedBehavior, Dictionary<string, JunimoHutBehavior> itemBehavior)
         : base(hut, location, BaseMachine.GetTileAreaFor(hut))
     {
         this.GemBehavior = gemBehavior;
         this.FertilizerBehavior = fertilizerBehavior;
         this.SeedBehavior = seedBehavior;
+        this.ItemBehavior = itemBehavior;
 
-        this.HasInput =
+        this.HasInputRules =
             gemBehavior is JunimoHutBehavior.MoveIntoHut
             || fertilizerBehavior is JunimoHutBehavior.MoveIntoHut
-            || seedBehavior is JunimoHutBehavior.MoveIntoHut;
-        this.HasIgnoredOutput =
+            || seedBehavior is JunimoHutBehavior.MoveIntoHut
+            || itemBehavior.Any(p => p.Value is JunimoHutBehavior.MoveIntoHut);
+
+        this.HasIgnoreOutputRules =
             gemBehavior is not JunimoHutBehavior.MoveIntoChests
             || fertilizerBehavior is not JunimoHutBehavior.MoveIntoChests
-            || seedBehavior is not JunimoHutBehavior.MoveIntoChests;
+            || seedBehavior is not JunimoHutBehavior.MoveIntoChests
+            || itemBehavior.Any(p => p.Value is not (JunimoHutBehavior.AutoDetect or JunimoHutBehavior.MoveIntoChests));
     }
 
     /// <inheritdoc />
@@ -66,7 +79,7 @@ internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
         if (this.GetNextOutput() != null)
             return MachineState.Done;
 
-        return this.HasInput
+        return this.HasInputRules
             ? MachineState.Empty
             : MachineState.Processing;
     }
@@ -80,41 +93,21 @@ internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
     /// <inheritdoc />
     public override bool SetInput(IStorage input)
     {
-        if (!this.HasInput)
-            return false;
-
         // get next item
-        ITrackedStack? tracker = null;
-        foreach (ITrackedStack stack in input.GetItems())
+        if (this.HasInputRules)
         {
-            if (stack.Sample is not SObject obj)
-                continue;
-
-            switch (obj.Category)
+            foreach (ITrackedStack stack in input.GetItems())
             {
-                case SObject.SeedsCategory when this.SeedBehavior == JunimoHutBehavior.MoveIntoHut:
-                    tracker = stack;
-                    break;
-
-                case SObject.fertilizerCategory when this.FertilizerBehavior == JunimoHutBehavior.MoveIntoHut:
-                    tracker = stack;
-                    break;
-
-                case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior == JunimoHutBehavior.MoveIntoHut:
-                    tracker = stack;
-                    break;
+                if (this.ShouldMoveIntoHut(stack.Sample))
+                {
+                    Item item = stack.Take(1)!;
+                    this.Output.addItem(item);
+                    return true;
+                }
             }
-
-            if (tracker is not null)
-                break;
         }
-        if (tracker == null)
-            return false;
 
-        // place item in output chest
-        SObject item = (SObject)tracker.Take(1)!;
-        this.Output.addItem(item);
-        return true;
+        return false;
     }
 
 
@@ -133,31 +126,81 @@ internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
     /// <summary>Get the next output item.</summary>
     private Item? GetNextOutput()
     {
-        foreach (Item item in this.Output.Items)
+        foreach (Item? item in this.Output.Items)
         {
-            if (item is null || item.QualifiedItemId == "(O)Raisins")
-                continue;
-
-            if (this.HasIgnoredOutput)
-            {
-                bool ignore = false;
-
-                switch (item.Category)
-                {
-                    case SObject.SeedsCategory when this.SeedBehavior is not JunimoHutBehavior.MoveIntoChests:
-                    case SObject.fertilizerCategory when this.FertilizerBehavior is not JunimoHutBehavior.MoveIntoChests:
-                    case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior is not JunimoHutBehavior.MoveIntoChests:
-                        ignore = true;
-                        break;
-                }
-
-                if (ignore)
-                    continue;
-            }
-
-            return item;
+            if (item is not null && this.ShouldMoveIntoChest(item))
+                return item;
         }
 
         return null;
+    }
+
+    /// <summary>Get whether an item should be moved into a connected chest.</summary>
+    /// <param name="item">The item to check.</param>
+    private bool ShouldMoveIntoChest(Item item)
+    {
+        bool hasCustomBehavior = this.HasIgnoreOutputRules;
+
+        // check item ID
+        if (hasCustomBehavior && this.ItemBehavior.TryGetValue(item.QualifiedItemId, out JunimoHutBehavior behavior))
+        {
+            switch (behavior)
+            {
+                case JunimoHutBehavior.Ignore:
+                case JunimoHutBehavior.MoveIntoHut:
+                    return false;
+
+                case JunimoHutBehavior.MoveIntoChests:
+                    return true;
+            }
+        }
+        if (item.QualifiedItemId == "(O)Raisins")
+            return false; // raisins change the vanilla Junimo hut behavior
+
+        // check item category
+        if (hasCustomBehavior)
+        {
+            switch (item.Category)
+            {
+                case SObject.SeedsCategory when this.SeedBehavior is not JunimoHutBehavior.MoveIntoChests:
+                case SObject.fertilizerCategory when this.FertilizerBehavior is not JunimoHutBehavior.MoveIntoChests:
+                case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior is not JunimoHutBehavior.MoveIntoChests:
+                    return false;
+            }
+        }
+
+        // all items are moved into connected chests by default
+        return true;
+    }
+
+    /// <summary>Get whether an item should be moved into the Junimo hut.</summary>
+    /// <param name="item">The item to check.</param>
+    private bool ShouldMoveIntoHut(Item item)
+    {
+        // check item ID
+        if (this.ItemBehavior.TryGetValue(item.QualifiedItemId, out JunimoHutBehavior behavior))
+        {
+            switch (behavior)
+            {
+                case JunimoHutBehavior.Ignore:
+                case JunimoHutBehavior.MoveIntoChests:
+                    return false;
+
+                case JunimoHutBehavior.MoveIntoHut:
+                    return true;
+            }
+        }
+
+        // check item category
+        switch (item.Category)
+        {
+            case SObject.SeedsCategory when this.SeedBehavior is JunimoHutBehavior.MoveIntoHut:
+            case SObject.fertilizerCategory when this.FertilizerBehavior is JunimoHutBehavior.MoveIntoHut:
+            case (SObject.GemCategory or SObject.mineralsCategory) when this.GemBehavior is JunimoHutBehavior.MoveIntoHut:
+                return true;
+        }
+
+        // no items are moved into Junimo huts by default
+        return false;
     }
 }

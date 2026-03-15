@@ -833,6 +833,13 @@
     "config.hide-on-key-up.desc": "確認キーを押した状態から離した時に、確認UIを非表示にする。",
     "config.toggle-lookup.name": "確認キー",
     "config.toggle-lookup.desc": "マウスカーソルを合わせた状態で、確認画面を表示するキー設定。",
+
+    // TODO
+    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
+    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
+    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+
     "config.toggle-search.name": "検索キー",
     "config.toggle-search.desc": "検索画面を表示するためのキー設定。",
     "config.scroll-up.name": "上スクロール",

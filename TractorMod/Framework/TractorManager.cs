@@ -24,7 +24,7 @@ internal sealed class TractorManager
     ** Fields
     *********/
     /// <summary>The unique buff ID for the tractor speed.</summary>
-    private readonly string BuffUniqueID = "Pathoschild.TractorMod";
+    private readonly string BuffUniqueId = "Pathoschild.TractorMod";
 
     /// <summary>The number of ticks between each tractor action check.</summary>
     private readonly int TicksPerAction = 12; // roughly five times per second
@@ -277,16 +277,16 @@ internal sealed class TractorManager
         // remove if no longer riding
         if (!isRiding)
         {
-            Game1.player.buffs.Remove(this.BuffUniqueID);
+            Game1.player.buffs.Remove(this.BuffUniqueId);
             return;
         }
 
         // else reapply if expired or expiring
-        Game1.player.buffs.AppliedBuffs.TryGetValue(this.BuffUniqueID, out Buff? buff);
+        Game1.player.buffs.AppliedBuffs.TryGetValue(this.BuffUniqueId, out Buff? buff);
         if (buff == null || buff.millisecondsDuration < 5000 || buff.effects.MagneticRadius.Value != this.Config.MagneticRadius || buff.effects.Speed.Value != this.Config.TractorSpeed)
         {
             buff = new Buff(
-                id: this.BuffUniqueID,
+                id: this.BuffUniqueId,
                 source: "Tractor Power",
                 displayName: I18n.Buff_Name(),
                 duration: 60000,
@@ -450,7 +450,7 @@ internal sealed class TractorManager
         };
     }
 
-    /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
+    /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterward.</summary>
     /// <param name="action">The action to perform.</param>
     [SuppressMessage("SMAPI", "AvoidImplicitNetFieldCast", Justification = "Deliberately accesses net field instance.")]
     private void TemporarilyFakeInteraction(Action action)

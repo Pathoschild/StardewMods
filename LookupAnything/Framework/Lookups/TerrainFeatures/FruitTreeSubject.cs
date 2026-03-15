@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -26,6 +27,9 @@ internal class FruitTreeSubject : BaseSubject
 
     /// <summary>The tree's tile position.</summary>
     private readonly Vector2 Tile;
+
+    /// <summary>The cached portrait to draw in <see cref="DrawPortrait"/>.</summary>
+    private Texture2D? Portrait;
 
 
     /*********
@@ -155,7 +159,27 @@ internal class FruitTreeSubject : BaseSubject
     /// <inheritdoc />
     public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
     {
-        this.Target.drawInMenu(spriteBatch, position, Vector2.Zero, 1, 1);
+        this.Portrait ??= DrawHelper.RenderToTexture(
+            renderBatch =>
+            {
+                Vector2 wasTile = this.Target.Tile;
+                try
+                {
+                    // draw in top-left corner of viewport (so it's top-left of render target)
+                    Vector2 topLeftTile = new Vector2(Game1.viewport.X, Game1.viewport.Y) / Game1.tileSize;
+                    this.Target.Tile = new Vector2(topLeftTile.X + 1, topLeftTile.Y + 4);
+                    this.Target.draw(renderBatch);
+                }
+                finally
+                {
+                    this.Target.Tile = wasTile;
+                }
+            },
+            pixelWidth: Game1.tileSize * 3,
+            pixelHeight: Game1.tileSize * 5
+        );
+
+        spriteBatch.DrawSpriteWithin(this.Portrait, new Rectangle(0, 0, this.Portrait.Width, this.Portrait.Height), position.X, position.Y, size);
         return true;
     }
 

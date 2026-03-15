@@ -43,7 +43,7 @@ internal class TextureManager : IDisposable
     private readonly IDictionary<string, string> AssetMap;
 
     /// <summary>The last season for which we updated textures.</summary>
-    private Season? LastSeason = null;
+    private Season? LastSeason;
 
 
     /*********

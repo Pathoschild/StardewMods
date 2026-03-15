@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Framework.ConfigModels;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -49,7 +50,7 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     /// <inheritdoc />
     public override TileGroup[] Update(ref readonly GameLocation location, ref readonly Rectangle visibleArea, ref readonly IReadOnlySet<Vector2> visibleTiles, ref readonly Vector2 cursorTile)
     {
-        var tiles = this.GetTiles(location, visibleTiles).ToLookup(p => p.Type.Id);
+        ILookup<string, TileData> tiles = this.GetTiles(location, visibleTiles).ToLookup(p => p.Type.Id);
 
         return [
             new TileGroup(tiles[this.Ready.Id], outerBorderColor: this.Ready.Color),
@@ -61,9 +62,21 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     /// <inheritdoc />
     public bool AppliesTo(Item item)
     {
-        return
-            item is MeleeWeapon tool
-            && tool.isScythe();
+        switch (item)
+        {
+            // scythe
+            case MeleeWeapon tool:
+                return tool.isScythe();
+
+            // seeds
+            case Object when item.HasTypeObject():
+                return
+                    item.ItemId is "MixedFlowerSeeds" or Crop.mixedSeedsId or "251"/* Tea Sapling */
+                    || Game1.cropData.ContainsKey(item.ItemId);
+
+            default:
+                return false;
+        }
     }
 
 
@@ -75,22 +88,19 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
     private IEnumerable<TileData> GetTiles(GameLocation location, IReadOnlySet<Vector2> visibleTiles)
     {
+        // check tiles
         foreach (Vector2 tile in visibleTiles)
         {
-            // crop
-            if (this.GetDirt(location, tile)?.crop is { } crop && this.TryCheckCrop(location, tile, crop, out TileData? tileData))
+            if (this.TryCheckTile(location, tile, out TileData? tileData, out int tileWidth))
+            {
                 yield return tileData;
 
-            // indoor pot
-            else if ((location.objects.GetValueOrDefault(tile) as IndoorPot)?.bush.Value is { } potBush && this.TryCheckBush(tile, potBush, out tileData))
-                yield return tileData;
-
-            // terrain feature
-            else if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrainFeature) && this.TryCheckTerrainFeature(tile, terrainFeature, out tileData))
-                yield return tileData;
+                for (int xOffset = 1; xOffset < tileWidth; xOffset++)
+                    yield return new TileData(new Vector2(tileData.TilePosition.X + xOffset, tileData.TilePosition.Y), tileData.Type, tileData.Color, tileData.DrawOffset);
+            }
         }
 
-        // large terrain features
+        // check large terrain features
         foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
         {
             if (visibleTiles.Contains(feature.Tile) && this.TryCheckLargeTerrainFeature(feature, out TileData? tileData, out int tileWidth))
@@ -103,12 +113,59 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
         }
     }
 
+    /// <summary>Get the tile data for a tile.</summary>
+    /// <param name="location">The current location.</param>
+    /// <param name="tile">The tile to check.</param>
+    /// <param name="tileData">The tile data if valid.</param>
+    /// <param name="tileWidth">The bush's tile width.</param>
+    /// <returns>Returns whether the tile contains a harvestable type.</returns>
+    private bool TryCheckTile(GameLocation location, Vector2 tile, [NotNullWhen(true)] out TileData? tileData, out int tileWidth)
+    {
+        // crop
+        if (this.GetDirt(location, tile)?.crop is { } crop && this.TryCheckCrop(location, tile, crop, out tileData))
+        {
+            tileWidth = 1;
+            return true;
+        }
+
+        // object
+        if (location.objects.TryGetValue(tile, out Object obj) && obj is not null)
+        {
+            if (obj is IndoorPot pot)
+            {
+                if (pot.bush.Value is { } bush && this.TryCheckBush(tile, bush, out tileData, out tileWidth))
+                    return true;
+
+                tileData = null;
+                tileWidth = 0;
+                return false;
+            }
+
+            if (obj.isForage() || obj is { IsSpawnedObject: true, CanBeGrabbed: true })
+            {
+                tileData = new TileData(tile, this.Ready);
+                tileWidth = 1;
+                return true;
+            }
+        }
+
+        // terrain feature
+        if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature? terrainFeature) && this.TryCheckTerrainFeature(tile, terrainFeature, out tileData, out tileWidth))
+            return true;
+
+        // none found
+        tileData = null;
+        tileWidth = 0;
+        return false;
+    }
+
     /// <summary>Get the tile data for a bush.</summary>
     /// <param name="tile">The tile containing the bush.</param>
     /// <param name="bush">The bush instance.</param>
     /// <param name="tileData">The tile data if valid.</param>
+    /// <param name="tileWidth">The bush's tile width.</param>
     /// <returns>Returns whether the bush is a harvestable type.</returns>
-    private bool TryCheckBush(Vector2 tile, Bush bush, [NotNullWhen(true)] out TileData? tileData)
+    private bool TryCheckBush(Vector2 tile, Bush bush, [NotNullWhen(true)] out TileData? tileData, out int tileWidth)
     {
         if (
             !(bush.size.Value == Bush.mediumBush && !bush.townBush.Value) // berry bush
@@ -116,11 +173,18 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
         )
         {
             tileData = null;
+            tileWidth = 0;
             return false;
         }
 
         bool ready = bush.tileSheetOffset.Value == 1;
         tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+        tileWidth = bush.size.Value switch
+        {
+            Bush.walnutBush or Bush.mediumBush => 2,
+            Bush.largeBush => 3,
+            _ => 1
+        };
         return true;
     }
 
@@ -156,16 +220,23 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
     /// <param name="tile">The tile containing the terrain feature.</param>
     /// <param name="terrainFeature">The terrain feature instance.</param>
     /// <param name="tileData">The tile data if valid.</param>
+    /// <param name="tileWidth">The terrain feature's tile width.</param>
     /// <returns>Returns whether the crop is a harvestable type.</returns>
-    private bool TryCheckTerrainFeature(Vector2 tile, TerrainFeature terrainFeature, [NotNullWhen(true)] out TileData? tileData)
+    private bool TryCheckTerrainFeature(Vector2 tile, TerrainFeature terrainFeature, [NotNullWhen(true)] out TileData? tileData, out int tileWidth)
     {
         switch (terrainFeature)
         {
+            case Bush bush:
+                if (this.TryCheckBush(tile, bush, out tileData, out tileWidth))
+                    return true;
+                break;
+
             case FruitTree fruitTree:
                 if (fruitTree.growthStage.Value >= FruitTree.treeStage)
                 {
                     bool ready = fruitTree.fruit.Count > 0;
                     tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+                    tileWidth = 1;
                     return true;
                 }
                 break;
@@ -177,12 +248,14 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
                         tree.hasMoss.Value
                         || (tree.hasSeed.Value && (Game1.IsMultiplayer || Game1.player.ForagingLevel >= 1));
                     tileData = new TileData(tile, ready ? this.Ready : this.NotReady);
+                    tileWidth = 1;
                     return true;
                 }
                 break;
         }
 
         tileData = null;
+        tileWidth = 0;
         return false;
     }
 
@@ -196,16 +269,8 @@ internal class CropHarvestLayer : BaseLayer, IAutoItemLayer
         switch (terrainFeature)
         {
             case Bush bush:
-                if (this.TryCheckBush(terrainFeature.Tile, bush, out tileData))
-                {
-                    tileWidth = bush.size.Value switch
-                    {
-                        Bush.walnutBush or Bush.mediumBush => 2,
-                        Bush.largeBush => 3,
-                        _ => 1
-                    };
+                if (this.TryCheckBush(terrainFeature.Tile, bush, out tileData, out tileWidth))
                     return true;
-                }
 
                 break;
         }

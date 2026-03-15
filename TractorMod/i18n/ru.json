@@ -176,6 +176,10 @@
     "config.clear-debris.name": "Уборка мусора",
     "config.clear-debris.tooltip": "Будет убирать сорняки, ветки, большие пни и брёвна.",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "Уборка сорняков",
     "config.clear-weeds.tooltip": "Будет срубать сорняки.",
 

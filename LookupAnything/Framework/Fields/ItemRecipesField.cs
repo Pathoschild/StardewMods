@@ -94,7 +94,7 @@ internal class ItemRecipesField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         // reset
         this.LinkTextAreas.Clear();
@@ -129,6 +129,9 @@ internal class ItemRecipesField : GenericField
         curPos.Y += groupVerticalMargin;
         foreach (RecipeByTypeGroup group in this.RecipesByType)
         {
+            if (curPos.Y > visibleHeight)
+                break;
+
             // check if we can align columns
             bool alignColumns = wrapWidth >= (group.TotalColumnWidth + itemSpacer + ((group.ColumnWidths.Length - 1) * joinerWidth)); // columns + space between output/input + space between each input
 
@@ -144,6 +147,9 @@ internal class ItemRecipesField : GenericField
             // draw recipe lines
             foreach (RecipeEntry entry in group.Recipes)
             {
+                if (curPos.Y > visibleHeight)
+                    break;
+
                 if (!this.ShowInvalidRecipes && !entry.IsValid)
                     continue;
                 if (!this.ShowUnknownRecipes && !entry.IsKnown)

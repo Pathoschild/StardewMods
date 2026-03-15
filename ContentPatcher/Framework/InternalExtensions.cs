@@ -99,34 +99,34 @@ internal static class InternalExtensions
 
     /// <summary>Get whether the manifest lists a given mod ID as a dependency.</summary>
     /// <param name="manifest">The manifest.</param>
-    /// <param name="modID">The mod ID.</param>
+    /// <param name="modId">The mod ID.</param>
     /// <param name="canBeOptional">Whether the dependency can be optional.</param>
-    public static bool HasDependency(this IManifest manifest, string modID, bool canBeOptional = true)
+    public static bool HasDependency(this IManifest manifest, string modId, bool canBeOptional = true)
     {
-        return manifest.HasDependency(modID, out _, canBeOptional);
+        return manifest.HasDependency(modId, out _, canBeOptional);
     }
 
     /// <summary>Get whether the manifest lists a given mod ID as a dependency.</summary>
     /// <param name="manifest">The manifest.</param>
-    /// <param name="modID">The mod ID.</param>
+    /// <param name="modId">The mod ID.</param>
     /// <param name="minVersion">The minimum version required by the mod, if any.</param>
     /// <param name="canBeOptional">Whether the dependency can be optional.</param>
-    public static bool HasDependency(this IManifest? manifest, string modID, out ISemanticVersion? minVersion, bool canBeOptional = true)
+    public static bool HasDependency(this IManifest? manifest, string modId, out ISemanticVersion? minVersion, bool canBeOptional = true)
     {
         minVersion = null;
         if (manifest == null)
             return false;
 
         // self-reference (e.g. mod can use its own tokens)
-        if (manifest.UniqueID.EqualsIgnoreCase(modID))
+        if (manifest.UniqueID.EqualsIgnoreCase(modId))
             return true;
 
         // check content pack for
-        if (manifest.ContentPackFor?.UniqueID.EqualsIgnoreCase(modID) == true)
+        if (manifest.ContentPackFor?.UniqueID.EqualsIgnoreCase(modId) == true)
             return true;
 
         // check dependencies
-        IManifestDependency? dependency = manifest.Dependencies.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
+        IManifestDependency? dependency = manifest.Dependencies.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modId));
         minVersion = dependency?.MinimumVersion;
         return
             dependency != null

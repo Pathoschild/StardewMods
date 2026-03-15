@@ -6,6 +6,9 @@ internal class ReassignedContentPackModel
     /*********
     ** Accessors
     *********/
+    /****
+    ** Bus Locations
+    ****/
     /// <inheritdoc cref="Stop.ToLocation" />
     public string? MapName { get; set; }
 
@@ -23,4 +26,12 @@ internal class ReassignedContentPackModel
 
     /// <inheritdoc cref="Stop.Cost" />
     public int TicketPrice { get; set; }
+
+
+    /****
+    ** Bus Locations Continued
+    ****/
+    /// <summary>Multiple destinations added by this content pack.</summary>
+    /// <remarks>If this is set, the other fields are ignored.</remarks>
+    public ReassignedContentPackModel?[]? Locations { get; set; }
 }

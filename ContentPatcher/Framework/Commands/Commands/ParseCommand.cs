@@ -56,14 +56,14 @@ internal class ParseCommand : BaseCommand
             return;
         }
         string raw = args[0];
-        string? modID = args.Length >= 2 && args[1] != "compact" ? args[1] : null;
+        string? modId = args.Length >= 2 && args[1] != "compact" ? args[1] : null;
         bool compact = args.Skip(1).Contains("compact");
 
         // get context
         IContext context;
         try
         {
-            context = this.GetContext(modID);
+            context = this.GetContext(modId);
         }
         catch (KeyNotFoundException ex)
         {

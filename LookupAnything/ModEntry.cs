@@ -64,8 +64,11 @@ internal class ModEntry : Mod
     /// <summary>Draws debug information to the screen.</summary>
     private PerScreen<DebugInterface>? DebugInterface;
 
+    /// <summary>Tracks double taps (Android) or double-clicks (desktop).</summary>
+    private readonly PerScreen<DoubleTapTracker> DoubleTapTracker = new(() => new DoubleTapTracker());
+
     /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
-    private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
+    private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new Stack<IClickableMenu>());
 
 
     /*********
@@ -92,7 +95,6 @@ internal class ModEntry : Mod
         if (!this.IsDataValid)
             this.Monitor.Log($"The {this.DatabaseFileName} file seems to be missing or corrupt. Lookups will be disabled.", LogLevel.Error);
 
-
         // validate translations
         if (!helper.Translation.GetTranslations().Any())
             this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
@@ -103,6 +105,7 @@ internal class ModEntry : Mod
         helper.Events.Display.RenderedHud += this.OnRenderedHud;
         helper.Events.Display.MenuChanged += this.OnMenuChanged;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+        helper.Events.Input.ButtonPressed += this.OnButtonPressed;
     }
 
 
@@ -120,7 +123,7 @@ internal class ModEntry : Mod
 
         // initialize functionality
         this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-        this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
+        this.TargetFactory = new TargetFactory(this.Monitor, this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
 
         // add config UI
@@ -136,7 +139,7 @@ internal class ModEntry : Mod
                 new Rectangle(330, 357, 7, 13),
                 I18n.Icon_ToggleSearch_Name,
                 I18n.Icon_ToggleSearch_Desc,
-                onClick: () => this.ShowLookup(ignoreCursor: true),
+                onClick: () => this.ShowLookup(LookupCursorMode.Ignore),
                 onRightClick: this.TryToggleSearch
             );
         }
@@ -184,6 +187,27 @@ internal class ModEntry : Mod
         });
     }
 
+    /// <inheritdoc cref="IInputEvents.ButtonPressed" />
+    private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
+    {
+        if (!this.IsDataValid)
+            return;
+
+        this.Monitor.InterceptErrors("handling double-tap lookup", () =>
+        {
+            if (e.Button != SButton.MouseLeft || !this.Config.ToggleLookupOnDoubleTap)
+                return;
+
+            if (Game1.activeClickableMenu is not (null or LookupMenu))
+                return;
+
+            if (this.DoubleTapTracker.Value.ReceiveButtonPress())
+            {
+                this.ShowLookup(LookupCursorMode.ForceCheck);
+            }
+        });
+    }
+
     /// <inheritdoc cref="IDisplayEvents.MenuChanged" />
     private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
     {
@@ -210,17 +234,18 @@ internal class ModEntry : Mod
     ** Lookup menu helpers
     ****/
     /// <summary>Show the lookup UI for the current target.</summary>
-    private void ToggleLookup()
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private void ToggleLookup(LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (Game1.activeClickableMenu is LookupMenu)
             this.HideLookup();
         else
-            this.ShowLookup();
+            this.ShowLookup(cursorMode);
     }
 
     /// <summary>Show the lookup UI for the current target.</summary>
-    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
-    private void ShowLookup(bool ignoreCursor = false)
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private void ShowLookup(LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (!this.IsDataValid)
             return;
@@ -232,7 +257,7 @@ internal class ModEntry : Mod
             try
             {
                 // get target
-                ISubject? subject = this.GetSubject(logMessage, ignoreCursor);
+                ISubject? subject = this.GetSubject(logMessage, cursorMode);
                 if (subject == null)
                 {
                     this.Monitor.Log($"{logMessage} no target found.");
@@ -363,8 +388,8 @@ internal class ModEntry : Mod
 
     /// <summary>Get the most relevant subject under the player's cursor.</summary>
     /// <param name="logMessage">The log message to which to append search details.</param>
-    /// <param name="ignoreCursor">Whether to ignore the cursor position and search for a subject in front of the player.</param>
-    private ISubject? GetSubject(StringBuilder logMessage, bool ignoreCursor = false)
+    /// <param name="cursorMode">How to handle the cursor position when searching for a match.</param>
+    private ISubject? GetSubject(StringBuilder logMessage, LookupCursorMode cursorMode = LookupCursorMode.AutoDetect)
     {
         if (!this.IsDataValid)
             return null;
@@ -374,10 +399,12 @@ internal class ModEntry : Mod
         if (!Game1.uiMode)
             cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos); // menus use UI coordinates
 
-        bool hasCursor =
-            !ignoreCursor
-            && Constants.TargetPlatform != GamePlatform.Android
-            && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
+        bool hasCursor = cursorMode switch
+        {
+            LookupCursorMode.ForceCheck => true,
+            LookupCursorMode.Ignore => false,
+            _ => Constants.TargetPlatform != GamePlatform.Android && Game1.wasMouseVisibleThisFrame // note: only reliable when a menu isn't open
+        };
 
         // open menu
         if (Game1.activeClickableMenu != null)

@@ -36,12 +36,16 @@ internal class CheckboxListField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         float topOffset = 0;
 
         foreach (CheckboxList checkboxList in this.CheckboxLists)
-            topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
+        {
+            topOffset += this.DrawCheckboxList(checkboxList, spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, visibleHeight).Y;
+            if (topOffset > visibleHeight)
+                break;
+        }
 
         return new Vector2(wrapWidth, topOffset - this.LineHeight);
     }
@@ -66,8 +70,9 @@ internal class CheckboxListField : GenericField
     /// <param name="font">The recommended font.</param>
     /// <param name="position">The position at which to draw.</param>
     /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
+    /// <param name="visibleHeight">The visible height available for drawing. Any content beyond this height won't be visible to the player.</param>
     /// <returns>Returns the drawn dimensions.</returns>
-    protected Vector2 DrawCheckboxList(CheckboxList checkboxList, SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    protected Vector2 DrawCheckboxList(CheckboxList checkboxList, SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         float topOffset = 0;
         float checkboxSize = this.CheckboxSize;
@@ -82,6 +87,9 @@ internal class CheckboxListField : GenericField
 
         foreach (Checkbox checkbox in checkboxList.Checkboxes)
         {
+            if (topOffset > visibleHeight)
+                break;
+
             // draw icon
             spriteBatch.Draw(
                 texture: CommonSprites.Icons.Sheet,

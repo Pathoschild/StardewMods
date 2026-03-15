@@ -172,6 +172,10 @@
     "config.clear-debris.name": "障害物の除去",
     "config.clear-debris.tooltip": "雑草、枝、おおきな切り株、おおきな丸太などを除去する。",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "雑草の除去",
     "config.clear-weeds.tooltip": "雑草を除去する。",
 

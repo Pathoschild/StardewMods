@@ -8,6 +8,9 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/root/.github/">
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="TestDataLayersMod/TestDataLayersMod.csproj" />
     <Project Path="TestMod/TestMod.csproj" />

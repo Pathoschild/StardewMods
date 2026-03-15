@@ -139,7 +139,7 @@ internal class ModEntry : Mod
     public override object GetApi()
     {
         return new ContentPatcherAPI(
-            contentPatcherID: this.ModManifest.UniqueID,
+            contentPatcherId: this.ModManifest.UniqueID,
             monitor: this.Monitor,
             reflection: this.Helper.Reflection,
             addModToken: this.AddModToken,
@@ -298,7 +298,7 @@ internal class ModEntry : Mod
             monitor: this.Monitor,
             contentHelper: this.Helper.GameContent,
             contentPacks: this.ContentPacks,
-            getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
+            getContext: modId => modId == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modId),
             updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)
         );
         this.CommandHandler.RegisterWith(helper.ConsoleCommands);

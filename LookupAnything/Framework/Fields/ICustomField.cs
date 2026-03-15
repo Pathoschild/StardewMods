@@ -35,8 +35,9 @@ internal interface ICustomField
     /// <param name="font">The recommended font.</param>
     /// <param name="position">The position at which to draw.</param>
     /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
+    /// <param name="visibleHeight">The visible height available for drawing. Any content beyond this height won't be visible to the player.</param>
     /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="Value"/> using the default format.</returns>
-    Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth);
+    Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight);
 
     /// <summary>Get the subject that should be opened when the player clicks a position within the field, if any.</summary>
     /// <param name="x">The X pixel position to check.</param>

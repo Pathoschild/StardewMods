@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.7.0
+Released 14 March 2026 for SMAPI 4.3.1 or later.
+
+* Added option to require Pam be present before you can depart from the Stardew Valley bus stop.
+* Added compatibility with Bus Locations Continued, including support for [reassigning its content packs](README.md#reassign-old-content-packs).
+* Central Station downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
+
 ## 1.6.2
 Released 11 January 2026 for SMAPI 4.3.1 or later.
 

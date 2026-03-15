@@ -32,6 +32,12 @@
     "config.junimo-hut-seeds.name": "种子",
     "config.junimo-hut-seeds.desc": "祝尼魔屋应该如何处理种子物品。如果设置为“自动检测”并且安装了“Better Junimos”模组将会忽略对种子物品的处理，否则将会把它们从祝尼魔屋移动到与之连接的箱子内。",
 
+    // TODO
+    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
+    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
+    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+
     // Junimo hut dropdown values (祝尼魔屋下拉选项)
     "config.junimo-huts.auto-detect": "自动检测",
     "config.junimo-huts.ignore": "忽略这类物品",

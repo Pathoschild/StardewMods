@@ -1893,7 +1893,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
 {
     "Format": "2.9.0",
     "AliasTokenNames": {
-        "ItemID": "spacechase0.jsonAssets/ObjectId",
+        "ItemId": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
     },
     "Changes": [
@@ -1901,7 +1901,7 @@ _别名_ 为现有令牌添加可选替代名称，仅影响此内容包，可�
             "Action": "EditData",
             "Target": "Data/NpcGiftTastes",
             "Entries": {
-                "Universal_Love": "74 446 797 373 {{ItemID: pufferchick}}"
+                "Universal_Love": "74 446 797 373 {{ItemId: pufferchick}}"
             }
         }
     ]

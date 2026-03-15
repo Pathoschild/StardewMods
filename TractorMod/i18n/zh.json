@@ -170,6 +170,10 @@
     "config.clear-debris.name": "清除杂物",
     "config.clear-debris.tooltip": "是否清除杂物，如杂草、树枝、树桩。",
 
+    // TODO
+    "config.clear-mine-stones.name": "Break Mine Stones",
+    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+
     "config.clear-weeds.name": "清除杂草",
     "config.clear-weeds.tooltip": "是否清除杂草。",
 

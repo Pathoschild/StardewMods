@@ -369,8 +369,8 @@
             "Action": "EditData",
             "Target": "Data/MoviesReactions",
             "MoveEntries": [
-                { "ID": "Abigail", "BeforeID": "Leah" },     //移动字段让阿比盖尔在莉亚前面
-                { "ID": "Abigail", "AfterID": "Leah" },      //移动字段让阿比盖尔在莉亚后面
+                { "ID": "Abigail", "BeforeId": "Leah" },     //移动字段让阿比盖尔在莉亚前面
+                { "ID": "Abigail", "AfterId": "Leah" },      //移动字段让阿比盖尔在莉亚后面
                 { "ID": "Abigail", "ToPosition": "Top" },    //移动字段让它位于最顶层
                 { "ID": "Abigail", "ToPosition": "Bottom" }, //移动字段让它位于最底层
             ]

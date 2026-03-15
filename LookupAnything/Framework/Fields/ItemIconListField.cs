@@ -27,7 +27,7 @@ internal class ItemIconListField : GenericField
     private readonly bool ShowStackSize;
 
     /// <summary>The pixel indent to apply before each entry in the list.</summary>
-    private readonly int IconIndent = 0;
+    private readonly int IconIndent;
 
 
     /*********
@@ -40,6 +40,7 @@ internal class ItemIconListField : GenericField
     /// <param name="showStackSize">Whether to draw the stack size on the item icon.</param>
     /// <param name="introText">The text to show before the item list, if any.</param>
     /// <param name="formatItemName">Get the name to show for an item, or <c>null</c> to use the item's display name.</param>
+    /// <param name="iconIndent">The pixel indent to apply before each entry in the list.</param>
     public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item?>? items, bool showStackSize, string? introText = null, Func<Item, string?>? formatItemName = null, int iconIndent = 0)
         : base(label, hasValue: items != null)
     {
@@ -52,7 +53,7 @@ internal class ItemIconListField : GenericField
     }
 
     /// <inheritdoc />
-    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
+    public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         // get icon size
         float textHeight = font.MeasureString("ABC").Y;
@@ -71,6 +72,9 @@ internal class ItemIconListField : GenericField
         int leftOffset = this.IconIndent;
         foreach ((Item item, SpriteInfo? sprite) in this.Items)
         {
+            if (topOffset > visibleHeight)
+                break;
+
             // draw icon
             spriteBatch.DrawSpriteWithin(sprite, position.X + leftOffset, position.Y + topOffset, iconSize);
             if (this.ShowStackSize && item.Stack > 1)

@@ -211,11 +211,11 @@ internal class ShippingBinContainer : IContainer
 
         // reopen menu
         IClickableMenu menu = Game1.activeClickableMenu;
-        int snappedComponentID = menu.currentlySnappedComponent?.myID ?? -1;
+        int snappedComponentId = menu.currentlySnappedComponent?.myID ?? -1;
         menu = this.OpenMenu();
-        if (snappedComponentID != -1)
+        if (snappedComponentId != -1)
         {
-            menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentID);
+            menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentId);
             menu.snapCursorToCurrentSnappedComponent();
         }
     }

@@ -34,7 +34,7 @@
     "generic.show-x-results": "mostra {{count}} risultati",
 
     // types
-    "type.achievement": "Achievement", // TODO
+    "type.achievement": "Achievement",
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
@@ -181,14 +181,13 @@
     /*********
     ** Achievement lookups
     *********/
-    // TODO
     // labels
-    "achievement.unlocked": "Unlocked",
-    "achievement.hat-shop": "Hat shop",
+    "achievement.unlocked": "Sbloccato",
+    "achievement.hat-shop": "Negozio di cappelli",
 
     // values
-    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
-    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+    "achievement.hat-shop.hats-added": "Questi cappelli vengono aggiunti al Negozio del Topo di cappelli quando si sblocca l'achievement:",
+    "achievement.hat-shop.no-hats-added": "Questo achievement non sblocca cappelli.",
 
 
     /*********
@@ -739,11 +738,10 @@
     ** Search UI
     *************************************************/
     // screen reader text
-    // TODO
-    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
-    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
-    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
-    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.instructions": "Menu di ricerca di Lookup Anything. Casella di ricerca selezionata. Inserisci il testo per cercare.",
+    "search-menu.screen-reader.search-results": "Casella di ricerca. {{count}} risultati trovati per \"{{search}}\". Scorri verso il basso per visualizzare i risultati.",
+    "search-menu.screen-reader.search-no-results": "Casella di ricerca. Nessun risultato trovato per \"{{search}}\".",
+    "search-menu.screen-reader.search-empty": "Casella di ricerca. Attualmente vuota.",
     "search-menu.screen-reader.result": "{{name}} ({{type}}).",
 
 
@@ -828,8 +826,14 @@
     "config.title.controls": "Controlli",
     "config.hide-on-key-up.name": "Nascondi con tasto non premuto",
     "config.hide-on-key-up.desc": "Scegli se nascondere l'interfaccia utente di ricerca quando si rilascia il tasto di ricerca.",
-    "config.toggle-lookup.name": "Attiva lookup",
+    "config.toggle-lookup.name": "Attiva ricerca",
     "config.toggle-lookup.desc": "I tasti che attivano l'interfaccia utente di ricerca per qualcosa sotto il cursore.",
+
+    "config.toggle-lookup-on-double-click.name": "Attiva/disattiva ricerca con doppio clic",
+    "config.toggle-lookup-on-double-click.description": "Scegli se attivare/disattivare l'interfaccia di ricerca cliccando due volte il tasto sinistro del mouse. Se possibile, questa funzione individua la posizione del cursore.",
+    "config.toggle-lookup-on-double-tap.name": "Attiva/disattiva ricerca con doppio tocco",
+    "config.toggle-lookup-on-double-tap.description": "Scegli se attivare/disattivare l'interfaccia di ricerca toccando due volte lo schermo. Se possibile, questa funzione individua la posizione toccata.",
+
     "config.toggle-search.name": "Attiva ricerca",
     "config.toggle-search.desc": "I tasti che attivano l'interfaccia utente di ricerca.",
     "config.scroll-up.name": "Scorri verso l'alto",

@@ -11,7 +11,7 @@ internal abstract class BaseIntegration : IModIntegration
     ** Fields
     *********/
     /// <summary>The mod's unique ID.</summary>
-    protected string ModID { get; }
+    protected string ModId { get; }
 
     /// <summary>An API for fetching metadata about loaded mods.</summary>
     protected IModRegistry ModRegistry { get; }
@@ -35,20 +35,20 @@ internal abstract class BaseIntegration : IModIntegration
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A human-readable name for the mod.</param>
-    /// <param name="modID">The mod's unique ID.</param>
+    /// <param name="modId">The mod's unique ID.</param>
     /// <param name="minVersion">The minimum version of the mod that's supported.</param>
     /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    protected BaseIntegration(string label, string modID, string minVersion, IModRegistry modRegistry, IMonitor monitor)
+    protected BaseIntegration(string label, string modId, string minVersion, IModRegistry modRegistry, IMonitor monitor)
     {
         // init
         this.Label = label;
-        this.ModID = modID;
+        this.ModId = modId;
         this.ModRegistry = modRegistry;
         this.Monitor = monitor;
 
         // validate mod
-        IManifest? manifest = modRegistry.Get(this.ModID)?.Manifest;
+        IManifest? manifest = modRegistry.Get(this.ModId)?.Manifest;
         if (manifest == null)
             return;
         if (manifest.Version.IsOlderThan(minVersion))
@@ -64,7 +64,7 @@ internal abstract class BaseIntegration : IModIntegration
     protected TApi? GetValidatedApi<TApi>()
         where TApi : class
     {
-        TApi? api = this.ModRegistry.GetApi<TApi>(this.ModID);
+        TApi? api = this.ModRegistry.GetApi<TApi>(this.ModId);
         if (api == null)
         {
             this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Disabled integration with this mod.", LogLevel.Warn);
@@ -94,7 +94,7 @@ internal abstract class BaseIntegration<TApi> : BaseIntegration
     public TApi? ModApi { get; }
 
     /// <inheritdoc />
-    [MemberNotNullWhen(true, nameof(BaseIntegration<TApi>.ModApi))]
+    [MemberNotNullWhen(true, nameof(BaseIntegration<>.ModApi))]
     public override bool IsLoaded => this.ModApi != null;
 
 
@@ -103,19 +103,19 @@ internal abstract class BaseIntegration<TApi> : BaseIntegration
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="label">A human-readable name for the mod.</param>
-    /// <param name="modID">The mod's unique ID.</param>
+    /// <param name="modId">The mod's unique ID.</param>
     /// <param name="minVersion">The minimum version of the mod that's supported.</param>
     /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
-    protected BaseIntegration(string label, string modID, string minVersion, IModRegistry modRegistry, IMonitor monitor)
-        : base(label, modID, minVersion, modRegistry, monitor)
+    protected BaseIntegration(string label, string modId, string minVersion, IModRegistry modRegistry, IMonitor monitor)
+        : base(label, modId, minVersion, modRegistry, monitor)
     {
         if (base.IsLoaded)
             this.ModApi = this.GetValidatedApi<TApi>();
     }
 
     /// <inheritdoc />
-    [MemberNotNull(nameof(BaseIntegration<TApi>.ModApi))]
+    [MemberNotNull(nameof(BaseIntegration<>.ModApi))]
     protected override void AssertLoaded()
     {
         if (!this.IsLoaded)

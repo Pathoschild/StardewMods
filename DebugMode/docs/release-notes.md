@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.17.4
+Released 14 March 2016 for SMAPI 4.1.10 or later.
+
+* Debug Mode downloads are now created via [automated and attested builds](https://www.patreon.com/posts/automated-builds-148417912).  
+  _This guarantees that the download only contains what's in the public source code and hasn't been tampered with._
+
 ## 1.17.3
 Released 11 January 2026 for SMAPI 4.1.10 or later.
 

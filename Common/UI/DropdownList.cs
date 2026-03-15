@@ -93,7 +93,7 @@ internal class DropdownList<TValue> : ClickableComponent
     /// <param name="y">The Y-position from which to render the list.</param>
     /// <param name="font">The font with which to render text.</param>
     public DropdownList(TValue? selectedValue, TValue[] items, Func<TValue, string> getLabel, int x, int y, SpriteFont font)
-        : base(new Rectangle(), nameof(DropdownList<TValue>))
+        : base(new Rectangle(), nameof(DropdownList<>))
     {
         // save values
         this.Options = items
@@ -211,7 +211,7 @@ internal class DropdownList<TValue> : ClickableComponent
     }
 
     /// <summary>Recalculate dimensions and components for rendering.</summary>
-    [MemberNotNull(nameof(DropdownList<TValue>.UpArrow), nameof(DropdownList<TValue>.DownArrow))]
+    [MemberNotNull(nameof(DropdownList<>.UpArrow), nameof(DropdownList<>.DownArrow))]
     public void ReinitializeComponents()
     {
         int x = this.bounds.X;
