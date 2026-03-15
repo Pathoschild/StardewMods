@@ -46,7 +46,7 @@ internal class GroupStats
         this.IsJunimoGroup = machineGroup.IsJunimoGroup;
 
         this.Machines = machineGroup.Machines
-            .GroupBy(p => p.MachineTypeId)
+            .GroupBy(p => p.MachineTypeID)
             .Select(p => new GroupMachineStats(p.Key, p))
             .ToArray();
 

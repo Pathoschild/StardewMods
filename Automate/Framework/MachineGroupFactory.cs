@@ -82,7 +82,7 @@ internal class MachineGroupFactory
         return
             (
                 from machine in machines
-                let config = this.GetMachineOverride(machine.MachineTypeId)
+                let config = this.GetMachineOverride(machine.MachineTypeID)
                 orderby config?.Priority ?? 0 descending
                 select machine
             );
@@ -189,7 +189,7 @@ internal class MachineGroupFactory
             switch (entity)
             {
                 case IMachine machine:
-                    if (this.GetMachineOverride(machine.MachineTypeId)?.Enabled != false)
+                    if (this.GetMachineOverride(machine.MachineTypeID)?.Enabled != false)
                         group.Add(machine);
                     anyAdded = true;
                     break;
