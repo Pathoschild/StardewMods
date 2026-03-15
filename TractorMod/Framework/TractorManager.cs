@@ -450,7 +450,7 @@ internal sealed class TractorManager
         };
     }
 
-    /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
+    /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterward.</summary>
     /// <param name="action">The action to perform.</param>
     [SuppressMessage("SMAPI", "AvoidImplicitNetFieldCast", Justification = "Deliberately accesses net field instance.")]
     private void TemporarilyFakeInteraction(Action action)

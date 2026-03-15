@@ -566,7 +566,7 @@ internal class SummaryCommand : BaseCommand
         return null;
     }
 
-    /// <summary>Get the human readable display text for a priority value.</summary>
+    /// <summary>Get the human-readable display text for a priority value.</summary>
     /// <typeparam name="TPriority">The priority enum type.</typeparam>
     /// <param name="value">The priority value.</param>
     private string GetDisplayPriority<TPriority>(int value)

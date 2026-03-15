@@ -420,7 +420,7 @@ internal class EditDataPatch : Patch
             object key = editor.ParseKey(recordGroup.Key);
             Type? valueType = editor.GetEntryType(key);
 
-            // skip if doesn't exist
+            // skip if it doesn't exist
             if (!editor.HasEntry(key))
             {
                 this.WarnForField($"there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", onWarning);

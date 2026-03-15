@@ -43,7 +43,7 @@ internal static class Migrator
         if (!Context.IsMainPlayer)
             return;
 
-        // reset if the the previous migration wasn't saved
+        // reset if the previous migration wasn't saved
         Migrator.OnSaved.Clear();
 
         // get info

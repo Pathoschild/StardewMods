@@ -29,7 +29,7 @@ internal class IncludePatch : Patch
     /// <summary>Handles loading and unloading patches for content packs.</summary>
     private readonly PatchLoader PatchLoader;
 
-    /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily means it succeeded (e.g. the file may not have existed).</summary>
+    /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily mean it succeeded (e.g. the file may not have existed).</summary>
     private bool AttemptedDataLoad;
 
 
