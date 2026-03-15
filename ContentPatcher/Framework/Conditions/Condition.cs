@@ -17,9 +17,6 @@ internal class Condition : IContextual
     /// <summary>Diagnostic info about the instance.</summary>
     private readonly ContextualState State = new();
 
-    /// <summary>Whether the token represented by <see cref="Name"/> is mutable.</summary>
-    private readonly bool IsTokenMutable;
-
 
     /*********
     ** Accessors
@@ -37,7 +34,7 @@ internal class Condition : IContextual
     public IInvariantSet CurrentValues { get; private set; }
 
     /// <inheritdoc />
-    public bool IsMutable => this.IsTokenMutable || this.Contextuals.IsMutable;
+    public bool IsMutable => field || this.Contextuals.IsMutable;
 
     /// <inheritdoc />
     public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
@@ -62,7 +59,7 @@ internal class Condition : IContextual
             ? new InputArguments(input)
             : InputArguments.Empty;
         this.Values = values;
-        this.IsTokenMutable = isTokenMutable;
+        this.IsMutable = isTokenMutable;
         this.Contextuals = new AggregateContextual()
             .Add(input)
             .Add(values);
