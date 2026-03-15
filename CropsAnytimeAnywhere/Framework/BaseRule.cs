@@ -27,28 +27,8 @@ internal abstract class BaseRule
 
 
     /*********
-    ** Protected methods
+    ** Public methods
     *********/
-    /// <summary>Construct an instance.</summary>
-    /// <param name="forLocations"><inheritdoc cref="ForLocations" path="/summary"/></param>
-    /// <param name="forLocationContexts"><inheritdoc cref="ForLocationContexts" path="/summary"/></param>
-    /// <param name="forSeasons"><inheritdoc cref="ForSeasons" path="/summary"/></param>
-    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
-    public BaseRule(HashSet<string>? forLocations, HashSet<string>? forLocationContexts, HashSet<Season>? forSeasons)
-    {
-        forLocations?.RemoveWhere(p => p is null);
-        forLocationContexts?.RemoveWhere(p => p is null);
-
-        this.ForLocations = forLocations.ToNonNullCaseInsensitive();
-        this.ForLocationContexts = forLocationContexts.ToNonNullCaseInsensitive();
-        this.ForSeasons = forSeasons ?? [];
-
-        this.HasConditions =
-            this.ForLocations.Count > 0
-            || this.ForLocationContexts.Count > 0
-            || this.ForSeasons.Count > 0;
-    }
-
     /// <summary>Get whether this rule applies to the given location in the current season.</summary>
     /// <param name="location">The location to check.</param>
     public bool AppliesTo(GameLocation location)
@@ -66,5 +46,29 @@ internal abstract class BaseRule
         }
 
         return true;
+    }
+
+
+    /*********
+    ** Protected methods
+    *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="forLocations"><inheritdoc cref="ForLocations" path="/summary"/></param>
+    /// <param name="forLocationContexts"><inheritdoc cref="ForLocationContexts" path="/summary"/></param>
+    /// <param name="forSeasons"><inheritdoc cref="ForSeasons" path="/summary"/></param>
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = SuppressReasons.MethodValidatesNullability)]
+    protected BaseRule(HashSet<string>? forLocations, HashSet<string>? forLocationContexts, HashSet<Season>? forSeasons)
+    {
+        forLocations?.RemoveWhere(p => p is null);
+        forLocationContexts?.RemoveWhere(p => p is null);
+
+        this.ForLocations = forLocations.ToNonNullCaseInsensitive();
+        this.ForLocationContexts = forLocationContexts.ToNonNullCaseInsensitive();
+        this.ForSeasons = forSeasons ?? [];
+
+        this.HasConditions =
+            this.ForLocations.Count > 0
+            || this.ForLocationContexts.Count > 0
+            || this.ForSeasons.Count > 0;
     }
 }
