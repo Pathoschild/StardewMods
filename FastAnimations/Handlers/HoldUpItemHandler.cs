@@ -10,7 +10,7 @@ using StardewValley.Objects;
 namespace Pathoschild.Stardew.FastAnimations.Handlers;
 
 /// <summary>Handles the hold-up-item animation.</summary>
-/// <remarks>See game logic in <see cref="Farmer.holdUpItemThenMessage"/>.</remarks>
+/// <remarks>See game logic in <see cref="Farmer.holdUpItemThenMessage(Item,int,bool)"/>.</remarks>
 internal sealed class HoldUpItemHandler : BaseAnimationHandler
 {
     /*********

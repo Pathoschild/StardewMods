@@ -40,6 +40,7 @@ internal class ItemIconListField : GenericField
     /// <param name="showStackSize">Whether to draw the stack size on the item icon.</param>
     /// <param name="introText">The text to show before the item list, if any.</param>
     /// <param name="formatItemName">Get the name to show for an item, or <c>null</c> to use the item's display name.</param>
+    /// <param name="iconIndent">The pixel indent to apply before each entry in the list.</param>
     public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item?>? items, bool showStackSize, string? introText = null, Func<Item, string?>? formatItemName = null, int iconIndent = 0)
         : base(label, hasValue: items != null)
     {
