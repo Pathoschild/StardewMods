@@ -187,13 +187,10 @@
 
 
     /*********
-    ** Generic Mod Config Menu UI
+    ** Generic Mod Config Menu UI (通用模组配置菜单界面)
     *********/
-    // TODO
-    "config.require-pam-bus.name": "Require Pam's bus",
-    "config.require-pam-bus.desc": "Whether you must repair Pam's bus before departing from the Stardew Valley bus stop. If not required, you can take the bus to Central Station (but not the desert) before it's repaired.",
-
-    // TODO
-    "config.require-pam.name": "Require Pam",
-    "config.require-pam.desc": "Whether Pam must be standing at the Stardew Valley bus stop before you can depart from there (equivalent to when the mod isn't installed)."
+    "config.require-pam-bus.name": "需要修复潘姆的巴士",
+    "config.require-pam-bus.desc": "是否必须修复潘姆的巴士后才能从星露谷巴士站出发。如果不需要，你可以在巴士修复前乘坐巴士前往中央车站（但不能前往沙漠）。",
+    "config.require-pam.name": "需要潘姆在场",
+    "config.require-pam.desc": "是否必须潘姆站在星露谷巴士站你才能从那里出发（等同于未安装此模组时的情况）。"
 }
