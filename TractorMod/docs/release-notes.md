@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Removed timer on the the tractor buff icon (since it's active until you dismount it).
+
 ## 4.24.4
 Released 14 March 2016 for SMAPI 4.1.10 or later.
 

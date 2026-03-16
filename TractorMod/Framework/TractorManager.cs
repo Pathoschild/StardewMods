@@ -281,15 +281,15 @@ internal sealed class TractorManager
             return;
         }
 
-        // else reapply if expired or expiring
+        // else reapply if needed
         Game1.player.buffs.AppliedBuffs.TryGetValue(this.BuffUniqueId, out Buff? buff);
-        if (buff == null || buff.millisecondsDuration < 5000 || buff.effects.MagneticRadius.Value != this.Config.MagneticRadius || buff.effects.Speed.Value != this.Config.TractorSpeed)
+        if (buff == null || buff.effects.MagneticRadius.Value != this.Config.MagneticRadius || buff.effects.Speed.Value != this.Config.TractorSpeed)
         {
             buff = new Buff(
                 id: this.BuffUniqueId,
                 source: "Tractor Power",
                 displayName: I18n.Buff_Name(),
-                duration: 60000,
+                duration: Buff.ENDLESS,
                 iconTexture: this.GetBuffIconTexture(),
                 iconSheetIndex: 0,
                 effects: new StardewValley.Buffs.BuffEffects()
