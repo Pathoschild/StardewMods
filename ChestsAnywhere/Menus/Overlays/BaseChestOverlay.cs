@@ -958,6 +958,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             {
                 this.DeselectManagedTextboxes();
                 textbox.Select();
+                this.AnnounceTextFieldOpened();
             }
 
             return true;
@@ -1059,18 +1060,21 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 this.DeselectManagedTextboxes();
                 this.EditNameField.Select();
                 this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
                 return true;
 
             case "edit-category":
                 this.DeselectManagedTextboxes();
                 this.EditCategoryField.Select();
                 this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
                 return true;
 
             case "edit-order":
                 this.DeselectManagedTextboxes();
                 this.EditOrderField.Select();
                 this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
                 return true;
 
             case "edit-hide":
@@ -1141,6 +1145,13 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         return string.IsNullOrWhiteSpace(value)
             ? label
             : $"{label}, {value}";
+    }
+
+    /// <summary>Announce that a text field is now active for editing.</summary>
+    private void AnnounceTextFieldOpened()
+    {
+        this.LastEditElementKey = null;
+        this.StardewAccess.SayWithMenuChecker("Text field open. Enter to exit.", true, "edit-textbox-open");
     }
 
     /// <summary>Get the speech value for a text field.</summary>

@@ -407,7 +407,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
             {
                 this.DeselectSearchBoxes();
                 this.SetFocusedComponent(selectedSearchBox.Clickable);
-                this.TrySpeakFocusedComponent(force: true, interrupt: false);
+                this.AnnounceSearchResults(interrupt: false);
             }
 
             return;
@@ -634,7 +634,12 @@ internal sealed class ChestSearchMenu : IClickableMenu
             searchBox.TextBox.Select();
 
         if (announce)
-            this.TrySpeakFocusedComponent(force: true);
+        {
+            if (selectText)
+                this.AnnounceSearchTextFieldOpened(searchBox);
+            else
+                this.TrySpeakFocusedComponent(force: true);
+        }
     }
 
     /// <summary>Open a chest result while moving the cursor off the outgoing search menu first.</summary>
@@ -880,5 +885,30 @@ internal sealed class ChestSearchMenu : IClickableMenu
             : searchBox.TextBox.Text;
 
         return $"{searchBox.Label}, {value}";
+    }
+
+    /// <summary>Announce that a search text field is active for editing.</summary>
+    private void AnnounceSearchTextFieldOpened(ChestSearchBox searchBox)
+    {
+        this.LastFocusedQuery = null;
+        string text = ReferenceEquals(searchBox, this.ItemSearchBox)
+            ? "Search item field open. Enter to exit."
+            : "Search chests field open. Enter to exit.";
+        string query = ReferenceEquals(searchBox, this.ItemSearchBox)
+            ? "chests-search:textbox-open:item"
+            : "chests-search:textbox-open:name";
+        this.StardewAccess.SayWithMenuChecker(text, true, query);
+    }
+
+    /// <summary>Announce the current search result count after leaving a search box.</summary>
+    private void AnnounceSearchResults(bool interrupt)
+    {
+        string text = this.VisibleChests.Count == 0
+            ? "No results"
+            : this.VisibleChests.Count == 1
+                ? "1 result. Go down for results."
+                : $"{this.VisibleChests.Count} results. Go down for results.";
+
+        this.StardewAccess.SayWithMenuChecker(text, interrupt, $"chests-search:result-count:{this.VisibleChests.Count}");
     }
 }
