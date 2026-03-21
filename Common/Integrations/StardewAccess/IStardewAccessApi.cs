@@ -44,6 +44,9 @@ public interface IStardewAccessApi
     /// <param name="extraItemToShowAmount">The amount for the extra item to narrate.</param>
     public string GetDetailsOfItem(Item item, bool giveExtraDetails = false, int price = -1, string? extraItemToShowIndex = null, int extraItemToShowAmount = -1);
 
+    /// <summary>Tell Stardew Access to skip its generic menu narration for a menu handled by the calling mod.</summary>
+    public void RegisterCustomMenuAsAccessible(string? fullNameOfClass);
+
     /// <summary>Speak the currently hovered slot from an inventory menu using Stardew Access' built-in menu narration.</summary>
     public bool SpeakHoveredInventorySlot(InventoryMenu? inventoryMenu, bool? giveExtraDetails = null, int hoverPrice = -1, string? extraItemToShowIndex = null, int extraItemToShowAmount = -1, string highlightedItemPrefix = "", string highlightedItemSuffix = "", int? hoverX = null, int? hoverY = null);
 

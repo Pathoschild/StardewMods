@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
@@ -108,6 +109,8 @@ internal class ModEntry : Mod
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
         this.StardewAccess = new StardewAccessIntegration(this.Helper.ModRegistry, this.Monitor);
+        if (this.StardewAccess.IsLoaded)
+            this.StardewAccess.RegisterCustomMenuAsAccessible(typeof(ChestSearchMenu).FullName);
 
         // add config UI
         this.AddGenericModConfigMenu(
@@ -196,6 +199,18 @@ internal class ModEntry : Mod
         try
         {
             ModConfigKeys keys = this.Keys;
+
+            if (Game1.activeClickableMenu is ChestSearchMenu chestSearchMenu && this.StardewAccess.IsLoaded)
+            {
+                bool leftClickPressed = this.StardewAccess.LeftClickMainKey.JustPressed() || this.StardewAccess.LeftClickAlternateKey.JustPressed();
+                if (leftClickPressed)
+                {
+                    chestSearchMenu.TryHandleStardewAccessLeftClick();
+                    this.Helper.Input.SuppressActiveKeybinds(this.StardewAccess.LeftClickMainKey);
+                    this.Helper.Input.SuppressActiveKeybinds(this.StardewAccess.LeftClickAlternateKey);
+                    return;
+                }
+            }
 
             // open menu
             if (keys.Toggle.JustPressed())

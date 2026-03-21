@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Extensions;
@@ -59,6 +60,9 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The configured key bindings.</summary>
     private readonly KeybindList PreviewKey;
 
+    /// <summary>The Stardew Access integration.</summary>
+    private readonly StardewAccessIntegration StardewAccess;
+
     /// <summary>The pool of chest search result components.</summary>
     /// <remarks>Most code should use <see cref="VisibleChestCells"/> instead.</remarks>
     private readonly ChestSearchMenuCell[] ChestCellPool;
@@ -91,6 +95,18 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The index of the first chest result to show in the list to match the scroll offset.</summary>
     private int ScrollIndex;
 
+    /// <summary>Whether the menu is on its first update tick.</summary>
+    private bool IsFirstTick = true;
+
+    /// <summary>The last focused element query narrated by the search menu.</summary>
+    private string? LastFocusedQuery;
+
+    /// <summary>The last focused header control above the search results.</summary>
+    private ClickableComponent? LastHeaderComponent;
+
+    /// <summary>The chest result queued to open after the current click/input cycle finishes.</summary>
+    private ManagedChest? PendingChestToOpen;
+
 
     /*********
     ** Public methods
@@ -99,7 +115,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <param name="currentChest">The chest to open when the search menu is closed, if a different chest isn't selected manually.</param>
     /// <param name="chests"><inheritdoc cref="Chests" path="/summary"/></param>
     /// <param name="keys">The configured key bindings.</param>
-    public ChestSearchMenu(ManagedChest currentChest, ManagedChest[] chests, ModConfigKeys keys)
+    /// <param name="stardewAccess">The Stardew Access integration.</param>
+    public ChestSearchMenu(ManagedChest currentChest, ManagedChest[] chests, ModConfigKeys keys, StardewAccessIntegration stardewAccess)
         : base(
             x: Game1.viewport.X + 96,
             y: Game1.viewport.Y + 96,
@@ -112,6 +129,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
         this.Chests = chests;
         this.VisibleChests = chests.ToList();
         this.PreviewKey = keys.SearchMenuPreviewChest;
+        this.StardewAccess = stardewAccess;
         this.exitFunction = () => currentChest.OpenMenu();
 
         // get position
@@ -187,13 +205,15 @@ internal sealed class ChestSearchMenu : IClickableMenu
         this.upperRightCloseButton.myID = upperRightCloseButton_ID;
         this.upperRightCloseButton.leftNeighborID = 1001;
         this.upperRightCloseButton.downNeighborID = 1001;
+        this.upperRightCloseButton.ScreenReaderText = "Close";
+
+        this.populateClickableComponentList();
+        this.SetFocusedComponent(this.NameSearchBox.Clickable);
+        this.LastHeaderComponent = this.NameSearchBox.Clickable;
 
         // enable controller navigation
         if (Game1.options.snappyMenus && Game1.options.gamepadControls)
-        {
-            this.populateClickableComponentList();
             this.snapToDefaultClickableComponent();
-        }
 
         // set initial results
         this.UpdateVisibleCells();
@@ -209,7 +229,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <inheritdoc />
     public override void snapToDefaultClickableComponent()
     {
-        this.currentlySnappedComponent = this.getComponentWithID(1001);
+        this.SetFocusedComponent(this.NameSearchBox.Clickable);
         base.snapToDefaultClickableComponent();
     }
 
@@ -220,8 +240,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
         {
             if (!this.ScrollGrid(1))
             {
-                this.currentlySnappedComponent = this.getComponentWithID(oldId < 101 + ChestsPerRow / 2 ? 1001 : 1002);
-                this.snapCursorToCurrentSnappedComponent();
+                this.SetFocusedComponent(this.getComponentWithID(oldId < 101 + ChestsPerRow / 2 ? 1001 : 1002), snapCursor: true);
             }
         }
         else if (oldId >= 100 + ChestsPerRow * (RowCount - 1))
@@ -233,9 +252,26 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <inheritdoc />
     public override void update(GameTime time)
     {
+        if (this.PendingChestToOpen is { } pendingChest)
+        {
+            this.PendingChestToOpen = null;
+            this.MoveCursorOffMenu();
+            pendingChest.OpenMenu();
+            return;
+        }
+
         this.ApplySearchIfChanged();
 
         base.update(time);
+
+        if (this.IsFirstTick)
+        {
+            this.IsFirstTick = false;
+            this.FocusSearchBox(this.NameSearchBox, selectText: true, announce: true);
+            return;
+        }
+
+        this.EnsureFocusedComponent();
     }
 
     /// <inheritdoc />
@@ -324,46 +360,58 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <inheritdoc />
     public override void receiveLeftClick(int x, int y, bool playSound = true)
     {
-        // select search box
+        if (this.upperRightCloseButton.containsPoint(x, y))
+        {
+            this.SetFocusedComponent(this.upperRightCloseButton);
+            this.DeselectSearchBoxes();
+            this.exitThisMenu();
+            return;
+        }
+
         foreach (ChestSearchBox searchBox in this.SearchBoxes)
         {
-            if (searchBox.Clickable.bounds.Contains(x, y))
-            {
-                if (searchBox.TextBox.Selected)
-                    searchBox.TextBox.Selected = false;
-                else
-                {
-                    foreach (ChestSearchBox searchBox2 in this.SearchBoxes)
-                        searchBox2.TextBox.Selected = false;
+            if (!searchBox.Clickable.bounds.Contains(x, y))
+                continue;
 
-                    searchBox.TextBox.Select();
-                    return;
-                }
-            }
+            this.FocusSearchBox(searchBox, selectText: true, announce: true);
+            return;
         }
 
-        // open chest
         foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
         {
-            if (cell.bounds.Contains(x, y))
-            {
-                cell.Chest!.OpenMenu();
-                return;
-            }
+            if (!cell.bounds.Contains(x, y))
+                continue;
+
+            this.SetFocusedComponent(cell);
+            this.OpenChestResult(cell.Chest!);
+            return;
         }
 
-        // default behavior
         base.receiveLeftClick(x, y, playSound);
     }
 
+    /// <inheritdoc />
     public override void receiveKeyPress(Keys key)
     {
-        // ignore text input if a search box is selected
-        if (key != Keys.Escape && this.SearchBoxes.Any(searchBox => searchBox.TextBox.Selected))
+        if (key == Keys.Escape)
+        {
+            this.DeselectSearchBoxes();
+            this.exitThisMenu();
             return;
+        }
 
-        if ((key == Keys.Enter || key == Keys.Space) && this.TryOpenSnappedChest())
+        ChestSearchBox? selectedSearchBox = this.GetSelectedSearchBox();
+        if (selectedSearchBox != null)
+        {
+            if (key == Keys.Enter)
+            {
+                this.DeselectSearchBoxes();
+                this.SetFocusedComponent(selectedSearchBox.Clickable);
+                this.TrySpeakFocusedComponent(force: true, interrupt: false);
+            }
+
             return;
+        }
 
         bool isMovementKey =
             Game1.options.doesInputListContain(Game1.options.moveUpButton, key)
@@ -372,22 +420,11 @@ internal sealed class ChestSearchMenu : IClickableMenu
             || Game1.options.doesInputListContain(Game1.options.moveLeftButton, key);
         if (isMovementKey)
         {
-            this.currentlySnappedComponent ??= this.VisibleChestCells.FirstOrDefault() ?? this.getComponentWithID(1001);
-            base.receiveKeyPress(key);
+            this.EnsureFocusedComponent();
+            if (this.TryHandleDirectionalNavigation(key))
+                this.TrySpeakFocusedComponent(interrupt: true);
             return;
         }
-
-        // default behavior
-        base.receiveKeyPress(key);
-    }
-
-    /// <inheritdoc />
-    public override void receiveGamePadButton(Buttons button)
-    {
-        if (button == Buttons.A && this.TryOpenSnappedChest())
-            return;
-
-        base.receiveGamePadButton(button);
     }
 
     /// <inheritdoc />
@@ -419,7 +456,6 @@ internal sealed class ChestSearchMenu : IClickableMenu
         }
         this.HoverItems = null;
 
-        // default behavior
         base.performHoverAction(x, y);
     }
 
@@ -493,6 +529,10 @@ internal sealed class ChestSearchMenu : IClickableMenu
         // update matched chests
         if (searchChanged)
         {
+            bool hasSearchFilters = applySearchBoxes.Any();
+            if (this.HasAppliedSearch != hasSearchFilters)
+                this.ScrollIndex = 0;
+
             this.VisibleChests.Clear();
 
             if (applySearchBoxes.Contains(this.ItemSearchBox))
@@ -505,15 +545,15 @@ internal sealed class ChestSearchMenu : IClickableMenu
                     if (applySearchBoxes.All(searchBox => searchBox.Matches(chest)))
                         this.VisibleChests.Add(chest);
                 }
-
-                this.UpdateVisibleCells();
             }
+            else
+                this.VisibleChests.AddRange(this.Chests);
+
+            this.UpdateVisibleCells();
         }
 
         // update state
         bool newSearchState = applySearchBoxes.Any();
-        if (this.HasAppliedSearch != newSearchState)
-            this.ScrollIndex = 0;
         this.HasAppliedSearch = newSearchState;
     }
 
@@ -547,7 +587,298 @@ internal sealed class ChestSearchMenu : IClickableMenu
         if (this.currentlySnappedComponent is not ChestSearchMenuCell cell || !cell.visible || cell.Chest == null)
             return false;
 
-        cell.Chest.OpenMenu();
+        return this.OpenChestResult(cell.Chest);
+    }
+
+    /// <summary>Handle Stardew Access' left-click action against the currently snapped element.</summary>
+    internal bool TryHandleStardewAccessLeftClick()
+    {
+        ClickableComponent? target = this.GetActionTargetAt(Game1.getMouseX(true), Game1.getMouseY(true)) ?? this.currentlySnappedComponent ?? this.GetSelectedSearchBox()?.Clickable;
+        if (target == null)
+            return false;
+
+        this.SetFocusedComponent(target);
+
+        if (target is ChestSearchMenuCell)
+            return this.TryOpenSnappedChest();
+
+        if (ReferenceEquals(target, this.NameSearchBox.Clickable))
+        {
+            this.FocusSearchBox(this.NameSearchBox, selectText: true, announce: true);
+            return true;
+        }
+
+        if (ReferenceEquals(target, this.ItemSearchBox.Clickable))
+        {
+            this.FocusSearchBox(this.ItemSearchBox, selectText: true, announce: true);
+            return true;
+        }
+
+        if (ReferenceEquals(target, this.upperRightCloseButton))
+        {
+            this.DeselectSearchBoxes();
+            this.exitThisMenu();
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Focus a search box and optionally enter text editing.</summary>
+    private void FocusSearchBox(ChestSearchBox searchBox, bool selectText, bool announce)
+    {
+        this.DeselectSearchBoxes();
+        this.SetFocusedComponent(searchBox.Clickable);
+
+        if (selectText)
+            searchBox.TextBox.Select();
+
+        if (announce)
+            this.TrySpeakFocusedComponent(force: true);
+    }
+
+    /// <summary>Open a chest result while moving the cursor off the outgoing search menu first.</summary>
+    private bool OpenChestResult(ManagedChest chest)
+    {
+        this.DeselectSearchBoxes();
+        this.PendingChestToOpen = chest;
         return true;
+    }
+
+    /// <summary>Deselect every search box.</summary>
+    private void DeselectSearchBoxes()
+    {
+        foreach (ChestSearchBox searchBox in this.SearchBoxes)
+            searchBox.TextBox.Selected = false;
+    }
+
+    /// <summary>Ensure the menu still has a valid focused component after layout or search changes.</summary>
+    private void EnsureFocusedComponent()
+    {
+        ChestSearchBox? selectedSearchBox = this.GetSelectedSearchBox();
+        if (selectedSearchBox != null)
+        {
+            this.SetFocusedComponent(selectedSearchBox.Clickable);
+            return;
+        }
+
+        if (this.currentlySnappedComponent is ChestSearchMenuCell cell && (!cell.visible || cell.Chest == null))
+            this.currentlySnappedComponent = null;
+
+        this.currentlySnappedComponent ??= this.NameSearchBox.Clickable;
+    }
+
+    /// <summary>Set the focused clickable component.</summary>
+    private void SetFocusedComponent(ClickableComponent? component, bool snapCursor = true)
+    {
+        this.currentlySnappedComponent = component;
+        if (component != null && this.IsHeaderComponent(component))
+            this.LastHeaderComponent = component;
+
+        if (snapCursor && component != null)
+            this.snapCursorToCurrentSnappedComponent();
+    }
+
+    /// <summary>Move the cursor away from the search menu so the newly opened chest doesn't inherit a stale click target.</summary>
+    private void MoveCursorOffMenu()
+    {
+        int x = Math.Max(0, this.xPositionOnScreen - Game1.tileSize);
+        int y = Math.Max(0, this.yPositionOnScreen - Game1.tileSize);
+        Game1.setMousePosition(x, y);
+    }
+
+    /// <summary>Handle a directional navigation input using a stable linear result list.</summary>
+    private bool TryHandleDirectionalNavigation(Keys key)
+    {
+        bool upPressed = Game1.options.doesInputListContain(Game1.options.moveUpButton, key);
+        bool downPressed = Game1.options.doesInputListContain(Game1.options.moveDownButton, key);
+        bool leftPressed = Game1.options.doesInputListContain(Game1.options.moveLeftButton, key);
+        bool rightPressed = Game1.options.doesInputListContain(Game1.options.moveRightButton, key);
+
+        if (downPressed)
+            return this.MoveFocusDown();
+        if (upPressed)
+            return this.MoveFocusUp();
+        if (leftPressed)
+            return this.MoveHeaderFocus(-1);
+        if (rightPressed)
+            return this.MoveHeaderFocus(1);
+
+        return false;
+    }
+
+    /// <summary>Move focus down through the stable result list.</summary>
+    private bool MoveFocusDown()
+    {
+        int focusedResultIndex = this.GetFocusedResultIndex();
+        if (focusedResultIndex >= 0)
+        {
+            if (focusedResultIndex + 1 >= this.VisibleChests.Count)
+                return false;
+
+            this.FocusResult(focusedResultIndex + 1);
+            return true;
+        }
+
+        if (this.VisibleChests.Count == 0)
+            return false;
+
+        this.FocusResult(0);
+        return true;
+    }
+
+    /// <summary>Move focus up through the stable result list.</summary>
+    private bool MoveFocusUp()
+    {
+        int focusedResultIndex = this.GetFocusedResultIndex();
+        if (focusedResultIndex > 0)
+        {
+            this.FocusResult(focusedResultIndex - 1);
+            return true;
+        }
+
+        if (focusedResultIndex == 0)
+        {
+            this.SetFocusedComponent(this.LastHeaderComponent ?? this.NameSearchBox.Clickable);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Move focus left or right across the header controls.</summary>
+    private bool MoveHeaderFocus(int direction)
+    {
+        if (this.currentlySnappedComponent is ChestSearchMenuCell)
+            return false;
+
+        ClickableComponent[] headerComponents = [this.NameSearchBox.Clickable, this.ItemSearchBox.Clickable, this.upperRightCloseButton];
+        int currentIndex = Array.FindIndex(headerComponents, component => ReferenceEquals(component, this.currentlySnappedComponent));
+        if (currentIndex < 0)
+            currentIndex = 0;
+
+        int newIndex = Math.Clamp(currentIndex + direction, 0, headerComponents.Length - 1);
+        if (newIndex == currentIndex)
+            return false;
+
+        this.SetFocusedComponent(headerComponents[newIndex]);
+        return true;
+    }
+
+    /// <summary>Focus a search result by its absolute index in the filtered chest list.</summary>
+    private void FocusResult(int resultIndex)
+    {
+        if (resultIndex < 0 || resultIndex >= this.VisibleChests.Count)
+            return;
+
+        if (resultIndex < this.ScrollIndex || resultIndex >= this.ScrollIndex + this.ChestCellPool.Length)
+        {
+            this.ScrollIndex = Math.Clamp(resultIndex, 0, Math.Max(0, this.VisibleChests.Count - 1));
+            this.UpdateVisibleCells();
+        }
+
+        int visibleIndex = resultIndex - this.ScrollIndex;
+        if (visibleIndex < 0 || visibleIndex >= this.VisibleChestCells.Count)
+            return;
+
+        this.SetFocusedComponent(this.VisibleChestCells[visibleIndex]);
+    }
+
+    /// <summary>Get the absolute index of the currently focused result, if any.</summary>
+    private int GetFocusedResultIndex()
+    {
+        if (this.currentlySnappedComponent is not ChestSearchMenuCell cell || cell.Chest == null)
+            return -1;
+
+        int visibleIndex = this.VisibleChestCells.IndexOf(cell);
+        return visibleIndex >= 0
+            ? this.ScrollIndex + visibleIndex
+            : -1;
+    }
+
+    /// <summary>Get whether a component belongs to the header controls.</summary>
+    private bool IsHeaderComponent(ClickableComponent component)
+    {
+        return ReferenceEquals(component, this.NameSearchBox.Clickable)
+            || ReferenceEquals(component, this.ItemSearchBox.Clickable)
+            || ReferenceEquals(component, this.upperRightCloseButton);
+    }
+
+    /// <summary>Get the currently selected search box, if any.</summary>
+    private ChestSearchBox? GetSelectedSearchBox()
+    {
+        return this.SearchBoxes.FirstOrDefault(searchBox => searchBox.TextBox.Selected);
+    }
+
+    /// <summary>Get the actionable component currently under the cursor, if any.</summary>
+    private ClickableComponent? GetActionTargetAt(int x, int y)
+    {
+        if (this.upperRightCloseButton.containsPoint(x, y))
+            return this.upperRightCloseButton;
+
+        foreach (ChestSearchBox searchBox in this.SearchBoxes)
+        {
+            if (searchBox.Clickable.bounds.Contains(x, y))
+                return searchBox.Clickable;
+        }
+
+        foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
+        {
+            if (cell.bounds.Contains(x, y))
+                return cell;
+        }
+
+        return null;
+    }
+
+    /// <summary>Speak the currently focused element once.</summary>
+    private void TrySpeakFocusedComponent(bool interrupt = true, bool force = false)
+    {
+        if (!this.StardewAccess.IsLoaded || this.currentlySnappedComponent == null)
+            return;
+
+        string? text = null;
+        string? query = null;
+
+        if (ReferenceEquals(this.currentlySnappedComponent, this.NameSearchBox.Clickable))
+        {
+            text = this.GetSearchBoxSpeech(this.NameSearchBox);
+            query = $"search-box:name:{this.NameSearchBox.TextBox.Text}:{this.NameSearchBox.TextBox.Selected}";
+        }
+        else if (ReferenceEquals(this.currentlySnappedComponent, this.ItemSearchBox.Clickable))
+        {
+            text = this.GetSearchBoxSpeech(this.ItemSearchBox);
+            query = $"search-box:item:{this.ItemSearchBox.TextBox.Text}:{this.ItemSearchBox.TextBox.Selected}";
+        }
+        else if (ReferenceEquals(this.currentlySnappedComponent, this.upperRightCloseButton))
+        {
+            text = "Close";
+            query = "search-close";
+        }
+        else if (this.currentlySnappedComponent is ChestSearchMenuCell cell && cell.visible && cell.Chest != null)
+        {
+            text = cell.ScreenReaderText;
+            query = $"search-result:{cell.Chest.DisplayCategory}:{cell.Chest.DisplayName}";
+        }
+
+        if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(query))
+            return;
+
+        query = $"chests-search:{query}";
+        if (!force && string.Equals(query, this.LastFocusedQuery, StringComparison.Ordinal))
+            return;
+
+        this.LastFocusedQuery = query;
+        this.StardewAccess.SayWithMenuChecker(text, interrupt, query);
+    }
+
+    /// <summary>Get the spoken text for a search box.</summary>
+    private string GetSearchBoxSpeech(ChestSearchBox searchBox)
+    {
+        string value = string.IsNullOrWhiteSpace(searchBox.TextBox.Text)
+            ? "blank"
+            : searchBox.TextBox.Text;
+
+        return $"{searchBox.Label}, {value}";
     }
 }

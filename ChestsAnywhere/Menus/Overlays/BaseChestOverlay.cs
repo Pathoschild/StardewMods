@@ -176,7 +176,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Open the search menu.</summary>
     private void ShowChestSearch()
     {
-        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys);
+        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys, this.StardewAccess);
     }
 
     /// <summary>Sort the player's inventory.</summary>

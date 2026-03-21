@@ -84,6 +84,15 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
         ) ?? item.DisplayName;
     }
 
+    /// <summary>Tell Stardew Access to skip its generic menu narration for a menu handled by this mod.</summary>
+    public void RegisterCustomMenuAsAccessible(string? fullNameOfClass)
+    {
+        this.SafelyCallApi(
+            api => api.RegisterCustomMenuAsAccessible(fullNameOfClass),
+            "registering a custom accessible menu"
+        );
+    }
+
     /// <inheritdoc cref="IStardewAccessApi.SpeakHoveredInventorySlot" />
     public bool SpeakHoveredInventorySlot(InventoryMenu? inventoryMenu, bool? giveExtraDetails = null, int hoverPrice = -1, string? extraItemToShowIndex = null, int extraItemToShowAmount = -1, string highlightedItemPrefix = "", string highlightedItemSuffix = "", int? hoverX = null, int? hoverY = null)
     {

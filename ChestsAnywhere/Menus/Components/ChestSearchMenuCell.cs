@@ -67,6 +67,7 @@ internal class ChestSearchMenuCell : ClickableComponent
             this.LoadedIcon = null;
 
         this.Chest = chest;
+        this.ScreenReaderText = $"{chest.DisplayCategory}, {chest.DisplayName}";
     }
 
     /// <summary>Draw the cell to the screen.</summary>
@@ -122,6 +123,5 @@ internal class ChestSearchMenuCell : ClickableComponent
             color: Game1.textColor
         );
 
-        this.ScreenReaderText = $"{chest.DisplayCategory} {chest.DisplayName}";
     }
 }
