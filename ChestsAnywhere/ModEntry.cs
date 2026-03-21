@@ -8,6 +8,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -48,6 +49,9 @@ internal class ModEntry : Mod
     /// <summary>The Better Game Menu integration.</summary>
     private BetterGameMenuIntegration? BetterGameMenu;
 
+    /// <summary>The Stardew Access integration.</summary>
+    private StardewAccessIntegration StardewAccess = null!;
+
     /// <summary>The cached chest lookup for the last tile checked.</summary>
     private readonly PerScreen<ChestOnTile?> CachedChestOnTile = new();
 
@@ -65,6 +69,7 @@ internal class ModEntry : Mod
         this.Config = helper.ReadConfig<ModConfig>();
         this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
         this.ChestFactory = new ChestFactory(helper.Multiplayer, () => this.Config);
+        this.StardewAccess = new StardewAccessIntegration(helper.ModRegistry, this.Monitor);
 
         // Android workaround: shipping bin feature isn't compatible and breaks the UI
         if (Constants.TargetPlatform == GamePlatform.Android && this.Config.EnableShippingBin)
@@ -229,7 +234,10 @@ internal class ModEntry : Mod
         // get open chest
         ManagedChest? chest = this.ChestFactory.GetChestFromMenu(menu);
         if (chest == null)
+        {
+            BaseChestOverlay.ResetAccessibilityState();
             return;
+        }
 
         // reopen shipping box in standard chest UI if needed
         // This is called in two cases:
@@ -248,11 +256,11 @@ internal class ModEntry : Mod
         switch (menu)
         {
             case ItemGrabMenu chestMenu:
-                this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled);
+                this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.StardewAccess, showAutomateOptions: isAutomateInstalled);
                 break;
 
             case ShopMenu shopMenu:
-                this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled);
+                this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.StardewAccess, showAutomateOptions: isAutomateInstalled);
                 break;
         }
 

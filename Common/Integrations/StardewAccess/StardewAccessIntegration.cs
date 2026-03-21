@@ -1,4 +1,6 @@
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
+using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Common.Integrations.StardewAccess;
@@ -14,6 +16,18 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     public StardewAccessIntegration(IModRegistry modRegistry, IMonitor monitor)
         : base("Stardew Access", "shoaib.stardewaccess", "1.6.2", modRegistry, monitor) { }
+
+    /// <summary>The configured primary left-click keybind.</summary>
+    public KeybindList LeftClickMainKey
+        => this.SafelyCallApi(api => api.LeftClickMainKey, "reading Stardew Access keybinds", new KeybindList()) ?? new KeybindList();
+
+    /// <summary>The configured alternate left-click keybind.</summary>
+    public KeybindList LeftClickAlternateKey
+        => this.SafelyCallApi(api => api.LeftClickAlternateKey, "reading Stardew Access keybinds", new KeybindList()) ?? new KeybindList();
+
+    /// <summary>The configured info/action keybind used by Stardew Access for hover-only controls.</summary>
+    public KeybindList PrimaryInfoKey
+        => this.SafelyCallApi(api => api.PrimaryInfoKey, "reading Stardew Access keybinds", new KeybindList()) ?? new KeybindList();
 
     /// <inheritdoc cref="IStardewAccessApi.Say" />
     public bool Say(string text, bool interrupt)
@@ -44,5 +58,15 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
             api => api.SayWithMenuChecker(element.ScreenReaderText, interrupt),
             "saying menu element"
         );
+    }
+
+    /// <inheritdoc cref="IStardewAccessApi.GetDetailsOfItem" />
+    public string GetDetailsOfItem(Item item, bool giveExtraDetails = false)
+    {
+        return this.SafelyCallApi(
+            api => api.GetDetailsOfItem(item, giveExtraDetails),
+            "getting item details",
+            item.DisplayName
+        ) ?? item.DisplayName;
     }
 }

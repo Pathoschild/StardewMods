@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -51,8 +52,8 @@ internal class ChestOverlay : BaseChestOverlay
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
-    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-        : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
+    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, StardewAccessIntegration stardewAccess, bool showAutomateOptions)
+        : base(menu, chest, chests, config, keys, events, input, reflection, stardewAccess, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
     {
         this.Menu = menu;
         this.MenuInventoryMenu = menu.ItemsToGrabMenu;
@@ -135,12 +136,17 @@ internal class ChestOverlay : BaseChestOverlay
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(this.HoverText) && this.StardewAccess.IsLoaded)
+            this.StardewAccess.SayWithMenuChecker(this.HoverText, true, $"chests-hover:{this.HoverText}");
+
         return base.ReceiveCursorHover(x, y);
     }
 
     /// <inheritdoc />
     protected override void DrawUi(SpriteBatch batch)
     {
+        this.TrySpeakPendingChestItem();
+
         if (!this.ActiveElement.HasFlag(Element.EditForm))
         {
             float navOpacity = this.CanCloseChest ? 1f : 0.5f;
@@ -219,5 +225,11 @@ internal class ChestOverlay : BaseChestOverlay
     private bool IsColorPickerShown(ItemGrabMenu menu)
     {
         return menu.chestColorPicker?.visible ?? false;
+    }
+
+    /// <inheritdoc />
+    protected override InventoryMenu? GetOverlayInventoryMenu()
+    {
+        return this.Menu.ItemsToGrabMenu;
     }
 }
