@@ -141,6 +141,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>The keyboard-focused edit navigation index.</summary>
     private int EditNavIndex = -1;
 
+    /// <summary>The exact Stardew Access slot query to suppress on the first render after opening the edit form.</summary>
+    private string? PendingEditOpenSuppressionQuery;
+
     /*********
     ** Accessors
     *********/
@@ -347,6 +350,16 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         // cursor
         this.DrawCursor();
+    }
+
+    /// <summary>Apply any pending menu narration suppression before the underlying menu draw runs.</summary>
+    internal void PrepareMenuNarrationForRender()
+    {
+        if (!this.StardewAccess.IsLoaded || string.IsNullOrWhiteSpace(this.PendingEditOpenSuppressionQuery))
+            return;
+
+        this.StardewAccess.PrevMenuQueryText = this.PendingEditOpenSuppressionQuery;
+        this.PendingEditOpenSuppressionQuery = null;
     }
 
     /****
@@ -956,7 +969,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     }
 
     /// <summary>Get the hovered slot index for an inventory menu.</summary>
-    private int GetHoveredSlotIndex(InventoryMenu inventoryMenu)
+    protected int GetHoveredSlotIndex(InventoryMenu inventoryMenu)
     {
         int x = Game1.getMouseX(true);
         int y = Game1.getMouseY(true);
@@ -1012,8 +1025,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Suppress Stardew Access' default hovered slot narration for the given inventory menu index.</summary>
     protected void SuppressHoveredSlotNarration(InventoryMenu inventoryMenu, int hoveredIndex)
     {
-        (string ignoredItemText, string queryText) = this.GetHoveredChestSlotNarration(inventoryMenu, hoveredIndex);
-        this.StardewAccess.PrevMenuQueryText = $"{queryText}:{hoveredIndex}";
+        this.StardewAccess.PrevMenuQueryText = this.GetHoveredSlotCustomQuery(inventoryMenu, hoveredIndex);
     }
 
     /// <summary>Suppress any hovered slot narration immediately before switching to another chest.</summary>
@@ -1023,6 +1035,14 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         int hoveredIndex = inventoryMenu != null ? this.GetHoveredSlotIndex(inventoryMenu) : -1;
         if (inventoryMenu != null && hoveredIndex >= 0)
             this.SuppressHoveredSlotNarration(inventoryMenu, hoveredIndex);
+    }
+
+    /// <summary>Get the inventory menu and slot index that should be suppressed when the edit form opens.</summary>
+    protected virtual (InventoryMenu? Menu, int Index) GetEditOpenHoveredSlot()
+    {
+        InventoryMenu? inventoryMenu = this.GetOverlayInventoryMenu();
+        int hoveredIndex = inventoryMenu != null ? this.GetHoveredSlotIndex(inventoryMenu) : -1;
+        return (inventoryMenu, hoveredIndex);
     }
 
     /// <summary>Activate the currently focused edit element without relying on the cursor position.</summary>
@@ -1148,7 +1168,25 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         Item item = inventoryMenu.actualInventory[hoveredIndex];
         string itemText = this.StardewAccess.GetDetailsOfItem(item, giveExtraDetails: true);
+        if (inventoryMenu.highlightMethod(item) == false)
+        {
+            string suffix = this.StardewAccess.Translate("item-suffix-not_usable_here", new { content = "" });
+            int firstCommaIndex = itemText.IndexOf(", ", StringComparison.Ordinal);
+            itemText = !string.IsNullOrWhiteSpace(suffix)
+                ? firstCommaIndex >= 0
+                    ? itemText.Insert(firstCommaIndex, suffix)
+                    : itemText + suffix
+                : itemText;
+        }
+
         return (itemText, itemText);
+    }
+
+    /// <summary>Get the exact Stardew Access custom query string for a hovered inventory slot.</summary>
+    private string GetHoveredSlotCustomQuery(InventoryMenu inventoryMenu, int hoveredIndex)
+    {
+        (string ignoredItemText, string queryText) = this.GetHoveredChestSlotNarration(inventoryMenu, hoveredIndex);
+        return $"{queryText}:{hoveredIndex}";
     }
 
     /// <summary>Get whether any configured button was pressed.</summary>
@@ -1234,8 +1272,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Reset and display the edit screen.</summary>
     private void OpenEdit()
     {
-        InventoryMenu? inventoryMenu = this.GetOverlayInventoryMenu();
-        int hoveredIndex = inventoryMenu != null ? this.GetHoveredSlotIndex(inventoryMenu) : -1;
+        (InventoryMenu? inventoryMenu, int hoveredIndex) = this.GetEditOpenHoveredSlot();
 
         this.EditNameField.Text = this.Chest.DisplayName;
         this.EditCategoryField.Text = this.Chest.DisplayCategory;
@@ -1247,7 +1284,13 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         this.ActiveElement = Element.EditForm;
         if (inventoryMenu != null && hoveredIndex >= 0)
+        {
             this.SuppressHoveredSlotNarration(inventoryMenu, hoveredIndex);
+            this.PendingEditOpenSuppressionQuery = this.GetHoveredSlotCustomQuery(inventoryMenu, hoveredIndex);
+        }
+
+        Rectangle nameBounds = this.EditNameField.GetBounds();
+        Game1.setMousePosition(nameBounds.Center.X, nameBounds.Center.Y);
     }
 
     /// <summary>Get the chests in a given category.</summary>

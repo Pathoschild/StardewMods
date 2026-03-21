@@ -182,6 +182,9 @@ internal class ModEntry : Mod
     private void OnRenderingActiveMenu(object? sender, RenderingActiveMenuEventArgs e)
     {
         this.TryApplyPendingChestAnnouncement();
+
+        if (this.CurrentOverlay.Value is BaseChestOverlay overlay)
+            overlay.PrepareMenuNarrationForRender();
     }
 
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />

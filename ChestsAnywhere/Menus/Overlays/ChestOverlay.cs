@@ -208,6 +208,20 @@ internal class ChestOverlay : BaseChestOverlay
     }
 
     /// <inheritdoc />
+    protected override (InventoryMenu? Menu, int Index) GetEditOpenHoveredSlot()
+    {
+        int chestHoveredIndex = this.GetHoveredSlotIndex(this.MenuInventoryMenu);
+        if (chestHoveredIndex >= 0)
+            return (this.MenuInventoryMenu, chestHoveredIndex);
+
+        int playerHoveredIndex = this.GetHoveredSlotIndex(this.Menu.inventory);
+        if (playerHoveredIndex >= 0)
+            return (this.Menu.inventory, playerHoveredIndex);
+
+        return (null, -1);
+    }
+
+    /// <inheritdoc />
     protected override int GetTopOffset(IClickableMenu menu)
     {
         // get grab menu info
