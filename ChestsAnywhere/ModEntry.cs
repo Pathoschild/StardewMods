@@ -399,14 +399,34 @@ internal class ModEntry : Mod
                 return;
             }
 
+            // Wait at least one full render frame before reading the inventory,
+            // because the menu's items may not yet reflect the new chest on the
+            // same frame the menu was opened.
+            if (pending.RenderFramesSeen++ < 1)
+            {
+                // Suppress slot narration during the wait so the user doesn't
+                // hear potentially stale item data.
+                int waitIndex = this.GetHoveredSlotIndex(itemGrabMenu.ItemsToGrabMenu);
+                if (waitIndex >= 0)
+                {
+                    string waitQuery = this.GetHoveredSlotQueryText(itemGrabMenu.ItemsToGrabMenu, waitIndex);
+                    this.StardewAccess.PrevMenuQueryText = $"{waitQuery}:{waitIndex}";
+                }
+                return;
+            }
+
             int hoveredIndex = this.GetHoveredSlotIndex(itemGrabMenu.ItemsToGrabMenu);
             if (hoveredIndex < 0)
                 return;
 
             string queryText = this.GetHoveredSlotQueryText(itemGrabMenu.ItemsToGrabMenu, hoveredIndex);
             string customQuery = $"{queryText}:{hoveredIndex}";
-            this.StardewAccess.PrevMenuQueryText = "";
-            this.StardewAccess.MenuPrefixNoQueryText = pending.Prefix;
+
+            // Speak the full announcement directly instead of using the one-shot
+            // MenuPrefixNoQueryText, which is fragile because any intervening
+            // SayWithMenuChecker call can consume the prefix before the slot narration.
+            this.StardewAccess.Say($"{pending.Prefix}{queryText}", true);
+            this.StardewAccess.PrevMenuQueryText = customQuery;
             this.SuppressedAnnouncement.Value = new SuppressedChestAnnouncement(itemGrabMenu, customQuery);
             this.PendingAnnouncement.Value = null;
             return;
@@ -571,7 +591,12 @@ internal class ModEntry : Mod
     /// <summary>A pending chest announcement to prepend to the next resolved chest-slot narration.</summary>
     /// <param name="Chest">The chest that should receive the announcement.</param>
     /// <param name="Prefix">The text to prepend to the next chest-slot narration.</param>
-    private record PendingChestAnnouncement(ManagedChest Chest, string Prefix);
+    private record PendingChestAnnouncement(ManagedChest Chest, string Prefix)
+    {
+        /// <summary>The number of render frames seen since this announcement was queued. The announcement
+        /// is deferred until at least one full render frame has passed, giving the menu inventory time to settle.</summary>
+        public int RenderFramesSeen { get; set; }
+    };
 
     /// <summary>The exact chest-slot query to suppress for the active menu after a prefixed announcement was spoken.</summary>
     /// <param name="Menu">The item grab menu whose chest slot should be suppressed.</param>

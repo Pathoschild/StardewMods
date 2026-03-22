@@ -107,6 +107,9 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The chest result queued to open after the current click/input cycle finishes.</summary>
     private ManagedChest? PendingChestToOpen;
 
+    /// <summary>The pending search text field announcement to speak after the next textbox draw, so it fires after Stardew Access's TextBoxPatch narration.</summary>
+    private ChestSearchBox? PendingSearchTextFieldAnnouncement;
+
 
     /*********
     ** Public methods
@@ -292,6 +295,10 @@ internal sealed class ChestSearchMenu : IClickableMenu
             );
             searchBox.TextBox.Draw(b);
         }
+
+        // Announce search text field after textbox draws so we override Stardew Access's
+        // TextBoxPatch narration (which speaks the textbox content on first selection).
+        this.TryCompleteSearchTextFieldOpenAnnouncement();
 
         // draw chest cells
         foreach (ChestSearchMenuCell cell in this.VisibleChestCells)
@@ -888,9 +895,23 @@ internal sealed class ChestSearchMenu : IClickableMenu
     }
 
     /// <summary>Announce that a search text field is active for editing.</summary>
+    /// <remarks>This defers the announcement to the next draw cycle so it fires after Stardew Access's
+    /// TextBoxPatch narration (which speaks the textbox content on the first draw after selection) and
+    /// overrides it via interrupt.</remarks>
     private void AnnounceSearchTextFieldOpened(ChestSearchBox searchBox)
     {
         this.LastFocusedQuery = null;
+        this.PendingSearchTextFieldAnnouncement = searchBox;
+    }
+
+    /// <summary>If a search-text-field-open announcement is pending, speak it now (after the search boxes have been drawn).</summary>
+    private void TryCompleteSearchTextFieldOpenAnnouncement()
+    {
+        ChestSearchBox? searchBox = this.PendingSearchTextFieldAnnouncement;
+        if (searchBox == null)
+            return;
+
+        this.PendingSearchTextFieldAnnouncement = null;
         string text = ReferenceEquals(searchBox, this.ItemSearchBox)
             ? "Search item field open. Enter to exit."
             : "Search chests field open. Enter to exit.";

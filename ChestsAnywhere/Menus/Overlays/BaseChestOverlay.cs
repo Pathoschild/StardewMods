@@ -144,6 +144,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>The exact Stardew Access slot query to suppress on the first render after opening the edit form.</summary>
     private string? PendingEditOpenSuppressionQuery;
 
+    /// <summary>Whether to announce "Text field open" after the next textbox draw, so it fires after Stardew Access's TextBoxPatch narration and overrides it.</summary>
+    private bool PendingTextFieldOpenAnnouncement;
+
     /*********
     ** Accessors
     *********/
@@ -311,6 +314,10 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 // update offset
                 topOffset += Math.Max(labelSize.Y + 7, textbox.Height);
             }
+
+            // Announce text field after textbox draws so we override Stardew Access's
+            // TextBoxPatch narration (which speaks the textbox content on first selection).
+            this.TryCompleteTextFieldOpenAnnouncement();
 
             // checkboxes
             topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest()).Y;
@@ -911,7 +918,10 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         // deselect textboxes
         if (value != Element.EditForm)
+        {
             this.DeselectManagedTextboxes();
+            this.PendingTextFieldOpenAnnouncement = false;
+        }
 
         this.LastHoverText = null;
         this.LastEditElementKey = null;
@@ -1148,9 +1158,22 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     }
 
     /// <summary>Announce that a text field is now active for editing.</summary>
+    /// <remarks>This defers the announcement to the next draw cycle so it fires after Stardew Access's
+    /// TextBoxPatch narration (which speaks the textbox content on the first draw after selection) and
+    /// overrides it via interrupt.</remarks>
     private void AnnounceTextFieldOpened()
     {
         this.LastEditElementKey = null;
+        this.PendingTextFieldOpenAnnouncement = true;
+    }
+
+    /// <summary>If a text-field-open announcement is pending, speak it now (after the textbox has been drawn).</summary>
+    private void TryCompleteTextFieldOpenAnnouncement()
+    {
+        if (!this.PendingTextFieldOpenAnnouncement)
+            return;
+
+        this.PendingTextFieldOpenAnnouncement = false;
         this.StardewAccess.SayWithMenuChecker("Text field open. Enter to exit.", true, "edit-textbox-open");
     }
 
