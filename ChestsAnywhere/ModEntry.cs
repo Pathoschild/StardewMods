@@ -262,6 +262,8 @@ internal class ModEntry : Mod
             overlay.OnChestSelected += selected =>
             {
                 this.LastChest.Value = selected;
+
+                Game1.activeClickableMenu?.exitThisMenu();
                 selected.OpenMenu();
             };
             this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;

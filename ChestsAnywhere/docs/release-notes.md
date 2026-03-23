@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed dressers or fish tanks becoming temporarily non-interactable if you open their inventory, then navigate to another chest before closing the menu.
+
 ## 1.30.1
 Released 14 March 2026 for SMAPI 4.1.10 or later.
 
