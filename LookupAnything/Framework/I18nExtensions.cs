@@ -99,7 +99,8 @@ internal partial class I18n
 
     /// <summary>Get a human-readable representation of a value.</summary>
     /// <param name="value">The underlying value.</param>
-    public static string? Stringify(object? value)
+    /// <param name="isNested">Whether the current value is nested within a larger value. This disables some multi-line formatting.</param>
+    public static string? Stringify(object? value, bool isNested = false)
     {
         switch (value)
         {
@@ -153,13 +154,13 @@ internal partial class I18n
             ** Game types
             ****/
             case AnimatedSprite sprite:
-                return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
+                return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect, isNested: true)})";
 
             case Item item:
                 return $"({item} {item.QualifiedItemId})";
 
             case MarriageDialogueReference dialogue:
-                return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
+                return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions, isNested: true)})";
 
             case ModDataDictionary data when data.Any():
                 {
@@ -171,35 +172,35 @@ internal partial class I18n
                 }
 
             case NetBool net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetByte net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetColor net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetDancePartner net:
-                return I18n.Stringify(net.Value?.displayName);
+                return I18n.Stringify(net.Value?.displayName, isNested);
             case NetDouble net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetFloat net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetGuid net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetInt net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetLocationRef net:
-                return I18n.Stringify(net.Value?.NameOrUniqueName);
+                return I18n.Stringify(net.Value?.NameOrUniqueName, isNested);
             case NetLong net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetPoint net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetPosition net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetRectangle net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetString net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
             case NetVector2 net:
-                return I18n.Stringify(net.Value);
+                return I18n.Stringify(net.Value, isNested);
 
             case SchedulePathDescription schedulePath:
                 return $"{schedulePath.time / 100:00}:{schedulePath.time % 100:00} {schedulePath.targetLocationName} ({schedulePath.targetTile.X}, {schedulePath.targetTile.Y}) {schedulePath.facingDirection} {schedulePath.endOfRouteMessage}";
@@ -209,7 +210,7 @@ internal partial class I18n
                     StringBuilder str = new StringBuilder();
                     str.AppendLine();
                     foreach ((string key, uint statValue) in stats.Values)
-                        str.AppendLine($"- {key}: {I18n.Stringify(statValue)}");
+                        str.AppendLine($"- {key}: {I18n.Stringify(statValue, isNested: true)}");
                     return str.ToString().TrimEnd();
                 }
 
@@ -228,7 +229,7 @@ internal partial class I18n
                     {
                         object? dict = type.GetProperty("FieldDict")?.GetValue(value);
                         if (dict != null)
-                            return I18n.Stringify(dict);
+                            return I18n.Stringify(dict, isNested);
                     }
 
                     if (type.IsGenericType)
@@ -240,23 +241,29 @@ internal partial class I18n
                         {
                             PropertyInfo? refValue = type.GetProperty(nameof(NetRef<>.Value));
                             if (refValue != null)
-                                return I18n.Stringify(refValue.GetValue(value));
+                                return I18n.Stringify(refValue.GetValue(value), isNested);
                         }
 
                         // key/value pair
                         if (genericType == typeof(KeyValuePair<,>))
                         {
-                            string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Key))?.GetValue(value));
-                            string? v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Value))?.GetValue(value));
-                            return $"({k}: {v})";
+                            string? key = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Key))?.GetValue(value), isNested: true);
+                            string? val = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<,>.Value))?.GetValue(value), isNested: true);
+                            return $"[{key}]: {val}";
                         }
                     }
 
                     // enumerable
                     if (value is IEnumerable array and not string)
                     {
-                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "(null)").ToArray();
-                        return "[" + I18n.List(values) + "]";
+                        string[] values = (from item in array.Cast<object>() select I18n.Stringify(item, isNested: true) ?? "(null)").ToArray();
+                        if (values.Length == 0)
+                            return "[]";
+
+                        if (isNested)
+                            return $"[{I18n.List(values)}]";
+
+                        return $"{Environment.NewLine}- " + string.Join($"{Environment.NewLine}- ", values);
                     }
 
                     // anything else

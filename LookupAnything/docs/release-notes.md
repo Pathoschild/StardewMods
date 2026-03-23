@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* The 'raw data' field now shows list/dictionary values as multi-line lists for readability.
 * Fixed item lookups' fish spawn rules showing duplicate entries. These are now merged automatically.
 * Fixed item lookups' fish spawn locations not always sorted.
 * Improved translations. Thanks to jjongleee (updated Korean)!
