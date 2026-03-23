@@ -84,20 +84,17 @@
     // message from the transit area doors (mensagem das portas de saída)
     "location.transit-area-doors": "Isso leva de volta ao cais e as plataformas. Você vai precisar de um ingresso da bilheteira primeiro.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter (mensagens raras do guichê de passagens)
     "location.ticket-counter.1": "(Você tenta espiar pelo guichê, mas só vê uma sombra vaga através do vidro escuro.)",
     "location.ticket-counter.2": "(Você ouve sussurros estranhos através do vidro.)",
     "location.ticket-counter.3": "(Por um instante, você vê através do vidro escuro. Mas quando tenta lembrar, não consegue recordar o que viu.)",
 
-    // rare messages from ticket machine (mensagens raras da máquina de passagens)
     "location.ticket-machine.1": "(Sente uma leve desaprovação vinda do guichê... Ou será imaginação sua?)",
     "location.ticket-machine.2": "(Você sente uma leve sensação de desconforto por ter pulado o guichê.)",
     "location.ticket-machine.3": "(A máquina lista dezenas de destinos que você nunca ouviu falar. Você pisca e a lista normal volta.)",
 
-    // rare messages from cola machine (mensagens raras da máquina de refrigerante)
     "location.cola-machine.1": "(Ela só vende Joja Cola, mas algo cai na bandeja quando você se aproxima.)",
     "location.cola-machine.2": "(Antes que você faça algo, um item cai na bandeja com um barulho seco.)",
     "location.cola-machine.3": "(De alguma forma, você sente que a máquina de refrigerante quer ajudar.)",

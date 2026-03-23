@@ -66,7 +66,7 @@
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
-    "internal-id": "내부 식별 ID", 
+    "internal-id": "내부 식별 ID",
 
 
     /*************************************************
@@ -123,10 +123,10 @@
     "location.forest.island-tip": "섬 (큰 섬의 남쪽 끝)",
     "location.forest.lake": "숲 호수",
     "location.forest.river": "숲 강",
-    "location.HarveyRoom": "하비의 방", 
+    "location.HarveyRoom": "하비의 방",
     "location.LeoTreeHouse": "나무집",
     "location.SandyHouse": "오아시스",
-    "location.SebastianRoom": "세바스찬의 방", 
+    "location.SebastianRoom": "세바스찬의 방",
     "location.submarine": "야시장 잠수함",
     "location.town.northmost-bridge": "마을 (최북단의 다리)",
     "location.undergroundMine": "광산",
@@ -181,7 +181,6 @@
     /*********
     ** Achievement lookups
     *********/
-    // TODO
     // labels
     "achievement.unlocked": "Unlocked",
     "achievement.hat-shop": "Hat shop",
@@ -202,7 +201,7 @@
     "animal.produce-ready": "생산물 준비 완료",
     "animal.growth": "성장 단계",
     "animal.sells-for": "판매 가격: ",
-    "animal.golden-cracker": "황금 동물 과자", 
+    "animal.golden-cracker": "황금 동물 과자",
 
     // values
     "animal.complaints.hungry": "어제 먹이를 먹지 못함.",
@@ -213,6 +212,7 @@
     "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
     "animal.golden-cracker.none": "없음. 황금 동물 과자를 사용하면 생산품이 두 배가 됨.",
     "animal.golden-cracker.applied": "적용됨. 생산품이 두 배가 됨.",
+
 
     /*********
     ** Building > generic lookups
@@ -375,7 +375,7 @@
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
     "item.needed-for.quests": "현재 퀘스트 ({{quests}})",
-    "item.needed-for.trash-bear": "쓰레기 곰 (1개 가져다주기)", 
+    "item.needed-for.trash-bear": "쓰레기 곰 (1개 가져다주기)",
     "item.unknown-recipes": "알 수 없는 레시피 {{count}}개",
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",
@@ -526,7 +526,7 @@
     "npc.neutral-gifts": "그저그런 선물",
     "npc.dislikes-gifts": "싫어하는 선물",
     "npc.hates-gifts": "혐오하는 선물",
-    "npc.schedule": "오늘 일정", 
+    "npc.schedule": "오늘 일정",
 
     // values
     "npc.can-romance.married": "당신은 이미 결혼했다!", // < turns into a heart (Korean does not support emoji)
@@ -667,12 +667,12 @@
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
     "tile.map-name": "맵 이름",
     "tile.map-properties": "맵 속성",
-    "tile.layer-tile": "{{layer}} 타일", 
+    "tile.layer-tile": "{{layer}} 타일",
     "tile.layer-tile-none": "타일",
 
     // values
     "tile.map-properties.value": "{{name}}: {{value}}",
-    "tile.layer-tile.appearance": "타일시트 '{{tilesheetId}}'의 인덱스 {{index}} (경로: '{{tilesheetPath}}')", 
+    "tile.layer-tile.appearance": "타일시트 '{{tilesheetId}}'의 인덱스 {{index}} (경로: '{{tilesheetPath}}')",
     "tile.layer-tile.blend-mode": "혼합 모드: {{value}}",
     "tile.layer-tile.index-property": "건물 인덱스: {{name}}: {{value}}",
     "tile.layer-tile.tile-property": "건물: {{name}}: {{value}}",
@@ -749,7 +749,6 @@
     ** Generic Mod Config Menu UI
     *************************************************/
     // appearance
-    // TODO
     "config.title.appearance": "표시",
 
     "config.theme.name": "표시 테마",
@@ -767,7 +766,7 @@
 
     // progression mode
     "config.title.progression": "진행 모드",
-    
+
     "config.progression.show-uncaught-fish-spawn-rules.name": "잡지 못한 물고기의 출현 조건 표시",
     "config.progression.show-uncaught-fish-spawn-rules.desc": "아직 잡지 못한 물고기의 출현 조건을 표시할지 여부입니다.",
 

@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "駅のドックとホームに戻ります。まずはチケットカウンターでチケットを購入してください。",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "…？",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "（チケット売り場を覗き込もうとしたが、カラーガラス越しにぼんやりと影が見えるだけだ。）",
     "location.ticket-counter.2": "（ガラスの向こうから奇妙なささやき声が聞こえてくる。）",
     "location.ticket-counter.3": "（突然、一瞬だけカラーガラスの向こうが見える。思い返すが何を見たのか思い出せない。）",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "（チケットカウンターから微妙に非難を感じる。あるいはただの気のせいかもしれない。）",
     "location.ticket-machine.2": "（チケットカウンターを飛ばすことに漠然とした不安を覚える。）",
     "location.ticket-machine.3": "（機械が聞いたこともない何十もの目的地をリストアップする。瞬きをすると、通常のリストに戻った。）",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "（この販売機ではJojaコーラしか売っていない。しかし、あなたが近づくと、何かがトレイにドサッと落ちた。）",
     "location.cola-machine.2": "（あなたはコーラマシンに近づいた。何もしていないのに、ガチャンと音を立てて商品が落ちてきた。）",
     "location.cola-machine.3": "（どういうわけか、コーラマシンが手助けしたがっているのを感じる。）",

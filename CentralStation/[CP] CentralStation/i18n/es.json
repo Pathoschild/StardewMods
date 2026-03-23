@@ -76,20 +76,17 @@
     // message from the transit area doors (mensaje desde las puertas de salida)
     "location.transit-area-doors": "Esto lleva de vuelta al muelle y a las plataformas. Necesitarás un boleto de la boletería primero.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter (mensajes raros desde la boletería)
     "location.ticket-counter.1": "(Tratas de mirar dentro de la boletería, pero solo ves una sombra vaga a través del cristal ahumado.)",
     "location.ticket-counter.2": "(Escuchas extraños susurros a través del cristal.)",
     "location.ticket-counter.3": "(De repente puedes ver a través del cristal ahumado, solo por un momento. Cuando lo piensas, no puedes recordar qué viste.)",
 
-    // rare messages from ticket machine (mensajes raros desde la máquina de boletos)
     "location.ticket-machine.1": "(Sientes una vaga desaprobación desde la boletería. ¿O tal vez solo lo estás imaginando?)",
     "location.ticket-machine.2": "(Sientes una vaga sensación de incomodidad por saltarte la boletería.)",
     "location.ticket-machine.3": "(La máquina lista docenas de destinos que nunca has oído mencionar. Parpadeas y la lista vuelve a la normalidad.)",
 
-    // rare messages from cola machine (mensajes raros desde la máquina de refrescos)
     "location.cola-machine.1": "(Esta máquina solo vende Joja Cola, pero algo cae con un golpe en la bandeja cuando te acercas)",
     "location.cola-machine.2": "(Te acercas a la máquina de refrescos. Antes de que puedas hacer algo, un objeto cae con un clonk.)",
     "location.cola-machine.3": "(De alguna manera sientes que la máquina de refrescos quiere ayudarte.)",

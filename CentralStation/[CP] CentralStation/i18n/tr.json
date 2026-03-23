@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "Bu yol rıhtıma ve platformlara geri dönüyor. Öncelikle bilet gişesinden bir bilet almalısın.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(Bilet gişesine bakmaya çalışıyorsun, ama renkli camın ardında belirsiz bir gölgeden başka bir şey göremiyorsun.)",
     "location.ticket-counter.2": "(Camın ardından tuhaf fısıltılar geliyor.)",
     "location.ticket-counter.3": "(Aniden bir saniyeliğine renkli camın arkasını görebildin. Tekrar düşününce, ne gördüğünü hatırlayamıyorsun.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(Bilet gişesinden belirsiz bir onaylamama seziyorsun. Belki de sadece hayal ediyorsundur.)",
     "location.ticket-machine.2": "(Bilet gişesini atladığın için belirsiz bir huzursuzluk hissediyorsun.)",
     "location.ticket-machine.3": "(Makine hayatında hiç duymadığın düzinelerce yer listeliyor. Gözünü kırpar kırpmaz liste eski hâline döner.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(Bu makine sadece Joja Kola satıyor, ama yaklaştıkça bir şey pikap tepsisine çarpıyor.)",
     "location.cola-machine.2": "(Kola makinesine yaklaşıyorsun. Sen daha hiçbir şey yapmadan, bir şey takırdayarak düşüveriyor.)",
     "location.cola-machine.3": "(Bir şekilde kola makinesinin yardım etmek istediğini hissediyorsun.)",

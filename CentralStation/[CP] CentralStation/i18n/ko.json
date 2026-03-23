@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "여기는 선착장과 플랫폼으로 연결됩니다. 먼저 매표소에서 티켓을 발급받으세요.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(당신은 매표소 내부를 들여다보고자 하지만 코팅된 유리 너머로 실루엣만 희미하게 보입니다.)",
     "location.ticket-counter.2": "(유리 너머로 이상한 속삭임이 들립니다.)",
     "location.ticket-counter.3": "(갑자기 코팅된 유리 너머가 보입니다, 잠시 뒤. 다시 떠올려보고자 하자, 당신이 뭘 보았었는지 기억이 나지 않습니다.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(당신은 티켓 카운터에서 막연한 꺼림칙함을 느낍니다. 아니면 그냥 기분 탓일 수도 있습니다.)",
     "location.ticket-machine.2": "(당신은 티켓 카운터를 건너뛰는 것에 대해 막연한 불안감을 느낍니다.)",
     "location.ticket-machine.3": "(기계가 당신이 들어본 적도 없는 수십 개의 목적지를 나타냅니다. 당신이 눈을 깜빡이자 원래의 모습으로 돌아왔습니다.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(이 기계는 조자 콜라만 팔지만 당신이 다가가면 무언가 픽업 트레이에 쿵하는 소리가 납니다.)",
     "location.cola-machine.2": "(콜라 기계에 접근합니다. 당신이 무언가 하기도 전에, 물건이 쿵하고 떨어집니다.)",
     "location.cola-machine.3": "(왠지 콜라 기계가 도와주고 싶어하는 것 같습니다.)",

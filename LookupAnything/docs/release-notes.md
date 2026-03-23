@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to jjongleee (updated Korean)!
+
 ## 1.55.0
 Released 14 March 2016 for SMAPI 4.3.1 or later.
 

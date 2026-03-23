@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "Queste conducono al molo e alle piattaforme. Prima è necessario acquistare un biglietto alla biglietteria.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(Provi a sbirciare nella biglietteria, ma vedi solo una vaga ombra attraverso il vetro oscurato.)",
     "location.ticket-counter.2": "(Si sentono strani sussurri attraverso il vetro.)",
     "location.ticket-counter.3": "(Improvvisamente riesci a vedere attraverso il vetro oscurato, solo per un momento. Quando ci ripensi, non riesci a ricordare quello che hai visto.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(Percepisci un vago senso di disapprovazione provenire dalla biglietteria. O forse te lo stai solo immaginando.)",
     "location.ticket-machine.2": "(Provi un vago senso di disagio per aver saltato la biglietteria.)",
     "location.ticket-machine.3": "(La biglietteria elenca decine di destinazioni che non hai mai sentito nominare. Sbatti le palpebre e torna l'elenco normale.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(Questo distributore vende solo Joja Cola, ma quando ti avvicini qualcosa sbatte sul vassoio di raccolta.)",
     "location.cola-machine.2": "(Ti avvicini al distributore. Prima che tu possa fare qualcosa, un oggetto cade con un colpo secco.)",
     "location.cola-machine.3": "(In qualche modo, percepisci che il distributore ti vuole aiutare.)",

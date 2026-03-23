@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "Hier geht es zurück zum Anleger und zu den Bahnsteigen. Du benötigst zuerst eine Fahrkarte vom Fahrkartenschalter.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(Du versuchst, einen Blick in den Fahrkartenschalter zu werfen, aber durch die getönten Scheiben ist nur ein undeutlicher Schatten zu sehen).",
     "location.ticket-counter.2": "(Du hörst seltsames Geflüster durch das Glas.)",
     "location.ticket-counter.3": "(Plötzlich kannst du durch das getönte Glas sehen, nur kurz. Du kannst dich nicht mehr erinnern, was du gesehen hast.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(Du spürst eine mulmige Ablehnung vom Ticketschalter. Vielleicht bildest du es dir aber auch nur ein.)",
     "location.ticket-machine.2": "(Du bekommst ein mulmiges Gefühl, weil du den Ticketschalter übersprungen hast.)",
     "location.ticket-machine.3": "(Die Maschine listet Dutzende von Reisezielen auf, von denen du noch nie gehört hast. Du blinzelst und die normale Liste ist wieder zurück.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(Dieser Automat verkauft nur Joja Cola, aber als du näher kommst, poltert etwas in den Auffangbehälter).",
     "location.cola-machine.2": "(Du näherst dich dem Cola-Automaten. Bevor du etwas tun konntest, fällt ein Gegenstand mit einem Poltern heraus).",
     "location.cola-machine.3": "(Irgendwie hast du das Gefühl, der Cola-Automat will dir helfen.)",
@@ -97,6 +94,7 @@
     // employee lounge
     "location.employee-lockers": "Die Mitarbeiterspinde sind nicht verschlossen, aber du spürst, dass dich etwas beobachtet.",
     "location.employee-fridge": "Die Mittagessen der Mitarbeitenden. Es wäre unhöflich, sich daran zu bedienen.",
+
 
     /*********
     ** Tourist dialogue

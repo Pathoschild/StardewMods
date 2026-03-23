@@ -76,20 +76,17 @@
     // message from the transit area doors
     "location.transit-area-doors": "Cela vous ramène au quai et plateformes. Vous devez d'abord vous procurer un billet au guichet.",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter
     "location.ticket-counter.1": "(Vous essayez de jeter un coup d'œil dans le guichet, mais il n'y a qu'une ombre assez vague à travers la vitre teintée.)",
     "location.ticket-counter.2": "(Vous entendez d'étranges chuchotements à travers la vitre.)",
     "location.ticket-counter.3": "(Soudain, vous pouvez voir à travers la vitre teintée, juste pour un instant. Lorsque vous y repensez, vous ne vous souvenez plus de ce que vous avez vu.)",
 
-    // rare messages from ticket machine
     "location.ticket-machine.1": "(Vous sentez une vague désapprobation venant du guichet. Ou peut-être l'imaginez-vous.)",
     "location.ticket-machine.2": "(Vous éprouvez un vague sentiment de malaise en ignorant le guichet.)",
     "location.ticket-machine.3": "(L'appareil énumère des dizaines de destinations dont vous n'avez jamais entendu parler. Vous clignez des yeux et la liste normale réapparaît.)",
 
-    // rare messages from cola machine
     "location.cola-machine.1": "(Ce distributeur ne vend que du Joja Cola, mais quelque chose s'écrase dans le bac de ramassage lorsque vous vous approchez.)",
     "location.cola-machine.2": "(Vous vous approchez du distributeur de Cola. Avant que vous ne puissiez faire quoi que ce soit, un objet tombe avec fracas.)",
     "location.cola-machine.3": "(D'une certaine manière, vous sentez que le distributeur de Cola veut vous aider.)",

@@ -76,20 +76,17 @@
     // message from the transit area doors (出口门提示)
     "location.transit-area-doors": "这扇门通往码头和站台，你需要先去售票处买票。",
 
-    // messages from exit door
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
-    // rare messages from ticket counter (售票处少见对话)
     "location.ticket-counter.1": "（你试图窥视售票亭，但有色玻璃后只有模糊的影子）",
     "location.ticket-counter.2": "（你听到玻璃后传来奇怪的耳语声）",
     "location.ticket-counter.3": "（突然你短暂看透了有色玻璃。但回想时，却记不清看到了什么）",
 
-    // rare messages from ticket machine (售票机少见对话)
     "location.ticket-machine.1": "（总觉得售票亭那边投来反对的目光... 或许是错觉？）",
     "location.ticket-machine.2": "（跳过人工售票让你产生莫名的不安）",
     "location.ticket-machine.3": "（机器列出了几十个从未听过的站点，眨眼间又恢复了正常列表）",
 
-    // rare messages from cola machine (可乐机少见对话)
     "location.cola-machine.1": "（这台机器只卖Joja可乐，但当你靠近时，取物槽突然掉出东西）",
     "location.cola-machine.2": "（你刚走近可乐机，还没操作就有物品哐当落下）",
     "location.cola-machine.3": "（不知为何，你觉得可乐机是个好机）",
