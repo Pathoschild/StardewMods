@@ -34,7 +34,7 @@
     "generic.show-x-results": "결과 {{count}}개 보기",
 
     // types 유형
-    "type.achievement": "Achievement", // TODO
+    "type.achievement": "업적",
     "type.building": "건물",
     "type.bush": "덤불",
     "type.fruit-tree": "과일 나무",
@@ -62,12 +62,11 @@
     "friendship-status.kicked-out": "내쫓음",
 
     // custom content (shows which mod added an item, NPC, etc)
-    // TODO
-    "added-by-mod": "Added by mod",
+    "added-by-mod": "추가한 모드",
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
-    "internal-id": "Internal ID", // TODO
+    "internal-id": "내부 식별 ID", 
 
 
     /*************************************************
@@ -124,10 +123,10 @@
     "location.forest.island-tip": "섬 (큰 섬의 남쪽 끝)",
     "location.forest.lake": "숲 호수",
     "location.forest.river": "숲 강",
-    "location.HarveyRoom": "Harvey's Room", // TODO
-    "location.LeoTreeHouse": "Treehouse", // TODO
-    "location.SandyHouse": "Oasis", // TODO
-    "location.SebastianRoom": "Sebastian's Room", // TODO
+    "location.HarveyRoom": "하비의 방", 
+    "location.LeoTreeHouse": "나무집",
+    "location.SandyHouse": "오아시스",
+    "location.SebastianRoom": "세바스찬의 방", 
     "location.submarine": "야시장 잠수함",
     "location.town.northmost-bridge": "마을 (최북단의 다리)",
     "location.undergroundMine": "광산",
@@ -203,7 +202,7 @@
     "animal.produce-ready": "생산물 준비 완료",
     "animal.growth": "성장 단계",
     "animal.sells-for": "판매 가격: ",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "황금 동물 과자", 
 
     // values
     "animal.complaints.hungry": "어제 먹이를 먹지 못함.",
@@ -212,9 +211,8 @@
     "animal.complaints.no-heater": "겨울에 난방기가 없음.",
     "animal.complaints.not-petted": "오늘 쓰다듬 받지 못함.",
     "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
-    "animal.golden-cracker.none": "None. Add a golden animal cracker to double produced items.", // TODO
-    "animal.golden-cracker.applied": "Applied; produced items are doubled.", // TODO
-
+    "animal.golden-cracker.none": "없음. 황금 동물 과자를 사용하면 생산품이 두 배가 됨.",
+    "animal.golden-cracker.applied": "적용됨. 생산품이 두 배가 됨.",
 
     /*********
     ** Building > generic lookups
@@ -334,8 +332,8 @@
     "crop.summary.drops-X-to-Y": "{{min}} ~ {{max}}개의 추가 작물을 ({{percent}}%의 확률로 획득 가능)",
     "crop.summary.harvest-once": "{{daysToFirstHarvest}}일 후에 수확 가능",
     "crop.summary.harvest-multi": "{{daysToFirstHarvest}}일 후에 수확 가능, 그 후 매 {{daysToNextHarvests}}일마다 주기적 수확 가능.",
-    "crop.summary.farming-xp": "gives +{{amount}} farming XP per harvest", // TODO
-    "crop.summary.foraging-xp": "gives +{{amount}} foraging XP per harvest", // TODO
+    "crop.summary.farming-xp": "수확 시 농사 경험치 +{{amount}}",
+    "crop.summary.foraging-xp": "수확 시 채집 경험치 +{{amount}}",
     "crop.summary.seasons": "{{seasons}}에 자람",
     "crop.summary.sells-for": "판매 가격: {{price}}",
     "crop.harvest.too-late": "작물을 수확하기엔 너무 늦은 계절이다 (다음 수확까지 {{date}}일 걸림)",
@@ -352,7 +350,7 @@
     "item.dislikes-this": "싫어함",
     "item.hates-this": "증오함",
     "item.needed-for": "필요함",
-    "item.flavor": "Flavor", // TODO // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.flavor": "재료", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "보유함",
     "item.number-cooked": "요리됨",
     "item.number-crafted": "제작됨",
@@ -377,7 +375,7 @@
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
     "item.needed-for.quests": "현재 퀘스트 ({{quests}})",
-    "item.needed-for.trash-bear": "trash bear (deliver one)", // TODO
+    "item.needed-for.trash-bear": "쓰레기 곰 (1개 가져다주기)", 
     "item.unknown-recipes": "알 수 없는 레시피 {{count}}개",
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",
@@ -385,9 +383,9 @@
     "item.recipes-for-machine.same-as-input": "[넣는 아이템과 동일]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "이 기계 규칙은 너무 복잡해서 표시할 수 없습니다.",
     "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유 중.",
-    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-owned-flavored.summary": "{{count}}개 ({{name}}) 또는 {{baseCount}}개 ({{baseName}}) 보유 중", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
-    "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})", // TODO
+    "item.internal-id.summary": "{{itemId}} (중복되지 않는 '고유 ID': {{qualifiedItemId}})",
 
 
     /*********
@@ -443,7 +441,7 @@
     "item.fish-spawn-rules.time": "시간: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "날씨: 맑은 날",
     "item.fish-spawn-rules.weather-rainy": "날씨: 비 오는 날",
-    "item.uncaught-fish": "{{count}} uncaught fish", // TODO
+    "item.uncaught-fish": "아직 잡지 못한 물고기 {{count}}마리",
 
 
     /*********
@@ -528,7 +526,7 @@
     "npc.neutral-gifts": "그저그런 선물",
     "npc.dislikes-gifts": "싫어하는 선물",
     "npc.hates-gifts": "혐오하는 선물",
-    "npc.schedule": "Today's schedule", // TODO
+    "npc.schedule": "오늘 일정", 
 
     // values
     "npc.can-romance.married": "당신은 이미 결혼했다!", // < turns into a heart (Korean does not support emoji)
@@ -538,12 +536,12 @@
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
     "npc.undiscovered-gift-taste": "공개되지 않은 품목 {{count}}개",
     "npc.unowned-gift-taste": "소유하지 않은 품목 {{count}}개",
-    "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
-    "npc.schedule.no-entries": "No schedule loaded.", // TODO
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
-    "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
-    "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
-    "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
+    "npc.schedule.current-position": "현재 위치는 {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.no-entries": "불러온 일정이 없음.",
+    "npc.schedule.not-following-schedule": "현재 일정대로 움직이지 않음. 보통 NPC가 특별한 행동을 하는 중이라는 뜻. (예: 영화관에 있음).",
+    "npc.schedule.entry": "{{time}}: {{locationName}} ({{x}}, {{y}})로 걸어감.",
+    "npc.schedule.farmhand.unknown-position": "현재 호스트 쪽에서 알 수 없는 위치에 있음.",
+    "npc.schedule.farmhand.unknown-schedule": "멀티플레이에서는 NPC를 호스트가 관리하므로 일정을 확인할 수 없음.",
 
 
     /*********
@@ -668,13 +666,13 @@
     "tile.title": "맵 타일 ({{x}}, {{y}})",
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
     "tile.map-name": "맵 이름",
-    "tile.map-properties": "Map properties", // TODO
-    "tile.layer-tile": "{{layer}} tile", // TODO
+    "tile.map-properties": "맵 속성",
+    "tile.layer-tile": "{{layer}} 타일", 
     "tile.layer-tile-none": "타일",
 
     // values
-    "tile.map-properties.value": "{{name}}: {{value}}", // TODO
-    "tile.layer-tile.appearance": "index {{index}} from tilesheet '{{tilesheetId}}' (path: '{{tilesheetPath}}')", // TODO
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "타일시트 '{{tilesheetId}}'의 인덱스 {{index}} (경로: '{{tilesheetPath}}')", 
     "tile.layer-tile.blend-mode": "혼합 모드: {{value}}",
     "tile.layer-tile.index-property": "건물 인덱스: {{name}}: {{value}}",
     "tile.layer-tile.tile-property": "건물: {{name}}: {{value}}",
@@ -729,23 +727,21 @@
     /*********
     ** Data mining fields
     *********/
-    // TODO
-    "data-mining.name": "Raw data",
-    "data-mining.name.map-tile": "Raw data (map tile)",
-    "data-mining.name.map-location": "Raw data (location)",
+    "data-mining.name": "원본 데이터",
+    "data-mining.name.map-tile": "원본 데이터 (맵 타일)",
+    "data-mining.name.map-location": "원본 데이터 (위치)",
 
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+    "data-mining.section-pinned": "고정", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*************************************************
     ** Search UI
     *************************************************/
     // screen reader text
-    // TODO
-    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
-    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
-    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
-    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.instructions": "Lookup Anything 검색 메뉴입니다. 검색 상자가 선택되어 있습니다. 검색할 내용을 입력하세요.",
+    "search-menu.screen-reader.search-results": "검색 상자입니다. \"{{search}}\"에 대한 검색 결과가 {{count}}개 있습니다. 아래로 이동하면 결과를 확인할 수 있습니다.",
+    "search-menu.screen-reader.search-no-results": "검색 상자입니다. \"{{search}}\"에 대한 검색 결과가 없습니다.",
+    "search-menu.screen-reader.search-empty": "검색 상자입니다. 현재 비어 있습니다.",
     "search-menu.screen-reader.result": "{{name}} ({{type}}).",
 
 
@@ -754,26 +750,26 @@
     *************************************************/
     // appearance
     // TODO
-    "config.title.appearance": "Appearance",
+    "config.title.appearance": "표시",
 
-    "config.theme.name": "Visual theme",
-    "config.theme.desc": "The appearance to apply for the lookup and search menu.",
+    "config.theme.name": "표시 테마",
+    "config.theme.desc": "정보 및 검색 메뉴에 사용할 표시 테마입니다.",
 
-    "config.theme.values.Parchment": "Parchment",
-    "config.theme.values.Joja": "Joja",
-    "config.theme.values.MenuBox_Border": "Menu box (border)",
-    "config.theme.values.MenuBox_Inset": "Menu box (inset)",
-    "config.theme.values.MenuBox_Raised": "Menu box (raised)",
-    "config.theme.values.Plain": "Plain",
+    "config.theme.values.Parchment": "양피지",
+    "config.theme.values.Joja": "조자",
+    "config.theme.values.MenuBox_Border": "메뉴 상자 (테두리)",
+    "config.theme.values.MenuBox_Inset": "메뉴 상자 (안쪽)",
+    "config.theme.values.MenuBox_Raised": "메뉴 상자 (입체)",
+    "config.theme.values.Plain": "기본",
 
     "config.force-full-screen.name": "전체 화면 강제 표시",
     "config.force-full-screen.desc": "메뉴가 창 중앙이 아닌 항상 전체 화면이어야 하는지 여부. 이 기능은 주로 데이터 마이닝 필드를 볼 때 유용합니다.",
 
     // progression mode
     "config.title.progression": "진행 모드",
-
-    "config.progression.show-uncaught-fish-spawn-rules.name": "Show uncaught fish spawn rules", // TODO
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
+    
+    "config.progression.show-uncaught-fish-spawn-rules.name": "잡지 못한 물고기의 출현 조건 표시",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "아직 잡지 못한 물고기의 출현 조건을 표시할지 여부입니다.",
 
     "config.progression.show-unknown-gift-tastes.name": "모르는 선물 취향 보기",
     "config.progression.show-unknown-gift-tastes.desc": "게임 내에서 아직 알지 못한 선물 취향을 표시할지 여부(예: 대화 텍스트 또는 실험을 통해).",
@@ -834,11 +830,10 @@
     "config.toggle-lookup.name": "조회 전환",
     "config.toggle-lookup.desc": "커서 아래에 있는 항목에 대한 조회 UI를 전환하는 키.",
 
-    // TODO
-    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
-    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
-    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
-    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-click.name": "더블 클릭으로 정보창 열기/닫기",
+    "config.toggle-lookup-on-double-click.description": "마우스 왼쪽 버튼을 두 번 클릭해 정보창을 열거나 닫을지 여부입니다. 클릭한 위치의 정보를 불러옵니다.",
+    "config.toggle-lookup-on-double-tap.name": "더블 탭으로 정보창 열기/닫기",
+    "config.toggle-lookup-on-double-tap.description": "화면을 두 번 탭해 정보창을 열거나 닫을지 여부입니다. 탭한 위치의 정보를 불러옵니다.",
 
     "config.toggle-search.name": "검색 전환",
     "config.toggle-search.desc": "검색창 실행 전환하는 키",
