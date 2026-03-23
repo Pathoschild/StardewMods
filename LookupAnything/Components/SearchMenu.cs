@@ -283,10 +283,20 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
 
         // handle on-screen keyboard
         bool keyboardOpen = Game1.textEntry is not null;
-        if (keyboardOpen != this.WasKeyboardOpen && this.currentlySnappedComponent?.myID == SearchBoxId)
+        if (keyboardOpen != this.WasKeyboardOpen)
         {
             if (!keyboardOpen)
-                this.StardewAccess.SayMenuElement(this.SearchTextboxClickableArea, interrupt: false); // already narrated if search text changed
+            {
+                // cursor was moved by keyboard menu, snap back to the search box so player can navigate down to results
+                if (this.currentlySnappedComponent?.myID != SearchBoxId)
+                {
+                    this.currentlySnappedComponent = this.SearchTextboxClickableArea;
+                    this.SnapToSelectedComponent = true;
+                }
+
+                // narrate instructions
+                this.StardewAccess.SayMenuElement(this.SearchTextboxClickableArea, interrupt: false);
+            }
 
             this.WasKeyboardOpen = keyboardOpen;
         }

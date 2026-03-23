@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* When using the on-screen keyboard on the search menu, closing the keyboard now snaps back to the search box so navigation is more intuitive.
 * Improved the optional 'raw data' field:
   * Friendship data is now extracted where applicable.
   * List/dictionary values are now shown as multi-line lists for readability.
