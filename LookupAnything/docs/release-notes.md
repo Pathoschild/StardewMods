@@ -10,7 +10,7 @@
 * Improved translations. Thanks to jjongleee (updated Korean)!
 
 ## 1.55.0
-Released 14 March 2016 for SMAPI 4.3.1 or later.
+Released 14 March 2026 for SMAPI 4.3.1 or later.
 
 * You can now double-tap the screen on Android to look up whatever's under the tap (thanks to ferrles124!).
 * Improved performance when viewing lookups with a lot of information shown.

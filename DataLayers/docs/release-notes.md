@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.23.0
-Released 14 March 2016 for SMAPI 4.1.10 or later.
+Released 14 March 2026 for SMAPI 4.1.10 or later.
 
 * The _Auto_ layer now chooses...
   * _Crops: Ready to Harvest_ when holding seeds or tea saplings;
