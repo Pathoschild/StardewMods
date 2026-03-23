@@ -156,6 +156,24 @@ internal partial class I18n
             case AnimatedSprite sprite:
                 return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect, isNested: true)})";
 
+            case Friendship friendship:
+                {
+                    string?[] fields = [
+                        friendship.IsRoommate() ? "status: Roommate" : $"status: {friendship.Status}",
+                        $"points: {friendship.Points}",
+                        $"giftsToday: {friendship.GiftsToday}",
+                        $"giftsThisWeek: {friendship.GiftsThisWeek}",
+                        friendship.LastGiftDate?.TotalDays > 0 ? $"lastGiftDate: {SDate.From(friendship.LastGiftDate)}" : null,
+                        $"talkedToday: {friendship.TalkedToToday}",
+                        friendship.ProposalRejected ? "proposalRejected: true" : null,
+                        friendship.WeddingDate?.TotalDays > 0 ? $"weddingDate: {SDate.From(friendship.WeddingDate)}" : null,
+                        friendship.NextBirthingDate?.TotalDays > 0 ? $"nextBirthingDate: {SDate.From(friendship.NextBirthingDate)}" : null,
+                        friendship.Proposer > 0 ? $"proposer: {Game1.GetPlayer(friendship.Proposer)?.Name ?? friendship.Proposer.ToString()}" : null
+                    ];
+
+                    return $"({string.Join(", ", fields.Where(p => p is not null))})";
+                }
+
             case Item item:
                 return $"({item} {item.QualifiedItemId})";
 
