@@ -182,7 +182,7 @@ internal class FishSpawnRulesField : CheckboxListField
             yield return FishSpawnRulesField.GetCondition(
                 label: I18n.Item_FishSpawnRules_Locations(
                     locations: I18n.List(
-                        spawnRules.Locations.Select(gameHelper.GetLocationDisplayName).OrderBy(p => p)
+                        spawnRules.Locations.Select(gameHelper.GetLocationDisplayName).OrderBy(p => p).Distinct()
                     )
                 ),
                 isMet: spawnRules.MatchesLocation(Game1.currentLocation.Name)
@@ -205,7 +205,7 @@ internal class FishSpawnRulesField : CheckboxListField
                 if (locationsBySeason.TryGetValue(season, out string[]? locationNames))
                 {
                     summary.Add(new FormattedText(
-                        text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: I18n.List(locationNames)),
+                        text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: I18n.List(locationNames.OrderBy(p => p).Distinct())),
                         color: season == Game1.currentSeason ? Color.Black : Color.Gray
                     ));
                 }
