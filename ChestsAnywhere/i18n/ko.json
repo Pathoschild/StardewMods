@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "오두막 ({{owner}})",
     "default-category.cabin-unowned": "오두막 (비어있음)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "지하실 ({{owner}})",
+    "default-category.cellar-unowned": "지하실 #{{cellarNumber}}",
+    "default-category.farmhouse": "농가",
+    "default-category.island-farmhouse": "진저 섬 농가",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -24,7 +24,7 @@
     "label.category": "카테고리",
     "label.order": "순서",
     "label.hide-chest": "보관함 숨기기",
-    "label.hide-chest-hidden": "이 보관함 숨기기 (숨긴 후에는 직접 찾아가야 설정을 해제할 수 있습니다!)",
+    "label.hide-chest-hidden": "이 보관함 숨기기 (숨긴 후에는 직접 상자를 찾아 설정을 해제할 수 있습니다!)",
     "label.automate-options": "Automate",
     "label.automate-store": "이 보관함에 아이템 저장하기",
     "label.automate-store-first": "이 보관함에 아이템 우선순위로 저장하기",
@@ -41,17 +41,17 @@
 
     // chest search menu
     // TODO
-    "search-box.chest-name": "Search Chest Name:",
-    "search-box.item-name": "Search Items:",
+    "search-box.chest-name": "상자 이름 검색:",
+    "search-box.item-name": "아이템 검색:",
 
 
     /**********
     ** Errors
     **********/
-    "errors.disabled-from-here": "당신은 여기로에서 보관함에 접근할 수 없습니다.",
-    "errors.no-chests": "당신은 아직 보관함이 하나도 없습니다.",
-    "errors.no-chests-in-location": "이 장소에 당신의 보관함이 없습니다.",
-    "errors.no-chests-in-range": "범위 내에 당신의 보관함이 없습니다.",
+    "errors.disabled-from-here": "이 곳에서는 보관함에 접근할 수 없습니다.",
+    "errors.no-chests": "아직 보관함이 하나도 없습니다.",
+    "errors.no-chests-in-location": "여기에 보관함이 없습니다.",
+    "errors.no-chests-in-range": "범위 내에 보관함이 없습니다.",
 
 
     /**********
@@ -115,8 +115,8 @@
     "config.edit-chest.desc": "현재 보관함 설정을 편집하는 키.",
 
     // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "아이템 정렬",
+    "config.sort-items.desc": "상자가 열려 있을 때 인벤토리의 아이템을 정렬하는 키입니다.",
 
     "config.navigate-prev-chest.name": "탐색: 이전 보관함",
     "config.navigate-prev-chest.desc": "메뉴에서 이전 보관함으로 이동하는 키.",
@@ -137,11 +137,11 @@
     "config.hold-to-scroll-chests.desc": "이 키를 누른 상태에서 마우스 휠을 돌려 보관함을 선택합니다.",
 
     // TODO
-    "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
-
-    "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+    "config.open-search-menu.name": "검색 메뉴 열기",
+    "config.open-search-menu.desc": "상자 화면에서 모든 상자의 검색 메뉴를 여는 키입니다.",
+    
+    "config.search-menu-preview.name": "검색 메뉴 상자 미리보기",
+    "config.search-menu-preview.desc": "검색 화면에서, 가리킨 상자 내용의 미리보기 툴팁을 표시하기 위해 누르고 있을 키입니다.",
 
 
     /*********
@@ -149,5 +149,5 @@
     *********/
     // TODO
     "icon.open-menu.name": "Chests Anywhere",
-    "icon.open-menu.desc": "Open Menu"
+    "icon.open-menu.desc": "메뉴 열기"
 }
