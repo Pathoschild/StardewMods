@@ -172,13 +172,17 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         // handle exit
         if (key == Keys.Escape)
         {
-            this.exitThisMenu();
+            if (this.SearchTextbox.Selected)
+                // De-select text box if selected instead
+                this.SearchTextbox.Selected = false;
+            else
+                this.exitThisMenu();
             return;
         }
 
         // handle controller navigation
         // (Controller snap navigation is sent as key presses; see 'receiveKeyPress' in Game1.updateActiveMenu.)
-        if (Game1.options.snappyMenus && Game1.options.gamepadControls && Game1.textEntry is null)
+        if (Game1.options.snappyMenus && Game1.options.gamepadControls && Game1.textEntry is null && !this.SearchTextbox.Selected)
         {
             bool isMovementKey =
                 Game1.options.doesInputListContain(Game1.options.moveUpButton, key)
