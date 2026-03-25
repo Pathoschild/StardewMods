@@ -173,8 +173,7 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         if (key == Keys.Escape)
         {
             if (this.SearchTextbox.Selected)
-                // De-select text box if selected instead
-                this.SearchTextbox.Selected = false;
+                this.SearchTextbox.Selected = false; // deselect search box first, to allow for key navigation
             else
                 this.exitThisMenu();
             return;

@@ -2,7 +2,6 @@
     /*********
     ** In-game messages
     *********/
-    // TODO
     "mod-paused": "Fast Animations가 일시 중지되었습니다. 기본 속도로 재생됩니다. 다시 켜려면 {{keybind}} 키를 한 번 더 누르세요.",
     "mod-unpaused": "Fast Animations가 다시 활성화되었습니다. 설정한 속도로 재생됩니다. 다시 일시 중지하려면 {{keybind}} 키를 한 번 더 누르세요.",
 
@@ -79,7 +78,6 @@
     "config.fade.name": "화면 전환",
     "config.fade.tooltip": "다른 맵으로 이동할 때 화면이 전환되는 속도. 기본 값 {{defaultValue}}x.",
 
-    // TODO
     "config.fishing-text.name": "낚시 미니게임 텍스트",
     "config.fishing-text.tooltip": "'HIT!'이나 'PERFECT' 같은 낚시 미니게임 텍스트 애니메이션의 재생 속도 설정. 기본값 {{defaultValue}}x",
 
@@ -118,7 +116,6 @@
     "config.open-dialogue-box.name": "대화창 열림",
     "config.open-dialogue-box.tooltip": "대화창이 열리는 속도. 기본 값 {{defaultValue}}x.",
 
-    // TODO
     "config.shipping-menu.name": "출하 메뉴 전환",
     "config.shipping-menu.tooltip": "출하 메뉴 화면 전환 속도. 기본값 {{defaultValue}}x.",
 
@@ -131,8 +128,7 @@
     /****
     ** 'Pause Mod' section
     ****/
-    // TODO
-   "config.pause-mod-section": "모드 일시 중지",
+    "config.pause-mod-section": "모드 일시 중지",
 
     "config.mod-paused.name": "임시 일시 중지",
     "config.mod-paused.tooltip": "모드를 임시로 일시 중지할지 설정합니다. 일시 중지하면 모든 애니메이션이 기본 속도로 재생됩니다. 이 설정은 현재 실행 중에만 적용됩니다.",

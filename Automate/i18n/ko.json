@@ -19,8 +19,6 @@
     "config.title.connectors": "연결 활성화",
     "config.connector.desc": "{{itemName}}이(가) 기계와 상자를 서로 연결하는지 여부.",
     "config.custom-connectors.name": "사용자 지정 연결",
-
-    // TODO
     "config.custom-connectors.desc": "인접한 기계끼리 연결해 주는 아이템입니다. 아이템 이름은 사용하는 언어와 관계없이 영문 이름(예: \"Wood Path\") 또는 정식 아이템 ID(예: \"(O)405\")로 입력해야 하며, 여러 항목은 쉼표로 구분해 입력합니다.", // note: 다른 언어로 플레이하는 경우에도 영어로 입력해야 합니다)
 
     // Junimo hut options
@@ -31,8 +29,6 @@
     "config.junimo-hut-fertilizer.desc": "주니모 오두막이 비료 아이템으로 해야 할 일. '자동 감지'는 Better Junimos가 설치되어 있으면 무시하고 오두막에서 연결된 상자로 옮깁니다.",
     "config.junimo-hut-seeds.name": "씨앗",
     "config.junimo-hut-seeds.desc": "주니모 오두막이 씨앗 아이템으로 해야 할 일. '자동 감지'는 Better Junimos가 설치된 경우 이를 무시하고 그렇지 않으면 오두막에서 연결된 상자로 옮깁니다.",
-
-    // TODO
     "config.junimo-hut-move-items-into-hut.name": "주니모 오두막으로 옮길 아이템 ID",
     "config.junimo-hut-move-items-into-hut.desc": "주니모가 오두막으로 옮길 아이템입니다({{gemFieldName}} 같은 다른 항목 설정과 관계없이 적용됩니다). Lookup Anything 모드의 'internal ID' 항목에 표시되는 정식 아이템 ID를 쉼표로 구분해 입력합니다.",
     "config.junimo-hut-ignore-items.name": "무시할 아이템 ID",
@@ -45,7 +41,6 @@
     "config.junimo-huts.move-into-huts": "상자에서 주니모 오두막으로 이동",
 
     // per-chest settings
-    // TODO
     "config.title.chest-settings": "상자 설정",
     "config.default-chest-override.name": "기본 동작",
     "config.default-chest-override.desc": "아래에서 따로 설정한 경우를 제외하고, 상자를 기본적으로 활성화할지 여부를 정합니다. 활성화된 상자는 연결된 기계를 자동화하고, 비활성화된 상자는 완전히 무시됩니다.",

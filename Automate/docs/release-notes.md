@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to jjongleee (updated Korean)!
+
 ## 2.6.1
 Released 15 March 2026 for SMAPI 4.1.10 or later.
 

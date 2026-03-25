@@ -6,7 +6,6 @@
     // Note for translators:
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
-    // TODO
     "auto.name": "자동",
     "auto.name-active": "자동 ({{layerName}})",
     "auto.name-inactive": "자동 (표시할 항목 없음)",
@@ -29,7 +28,6 @@
     "bee-houses.range": "꽃의 범위",
 
     // coverage: bombs
-    // TODO
     "bombs.name": "범위: 폭탄",
     "bombs.dig": "채굴 범위",
     "bombs.explosion": "오브젝트 파괴 범위",
@@ -74,7 +72,6 @@
     "crop-fertilizer.multiple": "여러 비료 유형",
 
     // fishing depth
-    // TODO
     "fishing-depth.name": "수심",
     "fishing-depth.one": "해안 가까이",
     "fishing-depth.two": "2",
@@ -118,7 +115,6 @@
     "config.color-scheme.desc": "모든 데이터 레이어에 적용할 색 구성을 변경합니다.",
     "config.color-schemes.default": "기본 색상",
 
-    // TODO
     "config.legend-alpha-on-hover.name": "마우스 오버 시 상자 불투명도",
     "config.legend-alpha-on-hover.desc": "커서가 상자 위에 있을 때의 투명도를 설정합니다. 값은 0(투명)부터 1(불투명)까지입니다.",
 
@@ -136,8 +132,7 @@
     "config.layer-enabled.name": "활성화",
     "config.layer-enabled.desc": "이 레이어를 사용할지 여부",
 
-    // TODO
-     "config.layer-enabled-for-auto-layer.name": "'{{autoLayerName}}' 레이어에서 표시 허용",
+    "config.layer-enabled-for-auto-layer.name": "'{{autoLayerName}}' 레이어에서 표시 허용",
     "config.layer-enabled-for-auto-layer.desc": "'{{autoLayerName}}' 레이어를 선택했을 때 이 레이어를 자동으로 표시할지 설정합니다(다른 설정에서 비활성화되어 있어도 표시될 수 있습니다).",
 
     "config.layer-update-on-view-change.name": "화면 변경 시 업데이트",

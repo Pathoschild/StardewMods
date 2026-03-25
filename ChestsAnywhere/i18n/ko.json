@@ -40,7 +40,6 @@
     "button.reset": "초기화",
 
     // chest search menu
-    // TODO
     "search-box.chest-name": "상자 이름 검색:",
     "search-box.item-name": "아이템 검색:",
 
@@ -114,7 +113,6 @@
     "config.edit-chest.name": "보관함 편집",
     "config.edit-chest.desc": "현재 보관함 설정을 편집하는 키.",
 
-    // TODO
     "config.sort-items.name": "아이템 정렬",
     "config.sort-items.desc": "상자가 열려 있을 때 인벤토리의 아이템을 정렬하는 키입니다.",
 
@@ -136,10 +134,9 @@
     "config.hold-to-scroll-chests.name": "보관함 스크롤",
     "config.hold-to-scroll-chests.desc": "이 키를 누른 상태에서 마우스 휠을 돌려 보관함을 선택합니다.",
 
-    // TODO
     "config.open-search-menu.name": "검색 메뉴 열기",
     "config.open-search-menu.desc": "상자 화면에서 모든 상자의 검색 메뉴를 여는 키입니다.",
-    
+
     "config.search-menu-preview.name": "검색 메뉴 상자 미리보기",
     "config.search-menu-preview.desc": "검색 화면에서, 가리킨 상자 내용의 미리보기 툴팁을 표시하기 위해 누르고 있을 키입니다.",
 
@@ -147,7 +144,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
     "icon.open-menu.name": "Chests Anywhere",
     "icon.open-menu.desc": "메뉴 열기"
 }

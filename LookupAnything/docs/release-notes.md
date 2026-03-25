@@ -6,6 +6,7 @@
 * Improved the optional 'raw data' field:
   * Friendship data is now extracted where applicable.
   * List/dictionary values are now shown as multi-line lists for readability.
+* Improved input handling in search UI when search box is selected (thanks to khanshoaib3!).
 * Fixed item lookups' fish spawn rules showing duplicate entries. These are now merged automatically.
 * Fixed item lookups' fish spawn locations not always sorted.
 * Improved translations. Thanks to jjongleee (updated Korean)!
