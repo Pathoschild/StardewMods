@@ -7,9 +7,9 @@
     //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
     //   {{layerName}} is one of the layer name translations below.
     // TODO
-    "auto.name": "Auto",
-    "auto.name-active": "Auto ({{layerName}})",
-    "auto.name-inactive": "Auto (nothing to show)",
+    "auto.name": "자동",
+    "auto.name-active": "자동 ({{layerName}})",
+    "auto.name-inactive": "자동 (표시할 항목 없음)",
 
     // accessible
     "accessible.name": "진입가능 여부",
@@ -30,10 +30,10 @@
 
     // coverage: bombs
     // TODO
-    "bombs.name": "Coverage: Bombs",
-    "bombs.dig": "Dig Radius",
-    "bombs.explosion": "Destroy Object Radius",
-    "bombs.shockwave": "Shockwave Radius",
+    "bombs.name": "범위: 폭탄",
+    "bombs.dig": "채굴 범위",
+    "bombs.explosion": "오브젝트 파괴 범위",
+    "bombs.shockwave": "파괴 범위",
 
     // coverage: Junimo huts
     "junimo-huts.name": "적용범위: 주니모 오두막",
@@ -75,12 +75,12 @@
 
     // fishing depth
     // TODO
-    "fishing-depth.name": "Fishing Depth",
-    "fishing-depth.one": "Next to shore",
-    "fishing-depth.two": "Two",
-    "fishing-depth.three": "Three",
-    "fishing-depth.four": "Four",
-    "fishing-depth.max": "Max depth",
+    "fishing-depth.name": "수심",
+    "fishing-depth.one": "해안 가까이",
+    "fishing-depth.two": "2",
+    "fishing-depth.three": "3",
+    "fishing-depth.four": "4",
+    "fishing-depth.max": "최대",
 
     // machine processing
     "machines.name": "기계 동작 여부",
@@ -119,8 +119,8 @@
     "config.color-schemes.default": "기본 색상",
 
     // TODO
-    "config.legend-alpha-on-hover.name": "Legend opacity on hover",
-    "config.legend-alpha-on-hover.desc": "How see-through the legend info box should be when the cursor is over it, as a value between 0 (transparent) and 1 (opaque).",
+    "config.legend-alpha-on-hover.name": "마우스 오버 시 상자 불투명도",
+    "config.legend-alpha-on-hover.desc": "커서가 상자 위에 있을 때의 투명도를 설정합니다. 값은 0(투명)부터 1(불투명)까지입니다.",
 
     // main controls
     "config.toggle-layer-key.name": "데이터 레이어 활성키",
@@ -137,8 +137,8 @@
     "config.layer-enabled.desc": "이 레이어를 사용할지 여부",
 
     // TODO
-    "config.layer-enabled-for-auto-layer.name": "Enabled for '{{autoLayerName}}' layer",
-    "config.layer-enabled-for-auto-layer.desc": "Whether this layer can be shown automatically when you select the '{{autoLayerName}}' layer (even if it's otherwise disabled).",
+     "config.layer-enabled-for-auto-layer.name": "'{{autoLayerName}}' 레이어에서 표시 허용",
+    "config.layer-enabled-for-auto-layer.desc": "'{{autoLayerName}}' 레이어를 선택했을 때 이 레이어를 자동으로 표시할지 설정합니다(다른 설정에서 비활성화되어 있어도 표시될 수 있습니다).",
 
     "config.layer-update-on-view-change.name": "화면 변경 시 업데이트",
     "config.layer-update-on-view-change.desc": "'초당 업데이트 수' 설정과 관계 없이 게임 화면에 변화가 생기면 레이어 정보가 업데이트 됩니다.",
