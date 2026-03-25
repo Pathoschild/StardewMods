@@ -196,10 +196,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
             ****/
             case not null:
                 {
-                    NPC? npc =
-                        this.Reflection.GetField<NPC>(targetMenu, "hoveredNpc", required: false)?.GetValue()
-                        ?? this.Reflection.GetField<NPC>(targetMenu, "HoveredNpc", required: false)?.GetValue();
-                    if (npc is not null)
+                    if (this.TryPropertyOrField(targetMenu, out NPC? npc, "HoveredNpc", "hoveredNpc"))
                         return this.BuildSubject(npc);
                 }
                 break;

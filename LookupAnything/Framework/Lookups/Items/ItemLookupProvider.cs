@@ -360,10 +360,7 @@ internal class ItemLookupProvider : BaseLookupProvider
         {
             // by convention
             {
-                Item? item =
-                    this.Reflection.GetField<Item?>(menu, "hoveredItem", required: false)?.GetValue()
-                    ?? this.Reflection.GetField<Item?>(menu, "HoveredItem", required: false)?.GetValue();
-                if (item != null)
+                if (this.TryPropertyOrField(menu, out Item? item, "HoveredItem", "hoveredItem"))
                     return this.BuildSubject(item, ObjectContext.Inventory, null);
             }
 

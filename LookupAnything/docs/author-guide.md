@@ -38,14 +38,16 @@ Lookup Anything will detect the field and search inside it too.
 ### Hovered content in custom menus
 Lookup Anything detects when the cursor is over an item or NPC in standard menus.
 
-For custom menus, you can add one or both of these fields:
-* a `HoveredItem` field with any `Item` type:
+For custom menus, you can add one or both of these property or fields:
+* a `HoveredItem` property/field with any `Item` type:
   ```c#
-  public Object HoveredItem;
+  public Item HoveredItem { get; }
+  public Item hoveredItem;
   ```
-* and/or a `HoveredNpc` field with any `NPC` type:
+* and/or a `HoveredNpc` property/field with any `NPC` type:
   ```c#
-  public NPC HoveredNpc;
+  public NPC HoveredNpc { get; }
+  public NPC hoveredNpc;
   ```
 
 If present, Lookup Anything will handle them automatically.

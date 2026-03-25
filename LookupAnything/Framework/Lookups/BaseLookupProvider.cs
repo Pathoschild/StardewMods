@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -57,5 +58,32 @@ internal abstract class BaseLookupProvider : ILookupProvider
     {
         this.Reflection = reflection;
         this.GameHelper = gameHelper;
+    }
+
+    /// <summary>Try to get a property or field's value, based on one or more property or field names</summary>
+    /// <typeparam name="T">Type of property/field</typeparam>
+    /// <param name="reflection">SMAPI reflection helper helper</param>
+    /// <param name="thisObject">The object to reflect on</param>
+    /// <param name="value">Found property or field value</param>
+    /// <param name="propertyOrFieldNames">One or more property/field names</param>
+    /// <returns>true if value found</returns>
+    public bool TryPropertyOrField<T>(object thisObject, [NotNullWhen(true)] out T? value, params string[] propertyOrFieldNames)
+    {
+        // properties
+        foreach (string name in propertyOrFieldNames)
+        {
+            var prop = this.Reflection.GetProperty<T>(thisObject, name, required: false);
+            if (prop != null && (value = prop.GetValue()) != null)
+                return true;
+        }
+        // fields
+        foreach (string name in propertyOrFieldNames)
+        {
+            var field = this.Reflection.GetField<T>(thisObject, name, required: false);
+            if (field != null && (value = field.GetValue()) != null)
+                return true;
+        }
+        value = default;
+        return false;
     }
 }
