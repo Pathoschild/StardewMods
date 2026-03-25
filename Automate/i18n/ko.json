@@ -21,7 +21,7 @@
     "config.custom-connectors.name": "사용자 지정 연결",
 
     // TODO
-    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages (다른 언어로 재생되는 경우에도 영어여야 합니다)
+    "config.custom-connectors.desc": "인접한 기계끼리 연결해 주는 아이템입니다. 아이템 이름은 사용하는 언어와 관계없이 영문 이름(예: \"Wood Path\") 또는 정식 아이템 ID(예: \"(O)405\")로 입력해야 하며, 여러 항목은 쉼표로 구분해 입력합니다.", // note: 다른 언어로 플레이하는 경우에도 영어로 입력해야 합니다)
 
     // Junimo hut options
     "config.title.junimo-huts": "주니모 오두막 동작",
@@ -33,10 +33,10 @@
     "config.junimo-hut-seeds.desc": "주니모 오두막이 씨앗 아이템으로 해야 할 일. '자동 감지'는 Better Junimos가 설치된 경우 이를 무시하고 그렇지 않으면 오두막에서 연결된 상자로 옮깁니다.",
 
     // TODO
-    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
-    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
-    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
-    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-move-items-into-hut.name": "주니모 오두막으로 옮길 아이템 ID",
+    "config.junimo-hut-move-items-into-hut.desc": "주니모가 오두막으로 옮길 아이템입니다({{gemFieldName}} 같은 다른 항목 설정과 관계없이 적용됩니다). Lookup Anything 모드의 'internal ID' 항목에 표시되는 정식 아이템 ID를 쉼표로 구분해 입력합니다.",
+    "config.junimo-hut-ignore-items.name": "무시할 아이템 ID",
+    "config.junimo-hut-ignore-items.desc": "주니모가 수거하지 않을 아이템입니다({{gemFieldName}} 같은 다른 항목 설정과 관계없이 적용됩니다). Lookup Anything 모드의 'internal ID' 항목에 표시되는 정식 아이템 ID를 쉼표로 구분해 입력합니다.",
 
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "자동 감지",
@@ -46,16 +46,16 @@
 
     // per-chest settings
     // TODO
-    "config.title.chest-settings": "Chest settings",
-    "config.default-chest-override.name": "Default behavior",
-    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.title.chest-settings": "상자 설정",
+    "config.default-chest-override.name": "기본 동작",
+    "config.default-chest-override.desc": "아래에서 따로 설정한 경우를 제외하고, 상자를 기본적으로 활성화할지 여부를 정합니다. 활성화된 상자는 연결된 기계를 자동화하고, 비활성화된 상자는 완전히 무시됩니다.",
     "config.chest-override.name": "{{chestName}}",
-    "config.chest-override.name.take-only": "{{chestName}} (take items only)",
-    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
-    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // {{description}} contains the previous translation line
-    "config.chest-override.values.default": "Default",
-    "config.chest-override.values.enabled": "Enable",
-    "config.chest-override.values.disabled": "Disable",
+    "config.chest-override.name.take-only": "{{chestName}} (꺼내기 전용)",
+    "config.chest-override.desc": "설치한 {{chestName}} 아이템을 상자로 사용할지 설정합니다. '{{defaultBehaviorField}}'의 설명을 참고하세요.",
+    "config.chest-override.desc.take-only": "{{description}} (사용 시 이 상자 종류에서는 아이템을 꺼내기만 할 수 있습니다.)",
+    "config.chest-override.values.default": "기본값",
+    "config.chest-override.values.enabled": "사용",
+    "config.chest-override.values.disabled": "비활성화",
 
     // per-machine settings
     "config.title.machine-settings": "{{machineName}} 동작",
