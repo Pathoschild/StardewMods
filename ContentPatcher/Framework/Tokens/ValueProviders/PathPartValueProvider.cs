@@ -78,6 +78,24 @@ internal class PathPartValueProvider : BaseValueProvider
             return true;
         }
 
+        // index
+        if (int.TryParse(rawPart, out int index))
+        {
+            string[] segments = PathUtilities.GetSegments(path);
+            if (Math.Abs(index) >= segments.Length)
+            {
+                part = null;
+                return true;
+            }
+
+            // get value at index (negative index = from end)
+            part = index >= 0
+                ? segments[index]
+                : segments[segments.Length + index];
+
+            return true;
+        }
+
         // fragment
         if (Enum.TryParse(rawPart, ignoreCase: true, out PathFragment fragment))
         {
@@ -93,24 +111,6 @@ internal class PathPartValueProvider : BaseValueProvider
                 error = $"Invalid path fragment type '{rawPart}'; expected a numeric index, or one of {string.Join(", ", Enum.GetNames(typeof(PathFragment)))}.";
 
             return part != null;
-        }
-
-        // index
-        if (int.TryParse(rawPart, out int index))
-        {
-            string[] segments = PathUtilities.GetSegments(rawPart);
-            if (Math.Abs(index) >= segments.Length)
-            {
-                part = null;
-                return true;
-            }
-
-            // get value at index (negative index = from end)
-            part = index >= 0
-                ? segments[index]
-                : segments[segments.Length + index];
-
-            return true;
         }
 
         // invalid input
