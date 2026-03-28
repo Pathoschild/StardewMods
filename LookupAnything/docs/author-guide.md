@@ -38,17 +38,21 @@ Lookup Anything will detect the field and search inside it too.
 ### Hovered content in custom menus
 Lookup Anything detects when the cursor is over an item or NPC in standard menus.
 
-For custom menus, you can add one or both of these fields:
-* a `HoveredItem` field with any `Item` type:
-  ```c#
-  public Object HoveredItem;
-  ```
-* and/or a `HoveredNpc` field with any `NPC` type:
-  ```c#
-  public NPC HoveredNpc;
-  ```
+In your custom menus, you can tell Lookup Anything about the hovered content by adding a field or
+property with a specific name:
 
-If present, Lookup Anything will handle them automatically.
+name | type
+---- | ----
+`HoveredItem` _or_<br />`hoveredItem` | `Item` (or subtype like `Object`)
+`HoveredNpc` _or_<br />`hoveredNpc` | `NPC` (or subtype like `Horse`)
+
+For example:
+```c#
+public Item HoveredItem { get; }
+```
+
+When the player presses `F1` on your menu, they'll see the matching content automatically. If you
+have multiple fields/properties, Lookup Anything will choose one non-null value to show.
 
 ## Add a UI theme
 Lookup Anything uses visual themes to change its menu appearance.

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -57,5 +58,35 @@ internal abstract class BaseLookupProvider : ILookupProvider
     {
         this.Reflection = reflection;
         this.GameHelper = gameHelper;
+    }
+
+    /// <summary>Try to get the value of a property or field with one of the given names.</summary>
+    /// <typeparam name="T">The expected member type.</typeparam>
+    /// <param name="obj">The object whose members to search.</param>
+    /// <param name="value">The value that was found, if applicable.</param>
+    /// <param name="propertyOrFieldNames">The member names to match.</param>
+    /// <returns>Returns whether a matching member was found with a non-null value.</returns>
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "Reflection API can return null when `required: false` is set.")]
+    public bool TryPropertyOrField<T>(object obj, [NotNullWhen(true)] out T? value, params string[] propertyOrFieldNames)
+    {
+        // property
+        foreach (string name in propertyOrFieldNames)
+        {
+            IReflectedProperty<T>? prop = this.Reflection.GetProperty<T>(obj, name, required: false);
+            if (prop != null && (value = prop.GetValue()) != null)
+                return true;
+        }
+
+        // field
+        foreach (string name in propertyOrFieldNames)
+        {
+            IReflectedField<T>? field = this.Reflection.GetField<T>(obj, name, required: false);
+            if (field != null && (value = field.GetValue()) != null)
+                return true;
+        }
+
+        // none found
+        value = default;
+        return false;
     }
 }
