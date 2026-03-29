@@ -31,9 +31,12 @@ internal class ModTokenContext : IContext
     /// <summary>The dynamic tokens stored in the <see cref="DynamicContext"/>.</summary>
     private readonly InvariantDictionary<ManagedManualToken> DynamicTokens = new();
 
-    /// <summary>The possible values for the <see cref="DynamicTokens"/>.</summary>
-    /// <remarks>These must be stored in registration order, since each token value may affect the value of subsequent tokens.</remarks>
-    private readonly List<DynamicTokenValue> DynamicTokenValues = [];
+    /// <summary>
+    /// The contextual entities for the <see cref="DynamicTokens"/> that can receive context updates in <see cref="UpdateContext"/>.
+    /// They are either associated with a particular <see cref="DynamicTokens"/>, or serves only as parent to subsequent values.
+    /// </summary>
+    /// <remarks>These must be stored in registration order, since each contextual value may affect the value of subsequent tokens.</remarks>
+    private readonly List<DynamicTokenContextual> DynamicTokenContextualList = [];
 
     /// <summary>The alias token names defined for the content pack.</summary>
     private readonly InvariantDictionary<string> AliasTokenNames = new();
@@ -104,7 +107,8 @@ internal class ModTokenContext : IContext
     /// <param name="name">The token name.</param>
     /// <param name="rawValue">The token value to set.</param>
     /// <param name="conditions">The conditions that must match to set this value.</param>
-    public void AddDynamicToken(string name, IManagedTokenString rawValue, Condition[] conditions)
+    /// <param name="parent">The parent contextual entity of this dynamic token value.</param>
+    public void AddDynamicToken(string name, IManagedTokenString rawValue, Condition[] conditions, DynamicTokenContextual? parent)
     {
         // validate
         if (this.ParentContext.Contains(name, enforceContext: false))
@@ -121,7 +125,7 @@ internal class ModTokenContext : IContext
         }
 
         // create token value handler
-        var tokenValue = new DynamicTokenValue(managed, rawValue, conditions);
+        var tokenValue = new DynamicTokenValue(managed, rawValue, conditions, parent);
         IInvariantSet tokensUsed = tokenValue.GetTokensUsed().GetWithout(name);
 
         // save value info
@@ -132,8 +136,29 @@ internal class ModTokenContext : IContext
             managed.ValueProvider.SetValue(tokenValue.Value);
             managed.ValueProvider.SetReady(true);
         }
-        this.DynamicTokenValues.Add(tokenValue);
 
+        this.AddDynamicTokenContextual(tokenValue, tokensUsed);
+    }
+
+    /// <summary>Add a dynamic token value to the context.</summary>
+    /// <param name="name">The include name.</param>
+    /// <param name="conditions">The conditions to be updated in this context.</param>
+    /// <param name="parent">The parent contextual entity of this dynamic token value.</param>
+    /// <returns></returns>
+    public DynamicTokenContextual AddDynamicTokenInclude(string name, Condition[] conditions, DynamicTokenContextual? parent)
+    {
+        var tokenGroup = new DynamicTokenContextual(name, conditions, parent);
+        this.AddDynamicTokenContextual(tokenGroup, tokenGroup.GetTokensUsed().GetWithout(name));
+        return tokenGroup;
+    }
+
+    /// <summary>Add a dynamic token contextual entity.</summary>
+    /// <param name="tokenCtx">Token contextual entity to add</param>
+    /// <param name="tokensUsed">Tokens this contextual entity depends on</param>
+    private void AddDynamicTokenContextual(DynamicTokenContextual tokenCtx, IInvariantSet tokensUsed)
+    {
+        this.DynamicTokenContextualList.Add(tokenCtx);
+        string name = tokenCtx.Name;
         // track token dependencies
         if (tokensUsed.Any())
         {
@@ -152,7 +177,6 @@ internal class ModTokenContext : IContext
                 {
                     if (!this.DynamicTokenDependents.TryGetValue(dependency, out MutableInvariantSet? dependents))
                         this.DynamicTokenDependents[dependency] = dependents = [];
-
                     dependents.Add(name);
                 }
 
@@ -260,18 +284,22 @@ internal class ModTokenContext : IContext
                     }
                 }
 
-                foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+                foreach (DynamicTokenContextual tokenCtx in this.DynamicTokenContextualList)
                 {
-                    if (!resetDynamicTokens && !updateDynamicTokens!.Contains(tokenValue.Name))
-                        continue;
-
-                    tokenValue.UpdateContext(this);
-                    if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
+                    if (!resetDynamicTokens && !updateDynamicTokens!.Contains(tokenCtx.Name))
                     {
-                        ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+                        continue;
+                    }
+                    tokenCtx.UpdateContext(this);
+                    if (tokenCtx is DynamicTokenValue tokenValue)
+                    {
+                        if (tokenValue.IsReady && tokenValue.AllConditionsMatch())
+                        {
+                            ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
 
-                        valueProvider.SetValue(tokenValue.Value);
-                        valueProvider.SetReady(true);
+                            valueProvider.SetValue(tokenValue.Value);
+                            valueProvider.SetReady(true);
+                        }
                     }
                 }
             }

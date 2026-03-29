@@ -14,6 +14,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Extensions;
 
 namespace ContentPatcher.Framework;
 
@@ -248,72 +249,10 @@ internal class ScreenManager
                     foreach (KeyValuePair<string, ConfigField> pair in config)
                         this.AddConfigToken(pair.Key, pair.Value, modContext, current);
 
-                    // load dynamic tokens
                     IDictionary<string, int> dynamicTokenCountByName = new InvariantDictionary<int>();
                     foreach (DynamicTokenConfig entry in content.DynamicTokens)
                     {
-                        void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
-
-                        // get path
-                        LogPathBuilder localPath = current.LogPath.With(nameof(content.DynamicTokens));
-                        {
-                            string label = string.IsNullOrWhiteSpace(entry.Name)
-                                ? "unnamed"
-                                : entry.Name;
-
-                            dynamicTokenCountByName.TryAdd(label, -1);
-                            int discriminator = ++dynamicTokenCountByName[label];
-                            localPath = localPath.With($"{entry.Name} {discriminator}");
-                        }
-
-                        // validate token name
-                        if (string.IsNullOrWhiteSpace(entry.Name))
-                        {
-                            LogSkip("the token name can't be empty.");
-                            continue;
-                        }
-                        if (entry.Name.Contains(InternalConstants.PositionalInputArgSeparator))
-                        {
-                            LogSkip($"the token name can't have positional input arguments ({InternalConstants.PositionalInputArgSeparator} character).");
-                            continue;
-                        }
-                        if (Enum.TryParse<ConditionType>(entry.Name, true, out _))
-                        {
-                            LogSkip("the token name is already used by a global token.");
-                            continue;
-                        }
-                        if (config.ContainsKey(entry.Name))
-                        {
-                            LogSkip("the token name is already used by a config token.");
-                            continue;
-                        }
-
-                        // parse conditions
-                        Condition[] conditions;
-                        IInvariantSet immutableRequiredModIds;
-                        {
-                            if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIds, out string? conditionError))
-                            {
-                                this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
-                                continue;
-                            }
-                        }
-
-                        // parse values
-                        IManagedTokenString? values;
-                        if (!string.IsNullOrWhiteSpace(entry.Value))
-                        {
-                            if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIds, localPath.With(nameof(entry.Value)), out string? valueError, out values))
-                            {
-                                LogSkip($"the token value is invalid: {valueError}");
-                                continue;
-                            }
-                        }
-                        else
-                            values = new LiteralString("", localPath.With(nameof(entry.Value)));
-
-                        // add token
-                        modContext.AddDynamicToken(entry.Name, values, conditions);
+                        this.AddDynamicToken(current, config, modContext, tokenParser, dynamicTokenCountByName, entry);
                     }
                 }
 
@@ -366,6 +305,156 @@ internal class ScreenManager
         }
 
         this.CustomLocationManager.EnforceUniqueNames();
+    }
+
+    /// <summary>Register a dynamic token for a content pack, possibly one with includes.</summary>
+    /// <param name="current">Content pack</param>
+    /// <param name="config">Registered config tokens</param>
+    /// <param name="modContext">Token context</param>
+    /// <param name="tokenParser">Token parser</param>
+    /// <param name="dynamicTokenCountByName">Counter for number of times a specific dynamic token has been referenced</param>
+    /// <param name="entry">Dynamic token info</param>
+    /// <param name="parent">Parent dynamic token contextual entity</param>
+    /// <param name="requiredModIDs">Parent required mod IDs</param>
+    /// <returns></returns>
+    private bool AddDynamicToken(LoadedContentPack current, InvariantDictionary<ConfigField> config, ModTokenContext modContext, TokenParser tokenParser, IDictionary<string, int> dynamicTokenCountByName, DynamicTokenConfig entry, DynamicTokenContextual? parent = null, MutableInvariantSet? requiredModIDs = null)
+    {
+        void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
+
+        // validate token
+        if (!string.IsNullOrWhiteSpace(entry.IncludeFromFile))
+        {
+            if (!current.ContentPack.HasFile(entry.IncludeFromFile))
+            {
+                LogSkip($"the token include from file '{entry.IncludeFromFile}' does not exist.");
+                return false;
+            }
+            if (dynamicTokenCountByName.ContainsKey(entry.IncludeFromFile))
+            {
+                LogSkip($"the token include from file '{entry.IncludeFromFile}' has already been included once.");
+                return false;
+            }
+            if (entry.IncludeFromFile.StartsWith(DynamicTokenContextual.DynamicTokenIncludePrefix))
+            {
+                LogSkip($"the token include from file cannot start with '{DynamicTokenContextual.DynamicTokenIncludePrefix}'.");
+                return false;
+            }
+            var includeContent = current.ContentPack.ModContent.Load<ContentConfig>(entry.IncludeFromFile);
+            if (!includeContent.DynamicTokens.Any())
+            {
+                LogSkip($"the file '{entry.IncludeFromFile}' doesn't have anything in the {nameof(includeContent.Changes)} field. Is the file formatted correctly?.");
+                return false;
+            }
+            {
+                var invalidFields = includeContent.GetInvalidFieldsForSubFile(nameof(ContentConfig.DynamicTokens));
+                if (invalidFields.Any())
+                {
+                    LogSkip($"the file '{entry.IncludeFromFile}' contains fields which aren't allowed for a dynamic token include file ({string.Join(", ", invalidFields.OrderByHuman())}).");
+                    return false;
+                }
+            }
+
+            // Case 1: Dynamic token include group
+
+            LogPathBuilder localPath = MakeDynamicTokenLocalPath(current, dynamicTokenCountByName, entry, entry.IncludeFromFile);
+            // parse conditions
+            Condition[] conditions;
+            {
+                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, ref requiredModIDs, out string? conditionError))
+                {
+                    LogSkip($"its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.");
+                    return false;
+                }
+            }
+            // add token group if it has conditions
+            DynamicTokenContextual? tokenInclude = null;
+            if (parent != null || conditions.Any())
+            {
+                tokenInclude = modContext.AddDynamicTokenInclude(entry.IncludeFromFile, conditions, parent);
+            }
+            // add tokens
+            foreach (DynamicTokenConfig subEntry in includeContent.DynamicTokens)
+            {
+                this.AddDynamicToken(current, config, modContext, tokenParser, dynamicTokenCountByName, subEntry, tokenInclude, requiredModIDs);
+            }
+            return true;
+
+        }
+        else if (!string.IsNullOrWhiteSpace(entry.Name))
+        {
+            if (entry.Name.Contains(InternalConstants.PositionalInputArgSeparator))
+            {
+                LogSkip($"the token name can't have positional input arguments ({InternalConstants.PositionalInputArgSeparator} character).");
+                return false;
+            }
+            if (Enum.TryParse<ConditionType>(entry.Name, true, out _))
+            {
+                LogSkip("the token name is already used by a global token.");
+                return false;
+            }
+            if (config.ContainsKey(entry.Name))
+            {
+                LogSkip("the token name is already used by a config token.");
+                return false;
+            }
+            if (entry.Name.StartsWith(DynamicTokenContextual.DynamicTokenIncludePrefix))
+            {
+                LogSkip($"the token name cannot start with '{DynamicTokenContextual.DynamicTokenIncludePrefix}'.");
+                return false;
+            }
+
+            // CASE 2: Concrete dynamic token
+
+            LogPathBuilder localPath = MakeDynamicTokenLocalPath(current, dynamicTokenCountByName, entry, entry.Name);
+            // parse conditions
+            MutableInvariantSet? thisRequiredModIDs = requiredModIDs != null ? new(requiredModIDs) : null;
+            Condition[] conditions;
+            {
+                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, ref thisRequiredModIDs, out string? conditionError))
+                {
+                    LogSkip($"its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.");
+                    return false;
+                }
+            }
+            IInvariantSet assumeModIds = thisRequiredModIDs?.Lock() ?? InvariantSets.Empty;
+
+            // parse values
+            IManagedTokenString? values;
+            if (!string.IsNullOrWhiteSpace(entry.Value))
+            {
+                if (!tokenParser.TryParseString(entry.Value, assumeModIds, localPath.With(nameof(entry.Value)), out string? valueError, out values))
+                {
+                    LogSkip($"the token value is invalid: {valueError}");
+                    return false;
+                }
+            }
+            else
+                values = new LiteralString("", localPath.With(nameof(entry.Value)));
+
+            // add token
+            modContext.AddDynamicToken(entry.Name, values, conditions, parent);
+            return true;
+        }
+        else
+        {
+            LogSkip("the token entry must have either 'Name' or 'IncludeFromFile'.");
+            return false;
+        }
+    }
+
+    /// <summary>Create dynamic token specific log path builder.</summary>
+    /// <param name="current">Current content pack</param>
+    /// <param name="dynamicTokenCountByName">Counter for number of times a specific dynamic token has been referenced</param>
+    /// <param name="entry">Dynamic token config entry</param>
+    /// <param name="logPathLabel">Label to use in log</param>
+    /// <returns></returns>
+    private static LogPathBuilder MakeDynamicTokenLocalPath(LoadedContentPack current, IDictionary<string, int> dynamicTokenCountByName, DynamicTokenConfig entry, string logPathLabel)
+    {
+        LogPathBuilder localPath = current.LogPath.With(nameof(current.Content.DynamicTokens));
+        dynamicTokenCountByName.TryAdd(logPathLabel, -1);
+        int discriminator = ++dynamicTokenCountByName[logPathLabel];
+        localPath = localPath.With($"{logPathLabel} {discriminator}");
+        return localPath;
     }
 
     /// <summary>Reapply a content pack when its configuration changes.</summary>

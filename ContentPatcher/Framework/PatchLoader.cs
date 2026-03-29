@@ -144,27 +144,26 @@ internal class PatchLoader
     /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
     /// <param name="path">The path to the value from the root content file.</param>
     /// <param name="conditions">The normalized conditions.</param>
-    /// <param name="immutableRequiredModIds">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
+    /// <param name="requiredModIds">Mutable set of mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
     /// <param name="error">An error message indicating why normalization failed.</param>
-    public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, out IInvariantSet immutableRequiredModIds, [NotNullWhen(false)] out string? error)
+    public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, ref MutableInvariantSet? requiredModIds, [NotNullWhen(false)] out string? error)
     {
         // no conditions
         if (raw == null || !raw.Any())
         {
-            immutableRequiredModIds = InvariantSets.Empty;
             conditions = [];
             error = null;
             return true;
         }
 
         // parse conditions
-        MutableInvariantSet requiredModIds = [];
+        requiredModIds ??= [];
         InvariantDictionary<Condition> parsed = new();
         foreach ((string key, string? value) in raw.OrderBy(p => this.GetConditionParseOrder(p.Key, p.Value)))
         {
             if (!this.TryParseCondition(key, value, tokenParser, path.With(key), out Condition? condition, ref requiredModIds, out error))
             {
-                immutableRequiredModIds = InvariantSets.Empty;
+                requiredModIds = null;
                 conditions = [];
                 return false;
             }
@@ -172,10 +171,24 @@ internal class PatchLoader
             parsed[key] = condition;
         }
 
-        immutableRequiredModIds = requiredModIds.Lock();
         conditions = parsed.Values.ToArray();
         error = null;
         return true;
+    }
+
+    /// <summary>Normalize and parse the given condition values.</summary>
+    /// <param name="raw">The raw condition values to normalize.</param>
+    /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+    /// <param name="path">The path to the value from the root content file.</param>
+    /// <param name="conditions">The normalized conditions.</param>
+    /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
+    /// <param name="error">An error message indicating why normalization failed.</param>
+    public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, out IInvariantSet immutableRequiredModIDs, [NotNullWhen(false)] out string? error)
+    {
+        MutableInvariantSet? requiredModIDs = null;
+        bool result = this.TryParseConditions(raw, tokenParser, path, out conditions, ref requiredModIDs, out error);
+        immutableRequiredModIDs = requiredModIDs?.Lock() ?? InvariantSet.Empty;
+        return result;
     }
 
     /// <summary>Normalize and parse the given update rate.</summary>
