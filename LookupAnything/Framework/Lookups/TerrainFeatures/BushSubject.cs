@@ -90,10 +90,16 @@ internal class BushSubject : BaseSubject
         {
             if (isBerryBush || isTeaBush)
             {
-                SDate nextHarvest = this.GetNextHarvestDate(bush);
-                string nextHarvestStr = nextHarvest == today
-                    ? I18n.Generic_Now()
-                    : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
+                string nextHarvestStr;
+
+                SDate? nextHarvest = this.GetNextHarvestDate(bush);
+                if (nextHarvest is null)
+                    nextHarvestStr = I18n.Generic_Unknown();
+                else if (nextHarvest == today)
+                    nextHarvestStr = I18n.Generic_Now();
+                else
+                    nextHarvestStr = $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
+
                 if (this.TryGetCustomBushDrops(bush, out IList<ItemDropData>? drops))
                     yield return new ItemDropListField(this.GameHelper, this.Codex, I18n.Bush_NextHarvest(), drops, preface: nextHarvestStr);
                 else
@@ -283,7 +289,7 @@ internal class BushSubject : BaseSubject
 
     /// <summary>Get the seasons during which this bush produces berries when not sheltered.</summary>
     /// <param name="bush">The bush to check.</param>
-    private List<Season> GetProducingSeasons(Bush bush)
+    private IReadOnlyList<Season> GetProducingSeasons(Bush bush)
     {
         if (this.TryGetCustomBush(bush, out ICustomBush? customBush))
             return customBush.Seasons;
@@ -294,10 +300,10 @@ internal class BushSubject : BaseSubject
         return [Season.Spring, Season.Fall];
     }
 
-    /// <summary>Get the next date when the bush will produce forage.</summary>
+    /// <summary>Get the next date when the bush will produce forage, or <c>null</c> if there's no known date.</summary>
     /// <param name="bush">The bush to check.</param>
     /// <remarks>Derived from <see cref="Bush.inBloom"/>.</remarks>
-    private SDate GetNextHarvestDate(Bush bush)
+    private SDate? GetNextHarvestDate(Bush bush)
     {
         SDate today = SDate.Now();
         var tomorrow = today.AddDays(1);
@@ -310,14 +316,18 @@ internal class BushSubject : BaseSubject
         int dayToBegin = this.GetDayToBeginProducing(bush);
         if (dayToBegin >= 0)
         {
+            // set initial date: date full-grown or tomorrow, whichever is later
             SDate readyDate = this.GetDateFullyGrown(bush);
             if (readyDate < tomorrow)
                 readyDate = tomorrow;
 
+            // if bush isn't sheltered, check seasons it produces
             if (!bush.IsSheltered())
             {
-                // bush not sheltered, must check producing seasons
-                List<Season> producingSeasons = this.GetProducingSeasons(bush);
+                IReadOnlyList<Season> producingSeasons = this.GetProducingSeasons(bush);
+                if (producingSeasons.Count == 0)
+                    return null; // e.g. Custom Bush for conditional output
+
                 SDate seasonDate = new(Math.Max(1, dayToBegin), readyDate.Season, readyDate.Year);
                 while (!producingSeasons.Contains(seasonDate.Season))
                     seasonDate = seasonDate.AddDays(28);
@@ -326,8 +336,9 @@ internal class BushSubject : BaseSubject
                     return seasonDate;
             }
 
+            // apply day of month if needed
             if (readyDate.Day < dayToBegin)
-                readyDate = new(dayToBegin, readyDate.Season, readyDate.Year);
+                readyDate = new SDate(dayToBegin, readyDate.Season, readyDate.Year);
 
             return readyDate;
         }

@@ -8,6 +8,7 @@
   * List/dictionary values are now shown as multi-line lists for readability.
 * Improved input handling in search UI when search box is selected (thanks to khanshoaib3!).
 * Extended [custom menu conventional fields](author-guide.md#hovered-content-in-custom-menus) to support properties too (thanks to Mushymato!).
+* Fixed bush lookup error when Custom Bush reports no applicable seasons; the lookup will now show 'unknown' as the next harvest date in that case.
 * Fixed item lookups' fish spawn rules showing duplicate entries. These are now merged automatically.
 * Fixed item lookups' fish spawn locations not always sorted.
 * Fixed item/NPC lookup from a custom menu with an invalid field type.
