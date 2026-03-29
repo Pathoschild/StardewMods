@@ -20,11 +20,12 @@ internal class TerrainFeatureLookupProvider : BaseLookupProvider
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="codex">Provides subject entries.</param>
-    public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex)
-        : base(reflection, gameHelper)
+    public TerrainFeatureLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex)
+        : base(monitor, reflection, gameHelper)
     {
         this.Codex = codex;
     }

@@ -11,11 +11,9 @@ internal class AchievementLookupProvider : BaseLookupProvider
     /*********
     ** Public methods
     *********/
-    /// <summary>Construct an instance.</summary>
-    /// <param name="reflection">Simplifies access to private game code.</param>
-    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    public AchievementLookupProvider(IReflectionHelper reflection, GameHelper gameHelper)
-        : base(reflection, gameHelper) { }
+    /// <inheritdoc />
+    public AchievementLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper)
+        : base(monitor, reflection, gameHelper) { }
 
     /// <inheritdoc />
     public override ISubject? GetSubject(IClickableMenu menu, int cursorX, int cursorY)

@@ -57,12 +57,12 @@ internal class TargetFactory : ISubjectRegistry
 
         ISubjectRegistry codex = this;
         this.LookupProviders = [
-            new BuildingLookupProvider(reflection, gameHelper, config, codex),
-            new CharacterLookupProvider(reflection, gameHelper, config, codex),
+            new BuildingLookupProvider(monitor, reflection, gameHelper, config, codex),
+            new CharacterLookupProvider(monitor, reflection, gameHelper, config, codex),
             new ItemLookupProvider(monitor, reflection, gameHelper, config, codex),
-            new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
-            new AchievementLookupProvider(reflection, gameHelper),
-            new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
+            new TerrainFeatureLookupProvider(monitor, reflection, gameHelper, codex),
+            new AchievementLookupProvider(monitor, reflection, gameHelper),
+            new TileLookupProvider(monitor, reflection, gameHelper, config, showRawTileInfo)
         ];
     }
 

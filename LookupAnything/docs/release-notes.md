@@ -10,6 +10,7 @@
 * Extended [custom menu conventional fields](author-guide.md#hovered-content-in-custom-menus) to support properties too (thanks to Mushymato!).
 * Fixed item lookups' fish spawn rules showing duplicate entries. These are now merged automatically.
 * Fixed item lookups' fish spawn locations not always sorted.
+* Fixed item/NPC lookup from a custom menu with an invalid field type.
 * Improved translations. Thanks to jjongleee (updated Korean)!
 
 ## 1.55.0

@@ -23,9 +23,6 @@ internal class ItemLookupProvider : BaseLookupProvider
     /*********
     ** Fields
     *********/
-    /// <summary>Encapsulates monitoring and logging.</summary>
-    private readonly IMonitor Monitor;
-
     /// <summary>Provides methods for searching and constructing items.</summary>
     private readonly ItemRepository ItemRepository = new();
 
@@ -46,9 +43,8 @@ internal class ItemLookupProvider : BaseLookupProvider
     /// <param name="config">The mod configuration.</param>
     /// <param name="codex">Provides subject entries.</param>
     public ItemLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
-        : base(reflection, gameHelper)
+        : base(monitor, reflection, gameHelper)
     {
-        this.Monitor = monitor;
         this.Config = config;
         this.Codex = codex;
     }
@@ -360,7 +356,7 @@ internal class ItemLookupProvider : BaseLookupProvider
         {
             // by convention
             {
-                if (this.TryPropertyOrField(menu, out Item? item, "HoveredItem", "hoveredItem"))
+                if (this.TryGetPropertyOrField(menu, out Item? item, "HoveredItem", "hoveredItem"))
                     return this.BuildSubject(item, ObjectContext.Inventory, null);
             }
 

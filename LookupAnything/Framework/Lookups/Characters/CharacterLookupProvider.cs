@@ -29,12 +29,13 @@ internal class CharacterLookupProvider : BaseLookupProvider
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="config">The mod configuration.</param>
     /// <param name="codex">Provides subject entries.</param>
-    public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
-        : base(reflection, gameHelper)
+    public CharacterLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
+        : base(monitor, reflection, gameHelper)
     {
         this.Config = config;
         this.Codex = codex;
@@ -196,7 +197,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
             ****/
             case not null:
                 {
-                    if (this.TryPropertyOrField(targetMenu, out NPC? npc, "HoveredNpc", "hoveredNpc"))
+                    if (this.TryGetPropertyOrField(targetMenu, out NPC? npc, "HoveredNpc", "hoveredNpc"))
                         return this.BuildSubject(npc);
                 }
                 break;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,9 @@ internal abstract class BaseLookupProvider : ILookupProvider
     /*********
     ** Fields
     *********/
+    /// <summary>Encapsulates monitoring and logging.</summary>
+    protected readonly IMonitor Monitor;
+
     /// <summary>Simplifies access to private game code.</summary>
     protected readonly IReflectionHelper Reflection;
 
@@ -52,10 +56,12 @@ internal abstract class BaseLookupProvider : ILookupProvider
     ** Protected methods
     *********/
     /// <summary>Construct an instance.</summary>
+    /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="reflection">Simplifies access to private game code.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    protected BaseLookupProvider(IReflectionHelper reflection, GameHelper gameHelper)
+    protected BaseLookupProvider(IMonitor monitor, IReflectionHelper reflection, GameHelper gameHelper)
     {
+        this.Monitor = monitor;
         this.Reflection = reflection;
         this.GameHelper = gameHelper;
     }
@@ -67,22 +73,44 @@ internal abstract class BaseLookupProvider : ILookupProvider
     /// <param name="propertyOrFieldNames">The member names to match.</param>
     /// <returns>Returns whether a matching member was found with a non-null value.</returns>
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "Reflection API can return null when `required: false` is set.")]
-    public bool TryPropertyOrField<T>(object obj, [NotNullWhen(true)] out T? value, params string[] propertyOrFieldNames)
+    public bool TryGetPropertyOrField<T>(object obj, [NotNullWhen(true)] out T? value, params string[] propertyOrFieldNames)
     {
         // property
         foreach (string name in propertyOrFieldNames)
         {
-            IReflectedProperty<T>? prop = this.Reflection.GetProperty<T>(obj, name, required: false);
-            if (prop != null && (value = prop.GetValue()) != null)
-                return true;
+            IReflectedProperty<T>? property = this.Reflection.GetProperty<T>(obj, name, required: false);
+            if (property != null)
+            {
+                try
+                {
+                    value = property.GetValue();
+                    if (value is not null)
+                        return true;
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.LogOnce($"Couldn't get subject from the {obj.GetType().FullName} menu's {name} property: {ex.Message}");
+                }
+            }
         }
 
         // field
         foreach (string name in propertyOrFieldNames)
         {
             IReflectedField<T>? field = this.Reflection.GetField<T>(obj, name, required: false);
-            if (field != null && (value = field.GetValue()) != null)
-                return true;
+            if (field != null)
+            {
+                try
+                {
+                    value = field.GetValue();
+                    if (value is not null)
+                        return true;
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.LogOnce($"Couldn't get subject from the {obj.GetType().FullName} menu's {name} field: {ex.Message}");
+                }
+            }
         }
 
         // none found
