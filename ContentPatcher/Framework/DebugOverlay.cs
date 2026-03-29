@@ -48,7 +48,7 @@ internal class DebugOverlay : BaseOverlay
         : base(events, inputHelper, reflection)
     {
         this.Content = contentHelper;
-        this.TextureNames = this.GetTextureNames(contentHelper).OrderByHuman(p => p.Name).ToArray();
+        this.TextureNames = this.GetTextureNames(contentHelper).OrderByHuman(p => p.Name).DistinctBy(p => p.Name).ToArray();
         this.NextTexture();
     }
 

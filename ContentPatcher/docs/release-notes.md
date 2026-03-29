@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Fixed `{{PathPart}}` not handling numeric indexes correctly.
+* Fixed debug texture view not navigating between textures consistently.
 
 ## 2.9.1
 Released 14 March 2026 for SMAPI 4.4.0 or later.
