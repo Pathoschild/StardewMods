@@ -31,10 +31,10 @@
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{count}} adet için {{price}}g",
-    "generic.show-x-results": "{{count}} sonuçlarını göster",
+    "generic.show-x-results": "{{count}} sonucu göster",
 
     // types
-    "type.achievement": "Achievement", // TODO
+    "type.achievement": "Başarım",
     "type.building": "Bina",
     "type.bush": "Çalı",
     "type.fruit-tree": "Meyve Ağacı",
@@ -181,14 +181,13 @@
     /*********
     ** Achievement lookups
     *********/
-    // TODO
     // labels
-    "achievement.unlocked": "Unlocked",
-    "achievement.hat-shop": "Hat shop",
+    "achievement.unlocked": "Açıldı",
+    "achievement.hat-shop": "Şapka dükkanı",
 
     // values
-    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
-    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+    "achievement.hat-shop.hats-added": "Bu başarım açıldığında Şapka Faresi dükkanına şu şapkalar eklenir:",
+    "achievement.hat-shop.no-hats-added": "Bu başarım ile hiçbir şapka açılmaz.",
 
 
     /*********
@@ -299,7 +298,7 @@
     *********/
     // labels
     "fruit-tree.complaints": "Şikayetler",
-    "fruit-tree.name": "{{fruitName}} Ağaçı",
+    "fruit-tree.name": "{{fruitName}} Ağacı",
     "fruit-tree.growth": "Büyüme",
     "fruit-tree.next-fruit": "Sonraki meyve",
     "fruit-tree.season": "Mevsim",
@@ -464,7 +463,7 @@
     "item.melee-weapon.knockback.label": "{{amount}} (normal mesafenin {{multiplier}} katı)",
     "item.melee-weapon.reach.label": "{{amount}} piksel",
     "item.melee-weapon.speed.shown-vs-actual": "gösterilen: {{shownSpeed}}{{lineBreak}} gerçek: {{actualSpeed}}",
-    "item.melee-weapon.speed.summary": "{{hız}} (dönüş karesi başına {{milisaniye}} milisaniye, oyuncu hız bonuslarından önce)",
+    "item.melee-weapon.speed.summary": "{{speed}} (dönüş karesi başına {{milliseconds}} milisaniye, oyuncu hız bonuslarından önce)",
 
 
     /*********
@@ -708,7 +707,7 @@
     "tree.name.mystic": "Mistik Ağaç",
     "tree.name.unknown": "Bilinmeyen Ağaç",
     "tree.stage.done": "Tamamen olgunlaşmış",
-    "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
+    "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
     "tree.next-growth.winter": "gübrelenmediği sürece kışın sera dışında büyüyemez",
     "tree.next-growth.adjacent-trees": "büyüyemiyor çünkü diğer ağaçlar çok yakın",
     "tree.next-growth.chance": "{{chance}}% şansla yarın {{stage}} aşamasına olgunlaşacak",
@@ -739,11 +738,10 @@
     ** Search UI
     *************************************************/
     // screen reader text
-    // TODO
-    "search-menu.screen-reader.instructions": "Lookup Anything search menu. Search box selected. Enter text to search.",
-    "search-menu.screen-reader.search-results": "Search box. {{count}} results found for \"{{search}}\". Navigate down for results.",
-    "search-menu.screen-reader.search-no-results": "Search box. No results found for \"{{search}}\".",
-    "search-menu.screen-reader.search-empty": "Search box. Currently empty.",
+    "search-menu.screen-reader.instructions": "Lookup Anything arama menüsü. Arama kutusu seçildi. Aramak için metin girin.",
+    "search-menu.screen-reader.search-results": "Arama kutusu. \"{{search}}\" için {{count}} sonuç bulundu. Sonuçlar için aşağı gidin.",
+    "search-menu.screen-reader.search-no-results": "Arama kutusu. \"{{search}}\" için sonuç bulunamadı.",
+    "search-menu.screen-reader.search-empty": "Arama kutusu. Şu an boş.",
     "search-menu.screen-reader.result": "{{name}} ({{type}}).",
 
 
@@ -831,11 +829,10 @@
     "config.toggle-lookup.name": "Aramayı aç/kapat",
     "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",
 
-    // TODO
-    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
-    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
-    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
-    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-click.name": "Çift tıklama ile aramayı aç/kapat",
+    "config.toggle-lookup-on-double-click.description": "Sol fare tuşuna iki kez tıklayarak arama arayüzünün açılıp kapatılmayacağı. Mümkünse tıklanan konumu arar.",
+    "config.toggle-lookup-on-double-tap.name": "Çift dokunma ile aramayı aç/kapat",
+    "config.toggle-lookup-on-double-tap.description": "Ekrana iki kez dokunarak arama arayüzünün açılıp kapatılmayacağı. Mümkünse dokunulan konumu arar.",
 
     "config.toggle-search.name": "Aramayı aç/kapat",
     "config.toggle-search.desc": "Arama arayüzünü değiştiren tuşlar.",
