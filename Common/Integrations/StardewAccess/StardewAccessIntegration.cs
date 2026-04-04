@@ -29,6 +29,20 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
     public KeybindList PrimaryInfoKey
         => this.SafelyCallApi(api => api.PrimaryInfoKey, "reading Stardew Access keybinds", new KeybindList()) ?? new KeybindList();
 
+    /// <summary>The previous menu query used by Stardew Access to suppress duplicate menu narration.</summary>
+    public string PrevMenuQueryText
+    {
+        get => this.SafelyCallApi(api => api.PrevMenuQueryText, "reading Stardew Access previous menu query", "") ?? "";
+        set => this.SafelyCallApi(api => api.PrevMenuQueryText = value, "setting Stardew Access previous menu query");
+    }
+
+    /// <summary>A one-time prefix applied to the next narrated menu text.</summary>
+    public string MenuPrefixNoQueryText
+    {
+        get => this.SafelyCallApi(api => api.MenuPrefixNoQueryText, "reading Stardew Access menu prefix", "") ?? "";
+        set => this.SafelyCallApi(api => api.MenuPrefixNoQueryText = value, "setting Stardew Access menu prefix");
+    }
+
     /// <inheritdoc cref="IStardewAccessApi.Say" />
     public bool Say(string text, bool interrupt)
     {
@@ -64,9 +78,28 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
     public string GetDetailsOfItem(Item item, bool giveExtraDetails = false)
     {
         return this.SafelyCallApi(
-            api => api.GetDetailsOfItem(item, giveExtraDetails),
+            api => api.GetDetailsOfItem(item, giveExtraDetails, -1, null, -1),
             "getting item details",
             item.DisplayName
         ) ?? item.DisplayName;
+    }
+
+    /// <inheritdoc cref="IStardewAccessApi.SpeakHoveredInventorySlot" />
+    public bool SpeakHoveredInventorySlot(InventoryMenu? inventoryMenu, bool? giveExtraDetails = null, int hoverPrice = -1, string? extraItemToShowIndex = null, int extraItemToShowAmount = -1, string highlightedItemPrefix = "", string highlightedItemSuffix = "", int? hoverX = null, int? hoverY = null)
+    {
+        return this.SafelyCallApi(
+            api => api.SpeakHoveredInventorySlot(inventoryMenu, giveExtraDetails, hoverPrice, extraItemToShowIndex, extraItemToShowAmount, highlightedItemPrefix, highlightedItemSuffix, hoverX, hoverY),
+            "speaking hovered inventory slot"
+        );
+    }
+
+    /// <summary>Translate a Stardew Access translation key using its own i18n files.</summary>
+    public string Translate(string translationKey, object? tokens = null, string translationCategory = "Default", bool disableWarning = false)
+    {
+        return this.SafelyCallApi(
+            api => api.Translate(translationKey, tokens, translationCategory, disableWarning),
+            "translating Stardew Access text",
+            translationKey
+        ) ?? translationKey;
     }
 }

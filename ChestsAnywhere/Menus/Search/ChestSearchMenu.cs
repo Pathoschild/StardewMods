@@ -362,8 +362,32 @@ internal sealed class ChestSearchMenu : IClickableMenu
         if (key != Keys.Escape && this.SearchBoxes.Any(searchBox => searchBox.TextBox.Selected))
             return;
 
+        if ((key == Keys.Enter || key == Keys.Space) && this.TryOpenSnappedChest())
+            return;
+
+        bool isMovementKey =
+            Game1.options.doesInputListContain(Game1.options.moveUpButton, key)
+            || Game1.options.doesInputListContain(Game1.options.moveRightButton, key)
+            || Game1.options.doesInputListContain(Game1.options.moveDownButton, key)
+            || Game1.options.doesInputListContain(Game1.options.moveLeftButton, key);
+        if (isMovementKey)
+        {
+            this.currentlySnappedComponent ??= this.VisibleChestCells.FirstOrDefault() ?? this.getComponentWithID(1001);
+            base.receiveKeyPress(key);
+            return;
+        }
+
         // default behavior
         base.receiveKeyPress(key);
+    }
+
+    /// <inheritdoc />
+    public override void receiveGamePadButton(Buttons button)
+    {
+        if (button == Buttons.A && this.TryOpenSnappedChest())
+            return;
+
+        base.receiveGamePadButton(button);
     }
 
     /// <inheritdoc />
@@ -515,5 +539,15 @@ internal sealed class ChestSearchMenu : IClickableMenu
 
         for (int i = slotIndex; i < this.ChestCellPool.Length; i++)
             this.ChestCellPool[i].visible = false;
+    }
+
+    /// <summary>Open the currently snapped chest result, if any.</summary>
+    private bool TryOpenSnappedChest()
+    {
+        if (this.currentlySnappedComponent is not ChestSearchMenuCell cell || !cell.visible || cell.Chest == null)
+            return false;
+
+        cell.Chest.OpenMenu();
+        return true;
     }
 }

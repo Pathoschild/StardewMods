@@ -20,7 +20,7 @@ internal class ChestOverlay : BaseChestOverlay
     /// <summary>The underlying chest menu.</summary>
     private readonly ItemGrabMenu Menu;
 
-    /// <summary>The underlying menu's player inventory submenu.</summary>
+    /// <summary>The underlying menu's chest inventory submenu.</summary>
     private readonly InventoryMenu MenuInventoryMenu;
 
     /// <summary>The default highlight function for the chest items.</summary>
@@ -57,8 +57,8 @@ internal class ChestOverlay : BaseChestOverlay
     {
         this.Menu = menu;
         this.MenuInventoryMenu = menu.ItemsToGrabMenu;
-        this.DefaultChestHighlighter = menu.inventory.highlightMethod;
-        this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultChestHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultInventoryHighlighter = menu.inventory.highlightMethod;
         this.WasColorPickerShown = this.IsColorPickerShown(menu);
     }
 
@@ -145,7 +145,11 @@ internal class ChestOverlay : BaseChestOverlay
     /// <inheritdoc />
     protected override void DrawUi(SpriteBatch batch)
     {
-        this.TrySpeakPendingChestItem();
+        if (this.ActiveElement != Element.Menu)
+        {
+            this.SuppressHoveredSlotNarration(this.Menu.ItemsToGrabMenu);
+            this.SuppressHoveredSlotNarration(this.Menu.inventory);
+        }
 
         if (!this.ActiveElement.HasFlag(Element.EditForm))
         {
@@ -186,14 +190,21 @@ internal class ChestOverlay : BaseChestOverlay
     {
         if (clickable)
         {
-            this.Menu.inventory.highlightMethod = this.DefaultChestHighlighter;
-            this.MenuInventoryMenu.highlightMethod = this.DefaultInventoryHighlighter;
+            this.MenuInventoryMenu.highlightMethod = this.DefaultChestHighlighter;
+            this.Menu.inventory.highlightMethod = this.DefaultInventoryHighlighter;
         }
         else
         {
-            this.Menu.inventory.highlightMethod = _ => false;
             this.MenuInventoryMenu.highlightMethod = _ => false;
+            this.Menu.inventory.highlightMethod = _ => false;
         }
+    }
+
+    /// <inheritdoc />
+    protected override void SuppressPreSwitchSlotNarration()
+    {
+        base.SuppressPreSwitchSlotNarration();
+        this.SuppressHoveredSlotNarration(this.Menu.inventory);
     }
 
     /// <inheritdoc />
@@ -230,6 +241,6 @@ internal class ChestOverlay : BaseChestOverlay
     /// <inheritdoc />
     protected override InventoryMenu? GetOverlayInventoryMenu()
     {
-        return this.Menu.ItemsToGrabMenu;
+        return this.MenuInventoryMenu;
     }
 }
