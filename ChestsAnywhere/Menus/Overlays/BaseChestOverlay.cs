@@ -511,6 +511,11 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 return true;
             }
 
+            // In Menu mode, let Stardew Access handle the click natively so it reaches
+            // the underlying menu (e.g., for chest item transfer via Ctrl+Enter).
+            if (this.ActiveElement == Element.Menu)
+                return false;
+
             this.ReceiveLeftClick(Game1.getMouseX(true), Game1.getMouseY(true));
             this.SuppressActiveKeybinds(this.StardewAccess.LeftClickMainKey);
             this.SuppressActiveKeybinds(this.StardewAccess.LeftClickAlternateKey);
