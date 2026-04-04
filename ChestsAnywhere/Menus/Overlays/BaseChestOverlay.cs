@@ -385,7 +385,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             return;
 
         // check for textbox focus
-        bool anyTextboxSelected = Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null;
+        bool anyTextboxSelected = this.IsAnyManagedTextboxSelected() || (Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null);
         if (this.ActiveElement == Element.EditForm && anyTextboxSelected)
         {
             this.SuppressConfiguredButtons(Game1.options.moveUpButton, e.Pressed);
@@ -975,6 +975,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         }
 
         // else deselect any current textbox
+        // Don't deselect if the click is outside the menu bounds (e.g. cursor was moved
+        // off-menu for accessibility) — this prevents spurious clicks from closing the textbox.
+        Rectangle menuBounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
+        if (this.IsAnyManagedTextboxSelected() && !menuBounds.Contains(x, y))
+            return false;
+
         this.DeselectManagedTextboxes();
         return false;
     }
@@ -1343,6 +1349,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     {
         foreach (ValidatedTextBox textbox in this.ManagedTextboxes)
             textbox.Selected = false;
+
+        if (this.ManagedTextboxes.Any(textbox => ReferenceEquals(textbox, Game1.keyboardDispatcher?.Subscriber)))
+            Game1.keyboardDispatcher.Subscriber = null;
     }
 
     /// <summary>Get whether any managed textbox is currently selected.</summary>
