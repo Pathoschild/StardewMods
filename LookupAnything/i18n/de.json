@@ -32,6 +32,9 @@
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
     "generic.show-x-results": "zeige {{count}} Ergebnisse",
+    "screen-reader.list-expand-hint": "rechts zum Erweitern",
+    "screen-reader.list-collapse-hint": "links zum Einklappen",
+    "screen-reader.list-position": "{{current}} von {{total}}",
 
     // types
     "type.achievement": "Achievement", // TODO

@@ -22,6 +22,7 @@ internal static class LookupMenuScreenReader
     private static readonly Dictionary<object, string> CollapsedLinkText = new(ReferenceEqualityComparer.Instance);
     private static IClickableMenu? _lastMenu;
     private static int _selectedIndex = -1;
+    private static ExpandedFieldState? _expandedFieldState;
     private static FieldInfo? _fieldsField;
     private static FieldInfo? _subjectField;
     private static PropertyInfo? _fieldLabelProperty;
@@ -54,6 +55,7 @@ internal static class LookupMenuScreenReader
         _lastMenu = newMenu;
         _selectedIndex = 0;
         CollapsedLinkText.Clear();
+        _expandedFieldState = null;
         SpeakCurrentField(newMenu!, announceSubject: true);
     }
 
@@ -82,7 +84,10 @@ internal static class LookupMenuScreenReader
             SuppressConfiguredButtons(Game1.options.moveDownButton, e.Pressed);
 
             int direction = upPressed && !downPressed ? -1 : 1;
-            MoveSelection(menu, direction);
+            if (_expandedFieldState != null)
+                MoveExpandedSelection(menu, direction);
+            else
+                MoveSelection(menu, direction);
             return;
         }
 
@@ -90,7 +95,11 @@ internal static class LookupMenuScreenReader
         if (rightPressed)
         {
             SuppressConfiguredButtons(Game1.options.moveRightButton, e.Pressed);
-            if (TryExpandCurrentField(menu))
+            if (_expandedFieldState == null && TryEnterExpandedField(menu))
+            {
+                SpeakExpandedFieldEntry(menu, includeCollapseHint: true, previousIndex: null);
+            }
+            else if (_expandedFieldState == null && TryExpandCurrentField(menu))
             {
                 SpeakCurrentField(menu, announceSubject: false);
             }
@@ -101,7 +110,11 @@ internal static class LookupMenuScreenReader
         if (leftPressed)
         {
             SuppressConfiguredButtons(Game1.options.moveLeftButton, e.Pressed);
-            if (TryCollapseCurrentField(menu))
+            if (_expandedFieldState != null && TryExitExpandedField())
+            {
+                SpeakCurrentField(menu, announceSubject: false);
+            }
+            else if (TryCollapseCurrentField(menu))
             {
                 SpeakCurrentField(menu, announceSubject: false);
             }
@@ -112,6 +125,7 @@ internal static class LookupMenuScreenReader
     {
         _lastMenu = null;
         _selectedIndex = -1;
+        _expandedFieldState = null;
         CollapsedLinkText.Clear();
     }
 
@@ -150,22 +164,54 @@ internal static class LookupMenuScreenReader
             return false;
         }
 
-        if (_selectedIndex < 0 || _selectedIndex >= fields.Length)
+        bool hasHeader = HasNavigableHeader(menu);
+        if (_selectedIndex < (hasHeader ? -1 : 0) || _selectedIndex >= fields.Length)
         {
             _selectedIndex = 0;
         }
 
-        _selectedIndex += direction;
-        if (_selectedIndex < 0)
+        int itemCount = fields.Length + (hasHeader ? 1 : 0);
+        int currentPosition = hasHeader
+            ? _selectedIndex + 1
+            : _selectedIndex;
+
+        currentPosition += direction;
+        if (currentPosition < 0)
         {
-            _selectedIndex = fields.Length - 1;
+            currentPosition = itemCount - 1;
         }
-        else if (_selectedIndex >= fields.Length)
+        else if (currentPosition >= itemCount)
         {
-            _selectedIndex = 0;
+            currentPosition = 0;
         }
+
+        _selectedIndex = hasHeader
+            ? currentPosition - 1
+            : currentPosition;
 
         SpeakCurrentField(menu, announceSubject: false);
+        return true;
+    }
+
+    private static bool MoveExpandedSelection(IClickableMenu menu, int direction)
+    {
+        if (_expandedFieldState == null || _expandedFieldState.Entries.Length == 0)
+        {
+            return false;
+        }
+
+        int previousIndex = _expandedFieldState.EntryIndex;
+        _expandedFieldState.EntryIndex += direction;
+        if (_expandedFieldState.EntryIndex < 0)
+        {
+            _expandedFieldState.EntryIndex = _expandedFieldState.Entries.Length - 1;
+        }
+        else if (_expandedFieldState.EntryIndex >= _expandedFieldState.Entries.Length)
+        {
+            _expandedFieldState.EntryIndex = 0;
+        }
+
+        SpeakExpandedFieldEntry(menu, includeCollapseHint: false, previousIndex);
         return true;
     }
 
@@ -173,6 +219,13 @@ internal static class LookupMenuScreenReader
     {
         if (!TryGetFields(menu, out object[] fields))
         {
+            return;
+        }
+
+        string subjectInfo = GetSubjectInfo(menu);
+        if (_selectedIndex == -1 && !string.IsNullOrWhiteSpace(subjectInfo))
+        {
+            StardewAccess?.SayWithMenuChecker(subjectInfo, true, $"lookup-header:{subjectInfo}");
             return;
         }
 
@@ -186,16 +239,58 @@ internal static class LookupMenuScreenReader
         string? value = GetFieldValueText(field);
 
         string text = string.IsNullOrWhiteSpace(value) ? label : $"{label}, {value}";
+        if (TryGetAccessibleListEntries(field, out AccessibleListEntry[] entries) && entries.Length >= 2)
+        {
+            text = AppendInstruction(text, GetExpandHintText());
+        }
+
         if (announceSubject)
         {
-            string subjectInfo = GetSubjectInfo(menu);
             if (!string.IsNullOrWhiteSpace(subjectInfo))
             {
                 text = $"{subjectInfo}. {text}";
             }
         }
 
-        StardewAccess?.SayWithMenuChecker(text, true);
+        StardewAccess?.SayWithMenuChecker(text, true, $"lookup-top:{_selectedIndex}:{text}");
+    }
+
+    private static void SpeakExpandedFieldEntry(IClickableMenu menu, bool includeCollapseHint, int? previousIndex)
+    {
+        if (_expandedFieldState == null || _expandedFieldState.Entries.Length == 0)
+        {
+            return;
+        }
+
+        _selectedIndex = _expandedFieldState.FieldIndex;
+        if (_expandedFieldState.EntryIndex < 0 || _expandedFieldState.EntryIndex >= _expandedFieldState.Entries.Length)
+        {
+            _expandedFieldState.EntryIndex = 0;
+        }
+
+        AccessibleListEntry entry = _expandedFieldState.Entries[_expandedFieldState.EntryIndex];
+        string position = GetListPositionText(_expandedFieldState.EntryIndex + 1, _expandedFieldState.Entries.Length);
+
+        string? context = entry.Context;
+        if (previousIndex is >= 0 && previousIndex < _expandedFieldState.Entries.Length)
+        {
+            string? previousContext = _expandedFieldState.Entries[previousIndex.Value].Context;
+            if (string.Equals(context, previousContext, StringComparison.Ordinal))
+                context = null;
+        }
+
+        List<string> parts = [];
+        if (!string.IsNullOrWhiteSpace(entry.Text))
+            parts.Add(entry.Text);
+        if (!string.IsNullOrWhiteSpace(context))
+            parts.Add(context);
+        parts.Add(position);
+
+        string text = string.Join(", ", parts);
+        if (includeCollapseHint)
+            text = AppendInstruction(text, GetCollapseHintText());
+
+        StardewAccess?.SayWithMenuChecker(text, true, $"lookup-entry:{_expandedFieldState.FieldIndex}:{_expandedFieldState.EntryIndex}:{text}");
     }
 
     private static string GetSubjectInfo(IClickableMenu menu)
@@ -231,6 +326,9 @@ internal static class LookupMenuScreenReader
 
         return string.Join(", ", parts);
     }
+
+    private static bool HasNavigableHeader(IClickableMenu menu)
+        => !string.IsNullOrWhiteSpace(GetSubjectInfo(menu));
 
     private static bool TryExpandCurrentField(IClickableMenu menu)
     {
@@ -284,13 +382,61 @@ internal static class LookupMenuScreenReader
             return false;
         }
 
-        MethodInfo? collapseByDefault = field.GetType().GetMethod("CollapseByDefault", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        if (collapseByDefault == null)
+        return TryCollapseField(field, linkText);
+    }
+
+    private static bool TryEnterExpandedField(IClickableMenu menu)
+    {
+        if (!TryGetFields(menu, out object[] fields))
         {
             return false;
         }
 
-        collapseByDefault.Invoke(field, [linkText]);
+        if (_selectedIndex < 0 || _selectedIndex >= fields.Length)
+        {
+            return false;
+        }
+
+        object field = fields[_selectedIndex];
+        if (!TryGetAccessibleListEntries(field, out AccessibleListEntry[] entries) || entries.Length < 2)
+        {
+            return false;
+        }
+
+        string? collapseLinkText = null;
+        bool restoreCollapsedState = false;
+        object? expandLink = GetFieldExpandLink(field);
+        if (expandLink != null)
+        {
+            collapseLinkText = GetFormattedText(expandLink, "Value");
+            restoreCollapsedState = TryExpandCurrentField(menu);
+            if (!restoreCollapsedState)
+            {
+                return false;
+            }
+        }
+
+        _expandedFieldState = new ExpandedFieldState(field, _selectedIndex, entries, collapseLinkText, restoreCollapsedState);
+        return true;
+    }
+
+    private static bool TryExitExpandedField()
+    {
+        if (_expandedFieldState == null)
+        {
+            return false;
+        }
+
+        ExpandedFieldState state = _expandedFieldState;
+        _expandedFieldState = null;
+        _selectedIndex = state.FieldIndex;
+
+        if (state.RestoreCollapsedState && !string.IsNullOrWhiteSpace(state.CollapseLinkText))
+        {
+            TryCollapseField(state.Field, state.CollapseLinkText);
+            CollapsedLinkText.Remove(state.Field);
+        }
+
         return true;
     }
 
@@ -304,6 +450,18 @@ internal static class LookupMenuScreenReader
 
         object?[] parameters = [0, 0, null];
         method.Invoke(field, parameters);
+    }
+
+    private static bool TryCollapseField(object field, string linkText)
+    {
+        MethodInfo? collapseByDefault = field.GetType().GetMethod("CollapseByDefault", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (collapseByDefault == null)
+        {
+            return false;
+        }
+
+        collapseByDefault.Invoke(field, [linkText]);
+        return true;
     }
 
     private static string GetFieldLabel(object field)
@@ -389,6 +547,327 @@ internal static class LookupMenuScreenReader
 
         return null;
     }
+
+    private static bool TryGetAccessibleListEntries(object field, out AccessibleListEntry[] entries)
+    {
+        string fieldTypeName = field.GetType().Name;
+        entries =
+            string.Equals(fieldTypeName, "ItemIconListField", StringComparison.Ordinal) ? GetItemIconListEntries(field)
+            : IsCheckboxListField(field) ? GetCheckboxListEntries(field)
+            : string.Equals(fieldTypeName, "ItemRecipesField", StringComparison.Ordinal) ? GetItemRecipeEntries(field)
+            : string.Equals(fieldTypeName, "ItemDropListField", StringComparison.Ordinal) ? GetItemDropListEntries(field)
+            : string.Equals(fieldTypeName, "FishPondDropsField", StringComparison.Ordinal) ? GetFishPondDropEntries(field)
+            : string.Equals(fieldTypeName, "CharacterGiftTastesField", StringComparison.Ordinal) ? GetFormattedValueListEntries(field)
+            : string.Equals(fieldTypeName, "ItemGiftTastesField", StringComparison.Ordinal) ? GetFormattedValueListEntries(field)
+            : string.Equals(fieldTypeName, "MovieTastesField", StringComparison.Ordinal) ? GetMovieTasteEntries(field)
+            : [];
+
+        return entries.Length > 0;
+    }
+
+    private static AccessibleListEntry[] GetItemIconListEntries(object field)
+    {
+        if (GetMemberValue(field, "Items") is not Array items || items.Length == 0)
+        {
+            return [];
+        }
+
+        string? introText = GetMemberValue(field, "IntroText") as string;
+        bool showStackSize = GetBoolMember(field, "ShowStackSize");
+        Delegate? formatItemName = GetMemberValue(field, "FormatItemName") as Delegate;
+
+        List<AccessibleListEntry> entries = [];
+        foreach (object itemEntry in items)
+        {
+            if (GetMemberValue(itemEntry, "Item1") is not Item item)
+            {
+                continue;
+            }
+
+            string? name = formatItemName?.DynamicInvoke(item) as string;
+            name ??= item.DisplayName;
+            if (showStackSize && item.Stack > 1)
+            {
+                name += $" x{item.Stack}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                entries.Add(new AccessibleListEntry(name, introText));
+            }
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetCheckboxListEntries(object field)
+    {
+        FieldInfo? listsField = GetFieldInHierarchy(field.GetType(), "CheckboxLists");
+        if (listsField?.GetValue(field) is not Array lists || lists.Length == 0)
+        {
+            return [];
+        }
+
+        List<AccessibleListEntry> entries = [];
+        int hiddenCount = 0;
+        foreach (object list in lists)
+        {
+            if (GetBoolMember(list, "IsHidden"))
+            {
+                hiddenCount++;
+                continue;
+            }
+
+            string? introText = GetNestedMemberText(list, "Intro", "Text");
+            if (GetMemberValue(list, "Checkboxes") is not Array checkboxes)
+            {
+                continue;
+            }
+
+            foreach (object checkbox in checkboxes)
+            {
+                string? text = JoinFormattedText(GetMemberValue(checkbox, "Text") as Array);
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    continue;
+                }
+
+                string stateText = GetCheckboxStateText(GetBoolMember(checkbox, "IsChecked"));
+                entries.Add(new AccessibleListEntry($"{stateText}: {text}", introText));
+            }
+        }
+
+        if (hiddenCount > 0)
+        {
+            string hiddenText =
+                string.Equals(field.GetType().Name, "FishSpawnRulesField", StringComparison.Ordinal)
+                    ? (TryInvokeLookupI18nMethod("Item_UncaughtFish", hiddenCount) ?? $"uncaught fish: {hiddenCount}")
+                    : $"hidden entries: {hiddenCount}";
+            entries.Add(new AccessibleListEntry(hiddenText));
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetItemRecipeEntries(object field)
+    {
+        FieldInfo? recipesField = GetFieldInHierarchy(field.GetType(), "RecipesByType");
+        if (recipesField?.GetValue(field) is not Array groups || groups.Length == 0)
+        {
+            return [];
+        }
+
+        bool showUnknown = GetBoolMember(field, "ShowUnknownRecipes", defaultValue: true);
+        bool showInvalid = GetBoolMember(field, "ShowInvalidRecipes", defaultValue: true);
+        bool showOutputLabels = GetBoolMember(field, "ShowOutputLabels", defaultValue: true);
+
+        List<AccessibleListEntry> entries = [];
+        foreach (object group in groups)
+        {
+            string type = GetMemberValue(group, "Type") as string ?? "Recipes";
+            if (GetMemberValue(group, "Recipes") is not Array recipes)
+            {
+                continue;
+            }
+
+            int unknownCount = 0;
+            foreach (object recipe in recipes)
+            {
+                bool isKnown = GetBoolMember(recipe, "IsKnown", defaultValue: true);
+                bool isValid = GetBoolMember(recipe, "IsValid", defaultValue: true);
+                if (!showInvalid && !isValid)
+                {
+                    continue;
+                }
+                if (!showUnknown && !isKnown)
+                {
+                    unknownCount++;
+                    continue;
+                }
+
+                string output = GetRecipeItemText(GetMemberValue(recipe, "Output"));
+                string[] inputs = GetRecipeItemInputs(GetMemberValue(recipe, "Inputs"));
+                string description = inputs.Length > 0
+                    ? (showOutputLabels ? $"{output} <- {string.Join(" + ", inputs)}" : string.Join(" + ", inputs))
+                    : output;
+
+                string? conditions = GetMemberValue(recipe, "Conditions") as string;
+                if (!string.IsNullOrWhiteSpace(conditions))
+                {
+                    description += $" ({conditions})";
+                }
+
+                if (showUnknown && !isKnown)
+                {
+                    description += " (unknown)";
+                }
+
+                entries.Add(new AccessibleListEntry(description, type));
+            }
+
+            if (!showUnknown && unknownCount > 0)
+            {
+                string unknownText = TryInvokeLookupI18nMethod("Item_UnknownRecipes", unknownCount)
+                                     ?? $"unknown recipes: {unknownCount}";
+                entries.Add(new AccessibleListEntry(unknownText, type));
+            }
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetItemDropListEntries(object field)
+    {
+        if (GetMemberValue(field, "Drops") is not Array drops || drops.Length == 0)
+        {
+            return [];
+        }
+
+        string? preface = GetMemberValue(field, "Preface") as string;
+        List<AccessibleListEntry> entries = [];
+        foreach (object entry in drops)
+        {
+            object? dropData = GetMemberValue(entry, "Item1");
+            Item? item = GetMemberValue(entry, "Item2") as Item;
+            if (dropData == null || item == null)
+            {
+                continue;
+            }
+
+            float probability = GetFloatMember(dropData, "Probability");
+            int minDrop = GetIntMember(dropData, "MinDrop");
+            int maxDrop = GetIntMember(dropData, "MaxDrop");
+            string? conditions = GetMemberValue(dropData, "Conditions") as string;
+
+            string text = probability > 0f && probability < 1f
+                ? $"{Math.Round(probability * 100f)}% {item.DisplayName}"
+                : item.DisplayName;
+            if (minDrop != maxDrop)
+            {
+                text += $" ({minDrop}-{maxDrop})";
+            }
+            else if (minDrop > 1)
+            {
+                text += $" ({minDrop})";
+            }
+            if (!string.IsNullOrWhiteSpace(conditions))
+            {
+                text += $" ({conditions})";
+            }
+
+            entries.Add(new AccessibleListEntry(text, preface));
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetFishPondDropEntries(object field)
+    {
+        if (GetMemberValue(field, "Drops") is not Array drops || drops.Length == 0)
+        {
+            return [];
+        }
+
+        string? preface = GetMemberValue(field, "Preface") as string;
+        List<AccessibleListEntry> entries = [];
+        foreach (object drop in drops)
+        {
+            string? entryText = FormatFishPondDropEntry(drop);
+            if (string.IsNullOrWhiteSpace(entryText))
+            {
+                continue;
+            }
+
+            int minPopulation = GetIntMember(drop, "MinPopulation");
+            string minFishText = TryInvokeLookupI18nMethod("Building_FishPond_Drops_MinFish", minPopulation)
+                                 ?? $"min fish {minPopulation}";
+            string context = string.IsNullOrWhiteSpace(preface)
+                ? minFishText
+                : $"{preface}, {minFishText}";
+            entries.Add(new AccessibleListEntry(entryText, context));
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetFormattedValueListEntries(object field)
+    {
+        if (GetMemberValue(field, "Value") is not Array valueEntries || valueEntries.Length == 0)
+        {
+            return [];
+        }
+
+        string listSeparator = GetListSeparator();
+        List<AccessibleListEntry> entries = [];
+        foreach (object entry in valueEntries)
+        {
+            if (GetMemberValue(entry, "Text") is not string text || string.IsNullOrWhiteSpace(text))
+            {
+                continue;
+            }
+
+            text = TrimTrailingSeparator(text.Trim(), listSeparator);
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                entries.Add(new AccessibleListEntry(text));
+            }
+        }
+
+        return entries.ToArray();
+    }
+
+    private static AccessibleListEntry[] GetMovieTasteEntries(object field)
+    {
+        if (GetMemberValue(field, "Value") is not Array valueEntries || valueEntries.Length == 0)
+        {
+            return [];
+        }
+
+        string? joined = JoinFormattedText(valueEntries);
+        if (string.IsNullOrWhiteSpace(joined))
+        {
+            return [];
+        }
+
+        string separator = GetListSeparator();
+        return joined
+            .Split([separator], StringSplitOptions.RemoveEmptyEntries)
+            .Select(part => part.Trim())
+            .Where(part => !string.IsNullOrWhiteSpace(part))
+            .Select(part => new AccessibleListEntry(part))
+            .ToArray();
+    }
+
+    private static string GetCheckboxStateText(bool isChecked)
+        => isChecked
+            ? (TryInvokeLookupI18nMethod("Generic_Yes") ?? "yes")
+            : (TryInvokeLookupI18nMethod("Generic_No") ?? "no");
+
+    private static string GetListSeparator()
+        => TryInvokeLookupI18nMethod("Generic_ListSeparator") ?? ", ";
+
+    private static string TrimTrailingSeparator(string text, string separator)
+    {
+        return text.EndsWith(separator, StringComparison.Ordinal)
+            ? text[..^separator.Length].TrimEnd()
+            : text;
+    }
+
+    private static string AppendInstruction(string text, string instruction)
+    {
+        return string.IsNullOrWhiteSpace(instruction)
+            ? text
+            : $"{text}, {instruction}";
+    }
+
+    private static string GetExpandHintText()
+        => TryInvokeLookupI18nMethod("ScreenReader_ListExpandHint") ?? "right to expand";
+
+    private static string GetCollapseHintText()
+        => TryInvokeLookupI18nMethod("ScreenReader_ListCollapseHint") ?? "left to collapse";
+
+    private static string GetListPositionText(int current, int total)
+        => TryInvokeLookupI18nMethod("ScreenReader_ListPosition", current, total) ?? $"{current} of {total}";
 
     private static string? GetFormattedText(object formattedTextOwner, string propertyName)
     {
@@ -914,7 +1393,14 @@ internal static class LookupMenuScreenReader
         string? text = GetMemberValue(entry, "DisplayText") as string;
         if (string.IsNullOrWhiteSpace(text))
         {
-            return "Unknown";
+            text =
+                GetNestedMemberText(entry, "Entity", "DisplayName")
+                ?? GetNestedMemberText(entry, "Entity", "Name");
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return "Unknown";
+            }
         }
 
         text = text.Trim().TrimEnd(':');
@@ -1185,6 +1671,18 @@ internal static class LookupMenuScreenReader
             _ => "red"
         };
     }
+
+    private sealed class ExpandedFieldState(object field, int fieldIndex, AccessibleListEntry[] entries, string? collapseLinkText, bool restoreCollapsedState)
+    {
+        public object Field { get; } = field;
+        public int FieldIndex { get; } = fieldIndex;
+        public AccessibleListEntry[] Entries { get; } = entries;
+        public string? CollapseLinkText { get; } = collapseLinkText;
+        public bool RestoreCollapsedState { get; } = restoreCollapsedState;
+        public int EntryIndex { get; set; }
+    }
+
+    private sealed record AccessibleListEntry(string Text, string? Context = null);
 
     private sealed class ReferenceEqualityComparer : IEqualityComparer<object>
     {
