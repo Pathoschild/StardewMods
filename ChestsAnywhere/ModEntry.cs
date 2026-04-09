@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Integrations.IconicFramework;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -48,8 +50,17 @@ internal class ModEntry : Mod
     /// <summary>The Better Game Menu integration.</summary>
     private BetterGameMenuIntegration? BetterGameMenu;
 
+    /// <summary>The Stardew Access integration.</summary>
+    private StardewAccessIntegration StardewAccess = null!;
+
     /// <summary>The cached chest lookup for the last tile checked.</summary>
     private readonly PerScreen<ChestOnTile?> CachedChestOnTile = new();
+
+    /// <summary>A pending one-line chest announcement waiting for the next stable item hover.</summary>
+    private readonly PerScreen<PendingChestAnnouncement?> PendingAnnouncement = new();
+
+    /// <summary>The current chest-slot query to suppress after a prefixed chest announcement was spoken.</summary>
+    private readonly PerScreen<SuppressedChestAnnouncement?> SuppressedAnnouncement = new();
 
 
     /*********
@@ -75,6 +86,7 @@ internal class ModEntry : Mod
         helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
+        helper.Events.Display.RenderingActiveMenu += this.OnRenderingActiveMenu;
         helper.Events.Display.RenderedHud += this.OnRenderedHud;
         helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
 
@@ -96,6 +108,10 @@ internal class ModEntry : Mod
     /// <inheritdoc cref="IGameLoopEvents.GameLaunched" />
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
     {
+        this.StardewAccess = new StardewAccessIntegration(this.Helper.ModRegistry, this.Monitor);
+        if (this.StardewAccess.IsLoaded)
+            this.StardewAccess.RegisterCustomMenuAsAccessible(typeof(ChestSearchMenu).FullName);
+
         // add config UI
         this.AddGenericModConfigMenu(
             new GenericModConfigMenuIntegrationForChestsAnywhere(),
@@ -165,6 +181,15 @@ internal class ModEntry : Mod
         this.ChangeOverlayIfNeeded();
     }
 
+    /// <inheritdoc cref="IDisplayEvents.RenderingActiveMenu" />
+    private void OnRenderingActiveMenu(object? sender, RenderingActiveMenuEventArgs e)
+    {
+        this.TryApplyPendingChestAnnouncement();
+
+        if (this.CurrentOverlay.Value is BaseChestOverlay overlay)
+            overlay.PrepareMenuNarrationForRender();
+    }
+
     /// <inheritdoc cref="IInputEvents.ButtonsChanged" />
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
@@ -174,6 +199,18 @@ internal class ModEntry : Mod
         try
         {
             ModConfigKeys keys = this.Keys;
+
+            if (Game1.activeClickableMenu is ChestSearchMenu chestSearchMenu && this.StardewAccess.IsLoaded)
+            {
+                bool leftClickPressed = this.StardewAccess.LeftClickMainKey.JustPressed() || this.StardewAccess.LeftClickAlternateKey.JustPressed();
+                if (leftClickPressed)
+                {
+                    chestSearchMenu.TryHandleStardewAccessLeftClick();
+                    this.Helper.Input.SuppressActiveKeybinds(this.StardewAccess.LeftClickMainKey);
+                    this.Helper.Input.SuppressActiveKeybinds(this.StardewAccess.LeftClickAlternateKey);
+                    return;
+                }
+            }
 
             // open menu
             if (keys.Toggle.JustPressed())
@@ -229,7 +266,13 @@ internal class ModEntry : Mod
         // get open chest
         ManagedChest? chest = this.ChestFactory.GetChestFromMenu(menu);
         if (chest == null)
+        {
+            BaseChestOverlay.ResetAccessibilityState();
+            this.PendingAnnouncement.Value = null;
+            this.SuppressedAnnouncement.Value = null;
             return;
+        }
+        this.LastChest.Value = chest;
 
         // reopen shipping box in standard chest UI if needed
         // This is called in two cases:
@@ -248,11 +291,11 @@ internal class ModEntry : Mod
         switch (menu)
         {
             case ItemGrabMenu chestMenu:
-                this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled);
+                this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.StardewAccess, showAutomateOptions: isAutomateInstalled);
                 break;
 
             case ShopMenu shopMenu:
-                this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled);
+                this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.StardewAccess, showAutomateOptions: isAutomateInstalled);
                 break;
         }
 
@@ -261,10 +304,10 @@ internal class ModEntry : Mod
         {
             overlay.OnChestSelected += selected =>
             {
+                ManagedChest? previousChest = this.LastChest.Value;
+                IClickableMenu openedMenu = selected.OpenMenu();
+                this.QueueChestAnnouncement(previousChest, selected, openedMenu);
                 this.LastChest.Value = selected;
-
-                Game1.activeClickableMenu?.exitThisMenu();
-                selected.OpenMenu();
             };
             this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
         }
@@ -296,7 +339,149 @@ internal class ModEntry : Mod
         }
 
         // render menu
-        selectedChest.OpenMenu();
+        IClickableMenu openedMenu = selectedChest.OpenMenu();
+        this.QueueChestAnnouncement(null, selectedChest, openedMenu);
+        this.LastChest.Value = selectedChest;
+    }
+
+    /// <summary>Queue a one-line chest announcement for the next stable chest-slot hover.</summary>
+    private void QueueChestAnnouncement(ManagedChest? previousChest, ManagedChest selectedChest, IClickableMenu openedMenu)
+    {
+        if (!this.StardewAccess.IsLoaded || openedMenu is not ItemGrabMenu)
+            return;
+
+        string? prefix = this.GetChestAnnouncementPrefix(previousChest, selectedChest);
+        if (string.IsNullOrWhiteSpace(prefix))
+        {
+            this.PendingAnnouncement.Value = null;
+            this.SuppressedAnnouncement.Value = null;
+            return;
+        }
+
+        this.PendingAnnouncement.Value = new PendingChestAnnouncement(selectedChest, prefix);
+        this.SuppressedAnnouncement.Value = null;
+    }
+
+    /// <summary>Get the one-line prefix to prepend to the next hovered chest slot narration.</summary>
+    private string? GetChestAnnouncementPrefix(ManagedChest? previousChest, ManagedChest selectedChest)
+    {
+        bool categoryChanged = previousChest == null || !string.Equals(previousChest.DisplayCategory, selectedChest.DisplayCategory, StringComparison.Ordinal);
+        bool chestChanged = previousChest == null || !string.Equals(previousChest.DisplayName, selectedChest.DisplayName, StringComparison.Ordinal);
+        if (!categoryChanged && !chestChanged)
+            return null;
+
+        return categoryChanged
+            ? $"{selectedChest.DisplayCategory}, {selectedChest.DisplayName}, "
+            : $"{selectedChest.DisplayName}, ";
+    }
+
+    /// <summary>Apply the pending chest prefix once the active chest slot is stable enough to resolve.</summary>
+    private void TryApplyPendingChestAnnouncement()
+    {
+        PendingChestAnnouncement? pending = this.PendingAnnouncement.Value;
+        if (!this.StardewAccess.IsLoaded)
+            return;
+
+        if (Game1.activeClickableMenu is not ItemGrabMenu itemGrabMenu)
+        {
+            this.PendingAnnouncement.Value = null;
+            this.SuppressedAnnouncement.Value = null;
+            return;
+        }
+
+        if (pending != null)
+        {
+            ManagedChest? currentChest = this.ChestFactory.GetChestFromMenu(itemGrabMenu);
+            if (currentChest == null || ChestFactory.GetBestMatch([currentChest], pending.Chest) == null)
+            {
+                this.PendingAnnouncement.Value = null;
+                this.SuppressedAnnouncement.Value = null;
+                return;
+            }
+
+            // Wait at least one full render frame before reading the inventory,
+            // because the menu's items may not yet reflect the new chest on the
+            // same frame the menu was opened.
+            if (pending.RenderFramesSeen++ < 1)
+            {
+                // Suppress slot narration during the wait so the user doesn't
+                // hear potentially stale item data.
+                int waitIndex = this.GetHoveredSlotIndex(itemGrabMenu.ItemsToGrabMenu);
+                if (waitIndex >= 0)
+                {
+                    string waitQuery = this.GetHoveredSlotQueryText(itemGrabMenu.ItemsToGrabMenu, waitIndex);
+                    this.StardewAccess.PrevMenuQueryText = $"{waitQuery}:{waitIndex}";
+                }
+                return;
+            }
+
+            int hoveredIndex = this.GetHoveredSlotIndex(itemGrabMenu.ItemsToGrabMenu);
+            if (hoveredIndex < 0)
+                return;
+
+            string queryText = this.GetHoveredSlotQueryText(itemGrabMenu.ItemsToGrabMenu, hoveredIndex);
+            string customQuery = $"{queryText}:{hoveredIndex}";
+
+            // Speak the full announcement directly instead of using the one-shot
+            // MenuPrefixNoQueryText, which is fragile because any intervening
+            // SayWithMenuChecker call can consume the prefix before the slot narration.
+            this.StardewAccess.Say($"{pending.Prefix}{queryText}", true);
+            this.StardewAccess.PrevMenuQueryText = customQuery;
+            this.SuppressedAnnouncement.Value = new SuppressedChestAnnouncement(itemGrabMenu, customQuery);
+            this.PendingAnnouncement.Value = null;
+            return;
+        }
+
+        SuppressedChestAnnouncement? suppressed = this.SuppressedAnnouncement.Value;
+        if (suppressed == null)
+            return;
+
+        if (!ReferenceEquals(itemGrabMenu, suppressed.Menu))
+        {
+            this.SuppressedAnnouncement.Value = null;
+            return;
+        }
+
+        int currentHoveredIndex = this.GetHoveredSlotIndex(itemGrabMenu.ItemsToGrabMenu);
+        if (currentHoveredIndex < 0)
+            return;
+
+        string currentQueryText = this.GetHoveredSlotQueryText(itemGrabMenu.ItemsToGrabMenu, currentHoveredIndex);
+        string currentCustomQuery = $"{currentQueryText}:{currentHoveredIndex}";
+        if (!string.Equals(currentCustomQuery, suppressed.Query, StringComparison.Ordinal))
+        {
+            this.SuppressedAnnouncement.Value = null;
+            return;
+        }
+
+        this.StardewAccess.PrevMenuQueryText = suppressed.Query;
+    }
+
+    /// <summary>Get the currently hovered slot index in the given inventory menu.</summary>
+    private int GetHoveredSlotIndex(InventoryMenu inventoryMenu)
+    {
+        int x = Game1.getMouseX(true);
+        int y = Game1.getMouseY(true);
+        for (int i = 0; i < inventoryMenu.inventory.Count; i++)
+        {
+            if (inventoryMenu.inventory[i].containsPoint(x, y))
+                return i;
+        }
+
+        return -1;
+    }
+
+    /// <summary>Get the Stardew Access query text for the currently hovered chest slot.</summary>
+    private string GetHoveredSlotQueryText(InventoryMenu inventoryMenu, int hoveredIndex)
+    {
+        if ((inventoryMenu.playerInventory || inventoryMenu.showGrayedOutSlots) && hoveredIndex >= inventoryMenu.actualInventory.Count)
+            return this.StardewAccess.Translate("inventory_util-locked_slot");
+
+        if (hoveredIndex >= inventoryMenu.actualInventory.Count || inventoryMenu.actualInventory[hoveredIndex] == null)
+            return this.StardewAccess.Translate("inventory_util-empty_slot");
+
+        Item item = inventoryMenu.actualInventory[hoveredIndex];
+        return this.StardewAccess.GetDetailsOfItem(item, giveExtraDetails: true);
     }
 
     /// <summary>Get the default chest to open when opening the menu.</summary>
@@ -402,4 +587,19 @@ internal class ModEntry : Mod
     /// <param name="LocationName">The location unique name that was last checked.</param>
     /// <param name="ChestName">The chest name found on the tile, if any.</param>
     private record ChestOnTile(Vector2 Tile, string LocationName, string? ChestName);
+
+    /// <summary>A pending chest announcement to prepend to the next resolved chest-slot narration.</summary>
+    /// <param name="Chest">The chest that should receive the announcement.</param>
+    /// <param name="Prefix">The text to prepend to the next chest-slot narration.</param>
+    private record PendingChestAnnouncement(ManagedChest Chest, string Prefix)
+    {
+        /// <summary>The number of render frames seen since this announcement was queued. The announcement
+        /// is deferred until at least one full render frame has passed, giving the menu inventory time to settle.</summary>
+        public int RenderFramesSeen { get; set; }
+    };
+
+    /// <summary>The exact chest-slot query to suppress for the active menu after a prefixed announcement was spoken.</summary>
+    /// <param name="Menu">The item grab menu whose chest slot should be suppressed.</param>
+    /// <param name="Query">The exact Stardew Access query for the spoken chest slot.</param>
+    private record SuppressedChestAnnouncement(ItemGrabMenu Menu, string Query);
 }

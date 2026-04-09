@@ -10,6 +10,7 @@ using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -55,6 +56,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
     /// <summary>The configured key bindings.</summary>
     private readonly ModConfigKeys Keys;
+
+    /// <summary>The Stardew Access integration.</summary>
+    protected StardewAccessIntegration StardewAccess { get; }
 
     /// <summary>The keybind for escaping the active element or menu.</summary>
     private readonly KeybindList EscapeKeybind = KeybindList.Parse($"{SButton.Escape}, {SButton.ControllerB}");
@@ -128,6 +132,20 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         ? [SButton.LeftWindows, SButton.RightWindows]
         : [SButton.LeftControl, SButton.RightControl];
 
+    /// <summary>The last spoken hover text within the overlay.</summary>
+    private string? LastHoverText;
+
+    /// <summary>The last spoken edit element key.</summary>
+    private string? LastEditElementKey;
+
+    /// <summary>The keyboard-focused edit navigation index.</summary>
+    private int EditNavIndex = -1;
+
+    /// <summary>The exact Stardew Access slot query to suppress on the first render after opening the edit form.</summary>
+    private string? PendingEditOpenSuppressionQuery;
+
+    /// <summary>Whether to announce "Text field open" after the next textbox draw, so it fires after Stardew Access's TextBoxPatch narration and overrides it.</summary>
+    private bool PendingTextFieldOpenAnnouncement;
 
     /*********
     ** Accessors
@@ -149,6 +167,11 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <inheritdoc />
     public event Action<ManagedChest>? OnAutomateOptionsChanged;
 
+    /// <summary>Reset the cached accessibility state between unrelated menus.</summary>
+    public static void ResetAccessibilityState()
+    {
+    }
+
 
     /*********
     ** Public methods
@@ -156,7 +179,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Open the search menu.</summary>
     private void ShowChestSearch()
     {
-        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys);
+        Game1.activeClickableMenu = new ChestSearchMenu(this.Chest, this.Chests, this.Keys, this.StardewAccess);
     }
 
     /// <summary>Sort the player's inventory.</summary>
@@ -170,6 +193,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <param name="chest">The chest to select.</param>
     public void SelectChest(ManagedChest chest)
     {
+        this.SuppressPreSwitchSlotNarration();
         this.OnChestSelected?.Invoke(chest);
     }
 
@@ -180,7 +204,6 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.OnChestSelected = null;
         base.Dispose();
     }
-
 
     /*********
     ** Protected methods
@@ -196,7 +219,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
     /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-    protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive)
+    protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, StardewAccessIntegration stardewAccess, bool showAutomateOptions, Func<bool> keepAlive)
         : base(events, input, reflection, keepAlive, assumeUiMode: true)
     {
         // data
@@ -211,6 +234,7 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p, HumanSortComparer.DefaultIgnoreCase).ToArray();
         this.Config = config;
         this.Keys = keys;
+        this.StardewAccess = stardewAccess;
 
         this.ReinitializeBaseComponents();
     }
@@ -223,6 +247,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         this.DrawCount++;
         Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
+
+        if (this.ActiveElement == Element.EditForm && (this.EditNavIndex >= 0 || this.IsAnyManagedTextboxSelected()))
+            this.MoveCursorOffMenu();
+
+        if (this.ActiveElement != Element.Menu)
+            this.SuppressHoveredSlotNarration(this.GetOverlayInventoryMenu());
 
         // access mode
         if (!this.ActiveElement.HasFlag(Element.EditForm))
@@ -285,6 +315,10 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                 topOffset += Math.Max(labelSize.Y + 7, textbox.Height);
             }
 
+            // Announce text field after textbox draws so we override Stardew Access's
+            // TextBoxPatch narration (which speaks the textbox content on first selection).
+            this.TryCompleteTextFieldOpenAnnouncement();
+
             // checkboxes
             topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest()).Y;
 
@@ -325,6 +359,16 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.DrawCursor();
     }
 
+    /// <summary>Apply any pending menu narration suppression before the underlying menu draw runs.</summary>
+    internal void PrepareMenuNarrationForRender()
+    {
+        if (!this.StardewAccess.IsLoaded || string.IsNullOrWhiteSpace(this.PendingEditOpenSuppressionQuery))
+            return;
+
+        this.StardewAccess.PrevMenuQueryText = this.PendingEditOpenSuppressionQuery;
+        this.PendingEditOpenSuppressionQuery = null;
+    }
+
     /****
     ** Event handlers
     ****/
@@ -341,7 +385,18 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             return;
 
         // check for textbox focus
-        bool anyTextboxSelected = Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null;
+        bool anyTextboxSelected = this.IsAnyManagedTextboxSelected() || (Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null);
+        if (this.ActiveElement == Element.EditForm && anyTextboxSelected)
+        {
+            this.SuppressConfiguredButtons(Game1.options.moveUpButton, e.Pressed);
+            this.SuppressConfiguredButtons(Game1.options.moveDownButton, e.Pressed);
+            this.SuppressConfiguredButtons(Game1.options.moveLeftButton, e.Pressed);
+            this.SuppressConfiguredButtons(Game1.options.moveRightButton, e.Pressed);
+        }
+
+        bool handledStardewAccessInput = this.TryHandleStardewAccessButtons(e, anyTextboxSelected);
+        if (handledStardewAccessInput)
+            return;
 
         // handle keys
         bool canNavigate = this.CanCloseChest && !anyTextboxSelected;
@@ -381,7 +436,11 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             case Element.CategoryList:
             case Element.EditForm:
                 if (this.EscapeKeybind.JustPressed())
+                {
                     this.ActiveElement = Element.Menu;
+                    this.EditNavIndex = -1;
+                    this.LastEditElementKey = null;
+                }
 
                 // always suppress in this context, since we'll handle text input ourselves
                 if (e.Pressed.Any())
@@ -409,6 +468,84 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     {
         foreach (SButton button in buttons)
             this.InputHelper.Suppress(button);
+    }
+
+    /// <summary>Handle Stardew Access-specific keybinds for the overlay.</summary>
+    private bool TryHandleStardewAccessButtons(ButtonsChangedEventArgs e, bool anyTextboxSelected)
+    {
+        if (!this.StardewAccess.IsLoaded || !e.Pressed.Any())
+            return false;
+
+        if (this.ActiveElement == Element.EditForm && anyTextboxSelected && e.Pressed.Contains(SButton.Enter))
+        {
+            this.DeselectManagedTextboxes();
+            this.EditNavIndex = -1;
+            this.LastEditElementKey = null;
+            this.InputHelper.Suppress(SButton.Enter);
+            return true;
+        }
+
+        if (this.ActiveElement == Element.EditForm && !anyTextboxSelected)
+        {
+            bool upPressed = this.IsConfiguredButtonPressed(Game1.options.moveUpButton, e.Pressed);
+            bool downPressed = this.IsConfiguredButtonPressed(Game1.options.moveDownButton, e.Pressed);
+            if (upPressed || downPressed)
+            {
+                this.SuppressConfiguredButtons(Game1.options.moveUpButton, e.Pressed);
+                this.SuppressConfiguredButtons(Game1.options.moveDownButton, e.Pressed);
+                this.SuppressConfiguredButtons(Game1.options.moveLeftButton, e.Pressed);
+                this.SuppressConfiguredButtons(Game1.options.moveRightButton, e.Pressed);
+
+                int direction = upPressed && !downPressed ? -1 : 1;
+                this.MoveEditSelection(direction);
+                return true;
+            }
+        }
+
+        if (this.IsStardewAccessLeftClickPressed())
+        {
+            if (this.ActiveElement == Element.EditForm && !anyTextboxSelected && this.TryActivateFocusedEditElement())
+            {
+                this.SuppressActiveKeybinds(this.StardewAccess.LeftClickMainKey);
+                this.SuppressActiveKeybinds(this.StardewAccess.LeftClickAlternateKey);
+                return true;
+            }
+
+            // In Menu mode, let Stardew Access handle the click natively so it reaches
+            // the underlying menu (e.g., for chest item transfer via Ctrl+Enter).
+            if (this.ActiveElement == Element.Menu)
+                return false;
+
+            this.ReceiveLeftClick(Game1.getMouseX(true), Game1.getMouseY(true));
+            this.SuppressActiveKeybinds(this.StardewAccess.LeftClickMainKey);
+            this.SuppressActiveKeybinds(this.StardewAccess.LeftClickAlternateKey);
+            return true;
+        }
+
+        if (this.StardewAccess.PrimaryInfoKey.JustPressed())
+        {
+            if (this.ActiveElement == Element.EditForm && anyTextboxSelected)
+            {
+                this.SuppressActiveKeybinds(this.StardewAccess.PrimaryInfoKey);
+                return true;
+            }
+
+            if (this.ActiveElement == Element.EditForm)
+            {
+                this.ActiveElement = Element.Menu;
+                this.EditNavIndex = -1;
+                this.LastEditElementKey = null;
+                this.StardewAccess.SayWithMenuChecker("Close", true);
+                this.SuppressActiveKeybinds(this.StardewAccess.PrimaryInfoKey);
+                return true;
+            }
+
+            this.OpenEdit();
+            this.SuppressActiveKeybinds(this.StardewAccess.PrimaryInfoKey);
+            return true;
+        }
+
+        return false;
     }
 
     /// <inheritdoc />
@@ -574,6 +711,9 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         if (!this.IsInitialized)
             return false;
 
+        if (this.StardewAccess.IsLoaded)
+            this.TrySpeakHoveredElement(x, y);
+
         switch (this.ActiveElement)
         {
             case Element.Menu:
@@ -707,6 +847,12 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
         this.ReinitializeBaseComponents();
     }
 
+    /// <summary>Get the overlay inventory menu which should be narrated for the selected chest, if any.</summary>
+    protected virtual InventoryMenu? GetOverlayInventoryMenu()
+    {
+        return null;
+    }
+
     /// <summary>Get the Y pixel offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
     /// <param name="menu">The menu for which the UI is being overlaid.</param>
     protected virtual int GetTopOffset(IClickableMenu menu)
@@ -777,7 +923,28 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
         // deselect textboxes
         if (value != Element.EditForm)
+        {
             this.DeselectManagedTextboxes();
+            this.PendingTextFieldOpenAnnouncement = false;
+        }
+
+        this.LastHoverText = null;
+        this.LastEditElementKey = null;
+        if (value == Element.EditForm)
+        {
+            List<(string key, string label, Rectangle bounds)> elements = this.GetEditElements();
+            if (elements.Count > 0)
+            {
+                (string key, string label, Rectangle bounds) target = elements[0];
+                this.EditNavIndex = 0;
+                this.MoveCursorOffMenu();
+                this.SpeakEditElement(target.key, target.label);
+            }
+        }
+        else
+        {
+            this.EditNavIndex = -1;
+        }
     }
 
     /// <summary>Exit the chest menu.</summary>
@@ -806,14 +973,302 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
             {
                 this.DeselectManagedTextboxes();
                 textbox.Select();
+                this.AnnounceTextFieldOpened();
             }
 
             return true;
         }
 
         // else deselect any current textbox
+        // Don't deselect if the click is outside the menu bounds (e.g. cursor was moved
+        // off-menu for accessibility) — this prevents spurious clicks from closing the textbox.
+        Rectangle menuBounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
+        if (this.IsAnyManagedTextboxSelected() && !menuBounds.Contains(x, y))
+            return false;
+
         this.DeselectManagedTextboxes();
         return false;
+    }
+
+    /// <summary>Get the hovered slot index for an inventory menu.</summary>
+    protected int GetHoveredSlotIndex(InventoryMenu inventoryMenu)
+    {
+        int x = Game1.getMouseX(true);
+        int y = Game1.getMouseY(true);
+        for (int i = 0; i < inventoryMenu.inventory.Count; i++)
+        {
+            if (inventoryMenu.inventory[i].containsPoint(x, y))
+                return i;
+        }
+
+        return -1;
+    }
+
+    /// <summary>Move keyboard focus through the edit controls.</summary>
+    private void MoveEditSelection(int direction)
+    {
+        var elements = this.GetEditElements();
+        if (elements.Count == 0)
+        {
+            this.EditNavIndex = -1;
+            return;
+        }
+
+        if (this.EditNavIndex < 0 || this.EditNavIndex >= elements.Count)
+            this.EditNavIndex = direction < 0 ? 0 : -1;
+
+        this.EditNavIndex += direction;
+        if (this.EditNavIndex < 0)
+            this.EditNavIndex = elements.Count - 1;
+        else if (this.EditNavIndex >= elements.Count)
+            this.EditNavIndex = 0;
+
+        var target = elements[this.EditNavIndex];
+        this.MoveCursorOffMenu();
+        this.SpeakEditElement(target.key, target.label);
+    }
+
+    /// <summary>Suppress Stardew Access' default hovered slot narration for the current slot in the given inventory menu.</summary>
+    protected void SuppressHoveredSlotNarration(InventoryMenu? inventoryMenu)
+    {
+        if (!this.StardewAccess.IsLoaded || this.ActiveElement == Element.Menu)
+            return;
+
+        if (inventoryMenu == null)
+            return;
+
+        int hoveredIndex = this.GetHoveredSlotIndex(inventoryMenu);
+        if (hoveredIndex < 0)
+            return;
+
+        this.SuppressHoveredSlotNarration(inventoryMenu, hoveredIndex);
+    }
+
+    /// <summary>Suppress Stardew Access' default hovered slot narration for the given inventory menu index.</summary>
+    protected void SuppressHoveredSlotNarration(InventoryMenu inventoryMenu, int hoveredIndex)
+    {
+        this.StardewAccess.PrevMenuQueryText = this.GetHoveredSlotCustomQuery(inventoryMenu, hoveredIndex);
+    }
+
+    /// <summary>Suppress any hovered slot narration immediately before switching to another chest.</summary>
+    protected virtual void SuppressPreSwitchSlotNarration()
+    {
+        InventoryMenu? inventoryMenu = this.GetOverlayInventoryMenu();
+        int hoveredIndex = inventoryMenu != null ? this.GetHoveredSlotIndex(inventoryMenu) : -1;
+        if (inventoryMenu != null && hoveredIndex >= 0)
+            this.SuppressHoveredSlotNarration(inventoryMenu, hoveredIndex);
+    }
+
+    /// <summary>Get the inventory menu and slot index that should be suppressed when the edit form opens.</summary>
+    protected virtual (InventoryMenu? Menu, int Index) GetEditOpenHoveredSlot()
+    {
+        InventoryMenu? inventoryMenu = this.GetOverlayInventoryMenu();
+        int hoveredIndex = inventoryMenu != null ? this.GetHoveredSlotIndex(inventoryMenu) : -1;
+        return (inventoryMenu, hoveredIndex);
+    }
+
+    /// <summary>Activate the currently focused edit element without relying on the cursor position.</summary>
+    private bool TryActivateFocusedEditElement()
+    {
+        List<(string key, string label, Rectangle bounds)> elements = this.GetEditElements();
+        if (this.EditNavIndex < 0 || this.EditNavIndex >= elements.Count)
+            return false;
+
+        (string key, string ignoredLabel, Rectangle ignoredBounds) target = elements[this.EditNavIndex];
+        switch (target.key)
+        {
+            case "edit-name":
+                this.DeselectManagedTextboxes();
+                this.EditNameField.Select();
+                this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
+                return true;
+
+            case "edit-category":
+                this.DeselectManagedTextboxes();
+                this.EditCategoryField.Select();
+                this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
+                return true;
+
+            case "edit-order":
+                this.DeselectManagedTextboxes();
+                this.EditOrderField.Select();
+                this.MoveCursorOffMenu();
+                this.AnnounceTextFieldOpened();
+                return true;
+
+            case "edit-hide":
+                this.EditHideChestField.Toggle();
+                this.SpeakEditElement(target.key, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest());
+                return true;
+
+            case "edit-save":
+                this.SaveEdit();
+                this.ActiveElement = Element.Menu;
+                return true;
+
+            case "edit-reset":
+                this.ResetEdit();
+                return true;
+
+            case "edit-exit":
+                this.ActiveElement = Element.Menu;
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Get the edit elements in keyboard navigation order.</summary>
+    private List<(string key, string label, Rectangle bounds)> GetEditElements()
+    {
+        List<(string key, string label, Rectangle bounds)> elements = [];
+        elements.Add(("edit-name", I18n.Label_Name(), this.EditNameField.GetBounds()));
+        elements.Add(("edit-category", I18n.Label_Category(), this.EditCategoryField.GetBounds()));
+        elements.Add(("edit-order", I18n.Label_Order(), this.EditOrderField.GetBounds()));
+        elements.Add(("edit-hide", this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest(), this.EditHideChestField.GetBounds()));
+
+        if (this.EditAutomateStore != null)
+            elements.Add(("edit-automate-store", I18n.Label_AutomateStore(), this.EditAutomateStore.Bounds));
+        if (this.EditAutomateTake != null)
+            elements.Add(("edit-automate-take", I18n.Label_AutomateTake(), this.EditAutomateTake.Bounds));
+
+        elements.Add(("edit-save", I18n.Button_Save(), this.EditSaveButtonArea.bounds));
+        elements.Add(("edit-reset", I18n.Button_Reset(), this.EditResetButtonArea.bounds));
+        elements.Add(("edit-exit", "Close", this.EditExitButton.bounds));
+        return elements;
+    }
+
+    /// <summary>Speak an edit element label once, including its current value when useful.</summary>
+    private void SpeakEditElement(string key, string label)
+    {
+        if (key == this.LastEditElementKey)
+            return;
+
+        this.LastEditElementKey = key;
+        this.SuppressHoveredSlotNarration(this.GetOverlayInventoryMenu());
+        this.StardewAccess.SayWithMenuChecker(this.GetEditElementSpeech(key, label), true, $"edit-element:{key}");
+    }
+
+    /// <summary>Get the speech text for an edit element.</summary>
+    private string GetEditElementSpeech(string key, string label)
+    {
+        string value = key switch
+        {
+            "edit-name" => this.GetTextFieldSpeechValue(this.EditNameField.Text),
+            "edit-category" => this.GetTextFieldSpeechValue(this.EditCategoryField.Text),
+            "edit-order" => this.GetTextFieldSpeechValue(this.EditOrderField.Text),
+            "edit-hide" => this.EditHideChestField.Value ? "checked" : "not checked",
+            _ => string.Empty
+        };
+
+        return string.IsNullOrWhiteSpace(value)
+            ? label
+            : $"{label}, {value}";
+    }
+
+    /// <summary>Announce that a text field is now active for editing.</summary>
+    /// <remarks>This defers the announcement to the next draw cycle so it fires after Stardew Access's
+    /// TextBoxPatch narration (which speaks the textbox content on the first draw after selection) and
+    /// overrides it via interrupt.</remarks>
+    private void AnnounceTextFieldOpened()
+    {
+        this.LastEditElementKey = null;
+        this.PendingTextFieldOpenAnnouncement = true;
+    }
+
+    /// <summary>If a text-field-open announcement is pending, speak it now (after the textbox has been drawn).</summary>
+    private void TryCompleteTextFieldOpenAnnouncement()
+    {
+        if (!this.PendingTextFieldOpenAnnouncement)
+            return;
+
+        this.PendingTextFieldOpenAnnouncement = false;
+        this.StardewAccess.SayWithMenuChecker("Text field open. Enter to exit.", true, "edit-textbox-open");
+    }
+
+    /// <summary>Get the speech value for a text field.</summary>
+    private string GetTextFieldSpeechValue(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? "blank"
+            : value;
+    }
+
+    /// <summary>Get the current hovered chest-slot narration and its matching Stardew Access query text.</summary>
+    private (string ItemText, string QueryText) GetHoveredChestSlotNarration(InventoryMenu inventoryMenu, int hoveredIndex)
+    {
+        if ((inventoryMenu.playerInventory || inventoryMenu.showGrayedOutSlots) && hoveredIndex >= inventoryMenu.actualInventory.Count)
+        {
+            string lockedText = this.StardewAccess.Translate("inventory_util-locked_slot");
+            return (lockedText, lockedText);
+        }
+
+        if (hoveredIndex >= inventoryMenu.actualInventory.Count || inventoryMenu.actualInventory[hoveredIndex] == null)
+        {
+            string emptyText = this.StardewAccess.Translate("inventory_util-empty_slot");
+            return (emptyText, emptyText);
+        }
+
+        Item item = inventoryMenu.actualInventory[hoveredIndex];
+        string itemText = this.StardewAccess.GetDetailsOfItem(item, giveExtraDetails: true);
+        if (inventoryMenu.highlightMethod(item) == false)
+        {
+            string suffix = this.StardewAccess.Translate("item-suffix-not_usable_here", new { content = "" });
+            int firstCommaIndex = itemText.IndexOf(", ", StringComparison.Ordinal);
+            itemText = !string.IsNullOrWhiteSpace(suffix)
+                ? firstCommaIndex >= 0
+                    ? itemText.Insert(firstCommaIndex, suffix)
+                    : itemText + suffix
+                : itemText;
+        }
+
+        return (itemText, itemText);
+    }
+
+    /// <summary>Get the exact Stardew Access custom query string for a hovered inventory slot.</summary>
+    private string GetHoveredSlotCustomQuery(InventoryMenu inventoryMenu, int hoveredIndex)
+    {
+        (string ignoredItemText, string queryText) = this.GetHoveredChestSlotNarration(inventoryMenu, hoveredIndex);
+        return $"{queryText}:{hoveredIndex}";
+    }
+
+    /// <summary>Get whether any configured button was pressed.</summary>
+    private bool IsConfiguredButtonPressed(InputButton[] configuredButtons, IEnumerable<SButton> pressed)
+    {
+        return configuredButtons.Any(inputButton => pressed.Contains(inputButton.ToSButton()));
+    }
+
+    /// <summary>Suppress any configured buttons that are currently pressed.</summary>
+    private void SuppressConfiguredButtons(InputButton[] configuredButtons, IEnumerable<SButton> pressed)
+    {
+        foreach (InputButton inputButton in configuredButtons)
+        {
+            SButton button = inputButton.ToSButton();
+            if (pressed.Contains(button))
+                this.InputHelper.Suppress(button);
+        }
+    }
+
+    /// <summary>Suppress the currently active keys in a keybind list.</summary>
+    private void SuppressActiveKeybinds(KeybindList keybinds)
+    {
+        foreach (SButton button in Enum.GetValues<SButton>())
+        {
+            if (button == SButton.None)
+                continue;
+
+            if (keybinds.IsDown() && this.InputHelper.IsDown(button))
+                this.InputHelper.Suppress(button);
+        }
+    }
+
+    /// <summary>Get whether a Stardew Access left-click keybind was pressed.</summary>
+    private bool IsStardewAccessLeftClickPressed()
+    {
+        return this.StardewAccess.LeftClickMainKey.JustPressed()
+            || this.StardewAccess.LeftClickAlternateKey.JustPressed();
     }
 
     /// <summary>Get the index of a chest in the selected category.</summary>
@@ -862,14 +1317,25 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     /// <summary>Reset and display the edit screen.</summary>
     private void OpenEdit()
     {
+        (InventoryMenu? inventoryMenu, int hoveredIndex) = this.GetEditOpenHoveredSlot();
+
         this.EditNameField.Text = this.Chest.DisplayName;
         this.EditCategoryField.Text = this.Chest.DisplayCategory;
         this.EditOrderField.Text = this.Chest.Order?.ToString() ?? string.Empty;
         this.EditHideChestField.Value = this.Chest.IsIgnored;
         this.EditAutomateStore?.TrySelect(this.Chest.AutomateStoreItems);
         this.EditAutomateTake?.TrySelect(this.Chest.AutomateTakeItems);
+        this.StardewAccess.MenuPrefixNoQueryText = "";
 
         this.ActiveElement = Element.EditForm;
+        if (inventoryMenu != null && hoveredIndex >= 0)
+        {
+            this.SuppressHoveredSlotNarration(inventoryMenu, hoveredIndex);
+            this.PendingEditOpenSuppressionQuery = this.GetHoveredSlotCustomQuery(inventoryMenu, hoveredIndex);
+        }
+
+        Rectangle nameBounds = this.EditNameField.GetBounds();
+        Game1.setMousePosition(nameBounds.Center.X, nameBounds.Center.Y);
     }
 
     /// <summary>Get the chests in a given category.</summary>
@@ -888,6 +1354,62 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     {
         foreach (ValidatedTextBox textbox in this.ManagedTextboxes)
             textbox.Selected = false;
+
+        if (this.ManagedTextboxes.Any(textbox => ReferenceEquals(textbox, Game1.keyboardDispatcher?.Subscriber)))
+            Game1.keyboardDispatcher.Subscriber = null;
+    }
+
+    /// <summary>Get whether any managed textbox is currently selected.</summary>
+    private bool IsAnyManagedTextboxSelected()
+    {
+        return this.ManagedTextboxes.Any(p => p.Selected);
+    }
+
+    /// <summary>Speak the hovered overlay element, if any.</summary>
+    private void TrySpeakHoveredElement(int x, int y)
+    {
+        if (this.ActiveElement == Element.EditForm && this.EditNavIndex >= 0)
+            return;
+
+        string? text = null;
+        string? query = null;
+
+        switch (this.ActiveElement)
+        {
+            case Element.EditForm:
+                foreach ((string key, string label, Rectangle bounds) in this.GetEditElements())
+                {
+                    if (!bounds.Contains(x, y))
+                        continue;
+
+                    text = label;
+                    query = $"edit-hover:{key}";
+                    break;
+                }
+                break;
+
+            case Element.Menu:
+                if (this.EditButton.containsPoint(x, y))
+                {
+                    text = I18n.Button_EditChest();
+                    query = "menu-hover:edit";
+                }
+                break;
+        }
+
+        if (string.IsNullOrWhiteSpace(text) || query == this.LastHoverText)
+            return;
+
+        this.LastHoverText = query;
+        this.StardewAccess.SayWithMenuChecker(text, true, query);
+    }
+
+    /// <summary>Move the cursor away from the menu inventories so screen reader hover doesn't hit slots behind the overlay.</summary>
+    private void MoveCursorOffMenu()
+    {
+        int x = Math.Max(0, this.Menu.xPositionOnScreen - Game1.tileSize);
+        int y = Math.Max(0, this.Menu.yPositionOnScreen - Game1.tileSize);
+        Game1.setMousePosition(x, y);
     }
 
     /// <summary>Draw a checkbox to the screen, including any position updates needed.</summary>

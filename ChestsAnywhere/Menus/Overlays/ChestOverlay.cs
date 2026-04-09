@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -19,7 +20,7 @@ internal class ChestOverlay : BaseChestOverlay
     /// <summary>The underlying chest menu.</summary>
     private readonly ItemGrabMenu Menu;
 
-    /// <summary>The underlying menu's player inventory submenu.</summary>
+    /// <summary>The underlying menu's chest inventory submenu.</summary>
     private readonly InventoryMenu MenuInventoryMenu;
 
     /// <summary>The default highlight function for the chest items.</summary>
@@ -51,13 +52,13 @@ internal class ChestOverlay : BaseChestOverlay
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
-    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-        : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
+    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, StardewAccessIntegration stardewAccess, bool showAutomateOptions)
+        : base(menu, chest, chests, config, keys, events, input, reflection, stardewAccess, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
     {
         this.Menu = menu;
         this.MenuInventoryMenu = menu.ItemsToGrabMenu;
-        this.DefaultChestHighlighter = menu.inventory.highlightMethod;
-        this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultChestHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultInventoryHighlighter = menu.inventory.highlightMethod;
         this.WasColorPickerShown = this.IsColorPickerShown(menu);
     }
 
@@ -135,12 +136,21 @@ internal class ChestOverlay : BaseChestOverlay
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(this.HoverText) && this.StardewAccess.IsLoaded)
+            this.StardewAccess.SayWithMenuChecker(this.HoverText, true, $"chests-hover:{this.HoverText}");
+
         return base.ReceiveCursorHover(x, y);
     }
 
     /// <inheritdoc />
     protected override void DrawUi(SpriteBatch batch)
     {
+        if (this.ActiveElement != Element.Menu)
+        {
+            this.SuppressHoveredSlotNarration(this.Menu.ItemsToGrabMenu);
+            this.SuppressHoveredSlotNarration(this.Menu.inventory);
+        }
+
         if (!this.ActiveElement.HasFlag(Element.EditForm))
         {
             float navOpacity = this.CanCloseChest ? 1f : 0.5f;
@@ -180,14 +190,35 @@ internal class ChestOverlay : BaseChestOverlay
     {
         if (clickable)
         {
-            this.Menu.inventory.highlightMethod = this.DefaultChestHighlighter;
-            this.MenuInventoryMenu.highlightMethod = this.DefaultInventoryHighlighter;
+            this.MenuInventoryMenu.highlightMethod = this.DefaultChestHighlighter;
+            this.Menu.inventory.highlightMethod = this.DefaultInventoryHighlighter;
         }
         else
         {
-            this.Menu.inventory.highlightMethod = _ => false;
             this.MenuInventoryMenu.highlightMethod = _ => false;
+            this.Menu.inventory.highlightMethod = _ => false;
         }
+    }
+
+    /// <inheritdoc />
+    protected override void SuppressPreSwitchSlotNarration()
+    {
+        base.SuppressPreSwitchSlotNarration();
+        this.SuppressHoveredSlotNarration(this.Menu.inventory);
+    }
+
+    /// <inheritdoc />
+    protected override (InventoryMenu? Menu, int Index) GetEditOpenHoveredSlot()
+    {
+        int chestHoveredIndex = this.GetHoveredSlotIndex(this.MenuInventoryMenu);
+        if (chestHoveredIndex >= 0)
+            return (this.MenuInventoryMenu, chestHoveredIndex);
+
+        int playerHoveredIndex = this.GetHoveredSlotIndex(this.Menu.inventory);
+        if (playerHoveredIndex >= 0)
+            return (this.Menu.inventory, playerHoveredIndex);
+
+        return (null, -1);
     }
 
     /// <inheritdoc />
@@ -219,5 +250,11 @@ internal class ChestOverlay : BaseChestOverlay
     private bool IsColorPickerShown(ItemGrabMenu menu)
     {
         return menu.chestColorPicker?.visible ?? false;
+    }
+
+    /// <inheritdoc />
+    protected override InventoryMenu? GetOverlayInventoryMenu()
+    {
+        return this.MenuInventoryMenu;
     }
 }

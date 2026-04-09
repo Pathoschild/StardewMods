@@ -1,5 +1,6 @@
 using System;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -36,8 +37,8 @@ internal class ShopMenuOverlay : BaseChestOverlay
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
-    public ShopMenuOverlay(ShopMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-        : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ShopMenu)
+    public ShopMenuOverlay(ShopMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, StardewAccessIntegration stardewAccess, bool showAutomateOptions)
+        : base(menu, chest, chests, config, keys, events, input, reflection, stardewAccess, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ShopMenu)
     {
         this.Menu = menu;
         this.DefaultPurchaseFilter = menu.canPurchaseCheck;
