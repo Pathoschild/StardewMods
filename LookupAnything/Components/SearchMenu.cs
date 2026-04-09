@@ -88,6 +88,9 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     /// <summary>Whether the on-screen keyboard was open on the last tick.</summary>
     private bool WasKeyboardOpen;
 
+    /// <summary>The last narrated focus query in the search menu.</summary>
+    private string? LastSpokenFocusQuery;
+
 
     /*********
     ** Public methods
@@ -173,7 +176,12 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         if (key == Keys.Escape)
         {
             if (this.SearchTextbox.Selected)
+            {
                 this.SearchTextbox.Selected = false; // deselect search box first, to allow for key navigation
+                this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
+                this.LastSpokenFocusQuery = null;
+                this.StardewAccess.SayMenuElement(this.SearchTextboxClickableArea, interrupt: false);
+            }
             else
                 this.exitThisMenu();
             return;
@@ -518,6 +526,8 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         {
             if (this.ScrollIntoView(this.currentlySnappedComponent))
                 this.SnapToSelectedComponent = true;
+
+            this.SpeakFocusedComponent();
         }
 
         // toggle textbox selection
@@ -636,16 +646,27 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         // update screen reader text
         ClickableComponent searchBox = this.SearchTextboxClickableArea;
         if (string.IsNullOrWhiteSpace(search))
+        {
             searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchEmpty();
+            this.LastSpokenFocusQuery = null;
+        }
         else if (this.SearchResults.Length == 0)
+        {
             searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchNoResults(search: search);
+            this.LastSpokenFocusQuery = null;
+        }
         else
+        {
             searchBox.ScreenReaderText = I18n.SearchMenu_ScreenReader_SearchResults(search: search, count: this.SearchResults.Length);
+            this.LastSpokenFocusQuery = null;
+        }
 
         // reset controller snap elements
         this.StardewAccess.SayMenuElement(searchBox);
 
         this.populateClickableComponentList();
+        this.setCurrentlySnappedComponentTo(SearchMenu.SearchBoxId);
+        this.SnapToSelectedComponent = true;
     }
 
     /// <summary>Update the layout dimensions based on the current game scale.</summary>
@@ -677,5 +698,19 @@ internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
         this.initializeUpperRightCloseButton();
         this.upperRightCloseButton.myID = IClickableMenu.upperRightCloseButton_ID;
         this.upperRightCloseButton.downNeighborID = ClickableComponent.CUSTOM_SNAP_BEHAVIOR;
+    }
+
+    /// <summary>Speak the currently focused search-menu component once.</summary>
+    private void SpeakFocusedComponent()
+    {
+        if (this.currentlySnappedComponent == null)
+            return;
+
+        string query = $"lookup-search-focus:{this.currentlySnappedComponent.myID}";
+        if (string.Equals(query, this.LastSpokenFocusQuery, StringComparison.Ordinal))
+            return;
+
+        this.LastSpokenFocusQuery = query;
+        this.StardewAccess.SayMenuElement(this.currentlySnappedComponent);
     }
 }

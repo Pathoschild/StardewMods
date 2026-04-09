@@ -45,4 +45,18 @@ internal class StardewAccessIntegration : BaseIntegration<IStardewAccessApi>
             "saying menu element"
         );
     }
+
+    /// <summary>Register a custom menu type so Stardew Access uses the mod's own accessibility handling for it.</summary>
+    /// <param name="fullNameOfClass">The full type name of the custom menu.</param>
+    public void RegisterCustomMenuAsAccessible(string fullNameOfClass)
+    {
+        this.SafelyCallApi(
+            api =>
+            {
+                api.RegisterCustomMenuAsAccessible(fullNameOfClass);
+                return true;
+            },
+            "registering a custom accessible menu"
+        );
+    }
 }

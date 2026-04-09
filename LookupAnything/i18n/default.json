@@ -32,6 +32,9 @@
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{price}}g for stack of {{count}}",
     "generic.show-x-results": "show {{count}} results",
+    "screen-reader.list-expand-hint": "right to expand",
+    "screen-reader.list-collapse-hint": "left to collapse",
+    "screen-reader.list-position": "{{current}} of {{total}}",
 
     // types
     "type.achievement": "Achievement",

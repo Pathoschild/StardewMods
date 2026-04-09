@@ -125,6 +125,7 @@ internal class ModEntry : Mod
         this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
         this.TargetFactory = new TargetFactory(this.Monitor, this.Helper.Reflection, this.GameHelper, () => this.Config, () => this.Config.EnableTileLookups);
         this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
+        LookupMenuScreenReader.Initialize(this.GameHelper.StardewAccess, this.Helper.Input);
 
         // add config UI
         this.RegisterConfigMenu();
@@ -163,6 +164,8 @@ internal class ModEntry : Mod
 
         this.Monitor.InterceptErrors("handling your input", () =>
         {
+            LookupMenuScreenReader.HandleButtonsChanged(e);
+
             ModConfigKeys keys = this.Keys;
 
             // pressed
@@ -216,6 +219,11 @@ internal class ModEntry : Mod
         {
             if (e.NewMenu == null && (e.OldMenu is LookupMenu or SearchMenu) && this.PreviousMenus.Value.Any())
                 Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
+        });
+
+        this.Monitor.InterceptErrors("handling accessibility menu state", () =>
+        {
+            LookupMenuScreenReader.OnMenuChanged(e.NewMenu);
         });
     }
 
