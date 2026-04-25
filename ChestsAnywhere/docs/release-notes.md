@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed dressers or fish tanks becoming temporarily non-interactable if you open their inventory, then navigate to another chest before closing the menu.
+* Fixed support for shipping bins in custom locations.
 * Improved translations. Thanks to jjongleee (updated Korean)!
 
 ## 1.30.1

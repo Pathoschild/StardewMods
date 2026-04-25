@@ -286,14 +286,14 @@ internal class ChestFactory
         switch (menu)
         {
             case ItemGrabMenu itemGrabMenu:
-                inventory = this.GetInventoryFromContext(itemGrabMenu.context);
+                inventory = this.GetInventoryFromContext(itemGrabMenu.context) ?? itemGrabMenu.ItemsToGrabMenu.actualInventory;
                 forLocation = this.GetLocationFromContext(itemGrabMenu.context);
                 tile = this.GetTileFromContext(itemGrabMenu.context);
                 chest = itemGrabMenu.context as SObject;
                 break;
 
             case ShopMenu shopMenu:
-                inventory = this.GetInventoryFromContext(shopMenu.source);
+                inventory = this.GetInventoryFromContext(shopMenu.source) ?? shopMenu.inventory.actualInventory;
                 forLocation = this.GetLocationFromContext(shopMenu.source);
                 tile = this.GetTileFromContext(shopMenu.source);
                 chest = shopMenu.source as SObject;
