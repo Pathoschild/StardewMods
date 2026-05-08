@@ -1170,7 +1170,6 @@
  <objectgroup id="4" name="Back">
   <object id="263" name="TileData" x="48" y="1584" width="16" height="16">
    <properties>
-    <property name="TileDesc" value="doors,Central Station,tile.central-station-warp.name,Pathoschild.CentralStation.Content"/>
     <property name="TouchAction" value="Warp Pathoschild.CentralStation_CentralStation 3 13"/>
    </properties>
   </object>
@@ -1179,148 +1178,111 @@
   <object id="242" name="TileData" x="560" y="112" width="80" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation TicketBooth"/>
-    <property name="TileDesc" value="interactables,Ticket Counter,tile.ticket-counter.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="244" name="TileData" x="880" y="384" width="16" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation GiftShop"/>
-    <property name="TileDesc" value="interactables,Gift Shop,tile.gift-shop.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="245" name="TileData" x="96" y="192" width="32" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation PopUpShop"/>
-    <property name="TileDesc" value="interactables,Vendor Shop,tile.vendor-shop.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="247" name="TileData" x="272" y="192" width="32" height="16">
    <properties>
     <property name="Action" value="OpenShop Pathoschild.CentralStation_FoodCourt"/>
-    <property name="TileDesc" value="interactables,Food Court,tile.food-court.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="249" name="TileData" x="160" y="208" width="32" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation ColaMachine"/>
-    <property name="TileDesc" value="interactables,Joja Cola Machine 2,tile.joja-cola-machine-2.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="250" name="TileData" x="208" y="208" width="32" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation ColaMachine"/>
-    <property name="TileDesc" value="interactables,Joja Cola Machine 1,tile.joja-cola-machine-1.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="252" name="TileData" x="720" y="416" width="16" height="32">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 4,tile.bookshelf-4.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="253" name="TileData" x="960" y="192" width="80" height="16">
    <properties>
     <property name="Action" value="Message Pathoschild.CentralStation_TransitAreaDoors"/>
-    <property name="TileDesc" value="doors,Transit Area Doors,tile.transit-area-doors.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="254" name="TileData" x="992" y="240" width="16" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation TicketMachine"/>
-    <property name="TileDesc" value="interactables,Ticket Machine,tile.ticket-machine.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="255" name="TileData" x="576" y="560" width="48" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation ExitDoor"/>
-    <property name="TileDesc" value="doors,Exit Door,tile.exit-door.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="256" name="TileData" x="464" y="416" width="16" height="32">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 5,tile.bookshelf-5.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="257" name="TileData" x="48" y="288" width="16" height="32">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 6,tile.bookshelf-6.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="259" name="TileData" x="1072" y="208" width="48" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 1,tile.bookshelf-1.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="260" name="TileData" x="880" y="208" width="48" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 2,tile.bookshelf-2.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="261" name="TileData" x="1056" y="320" width="32" height="32">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation Bookshelf"/>
-    <property name="TileDesc" value="decor,Bookshelf 3,tile.bookshelf-3.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="262" name="TileData" x="48" y="192" width="16" height="16">
    <properties>
     <property name="Action" value="Warp 3 98 Pathoschild.CentralStation_CentralStation"/>
-    <property name="TileDesc" value="doors,Staff Room Door,tile.staff-room-door.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="264" name="TileData" x="32" y="1456" width="16" height="16">
    <properties>
     <property name="Action" value="Message Pathoschild.CentralStation_EmployeeLockers"/>
-    <property name="TileDesc" value="interactables,Employee Locker 1,tile.staff-room-employee-locker-1.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="265" name="TileData" x="96" y="1456" width="16" height="16">
    <properties>
     <property name="Action" value="Message Pathoschild.CentralStation_EmployeeFridge"/>
-    <property name="TileDesc" value="decor,Employee Fridge,tile.staff-room-employee-fridge.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="266" name="TileData" x="48" y="1456" width="16" height="16">
    <properties>
     <property name="Action" value="OpenShop Pathoschild.CentralStation_Locker"/>
-    <property name="TileDesc" value="interactables,Employee Locker 2,tile.staff-room-employee-locker-2.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="267" name="TileData" x="336" y="352" width="16" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation GarbageCan FoodCourt"/>
-    <property name="TileDesc" value="decor,Trash Can 3,tile.trash-can-3.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="268" name="TileData" x="720" y="240" width="16" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation GarbageCan TicketArea"/>
-    <property name="TileDesc" value="decor,Trash Can 2,tile.trash-can-2.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
   <object id="269" name="TileData" x="1136" y="256" width="16" height="16">
    <properties>
     <property name="Action" value="Pathoschild.CentralStation GarbageCan GiftShop"/>
-    <property name="TileDesc" value="decor,Trash Can 1,tile.trash-can-1.name,Pathoschild.CentralStation.Content"/>
-   </properties>
-  </object>
-  <object id="280" name="TileData" x="272" y="400" width="48" height="16">
-   <properties>
-    <property name="TileDesc" value="decor,Piano,tile.piano.name,Pathoschild.CentralStation.Content"/>
-   </properties>
-  </object>
-  <object id="281" name="TileData" x="288" y="416" width="16" height="16">
-   <properties>
-    <property name="TileDesc" value="decor,Green Stool,tile.green-stool.name,Pathoschild.CentralStation.Content"/>
-   </properties>
-  </object>
-  <object id="282" name="TileData" x="496" y="496" width="16" height="16">
-   <properties>
-    <property name="TileDesc" value="decor,Pink Suitcase,furniture.suitcase-pink.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
  </objectgroup>

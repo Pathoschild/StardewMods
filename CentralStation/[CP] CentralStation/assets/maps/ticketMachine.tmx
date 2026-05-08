@@ -42,7 +42,6 @@
   <object id="274" name="TileData" x="0" y="16" width="16" height="16">
    <properties>
     <property name="Action" value="CentralStation Train"/>
-    <property name="TileDesc" value="interactables,Ticket Machine,tile.ticket-machine.name,Pathoschild.CentralStation.Content"/>
    </properties>
   </object>
  </objectgroup>
