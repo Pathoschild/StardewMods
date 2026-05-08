@@ -1,0 +1,317 @@
+/*
+
+    This file describes the tiles of the Central Station map which can be exposed to the screen readers via Stardew Access
+
+*/
+{
+    "$schema": "https://smapi.io/schemas/content-patcher.json",
+
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "shoaib.stardewaccess/AccessibleTilesData",
+            "Entries": {
+                "shoaib.stardewaccess.cp": {
+                    "Maps": [
+                        {
+                            "Id": "Pathoschild.CentralStation_CentralStation",
+                            "Tiles": [
+                                {
+                                    "DisplayName": "{{i18n:tile.transit-area-doors.name}}",
+                                    "X": [ 60, 61, 62, 63, 64 ],
+                                    "Y": [ 12 ],
+                                    "Category": "doors"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 67, 68, 69 ],
+                                    "Y": [ 13 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 55, 56, 57 ],
+                                    "Y": [ 13 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 66, 67 ],
+                                    "Y": [ 20, 21 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 45 ],
+                                    "Y": [ 26, 27 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 29 ],
+                                    "Y": [ 26, 27 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.bookshelf.name}}",
+                                    "X": [ 3 ],
+                                    "Y": [ 18, 19 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.ticket-machine.name}}",
+                                    "X": [ 62 ],
+                                    "Y": [ 15 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.trash-can.name}}",
+                                    "X": [ 71 ],
+                                    "Y": [ 16 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.trash-can.name}}",
+                                    "X": [ 45 ],
+                                    "Y": [ 15 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.trash-can.name}}",
+                                    "X": [ 21 ],
+                                    "Y": [ 22 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.gift-shop.name}}",
+                                    "X": [ 55 ],
+                                    "Y": [ 24 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.ticket-counter.name}}",
+                                    "X": [ 35, 36, 37, 38, 39 ],
+                                    "Y": [ 7 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.suitcase-pink.name}}",
+                                    "X": [ 31 ],
+                                    "Y": [ 31 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.exit-door.name}}",
+                                    "X": [ 36, 37, 38 ],
+                                    "Y": [ 35 ],
+                                    "Category": "doors"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.food-court.name}}",
+                                    "X": [ 17, 18 ],
+                                    "Y": [ 12 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.vendor-shop.name}}",
+                                    "X": [ 6, 7 ],
+                                    "Y": [ 12 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.joja-cola-machine.name}}",
+                                    "X": [ 10, 11 ],
+                                    "Y": [ 13 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.joja-cola-machine.name}}",
+                                    "X": [ 13, 14 ],
+                                    "Y": [ 13 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.staff-room-door.name}}",
+                                    "X": [ 3 ],
+                                    "Y": [ 12 ],
+                                    "Category": "doors"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.piano.name}}",
+                                    "X": [ 17, 18, 19 ],
+                                    "Y": [ 25 ],
+                                    "Category": "decor"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.green-stool.name}}",
+                                    "X": [ 18 ],
+                                    "Y": [ 26 ],
+                                    "Category": "decor"
+                                },
+                                /* Staff Room */
+                                {
+                                    "DisplayName": "{{i18n:tile.central-station-warp.name}}",
+                                    "X": [ 3 ],
+                                    "Y": [ 99 ],
+                                    "Category": "doors"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.staff-room-employee-locker-1.name}}",
+                                    "X": [ 2 ],
+                                    "Y": [ 91 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.staff-room-employee-locker-2.name}}",
+                                    "X": [ 3 ],
+                                    "Y": [ 91 ],
+                                    "Category": "interactables"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tile.staff-room-employee-fridge.name}}",
+                                    "X": [ 6 ],
+                                    "Y": [ 91 ],
+                                    "Category": "decor"
+                                },
+                                /* NPCs */
+                                {
+                                    "DisplayName": "{{i18n:tourist.young-boy.name}}",
+                                    "X": [ 9 ],
+                                    "Y": [ 26 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.black-dress-woman.name}}",
+                                    "X": [ 39 ],
+                                    "Y": [ 22 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.drink-man.name}}",
+                                    "X": [ 58 ],
+                                    "Y": [ 22 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.sunglasses-man.name}}",
+                                    "X": [ 0 ],
+                                    "Y": [ 0 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.top-hat-man.name}}",
+                                    "X": [ 30 ],
+                                    "Y": [ 13 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.strong-man.name}}",
+                                    "X": [ 70 ],
+                                    "Y": [ 27 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.desert-racer-man.name}}",
+                                    "X": [ 9 ],
+                                    "Y": [ 22 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.desert-scholar-man.name}}",
+                                    "X": [ 66 ],
+                                    "Y": [ 22 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.flamingo.name}}",
+                                    "X": [ 30 ],
+                                    "Y": [ 10 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.shrouded-figure.name}}",
+                                    "X": [ 65 ],
+                                    "Y": [ 24 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.welwick.name}}",
+                                    "X": [ 70 ],
+                                    "Y": [ 22 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.cashier-girl.name}}",
+                                    "X": [ 39 ],
+                                    "Y": [ 28 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.governor.name}}",
+                                    "X": [ 19 ],
+                                    "Y": [ 19 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.lupini.name}}",
+                                    "X": [ 7 ],
+                                    "Y": [ 19 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.red-cap-guy.name}}",
+                                    "X": [ 33 ],
+                                    "Y": [ 27 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.shorts-man.name}}",
+                                    "X": [ 44 ],
+                                    "Y": [ 14 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.red-pirate.name}}",
+                                    "X": [ 6 ],
+                                    "Y": [ 17 ],
+                                    "Category": "npcs"
+                                },
+                                {
+                                    "DisplayName": "{{i18n:tourist.grim-pirate.name}}",
+                                    "X": [ 38 ],
+                                    "Y": [ 8 ],
+                                    "Category": "npcs"
+                                },
+                                /* TODO What's his location??
+                                {
+                                    "DisplayName": "{{i18n:tourist.blackgull-pirate.name}}",
+                                    "X": [ 0 ],
+                                    "Y": [ 0 ],
+                                    "Category": "npcs"
+                                },
+                                */
+                                {
+                                    "DisplayName": "{{i18n:tourist.bag-dog.name}}",
+                                    "X": [ 69 ],
+                                    "Y": [ 15 ],
+                                    "Category": "npcs"
+                                }
+                            ]
+                        },
+                        {
+                            "Id": "Railroad",
+                            "Tiles": [
+                                {
+                                    "DisplayName": "{{i18n:tile.ticket-machine.name}}",
+                                    "X": [ 32 ],
+                                    "Y": [ 40 ],
+                                    "Category": "interactables"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
