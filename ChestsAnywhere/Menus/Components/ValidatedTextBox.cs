@@ -89,6 +89,12 @@ internal class ValidatedTextBox : IKeyboardSubscriber
         Game1.keyboardDispatcher.Subscriber = this;
     }
 
+    /// <inheritdoc />
+    public void SelectAll()
+    {
+        this.Textbox.SelectAll();
+    }
+
     /// <summary>Receive input from the user.</summary>
     /// <param name="inputChar">The input character.</param>
     public void RecieveTextInput(char inputChar)
@@ -110,18 +116,32 @@ internal class ValidatedTextBox : IKeyboardSubscriber
         this.Textbox.RecieveTextInput(builder.ToString());
     }
 
+    /// <inheritdoc />
+    public string ClipboardCopy()
+    {
+        return this.Textbox.ClipboardCopy();
+    }
+
+    /// <inheritdoc />
+    public string ClipboardCut()
+    {
+        return this.Textbox.ClipboardCut();
+    }
+
     /// <summary>Receive input from the user.</summary>
     /// <param name="command">The input command.</param>
-    public void RecieveCommandInput(char command)
+    /// <param name="modifiers">The held modifier keys.</param>
+    public void RecieveCommandInput(char command, KeyboardModifier modifiers)
     {
-        this.Textbox.RecieveCommandInput(command);
+        this.Textbox.RecieveCommandInput(command, modifiers);
     }
 
     /// <summary>Receive input from the user.</summary>
     /// <param name="key">The input key.</param>
-    public void RecieveSpecialInput(Keys key)
+    /// <param name="modifiers">The held modifier keys.</param>
+    public void RecieveSpecialInput(Keys key, KeyboardModifier modifiers)
     {
-        this.Textbox.RecieveSpecialInput(key);
+        this.Textbox.RecieveSpecialInput(key, modifiers);
     }
 
     /// <summary>Get the textbox's bounds on the screen.</summary>
