@@ -23,7 +23,6 @@ using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Monsters;
 using StardewValley.TokenizableStrings;
 using SObject = StardewValley.Object;
 
@@ -453,88 +452,6 @@ internal class DataParser
                 : I18n.Location_UnknownFishArea(locationName: locationName, id: fishAreaId);
         }
         return displayName;
-    }
-
-    /// <summary>Parse monster data.</summary>
-    /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/>, <see cref="GameLocation.monsterDrop"/>, and the <see cref="Debris"/> constructor.</remarks>
-    public IEnumerable<MonsterData> GetMonsters()
-    {
-        foreach ((string name, string? rawData) in DataLoader.Monsters(Game1.content))
-        {
-            if (rawData is null)
-                continue;
-
-            // monster fields
-            string[] fields = rawData.Split('/');
-            int health = ArgUtility.GetInt(fields, Monster.index_health);
-            int damageToFarmer = ArgUtility.GetInt(fields, Monster.index_damageToFarmer);
-            bool isGlider = ArgUtility.GetBool(fields, Monster.index_isGlider);
-            int resilience = ArgUtility.GetInt(fields, Monster.index_resilience);
-            double jitteriness = ArgUtility.GetFloat(fields, Monster.index_jitteriness);
-            int moveTowardsPlayerThreshold = ArgUtility.GetInt(fields, Monster.index_distanceThresholdToMoveTowardsPlayer);
-            int speed = ArgUtility.GetInt(fields, Monster.index_speed);
-            double missChance = ArgUtility.GetFloat(fields, Monster.index_missChance);
-            bool isMineMonster = ArgUtility.GetBool(fields, Monster.index_isMineMonster);
-
-            // drops
-            var drops = new List<ItemDropData>();
-            string[] dropFields = ArgUtility.SplitBySpace(ArgUtility.Get(fields, Monster.index_drops));
-            for (int i = 0; i < dropFields.Length; i += 2)
-            {
-                // get drop info
-                string itemId = ArgUtility.Get(dropFields, i);
-                float chance = ArgUtility.GetFloat(dropFields, i + 1);
-                int maxDrops = 1;
-
-                // if item ID is negative, game randomly drops 1-3
-                if (int.TryParse(itemId, out int id) && id < 0)
-                {
-                    itemId = (-id).ToString();
-                    maxDrops = 3;
-                }
-
-                // some item IDs have special meaning
-                if (itemId == Debris.copperDebris.ToString())
-                    itemId = SObject.copper.ToString();
-                else if (itemId == Debris.ironDebris.ToString())
-                    itemId = SObject.iron.ToString();
-                else if (itemId == Debris.coalDebris.ToString())
-                    itemId = SObject.coal.ToString();
-                else if (itemId == Debris.goldDebris.ToString())
-                    itemId = SObject.gold.ToString();
-                else if (itemId == Debris.coinsDebris.ToString())
-                    continue; // no drop
-                else if (itemId == Debris.iridiumDebris.ToString())
-                    itemId = SObject.iridium.ToString();
-                else if (itemId == Debris.woodDebris.ToString())
-                    itemId = SObject.wood.ToString();
-                else if (itemId == Debris.stoneDebris.ToString())
-                    itemId = SObject.stone.ToString();
-
-                // add drop
-                drops.Add(new ItemDropData(itemId, 1, maxDrops, chance));
-            }
-            if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
-            {
-                drops.Add(new ItemDropData(SObject.diamondIndex.ToString(), 1, 1, 0.008f));
-                drops.Add(new ItemDropData(SObject.prismaticShardIndex.ToString(), 1, 1, 0.008f));
-            }
-
-            // yield data
-            yield return new MonsterData(
-                Name: name,
-                Health: health,
-                DamageToFarmer: damageToFarmer,
-                IsGlider: isGlider,
-                Resilience: resilience,
-                Jitteriness: jitteriness,
-                MoveTowardsPlayerThreshold: moveTowardsPlayerThreshold,
-                Speed: speed,
-                MissChance: missChance,
-                IsMineMonster: isMineMonster,
-                Drops: drops.ToArray()
-            );
-        }
     }
 
     /// <summary>Get the recipe ingredients.</summary>

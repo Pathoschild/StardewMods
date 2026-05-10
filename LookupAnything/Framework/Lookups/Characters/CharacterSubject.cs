@@ -15,14 +15,15 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.Constants;
 using StardewValley.GameData;
+using StardewValley.GameData.Monsters;
 using StardewValley.GameData.Pets;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
 using StardewValley.TokenizableStrings;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters;
 
@@ -584,23 +585,106 @@ internal class CharacterSubject : BaseSubject
 
     /// <summary>Get a monster's possible drops.</summary>
     /// <param name="monster">The monster whose drops to get.</param>
+    /// <remarks>Derived from <see cref="GameLocation.monsterDrop"/>.</remarks>
     private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
     {
+        Farmer player = Game1.player;
+        GameLocation location = monster.currentLocation ?? Game1.currentLocation;
+        List<ItemDropData> possibleDrops = [];
+
         // get possible drops
-        ItemDropData[]? possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
-        if (this.IsHauntedSkull)
-            possibleDrops ??= this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
-        possibleDrops ??= [];
+        if (Monster.TryGetData(monster.Name, out _, out MonsterData baseData, out MonsterVariantData variantData))
+        {
+            // base drops
+            if (variantData?.InheritDrops is not false)
+            {
+                possibleDrops.AddRange(
+                    this.ParseDrops(baseData.Drops)
+                );
+            }
+
+            // variant drops
+            possibleDrops.AddRange(
+                this.ParseDrops(variantData?.Drops)
+            );
+        }
+
+        // hardcoded drops
+        {
+            // secret note
+            if (location.HasUnlockedAreaSecretNotes(player))
+            {
+                bool journal = location.InIslandContext();
+                string noteItemId = journal
+                    ? "(O)842" // Journal Scrap
+                    : "(O)79"; // Secret Note
+
+                possibleDrops.Add(
+                    new ItemDropData(noteItemId, 1, 1, 0.033f)
+                );
+            }
+
+            // mystery box
+            if (Game1.MasterPlayer.mailReceived.Contains("sawQiPlane"))
+            {
+                string itemId = player.stats.Get(StatKeys.Mastery(Farmer.foragingSkill)) > 0
+                    ? "GoldenMysteryBox"
+                    : "MysteryBox";
+
+                float chance = .01f + (float)player.team.AverageDailyLuck() / 10f + player.LuckLevel * .008f;
+                chance *= Game1.player.stats.Get(StatKeys.Book_Mystery) > 0
+                    ? .88f
+                    : .66f;
+
+                possibleDrops.Add(
+                    new ItemDropData(itemId, 1, 1, chance)
+                );
+            }
+
+            // monster compendium
+            if (player.stats.MonstersKilled > 10)
+            {
+                float chance = .0001f + (!player.mailReceived.Contains("voidBookDropped") ? player.stats.MonstersKilled * .000015f : .0004f);
+
+                possibleDrops.Add(
+                    new ItemDropData("Book_Void", 1, 1, chance)
+                );
+            }
+
+            // mahogany seed
+            if (location is Woods)
+            {
+                possibleDrops.Add(
+                    new ItemDropData("292", 1, 1, 0.1f)
+                );
+            }
+
+            // galaxy soul or Qi gem
+            if (monster.isHardModeMonster.Value && Game1.netWorldState.Value.GoldenWalnutsFound >= 100)
+            {
+                if (Game1.stats.Get(StatKeys.HardModeMonstersKilled) > 50)
+                {
+                    float chance = .001f + player.LuckLevel * .0002f;
+                    possibleDrops.Add(
+                        new ItemDropData("896", 1, 1, chance)
+                    );
+                }
+
+                possibleDrops.Add(
+                    new ItemDropData("858", 1, 1, .008f + player.LuckLevel * .002f)
+                );
+            }
+        }
 
         // get actual drops
         IDictionary<string, List<ItemDropData>> dropsLeft = monster
-            .objectsToDrop
-            .Select(this.GetActualDrop)
+            .drops
+            .Select(item => new ItemDropData(item.ItemId, item.Stack, item.Stack, 1))
             .GroupBy(p => p.ItemId)
             .ToDictionary(group => group.Key, group => group.ToList());
 
         // return possible drops
-        foreach (var drop in possibleDrops.OrderByDescending(p => p.Probability))
+        foreach (ItemDropData drop in possibleDrops.OrderByDescending(p => p.Probability))
         {
             bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemId, out List<ItemDropData>? actualDrops) && actualDrops.Any();
             if (isGuaranteed)
@@ -629,36 +713,22 @@ internal class CharacterSubject : BaseSubject
         }
     }
 
-    /// <summary>Get the drop info for a <see cref="Monster.objectsToDrop"/> ID, if it's valid.</summary>
-    /// <param name="id">The ID to parse.</param>
-    /// <remarks>Derived from <see cref="GameLocation.monsterDrop"/> and the <see cref="Debris"/> constructor.</remarks>
-    private ItemDropData GetActualDrop(string id)
+    /// <summary>Parse drops from monster data.</summary>
+    /// <param name="drops">The drops from monster data to parse.</param>
+    private IEnumerable<ItemDropData> ParseDrops(List<MonsterDropData?>? drops)
     {
-        // basic info
-        int minDrop = 1;
-        int maxDrop = 1;
+        if (drops is null)
+            yield break;
 
-        // negative ID means the monster will drop 1-3 of the item
-        if (int.TryParse(id, out int numericId) && numericId < 0)
+        foreach (MonsterDropData? drop in drops)
         {
-            id = (-numericId).ToString();
-            maxDrop = 3;
+            if (drop is null)
+                continue;
+
+            int minStack = Math.Max(drop.MinStack, 1);
+            int maxStack = Math.Max(drop.MaxStack, minStack);
+
+            yield return new ItemDropData(drop.ItemId, minStack, maxStack, drop.Chance, drop.Condition);
         }
-
-        // handle hardcoded ID mappings in Debris constructor
-        id = id switch
-        {
-            "0" => SObject.copper.ToString(),
-            "2" => SObject.iron.ToString(),
-            "4" => SObject.coal.ToString(),
-            "6" => SObject.gold.ToString(),
-            "10" => SObject.iridium.ToString(),
-            "12" => SObject.wood.ToString(),
-            "14" => SObject.stone.ToString(),
-            _ => id
-        };
-
-        // build model
-        return new ItemDropData(ItemId: id, MinDrop: minDrop, MaxDrop: maxDrop, Probability: 1);
     }
 }

@@ -411,12 +411,6 @@ internal class GameHelper
         return this.DataParser.GetLocationDisplayName(id, data);
     }
 
-    /// <summary>Parse monster data.</summary>
-    public IEnumerable<MonsterData> GetMonsterData()
-    {
-        return this.DataParser.GetMonsters();
-    }
-
     /// <summary>Read parsed data about the Community Center bundles.</summary>
     public IEnumerable<BundleModel> GetBundleData()
     {
