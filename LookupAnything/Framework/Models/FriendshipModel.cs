@@ -13,8 +13,8 @@ internal record FriendshipModel
     /****
     ** Flags
     ****/
-    /// <summary>Whether the player can date the NPC.</summary>
-    public bool CanDate { get; }
+    /// <summary>Whether the player can romance the NPC.</summary>
+    public bool CanBeRomanced { get; }
 
     /// <summary>Whether the NPC is dating the player.</summary>
     public bool IsDating { get; }
@@ -89,7 +89,7 @@ internal record FriendshipModel
         bool roommate = friendship.IsRoommate();
 
         // flags
-        this.CanDate = npc.datable.Value;
+        this.CanBeRomanced = npc.CanBeRomanced;
         this.IsDating = friendship.IsDating();
         this.IsSpouse = marriedOrRoommate && !roommate;
         this.IsHousemate = marriedOrRoommate && roommate;
@@ -104,7 +104,7 @@ internal record FriendshipModel
         this.Points = friendship.Points;
         this.PointsPerLevel = NPC.friendshipPointsPerHeartLevel;
         this.FilledHearts = this.Points / NPC.friendshipPointsPerHeartLevel;
-        this.LockedHearts = this.CanDate && !this.IsDating ? constants.DatingHearts : 0;
+        this.LockedHearts = this.CanBeRomanced && !this.IsDating ? constants.DatingHearts : 0;
         this.EmptyHearts = this.MaxPoints / NPC.friendshipPointsPerHeartLevel - this.FilledHearts - this.LockedHearts;
         if (this.IsSpouse || this.IsHousemate)
         {

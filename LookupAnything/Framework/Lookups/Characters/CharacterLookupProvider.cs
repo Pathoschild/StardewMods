@@ -139,7 +139,7 @@ internal class CharacterLookupProvider : BaseLookupProvider
                     // get villager with a birthday on that date
                     NPC? target = this.GameHelper
                         .GetAllCharacters()
-                        .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
+                        .Where(p => p.Birthday_Season == Game1.season && p.Birthday_Day == selectedDay)
                         .MaxBy(p => p.CanSocialize); // SVE duplicates the Marlon NPC, but only one of them is marked social
                     if (target != null)
                         return this.BuildSubject(target);

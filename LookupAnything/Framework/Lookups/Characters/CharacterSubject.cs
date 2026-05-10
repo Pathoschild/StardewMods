@@ -385,7 +385,7 @@ internal class CharacterSubject : BaseSubject
         if (this.GameHelper.IsSocialVillager(npc))
         {
             // birthday
-            if (this.GameHelper.TryGetDate(npc.Birthday_Day, npc.Birthday_Season, out SDate birthday))
+            if (npc.Birthday_Season.HasValue && this.GameHelper.TryGetDate(npc.Birthday_Day, npc.Birthday_Season.Value, Game1.year, out SDate birthday))
                 yield return new GenericField(I18n.Npc_Birthday(), I18n.Stringify(birthday));
 
             // friendship
@@ -393,7 +393,7 @@ internal class CharacterSubject : BaseSubject
             {
                 // friendship/romance
                 FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name]);
-                yield return new GenericField(I18n.Npc_CanRomance(), friendship.IsSpouse ? I18n.Npc_CanRomance_Married() : friendship.IsHousemate ? I18n.Npc_CanRomance_Housemate() : this.Stringify(friendship.CanDate));
+                yield return new GenericField(I18n.Npc_CanRomance(), friendship.IsSpouse ? I18n.Npc_CanRomance_Married() : friendship.IsHousemate ? I18n.Npc_CanRomance_Housemate() : this.Stringify(friendship.CanBeRomanced));
                 yield return new CharacterFriendshipField(I18n.Npc_Friendship(), friendship);
 
                 // talked/gifted today

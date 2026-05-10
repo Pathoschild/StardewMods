@@ -164,20 +164,10 @@ internal class GameHelper
     /// <summary>Get a date from its component parts if they're valid.</summary>
     /// <param name="day">The day of month.</param>
     /// <param name="season">The season name.</param>
-    /// <param name="date">The resulting date, if valid.</param>
-    /// <returns>Returns whether the date is valid.</returns>
-    public bool TryGetDate(int day, string season, out SDate date)
-    {
-        return this.TryGetDate(day, season, Game1.year, out date);
-    }
-
-    /// <summary>Get a date from its component parts if they're valid.</summary>
-    /// <param name="day">The day of month.</param>
-    /// <param name="season">The season name.</param>
     /// <param name="year">The year.</param>
     /// <param name="date">The resulting date, if valid.</param>
     /// <returns>Returns whether the date is valid.</returns>
-    public bool TryGetDate(int day, string season, int year, out SDate date)
+    public bool TryGetDate(int day, Season season, int year, out SDate date)
     {
         try
         {
