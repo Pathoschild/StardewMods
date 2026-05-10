@@ -270,7 +270,7 @@ internal class ContentManager
         // get next
         if (queue.TryGetNext(out message, out hasMoreMessages))
         {
-            message = Dialogue.applyGenderSwitchBlocks(Game1.player.Gender, message);
+            message = Dialogue.ApplySwitchBlocks(Game1.player.Gender, message, $"{AssetNames.Tourists}:{key}:{message}");
             return true;
         }
 
