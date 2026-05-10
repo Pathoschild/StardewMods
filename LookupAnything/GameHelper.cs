@@ -724,7 +724,7 @@ internal class GameHelper
                     recipes.RemoveAll(other => other.Type == RecipeType.MachineInput && other.MachineId == recipe.MachineId && other.Ingredients.Length > 0 && other.Ingredients[0].InputId == recipe.InputId);
 
                 // get machine
-                var machine = ItemRegistry.Create<SObject>(recipe.MachineId, allowNull: true);
+                SObject? machine = ItemRegistry.CreateOrNull<SObject>(recipe.MachineId);
                 if (machine == null || !machine.HasTypeBigCraftable())
                     continue;
 

@@ -524,7 +524,7 @@ internal class ItemRecipesField : GenericField
         // from item
         if (ingredient.InputId != null)
         {
-            Item input = ItemRegistry.Create(ingredient.InputId, allowNull: true);
+            Item? input = ItemRegistry.CreateOrNull(ingredient.InputId);
 
             if (input is SObject obj)
             {

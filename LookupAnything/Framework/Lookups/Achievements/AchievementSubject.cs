@@ -95,7 +95,7 @@ internal class AchievementSubject : BaseSubject
         {
             if (this.IsHatUnlockCondition(shopItem.Condition))
             {
-                Item? hat = ItemRegistry.Create(shopItem.ItemId, allowNull: true);
+                Item? hat = ItemRegistry.CreateOrNull(shopItem.ItemId);
                 if (hat is { TypeDefinitionId: ItemRegistry.type_hat })
                     yield return hat;
             }

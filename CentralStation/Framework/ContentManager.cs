@@ -373,7 +373,8 @@ internal class ContentManager
     public bool TryParseOptionalSpaceDelimitedNetworks(string[] args, int index, out StopNetworks networks, [NotNullWhen(false)] out string? error, StopNetworks defaultValue)
     {
         // get default
-        if (!ArgUtility.TryGetOptionalRemainder(args, index, out string? rawNetworks, delimiter: ',') || rawNetworks is null)
+        string? rawNetworks = ArgUtility.GetRemainder(args, index, delimiter: ',');
+        if (rawNetworks is null)
         {
             error = null;
             networks = defaultValue;
