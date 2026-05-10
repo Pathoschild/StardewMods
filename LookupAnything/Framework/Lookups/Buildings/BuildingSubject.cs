@@ -183,7 +183,7 @@ internal class BuildingSubject : BaseSubject
                         // drops
                         float chanceOfAnyDrop = pondData.BaseMinProduceChance >= pondData.BaseMaxProduceChance
                             ? pondData.BaseMinProduceChance
-                            : Utility.Lerp(pondData.BaseMinProduceChance, pondData.BaseMaxProduceChance, (float)pond.currentOccupants.Value / FishPond.MAXIMUM_OCCUPANCY);
+                            : Utility.Lerp(pondData.BaseMinProduceChance, pondData.BaseMaxProduceChance, (float)pond.currentOccupants.Value / pond.GetMaxOccupancy());
                         yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, fish, preface: I18n.Building_FishPond_Drops_Preface(chance: (chanceOfAnyDrop * 100).ToString("0.##")));
 
                         // quests

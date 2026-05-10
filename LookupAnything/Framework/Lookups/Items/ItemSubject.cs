@@ -336,8 +336,15 @@ internal class ItemSubject : BaseSubject
             FishPondData? fishPondData = FishPond.GetRawData(item.ItemId);
             if (fishPondData is not null)
             {
-                int minChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, 1 / 10f) * 100);
-                int maxChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, FishPond.MAXIMUM_OCCUPANCY / 10f) * 100);
+                float minBaseChance = fishPondData.BaseMinProduceChance;
+                float maxBaseChance = fishPondData.BaseMaxProduceChance;
+
+                float maxOccupancy = fishPondData.MaxPopulation;
+                if (maxOccupancy < 1)
+                    maxOccupancy = FishPond.DEFAULT_MAXIMUM_OCCUPANCY;
+
+                int minChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(minBaseChance, maxBaseChance, 1 / maxOccupancy) * 100);
+                int maxChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(minBaseChance, maxBaseChance, 1f) * 100);
                 string preface = I18n.Building_FishPond_Drops_Preface(chance: I18n.Generic_Range(min: minChanceOfAnyDrop, max: maxChanceOfAnyDrop));
                 yield return new FishPondDropsField(this.GameHelper, this.Codex, I18n.Item_FishPondDrops(), -1, fishPondData, obj, preface);
             }
