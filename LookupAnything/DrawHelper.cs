@@ -167,7 +167,7 @@ internal static class DrawTextHelper
     /// <summary>Initialize for the current language if needed.</summary>
     public static void InitIfNeeded()
     {
-        string language = LocalizedContentManager.CurrentLanguageString;
+        string language = Game1.content.LanguageString;
 
         if (DrawTextHelper.LastLanguage != language)
         {

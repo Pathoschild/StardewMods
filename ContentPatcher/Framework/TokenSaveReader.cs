@@ -11,6 +11,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.ContentManagement;
 using StardewValley.GameData;
 using StardewValley.GameData.Characters;
 using StardewValley.Locations;
@@ -253,7 +254,7 @@ internal class TokenSaveReader
             return "wedding";
 
         // festival
-        IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
+        IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LanguageCode.en); // {{DayEvent}} shouldn't be translated
         if (festivalDates.TryGetValue($"{this.GetSeason()}{this.GetDay()}", out string? festivalName))
             return festivalName;
 

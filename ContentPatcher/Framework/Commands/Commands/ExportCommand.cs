@@ -14,6 +14,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
 using StardewModdingAPI.Toolkit.Serialization;
 using StardewValley;
+using StardewValley.ContentManagement;
 using TMXTile;
 using xTile;
 
@@ -433,7 +434,7 @@ internal class ExportCommand : BaseCommand
 
         // If it's not already cached, use a temporary content manager
         // This avoids corrupting the cache with an invalid type if it doesn't match.
-        using ContentManager contentManager = Game1.content.CreateTemporary();
+        using IContentManager contentManager = Game1.content.CreateTemporary();
         return contentManager.Load<TAsset?>(assetName);
     }
 
@@ -441,11 +442,11 @@ internal class ExportCommand : BaseCommand
     /// <param name="contentManager">The content manager to check.</param>
     /// <param name="assetName">The asset path relative to the loader root directory, not including the <c>.xnb</c> extension.</param>
     [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier", Justification = "Extra validation in error-handling.")]
-    private bool IsAssetLoaded(ContentManager contentManager, string assetName)
+    private bool IsAssetLoaded(IContentManager contentManager, string assetName)
     {
         IAssetName parsedName = this.ContentHelper.ParseAssetName(assetName);
 
-        return contentManager is IContentManager managed
+        return contentManager is ISmapiContentManager managed
             ? managed.IsLoaded(parsedName)
             : throw new InvalidOperationException($"Can't access internals for content manager with type {contentManager?.GetType().FullName ?? "null"}, expected implementation of {typeof(IContentManager).FullName}.");
     }

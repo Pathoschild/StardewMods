@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.ContentManagement;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -104,14 +105,14 @@ internal static class CommonHelper
         string timeStr = Game1.getTimeOfDayString(time);
 
         // for some reason, Game1.getTimeOfDayString doesn't add am/pm in some languages (e.g. '0200 -> 1400' is shown as '2:00 -> 2:00')
-        if (LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.it or LocalizedContentManager.LanguageCode.ko)
+        if (Game1.content.LanguageCode is LanguageCode.it or LanguageCode.ko)
         {
             string amOrPm = Game1.content.LoadString(time is < 1200 or >= 2400
                 ? "Strings\\StringsFromCSFiles:DayTimeMoneyBox.cs.10370"
                 : "Strings\\StringsFromCSFiles:DayTimeMoneyBox.cs.10371"
             );
 
-            timeStr += LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ko
+            timeStr += Game1.content.LanguageCode is LanguageCode.ko
                 ? amOrPm
                 : ' ' + amOrPm;
         }

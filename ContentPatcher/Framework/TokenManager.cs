@@ -10,6 +10,7 @@ using ContentPatcher.Framework.Tokens.ValueProviders.Players;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.ContentManagement;
 
 namespace ContentPatcher.Framework;
 
@@ -296,11 +297,11 @@ internal class TokenManager : IContext
     private IEnumerable<string> GetLanguage(IGameContentHelper contentHelper)
     {
         // get vanilla language
-        LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+        LanguageCode language = contentHelper.CurrentLocaleConstant;
         string code = language.ToString();
 
         // handle custom language
-        if (language == LocalizedContentManager.LanguageCode.mod)
+        if (language == LanguageCode.mod)
             code = contentHelper.CurrentLocale ?? code;
 
         return [code];

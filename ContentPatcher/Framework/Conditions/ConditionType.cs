@@ -210,7 +210,7 @@ internal enum ConditionType
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Deliberately named to match the Stardew Valley modding convention and folder name.")]
     I18n,
 
-    /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
+    /// <summary>The <see cref="StardewValley.ContentManagement.LanguageCode"/> name.</summary>
     Language,
 
     /// <summary>The current content pack's unique manifest ID.</summary>

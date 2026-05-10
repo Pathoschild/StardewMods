@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.ContentManagement;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
@@ -14,7 +15,7 @@ internal static class Constant
 
     /// <summary>Whether bold text should be enabled where needed.</summary>
     /// <remarks>This is disabled for languages like Chinese which are difficult to read in bold.</remarks>
-    public static bool AllowBold => Game1.content.GetCurrentLanguage() != LocalizedContentManager.LanguageCode.zh;
+    public static bool AllowBold => Game1.content.LanguageCode != LanguageCode.zh;
 
     /// <summary>The largest expected sprite size (measured in tiles).</summary>
     /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>

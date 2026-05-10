@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Force.DeepCloner;
 using StardewValley;
+using StardewValley.ContentManagement;
 
 namespace ContentPatcher.Framework.Migrations.Internal;
 
@@ -22,7 +23,7 @@ internal class VanillaAssetFactory<T>
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="load">The asset name to load.</param>
-    public VanillaAssetFactory(Func<LocalizedContentManager, T> load)
+    public VanillaAssetFactory(Func<IContentManager, T> load)
     {
         this.Data = new Lazy<T>(() => VanillaAssetFactory<T>.LoadVanillaData(load));
     }
@@ -40,9 +41,9 @@ internal class VanillaAssetFactory<T>
     *********/
     /// <summary>Load the vanilla data for an asset without mod edits applied.</summary>
     /// <param name="load">Load the asset from a content manager.</param>
-    public static T LoadVanillaData(Func<LocalizedContentManager, T> load)
+    public static T LoadVanillaData(Func<IContentManager, T> load)
     {
-        using var content = new LocalizedContentManager(Game1.content.ServiceProvider, Game1.content.RootDirectory);
+        using var content = new LocalizedContentManager(Game1.game1.Content.ServiceProvider, Game1.content.GetContentRoot());
         return load(content);
     }
 }

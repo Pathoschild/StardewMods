@@ -14,6 +14,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.ContentManagement;
 using StardewValley.Extensions;
 using xTile;
 
@@ -76,7 +77,7 @@ internal class PatchManager
     private readonly ProfilerIntegration? Profiler;
 
     /// <summary>A low-level content manager which is detached from SMAPI's content API, used to check whether an asset exists in the base game's content folder.</summary>
-    private readonly LocalizedContentManager RawFileContentManager;
+    private readonly IContentManager RawFileContentManager;
 
 
     /*********
@@ -92,7 +93,7 @@ internal class PatchManager
         this.Monitor = monitor;
         this.TokenManager = tokenManager;
         this.AssetValidators = assetValidators;
-        this.RawFileContentManager = new LocalizedContentManager(Game1.content.ServiceProvider, Game1.content.RootDirectory);
+        this.RawFileContentManager = new LocalizedContentManager(Game1.game1.Content.ServiceProvider, Game1.content.GetContentRoot());
         this.Profiler = profiler.IsLoaded
             ? profiler
             : null; // lets us avoid allocating arguments if Profiler isn't loaded

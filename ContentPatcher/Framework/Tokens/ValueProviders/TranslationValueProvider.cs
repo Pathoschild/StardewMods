@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
-using StardewValley;
+using StardewValley.ContentManagement;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders;
 
@@ -16,7 +16,7 @@ internal class TranslationValueProvider : BaseValueProvider
     private readonly ITranslationHelper TranslationHelper;
 
     /// <summary>The game locale as of the last context update.</summary>
-    private LocalizedContentManager.LanguageCode LastLocale;
+    private LanguageCode LastLocale;
 
 
     /*********
@@ -38,7 +38,7 @@ internal class TranslationValueProvider : BaseValueProvider
     /// <inheritdoc />
     public override bool UpdateContext(IContext context)
     {
-        LocalizedContentManager.LanguageCode curLocale = this.TranslationHelper.LocaleEnum;
+        LanguageCode curLocale = this.TranslationHelper.LocaleEnum;
 
         if (curLocale == this.LastLocale)
             return false;

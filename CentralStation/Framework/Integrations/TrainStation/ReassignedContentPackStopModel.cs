@@ -39,7 +39,7 @@ internal class ReassignedContentPackStopModel
     public string GetDisplayName()
     {
         return
-            this.LocalizedDisplayName?.GetValueOrDefault(LocalizedContentManager.CurrentLanguageCode.ToString())
+            this.LocalizedDisplayName?.GetValueOrDefault(Game1.content.LanguageCode.ToString())
             ?? this.LocalizedDisplayName?.GetValueOrDefault("en")
             ?? "No translation";
     }

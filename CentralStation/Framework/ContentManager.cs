@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.ContentManagement;
 using StardewValley.Extensions;
 using StardewValley.GameData;
 using StardewValley.Locations;
@@ -636,7 +637,7 @@ internal class ContentManager
         Utility.Shuffle(random, validTourists);
 
         // spawn tourists on map
-        LocalizedContentManager contentManager = Game1.content.CreateTemporary();
+        IContentManager contentManager = Game1.content.CreateTemporary();
         Map map = assetData.Data;
         Layer buildingsLayer = map.RequireLayer("Buildings");
         Layer pathsLayer = map.RequireLayer("Paths");
