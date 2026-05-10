@@ -870,7 +870,7 @@ internal class ItemSubject : BaseSubject
             {
                 trashBear.updateItemWanted();
 
-                if (ItemRegistry.HasItemId(obj, trashBear.itemWantedIndex))
+                if (ItemRegistry.HasItemId(obj, trashBear.wantedItemId))
                     neededFor.Add(I18n.Item_NeededFor_TrashBear());
             }
         }

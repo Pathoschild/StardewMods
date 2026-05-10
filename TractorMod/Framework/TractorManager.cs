@@ -298,7 +298,7 @@ internal sealed class TractorManager
                     Speed = { this.Config.TractorSpeed }
                 }
             );
-            Game1.player.applyBuff(buff);
+            Game1.player.applyLocalBuff(buff);
         }
     }
 

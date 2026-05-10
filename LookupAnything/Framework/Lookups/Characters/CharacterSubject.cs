@@ -365,7 +365,7 @@ internal class CharacterSubject : BaseSubject
         if (questsDone < maxQuests)
         {
             trashBear.updateItemWanted();
-            yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(trashBear.itemWantedIndex), this.Codex);
+            yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), ItemRegistry.Create(trashBear.wantedItemId), this.Codex);
         }
 
         // show progress
