@@ -6,7 +6,9 @@ using Pathoschild.Stardew.LookupAnything.Framework.DataMinedValues;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Extensions;
+using StardewValley.GameData.Achievements;
 using StardewValley.GameData.Shops;
+using StardewValley.TokenizableStrings;
 using ShopData = StardewValley.GameData.Shops.ShopData;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Achievements;
@@ -18,10 +20,10 @@ internal class AchievementSubject : BaseSubject
     ** Fields
     *********/
     /// <summary>The achievement ID.</summary>
-    private readonly int AchievementId;
+    private readonly string AchievementId;
 
-    /// <summary>The raw achievement data fields.</summary>
-    private readonly string[] DataFields;
+    /// <summary>The achievement data.</summary>
+    private readonly AchievementData Data;
 
 
     /*********
@@ -30,18 +32,18 @@ internal class AchievementSubject : BaseSubject
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="id">The achievement ID.</param>
-    /// <param name="dataFields">The raw achievement data fields.</param>
-    public AchievementSubject(GameHelper gameHelper, int id, string[] dataFields)
+    /// <param name="data">The achievement data.</param>
+    public AchievementSubject(GameHelper gameHelper, string id, AchievementData data)
         : base(gameHelper)
     {
         this.AchievementId = id;
-        this.DataFields = dataFields;
-        this.Description = ArgUtility.Get(dataFields, 1);
+        this.Data = data;
+        this.Description = TokenParser.ParseText(data.Description);
 
         // initialize
         this.Initialize(
-            name: ArgUtility.Get(dataFields, 0),
-            description: ArgUtility.Get(dataFields, 1),
+            name: TokenParser.ParseText(data.DisplayName),
+            description: this.Description,
             type: I18n.Type_Achievement()
         );
     }
@@ -62,13 +64,14 @@ internal class AchievementSubject : BaseSubject
         }
 
         // internal ID
-        yield return new GenericField(I18n.InternalId(), this.AchievementId.ToString());
+        yield return new GenericField(I18n.InternalId(), this.AchievementId);
     }
 
     /// <inheritdoc />
     public override IEnumerable<IDataMinedValue> GetDataMinedValues()
     {
-        yield return new GenericDataMinedValue(null, "Data", I18n.Stringify(this.DataFields));
+        foreach (IDataMinedValue entry in this.GetDataMinedValuesFrom(this.Data))
+            yield return entry;
     }
 
     /// <inheritdoc />
@@ -119,7 +122,7 @@ internal class AchievementSubject : BaseSubject
                 return false;
 
             string achievementId = ArgUtility.Get(query.Query, 2);
-            if (!achievementId.EqualsIgnoreCase(this.AchievementId.ToString()))
+            if (!achievementId.EqualsIgnoreCase(this.AchievementId))
                 return false;
 
             foundUnlock = true;

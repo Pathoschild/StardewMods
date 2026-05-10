@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.Achievements;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Achievements;
@@ -59,11 +60,11 @@ internal class AchievementLookupProvider : BaseLookupProvider
                     }
 
                     // get achievement
-                    int achievementId = 0;
-                    string? achievementData = null;
+                    string? achievementId = null;
+                    AchievementData? achievementData = null;
                     {
                         int curIndex = 0;
-                        foreach ((int id, string? rawData) in Game1.achievements)
+                        foreach ((string id, AchievementData? rawData) in Game1.achievements)
                         {
                             if (rawData is null)
                                 continue;
@@ -78,13 +79,12 @@ internal class AchievementLookupProvider : BaseLookupProvider
                             curIndex++;
                         }
 
-                        if (achievementData is null)
+                        if (achievementId is null || achievementData is null)
                             break;
                     }
 
                     // yield subject
-                    string[] fields = achievementData.Split('^');
-                    return this.BuildSubject(achievementId, fields);
+                    return this.BuildSubject(achievementId, achievementData);
                 }
         }
 
@@ -94,13 +94,12 @@ internal class AchievementLookupProvider : BaseLookupProvider
     /// <inheritdoc />
     public override IEnumerable<ISubject> GetSearchSubjects()
     {
-        foreach ((int id, string? rawData) in Game1.achievements)
+        foreach ((string id, AchievementData? data) in Game1.achievements)
         {
-            if (rawData is null)
+            if (data is null)
                 continue;
 
-            string[] fields = rawData.Split('^');
-            yield return this.BuildSubject(id, fields);
+            yield return this.BuildSubject(id, data);
         }
     }
 
@@ -110,9 +109,9 @@ internal class AchievementLookupProvider : BaseLookupProvider
     *********/
     /// <summary>Build a subject.</summary>
     /// <param name="achievementId">The achievement ID.</param>
-    /// <param name="fields">The raw achievement data fields.</param>
-    private ISubject BuildSubject(int achievementId, string[] fields)
+    /// <param name="data">The achievement data.</param>
+    private ISubject BuildSubject(string achievementId, AchievementData data)
     {
-        return new AchievementSubject(this.GameHelper, achievementId, fields);
+        return new AchievementSubject(this.GameHelper, achievementId, data);
     }
 }
