@@ -1,4 +1,4 @@
-﻿{
+{
     /**********
     ** Chest UI (箱子界面)
     **********/
@@ -15,6 +15,13 @@
     "default-category.cellar-unowned": "地窖 #{{cellarNumber}}",
     "default-category.farmhouse": "农舍",
     "default-category.island-farmhouse": "姜岛农舍",
+    "default-category.desert": "沙漠",
+    "default-category.island-north": "姜岛北部",
+    "default-category.island-south": "姜岛海滩",
+    "default-category.island-south-east": "姜岛东南",
+    "default-category.island-west": "姜岛农场",
+    "default-category.island-east": "姜岛东部",
+    "default-category.volcano-dungeon": "火山矿洞",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels (编辑箱子标签)

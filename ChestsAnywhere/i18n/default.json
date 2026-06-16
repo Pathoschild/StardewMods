@@ -15,6 +15,13 @@
     "default-category.cellar-unowned": "Cellar #{{cellarNumber}}",
     "default-category.farmhouse": "Farmhouse",
     "default-category.island-farmhouse": "Island Farmhouse",
+    "default-category.desert": "Desert",
+    "default-category.island-north": "Island North",
+    "default-category.island-south": "Island South",
+    "default-category.island-south-east": "Island South East",
+    "default-category.island-west": "Island West",
+    "default-category.island-east": "Island East",
+    "default-category.volcano-dungeon": "Volcano Dungeon",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
