@@ -470,6 +470,27 @@ internal class ChestFactory
             case IslandFarmHouse { Name: "IslandFarmHouse" }:
                 return I18n.DefaultCategory_IslandFarmhouse();
 
+            case Desert:
+                return I18n.DefaultCategory_Desert();
+
+            case IslandNorth:
+                return I18n.DefaultCategory_IslandNorth();
+
+            case IslandSouth:
+                return I18n.DefaultCategory_IslandSouth();
+
+            case IslandSouthEast:
+                return I18n.DefaultCategory_IslandSouthEast();
+
+            case IslandWest:
+                return I18n.DefaultCategory_IslandWest();
+
+            case IslandEast:
+                return I18n.DefaultCategory_IslandEast();
+
+            case VolcanoDungeon:
+                return I18n.DefaultCategory_VolcanoDungeon();
+
             case Cellar:
                 {
                     // extract cellar number
