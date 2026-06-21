@@ -55,6 +55,8 @@ internal class ScreenManager
     /// <summary>Whether <see cref="Initialize"/> has been called for this instance.</summary>
     public bool IsInitialized { get; private set; }
 
+    private IInvariantSet InstalledMods;
+
 
     /*********
     ** Public methods
@@ -70,6 +72,7 @@ internal class ScreenManager
     {
         this.Helper = helper;
         this.Monitor = monitor;
+        this.InstalledMods = installedMods;
         this.TokenManager = new TokenManager(helper.GameContent, installedMods, modTokens);
         this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators, profiler);
         this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, helper.GameContent.ParseAssetName);
@@ -215,6 +218,20 @@ internal class ScreenManager
         this.PatchManager.UpdateContext(this.Helper.GameContent, changedGlobalTokens, updateType);
     }
 
+    public void ReloadContentPack(LoadedContentPack contentPack)
+    {
+        this.TokenManager.ClearLocalToken(contentPack.ContentPack);
+        int oldLocations = this.CustomLocationManager.ClearContentPack(contentPack.ContentPack);
+
+        this.LoadContentPacks([contentPack], this.InstalledMods);
+
+        int newLocations = this.CustomLocationManager.GetCustomLocationData().Where(location => location.ContentPack.Manifest.UniqueID == contentPack.Manifest.UniqueID).Count();
+
+        if (oldLocations > 0 || newLocations > 0)
+        {
+            this.Helper.GameContent.InvalidateCache("Data/Locations");
+        }
+    }
 
     /*********
     ** Private methods

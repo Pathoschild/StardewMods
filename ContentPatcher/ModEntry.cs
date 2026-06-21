@@ -325,6 +325,8 @@ internal class ModEntry : Mod
                     break;
 
                 var configMenu = new GenericModConfigMenuIntegrationForContentPack(contentPack.ContentPack, this.ParseCommaDelimitedField, config);
+                contentPack.GMCMAPI = api;
+                contentPack.GMCMConfigMenu = configMenu;
                 configMenu.Register(api, this.Monitor);
             }
         }
@@ -371,7 +373,7 @@ internal class ModEntry : Mod
     private void OnContentPackConfigChanged(LoadedContentPack contentPack)
     {
         // re-save config.json
-        contentPack.ConfigFileHandler.Save(contentPack.ContentPack, contentPack.Config, this.Helper);
+        contentPack.ConfigFileHandler.Save(contentPack.ContentPack, contentPack.Config);
 
         // update tokens
         foreach (var screenManager in this.ScreenManager.GetActiveValues())
@@ -476,7 +478,7 @@ internal class ModEntry : Mod
             {
                 configFileHandler = new ConfigFileHandler("config.json", this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}", LogLevel.Warn));
                 config = configFileHandler.Read(contentPack, rawContentPack.Content.ConfigSchema, rawContentPack.Content.Format!);
-                configFileHandler.Save(contentPack, config, this.Helper);
+                configFileHandler.Save(contentPack, config);
             }
             catch (Exception ex)
             {
@@ -485,7 +487,7 @@ internal class ModEntry : Mod
             }
 
             // build content pack
-            yield return new LoadedContentPack(rawContentPack, configFileHandler, config);
+            yield return new LoadedContentPack(rawContentPack, configFileHandler, config, this.Monitor);
         }
     }
 

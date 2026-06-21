@@ -137,6 +137,7 @@ internal class PatchLoader
     public void UnloadPatchesLoadedBy(RawContentPack pack)
     {
         this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack);
+        this.PatchManager.ClearPermanentlyDisabledPatchesForPack(pack.ContentPack);
     }
 
     /// <summary>Normalize and parse the given condition values.</summary>
