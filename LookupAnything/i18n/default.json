@@ -199,6 +199,9 @@
     "animal.mood": "Mood today",
     "animal.complaints": "Complaints",
     "animal.produce-ready": "Produce ready",
+    "animal.produce": "Produce",
+    "animal.deluxe-produce": "Deluxe Produce",
+    "animal.extra-produce": "Extra Produce",
     "animal.growth": "Growth",
     "animal.sells-for": "Sells for",
     "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds
