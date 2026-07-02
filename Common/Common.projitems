@@ -35,6 +35,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomBush\ICustomBushDrop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraAnimalConfig\ExtraAnimalConfigIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraAnimalConfig\IExtraAnimalConfigApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\ExtraMachineConfigIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ExtraMachineConfig\IExtraMachineConfigApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\GenericModConfigMenu\GenericModConfigMenuIntegration.cs" />

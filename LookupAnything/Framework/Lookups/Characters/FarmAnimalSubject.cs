@@ -72,6 +72,9 @@ internal class FarmAnimalSubject : BaseSubject
         yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), CommonHelper.IsItemId(animal.currentProduce.Value, allowZero: false) ? ItemRegistry.Create(animal.currentProduce.Value) : null, this.Codex);
         if (!isFullyGrown)
             yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+        yield return new ItemIconListField(this.GameHelper, I18n.Animal_Produce(), this.GameHelper.GetAnimalProduceItems(animal.type.Value, animalData, false), true, codex: this.Codex);
+        yield return new ItemIconListField(this.GameHelper, I18n.Animal_DeluxeProduce(), this.GameHelper.GetAnimalProduceItems(animal.type.Value, animalData, true), true, codex: this.Codex);
+        yield return new ItemIconListField(this.GameHelper, I18n.Animal_ExtraProduce(), this.GameHelper.GetAnimalProduceItemsExtraAnimalConfig(animal.type.Value), true, codex: this.Codex);
         yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
 
         // bonuses
