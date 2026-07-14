@@ -352,6 +352,7 @@
     "item.needed-for": "Needed for",
     "item.flavor": "Flavor", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Owned",
+    "item.number-planted": "Planted",
     "item.number-cooked": "Cooked",
     "item.number-crafted": "Crafted",
     "item.recipes": "Recipes",
@@ -386,6 +387,10 @@
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "you made {{count}} of these",
     "item.internal-id.summary": "{{itemId}} (globally unique 'qualified ID': {{qualifiedItemId}})",
+    "item.crop-count.summary": "you have {{count}} of this crop planted",
+    "item.fruit-tree-count.summary": "you have {{count}} of this fruit tree planted",
+    "item.wild-tree-count.summary": "you have {{count}} of this tree planted",
+    "item.bush-count.summary": "you have {{count}} of this bush planted",
 
 
     /*********
