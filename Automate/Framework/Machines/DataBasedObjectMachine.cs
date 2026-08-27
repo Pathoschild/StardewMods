@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Storage;
 using StardewValley;
 using StardewValley.GameData.Machines;
 using StardewValley.TerrainFeatures;
@@ -17,6 +18,9 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
     /// <summary>The minimum machine processing time in minutes for which to apply fairy dust.</summary>
     private readonly Func<int> MinMinutesForFairyDust;
 
+    /// <summary>Get the default reserve stock to use if a container doesn't specify its own override.</summary>
+    private readonly Func<int> GetDefaultReserveStock;
+
 
     /*********
     ** Public methods
@@ -26,10 +30,12 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
     /// <param name="location">The location containing the machine.</param>
     /// <param name="tile">The tile covered by the machine.</param>
     /// <param name="minMinutesForFairyDust">The minimum machine processing time in minutes for which to apply fairy dust.</param>
-    public DataBasedObjectMachine(SObject machine, GameLocation location, Vector2 tile, Func<int> minMinutesForFairyDust)
+    /// <param name="getDefaultReserveStock">Get the default reserve stock to use if a container doesn't specify its own override.</param>
+    public DataBasedObjectMachine(SObject machine, GameLocation location, Vector2 tile, Func<int> minMinutesForFairyDust, Func<int> getDefaultReserveStock)
         : base(machine, location, tile, BaseMachine.GetDefaultMachineId(machine.Name))
     {
         this.MinMinutesForFairyDust = minMinutesForFairyDust;
+        this.GetDefaultReserveStock = getDefaultReserveStock;
     }
 
     /// <inheritdoc />
@@ -56,10 +62,14 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
         bool addedInput = false;
         foreach (IContainer container in input.OutputContainers)
         {
-            if (machine.AttemptAutoLoad(container.Inventory, Game1.player))
+            int reserveStock = container.GetReserveStock(this.GetDefaultReserveStock());
+            using (ReservedInventoryScope.Apply(container.Inventory, reserveStock))
             {
-                addedInput = true;
-                break;
+                if (machine.AttemptAutoLoad(container.Inventory, Game1.player))
+                {
+                    addedInput = true;
+                    break;
+                }
             }
         }
 
@@ -168,6 +178,9 @@ internal class DataBasedObjectMachine : GenericObjectMachine<SObject>
         int maxToApply = 3;
         foreach (IContainer container in input.OutputContainers)
         {
+            int reserveStock = container.GetReserveStock(this.GetDefaultReserveStock());
+            using IDisposable scope = ReservedInventoryScope.Apply(container.Inventory, reserveStock);
+
             while (maxToApply > 0 && container.Inventory.ContainsId("(O)872"))
             {
                 if (!machine.TryApplyFairyDust())

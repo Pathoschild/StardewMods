@@ -106,6 +106,13 @@ will update automatically.
 You can change how Automate uses an individual chest by editing its `modData` field (e.g. to hide it from Automate). See
 [_mod integrations_ in the Chests Anywhere docs](../../ChestsAnywhere/docs/README.md#mod-integrations) for more info.
 
+That doc doesn't cover the reserve stock option yet, since it's not exposed through Chests Anywhere's UI. You can set
+it directly via `modData`, or via a tag on the chest's name (e.g. `|automate:reserve:2|`):
+
+`modData` key | description
+------------- | -----------
+`Pathoschild.Automate/ReserveStock` | The minimum number of each item to leave in the chest when a machine takes input from it, as a non-negative integer. Overrides the "reserve stock" mod setting for this chest specifically.
+
 ## Advanced extensibility for mod authors
 See _[core concepts](#core-concepts)_ before reading this section.
 
