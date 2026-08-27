@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added a "reserve stock" option, so chests can keep a minimum amount of each item instead of letting machines take it all. This makes it easier for mods like Convenient Inventory to find the right chest for an item, since the chest never runs out completely. This can be configured globally (via Generic Mod Config Menu) or per chest (by adding a tag like `|automate:reserve:2|` to its name).
+* Fixed legacy chest-name option tags (like `|automate:no-store|`) being silently ignored instead of applied.
 * Improved translations. Thanks to jjongleee (updated Korean)!
 
 ## 2.6.1

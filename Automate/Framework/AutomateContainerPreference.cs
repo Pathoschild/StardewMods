@@ -27,6 +27,9 @@ internal static class AutomateContainerHelper
     /// <summary>The <see cref="ModDataDictionary"/> key for chest output options.</summary>
     public const string TakeItemsKey = "Pathoschild.Automate/TakeItems";
 
+    /// <summary>The <see cref="ModDataDictionary"/> key for the minimum stock to leave in the chest when machines take input from it.</summary>
+    public const string ReserveStockKey = "Pathoschild.Automate/ReserveStock";
+
 
     /*********
     ** Methods
