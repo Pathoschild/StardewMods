@@ -1,0 +1,54 @@
+{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Малка плажна ферма",
+    "farm.description": "Малък плодороден плажен кът, където можеш да ловиш както речни, така и океански риби.",
+
+    "farm.fish-areas.river": "Река",
+    "farm.fish-areas.estuary": "Устие",
+    "farm.fish-areas.ocean": "Океан",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Farm options
+    ****/
+    "config.farm-options-section": "Настройки на фермата",
+
+    "config.beach-sounds.name": "Възпроизвеждане на звуците на плажа",
+    "config.beach-sounds.tooltip": "Възпроизвеждане на фоновия звук на плажа (тоест звуците на вълните) в плажната ферма.",
+
+    "config.spawn-monsters.name": "Появяване на чудовища по подразбиране",
+    "config.spawn-monsters.tooltip": "Тази настройка определя дали при започване на нова игра да са включени чудовища през нощта. Можеш да я промениш при създаването на играта. Не засяга съществуващи запазени игри.",
+
+    /****
+    ** Farm layout
+    ****/
+    "config.farm-layout-section": "Разположение на фермата",
+
+    "config.campfire.name": "Добавяне на лагерен огън",
+    "config.campfire.tooltip": "Добавяне на работещ лагерен огън пред фермерската къща.",
+
+    "config.pier.name": "Добавяне на кей за риболов",
+    "config.pier.tooltip": "Добавяне на кей, от който можеш да ловиш риба.",
+
+    "config.islands.name": "Добавяне на острови",
+    "config.islands.tooltip": "Добавяне на океански острови с допълнителна площ земя.",
+
+    "config.shipping-bin-path.name": "Добавяне на пътека до кутията за пратки",
+    "config.shipping-bin-path.tooltip": "Поставяне на каменни плочки за пътека пред стандартното място на кутията за пратки.",
+
+    /****
+    ** Farm positions
+    ****/
+    "config.farm-positions-section": "Позиции във фермата",
+
+    "config.pier-x.name": "X на кея за риболов",
+    "config.pier-x.tooltip": "X-координатата на кея за риболов. Задай X и Y на 0 за автоматично позициониране.",
+
+    "config.pier-y.name": "Y на кея за риболов",
+    "config.pier-y.tooltip": "Y-координатата на кея за риболов. Задай X и Y на 0 за автоматично позициониране."
+}

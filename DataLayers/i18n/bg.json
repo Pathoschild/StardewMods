@@ -1,0 +1,150 @@
+{
+    /*********
+    ** Data Layers UI
+    *********/
+    // 'auto' layer
+    "auto.name": "Автоматично",
+    "auto.name-active": "Автоматично ({{layerName}})",
+    "auto.name-inactive": "Автоматично (няма данни за показване)",
+
+    // accessible
+    "accessible.name": "Достъпност",
+    "accessible.clear": "Свободно",
+    "accessible.occupied": "Заето",
+    "accessible.impassable": "Непроходимо",
+    "accessible.warp": "Преход",
+
+    // buildable
+    "buildable.name": "Строеж",
+    "buildable.buildable": "Може да се строи тук",
+    "buildable.occupied": "Заето",
+    "buildable.not-buildable": "Не може да се строи тук",
+
+    // coverage: bee houses
+    "bee-houses.name": "Обхват: кошери",
+    "bee-houses.range": "Обхват на цветята",
+
+    // coverage: bombs
+    "bombs.name": "Обхват: бомби",
+    "bombs.dig": "Радиус за разкопаване",
+    "bombs.explosion": "Радиус за унищожаване на предмети",
+    "bombs.shockwave": "Радиус на ударната вълна",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Обхват: колиби на джунимо",
+    "junimo-huts.can-harvest": "Може да се прибере",
+    "junimo-huts.cannot-harvest": "Не може да се прибере",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Обхват: плашила",
+    "scarecrows.protected": "Защитено",
+    "scarecrows.exposed": "Незащитено",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Обхват: разпръсквачи",
+    "sprinklers.covered": "Покрито",
+    "sprinklers.dry-crops": "Сухи посеви",
+
+    // crops: harvest
+    "crop-harvest.name": "Посеви: готови за прибиране",
+    "crop-harvest.ready": "Готово",
+    "crop-harvest.not-ready": "Не е готово",
+    "crop-harvest.not-enough-time-or-dead": "Недостатъчно време (или е мъртво)",
+
+    // crops: watered
+    "crop-water.name": "Посеви: поливане",
+    "crop-water.watered": "Полят посев",
+    "crop-water.dry": "Сух посев",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Посеви: вода за оризов разсад",
+    "crop-paddy-water.in-range": "Близо до вода",
+    "crop-paddy-water.not-in-range": "Суха земя",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Посеви: наторяване",
+    "crop-fertilizer.fertilizer": "Тор",
+    "crop-fertilizer.retaining-soil": "Задържаща почва",
+    "crop-fertilizer.speed-gro": "Ускорител на растежа",
+    "crop-fertilizer.multiple": "Няколко вида тор",
+
+    // fishing depth
+    "fishing-depth.name": "Дълбочина за риболов",
+    "fishing-depth.one": "До брега",
+    "fishing-depth.two": "Две",
+    "fishing-depth.three": "Три",
+    "fishing-depth.four": "Четири",
+    "fishing-depth.max": "Максимална дълбочина",
+
+    // machine processing
+    "machines.name": "Обработка в машини",
+    "machines.empty": "Празно",
+    "machines.processing": "Обработва се",
+    "machines.finished": "Готово",
+
+    // tile grid
+    "grid.name": "Мрежа на плочките",
+
+    // tillable
+    "tillable.name": "Обработваемост",
+    "tillable.tillable": "Обработваемо",
+    "tillable.tilled": "Обработено",
+    "tillable.occupied": "Заето",
+    "tillable.not-tillable": "Необработваемо",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // section names
+    "config.section.main-options": "Основни настройки",
+    "config.section.main-controls": "Основно управление",
+    "config.section.layer": "Слой „{{LayerName}}“",
+
+    // main options
+    "config.show-grid.name": "Показване на мрежата",
+    "config.show-grid.desc": "Дали да се показва мрежа на плочките, когато е отворен слой.",
+
+    "config.combine-borders.name": "Обединяване на припокриващи се контури",
+    "config.combine-borders.desc": "Когато две групи от един и същи цвят се припокриват, дали да се очертава един общ контур вместо отделните им контури.",
+
+    "config.color-scheme.name": "Цветова схема",
+    "config.color-scheme.desc": "Цветовата схема за използване, която променя цветовете във всички слоеве с данни.",
+    "config.color-schemes.default": "стандартни цветове",
+
+    "config.legend-alpha-on-hover.name": "Непрозрачност на легендата при посочване",
+    "config.legend-alpha-on-hover.desc": "Колко прозрачна да е кутията с легендата, когато курсорът е върху нея — стойност между 0 (прозрачна) и 1 (непрозрачна).",
+
+    // main controls
+    "config.toggle-layer-key.name": "Клавиш за превключване на слоевете с данни",
+    "config.toggle-layer-key.desc": "Клавишната комбинация, с която се показва или скрива покритието със слоевете данни.",
+
+    "config.prev-layer-key.name": "Клавиш за предишен слой",
+    "config.prev-layer-key.desc": "Клавишната комбинация, с която се преминава назад през наличните слоеве с данни.",
+
+    "config.next-layer-key.name": "Клавиш за следващ слой",
+    "config.next-layer-key.desc": "Клавишната комбинация, с която се преминава напред през наличните слоеве с данни.",
+
+    // data layers
+    "config.layer-enabled.name": "Включване",
+    "config.layer-enabled.desc": "Дали този слой да е достъпен в играта.",
+
+    "config.layer-enabled-for-auto-layer.name": "Включване за слоя „{{autoLayerName}}“",
+    "config.layer-enabled-for-auto-layer.desc": "Дали този слой може да се показва автоматично, когато избереш слоя „{{autoLayerName}}“, дори ако иначе е изключен.",
+
+    "config.layer-update-on-view-change.name": "Обновяване при промяна на изгледа",
+    "config.layer-update-on-view-change.desc": "Дали показаната информация от слоя да се обновява, когато нова част от света влезе в изгледа, независимо от настройката „обновявания в секунда“.",
+
+    "config.layer-updates-per-second.name": "Обновявания в секунда",
+    "config.layer-updates-per-second.desc": "Колко често да се обновява слоят, когато се показва, като брой обновявания в секунда. По-висока стойност от стандартната може да причини забавяне. По подразбиране: {{defaultValue}}.",
+
+    "config.layer-shortcut.name": "Клавиш за бърз достъп",
+    "config.layer-shortcut.desc": "Клавишната комбинация, с която се избира този слой, когато покритието е отворено.",
+
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.toggle-data-layers.name": "Слоеве с данни",
+    "icon.toggle-data-layers.desc": "Превключи слоевете с данни"
+}

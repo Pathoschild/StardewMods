@@ -1,0 +1,72 @@
+{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Основни настройки",
+    "config.enabled.name": "Включен",
+    "config.enabled.desc": "Дали да се включат функциите на Automate. Ако е изключено, машините няма да се автоматизират и наслагването няма да се показва.",
+    "config.automation-interval.name": "Брой тикове между автоматизациите",
+    "config.automation-interval.desc": "Броят тикове между всяка автоматизация (60 за веднъж в секунда, 120 за веднъж на две секунди и т.н.).",
+    "config.min-minutes-for-fairy-dust.name": "Мин. минути за Фееричен прах",
+    "config.min-minutes-for-fairy-dust.desc": "Минималното време за обработка от машината в минути, при което да се използва Фееричен прах. Например при 30 минути Фееричен прах няма да се използва, ако машината би завършила за 20 минути без него.",
+    "config.toggle-overlay-key.name": "Клавиш за индикаторите за автоматизация",
+    "config.toggle-overlay-key.desc": "Клавишите, с които се показват и скриват индикаторите за автоматизация.",
+    "config.warn-for-missing-bridge-mod.name": "Предупреждение за липсващ свързващ мод",
+    "config.warn-for-missing-bridge-mod.desc": "Дали при стартиране да се записва предупреждение, ако е инсталиран мод за персонализирани машини, който изисква отделна съвместима добавка, но тя липсва.",
+
+    // connectors
+    "config.title.connectors": "Включени свързващи предмети",
+    "config.connector.desc": "Дали {{itemName}} свързва машините и сандъците.",
+    "config.custom-connectors.name": "Персонализирани свързващи предмети",
+    "config.custom-connectors.desc": "Предметите, които свързват съседни машини. Може да посочиш вътрешното английско име (като \"Wood Path\") или квалифициран ID на предмет (като \"(O)405\"), както и няколко предмета, разделени със запетаи.", // note: connector names must be English even when playing in other languages
+
+    // Junimo hut options
+    "config.title.junimo-huts": "Поведение на колибите на джунимо",
+    "config.junimo-hut-gems.name": "Скъпоценни камъни",
+    "config.junimo-hut-gems.desc": "Какво да правят колибите на джунимо с предметите скъпоценни камъни. „Автоматично“ ще ги игнорира.",
+    "config.junimo-hut-fertilizer.name": "Тор",
+    "config.junimo-hut-fertilizer.desc": "Какво да правят колибите на джунимо с предметите тор. „Автоматично“ ще ги игнорира, ако Better Junimos е инсталиран; иначе ще ги премести от колибата в свързаните сандъци.",
+    "config.junimo-hut-seeds.name": "Семена",
+    "config.junimo-hut-seeds.desc": "Какво да правят колибите на джунимо с предметите семена. „Автоматично“ ще ги игнорира, ако Better Junimos е инсталиран; иначе ще ги премести от колибата в свързаните сандъци.",
+    "config.junimo-hut-move-items-into-hut.name": "Премести ID на предмети в колибата",
+    "config.junimo-hut-move-items-into-hut.desc": "Предметите, които да се преместват в колибите на джунимо (независимо от други полета като {{gemFieldName}}). Това е списък с квалифицирани ID на предмети, разделени със запетаи (както са показани от Lookup Anything в полето „вътрешен ID“).",
+    "config.junimo-hut-ignore-items.name": "Игнорирай ID на предмети",
+    "config.junimo-hut-ignore-items.desc": "Предметите, които да се игнорират (да не се преместват независимо от други полета като {{gemFieldName}}). Това е списък с квалифицирани ID на предмети, разделени със запетаи (както са показани от Lookup Anything в полето „вътрешен ID“).",
+
+    // Junimo hut dropdown values
+    "config.junimo-huts.auto-detect": "Автоматично",
+    "config.junimo-huts.ignore": "Игнорирай ги",
+    "config.junimo-huts.move-into-chests": "Премести от колибите на джунимо в сандъците",
+    "config.junimo-huts.move-into-huts": "Премести от сандъците в колибите на джунимо",
+
+    // per-chest settings
+    "config.title.chest-settings": "Настройки на сандъците",
+    "config.default-chest-override.name": "Стандартно поведение",
+    "config.default-chest-override.desc": "Дали сандъците да са включени или изключени по подразбиране (с изключение на зададените по-долу). Включените сандъци автоматизират свързаните машини, а изключените се игнорират изцяло.",
+    "config.chest-override.name": "{{chestName}}",
+    "config.chest-override.name.take-only": "{{chestName}} (само вземане)",
+    "config.chest-override.desc": "Дали поставените предмети {{chestName}} да са включени като сандъци. Виж подсказката на „{{defaultBehaviorField}}“.",
+    "config.chest-override.desc.take-only": "{{description}} (Когато е включено, от този тип сандък могат само да се вземат предмети.)", // {{description}} contains the previous translation line
+    "config.chest-override.values.default": "По подразбиране",
+    "config.chest-override.values.enabled": "Включи",
+    "config.chest-override.values.disabled": "Изключи",
+
+    // per-machine settings
+    "config.title.machine-settings": "Настройки на {{machineName}}",
+    "config.machine-settings-enabled.name": "Включена",
+    "config.machine-settings-enabled.desc": "Дали да се включи автоматизацията на {{machineName}}.",
+    "config.machine-settings-priority.name": "Приоритет",
+    "config.machine-settings-priority.desc": "Редът на приоритет, по който машините {{machineName}} да се обработват спрямо други машини. Стандартният приоритет на машините е 0, като по-високите стойности се обработват първи.",
+
+    // machine names
+    "config.machines.bush": "Храст",
+    "config.machines.fruit-tree": "Дърво (овощно дърво)",
+    "config.machines.trash-can": "Кошче за боклук",
+    "config.machines.wild-tree": "Дърво (диворастящо дърво)",
+    "config.machines.feed-hopper": "Хранилка за сено и силоз",
+
+    // special settings for individual machines
+    "config.machines.wild-tree.collect-moss.name": "Събирай мъх",
+    "config.machines.wild-tree.collect-moss.desc": "Дали да се събира мъхът по дърветата. Например запазването на мъха по дърветата повишава качеството на гъбите от близките пънове за гъби."
+}
