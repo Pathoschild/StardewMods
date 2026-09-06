@@ -20,7 +20,7 @@ internal class GenericModConfigMenuIntegrationForContentPack : IGenericModConfig
     private readonly IContentPack ContentPack;
 
     /// <summary>The config model.</summary>
-    private readonly InvariantDictionary<ConfigField> Config;
+    public InvariantDictionary<ConfigField> Config { get; set; }
 
     /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
     private readonly Func<string, IInvariantSet> ParseCommaDelimitedField;

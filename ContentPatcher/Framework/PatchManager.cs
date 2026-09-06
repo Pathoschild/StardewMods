@@ -408,6 +408,11 @@ internal class PatchManager
         return this.PermanentlyDisabledPatches;
     }
 
+    public void ClearPermanentlyDisabledPatchesForPack(IContentPack contentPack)
+    {
+        this.PermanentlyDisabledPatches.RemoveWhere(patch => patch.ContentPack.Manifest.UniqueID == contentPack.Manifest.UniqueID);
+    }
+
     /// <summary>Get patches which load the given asset in the current context.</summary>
     /// <param name="request">The asset request being intercepted.</param>
     public IEnumerable<LoadPatch> GetCurrentLoaders(AssetRequestedEventArgs request)

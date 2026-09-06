@@ -7,6 +7,7 @@ using ContentPatcher.Framework.ConfigModels;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.GameData.Locations;
 using xTile;
 
@@ -64,6 +65,11 @@ internal class CustomLocationManager
             this.CustomLocationsByMapPath[this.ContentHelper.ParseAssetName(parsed.PublicMapPath)] = parsed;
 
         return true;
+    }
+
+    public int ClearContentPack(IContentPack contentPack)
+    {
+        return this.CustomLocations.RemoveWhere(location => location.ContentPack.Manifest.UniqueID == contentPack.Manifest.UniqueID);
     }
 
     /// <summary>Enforce that custom location maps have a unique name.</summary>

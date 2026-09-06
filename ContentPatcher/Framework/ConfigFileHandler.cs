@@ -54,7 +54,7 @@ internal class ConfigFileHandler
     /// <param name="contentPack">The content pack.</param>
     /// <param name="config">The configuration to save.</param>
     /// <param name="modHelper">The mod helper through which to save the file.</param>
-    public void Save(IContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
+    public void Save(IContentPack contentPack, InvariantDictionary<ConfigField> config)
     {
         // save if settings valid
         if (config.Any())

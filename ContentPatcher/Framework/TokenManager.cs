@@ -76,6 +76,12 @@ internal class TokenManager : IContext
             this.GlobalContext.Save(new Token(valueProvider));
     }
 
+    public bool ClearLocalToken(IContentPack pack)
+    {
+        string scope = pack.Manifest.UniqueID.Trim();
+        return this.LocalTokens.Remove(scope);
+    }
+
     /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
     /// <param name="pack">The content pack to manage.</param>
     public ModTokenContext TrackLocalTokens(IContentPack pack)
