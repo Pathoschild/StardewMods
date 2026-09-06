@@ -6,10 +6,12 @@ using System.Linq;
 using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Delegates;
 using StardewValley.Extensions;
 using StardewValley.GameData.Buildings;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Objects;
 using StardewValley.Triggers;
 using SObject = StardewValley.Object;
 
@@ -130,7 +132,7 @@ internal class MigrateIdsAction
         // apply
         Utility.ForEachBuilding(building =>
         {
-            if (building.buildingType.Value is {} oldType && mapIds.TryGetValue(oldType, out string? newType) && Game1.buildingData.TryGetValue(newType, out BuildingData? newData))
+            if (building.buildingType.Value is { } oldType && mapIds.TryGetValue(oldType, out string? newType) && Game1.buildingData.TryGetValue(newType, out BuildingData? newData))
             {
                 building.buildingType.Value = newType;
 
@@ -318,15 +320,20 @@ internal class MigrateIdsAction
         // migrate items
         Utility.ForEachItem(item =>
         {
-            if (mapQualifiedIds.TryGetValue(item.QualifiedItemId, out ItemMetadata? data))
+            MaybeApplyItemMigration(mapQualifiedIds, item);
+
+            // migrate preserved item id (unqualified IDs)
+            if (item is SObject obj2 &&
+                obj2.preservedParentSheetIndex.Value is string preserveId &&
+                mapLocalObjectIds.TryGetValue(preserveId, out ItemMetadata? preserveData))
             {
-                if (item.ParentSheetIndex == 0 || (int.TryParse(item.ItemId, out int oldIndex) && item.ParentSheetIndex == oldIndex))
-                    item.ParentSheetIndex = data.GetParsedData()?.SpriteIndex ?? item.ParentSheetIndex;
+                obj2.preservedParentSheetIndex.Value = preserveData.LocalItemId;
+            }
 
-                item.ItemId = data.LocalItemId;
-
-                if (item is SObject obj)
-                    obj.reloadSprite();
+            // migrate signs
+            if (item is Sign sign)
+            {
+                MaybeApplyItemMigration(mapQualifiedIds, sign.displayItem.Value);
             }
 
             return true;
@@ -404,10 +411,40 @@ internal class MigrateIdsAction
                 }
 #pragma warning restore CS0618
             }
+
+            // fish ponds (unqualified IDs, must be a fish)
+            Utility.ForEachBuilding<FishPond>(pond =>
+            {
+                if (pond.fishType.Value != null && mapLocalObjectIds.TryGetValue(pond.fishType.Value, out ItemMetadata? data)
+                    && data.GetParsedData()?.Category == SObject.FishCategory
+                    && FishPond.GetRawData(data.LocalItemId) != null)
+                {
+                    pond.fishType.Value = data.LocalItemId;
+                }
+                MaybeApplyItemMigration(mapQualifiedIds, pond.output.Value);
+                MaybeApplyItemMigration(mapQualifiedIds, pond.neededItem.Value);
+                return true;
+            });
         }
 
         error = null;
         return true;
+    }
+
+    private static void MaybeApplyItemMigration(Dictionary<string, ItemMetadata> mapQualifiedIds, Item? item)
+    {
+        if (item == null)
+            return;
+        if (!mapQualifiedIds.TryGetValue(item.QualifiedItemId, out ItemMetadata? data))
+            return;
+
+        if (item.ParentSheetIndex == 0 || (int.TryParse(item.ItemId, out int oldIndex) && item.ParentSheetIndex == oldIndex))
+            item.ParentSheetIndex = data.GetParsedData()?.SpriteIndex ?? item.ParentSheetIndex;
+
+        item.ItemId = data.LocalItemId;
+
+        if (item is SObject obj)
+            obj.reloadSprite();
     }
 
     /// <summary>Try to migrate mail IDs.</summary>
