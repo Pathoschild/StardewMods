@@ -16,8 +16,8 @@ internal class LoadedContentPack : RawContentPack
 
     /// <summary>The content pack's configuration.</summary>
     public InvariantDictionary<ConfigField> Config { get; private set; }
-    public GenericModConfigMenuIntegrationForContentPack GMCMConfigMenu { get; internal set; }
-    public GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> GMCMAPI { get; internal set; }
+    public GenericModConfigMenuIntegrationForContentPack? GMCMConfigMenu { get; internal set; }
+    public GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>>? GMCMAPI { get; internal set; }
     private IMonitor Monitor { get; }
 
     /*********
@@ -41,7 +41,8 @@ internal class LoadedContentPack : RawContentPack
         this.ConfigFileHandler.Save(this.ContentPack, config);
         this.Config = config;
 
-        this.GMCMConfigMenu.Config = config;
-        this.GMCMConfigMenu.Register(this.GMCMAPI, this.Monitor);
+        this.GMCMConfigMenu?.Config = config;
+        if (this.GMCMAPI != null)
+            this.GMCMConfigMenu?.Register(this.GMCMAPI, this.Monitor);
     }
 }
