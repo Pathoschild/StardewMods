@@ -1,0 +1,852 @@
+﻿{
+    /*************************************************
+    ** Generic translations
+    *************************************************/
+    // language info
+    "generic.list-separator": ", ",
+    "generic.line-wrap-on": "",
+
+    // date names
+    "generic.now": "сега",
+    "generic.tomorrow": "утре",
+    "generic.yesterday": "вчера",
+
+    // generic values
+    "generic.unknown": "неизвестно",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% шанс за {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} от {{max}})",
+    "generic.ratio": "{{value}} от {{max}}",
+    "generic.range": "от {{min}} до {{max}}",
+    "generic.yes": "да",
+    "generic.no": "не",
+    "generic.seconds": "{{count}} секунди",
+    "generic.minutes": "{{count}} минути",
+    "generic.hours": "{{count}} часа",
+    "generic.days": "{{count}} дни",
+    "generic.in-x-days": "след {{count}} дни",
+    "generic.x-days-ago": "преди {{count}} дни",
+    "generic.price": "{{price}} з",
+    "generic.price-for-quality": "{{price}} з ({{quality}})",
+    "generic.price-for-stack": "{{price}} з за куп {{count}} бр.",
+    "generic.show-x-results": "покажи {{count}} резултата",
+
+    // types
+    "type.achievement": "Постижение",
+    "type.building": "Сграда",
+    "type.bush": "Храст",
+    "type.fruit-tree": "Овощно дърво",
+    "type.monster": "Чудовище",
+    "type.player": "Играч",
+    "type.tree": "Дърво",
+    "type.villager": "Жител",
+    "type.other": "Друго",
+
+    // item qualities
+    "quality.normal": "нормално",
+    "quality.silver": "сребърно",
+    "quality.gold": "златно",
+    "quality.iridium": "иридиево",
+
+    // item names shown in recipes
+    "item.wild-seeds": "Диви семена (всякакви)",
+
+    // NPC friendship
+    "friendship-status.friendly": "Приятелски",
+    "friendship-status.dating": "Връзка",
+    "friendship-status.engaged": "Сгодени",
+    "friendship-status.married": "В брак",
+    "friendship-status.divorced": "Разведени",
+    "friendship-status.kicked-out": "Изгонен",
+
+    // custom content
+    "added-by-mod": "Добавено от мод",
+    "added-by-mod.summary": "{{modName}}",
+
+    // internal ID
+    "internal-id": "Вътрешен ID",
+
+
+    /*************************************************
+    ** Lookup UI
+    *************************************************/
+    /*********
+    ** Data translations
+    *********/
+    // Стаи в Читалището
+    "bundle-area.pantry": "Килер",
+    "bundle-area.crafts-room": "Занаятчийска стая",
+    "bundle-area.fish-tank": "Аквариум",
+    "bundle-area.boiler-room": "Котелно помещение",
+    "bundle-area.vault": "Трезор",
+    "bundle-area.bulletin-board": "Табло за обяви",
+    "bundle-area.abandoned-joja-mart": "Изоставеният Джоджа Март",
+
+    // Имена на магазини
+    "shop.adventure-guild": "Гилдия на приключенците",
+    "shop.clint": "Клинт",
+    "shop.marnie": "Марни",
+    "shop.pierre": "Пиер",
+    "shop.robin": "Робин",
+    "shop.volcano": "магазин във вулкана",
+    "shop.willy": "Уили",
+
+    // Видове рецепти
+    "recipe-type.cooking": "Готвене",
+    "recipe-type.crafting": "Изработка",
+    "recipe-type.tailoring": "Шиене",
+
+    // Описания на NPC
+    "data.npc.pet.description": "Твоят верен домашен любимец.",
+    "data.npc.horse.description": "Твоят верен кон.",
+    "data.npc.junimo.description": "Горски дух от духовния свят. Знае се много малко за тях.",
+    "data.npc.trash-bear.description": "Приятелски дух, който почиства боклуците.",
+
+    // Типове предмети
+    "data.type.container": "Контейнер",
+
+    // Текст за предмети
+    "data.item.egg-incubator.description": "Излюпва яйца в малки пилета и патета.",
+    "data.item.barrel.name": "Бъчва",
+    "data.item.barrel.description": "Разбий я, за да получиш разни стоки.",
+    "data.item.box.name": "Кутия",
+    "data.item.box.description": "Разбий я, за да получиш разни стоки.",
+
+    // Имена на локации
+    "location.beach.east-pier": "{{locationName}} (източен кей)",
+    "location.bugLand": "Леговище на мутанти",
+    "location.desert.topPond": "{{locationName}} (северно езерце)",
+    "location.farmCave": "Пещера във фермата",
+    "location.farmHouse": "Фермерска къща",
+    "location.forest.island-tip": "{{locationName}} (реката близо до южния край на големия остров)",
+    "location.forest.lake": "{{locationName}} (езерце)",
+    "location.forest.river": "{{locationName}} (река)",
+    "location.HarveyRoom": "Стаята на Харви",
+    "location.LeoTreeHouse": "Къща на дърво",
+    "location.SandyHouse": "Оазис",
+    "location.SebastianRoom": "Стаята на Себастиан",
+    "location.submarine": "Подводница на Нощния пазар",
+    "location.town.northmost-bridge": "{{locationName}} (най-северният мост)",
+    "location.undergroundMine": "Мини",
+    "location.undergroundMine.level": "Мина, ниво {{level}}",
+    "location.witchSwamp": "Блато на вещицата",
+
+    "location.caldera": "Калдера на Острова на джинджифила",
+    "location.islandEast": "Остров на джинджифила: Изток",
+    "location.islandNorth": "Остров на джинджифила: Север",
+    "location.islandSouth": "Остров на джинджифила: Юг",
+    "location.islandSouthEast": "Остров на джинджифила: Югоизток",
+    "location.islandSouthEastCave": "Остров на джинджифила: пещера в Югоизтока",
+    "location.islandWest": "Остров на джинджифила: Запад",
+    "location.islandWest.freshwater": "Остров на джинджифила: Запад (езерце)",
+    "location.islandWest.ocean": "Остров на джинджифила: Запад (океан)",
+
+    "location.fish-area": "{{locationName}} ({{areaName}})",
+    "location.unknown-fish-area": "{{locationName}} (зона за риболов {{id}})",
+
+
+    /*********
+    ** Conditions & context tags
+    *********/
+    "conditions-summary": "[условия: {{conditions}}]",
+
+    "condition-or-context-tag.negate": "не е {{value}}",
+
+    "condition.day-of-month": "в определени дни ({{days}})",
+    "condition.day-of-month.even": "четни дни",
+    "condition.day-of-month.odd": "нечетни дни",
+
+    "condition.item-type.input": "входен предмет",
+    "condition.item-type.target": "целеви предмет",
+
+    "condition.raw-context-tag": "контекстен таг \"{{tag}}\"",
+    "condition.raw-condition": "заявка \"{{tag}}\"",
+
+    "condition.item-context-tag": "{{item}} има контекстен таг {{tags}}",
+    "condition.item-context-tags": "{{item}} има контекстни тагове {{tags}}",
+    "condition.item-context-tag.value": "'{{tag}}'",
+
+    "condition.item-edibility.edible": "{{item}} става за ядене",
+    "condition.item-edibility.min": "{{item}} има ядливост {{min}} или повече",
+    "condition.item-edibility.range": "{{item}} има ядливост от {{min}} до {{max}}",
+
+    "context-tag.bone": "кост (всякаква)",
+    "context-tag.egg": "яйце (всякакво)",
+    "context-tag.large-egg": "голямо яйце (всякакво)",
+    "context-tag.preserved-item": "консервирано: {{name}}",
+
+
+    /*********
+    ** Achievement lookups
+    *********/
+    // labels
+    "achievement.unlocked": "Отключено",
+    "achievement.hat-shop": "Магазин за шапки",
+
+    // values
+    "achievement.hat-shop.hats-added": "Тези шапки се добавят в магазина на Мишката, когато постижението е отключено:",
+    "achievement.hat-shop.no-hats-added": "Това постижение не отключва нови шапки.",
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Любов",
+    "animal.happiness": "Щастие",
+    "animal.mood": "Настроение днес",
+    "animal.complaints": "Оплаквания",
+    "animal.produce-ready": "Продукцията е готова",
+    "animal.growth": "Растеж",
+    "animal.sells-for": "Продажна цена",
+    "animal.golden-cracker": "Златна бисквитка за животни", // also used for fish ponds
+
+    // values
+    "animal.complaints.hungry": "не е хранено вчера",
+    "animal.complaints.left-out": "беше оставено навън снощи",
+    "animal.complaints.new-home": "преместено в нов дом",
+    "animal.complaints.no-heater": "няма отоплител през зимата",
+    "animal.complaints.not-petted": "не е галено днес",
+    "animal.complaints.wild-animal-attack": "нападнато от диви животни през нощта",
+    "animal.golden-cracker.none": "Няма. Добави златна бисквитка, за да удвоиш продукцията.",
+    "animal.golden-cracker.applied": "Приложена; продукцията е удвоена.",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Животни",
+    "building.construction": "Строеж",
+    "building.construction-costs": "Разходи за строеж",
+    "building.feed-trough": "Ясли за хранене",
+    "building.horse": "Кон",
+    "building.horse-location": "Местоположение на коня",
+    "building.owner": "Собственик",
+    "building.slimes": "Слаймове",
+    "building.stored-hay": "Съхранено сено",
+    "building.upgrades": "Подобрения",
+    "building.water-trough": "Корито за вода",
+
+    // values
+    "building.animals.summary": "{{count}} от макс. {{max}} животни",
+    "building.construction.summary": "готово на {{date}}",
+    "building.feed-trough.automated": "автоматизирано",
+    "building.feed-trough.summary": "запълнени са {{filled}} от {{max}} места за хранене",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Прибирането на реколта е активно",
+    "building.owner.none": "няма собственик",
+    "building.output-processing": "Продукцията се обработва",
+    "building.output-ready": "Продукцията е готова",
+    "building.slimes.summary": "{{count}} от макс. {{max}} слайма",
+    "building.stored-hay.summary": "{{hayCount}} от {{maxHayInLocation}} сено в тази локация (капацитет на сградата: {{maxHayInBuilding}})",
+    "building.upgrades.barn.0": "до 4 животни, добавя крави",
+    "building.upgrades.barn.1": "до 8 животни, добавя бременност и кози",
+    "building.upgrades.barn.2": "до 12 животни, добавя авто-хранене, прасета и овце",
+    "building.upgrades.cabin.0": "първоначална хижа",
+    "building.upgrades.cabin.1": "добавя кухня, позволява брак",
+    "building.upgrades.cabin.2": "позволява деца",
+    "building.upgrades.coop.0": "до 4 животни, добавя кокошки",
+    "building.upgrades.coop.1": "до 8 животни, добавя инкубатор, динозаври и патици",
+    "building.upgrades.coop.2": "до 12 животни, добавя авто-хранене и зайци",
+    "building.water-trough.summary": "запълнени са {{filled}} от {{max}} корита за вода",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Популация",
+    "building.fish-pond.drops": "Продукция",
+    "building.fish-pond.quests": "Задачи",
+
+    // values
+    "building.fish-pond.population.empty": "Добави риба, за да започнеш",
+    "building.fish-pond.population.next-spawn": "Нова риба ще се появи {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% шанс всеки ден за производство на първия съвпадащ предмет:",
+    "building.fish-pond.drops.min-fish": "При {{count}} риби:",
+    "building.fish-pond.quests.done": "{{count}} риби",
+    "building.fish-pond.quests.incomplete-one": "{{count}} риби: ще е нужно {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} риби: ще е нужно едно от {{itemList}}",
+    "building.fish-pond.quests.available": "достъпно {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Горски плод (храст)",
+    "bush.name.plain": "Обикновен храст",
+    "bush.name.tea": "Чаен храст",
+    "bush.description.berry": "Храст, по който растат дива малина и къпина.",
+    "bush.description.plain": "Обикновен храст, по който не расте нищо.",
+    "bush.description.Tea": "Храст, от който се берат чаени листа.",
+    "bush.date-planted": "Дата на засаждане",
+    "bush.growth": "Растеж",
+    "bush.next-harvest": "Следваща реколта",
+
+    // values
+    "bush.growth.summary": "узрява на {{date}}",
+    "bush.schedule.berry": "20% шанс за дива малина през пролетта (15-18) и къпина през есента (8-11).",
+    "bush.schedule.tea": "Дава чаени листа от 22-ро число на всеки сезон (освен зимата, ако не е в оранжерия).",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Оплаквания",
+    "fruit-tree.name": "{{fruitName}} (дърво)",
+    "fruit-tree.growth": "Растеж",
+    "fruit-tree.next-fruit": "Следващ плод",
+    "fruit-tree.season": "Сезон",
+    "fruit-tree.quality": "Качество",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "не може да расте поради съседни обекти",
+    "fruit-tree.growth.summary": "узрява на {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "няма да растат нови плодове, докато не събереш сегашните",
+    "fruit-tree.next-fruit.out-of-season": "не е в сезон",
+    "fruit-tree.next-fruit.struck-by-lightning": "ударено от мълния! Ще се възстанови след {{count}} дни.",
+    "fruit-tree.next-fruit.too-young": "твърде младо, за да ражда",
+    "fruit-tree.quality.now": "сега: {{quality}}",
+    "fruit-tree.quality.on-date": "{{quality}} на {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} на {{date}} догодина",
+    "fruit-tree.season.summary": "{{season}} (или по всяко време в оранжерия)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Реколта",
+    "crop.harvest": "Беритба",
+    "crop.fertilized": "Наторено",
+    "crop.watered": "Полято",
+
+    // values
+    "crop.summary.dead": "Това растение е мъртво.",
+    "crop.summary.drops-X": "дава {{count}}",
+    "crop.summary.drops-X-to-Y": "дава от {{min}} до {{max}} ({{percent}}% шанс за допълнителна реколта)",
+    "crop.summary.harvest-once": "беритба след {{daysToFirstHarvest}} дни",
+    "crop.summary.harvest-multi": "беритба след {{daysToFirstHarvest}} дни, след това на всеки {{daysToNextHarvests}} дни",
+    "crop.summary.farming-xp": "дава +{{amount}} опит за земеделие",
+    "crop.summary.foraging-xp": "дава +{{amount}} опит за събирачество",
+    "crop.summary.seasons": "расте през {{seasons}}",
+    "crop.summary.sells-for": "продава се за {{price}}",
+    "crop.harvest.too-late": "твърде късно в сезона за следваща беритба (щеше да бъде на {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "Съдържание",
+    "item.loves-this": "Обожава това",
+    "item.likes-this": "Харесва това",
+    "item.neutral-about-this": "Неутрално",
+    "item.dislikes-this": "Не харесва това",
+    "item.hates-this": "Мрази това",
+    "item.needed-for": "Нужно за",
+    "item.flavor": "Вкус/Аромат", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.number-owned": "Притежавани",
+    "item.number-cooked": "Сготвени",
+    "item.number-crafted": "Изработени",
+    "item.recipes": "Рецепти",
+    "item.see-also": "Виж също",
+    "item.sells-for": "Продава се за",
+    "item.sells-to": "Продава се на",
+    "item.can-be-dyed": "Може да се боядисва",
+    "item.produces-dye": "Дава боя",
+
+    // values
+    "item.contents.placed": "{{name}} е вътре",
+    "item.contents.ready": "{{name}} е готово",
+    "item.contents.partial": "{{name}} след {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} неразкрити жители",
+    "item.undiscovered-gift-taste-appended": ", и още {{count}} неразкрити жители",
+    "item.needed-for.community-center": "читалище ({{bundles}})",
+    "item.needed-for.full-shipment": "постижение: пълна доставка (изпрати един)",
+    "item.needed-for.monoculture": "постижение: монокултура (изпрати още {{count}})",
+    "item.needed-for.polyculture": "постижение: поликултура (изпрати още {{count}})",
+    "item.needed-for.full-collection": "постижение: пълна колекция (дари един на музея)",
+    "item.needed-for.gourmet-chef": "постижение: гурме готвач (сготви {{recipes}})",
+    "item.needed-for.craft-master": "постижение: майстор занаятчия (изработи {{recipes}})",
+    "item.needed-for.quests": "текущи задачи ({{quests}})",
+    "item.needed-for.trash-bear": "Мечо боклукчия (предай един)",
+    "item.unknown-recipes": "{{count}} неизвестни рецепти",
+    "item.sells-to.shipping-box": "кутия за пратки",
+    "item.recipes-for-ingredient.entry": "{{name}} (нужни са {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.recipes-for-machine.same-as-input": "[същото като вложения предмет]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.too-complex": "Някои правила на машината са твърде сложни за показване.",
+    "item.number-owned.summary": "притежаваш {{count}} броя",
+    "item.number-owned-flavored.summary": "притежаваш {{count}} ({{name}}) или {{baseCount}} ({{baseName}}) броя", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-crafted.summary": "изработил си {{count}} броя",
+    "item.internal-id.summary": "{{itemId}} (уникален ID: {{qualifiedItemId}})",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Съдържание",
+    "item.cask-schedule": "Зреене",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} - готово сега",
+    "item.cask-schedule.now-partial": "{{quality}} сега (използвай кирката, за да спреш зреенето)",
+    "item.cask-schedule.tomorrow": "{{quality}} утре",
+    "item.cask-schedule.in-x-days": "{{quality}} след {{count}} дни ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Стръв",
+    "item.crabpot-bait-needed": "Нуждае се от стръв!",
+    "item.crabpot-bait-not-needed": "Не е нужна поради професия Майстор на примамките.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Здравина",
+
+    // values
+    "item.fence-health.gold-clock": "няма гниене заради Златния часовник",
+    "item.fence-health.summary": "{{percent}}% (остават грубо {{count}} дни)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Продукция от развъдника",
+    "item.fish-spawn-rules": "Правила за поява",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "мин. ниво риболов: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "не е уловена още (може да се улови само веднъж)",
+    "item.fish-spawn-rules.extended-family-quest-active": "активна задача „Разширено семейство“",
+    "item.fish-spawn-rules.locations": "места: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "места:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "всеки сезон",
+    "item.fish-spawn-rules.season-list": "сезони: {{seasons}}",
+    "item.fish-spawn-rules.time": "време от деня: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "време: слънчево",
+    "item.fish-spawn-rules.weather-rainy": "време: дъждовно",
+    "item.uncaught-fish": "{{count}} неуловени риби",
+
+
+    /*********
+    ** Item > melee weapon lookups
+    *********/
+    // labels
+    "item.melee-weapon.accuracy": "Точност",
+    "item.melee-weapon.critical-chance": "Критичен шанс",
+    "item.melee-weapon.critical-damage": "Критични щети",
+    "item.melee-weapon.damage": "Щети",
+    "item.melee-weapon.defense": "Защита",
+    "item.melee-weapon.knockback": "Отблъскване",
+    "item.melee-weapon.reach": "Обсег",
+    "item.melee-weapon.speed": "Скорост на атака",
+
+    // values
+    "item.melee-weapon.critical-damage.label": "{{multiplier}} пъти нормални щети (преди бонуси на играча)",
+    "item.melee-weapon.defense.label": "{{amount}} докато е екипирано",
+    "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} пъти нормално разстояние)",
+    "item.melee-weapon.reach.label": "{{amount}} пиксела",
+    "item.melee-weapon.speed.shown-vs-actual": "показана: {{shownSpeed}}{{lineBreak}}реална: {{actualSpeed}}",
+    "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} милисекунди на замах, преди бонуси на играча)",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Предпочитание",
+    "item.movie-ticket.movie-this-week": "Филм тази седмица",
+    "item.movie-ticket.loves-movie": "Обожава филма",
+    "item.movie-ticket.likes-movie": "Харесва филма",
+    "item.movie-ticket.dislikes-movie": "Не харесва филма",
+    "item.movie-ticket.rejects-movie": "Няма да гледа филма",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} обожава това",
+    "item.movie-snack-preference.like": "{{name}} харесва това",
+    "item.movie-snack-preference.dislike": "{{name}} не харесва това",
+    "item.movie-ticket.movie-this-week.none": "Няма филм тази седмица",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Тоналност",
+    "item.music-block.drum-type": "Вид барабан",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Непобедим",
+    "monster.health": "Здраве",
+    "monster.drops": "Плячка",
+    "monster.experience": "Опит",
+    "monster.defense": "Защита",
+    "monster.attack": "Атака",
+    "monster.adventure-guild": "Гилдия на приключенците",
+
+    // values
+    "monster.drops.nothing": "нищо",
+    "monster.adventure-guild.eradication-goal": "цел за изтребление: {{name}} (убити {{count}} от {{requiredCount}})",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "Рожден ден",
+    "npc.can-romance": "Възможна връзка",
+    "npc.friendship": "Приятелство",
+    "npc.talked-today": "Разговор днес",
+    "npc.gifted-today": "Подарък днес",
+    "npc.gifted-this-week": "Подаръци за седмицата",
+    "npc.kissed-today": "Целувка днес",
+    "npc.hugged-today": "Прегръдка днес",
+    "npc.loves-gifts": "Обожава подаръци",
+    "npc.likes-gifts": "Харесва подаръци",
+    "npc.neutral-gifts": "Неутрални подаръци",
+    "npc.dislikes-gifts": "Не харесва подаръци",
+    "npc.hates-gifts": "Мрази подаръци",
+    "npc.schedule": "График за днес",
+
+    // values
+    "npc.can-romance.married": "Женени сте! <", // < turns into a heart
+    "npc.can-romance.housemate": "Съквартиранти сте!",
+    "npc.friendship.not-met": "Още не се познавате.",
+    "npc.friendship.need-bouquet": "нужен е букет за следващо ниво",
+    "npc.friendship.need-points": "следващо след {{count}} т.",
+    "npc.undiscovered-gift-taste": "{{count}} неразкрити предмета",
+    "npc.unowned-gift-taste": "{{count}} непритежавани предмета",
+    "npc.schedule.current-position": "В момента е в {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.no-entries": "Няма зареден график.",
+    "npc.schedule.not-following-schedule": "В момента не следва график. Това обикновено означава, че извършва специално действие (напр. в киното).",
+    "npc.schedule.entry": "{{time}}: отива в {{locationName}} ({{x}}, {{y}}).",
+    "npc.schedule.farmhand.unknown-position": "В момента е на неизвестно място при хоста.",
+    "npc.schedule.farmhand.unknown-schedule": "В мултиплейър NPC-тата се управляват от хоста, затова графикът им не е достъпен.",
+
+/*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Възраст",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} (остават {{count}} дни до {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "новородено",
+    "npc.child.age.baby": "бебе",
+    "npc.child.age.crawler": "пълзящо бебе",
+    "npc.child.age.toddler": "прохождащо дете",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Любов",
+    "pet.petted-today": "Погалено днес",
+    "pet.last-petted": "Последно гален",
+    "pet.water-bowl": "Купичка за вода",
+
+    // values
+    "pet.last-petted.yes": "да (+12 любов)",
+    "pet.last-petted.days-ago": "преди {{days}} дни",
+    "pet.last-petted.never": "никога",
+    "pet.water-bowl.empty": "празна",
+    "pet.water-bowl.filled": "пълна (+6 любов)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Име на фермата",
+    "player.farm-map": "Карта на фермата",
+    "player.favorite-thing": "Любимо нещо",
+    "player.gender": "Пол",
+    "player.housemate": "Съквартирант",
+    "player.spouse": "Съпруг/а",
+    "player.watched-movie-this-week": "Гледан филм тази седмица",
+    "player.combat-skill": "Бой",
+    "player.farming-skill": "Земеделие",
+    "player.fishing-skill": "Риболов",
+    "player.foraging-skill": "Събирачество",
+    "player.mining-skill": "Минно дело",
+    "player.luck": "Късмет",
+    "player.save-format": "Файлов формат",
+
+    // values
+    "player.farm-map.custom": "Персонализирана",
+    "player.gender.male": "мъж",
+    "player.gender.female": "жена",
+    "player.luck.summary": "{{percent}}% към много случайни проверки",
+    "player.skill.progress": "ниво {{level}} (нужен е {{expNeeded}} опит за следващо)",
+    "player.skill.progress-last": "ниво {{level}}",
+
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Решение",
+
+    // values
+    "puzzle.solution.solved": "Пъзелът е решен!",
+    "puzzle.solution.hidden": "Решенията на пъзелите са скрити според настройките ти.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Пъзел в кристалната пещера",
+    "puzzle.island-crystal-cave.crystal-id": "ID на кристал",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Активирай статуята, за да започнеш пъзела.",
+    "puzzle.island-crystal-cave.solution.waiting": "Изчакване играта да генерира последователност...",
+    "puzzle.island-crystal-cave.solution.activated": "Повтори модела на активираните кристали:",
+
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Пъзел с русалката на острова",
+    "puzzle.island-mermaid.solution.intro": "Използвай флейтови блокове, за да изсвириш песента на русалката от Нощния пазар. Стойности на тоналността (можеш да провериш флейтов блок, за да видиш неговия тон):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Пъзел в светилището на острова",
+
+    // values
+    "puzzle.island-shrine.solution": "На всеки пиедестал постави предмета, пуснат от птиците със скъпоценни камъни в съответната островна локация, когато вали. Предметите са произволни за всяко запазване.",
+    "puzzle.island-shrine.solution.east": "Изток: {{item}}",
+    "puzzle.island-shrine.solution.north": "Север: {{item}}",
+    "puzzle.island-shrine.solution.south": "Юг: {{item}}",
+    "puzzle.island-shrine.solution.west": "Запад: {{item}}",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // Note for translators:
+    // The translations in this section are a bit more technical. Quick summary:
+    //
+    //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
+    //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
+
+    // labels
+    "tile.title": "Плочка от картата ({{x}}, {{y}})",
+    "tile.description": "Позиция на плочка върху картата. Това се показва, защото си активирал проверка на плочки (tile lookups) в настройките.",
+    "tile.map-name": "Име на картата",
+    "tile.map-properties": "Свойства на картата",
+    "tile.layer-tile": "Плочка от слой {{layer}}",
+    "tile.layer-tile-none": "Плочка",
+
+    // values
+    "tile.map-properties.value": "{{name}}: {{value}}",
+    "tile.layer-tile.appearance": "индекс {{index}} от текстура '{{tilesheetId}}' (път: '{{tilesheetPath}}')",
+    "tile.layer-tile.blend-mode": "режим на смесване: {{value}}",
+    "tile.layer-tile.index-property": "индекс свойство: {{name}}: {{value}}",
+    "tile.layer-tile.tile-property": "свойство на плочката: {{name}}: {{value}}",
+    "tile.layer-tile.none-here": "тук няма плочка",
+
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Търсен предмет",
+    "trash-bear-or-gourmand.quest-progress": "Прогрес на задачата",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Етап на растеж",
+    "tree.next-growth": "Следващ растеж",
+    "tree.seed": "Семе",
+    "tree.is-fertilized": "Наторено",
+
+    // values
+    "tree.name.big-mushroom": "Голяма гъба",
+    "tree.name.mahogany": "Махагоново дърво",
+    "tree.name.maple": "Кленово дърво",
+    "tree.name.oak": "Дъбово дърво",
+    "tree.name.palm": "Палмово дърво",
+    "tree.name.pine": "Борово дърво",
+    "tree.name.mossy": "Мъхесто дърво",
+    "tree.name.mystic": "Мистично дърво",
+    "tree.name.unknown": "Неизвестно дърво",
+    "tree.stage.done": "Напълно пораснало",
+    "tree.stage.partial": "{{stageName}} ({{step}} от {{max}})",
+    "tree.next-growth.winter": "не може да расте навън през зимата без тор (освен в оранжерия)",
+    "tree.next-growth.adjacent-trees": "не може да расте, защото други дървета са твърде близо",
+    "tree.next-growth.chance": "{{chance}}% шанс да премине в етап {{stage}} утре",
+    "tree.seed.not-ready": "Не е готово",
+    "tree.seed.probability-daily": "{{chance}}% шанс за {{itemName}} всеки ден.",
+    "tree.seed.probability-on-chop": "{{chance}}% шанс да пусне {{itemName}} при отсичане.",
+
+    // growth stages
+    "tree.stages.seed": "семе",
+    "tree.stages.sprout": "кълн",
+    "tree.stages.sapling": "фиданка",
+    "tree.stages.bush": "храст",
+    "tree.stages.smallTree": "малко дърво",
+    "tree.stages.tree": "дърво",
+
+
+    /*********
+    ** Data mining fields
+    *********/
+    "data-mining.name": "Сурови данни",
+    "data-mining.name.map-tile": "Сурови данни (плочка)",
+    "data-mining.name.map-location": "Сурови данни (локация)",
+
+    "data-mining.section-pinned": "Закачено", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+
+
+    /*************************************************
+    ** Search UI
+    *************************************************/
+    // screen reader text
+    "search-menu.screen-reader.instructions": "Меню за търсене на Lookup Anything. Избрано е полето за търсене. Въведи текст.",
+    "search-menu.screen-reader.search-results": "Поле за търсене. Намерени са {{count}} резултата за „{{search}}“. Навигирай надолу за резултатите.",
+    "search-menu.screen-reader.search-no-results": "Поле за търсене. Няма намерени резултати за „{{search}}“.",
+    "search-menu.screen-reader.search-empty": "Поле за търсене. В момента е празно.",
+    "search-menu.screen-reader.result": "{{name}} ({{type}}).",
+
+
+    /*************************************************
+    ** Generic Mod Config Menu UI
+    *************************************************/
+    // appearance
+    "config.title.appearance": "Външен вид",
+
+    "config.theme.name": "Визуална тема",
+    "config.theme.desc": "Изгледът, който да се прилага за менютата за проверка и търсене.",
+
+    "config.theme.values.Parchment": "Пергамент",
+    "config.theme.values.Joja": "Джоджа",
+    "config.theme.values.MenuBox_Border": "Меню с рамка",
+    "config.theme.values.MenuBox_Inset": "Вдлъбнато меню",
+    "config.theme.values.MenuBox_Raised": "Изпъкнало меню",
+    "config.theme.values.Plain": "Изчистена",
+
+    "config.force-full-screen.name": "Принудителен цял екран",
+    "config.force-full-screen.desc": "Дали менюто винаги да бъде на цял екран, вместо центрирано в прозореца. Това е полезно предимно при преглед на полетата за сурови данни.",
+
+    // progression mode
+    "config.title.progression": "Режим на прогресия",
+
+    "config.progression.show-uncaught-fish-spawn-rules.name": "Правила за неуловени риби",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "Дали да се показват условията за поява на риби, които все още не си уловил.",
+
+    "config.progression.show-unknown-gift-tastes.name": "Неизвестни предпочитания за подаръци",
+    "config.progression.show-unknown-gift-tastes.desc": "Дали да се показват предпочитанията за подаръци, за които още не си научил в играта (напр. от диалози или чрез експериментиране).",
+
+    "config.progression.show-unknown-recipes.name": "Неизвестни рецепти",
+    "config.progression.show-unknown-recipes.desc": "Дали да се показват рецепти, които все още не си научил в играта.",
+
+    "config.progression.show-puzzle-solutions.name": "Решения на пъзели",
+    "config.progression.show-puzzle-solutions.desc": "Дали да се показват решенията на пъзелите.",
+
+    // gift tastes
+    "config.title.gift-tastes": "Предпочитания за подаръци",
+    "config.show-gift-tastes.loved.name": "Любими подаръци",
+    "config.show-gift-tastes.loved.desc": "Дали да се показват любимите подаръци при проверка на NPC и предмети.",
+    "config.show-gift-tastes.liked.name": "Харесвани подаръци",
+    "config.show-gift-tastes.liked.desc": "Дали да се показват харесваните подаръци при проверка на NPC и предмети.",
+    "config.show-gift-tastes.neutral.name": "Неутрални подаръци",
+    "config.show-gift-tastes.neutral.desc": "Дали да се показват неутралните подаръци при проверка на NPC и предмети.",
+    "config.show-gift-tastes.disliked.name": "Нехаресвани подаръци",
+    "config.show-gift-tastes.disliked.desc": "Дали да се показват нехаресваните подаръци при проверка на NPC и предмети.",
+    "config.show-gift-tastes.hated.name": "Мразени подаръци",
+    "config.show-gift-tastes.hated.desc": "Дали да се показват мразените подаръци при проверка на NPC и предмети.",
+
+    "config.show-unowned-gifts.name": "Непритежавани подаръци",
+    "config.show-unowned-gifts.desc": "Дали да се показват предпочитания за подаръци за предмети, които играчът не притежава никъде в света.",
+
+    "config.highlight-unrevealed-gift-tastes.name": "Открояване на неразкрити подаръци",
+    "config.highlight-unrevealed-gift-tastes.desc": "Дали да се открояват предпочитанията, които още не са разкрити в профила на жителя. Когато е включено, неразкритите предпочитания ще бъдат удебелени.",
+
+    // collapse fields
+    "config.title.collapse-fields": "Свиване на големи полета",
+
+    "config.collapse-fields.enabled.name": "Активирано",
+    "config.collapse-fields.enabled.desc": "Дали големите полета да се свиват, замествайки списъка с кликаема връзка „покажи {{count}} стойности“.",
+
+    "config.collapse-fields.building-recipes.name": "Сгради: рецепти",
+    "config.collapse-fields.item-recipes.name": "Предмети: рецепти",
+    "config.collapse-fields.npc-gift-tastes.name": "Жители: предпочитания за подаръци",
+    "config.collapse-fields.any.desc": "Ако полето съдържа толкова много стойности, списъкът ще бъде заместен с кликаема връзка „покажи {{count}} стойности“.",
+
+    // advanced options
+    "config.title.advanced-options": "Разширени опции",
+    "config.tile-lookups.name": "Проверка на плочки",
+    "config.tile-lookups.desc": "Дали плочките от картата да се включват като обекти за проверка.",
+    "config.data-mining-fields.name": "Полета за сурови данни",
+    "config.data-mining-fields.desc": "Дали да се показват сурови данни, полезни за разработчици (като отделни полета най-отдолу). Това е разширена функция, която не е предназначена за повечето играчи.",
+    "config.show-invalid-recipes.name": "Невалидни рецепти",
+    "config.show-invalid-recipes.desc": "Дали да се показват рецепти, които изискват или произвеждат счупени предмети.",
+    "config.target-redirection.name": "Пренасочване на проверката",
+    "config.target-redirection.desc": "В някои случаи играта създава временен обект, който представлява друг. Например Абигейл в мините всъщност е временен NPC с име 'AbigailMine', така че проверката ѝ там няма да покаже истинската ѝ информация. С тази опция ще се проверява оригиналната Абигейл.",
+    "config.scroll-amount.name": "Стъпка на превъртане",
+    "config.scroll-amount.desc": "Броят пиксели, с които съдържанието се мести при всяко превъртане нагоре/надолу.",
+
+    // controls section
+    "config.title.controls": "Управление",
+    "config.hide-on-key-up.name": "Скриване при пускане на клавиш",
+    "config.hide-on-key-up.desc": "Дали интерфейсът да се скрива веднага щом пуснеш клавиша за проверка.",
+    "config.toggle-lookup.name": "Клавиш за проверка",
+    "config.toggle-lookup.desc": "Клавишите, които отварят информация за обекта под курсора.",
+    "config.toggle-lookup-on-double-click.name": "Проверка при двойно кликване",
+    "config.toggle-lookup-on-double-click.description": "Дали да се отваря информация при двойно кликване с левия бутон на мишката.",
+    "config.toggle-lookup-on-double-tap.name": "Проверка при двойно докосване",
+    "config.toggle-lookup-on-double-tap.description": "Дали да се отваря информация при двойно докосване на екрана.",
+    "config.toggle-search.name": "Клавиш за търсене",
+    "config.toggle-search.desc": "Клавишите, които отварят интерфейса за търсене.",
+    "config.scroll-up.name": "Превъртане нагоре",
+    "config.scroll-up.desc": "Клавишите, които превъртат съдържанието нагоре с няколко реда.",
+    "config.scroll-down.name": "Превъртане надолу",
+    "config.scroll-down.desc": "Клавишите, които превъртат съдържанието надолу с няколко реда.",
+    "config.page-up.name": "Страница нагоре",
+    "config.page-up.desc": "Клавишите, които превъртат съдържанието нагоре с цяла страница.",
+    "config.page-down.name": "Страница надолу",
+    "config.page-down.desc": "Клавишите, които превъртат съдържанието надолу с цяла страница.",
+    "config.toggle-debug.name": "Дебъг информация",
+    "config.toggle-debug.desc": "Клавишите, които превключват показването на информация за дебъгване.",
+
+
+    /*************************************************
+    ** Iconic Framework icon
+    *************************************************/
+    "icon.toggle-search.name": "Lookup Anything",
+    "icon.toggle-search.desc": "Превключване на търсенето в Lookup Anything"
+}

@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Прескачане до",
+    "config.skip-to.tooltip": "Екранът, до който да се прескача автоматично. По подразбиране: Заглавно меню.",
+    "config.skip-to.values.title-menu": "Заглавно меню",
+    "config.skip-to.values.load-menu": "Меню за зареждане",
+    "config.skip-to.values.join-coop": "Присъединяване към кооперативна игра",
+    "config.skip-to.values.host-coop": "Създаване на кооперативна игра"
+}

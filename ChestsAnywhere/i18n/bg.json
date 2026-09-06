@@ -1,0 +1,149 @@
+{
+    /**********
+    ** Chest UI
+    **********/
+    // default chest names
+    "default-name.fridge": "Хладилник",
+    "default-name.other": "{{name}} №{{number}}",
+    "default-name.shipping-bin.store": "изпращане на предмети",
+    "default-name.shipping-bin.take": "получаване на предмети",
+
+    // default category names
+    "default-category.cabin-owned": "Хижа ({{owner}})",
+    "default-category.cabin-unowned": "Хижа (празна)",
+    "default-category.cellar-owned": "Изба ({{owner}})",
+    "default-category.cellar-unowned": "Изба №{{cellarNumber}}",
+    "default-category.farmhouse": "Фермерска къща",
+    "default-category.island-farmhouse": "Фермерска къща на острова",
+    "default-category.duplicate": "{{locationName}} №{{number}}",
+
+    // edit-chest labels
+    "label.location": "Място",
+    "label.location.tile": "плочка {{x}}, {{y}}",
+    "label.name": "Име",
+    "label.category": "Категория",
+    "label.order": "Ред",
+    "label.hide-chest": "Скриване на този сандък",
+    "label.hide-chest-hidden": "Скриване на този сандък (ще трябва да намериш сандъка, за да отмениш това!)",
+    "label.automate-options": "Automate",
+    "label.automate-store": "Поставяне на предмети в този сандък",
+    "label.automate-store-first": "Първо поставяне на предмети в този сандък",
+    "label.automate-store-disabled": "Без поставяне на предмети в този сандък",
+    "label.automate-take": "Вземане на предмети от този сандък",
+    "label.automate-take-first": "Първо вземане на предмети от този сандък",
+    "label.automate-take-disabled": "Без вземане на предмети от този сандък",
+
+    // button labels
+    "button.edit-chest": "Редактиране на сандъка",
+    "button.sort-inventory": "Подреждане на инвентара",
+    "button.save": "запазване",
+    "button.reset": "нулиране",
+
+    // chest search menu
+    "search-box.chest-name": "Търсене по име на сандък:",
+    "search-box.item-name": "Търсене на предмети:",
+
+
+    /**********
+    ** Errors
+    **********/
+    "errors.disabled-from-here": "Нямаш достъп до сандъците оттук.",
+    "errors.no-chests": "Все още нямаш сандъци.",
+    "errors.no-chests-in-location": "Нямаш сандъци в тази област.",
+    "errors.no-chests-in-range": "Нямаш сандъци в обхват.",
+
+
+    /**********
+    ** Generic Mod Config Menu UI
+    **********/
+    /****
+    ** general options
+    ****/
+    "config.title.general-options": "Основни настройки",
+
+    "config.show-hover-tooltips.name": "Показване на подсказки при посочване",
+    "config.show-hover-tooltips.desc": "Дали да се показва името на сандъка в подсказка, когато посочиш сандък.",
+
+    "config.enable-shipping-bin.name": "Вкл. кутия за пратки",
+    "config.enable-shipping-bin.desc": "Дали да се включи достъпът до кутията за пратки.",
+
+    "config.enable-sprinkler-attachments.name": "Вкл. приставки за разпръсквачи",
+    "config.enable-sprinkler-attachments.desc": "Дали да се включи достъпът до приставките за разпръсквачи, като обогатителите.",
+
+    "config.add-organize-player-items.name": "Бутон за подреждане",
+    "config.add-organize-player-items.desc": "Дали да се добави бутон „подреждане“ в интерфейсите на сандъците за инвентара на играча.",
+
+    /****
+    ** remote access
+    ****/
+    "config.title.remote-access": "Отдалечен достъп",
+
+    "config.range.name": "Обхват",
+    "config.range.desc": "Обхватът, в който сандъците са достъпни чрез менюто.",
+    "config.range.unlimited": "Всички сандъци",
+    "config.range.currentWorldArea": "Сандъци в текущата област на света",
+    "config.range.currentLocation": "Сандъци в текущото място",
+    "config.range.none": "Без достъп (няма отдалечен достъп до сандъците)",
+
+    "config.disable-mines.name": "Изключване в мините и Пещерата на черепа",
+    "config.disable-mines.desc": "Дали да се изключи отдалеченият достъп до сандъците в мините и Пещерата на черепа.",
+
+    "config.disable-custom-names.name": "Изключване на определени места",
+    "config.disable-custom-names.desc": "Вътрешните имена (показани от мода Debug Mode) на местата, от които да се изключи отдалеченият достъп до сандъците. Може да посочиш няколко имена, разделени със запетаи.",
+
+    /****
+    ** open menu hotkey
+    ****/
+    "config.title.open-menu-hotkey": "Клавиш за отваряне на интерфейса на сандъците",
+
+    "config.toggle-ui-key.name": "Показване на интерфейса",
+    "config.toggle-ui-key.desc": "Клавишите, с които се показва или скрива интерфейсът на сандъците.",
+
+    "config.reopen-last-chest.name": "Повторно отваряне на последния сандък",
+    "config.reopen-last-chest.desc": "Когато натиснеш бутона за показване на интерфейса, дали да се отвори отново последният сандък, който си избрал сам в текущата игрова сесия.",
+
+    "config.default-category.name": "Категория по подразбиране",
+    "config.default-category.desc": "Когато натиснеш бутона за показване на интерфейса, по подразбиране да се показват сандъците от тази категория (ако е зададена). Това се прилага след повторното отваряне на последния сандък.",
+
+    /****
+    ** controls when chest UI is open
+    ****/
+    "config.title.menu-controls": "Управление при отворен интерфейс на сандъците",
+
+    "config.edit-chest.name": "Редактиране на сандъка",
+    "config.edit-chest.desc": "Клавишите, с които се редактират настройките на текущия сандък.",
+
+    "config.sort-items.name": "Подреждане на предметите на играча",
+    "config.sort-items.desc": "Клавишите, с които се подреждат предметите в инвентара на играча, докато е отворен сандък.",
+
+    "config.navigate-prev-chest.name": "Навигация: предишен сандък",
+    "config.navigate-prev-chest.desc": "Клавишите, с които се отваря предишният сандък, докато менюто е отворено.",
+
+    "config.navigate-next-chest.name": "Навигация: следващ сандък",
+    "config.navigate-next-chest.desc": "Клавишите, с които се отваря следващият сандък, докато менюто е отворено.",
+
+    "config.navigate-prev-category.name": "Навигация: предишна категория",
+    "config.navigate-prev-category.desc": "Клавишите, с които се отваря предишната категория, докато менюто е отворено.",
+
+    "config.navigate-next-category.name": "Навигация: следваща категория",
+    "config.navigate-next-category.desc": "Клавишите, с които се отваря следващата категория, докато менюто е отворено.",
+
+    "config.hold-to-scroll-categories.name": "Задържане за превъртане на категориите",
+    "config.hold-to-scroll-categories.desc": "Клавишите, които при задържане позволяват превъртане на падащия списък с категории с колелцето на мишката.",
+
+    "config.hold-to-scroll-chests.name": "Задържане за превъртане на сандъците",
+    "config.hold-to-scroll-chests.desc": "Клавишите, които при задържане позволяват превъртане на падащия списък със сандъци с колелцето на мишката.",
+
+    "config.open-search-menu.name": "Отваряне на менюто за търсене",
+    "config.open-search-menu.desc": "Докато разглеждаш интерфейса на сандък, клавишите, с които се отваря менюто за търсене във всички сандъци.",
+
+    "config.search-menu-preview.name": "Преглед на сандък в менюто за търсене",
+    "config.search-menu-preview.desc": "Докато разглеждаш интерфейса за търсене, клавишите, които могат да се задържат, за да се покаже подсказка с предварителен преглед на съдържанието на посочения сандък.",
+
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.open-menu.name": "Chests Anywhere",
+    "icon.open-menu.desc": "Отвори менюто"
+}
