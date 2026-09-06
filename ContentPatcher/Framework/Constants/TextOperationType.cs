@@ -13,5 +13,8 @@ internal enum TextOperationType
     RemoveDelimited,
 
     /// <summary>Parse the target text into a list of delimited values, and replace the values matching the search with a new value.</summary>
-    ReplaceDelimited
+    ReplaceDelimited,
+
+    /// <summary>Search and replace the target text with the value, using search as regex.</summary>
+    Regex
 }
