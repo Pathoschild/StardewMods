@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
@@ -144,10 +142,10 @@ internal class IncludePatch : Patch
                 }
 
                 // validate fields
-                string[] invalidFields = this.GetInvalidFields(content).ToArray();
+                var invalidFields = content.GetInvalidFieldsForSubFile(nameof(ContentConfig.Changes));
                 if (invalidFields.Any())
                 {
-                    this.WarnForPatch($"file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).");
+                    this.WarnForPatch($"file contains fields which aren't allowed for a content include file ({string.Join(", ", invalidFields.OrderByHuman())}).");
                     return;
                 }
 
@@ -204,25 +202,6 @@ internal class IncludePatch : Patch
         left = PathUtilities.NormalizeAssetName(left);
         right = PathUtilities.NormalizeAssetName(right);
         return left.EqualsIgnoreCase(right);
-    }
-
-    /// <summary>Get the content fields which aren't allowed for a secondary file which were set.</summary>
-    /// <param name="content">The content to validate.</param>
-    private IEnumerable<string> GetInvalidFields(ContentConfig content)
-    {
-        foreach (PropertyInfo property in typeof(ContentConfig).GetProperties())
-        {
-            if (property.Name == nameof(ContentConfig.Changes))
-                continue;
-
-            object? value = property.GetValue(content);
-            bool hasValue = value is IEnumerable list
-                ? list.Cast<object>().Any()
-                : value != null;
-
-            if (hasValue)
-                yield return property.Name;
-        }
     }
 
     /// <summary>Get the root log path for included patches.</summary>

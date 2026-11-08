@@ -132,6 +132,12 @@ internal class AggregateContextual : IContextual
         );
     }
 
+    /// <summary>Get the token names used by this entity as mutable invariant set.</summary>
+    public MutableInvariantSet GetMutableTokensUsed()
+    {
+        return [.. this.ValuesImpl.SelectMany(p => p.GetTokensUsed())];
+    }
+
     /// <inheritdoc />
     public IContextualState GetDiagnosticState()
     {

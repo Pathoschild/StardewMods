@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -48,5 +51,25 @@ internal class ContentConfig
         this.CustomLocations = customLocations ?? [];
         this.Changes = changes?.WhereNotNull().ToArray() ?? [];
         this.ConfigSchema = configSchema ?? new InvariantDictionary<ConfigSchemaFieldConfig?>();
+    }
+
+
+    /// <summary>Get the content fields which aren't allowed for a secondary file which were set.</summary>
+    /// <param name="content">The content to validate.</param>
+    public IEnumerable<string> GetInvalidFieldsForSubFile(params string[] allowedFields)
+    {
+        foreach (PropertyInfo property in typeof(ContentConfig).GetProperties())
+        {
+            if (allowedFields.Contains(property.Name))
+                continue;
+
+            object? value = property.GetValue(this);
+            bool hasValue = value is IEnumerable list
+                ? list.Cast<object>().Any()
+                : value != null;
+
+            if (hasValue)
+                yield return property.Name;
+        }
     }
 }

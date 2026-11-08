@@ -14,7 +14,7 @@ internal interface IInvariantSet : IReadOnlySet<string>
 
     /// <summary>Get an invariant set with the given values added to this set's values.</summary>
     /// <param name="other">The values to add.</param>
-    IInvariantSet GetWith(ICollection<string> other);
+    IInvariantSet GetWith(IEnumerable<string> other);
 
     /// <summary>Get an invariant set with the given value removed from this set's values.</summary>
     /// <param name="other">The value to remove.</param>
