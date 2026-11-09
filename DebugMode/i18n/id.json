@@ -1,0 +1,38 @@
+{
+    /*********
+    ** Debug info
+    *********/
+    // labels shown on the debug screen
+    "label.tile": "ubin",
+    "label.location": "lokasi",
+    "label.menu": "menu",
+    "label.submenu": "submenu",
+    "label.minigame": "minigame",
+    "label.dialogue": "dialog",
+    "label.event-id": "ID acara",
+    "label.event-script": "skrip acara",
+    "label.festival-name": "festival",
+    "label.shop-id": "ID toko",
+    "label.song": "lagu",
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // general options
+    "config.title.general-options": "Opsi umum",
+    "config.enable-game-debug.name": "Aktifkan hotkey untuk debug game",
+    "config.enable-game-debug.desc": "Apakah menampilkan info debug juga mengaktifkan debug hotkey game, seperti menekan 5 untuk warp ke pantai",
+    "config.enable-dangerous-hotkeys.name": "Aktifkan hotkey berbahaya",
+    "config.enable-dangerous-hotkeys.desc": "Ketika hotkey debug game diaktifkan, juga aktifkan hotkey destruktif yang dapat segera mengakhiri hari saat ini, mengacak pemain atau dekorasi rumah, atau membuat game crash.",
+
+    // controls
+    "config.title.controls": "Kontrol",
+    "config.toggle-debug-key.name": "Nyalakan atau matikan info debug",
+    "config.toggle-debug-key.desc": "Tombol yang mengaktifkan info debug.",
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.toggle-debug-mode.name": "Mode Debug",
+    "icon.toggle-debug-mode.desc": "Nyalakan atau Matikan Mode Debug"
+}
