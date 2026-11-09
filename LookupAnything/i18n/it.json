@@ -828,12 +828,10 @@
     "config.hide-on-key-up.desc": "Scegli se nascondere l'interfaccia utente di ricerca quando si rilascia il tasto di ricerca.",
     "config.toggle-lookup.name": "Attiva ricerca",
     "config.toggle-lookup.desc": "I tasti che attivano l'interfaccia utente di ricerca per qualcosa sotto il cursore.",
-
     "config.toggle-lookup-on-double-click.name": "Attiva/disattiva ricerca con doppio clic",
     "config.toggle-lookup-on-double-click.description": "Scegli se attivare/disattivare l'interfaccia di ricerca cliccando due volte il tasto sinistro del mouse. Se possibile, questa funzione individua la posizione del cursore.",
     "config.toggle-lookup-on-double-tap.name": "Attiva/disattiva ricerca con doppio tocco",
     "config.toggle-lookup-on-double-tap.description": "Scegli se attivare/disattivare l'interfaccia di ricerca toccando due volte lo schermo. Se possibile, questa funzione individua la posizione toccata.",
-
     "config.toggle-search.name": "Attiva ricerca",
     "config.toggle-search.desc": "I tasti che attivano l'interfaccia utente di ricerca.",
     "config.scroll-up.name": "Scorri verso l'alto",

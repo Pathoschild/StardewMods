@@ -202,7 +202,7 @@
     "animal.produce-ready": "动物制品",
     "animal.growth": "生长",
     "animal.sells-for": "出售",
-    "animal.golden-cracker": "金色动物饼干", // also used for fish ponds 
+    "animal.golden-cracker": "金色动物饼干", // also used for fish ponds
 
     // values (数值)
     "animal.complaints.hungry": "昨天没有喂食",
@@ -836,7 +836,6 @@
     "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
     "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
     "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
-
     "config.toggle-search.name": "搜索",
     "config.toggle-search.desc": "自定义搜索快捷键",
     "config.scroll-up.name": "向上滚动",

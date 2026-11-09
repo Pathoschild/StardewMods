@@ -350,7 +350,7 @@
     "item.dislikes-this": "No le gusta a",
     "item.hates-this": "Odian esto",
     "item.needed-for": "Necesario para",
-    "item.flavor": "Sabor",// links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
+    "item.flavor": "Sabor", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "Tienes",
     "item.number-cooked": "Cocinado",
     "item.number-crafted": "Creado",
@@ -828,12 +828,10 @@
     "config.hide-on-key-up.desc": "Si se quiere ocultar la interfaz de búsqueda cuando se suelta la tecla de búsqueda.",
     "config.toggle-lookup.name": "Activar lookup",
     "config.toggle-lookup.desc": "Las teclas que activa la interfaz de lookup de algo bajo el cursor.",
-
     "config.toggle-lookup-on-double-click.name": "Alternar consulta al hacer doble clic",
     "config.toggle-lookup-on-double-click.description": "Indica si se debe alternar la interfaz de consulta haciendo doble clic con el botón izquierdo del ratón. Esto consulta la posición pulsada si es posible.",
     "config.toggle-lookup-on-double-tap.name": "Alternar consulta al pulsar dos veces",
     "config.toggle-lookup-on-double-tap.description": "Indica si se debe alternar la interfaz de consulta pulsando dos veces la pantalla. Esto consulta la posición pulsada si es posible.",
-
     "config.toggle-search.name": "Activar busqueda",
     "config.toggle-search.desc": "Las teclas que activa la interfaz de búsqueda.",
     "config.scroll-up.name": "Desplazarse hacia arriba",

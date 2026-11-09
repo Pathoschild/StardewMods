@@ -137,7 +137,6 @@
     "config.open-search-menu.name": "Arama menüsünü aç",
     "config.open-search-menu.desc": " Mevcut sandık görüntülenirken, bütün sandıklar için arama menüsünü açan tuşlar.",
 
-
     "config.search-menu-preview.name": "Arama menüsü önizlemesi",
     "config.search-menu-preview.desc": "Arama menüsündeyken, fareyle üzerine gelinen sandığın içeriğinin önizleme araç ipucunu göstermek için basılı tutulacak tuşlar.",
 

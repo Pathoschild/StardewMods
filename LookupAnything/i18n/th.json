@@ -543,7 +543,7 @@
     "npc.unowned-gift-taste": "{{count}} unowned items", // TODO
     "npc.schedule.current-position": "Currently at {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.no-entries": "No schedule loaded.", // TODO
-    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", //  TODO
+    "npc.schedule.not-following-schedule": "Currently not following a schedule. This usually means the NPC is doing special behaviors (e.g. at the movie theater).", // TODO
     "npc.schedule.entry": "{{time}}: walk to {{locationName}} ({{x}}, {{y}}).", // TODO
     "npc.schedule.farmhand.unknown-position": "Currently in an unknown location on the host.", // TODO
     "npc.schedule.farmhand.unknown-schedule": "In multiplayer, NPCs are managed by the host so their schedule isn't available.", // TODO
@@ -845,7 +845,6 @@
     "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
     "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
     "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
-
     "config.toggle-search.name": "สลับการค้นหา",
     "config.toggle-search.desc": "ปุ่มที่สลับ UI การค้นหา",
     "config.scroll-up.name": "เลื่อนขึ้น",

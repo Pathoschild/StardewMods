@@ -116,7 +116,6 @@
     "config.open-dialogue-box.name": "Diyalog kutusunu aç",
     "config.open-dialogue-box.tooltip": "Diyalog kutularının açılma hızı. Varsayılan: {{defaultValue}}x.",
 
-    
     "config.shipping-menu.name": "Gönderim Menüsü Geçişleri",
     "config.shipping-menu.tooltip": "Gün sonu gönderilen nesneler ekranının ne kadar hızlı geçeceği. Varsayılan: {{defaultValue}}x.",
 

@@ -381,7 +381,7 @@
     "item.sells-to.shipping-box": "Отгрузочный ящик",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in 
+    "item.recipes-for-machine.same-as-input": "[то же, что и на входе]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Функции некоторого оборудования слишком сложны для отображения.",
     "item.number-owned.summary": "У вас есть {{count}} шт.",
     "item.number-owned-flavored.summary": "вы владете {{count}} ({{name}}) или {{baseCount}} ({{baseName}})", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
@@ -838,7 +838,6 @@
     "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
     "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
     "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
-
     "config.toggle-search.name": "Переключить поиск",
     "config.toggle-search.desc": "Клавиши, которые переключают пользовательский интерфейс поиска.",
     "config.scroll-up.name": "Прокрутка вверх",

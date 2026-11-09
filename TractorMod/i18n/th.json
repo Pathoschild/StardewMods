@@ -120,6 +120,7 @@
 
     "config.chop-trees-saplings.name": "สับต้นไม้ (ต้นกล้า)",
     "config.chop-trees-saplings.tooltip": "รวมถึงเคลียร์ไม้ผลที่ยังไม่โตเต็มที่",
+
     "config.chop-trees-grown.name": "สับต้นไม้ (โตแล้ว)",
     "config.chop-trees-grown.tooltip": "รวมถึงเป็นการขจัดไม้ผลที่โตเต็มที่",
 

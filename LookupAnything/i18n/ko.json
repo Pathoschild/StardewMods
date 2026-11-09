@@ -828,12 +828,10 @@
     "config.hide-on-key-up.desc": "조회 키를 놓을 때 조회 UI를 숨길지 여부",
     "config.toggle-lookup.name": "조회 전환",
     "config.toggle-lookup.desc": "커서 아래에 있는 항목에 대한 조회 UI를 전환하는 키.",
-
     "config.toggle-lookup-on-double-click.name": "더블 클릭으로 정보창 열기/닫기",
     "config.toggle-lookup-on-double-click.description": "마우스 왼쪽 버튼을 두 번 클릭해 정보창을 열거나 닫을지 여부입니다. 클릭한 위치의 정보를 불러옵니다.",
     "config.toggle-lookup-on-double-tap.name": "더블 탭으로 정보창 열기/닫기",
     "config.toggle-lookup-on-double-tap.description": "화면을 두 번 탭해 정보창을 열거나 닫을지 여부입니다. 탭한 위치의 정보를 불러옵니다.",
-
     "config.toggle-search.name": "검색 전환",
     "config.toggle-search.desc": "검색창 실행 전환하는 키",
     "config.scroll-up.name": "위로 스크롤",

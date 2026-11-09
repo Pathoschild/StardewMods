@@ -109,7 +109,6 @@
 
     // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
-
     // mine containers
     "data.item.barrel.name": "Tonneau",
     "data.item.barrel.description": "À casser pour obtenir des biens divers.",
@@ -840,7 +839,6 @@
     "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
     "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
     "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
-
     "config.toggle-search.name": "Afficher la recherche",
     "config.toggle-search.desc": "Les touches qui permettent d’afficher/cacher l'interface de recherche.",
     "config.scroll-up.name": "Défilement vers le haut",

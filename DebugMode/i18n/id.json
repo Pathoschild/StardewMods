@@ -15,6 +15,7 @@
     "label.shop-id": "ID toko",
     "label.song": "lagu",
 
+
     /*********
     ** Generic Mod Config Menu UI
     *********/
@@ -29,6 +30,7 @@
     "config.title.controls": "Kontrol",
     "config.toggle-debug-key.name": "Nyalakan atau matikan info debug",
     "config.toggle-debug-key.desc": "Tombol yang mengaktifkan info debug.",
+
 
     /*********
     ** Iconic Framework icon

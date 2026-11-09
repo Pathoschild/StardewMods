@@ -189,6 +189,7 @@
     "achievement.hat-shop.hats-added": "Тези шапки се добавят в магазина на Мишката, когато постижението е отключено:",
     "achievement.hat-shop.no-hats-added": "Това постижение не отключва нови шапки.",
 
+
     /*********
     ** Animal lookups
     *********/
@@ -542,7 +543,8 @@
     "npc.schedule.farmhand.unknown-position": "В момента е на неизвестно място при хоста.",
     "npc.schedule.farmhand.unknown-schedule": "В мултиплейър NPC-тата се управляват от хоста, затова графикът им не е достъпен.",
 
-/*********
+
+    /*********
     ** NPC > child lookups
     *********/
     // labels

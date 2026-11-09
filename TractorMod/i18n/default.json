@@ -195,6 +195,7 @@
     "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
     "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
 
+
     /****
     ** Mining
     ****/

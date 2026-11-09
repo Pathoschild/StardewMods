@@ -110,7 +110,7 @@
 
     "tourist.man-with-sunglasses": "Ти пробував зазирати до квиткової каси? Я ніяк не можу розгледіти, хто там.#Власники крамниць теж не є працівниками.",
 
-    "tourist.man-with-top-hat.1": "Ей, ${малий^мала^мале}$. Хочеш знати секрет багатства?", // In this line man with top hat saying 'kid', like 'little one', in english it can be addressed to both boys and girls(if i understand correctly). So i look down the code and find switch for female and male, players. I hope i copy paste it right. 
+    "tourist.man-with-top-hat.1": "Ей, ${малий^мала^мале}$. Хочеш знати секрет багатства?", // In this line man with top hat saying 'kid', like 'little one', in english it can be addressed to both boys and girls(if i understand correctly). So i look down the code and find switch for female and male, players. I hope i copy paste it right.
     "tourist.man-with-top-hat.2": "Схеми швидкого збагачення. Азартні ігри. Казино завжди у виграші, розумієш, про що я? Хех.",
 
     "tourist.strong-man": "Ти сильний, як я? Трощити камінь!#Але тут немає каміння. Сумно.",

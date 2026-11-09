@@ -380,7 +380,7 @@
     "item.sells-to.shipping-box": "gönderi kutusu",
     "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in 
+    "item.recipes-for-machine.same-as-input": "[içine koyulan nesne ile aynı]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Bazı makinelerin işlevleri gösterilemeyecek kadar karmaşık",
     "item.number-owned.summary": "bundan {{count}} tane sahipsin",
     "item.number-owned-flavored.summary": "Elinizde {{count}} adet ({{name}}) veya {{baseCount}} adet ({{baseName}}) var", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
@@ -828,12 +828,10 @@
     "config.hide-on-key-up.desc": "Arama anahtarını bıraktığınızda arama kullanıcı arabiriminin gizlenip gizlenmeyeceği.",
     "config.toggle-lookup.name": "Aramayı aç/kapat",
     "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",
-
     "config.toggle-lookup-on-double-click.name": "Çift tıklama ile aramayı aç/kapat",
     "config.toggle-lookup-on-double-click.description": "Sol fare tuşuna iki kez tıklayarak arama arayüzünün açılıp kapatılmayacağı. Mümkünse tıklanan konumu arar.",
     "config.toggle-lookup-on-double-tap.name": "Çift dokunma ile aramayı aç/kapat",
     "config.toggle-lookup-on-double-tap.description": "Ekrana iki kez dokunarak arama arayüzünün açılıp kapatılmayacağı. Mümkünse dokunulan konumu arar.",
-
     "config.toggle-search.name": "Aramayı aç/kapat",
     "config.toggle-search.desc": "Arama arayüzünü değiştiren tuşlar.",
     "config.scroll-up.name": "Yukarı kaydır",
