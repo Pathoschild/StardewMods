@@ -40,7 +40,7 @@ field               | meaning
 Config names and fields are not case-sensitive.
 
 ### Examples
-This `content.json` defines a `BillboardMaterial` config field and uses it to change which patch is
+This `content.json` defines a `Material` config field and uses it to change which patch is
 applied:
 
 ```js
