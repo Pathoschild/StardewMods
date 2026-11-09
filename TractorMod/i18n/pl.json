@@ -46,7 +46,7 @@
     "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
 
     "config.magnetic-radius.name": "Magnetic Radius",
-    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from farther away). Default {{defaultValue}}.",
 
     "config.build-price.name": "Build Price",
     "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",

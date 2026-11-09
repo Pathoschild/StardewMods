@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Removed timer on the tractor buff icon (since it's active until you dismount it).
+* Fixed typo in config UI.
 * Improved translations. Thanks to AcTePuKc (added Bulgarian), Fen1kks (updated Turkish), and kr0n0m3tr0-88 (updated Spanish)!
 
 ## 4.24.4
