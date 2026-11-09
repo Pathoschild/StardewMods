@@ -75,9 +75,9 @@
 
     "config.tool-use-sounds-limit.name": "Sonidos al usar herramientas",
     "config.tool-use-sounds-limit.tooltip": "Al aplicar una herramienta en muchas casillas alrededor del tractor ,qué sonidos de herramienta deben reproducirse. La opción predeterminada es '{{defaultOption}}'. Ten en cuenta que '{{unlimitedOption}}' puede causar error si la opción '{{distanceOption}}' es demasiado alta, debido a la reproducción de demasiados sonidos a la vez.",
-    "config.tool-use-sounds-limit.value.Default": "default",
-    "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied",
-    "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)",
+    "config.tool-use-sounds-limit.value.Default": "default", // TODO
+    "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied", // TODO
+    "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)", // TODO
 
 
     /****
@@ -129,7 +129,7 @@
     "config.harvest-fruit-trees.name": "Cosechar árboles frutales",
     "config.harvest-fruit-trees.tooltip": "Si se cosechan árboles frutales.",
 
-    "config.harvest-tree-moss.name": "Recolectar musgo de los árboles"
+    "config.harvest-tree-moss.name": "Recolectar musgo de los árboles",
     "config.harvest-tree-moss.tooltip": "Indica si se debe recolectar musgo de los árboles.",
 
     "config.harvest-tree-seeds.name": "Recolectar semillas de los árboles",

@@ -17,6 +17,7 @@
     "destinations.stardew-valley.train": "Stardew Valley - Ferrovia",
 
     // stops from other mods
+    // TODO
     "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
     "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name
 

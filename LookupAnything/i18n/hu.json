@@ -204,7 +204,7 @@
     "animal.produce-ready": "Kész a termék",
     "animal.growth": "Növekedés",
     "animal.sells-for": "Ára",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "nem evett tegnap",
@@ -383,7 +383,7 @@
     "item.sells-to.shipping-box": "szállítmányos láda",
     "item.recipes-for-ingredient.entry": "{{name}} (szükséges: {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
+    "item.recipes-for-machine.same-as-input": "[same as input]", // TODO // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "ennyit birtokolsz ebből: {{count}}",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"

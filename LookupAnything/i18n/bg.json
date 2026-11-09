@@ -802,12 +802,12 @@
     "config.title.collapse-fields": "Свиване на големи полета",
 
     "config.collapse-fields.enabled.name": "Активирано",
-    "config.collapse-fields.enabled.desc": "Дали големите полета да се свиват, замествайки списъка с кликаема връзка „покажи {{count}} стойности“.",
+    "config.collapse-fields.enabled.desc": "Whether to collapse large fields, so the lookup menu will replace the list with a clickable 'show X values' link to expand it.", // TODO
 
     "config.collapse-fields.building-recipes.name": "Сгради: рецепти",
     "config.collapse-fields.item-recipes.name": "Предмети: рецепти",
     "config.collapse-fields.npc-gift-tastes.name": "Жители: предпочитания за подаръци",
-    "config.collapse-fields.any.desc": "Ако полето съдържа толкова много стойности, списъкът ще бъде заместен с кликаема връзка „покажи {{count}} стойности“.",
+    "config.collapse-fields.any.desc": "If the field contains this many values, the lookup menu will replace the list with a clickable 'show X values' link to expand it.", // TODO
 
     // advanced options
     "config.title.advanced-options": "Разширени опции",

@@ -32,12 +32,12 @@
     "config.harvest.name": "Aratás",
     "config.harvest.tooltip": "Milyen gyorsan aratod a növényeket és takarmányozol kézzel. Alapból {{defaultValue}}x.",
 
-    "config.horse-flute.name": "Lófuvola sebessége",
-    "config.horse-flute.tooltip": "Milyen gyorsan játszol a lófuvolán. Alapból {{defaultValue}}x.",
-
     // TODO
     "config.hold-up-item.name": "Hold up item",
     "config.hold-up-item.tooltip": "How fast you hold up an item. Default {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Lófuvola sebessége",
+    "config.horse-flute.tooltip": "Milyen gyorsan játszol a lófuvolán. Alapból {{defaultValue}}x.",
 
     "config.milk.name": "Fejés",
     "config.milk.tooltip": "Milyen gyorsan használod a tejesvödröt. Alapból {{defaultValue}}x.",

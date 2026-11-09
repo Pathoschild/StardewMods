@@ -124,7 +124,7 @@
 
     "tourist.flamingo.1": "...",
     "tourist.flamingo.2": "...?",
-    "tourist.flamingo.3": "*honk!*",
+    "tourist.flamingo.3": "*honk!*", // TODO
     "tourist.flamingo.4": "(Seni titizlikle görmezden geliyor.)",
 
     "tourist.shrouded-figure": "Bir ücret karşılığında seni eve yollayabilirim.#Ama sadece otobüse binebilirsin.",

@@ -32,10 +32,11 @@
     "config.harvest.tooltip": "La rapidez con la que se recogen los cultivos y el forraje a mano. Por defecto {{defaultValue}}x.",
 
     "config.hold-up-item.name": "Sostener objeto",
-    "config.hold-up-item.tooltip": "How fast you hold up an item. Default {{defaultValue}}x.",
+    "config.hold-up-item.tooltip": "La velocidad con la que sostienes un objeto en alto. Por defecto, {{defaultValue}}x.",
 
+    // TODO
     "config.horse-flute.name": "Play Horse Flute",
-    "config.horse-flute.tooltip": "La velocidad con la que sostienes un objeto en alto. Por defecto, {{defaultValue}}x.",
+    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.",
 
     "config.milk.name": "Ordeñar",
     "config.milk.tooltip": "La rapidez con la que se utiliza la cubeta lechera. Por defecto {{defaultValue}}x.",
@@ -128,6 +129,7 @@
     /****
     ** 'Pause Mod' section
     ****/
+    // TODO
     "config.pause-mod-section": "Pause mod",
 
     "config.mod-paused.name": "Pausar temporalmente",

@@ -152,6 +152,7 @@
     *********/
     "conditions-summary": "[conditions: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
 
+    // TODO
     "condition-or-context-tag.negate": "not {{value}}",
 
     "condition.day-of-month": "à ces jours spécifiques ({{days}})",
@@ -202,7 +203,7 @@
     "animal.produce-ready": "Produit prêt",
     "animal.growth": "Croissance",
     "animal.sells-for": "Valeur",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "n'a pas été nourri hier",

@@ -203,7 +203,7 @@
     "animal.produce-ready": "Produkt gotowy",
     "animal.growth": "Wiek",
     "animal.sells-for": "Sprzedaż za",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "nie było wczoraj karmione",

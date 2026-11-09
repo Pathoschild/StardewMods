@@ -30,7 +30,7 @@
     "config.junimo-hut-seeds.name": "Semillas",
     "config.junimo-hut-seeds.desc": "Qué debe hacer la Cabaña Junimo con items de Semillas. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
     "config.junimo-hut-move-items-into-hut.name": "Mover IDs de objetos a la cabaña",
-    "config.junimo-hut-move-items-into-hut.desc": "Los objetos que deben ser trasladados a las cabañas de los Junimo(sin importar otros campos como {{gemFieldName}}). Es una lista de IDs de objetos delimitada por comas (tal como se muestra en el campo 'internal ID' del mod Lookup Anything).",
+    "config.junimo-hut-move-items-into-hut.desc": "Los objetos que deben ser trasladados a las cabañas de los Junimo (sin importar otros campos como {{gemFieldName}}). Es una lista de IDs de objetos delimitada por comas (tal como se muestra en el campo 'internal ID' del mod Lookup Anything).",
     "config.junimo-hut-ignore-items.name": "Ignorar IDs de objetos",
     "config.junimo-hut-ignore-items.desc": "Los objetos que deben ser ignorados (no movidos a diferencia de otros campos como {{gemFieldName}}). Esta es una lista de objetos delimitada por comas (tal como se muestra en el campo 'internal id' del mod Lookup Anything.",
 

@@ -204,7 +204,7 @@
     "animal.produce-ready": "Produto pronto",
     "animal.growth": "Crescimento",
     "animal.sells-for": "Vende por",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "Não foi alimentado ontem",
@@ -383,7 +383,7 @@
     "item.sells-to.shipping-box": "Caixa de envio",
     "item.recipes-for-ingredient.entry": "{{name}} (precisa de {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
-    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
+    "item.recipes-for-machine.same-as-input": "[same as input]", // TODO // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "Possui {{count}} desses",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"

@@ -15,7 +15,7 @@
     "config.disabled-message.name": "Mostrar mensagem desativada",
     "config.disabled-message.desc": "Se uma mensagem no jogo deve ser exibida no canto da tela quando o modo noclip está desativado.",
 
-    "config.title.controls": "Controls",
+    "config.title.controls": "Controles",
     "config.toggle-key.name": "Tecla de alternância",
     "config.toggle-key.desc": "As teclas que ativam ou desativam o modo noclip no jogo."
 }

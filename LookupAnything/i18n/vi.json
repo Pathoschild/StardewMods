@@ -162,7 +162,7 @@
     "condition.item-type.input": "vật phẩm đầu vào",
     "condition.item-type.target": "vật phẩm mục tiêu",
 
-    "condition.raw-context-tag": "context tag \"{{tag}}\"",
+    "condition.raw-context-tag": "context tag \"{{tag}}\"", // TODO
     "condition.raw-condition": "query \"{{tag}}\"", // TODO
 
     "condition.item-context-tag": "{{item}} có thẻ ngữ cảnh {{tags}}",
@@ -203,7 +203,7 @@
     "animal.produce-ready": "Sản phẩm đã sẵn sàng",
     "animal.growth": "Trưởng thành",
     "animal.sells-for": "Giá bán",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "không được cho ăn hôm qua",
@@ -463,7 +463,7 @@
     "item.melee-weapon.critical-damage.label": "tăng {{multiplier}} sát thương cơ bản (trước khi được cộng thêm)",
     "item.melee-weapon.defense.label": "{{amount}} khi trang bị",
     "item.melee-weapon.knockback.label": "{{amount}} ({{multiplier}} lần tầm cơ bản)",
-    "item.melee-weapon.reach.label": "{{amount}} pixels",
+    "item.melee-weapon.reach.label": "{{amount}} pixels", // TODO
     "item.melee-weapon.speed.shown-vs-actual": "hiện tại: {{shownSpeed}}{{lineBreak}}thực tế: {{actualSpeed}}",
     "item.melee-weapon.speed.summary": "{{speed}} ({{milliseconds}} mili giây mỗi lần vung, trước khi cộng thêm tốc độ)",
 

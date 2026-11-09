@@ -204,7 +204,7 @@
     "animal.produce-ready": "พร้อมให้ผลผลิต",
     "animal.growth": "การเติบโต",
     "animal.sells-for": "ราคาขาย",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "ไม่มีอะไรตกถึงท้อง ตั้งแต่เมื่อวาน",
@@ -231,7 +231,7 @@
     "building.slimes": "จำนวนสไลม์",
     "building.stored-hay": "ฟางในคลัง",
     "building.upgrades": "การอัพเกรด",
-    "building.water-trough": "Water trough",
+    "building.water-trough": "Water trough", // TODO
 
     // values
     "building.animals.summary": "{{count}} ตัว จากจำนวนสูงสุด {{max}} ตัว",
@@ -383,7 +383,7 @@
     "item.sells-to.shipping-box": "กล่องส่งสินค้า",
     "item.recipes-for-ingredient.entry": "{{name}} (ต้องใช้ {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[same as input]", // e.g. crystalarium produces same item that was put in // TODO
+    "item.recipes-for-machine.same-as-input": "[same as input]", // TODO // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Some machine rules are too dynamic to display.", // TODO
     "item.number-owned.summary": "คุณมีแล้ว {{count}} ชิ้น",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
@@ -625,7 +625,7 @@
     *********/
     // labels
     "puzzle.island-crystal-cave.title": "ปริศนาถ้ำคริสตัล",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.crystal-id": "Crystal ID", // TODO
 
     // values
     "puzzle.island-crystal-cave.solution.not-activated": "เปิดใช้งานรูปปั้นเพื่อเริ่มปริศนา",
@@ -668,7 +668,7 @@
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
     // labels
-    "tile.title": "Map tile ({{x}}, {{y}})",
+    "tile.title": "Map tile ({{x}}, {{y}})", // TODO
     "tile.description": "ตำแหน่งไทล์บนแผนที่ สิ่งนี้แสดงขึ้นเนื่องจากคุณเปิดใช้งานการค้นหาไทล์ในการกำหนดค่า",
     "tile.map-name": "ชื่อแผนที่",
     "tile.map-properties": "Map properties", // TODO
@@ -851,9 +851,9 @@
     "config.scroll-up.desc": "ปุ่มที่เลื่อนเนื้อหายาวขึ้นสองสามบรรทัด",
     "config.scroll-down.name": "เลื่อนลง",
     "config.scroll-down.desc": "ปุ่มที่เลื่อนเนื้อหายาวๆ ลงไปสองสามบรรทัด",
-    "config.page-up.name": "Page up",
+    "config.page-up.name": "Page up", // TODO
     "config.page-up.desc": "ปุ่มที่เลื่อนเนื้อหาแบบยาวขึ้นโดยดูแบบเต็มหน้า",
-    "config.page-down.name": "Page down",
+    "config.page-down.name": "Page down", // TODO
     "config.page-down.desc": "ปุ่มที่เลื่อนลงมาตามเนื้อหายาวๆเต็มหน้า",
     "config.toggle-debug.name": "สลับดีบัก",
     "config.toggle-debug.desc": "ปุ่มที่สลับการแสดงข้อมูลดีบัก",

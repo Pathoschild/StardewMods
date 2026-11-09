@@ -101,6 +101,7 @@
     ** Generic Mod Config Menu UI
     *********/
     // section names
+    // TODO
     "config.section.main-options": "Main options",
     "config.section.main-controls": "Main controls",
     "config.section.layer": "'{{LayerName}}' layer", // {{LayerName}} is the layer name set above.

@@ -202,7 +202,7 @@
     "animal.produce-ready": "Продукция готова",
     "animal.growth": "Рост",
     "animal.sells-for": "Продаётся за",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "Кушал вчера",

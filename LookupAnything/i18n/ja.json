@@ -203,7 +203,7 @@
     "animal.produce-ready": "回収可能",
     "animal.growth": "成長",
     "animal.sells-for": "売値",
-    "animal.golden-cracker": "Golden animal cracker", // also used for fish ponds // TODO
+    "animal.golden-cracker": "Golden animal cracker", // TODO // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "昨日エサを食べることができなかった",

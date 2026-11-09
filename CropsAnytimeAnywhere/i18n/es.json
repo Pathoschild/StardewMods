@@ -3,6 +3,7 @@
     ** Generic Mod Config Menu UI
     *********/
     // warnings
+    // TODO
     "config.too-complex": "You have per-location settings, which are too complex to edit through Generic Mod Config Menu. You can edit the mod's config.json file directly, or reset the mod settings to default (by clicking the 'Default' and 'Save' buttons, then reopening the game).",
 
     // options

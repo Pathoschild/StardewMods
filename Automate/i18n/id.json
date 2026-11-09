@@ -68,5 +68,5 @@
 
     // special settings for individual machines
     "config.machines.wild-tree.collect-moss.name": "Kumpulkan Lumut",
-    "config.machines.wild-tree.collect-moss.desc": "Apakah lumut pada pohon akan dikumpulkan. Misalnya, membiarkan lumut pada pohon akan meningkatkan kualitas jamur dari batang jamur di dekatnya.",
+    "config.machines.wild-tree.collect-moss.desc": "Apakah lumut pada pohon akan dikumpulkan. Misalnya, membiarkan lumut pada pohon akan meningkatkan kualitas jamur dari batang jamur di dekatnya."
 }

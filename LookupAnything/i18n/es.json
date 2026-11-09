@@ -373,7 +373,7 @@
     "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
     "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
     "item.needed-for.gourmet-chef": "Logro de ''gourmet chef'' (cocina {{recipes}})",
-    "item.needed-for.craft-master": "Logro de ''craft master'' (crea {{recipes}})",Algunas reglas de las máquinas son demasiado dinámicas para mostrarlas.
+    "item.needed-for.craft-master": "Logro de ''craft master'' (crea {{recipes}})",
     "item.needed-for.quests": "Mision actual ({{quests}})",
     "item.needed-for.trash-bear": "oso de la basura (entregar uno)",
     "item.unknown-recipes": "{{count}} recetas desconocidas",
@@ -383,7 +383,7 @@
     "item.recipes-for-machine.same-as-input": "[igual que el material]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Algunas reglas de las máquinas son demasiado dinámicas para mostrarlas.",
     "item.number-owned.summary": "{{count}} ud(s)",
-    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
     "item.number-crafted.summary": "creaste {{count}} de estos",
     "item.internal-id.summary": "{{itemId}} ('ID' único a nivel global: {{qualifiedItemId}})",
 
@@ -432,7 +432,7 @@
     // values
     "item.fish-spawn-rules.min-fishing-level": "nivel de pescar mínimo: {{level}}",
     "item.fish-spawn-rules.not-caught-yet": "aún no ha sido atrapado (solo se puede atrapar una vez)",
-    "item.fish-spawn-rules.extended-family-quest-active": "\"Misión «Familia numerosa» activa",
+    "item.fish-spawn-rules.extended-family-quest-active": "Misión «Familia numerosa» activa",
     "item.fish-spawn-rules.locations": "ubicaciones: {{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "ubicaciones:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
@@ -757,7 +757,7 @@
     "config.theme.values.Parchment": "Pergamino",
     "config.theme.values.Joja": "Joja",
     "config.theme.values.MenuBox_Border": "Cuadro de menú (borde)",
-    "config.theme.values.MenuBox_Inset": "Cuadro de menú (hundido)"",
+    "config.theme.values.MenuBox_Inset": "Cuadro de menú (hundido)",
     "config.theme.values.MenuBox_Raised": "Cuadro de menú (elevado)",
     "config.theme.values.Plain": "Clásico",
 
@@ -792,6 +792,7 @@
     "config.show-gift-tastes.hated.name": "Mostrar regalos que odia",
     "config.show-gift-tastes.hated.desc": "Indica si mostrar regalos que odia en las búsquedas de NPC y objetos.",
 
+    // TODO
     "config.show-unowned-gifts.name": "Show unowned gift tastes",
     "config.show-unowned-gifts.desc": "Whether to show gift tastes for items that the player doesn't own somewhere in the world.",
 
@@ -801,9 +802,11 @@
     // collapse fields
     "config.title.collapse-fields": "Contraer campos largos",
 
+    // TODO
     "config.collapse-fields.enabled.name": "Enabled",
     "config.collapse-fields.enabled.desc": "Whether to collapse large fields, so the lookup menu will replace the list with a clickable 'show X values' link to expand it.",
 
+    // TODO
     "config.collapse-fields.building-recipes.name": "Building lookup: recipes",
     "config.collapse-fields.item-recipes.name": "Item lookup: recipes",
     "config.collapse-fields.npc-gift-tastes.name": "NPC lookup: gift tastes",

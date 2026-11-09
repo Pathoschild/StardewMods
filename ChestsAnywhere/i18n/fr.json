@@ -13,8 +13,8 @@
     "default-category.cabin-unowned": "Cabane (vide)",
     "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
     "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.farmhouse": "Farmhouse", // TODO
+    "default-category.island-farmhouse": "Island Farmhouse", // TODO
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

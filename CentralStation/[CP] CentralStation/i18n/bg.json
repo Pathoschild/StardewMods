@@ -97,31 +97,6 @@
 
 
     /*********
-    ** Furniture
-    *********/
-    // calendars
-    "furniture.calendar-city.name": "Градски календар",
-    "furniture.calendar-nature.name": "Календар на природата",
-
-    // wall decor
-    "furniture.clock.name": "Часовник",
-    "furniture.transit-map.name": "Карта на транспорта",
-    "furniture.travel-pictures.name": "Снимки от пътувания",
-    "furniture.welcome-sign.name": "Табела „Добре дошли“",
-
-    // rugs
-    "furniture.posh-rug.name": "Луксозен килим",
-
-    // general decor
-    "furniture.board-sign.name": "Дъсчена табела",
-    "furniture.postbox.name": "Пощенска кутия",
-    "furniture.suitcase-blue.name": "Син куфар",
-    "furniture.suitcase-pink.name": "Розов куфар",
-    "furniture.trash-can.name": "Кошче за боклук",
-    "furniture.trash-can-messy.name": "Разхвърляно кошче за боклук",
-
-
-    /*********
     ** Tourist dialogue
     *********/
     "tourist.young-boy.1": "Здрасти.",
@@ -162,7 +137,7 @@
     "tourist.cashier-girl.3": "Има толкова много места, до които можем да стигнем безплатно. Ще посетя всички!",
 
     "tourist.governor.1": "Много е странно. Никой не знае кой управлява тази гара.#Всички нужни разрешителни са подадени, но никой не помни това да се е случвало.#Е, това не е единственото странно нещо по тези места.",
-    "tourist.governor.2": "Толкова е хубаво най-сетне и аз да пътувам с влак. Следващия път непременно трябва да доведа и съпругата си.",
+    "tourist.governor.2": "Толкова е хубаво най-сетне и аз да пътувам с влак.#Следващия път непременно трябва да доведа и съпругата си.",
 
     "tourist.lupini.1": "Привет, ${млади^млада}$ ${господине^госпожице}$. ${Виждал^Виждала}$ ли си най-новите ми картини?", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
     "tourist.lupini.2": "Отивам да открия нова галерия. Можеш да дойдеш с мен, ако желаеш.",
@@ -181,6 +156,31 @@
 
     "tourist.bag-dog.1": "(Тя е на приключение.)",
     "tourist.bag-dog.2": "(Просто си почива в преносимото си легло-чанта.)",
+
+
+    /*********
+    ** Furniture
+    *********/
+    // calendars
+    "furniture.calendar-city.name": "Градски календар",
+    "furniture.calendar-nature.name": "Календар на природата",
+
+    // wall decor
+    "furniture.clock.name": "Часовник",
+    "furniture.transit-map.name": "Карта на транспорта",
+    "furniture.travel-pictures.name": "Снимки от пътувания",
+    "furniture.welcome-sign.name": "Табела „Добре дошли“",
+
+    // rugs
+    "furniture.posh-rug.name": "Луксозен килим",
+
+    // general decor
+    "furniture.board-sign.name": "Дъсчена табела",
+    "furniture.postbox.name": "Пощенска кутия",
+    "furniture.suitcase-blue.name": "Син куфар",
+    "furniture.suitcase-pink.name": "Розов куфар",
+    "furniture.trash-can.name": "Кошче за боклук",
+    "furniture.trash-can-messy.name": "Разхвърляно кошче за боклук",
 
 
     /*********

@@ -17,6 +17,7 @@
     "destinations.stardew-valley.train": "星露谷 - 铁路站",
 
     // stops from other mods (其他模组站点)
+    // TODO
     "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name (站点名称)
     "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name (站点名称)
 

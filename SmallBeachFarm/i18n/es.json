@@ -27,7 +27,7 @@
     /****
     ** Farm layout
     ****/
-    "config.farm-layout-section": "Farm layout",
+    "config.farm-layout-section": "Farm layout", // TODO
 
     "config.campfire.name": "Añadir una hoguera",
     "config.campfire.tooltip": "Añade una hoguera funcional delante de la casa de campo.",
