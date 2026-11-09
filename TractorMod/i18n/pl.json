@@ -66,7 +66,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     // TODO
     "config.tractor-sounds.name": "Engine Sounds",

@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "エンジン音",
     "config.tractor-sounds.tooltip": "トラクター乗車中に再生する効果音。セーブをリロードするまで変更が完全に反映されない場合があります。標準は{{defaultValue}}。",

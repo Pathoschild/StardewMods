@@ -382,7 +382,7 @@
     "item.sells-to.shipping-box": "Thùng bán hàng",
     "item.recipes-for-ingredient.entry": "{{name}} (cần {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[giống như đầu vào]",
+    "item.recipes-for-machine.same-as-input": "[giống như đầu vào]", // e.g. crystalarium produces same item that was put in
     "item.recipes-for-machine.too-complex": "Một số quy tắc của máy quá phức tạp để hiển thị.",
     "item.number-owned.summary": "Bạn sở hữu {{count}} cái",
     "item.number-owned-flavored.summary": "you own {{count}} ({{name}}) or {{baseCount}} ({{baseName}}) of these", // TODO // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"

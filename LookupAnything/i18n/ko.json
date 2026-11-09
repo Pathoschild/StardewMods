@@ -33,7 +33,7 @@
     "generic.price-for-stack": "{{count}}개를 묶음 판매 시 {{price}}g",
     "generic.show-x-results": "결과 {{count}}개 보기",
 
-    // types 유형
+    // types (유형)
     "type.achievement": "업적",
     "type.building": "건물",
     "type.bush": "덤불",
@@ -201,7 +201,7 @@
     "animal.produce-ready": "생산물 준비 완료",
     "animal.growth": "성장 단계",
     "animal.sells-for": "판매 가격: ",
-    "animal.golden-cracker": "황금 동물 과자",
+    "animal.golden-cracker": "황금 동물 과자", // also used for fish ponds
 
     // values
     "animal.complaints.hungry": "어제 먹이를 먹지 못함.",

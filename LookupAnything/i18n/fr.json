@@ -109,7 +109,6 @@
 
     // override item text
     "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
-    // mine containers
     "data.item.barrel.name": "Tonneau",
     "data.item.barrel.description": "À casser pour obtenir des biens divers.",
     "data.item.box.name": "Boîte",

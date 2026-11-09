@@ -3,8 +3,8 @@
     ** Generic translations
     *************************************************/
     // language info
-    "generic.list-separator": ", ",
-    "generic.line-wrap-on": "",
+    "generic.list-separator": ", ", // text between listed values (like ", " in "A, B, C")
+    "generic.line-wrap-on": "", // characters after which we can line-wrap text if needed, even if there's no space
 
     // date names
     "generic.now": "сега",
@@ -42,7 +42,7 @@
     "type.player": "Играч",
     "type.tree": "Дърво",
     "type.villager": "Жител",
-    "type.other": "Друго",
+    "type.other": "Друго", // default type
 
     // item qualities
     "quality.normal": "нормално",
@@ -61,7 +61,7 @@
     "friendship-status.divorced": "Разведени",
     "friendship-status.kicked-out": "Изгонен",
 
-    // custom content
+    // custom content (shows which mod added an item, NPC, etc)
     "added-by-mod": "Добавено от мод",
     "added-by-mod.summary": "{{modName}}",
 
@@ -75,7 +75,7 @@
     /*********
     ** Data translations
     *********/
-    // Стаи в Читалището
+    // Community Center bundle areas (Стаи в Читалището)
     "bundle-area.pantry": "Килер",
     "bundle-area.crafts-room": "Занаятчийска стая",
     "bundle-area.fish-tank": "Аквариум",
@@ -84,7 +84,7 @@
     "bundle-area.bulletin-board": "Табло за обяви",
     "bundle-area.abandoned-joja-mart": "Изоставеният Джоджа Март",
 
-    // Имена на магазини
+    // shop names (Имена на магазини)
     "shop.adventure-guild": "Гилдия на приключенците",
     "shop.clint": "Клинт",
     "shop.marnie": "Марни",
@@ -93,28 +93,28 @@
     "shop.volcano": "магазин във вулкана",
     "shop.willy": "Уили",
 
-    // Видове рецепти
+    // recipe types (Видове рецепти)
     "recipe-type.cooking": "Готвене",
     "recipe-type.crafting": "Изработка",
     "recipe-type.tailoring": "Шиене",
 
-    // Описания на NPC
+    // NPC descriptions (Описания на NPC)
     "data.npc.pet.description": "Твоят верен домашен любимец.",
     "data.npc.horse.description": "Твоят верен кон.",
     "data.npc.junimo.description": "Горски дух от духовния свят. Знае се много малко за тях.",
     "data.npc.trash-bear.description": "Приятелски дух, който почиства боклуците.",
 
-    // Типове предмети
+    // item types (Типове предмети)
     "data.type.container": "Контейнер",
 
-    // Текст за предмети
+    // override item text (Текст за предмети)
     "data.item.egg-incubator.description": "Излюпва яйца в малки пилета и патета.",
     "data.item.barrel.name": "Бъчва",
     "data.item.barrel.description": "Разбий я, за да получиш разни стоки.",
     "data.item.box.name": "Кутия",
     "data.item.box.description": "Разбий я, за да получиш разни стоки.",
 
-    // Имена на локации
+    // location names (Имена на локации)
     "location.beach.east-pier": "{{locationName}} (източен кей)",
     "location.bugLand": "Леговище на мутанти",
     "location.desert.topPond": "{{locationName}} (северно езерце)",
@@ -150,7 +150,7 @@
     /*********
     ** Conditions & context tags
     *********/
-    "conditions-summary": "[условия: {{conditions}}]",
+    "conditions-summary": "[условия: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
 
     "condition-or-context-tag.negate": "не е {{value}}",
 
@@ -166,7 +166,7 @@
 
     "condition.item-context-tag": "{{item}} има контекстен таг {{tags}}",
     "condition.item-context-tags": "{{item}} има контекстни тагове {{tags}}",
-    "condition.item-context-tag.value": "'{{tag}}'",
+    "condition.item-context-tag.value": "'{{tag}}'", // the format of each context tag in the list (each context tag isn't translated)
 
     "condition.item-edibility.edible": "{{item}} става за ядене",
     "condition.item-edibility.min": "{{item}} има ядливост {{min}} или повече",

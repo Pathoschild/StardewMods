@@ -64,7 +64,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "Sons du moteur",
     "config.tractor-sounds.tooltip": "Quel effet sonore jouer en conduisant le tracteur. Les modifications peuvent ne pas prendre effet tant que vous n'avez pas rechargé la sauvegarde. {{defaultValue}} par défaut.",

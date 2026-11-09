@@ -102,7 +102,7 @@
     // section names
     "config.section.main-options": "Opciones principales",
     "config.section.main-controls": "Controles principales",
-    "config.section.layer": "'{{LayerName}}' Capa", // {{LayerName}} es el nombre de la capa definido anteriormente.
+    "config.section.layer": "'{{LayerName}}' Capa", // {{LayerName}} is the layer name set above. ({{LayerName}} es el nombre de la capa definido anteriormente.)
 
     // main options
     "config.show-grid.name": "Mostrar cuadrícula",

@@ -1,26 +1,34 @@
-﻿{
+﻿//
+// Note for translators:
+// Some lines have a 'note for translators' comment like this one to clarify intent. You generally shouldn't translate
+// the 'note for translators' comments themselves, since they just explain the official intent and aren't shown in-game.
+//
+{
     /*********
     ** Destination names
     *********/
+    // default stops
     "destinations.central-station": "Централна гара",
     "destinations.stardew-valley": "Долината Стардю",
 
+    // default stops when shown in Central Station menu
     "destinations.stardew-valley.boat": "Долината Стардю: пристанище",
     "destinations.stardew-valley.bus": "Долината Стардю: автобусна спирка",
     "destinations.stardew-valley.train": "Долината Стардю: железница",
 
-    "destinations.from-bus-locations-mod": "{0} [мод Bus Locations]",
-    "destinations.from-train-station-mod": "{0} [мод Train Station]",
+    // stops from other mods
+    "destinations.from-bus-locations-mod": "{0} [мод Bus Locations]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [мод Train Station]", // {0} = stop name
 
 
     /*********
     ** Shop dialogues
     *********/
-    "food-court.dialogue.1": "Храна тук! Почти не е от личинки.",
-    "food-court.dialogue.2": "Гарантирано най-ниските цени в заведението.",
+    "food-court.dialogue.1": "Храна тук! Почти не е от личинки.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "Гарантирано най-ниските цени в заведението.", // note for translators: this is a joke, since it's the only food shop in the food court.
     "food-court.dialogue.3": "Почти минахме последната проверка за безопасност на храните!",
     "food-court.dialogue.4": "О, клиент. Какво искаш?",
-    "food-court.dialogue.5": "Имаме прясна и топла храна! Е, топла е. Ако я претоплиш в микровълновата.",
+    "food-court.dialogue.5": "Имаме прясна и топла храна! Е, топла е. Ако я претоплиш в микровълновата.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
 
     "gift-shop.dialogue.1": "Пътуваш надалеч? Увери се, че имаш всичко необходимо!",
     "gift-shop.dialogue.2": "Прибираш се? Вземи сувенири за вкъщи!",
@@ -36,6 +44,9 @@
     /*********
     ** Book titles
     *********/
+    // Note for translators: this section refers to locations mentioned in the base game (like the Ferngill Republic and Zuzu City).
+    // You can find their translations via the language links on the left of the page at https://stardewvalleywiki.com/Setting.
+    // The 'Z.C. Rarecrow Society' is from a letter; see https://stardewvalleywiki.com/Deluxe_Scarecrow and its language links.
     "books.cooking.1": "„Майонеза от празнотата и други гоблински деликатеси“.",
 
     "books.geography.1": "„Крайбрежието на Фернгил и какво намерихме там“.",
@@ -62,8 +73,10 @@
     /*********
     ** Location flavor text
     *********/
+    // message from the transit area doors
     "location.transit-area-doors": "Това води обратно към пристанището и пероните. Първо ще ти трябва билет от билетната каса.",
 
+    // rare messages in Central Station
     "location.exit-door.strange-sounds": "...?",
 
     "location.ticket-counter.1": "(Опитваш се да надникнеш в билетната каса, но зад тонираното стъкло се вижда само неясна сянка.)",
@@ -78,6 +91,7 @@
     "location.cola-machine.2": "(Приближаваш се до машината за кола. Преди да направиш нещо, предмет пада с тропване.)",
     "location.cola-machine.3": "(По някаква причина усещаш, че машината за кола иска да ти помогне.)",
 
+    // employee lounge
     "location.employee-lockers": "Шкафчетата на служителите не са заключени, но имаш чувството, че някой те наблюдава.",
     "location.employee-fridge": "Обедите на служителите. Би било невъзпитано да си вземеш.",
 
@@ -85,16 +99,20 @@
     /*********
     ** Furniture
     *********/
+    // calendars
     "furniture.calendar-city.name": "Градски календар",
     "furniture.calendar-nature.name": "Календар на природата",
 
+    // wall decor
     "furniture.clock.name": "Часовник",
     "furniture.transit-map.name": "Карта на транспорта",
     "furniture.travel-pictures.name": "Снимки от пътувания",
     "furniture.welcome-sign.name": "Табела „Добре дошли“",
 
+    // rugs
     "furniture.posh-rug.name": "Луксозен килим",
 
+    // general decor
     "furniture.board-sign.name": "Дъсчена табела",
     "furniture.postbox.name": "Пощенска кутия",
     "furniture.suitcase-blue.name": "Син куфар",
@@ -146,7 +164,7 @@
     "tourist.governor.1": "Много е странно. Никой не знае кой управлява тази гара.#Всички нужни разрешителни са подадени, но никой не помни това да се е случвало.#Е, това не е единственото странно нещо по тези места.",
     "tourist.governor.2": "Толкова е хубаво най-сетне и аз да пътувам с влак. Следващия път непременно трябва да доведа и съпругата си.",
 
-    "tourist.lupini.1": "Привет, ${млади^млада}$ ${господине^госпожице}$. ${Виждал^Виждала}$ ли си най-новите ми картини?",
+    "tourist.lupini.1": "Привет, ${млади^млада}$ ${господине^госпожице}$. ${Виждал^Виждала}$ ли си най-новите ми картини?", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
     "tourist.lupini.2": "Отивам да открия нова галерия. Можеш да дойдеш с мен, ако желаеш.",
 
     "tourist.red-cap-guy.1": "Най-хубавото на пътуването са различните хора и моди.",
@@ -165,6 +183,9 @@
     "tourist.bag-dog.2": "(Просто си почива в преносимото си легло-чанта.)",
 
 
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
     "config.require-pam-bus.name": "Изискване за автобуса на Пам",
     "config.require-pam-bus.desc": "Дали автобусът на Пам трябва да е поправен, преди да тръгнеш от автобусната спирка в Долината Стардю. Ако не се изисква, можеш да пътуваш с автобуса до Централна гара преди ремонта, но не и до пустинята.",
 

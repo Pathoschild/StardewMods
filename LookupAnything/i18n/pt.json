@@ -634,7 +634,7 @@
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
-    // label
+    // labels
     "puzzle.island-mermaid.title": "Quebra-cabeça da Sereia",
     "puzzle.island-mermaid.solution.intro": "Use blocos de flauta para tocar a música da Sereia.",
 

@@ -19,7 +19,7 @@
     "config.title.connectors": "Etkin bağlayıcılar",
     "config.connector.desc": "{{itemName}}'in makineleri ve sandıkları birbirine bağlayıp bağlamadığı.",
     "config.custom-connectors.name": "Özel bağlayıcılar",
-    "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan eşyalar. Dahili İngilizce ismini (\"Wood Path\" gibi) veya nitelikli eşya ID'sini (\"(O)405\" gibi) belirtebilir ve birden fazla eşyayı virgülle ayırarak listeleyebilirsiniz.",
+    "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan eşyalar. Dahili İngilizce ismini (\"Wood Path\" gibi) veya nitelikli eşya ID'sini (\"(O)405\" gibi) belirtebilir ve birden fazla eşyayı virgülle ayırarak listeleyebilirsiniz.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Junimo kulübesi davranışı",
@@ -47,7 +47,7 @@
     "config.chest-override.name": "{{chestName}}",
     "config.chest-override.name.take-only": "{{chestName}} (Sadece eşyaları alır)",
     "config.chest-override.desc": "Yerleştirilen {{chestName}} eşyalarının sandık işlevi görüp görmeyeceği. '{{defaultBehaviorField}}' açıklamasını inceleyin.",
-    "config.chest-override.desc.take-only": "{{description}} (Etkin olduğunda, bu sandık tipi sadece eşyaların alınabileceği bir sandık olur.)",
+    "config.chest-override.desc.take-only": "{{description}} (Etkin olduğunda, bu sandık tipi sadece eşyaların alınabileceği bir sandık olur.)", // {{description}} contains the previous translation line
     "config.chest-override.values.default": "Varsayılan",
     "config.chest-override.values.enabled": "Etkin",
     "config.chest-override.values.disabled": "Etkin değil",

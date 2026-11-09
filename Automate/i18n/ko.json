@@ -19,7 +19,7 @@
     "config.title.connectors": "연결 활성화",
     "config.connector.desc": "{{itemName}}이(가) 기계와 상자를 서로 연결하는지 여부.",
     "config.custom-connectors.name": "사용자 지정 연결",
-    "config.custom-connectors.desc": "인접한 기계끼리 연결해 주는 아이템입니다. 아이템 이름은 사용하는 언어와 관계없이 영문 이름(예: \"Wood Path\") 또는 정식 아이템 ID(예: \"(O)405\")로 입력해야 하며, 여러 항목은 쉼표로 구분해 입력합니다.", // note: 다른 언어로 플레이하는 경우에도 영어로 입력해야 합니다)
+    "config.custom-connectors.desc": "인접한 기계끼리 연결해 주는 아이템입니다. 아이템 이름은 사용하는 언어와 관계없이 영문 이름(예: \"Wood Path\") 또는 정식 아이템 ID(예: \"(O)405\")로 입력해야 하며, 여러 항목은 쉼표로 구분해 입력합니다.", // note: connector names must be English even when playing in other languages (다른 언어로 플레이하는 경우에도 영어로 입력해야 합니다)
 
     // Junimo hut options
     "config.title.junimo-huts": "주니모 오두막 동작",
@@ -47,7 +47,7 @@
     "config.chest-override.name": "{{chestName}}",
     "config.chest-override.name.take-only": "{{chestName}} (꺼내기 전용)",
     "config.chest-override.desc": "설치한 {{chestName}} 아이템을 상자로 사용할지 설정합니다. '{{defaultBehaviorField}}'의 설명을 참고하세요.",
-    "config.chest-override.desc.take-only": "{{description}} (사용 시 이 상자 종류에서는 아이템을 꺼내기만 할 수 있습니다.)",
+    "config.chest-override.desc.take-only": "{{description}} (사용 시 이 상자 종류에서는 아이템을 꺼내기만 할 수 있습니다.)", // {{description}} contains the previous translation line
     "config.chest-override.values.default": "기본값",
     "config.chest-override.values.enabled": "사용",
     "config.chest-override.values.disabled": "비활성화",

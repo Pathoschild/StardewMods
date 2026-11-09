@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "엔진 소리",
     "config.tractor-sounds.tooltip": "트랙터를 탈 때 재생할 소리 효과를 선택합니다. 변경사항이 적용되지 않을 경우 잠을 자거나 게임을 다시 실행 하세요. 기본값 {{defaultValue}}.",

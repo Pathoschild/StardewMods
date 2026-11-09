@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "Motorgeräusche",
     "config.tractor-sounds.tooltip": "Welche Soundeffekte während der Fahrt mit dem Traktor abgespielt werden sollen. Die Änderungen werden möglicherweise erst nach dem erneuten Laden des Spielstands vollständig wirksam. Standard: {{defaultValue}}.",

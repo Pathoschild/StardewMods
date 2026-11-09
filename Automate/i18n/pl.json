@@ -71,7 +71,7 @@
     "config.machines.wild-tree": "Drzewo (Dziki)",
     "config.machines.feed-hopper": "Silos i podajnik siana",
 
-    // specjalne ustawienia dla poszczególnych maszyn
+    // special settings for individual machines (specjalne ustawienia dla poszczególnych maszyn)
     "config.machines.wild-tree.collect-moss.name": "Zbieraj mech",
     "config.machines.wild-tree.collect-moss.desc": "Określa, czy zbierać mech z drzew. Na przykład pozostawienie mchu na drzewach zwiększy jakość grzybów z pobliskich kłód grzybowych."
 }

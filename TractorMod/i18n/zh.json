@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "引擎音效",
     "config.tractor-sounds.tooltip": "驾驶拖拉机时播放的音效。在重新加载存档之前，更改可能不会完全生效。默认{{defaultValue}}。",

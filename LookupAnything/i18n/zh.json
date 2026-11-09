@@ -384,7 +384,7 @@
     "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in (例如. 宝石复制机放入的物品和产出的物品一致)
     "item.recipes-for-machine.too-complex": "一些生产规则因太复杂而无法显示",
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
-    "item.number-owned-flavored.summary": "你目前拥有{{count}}个{{name}}（总共拥有{{baseCount}}个{{baseName}}）", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these" 例如，"你目前拥有5个鲟鱼籽（总共拥有20个鱼籽）"
+    "item.number-owned-flavored.summary": "你目前拥有{{count}}个{{name}}（总共拥有{{baseCount}}个{{baseName}}）", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these" (例如，"你目前拥有5个鲟鱼籽（总共拥有20个鱼籽）")
     "item.number-crafted.summary": "你已制造{{count}}个此物",
     "item.internal-id.summary": "{{itemId}}（全局唯一'限定性ID'：{{qualifiedItemId}}）",
 
@@ -668,11 +668,11 @@
     "tile.description": "地图上此位置的贴图。显示此信息是因为你在设置中启用了贴图查询功能。",
     "tile.map-name": "地图名",
     "tile.map-properties": "地图属性",
-    "tile.layer-tile": "{{layer}}贴图", // note: this still doesn't work perfectly since the layer name remains untranslated in zh
+    "tile.layer-tile": "{{layer}}贴图", // note from translator: this still doesn't work perfectly since the layer name remains untranslated in zh
     "tile.layer-tile-none": "贴图",
 
     // values (数值)
-    "tile.map-properties.value": "地图属性{{name}}的值为：{{value}}", // 例如，Outdoors: T  -> 地图属性Outdoors的值为：T
+    "tile.map-properties.value": "地图属性{{name}}的值为：{{value}}", // note from translator: 例如，Outdoors: T  -> 地图属性Outdoors的值为：T
     "tile.layer-tile.appearance": "贴图表'{{tilesheetId}}'，索引编号：{{index}}（路径：'{{tilesheetPath}}'）",
     "tile.layer-tile.blend-mode": "混合模式: {{value}}",
     "tile.layer-tile.index-property": "索引属性: {{name}}: {{value}}",

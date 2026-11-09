@@ -225,7 +225,7 @@
     "building.horse": "Caballo",
     "building.horse-location": "Ubicación del caballo",
     "building.owner": "Dueño",
-    "building.slimes": "Slimes", // translator note: Slimes is already an adopted word, like hacking
+    "building.slimes": "Slimes", // note from translator: slimes is already an adopted word, like hacking
     "building.stored-hay": "Heno almacenado",
     "building.upgrades": "Actualizaciones",
     "building.water-trough": "Abrevadero",
@@ -238,7 +238,7 @@
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
     "building.junimo-harvesting-enabled": "Cosechador habilitado",
     "building.owner.none": "sin dueño",
-    "building.output-processing": "Procesando producto", // translator note: changed 'output' to 'product' as we don't have a word with the same meaning
+    "building.output-processing": "Procesando producto", // note from translator: changed 'output' to 'product' as we don't have a word with the same meaning
     "building.output-ready": "Producto listo",
     "building.slimes.summary": "{{count}} de {{max}} slimes",
     "building.stored-hay.summary": "{{hayCount}} of {{maxHayInLocation}} heno en este edificio (máxima capacidad del edificio: {{maxHayInBuilding}})",
@@ -849,6 +849,6 @@
     /*************************************************
     ** Iconic Framework icon
     *************************************************/
-    "icon.toggle-search.name": "Lookup Anything", //No translation needed
+    "icon.toggle-search.name": "Lookup Anything", // note from translator: no translation needed
     "icon.toggle-search.desc": "Alternar la búsqueda de Lookup Anything"
 }

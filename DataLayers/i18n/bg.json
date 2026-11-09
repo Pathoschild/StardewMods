@@ -3,6 +3,9 @@
     ** Data Layers UI
     *********/
     // 'auto' layer
+    // Note for translators:
+    //   This layer chooses what to show based on the context (e.g. "Auto (Buildable)" when placing a building).
+    //   {{layerName}} is one of the layer name translations below.
     "auto.name": "Автоматично",
     "auto.name-active": "Автоматично ({{layerName}})",
     "auto.name-inactive": "Автоматично (няма данни за показване)",
@@ -99,7 +102,7 @@
     // section names
     "config.section.main-options": "Основни настройки",
     "config.section.main-controls": "Основно управление",
-    "config.section.layer": "Слой „{{LayerName}}“",
+    "config.section.layer": "Слой „{{LayerName}}“", // {{LayerName}} is the layer name set above.
 
     // main options
     "config.show-grid.name": "Показване на мрежата",

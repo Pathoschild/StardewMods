@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "Sonidos del motor",
     "config.tractor-sounds.tooltip": "Qué efectos de sonido reproducir al montar en el tractor. Los cambios puede que no surtan efecto por completo hasta que recargues la partida. Predeterminado {{defaultValue}}.",
@@ -263,6 +263,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    "icon.summon-tractor.name": "Tractor Mod", //Mod del tractor
+    "icon.summon-tractor.name": "Tractor Mod", // note from translator: Mod del tractor
     "icon.summon-tractor.desc": "Invocar tractor"
 }

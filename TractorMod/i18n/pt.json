@@ -62,7 +62,7 @@
 
 
     /****
-    ** Audio
+    ** Audio options
     ****/
     "config.tractor-sounds.name": "Sons do Motor",
     "config.tractor-sounds.tooltip": "Quais efeitos sonoros reproduzir ao andar de trator. As mudanças podem não ter efeito total até você recarregar o salvamento. Padrão {{defaultValue}}.",

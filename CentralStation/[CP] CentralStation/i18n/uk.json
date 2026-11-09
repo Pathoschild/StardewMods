@@ -110,7 +110,7 @@
 
     "tourist.man-with-sunglasses": "Ти пробував зазирати до квиткової каси? Я ніяк не можу розгледіти, хто там.#Власники крамниць теж не є працівниками.",
 
-    "tourist.man-with-top-hat.1": "Ей, ${малий^мала^мале}$. Хочеш знати секрет багатства?", // In this line man with top hat saying 'kid', like 'little one', in english it can be addressed to both boys and girls(if i understand correctly). So i look down the code and find switch for female and male, players. I hope i copy paste it right.
+    "tourist.man-with-top-hat.1": "Ей, ${малий^мала^мале}$. Хочеш знати секрет багатства?", // note from translator: In this line man with top hat saying 'kid', like 'little one', in english it can be addressed to both boys and girls(if i understand correctly). So i look down the code and find switch for female and male, players. I hope i copy paste it right.
     "tourist.man-with-top-hat.2": "Схеми швидкого збагачення. Азартні ігри. Казино завжди у виграші, розумієш, про що я? Хех.",
 
     "tourist.strong-man": "Ти сильний, як я? Трощити камінь!#Але тут немає каміння. Сумно.",
@@ -139,7 +139,7 @@
     "tourist.governor.1": "Це дуже дивно. Ніхто не знає, хто керує цією станцією.#Усі необхідні дозволи оформлено, але ніхто не пам'ятає, як це сталося.#Ну що ж, це не єдина дивина в цих краях.",
     "tourist.governor.2": "Так чудово нарешті самому проїхатися поїздом.#Наступного разу треба обов'язково взяти із собою дружину.",
 
-    "tourist.lupini.1": "Вітаю, ${молодий^молода^молодий}$ ${чоловіче^леді^друже}$. ${Ти бачив мої останні картини?^Ти бачила мої останні картини?^Тобі вже траплялися мої останні картини?}$", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players. (Translator) i add two more switches becouse for man and lady i need change one word but for non-binary i need to change it entirely. Hope it's allright.
+    "tourist.lupini.1": "Вітаю, ${молодий^молода^молодий}$ ${чоловіче^леді^друже}$. ${Ти бачив мої останні картини?^Ти бачила мої останні картини?^Тобі вже траплялися мої останні картини?}$", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players. // note from translator: i add two more switches becouse for man and lady i need change one word but for non-binary i need to change it entirely. Hope it's allright.
     "tourist.lupini.2": "Я вирушаю відкривати нову галерею. Можеш приєднатися, якщо бажаєш.",
 
     "tourist.red-cap-guy.1": "Найкраще в подорожах — це всі ці різні люди та стилі.",

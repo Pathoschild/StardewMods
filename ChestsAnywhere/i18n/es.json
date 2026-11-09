@@ -144,6 +144,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    "icon.open-menu.name": "Chests Anywhere", //Cofres en todas partes (Should the name 'Chests Anywhere' be translated into Spanish, or should we keep the original English name?)
+    "icon.open-menu.name": "Chests Anywhere", // note from translator: Cofres en todas partes (Should the name 'Chests Anywhere' be translated into Spanish, or should we keep the original English name?)
     "icon.open-menu.desc": "Abrir menú"
 }
