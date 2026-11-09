@@ -1,0 +1,267 @@
+{
+    /*********
+    ** Tractor
+    *********/
+    "buff.name": "Силата на трактора",
+    "garage.name": "Гараж за трактор",
+    "garage.description": "Гараж, в който да съхраняваш трактора си. Тракторът е включен!",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Section titles
+    ****/
+    "config.main-options": "Основни настройки",
+    "config.audio": "Звук",
+    "config.controls": "Управление",
+    "config.axe": "Функции на брадвата",
+    "config.hoe": "Функции на мотиката",
+    "config.pickaxe": "Функции на кирката",
+    "config.scythe": "Функции на косата",
+    "config.melee-blunt": "Функции на тъпите оръжия за близък бой",
+    "config.melee-dagger": "Функции на кинжалите",
+    "config.melee-sword": "Функции на мечовете",
+    "config.other-tools": "Други инструменти",
+    "config.custom-tools": "Персонализирани инструменти",
+
+
+    /****
+    ** Warnings
+    ****/
+    "config.questable-tractor-warning": "Questable Tractor е инсталиран. Този мод работи като презаписва настройките на трактора, затова може да нулира промените, които правиш тук.",
+
+
+    /****
+    ** Main options
+    ****/
+    "config.distance.name": "Обхват",
+    "config.distance.tooltip": "Броят плочки във всяка посока около трактора, които да бъдат засегнати (в допълнение към плочката под него). По подразбиране: {{defaultValue}}; стойност {{maxRecommendedValue}} обхваща по-голямата част от видимия екран, а по-високите стойности могат да влошат производителността на играта.",
+
+    "config.speed.name": "Скорост на трактора",
+    "config.speed.tooltip": "Модификаторът на скоростта при каране на трактор. По подразбиране: {{defaultValue}}.",
+
+    "config.magnetic-radius.name": "Магнитен обхват",
+    "config.magnetic-radius.tooltip": "Силата на привличане на предметите (по-високите стойности привличат предмети от по-далече). По подразбиране: {{defaultValue}}.",
+
+    "config.build-price.name": "Цена за построяване",
+    "config.build-price.tooltip": "Цената в злато за закупуване на гараж за трактор. По подразбиране: {{defaultValue}}з.",
+
+    "config.require-build-materials.name": "Изискване на строителни материали",
+    "config.require-build-materials.tooltip": "Дали освен цената в злато трябва да предоставиш и материали, за да построиш гараж за трактор.",
+
+    "config.can-summon-without-garage.name": "Призоваване без гараж",
+    "config.can-summon-without-garage.tooltip": "Дали можеш да призовеш временен трактор, без първо да построиш гараж.",
+
+    "config.invincible-on-tractor.name": "Неуязвимост на трактора",
+    "config.invincible-on-tractor.tooltip": "Дали да си неуязвим за щети от всякакъв източник, докато караш трактора.",
+
+    "config.highlight-radius.name": "Показване на обхвата (дебъг)",
+    "config.highlight-radius.tooltip": "Дали да се подчертава обхватът на трактора, докато го караш, за да се вижда по-лесно настройката за обхвата.",
+
+
+    /****
+    ** Audio options
+    ****/
+    "config.tractor-sounds.name": "Звуци на двигателя",
+    "config.tractor-sounds.tooltip": "Кои звукови ефекти да се пускат, докато караш трактора. Промените може да не влязат напълно в сила, докато не презаредиш запазената игра. По подразбиране: {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "без звуци",
+    "config.tractor-sounds.value.Horse": "звуци на кон",
+    "config.tractor-sounds.value.Tractor": "звуци на трактор",
+
+    "config.tractor-volume.name": "Сила на звука на двигателя",
+    "config.tractor-volume.tooltip": "Нивото на силата на звука за звуковите ефекти на трактора. По подразбиране: {{defaultValue}}%.",
+
+    "config.tool-use-sounds-limit.name": "Звуци на инструменти",
+    "config.tool-use-sounds-limit.tooltip": "Когато инструмент се прилага върху много плочки около трактора, кои звуци на инструмента да се пускат. Настройката по подразбиране е „{{defaultOption}}“. „{{unlimitedOption}}“ може да причини грешки, ако настройката „{{distanceOption}}“ е твърде висока, защото се пускат прекалено много звуци едновременно.",
+    "config.tool-use-sounds-limit.value.Default": "по подразбиране",
+    "config.tool-use-sounds-limit.value.OncePerTick": "първата засегната плочка",
+    "config.tool-use-sounds-limit.value.Unlimited": "всички звуци (не се препоръчва)",
+
+
+    /****
+    ** Keybind options
+    ****/
+    "config.summon-key.name": "Призоваване на трактор",
+    "config.summon-key.tooltip": "Премести наличен трактор до позицията ти. По подразбиране: Backspace.",
+
+    "config.dismiss-key.name": "Прибиране на трактора",
+    "config.dismiss-key.tooltip": "Върни трактора, който караш, в неговия гараж.",
+
+    "config.hold-to-activate-key.name": "Задържане за активиране",
+    "config.hold-to-activate-key.tooltip": "Ако е зададено, тракторът ще прави нещо само докато задържаш този бутон. Ако не е зададено нищо, тракторът ще работи автоматично, докато го караш.",
+
+    "config.increase-distance-key.name": "Увеличаване на обхвата",
+    "config.increase-distance-key.tooltip": "Временно увеличи с една плочка обхвата, в който инструментите се прилагат около трактора, до препоръчителния максимум от {{maxRecommendedValue}} плочки. Важи, докато не презаредиш запазената игра.",
+
+    "config.reduce-distance-key.name": "Намаляване на обхвата",
+    "config.reduce-distance-key.tooltip": "Временно намали с една плочка обхвата, в който инструментите се прилагат около трактора, до препоръчителния минимум от 1 плочка. Важи, докато не презаредиш запазената игра.",
+
+
+    /****
+    ** Trees & bushes
+    ****/
+    "config.chop-fruit-trees-seeds.name": "Премахване на семена на овощни дървета",
+    "config.chop-fruit-trees-seeds.tooltip": "Дали да се премахват семената на овощни дървета.",
+
+    "config.chop-fruit-trees-saplings.name": "Изсичане на фиданки на овощни дървета",
+    "config.chop-fruit-trees-saplings.tooltip": "Дали да се премахват овощни дървета, които не са напълно пораснали.",
+
+    "config.chop-fruit-trees-grown.name": "Изсичане на пораснали овощни дървета",
+    "config.chop-fruit-trees-grown.tooltip": "Дали да се секат напълно пораснали овощни дървета.",
+
+    "config.chop-trees-seeds.name": "Премахване на семена на дървета",
+    "config.chop-trees-seeds.tooltip": "Дали да се премахват семена на дървета, които не са овощни.",
+
+    "config.chop-trees-saplings.name": "Изсичане на фиданки на дървета",
+    "config.chop-trees-saplings.tooltip": "Дали да се премахват неплодни дървета, които не са напълно пораснали.",
+
+    "config.chop-trees-grown.name": "Изсичане на пораснали дървета",
+    "config.chop-trees-grown.tooltip": "Дали да се премахват напълно пораснали неплодни дървета.",
+
+    "config.chop-trees-stumps.name": "Изсичане на пънове",
+    "config.chop-trees-stumps.tooltip": "Дали да се премахват пънове на дървета, които не са овощни. (Това не засяга гигантските пънове, които се считат за отломки.)",
+
+    "config.chop-bushes.name": "Изсичане на храсти",
+    "config.chop-bushes.tooltip": "Дали да се секат храсти, които могат да се секат.",
+
+    "config.harvest-fruit-trees.name": "Прибиране на плодове от овощни дървета",
+    "config.harvest-fruit-trees.tooltip": "Дали да се прибират плодовете от овощни дървета.",
+
+    "config.harvest-tree-moss.name": "Събиране на мъх от дърветата",
+    "config.harvest-tree-moss.tooltip": "Дали да се събира мъх от дърветата.",
+
+    "config.harvest-tree-seeds.name": "Събиране на семена от дърветата",
+    "config.harvest-tree-seeds.tooltip": "Дали да се събират семена от дърветата.",
+
+
+    /****
+    ** Crops/forage/grass
+    ****/
+    "config.clear-dead-crops.name": "Премахване на мъртвите посеви",
+    "config.clear-dead-crops.tooltip": "Дали да се унищожават мъртвите посеви.",
+
+    "config.clear-live-crops.name": "Премахване на живите посеви",
+    "config.clear-live-crops.tooltip": "Дали да се унищожават живите посеви.",
+
+    "config.harvest-giant-crops.name": "Прибиране на гигантски посеви",
+    "config.harvest-giant-crops.tooltip": "Дали да се секат гигантски посеви.",
+
+    "config.harvest-crops.name": "Прибиране на посеви",
+    "config.harvest-crops.tooltip": "Дали да се прибират посеви.",
+
+    "config.harvest-flowers.name": "Прибиране на цветя",
+    "config.harvest-flowers.tooltip": "Дали да се прибират цветя.",
+
+    "config.harvest-forage.name": "Събиране на диворастящи предмети",
+    "config.harvest-forage.tooltip": "Дали да се събират диворастящи предмети.",
+
+    "config.harvest-blue-grass.name": "Косене на синя трева",
+    "config.harvest-blue-grass.tooltip": "Дали да се коси синя трева. Ако има свободно място в силоза, ще получиш сено както обикновено.",
+
+    "config.harvest-non-blue-grass.name": "Косене на трева, различна от синята",
+    "config.harvest-non-blue-grass.tooltip": "Дали да се коси трева, която не е синя. Ако има свободно място в силоза, ще получиш сено както обикновено.",
+
+
+    /****
+    ** Debris
+    ****/
+    "config.clear-debris.name": "Премахване на отломки",
+    "config.clear-debris.tooltip": "Дали да се унищожават отломки като бурени, клонки, гигантски пънове и паднали дънери.",
+
+    "config.clear-mine-stones.name": "Разбиване на камъни в мините",
+    "config.clear-mine-stones.tooltip": "Дали да се разбиват камъни в мините.",
+
+    "config.clear-weeds.name": "Премахване на бурени",
+    "config.clear-weeds.tooltip": "Дали да се унищожават бурени.",
+
+
+    /****
+    ** Dirt
+    ****/
+    "config.till-dirt.name": "Обработване на почвата",
+    "config.till-dirt.tooltip": "Дали да се обработва празна почва.",
+
+    "config.dig-artifact-spots.name": "Разкопаване на места за артефакти",
+    "config.dig-artifact-spots.tooltip": "Дали да се разкопават местата за артефакти.",
+
+    "config.dig-seed-spots.name": "Разкопаване на места за семена",
+    "config.dig-seed-spots.tooltip": "Дали да се разкопават местата за семена.",
+
+    "config.clear-dirt-without-fertilizer.name": "Почистване на обработена почва без тор",
+    "config.clear-dirt-without-fertilizer.tooltip": "Дали да се почиства обработена почва без тор.",
+
+    "config.clear-dirt-with-fertilizer.name": "Почистване на обработена почва с тор",
+    "config.clear-dirt-with-fertilizer.tooltip": "Дали да се почиства обработена почва с тор.",
+
+    /****
+    ** Mining
+    ****/
+    "config.break-boulders-and-meteorites.name": "Разбиване на валуни и метеорити",
+    "config.break-boulders-and-meteorites.tooltip": "Дали да се разбиват валуни и метеорити.",
+
+    "config.harvest-mine-spawns.name": "Събиране на предмети, появили се в мините",
+    "config.harvest-mine-spawns.tooltip": "Дали да се събират появили се в мините предмети като кварц и замръзнали сълзи.",
+
+
+    /****
+    ** Placed items
+    ****/
+    "config.break-flooring.name": "Разбиване на настилки",
+    "config.break-flooring.tooltip": "Дали да се разбиват поставени настилки.",
+
+    "config.break-objects.name": "Разбиване на предмети",
+    "config.break-objects.tooltip": "Дали да се разбиват поставени предмети.",
+
+    "config.break-mine-containers.name": "Разбиване на контейнери в мините",
+    "config.break-mine-containers.tooltip": "Дали да се разбиват контейнери в мините.",
+
+    "config.harvest-machines.name": "Събиране на продукцията от машините",
+    "config.harvest-machines.tooltip": "Дали да се събира продукцията от машините.",
+
+
+    /****
+    ** Melee
+    ****/
+    "config.attack-monsters.name": "Атакуване на чудовища",
+    "config.attack-monsters.tooltip": "Дали да се атакуват чудовища. (Това нарушава баланса заради скоростта на инструмента на трактора.)",
+
+
+    /****
+    ** Other
+    ****/
+    "config.milk-pail.name": "Използване на кофата за мляко",
+    "config.milk-pail.tooltip": "Дали да се събира мляко от селскостопански животни с кофата за мляко.",
+
+    "config.shears.name": "Използване на ножиците",
+    "config.shears.tooltip": "Дали да се събира вълна от селскостопански животни с ножиците.",
+
+    "config.watering-can.name": "Използване на лейката",
+    "config.watering-can.tooltip": "Дали да се поливат близките плочки с лейката. Това не изразходва водата в лейката.",
+
+    "config.fertilizer.name": "Използване на тор",
+    "config.fertilizer.tooltip": "Дали да се прилага тор върху посевите и обработената почва.",
+
+    "config.grass-starters.name": "Засаждане на стръкове трева",
+    "config.grass-starters.tooltip": "Дали да се засаждат стръкове трева.",
+
+    "config.seeds.name": "Засаждане на семена",
+    "config.seeds.tooltip": "Дали да се засаждат семена.",
+
+    "config.seed-bags.name": "Засаждане на семена от торби за семена",
+    "config.seed-bags.tooltip": "Дали да се засаждат семена от мода Seed Bag.",
+
+    "config.slingshot.name": "Използване на прашката",
+    "config.slingshot.tooltip": "Дали да се изстрелва прашката към курсора. (Това нарушава баланса и ще изразходва мунициите много бързо заради скоростта на инструмента на трактора.)",
+
+    "config.custom-tool-names.name": "Имена на персонализирани инструменти",
+    "config.custom-tool-names.tooltip": "Персонализираните предмети/инструменти, които да се включат при каране на трактора. Инструментите се използват на всяка околна плочка, а предметите се поставят. Ако посочиш нещо, което вече се поддържа (като брадвата), това премахва всички ограничения за използването му. Трябва да посочиш точното вътрешно име (не преведеното име за показване), например „Axe“ или „Mega Bomb“. Разделяй няколко стойности със запетаи.",
+
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.summon-tractor.name": "Tractor Mod",
+    "icon.summon-tractor.desc": "Призови трактор"
+}

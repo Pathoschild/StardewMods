@@ -1,0 +1,147 @@
+﻿{
+    /*********
+    ** In-game messages
+    *********/
+    "mod-paused": "Бързите анимации са на пауза; анимациите ще се изпълняват със стандартната скорост. Натисни {{keybind}} отново, за да ги възобновиш.",
+    "mod-unpaused": "Бързите анимации са възобновени и ще се изпълняват с избраните скорости. Натисни {{keybind}} отново, за да ги поставиш на пауза.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Общи настройки",
+
+    "config.disable-eat-prompt.name": "Пропускане на потвърждението за ядене и пиене",
+    "config.disable-eat-prompt.tooltip": "Дали да се пропуска прозорецът, който те пита дали наистина искаш да изядеш или изпиеш нещо.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Скорост на анимациите на играча",
+
+    "config.eat-or-drink.name": "Ядене и пиене",
+    "config.eat-or-drink.tooltip": "Колко бързо ядеш и пиеш. По подразбиране: {{defaultValue}}x.",
+
+    "config.fish.name": "Риболов",
+    "config.fish.tooltip": "Колко бързо замяташ и навиваш при риболов (не влияе на мини-играта). По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x.",
+
+    "config.harvest.name": "Прибиране на посеви",
+    "config.harvest.tooltip": "Колко бързо събираш реколта и предмети на ръка. По подразбиране: {{defaultValue}}x.",
+
+    "config.hold-up-item.name": "Вдигане на предмет",
+    "config.hold-up-item.tooltip": "Колко бързо вдигаш предмет над главата си. По подразбиране: {{defaultValue}}x.",
+
+    "config.horse-flute.name": "Свирене с флейта за кон",
+    "config.horse-flute.tooltip": "Колко бързо свириш с флейта за кон. По подразбиране: {{defaultValue}}x.",
+
+    "config.milk.name": "Доене",
+    "config.milk.tooltip": "Колко бързо използваш ведрото за мляко. По подразбиране: {{defaultValue}}x.",
+
+    "config.mount.name": "Качване и слизане от кон",
+    "config.mount.tooltip": "Колко бързо се качваш или слизаш от кон, включително от персонализирани ездитни животни като трактора. По подразбиране: {{defaultValue}}x.",
+
+    "config.read-book.name": "Четене на книга",
+    "config.read-book.tooltip": "Колко бързо четеш книги. По подразбиране: {{defaultValue}}x.",
+
+    "config.shear.name": "Стригане",
+    "config.shear.tooltip": "Колко бързо използваш ножиците за вълна. По подразбиране: {{defaultValue}}x.",
+
+    "config.slingshot.name": "Използване на прашка",
+    "config.slingshot.tooltip": "Колко бързо опъваш прашката. По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x.",
+
+    "config.tool.name": "Замахване с инструмент",
+    "config.tool.tooltip": "Колко бързо използваш инструментите си (без оръжия и въдица). По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x.",
+
+    "config.use-totem.name": "Използване на тотем",
+    "config.use-totem.tooltip": "Колко бързо използваш тотем. По подразбиране: {{defaultValue}}x.",
+
+    "config.weapon.name": "Замахване с оръжие",
+    "config.weapon.tooltip": "Колко бързо замахваш с оръжия. По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Скорост на анимациите в света",
+
+    "config.break-geodes.name": "Чупене на геоди",
+    "config.break-geodes.tooltip": "Колко бързо ковачът чупи геоди за теб. По подразбиране: {{defaultValue}}x.",
+
+    "config.bus.name": "Автобусът на Пам",
+    "config.bus.tooltip": "Колко бързо Пам кара автобуса до пустинята и обратно. По подразбиране: {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Ротативки в казиното",
+    "config.casino-slots.tooltip": "Колко бързо се въртят ротативките. По подразбиране: {{defaultValue}}x.",
+
+    "config.fade.name": "Затъмняване на екрана",
+    "config.fade.tooltip": "Колко бързо екранът потъмнява и отново светва. По подразбиране: {{defaultValue}}x.",
+
+    "config.fishing-text.name": "Текст при риболов",
+    "config.fishing-text.tooltip": "Колко бързо се появяват надписите 'HIT!' и 'PERFECT'. По подразбиране: {{defaultValue}}x.",
+
+    "config.fishing-treasure.name": "Сандък със съкровище при риболов",
+    "config.fishing-treasure.tooltip": "Колко бързо отваряш сандък със съкровище при риболов. По подразбиране: {{defaultValue}}x.",
+
+    "config.forge.name": "Ковачница",
+    "config.forge.tooltip": "Колко бързо работи ковачницата във вулкана. По подразбиране: {{defaultValue}}x.",
+
+    "config.open-chest.name": "Отваряне на сандък",
+    "config.open-chest.tooltip": "Колко бързо отваряш сандъци. По подразбиране: {{defaultValue}}x.",
+
+    "config.parrot-express.name": "Папагалски експрес",
+    "config.parrot-express.tooltip": "Колко бързо се движи папагалският експрес. По подразбиране: {{defaultValue}}x.",
+
+    "config.prize-ticket-machine.name": "Машина за наградни билети",
+    "config.prize-ticket-machine.tooltip": "Колко бързо машината на Люис приема наградни билети и дава предмети. По подразбиране: {{defaultValue}}x.",
+
+    "config.tailor.name": "Шиене",
+    "config.tailor.tooltip": "Колко бързо работи шевната машина. По подразбиране: {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Падане на дървета",
+    "config.tree-fall.tooltip": "Колко бързо падат дърветата, след като ги отсечеш. По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x.",
+
+    "config.wheel-spin.name": "Въртене на колелото",
+    "config.wheel-spin.tooltip": "Колко бързо се върти колелото на панаира в Стардю Вали. По подразбиране: {{defaultValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Скорост на анимациите по интерфейса",
+
+    "config.dialogue-typing.name": "Изписване на диалози",
+    "config.dialogue-typing.tooltip": "Колко бързо се появява текстът в кутиите за диалог. По подразбиране: {{defaultValue}}x",
+
+    "config.open-dialogue-box.name": "Отваряне на диалог",
+    "config.open-dialogue-box.tooltip": "Колко бързо се отварят кутиите за диалог. По подразбиране: {{defaultValue}}x.",
+
+    "config.shipping-menu.name": "Екран за продажби",
+    "config.shipping-menu.tooltip": "Колко бързо се сменят екраните в менюто за продажби в края на деня. По подразбиране: {{defaultValue}}x.",
+
+    "config.title-menu.name": "Начално меню",
+    "config.title-menu.tooltip": "Колко бързо преминават екраните в главното меню на играта. По подразбиране: {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Премигване при зареждане",
+    "config.load-game-blink.tooltip": "Колко бързо премигва слотът след кликване за зареждане на игра. По подразбиране: {{defaultValue}}x.",
+
+    /****
+    ** 'Pause Mod' section
+    ****/
+    "config.pause-mod-section": "Паузиране на мода",
+
+    "config.mod-paused.name": "Временно на пауза",
+    "config.mod-paused.tooltip": "Дали модът е временно спрян, така че всички анимации да са със стандартна скорост. Важи само за текущата сесия.",
+
+    "config.pause-mod.name": "Клавиш за пауза",
+    "config.pause-mod.tooltip": "Клавишът, който временно спира мода. Натискането му отново ще пусне мода обратно.",
+
+    /****
+    ** 'Experimental' section
+    ****/
+    "config.experimental": "Експериментални опции",
+    "config.experimental-warning": "Тези опции не са напълно стабилни и могат да доведат до забиване или срив на играта. Не се препоръчва включването им.",
+
+    "config.event.name": "Кътсцени и събития",
+    "config.event.tooltip": "Колко бързо се изпълняват събитията и кътсцените. По подразбиране: {{defaultValue}}x, препоръчително: {{suggestedValue}}x."
+}

@@ -1,0 +1,17 @@
+{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Изискване на флейта за кон",
+    "config.require-flute.description": "Дали трябва да имаш предмета „Флейта за кон“ в инвентара си, за да призовеш кон. По подразбиране: не.",
+
+    "config.summon-horse-button.name": "Бутон за призоваване на кон",
+    "config.summon-horse-button.description": "Бутонът, който натискаш, за да засвириш с флейтата и да призовеш кон. По подразбиране: {{defaultValue}}.",
+
+
+    /*********
+    ** Iconic Framework
+    *********/
+    "icon.summon-horse.name": "Horse Flute Anywhere",
+    "icon.summon-horse.desc": "Призови кон"
+}

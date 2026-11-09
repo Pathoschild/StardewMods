@@ -1,0 +1,40 @@
+{
+    /*********
+    ** Debug info
+    *********/
+    // labels shown on the debug screen
+    "label.tile": "плочка",
+    "label.location": "място",
+    "label.menu": "меню",
+    "label.submenu": "подменю",
+    "label.minigame": "миниигра",
+    "label.dialogue": "диалог",
+    "label.event-id": "ID на събитие",
+    "label.event-script": "скрипт за събитие",
+    "label.festival-name": "фестивал",
+    "label.shop-id":  "ID на магазин",
+    "label.song": "песен",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // general options
+    "config.title.general-options": "Основни настройки",
+    "config.enable-game-debug.name": "Вкл. дебъг клавиши на играта",
+    "config.enable-game-debug.desc": "Дали показването на дебъг информацията да включва и дебъг клавишите на играта, като например натискане на 5 за преместване до плажа.",
+    "config.enable-dangerous-hotkeys.name": "Разрешаване на опасни клавиши",
+    "config.enable-dangerous-hotkeys.desc": "Когато дебъг клавишите на играта са включени, дали да се разрешат и опасни клавиши, които могат незабавно да приключат текущия ден, да променят произволно украсата на играча или фермерската къща, или да сринат играта.",
+
+    // controls
+    "config.title.controls": "Управление",
+    "config.toggle-debug-key.name": "Показване на дебъг информация",
+    "config.toggle-debug-key.desc": "Клавишите, с които се показва или скрива дебъг информацията.",
+
+
+    /*********
+    ** Iconic Framework icon
+    *********/
+    "icon.toggle-debug-mode.name": "Дебъг режим",
+    "icon.toggle-debug-mode.desc": "Превключи дебъг режима"
+}
