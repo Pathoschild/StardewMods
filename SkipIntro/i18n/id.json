@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Lewati ke",
+    "config.skip-to.tooltip": "Layar mana yang akan dituju. Default Menu judul.",
+    "config.skip-to.values.title-menu": "Menu judul",
+    "config.skip-to.values.load-menu": "Menu lanjut",
+    "config.skip-to.values.join-coop": "Gabung mabar",
+    "config.skip-to.values.host-coop": "Host mabar"
+}
