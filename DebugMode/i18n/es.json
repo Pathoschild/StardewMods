@@ -8,11 +8,11 @@
     "label.menu": "menú",
     "label.submenu": "submenú",
     "label.minigame": "minijuego",
-    "label.dialogue": "dialogue", // TODO
+    "label.dialogue": "diálogo",
     "label.event-id": "ID de evento",
     "label.event-script": "guión del evento",
     "label.festival-name": "festival",
-    "label.shop-id": "shop ID", // TODO
+    "label.shop-id": "ID de la tienda",
     "label.song": "canción",
 
 
@@ -35,7 +35,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
     "icon.toggle-debug-mode.name": "Debug Mode",
-    "icon.toggle-debug-mode.desc": "Toggle Debug Mode"
+    "icon.toggle-debug-mode.desc": "Des/activar el modo de depuración"
 }

@@ -12,7 +12,6 @@
     /*********
     ** Iconic Framework
     *********/
-    // TODO
-    "icon.summon-horse.name": "Horse Flute Anywhere",
-    "icon.summon-horse.desc": "Summon Horse"
+    "icon.summon-horse.name": "Horse Flute Anywhere", //No translation needed - 'Flauta para caballos en cualquier parte'.
+    "icon.summon-horse.desc": "Llamar al caballo"
 }

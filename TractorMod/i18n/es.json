@@ -14,7 +14,7 @@
     ** Section titles
     ****/
     "config.main-options": "Opciones principales",
-    "config.audio": "Audio", // TODO
+    "config.audio": "Audio",
     "config.controls": "Controles",
     "config.axe": "Características del hacha",
     "config.hoe": "Características de la azada",
@@ -30,8 +30,7 @@
     /****
     ** Warnings
     ****/
-    // TODO
-    "config.questable-tractor-warning": "You have Questable Tractor installed. That mod works by overriding the tractor settings, so it may reset changes you make here.",
+    "config.questable-tractor-warning": "Tienes el mod 'Questable Tractor'. Ese mod funciona anulando la configuración del tractor por lo que es posible que restablezca los cambios que realices aquí.",
 
 
     /****
@@ -49,9 +48,8 @@
     "config.build-price.name": "Precio de compra",
     "config.build-price.tooltip": "El precio del oro para comprar un garaje de tractores. Por defecto {{defaultValue}}g.",
 
-    // TODO
-    "config.require-build-materials.name": "Require Build Materials",
-    "config.require-build-materials.tooltip": "Whether you need to provide materials to build a tractor garage, in addition to the gold price.",
+    "config.require-build-materials.name": "Requiere materiales de construcción",
+    "config.require-build-materials.tooltip": "Indica si necesitas aportar materiales para construir el garaje del tractor, además de su coste en oro.",
 
     "config.can-summon-without-garage.name": "Se puede invocar sin garaje",
     "config.can-summon-without-garage.tooltip": "Si se puede invocar un tractor temporal sin construir primero un garaje.",
@@ -66,18 +64,17 @@
     /****
     ** Audio
     ****/
-    // TODO
-    "config.tractor-sounds.name": "Engine Sounds",
-    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
-    "config.tractor-sounds.value.None": "no sounds",
-    "config.tractor-sounds.value.Horse": "horse sounds",
-    "config.tractor-sounds.value.Tractor": "tractor sounds",
+    "config.tractor-sounds.name": "Sonidos del motor",
+    "config.tractor-sounds.tooltip": "Qué efectos de sonido reproducir al montar en el tractor. Los cambios puede que no surtan efecto por completo hasta que recargues la partida. Predeterminado {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "sin sonidos",
+    "config.tractor-sounds.value.Horse": "sonidos de caballo",
+    "config.tractor-sounds.value.Tractor": "sonidos de tractor",
 
-    "config.tractor-volume.name": "Engine Sounds Volume",
-    "config.tractor-volume.tooltip": "The volume level for the tractor sound effects. Default {{defaultValue}}%.",
+    "config.tractor-volume.name": "Volumen de los sonidos de motor",
+    "config.tractor-volume.tooltip": "El nivel de volumen para los efectos de sonido del tractor. Predeterminado {{defaultValue}}%.",
 
-    "config.tool-use-sounds-limit.name": "Tool Use Sounds",
-    "config.tool-use-sounds-limit.tooltip": "When applying a tool to many tiles around the tractor, which tool sounds should be played. The default option is '{{defaultOption}}'. Note that '{{unlimitedOption}}' may cause errors if the '{{distanceOption}}' option is too high, due to playing too many sounds at once.",
+    "config.tool-use-sounds-limit.name": "Sonidos al usar herramientas",
+    "config.tool-use-sounds-limit.tooltip": "Al aplicar una herramienta en muchas casillas alrededor del tractor ,qué sonidos de herramienta deben reproducirse. La opción predeterminada es '{{defaultOption}}'. Ten en cuenta que '{{unlimitedOption}}' puede causar error si la opción '{{distanceOption}}' es demasiado alta, debido a la reproducción de demasiados sonidos a la vez.",
     "config.tool-use-sounds-limit.value.Default": "default",
     "config.tool-use-sounds-limit.value.OncePerTick": "first tile applied",
     "config.tool-use-sounds-limit.value.Unlimited": "play every sound (not recommended)",
@@ -95,12 +92,11 @@
     "config.hold-to-activate-key.name": "Mantener para activar",
     "config.hold-to-activate-key.tooltip": "Si se especifica, el tractor sólo hará algo mientras se mantiene este botón. Si no se especifica nada, el tractor funcionará automáticamente mientras lo estés conduciendo.",
 
-    // TODO
-    "config.increase-distance-key.name": "Increase Distance",
-    "config.increase-distance-key.tooltip": "Temporarily increase the distance at which tools are applied around the tractor by one, up to the recommended maximum of {{maxRecommendedValue}} tiles. This applies until you reload the save.",
+    "config.increase-distance-key.name": "Incrementar distancia",
+    "config.increase-distance-key.tooltip": "Aumenta temporalmente en uno la distancia a la que se aplican las herramientas alrededor del tractor, hasta el máximo recomendado de {{maxRecommendedValue}} casillas. Esto no se aplica hasta que recargues la partida.",
 
-    "config.reduce-distance-key.name": "Reduce Distance",
-    "config.reduce-distance-key.tooltip": "Temporarily reduce the distance at which tools are applied around the tractor by one, down to the recommended minimum of 1 tile. This applies until you reload the save.",
+    "config.reduce-distance-key.name": "Reducir distancia",
+    "config.reduce-distance-key.tooltip": "Reduce temporalmente en uno la distancia a la que se aplican las herramientas alrededor del tractor, hasta el mínimo recomendado de 1 casilla. Esto se aplica hasta que recargues la partida.",
 
 
     /****
@@ -114,7 +110,7 @@
 
     "config.chop-fruit-trees-grown.name": "Cortar árboles frutales (cultivados)",
     "config.chop-fruit-trees-grown.tooltip": "Si se cortan los árboles frutales ya crecidos.",
-
+    
     "config.chop-trees-seeds.name": "Cortar árboles (semillas)",
     "config.chop-trees-seeds.tooltip": "Si se eliminan las semillas de los árboles no frutales.",
 
@@ -124,8 +120,8 @@
     "config.chop-trees-grown.name": "Cortar árboles (cultivados)",
     "config.chop-trees-grown.tooltip": "Si se desbrozan árboles no frutales completamente crecidos.",
 
-    "config.chop-trees-stumps.name": "Chop Trees (Stumps)", // TODO
-    "config.chop-trees-stumps.tooltip": "Whether to clear non-fruit tree stumps. (This doesn't affect giant stumps, which count as debris.)", //  TODO
+    "config.chop-trees-stumps.name": "Talar árboles (tocones)",
+    "config.chop-trees-stumps.tooltip": "Indica si se deben limpiar los tocones de los árboles no frutales. (Esto no afecta a los tocones gigantes, que se consideran escombros).",
 
     "config.chop-bushes.name": "Cortar arbustos",
     "config.chop-bushes.tooltip": "Si se cortan los arbustos que se pueden cortar.",
@@ -133,13 +129,11 @@
     "config.harvest-fruit-trees.name": "Cosechar árboles frutales",
     "config.harvest-fruit-trees.tooltip": "Si se cosechan árboles frutales.",
 
-    // TODO
-    "config.harvest-tree-moss.name": "Harvest Tree Moss",
-    "config.harvest-tree-moss.tooltip": "Whether to collect moss from trees.",
+    "config.harvest-tree-moss.name": "Recolectar musgo de los árboles"
+    "config.harvest-tree-moss.tooltip": "Indica si se debe recolectar musgo de los árboles.",
 
-    // TODO
-    "config.harvest-tree-seeds.name": "Harvest Tree Seeds",
-    "config.harvest-tree-seeds.tooltip": "Whether to collect seeds from trees.",
+    "config.harvest-tree-seeds.name": "Recolectar semillas de los árboles",
+    "config.harvest-tree-seeds.tooltip": "Indica si se debe recolectar semillas de los árboles.",
 
 
     /****
@@ -176,9 +170,8 @@
     "config.clear-debris.name": "Despejar escombros",
     "config.clear-debris.tooltip": "Si se destruyen restos como maleza, ramitas, tocones gigantes y troncos caídos.",
 
-    // TODO
-    "config.clear-mine-stones.name": "Break Mine Stones",
-    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+    "config.clear-mine-stones.name": "Romper rocas de la mina",
+    "config.clear-mine-stones.tooltip": "Indica si se deben romper las rocas en la mina.",
 
     "config.clear-weeds.name": "Despejar maleza",
     "config.clear-weeds.tooltip": "Si se destruye la maleza.",
@@ -193,16 +186,14 @@
     "config.dig-artifact-spots.name": "Excavar puntos de artefactos",
     "config.dig-artifact-spots.tooltip": "Si se excavan puntos de artefactos.",
 
-    // TODO
-    "config.dig-seed-spots.name": "Dig Seed Spots",
-    "config.dig-seed-spots.tooltip": "Whether to dig up seed spots.",
+    "config.dig-seed-spots.name": "Cava puntos de semillas",
+    "config.dig-seed-spots.tooltip": "Indica si se deben cavar los puntos de semillas.",
 
     "config.clear-dirt-without-fertilizer.name": "Limpiar tierra labrada",
     "config.clear-dirt-without-fertilizer.tooltip": "Si se limpia la tierra labrada.",
 
-    // TODO
-    "config.clear-dirt-with-fertilizer.name": "Clear Tilled Dirt (Fertilized)",
-    "config.clear-dirt-with-fertilizer.tooltip": "Whether to clear tilled dirt which has fertilizer.",
+    "config.clear-dirt-with-fertilizer.name": "Limpiar tierra arada (con fertilizante)",
+    "config.clear-dirt-with-fertilizer.tooltip": "Indica si se debe limpiar la tierra arada que tiene fertilizante.",
 
 
     /****
@@ -272,7 +263,6 @@
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.summon-tractor.name": "Tractor Mod",
-    "icon.summon-tractor.desc": "Summon Tractor"
+    "icon.summon-tractor.name": "Tractor Mod", //Mod del tractor
+    "icon.summon-tractor.desc": "Invocar tractor"
 }

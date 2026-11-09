@@ -19,9 +19,7 @@
     "config.title.connectors": "Permitir conectores",
     "config.connector.desc": "Usa {{itemName}} para conectar máquinas y cofres.",
     "config.custom-connectors.name": "Personalizar conectores",
-
-    // TODO
-    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "Los objetos que conectan maquinas adyacentes entre si. Puedes especificar tanto el nombre en inglés (como \"Wood Path\") como el ID del objeto (como \"(O)405\"), y listar varios objetos separados por comas.", // note: connector names must be English even when playing in other languages
 
     // Junimo hut options
     "config.title.junimo-huts": "Uso de la Cabaña Junimo",
@@ -30,13 +28,11 @@
     "config.junimo-hut-fertilizer.name": "Fertilizante",
     "config.junimo-hut-fertilizer.desc": "Qué debe hacer la Cabaña Junimo con items de Fertilizante. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
     "config.junimo-hut-seeds.name": "Semillas",
-    "config.junimo-hut-seeds.desc": "Qué debe hacer la Cabaña Junimo con items de Semillas. 'Auto-detect' Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
-
-    // TODO
-    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
-    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
-    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
-    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-seeds.desc": "Qué debe hacer la Cabaña Junimo con items de Semillas. 'Detectar Automaticamente' para ignorar items si Better Junimos esta instalado, de lo contrario, los ítems se moverán desde la cabaña a los cofres conectados.",
+    "config.junimo-hut-move-items-into-hut.name": "Mover IDs de objetos a la cabaña",
+    "config.junimo-hut-move-items-into-hut.desc": "Los objetos que deben ser trasladados a las cabañas de los Junimo(sin importar otros campos como {{gemFieldName}}). Es una lista de IDs de objetos delimitada por comas (tal como se muestra en el campo 'internal ID' del mod Lookup Anything).",
+    "config.junimo-hut-ignore-items.name": "Ignorar IDs de objetos",
+    "config.junimo-hut-ignore-items.desc": "Los objetos que deben ser ignorados (no movidos a diferencia de otros campos como {{gemFieldName}}). Esta es una lista de objetos delimitada por comas (tal como se muestra en el campo 'internal id' del mod Lookup Anything.",
 
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Detectar Automaticamente",
@@ -45,17 +41,16 @@
     "config.junimo-huts.move-into-huts": "Mover desde los cobres a la Cabaña Junimo",
 
     // per-chest settings
-    // TODO
-    "config.title.chest-settings": "Chest settings",
-    "config.default-chest-override.name": "Default behavior",
-    "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.title.chest-settings": "Configuración de cofres",
+    "config.default-chest-override.name": "Comportamiento predeterminado",
+    "config.default-chest-override.desc": "Indica si los cofres deben estar activados o no por defecto (excepto aquellos configurados más abajo). Los cofres habilitados automatizarán las máquinas conectadas, mientras que los desactivados se ignorarán por completo.",
     "config.chest-override.name": "{{chestName}}",
-    "config.chest-override.name.take-only": "{{chestName}} (take items only)",
-    "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",
-    "config.chest-override.desc.take-only": "{{description}} (When enabled, this chest type only allows taking items out of the chest.)", // {{description}} contains the previous translation line
-    "config.chest-override.values.default": "Default",
-    "config.chest-override.values.enabled": "Enable",
-    "config.chest-override.values.disabled": "Disable",
+    "config.chest-override.name.take-only": "{{chestName}} (solo extraer objetos)",
+    "config.chest-override.desc": "Indica si los objetos {{chestName}} deben activarse como cofres. Consulta la descripción emergente en  '{{defaultBehaviorField}}'.",
+    "config.chest-override.desc.take-only": "{{description}} (Cuando está activado, ste tipo de cofre solo permite sacar objetos de su interior.)", // {{description}} contains the previous translation line
+    "config.chest-override.values.default": "Predeterminado",
+    "config.chest-override.values.enabled": "Activar",
+    "config.chest-override.values.disabled": "Desactivar",
 
     // per-machine settings
     "config.title.machine-settings": "Configuración de {{machineName}}",

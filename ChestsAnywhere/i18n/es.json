@@ -11,10 +11,10 @@
     // default category names
     "default-category.cabin-owned": "Cabaña ({{owner}})",
     "default-category.cabin-unowned": "Cabaña (vacía)",
-    "default-category.cellar-owned": "Cellar ({{owner}})", // TODO
-    "default-category.cellar-unowned": "Cellar #{{cellarNumber}}", // TODO
-    "default-category.farmhouse": "Farmhouse", // TODO
-    "default-category.island-farmhouse": "Island Farmhouse", // TODO
+    "default-category.cellar-owned": "Sótano ({{owner}})",
+    "default-category.cellar-unowned": "Sótano #{{cellarNumber}}",
+    "default-category.farmhouse": "Casa de la granja",
+    "default-category.island-farmhouse": "Casa de la isla",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -40,9 +40,8 @@
     "button.reset": "Reiniciar",
 
     // chest search menu
-    // TODO
-    "search-box.chest-name": "Search Chest Name:",
-    "search-box.item-name": "Search Items:",
+    "search-box.chest-name": "Buscar por nombre de cofre:",
+    "search-box.item-name": "Buscar por objetos:",
 
 
     /**********
@@ -68,8 +67,8 @@
     "config.enable-shipping-bin.name": "Habilitar el contenedor de envíos",
     "config.enable-shipping-bin.desc": "Si se permite el acceso a el contenedor de envíos.",
 
-    "config.enable-sprinkler-attachments.name": "Enable sprinkler attachments", // TODO
-    "config.enable-sprinkler-attachments.desc": "Whether to enable access to sprinkler attachments like enrichers.", // TODO
+    "config.enable-sprinkler-attachments.name": "Activar accesorios para aspersores",
+    "config.enable-sprinkler-attachments.desc": "Indica si se debe permitir el uso de accesorios para aspersores, como los enriquecedores.",
 
     "config.add-organize-player-items.name": "Añadir el botón de organizar los elementos de los jugadores",
     "config.add-organize-player-items.desc": "Si se añade un botón de 'organizar' en las interfaces de los cofres para el inventario del jugador.",
@@ -77,7 +76,7 @@
     /****
     ** remote access
     ****/
-    "config.title.remote-access": "Remote access", // TODO
+    "config.title.remote-access": "Acceso remoto",
 
     "config.range.name": "Rango",
     "config.range.desc": "El rango en el que los cofres son accesibles a través del menú.",
@@ -95,16 +94,16 @@
     /****
     ** open menu hotkey
     ****/
-    "config.title.open-menu-hotkey": "Hotkey to open chest UI", // TODO
+    "config.title.open-menu-hotkey": "Atajo de teclado para abrir el menú del cofre",
 
     "config.toggle-ui-key.name": "Activar la interfaz de usuario",
     "config.toggle-ui-key.desc": "Las teclas que muestran u ocultan la interfaz de usuario del cofre.",
 
-    "config.reopen-last-chest.name": "Reopen last chest", // TODO
-    "config.reopen-last-chest.desc": "When you press the 'toggle UI' button, whether to reopen the last chest you selected yourself during the current game session.", // TODO
+    "config.reopen-last-chest.name": "Reabrir último cofre",
+    "config.reopen-last-chest.desc": "Indica si, al pulsar el botón 'alternar interfaz', se debe reabrir automáticamente el último cofre que seleccionaste por ti mismo durante la sesión de juego actual.",
 
-    "config.default-category.name": "Default category", // TODO
-    "config.default-category.desc": "When you press the 'toggle UI' button, show the chests in this category by default (if set). This applies after 'reopen last chest'.", // TODO
+    "config.default-category.name": "Categoría predeterminada",
+    "config.default-category.desc": "Al pulsar el botón 'alternar interfaz', muestra los cofres de esa categoría por defecto (si ha sido configurado). Esta opción aplica después de la opción 'reabrir último cofre'.",
 
     /****
     ** controls when chest UI is open
@@ -114,9 +113,8 @@
     "config.edit-chest.name": "Editar el cofre",
     "config.edit-chest.desc": "Las teclas que editan las opciones del cofre actual.",
 
-    // TODO
-    "config.sort-items.name": "Sort player items",
-    "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
+    "config.sort-items.name": "Ordena los objetos del jugador",
+    "config.sort-items.desc": "Las teclas que ordenan los objetos en el inventario de un jugador mientras hay un cofre abierto .",
 
     "config.navigate-prev-chest.name": "Navegar: cofre anterior",
     "config.navigate-prev-chest.desc": "Las teclas que navegan al cofre anterior mientras el menú está abierto.",
@@ -136,18 +134,16 @@
     "config.hold-to-scroll-chests.name": "Mantener para desplazar cofres",
     "config.hold-to-scroll-chests.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de los cofres con la rueda de desplazamiento del ratón.",
 
-    // TODO
-    "config.open-search-menu.name": "Open Search Menu",
-    "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+    "config.open-search-menu.name": "Abrir el menú de búsqueda",
+    "config.open-search-menu.desc": "Las teclas que mientras se visualiza la interfaz de un cofre, abren el menú de búsqueda para todos los cofres.",
 
-    "config.search-menu-preview.name": "Search Menu Preview Chest",
-    "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",
+    "config.search-menu-preview.name": "Vista previa del cofre en el menú de búsqueda",
+    "config.search-menu-preview.desc": "Las teclas que se pueden mantener pulsadas para mostrar una descripción emergente con el contenido del cofre sobre el que se sitúa el cursor.",
 
 
     /*********
     ** Iconic Framework icon
     *********/
-    // TODO
-    "icon.open-menu.name": "Chests Anywhere",
-    "icon.open-menu.desc": "Open Menu"
+    "icon.open-menu.name": "Chests Anywhere", //Cofres en todas partes (Should the name 'Chests Anywhere' be translated into Spanish, or should we keep the original English name?)
+    "icon.open-menu.desc": "Abrir menú"
 }
