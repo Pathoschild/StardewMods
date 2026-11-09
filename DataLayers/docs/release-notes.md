@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to jjongleee (updated Korean)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), jjongleee (updated Korean), and kr0n0m3tr0-88 (updated Spanish)!
 
 ## 1.23.0
 Released 14 March 2026 for SMAPI 4.1.10 or later.

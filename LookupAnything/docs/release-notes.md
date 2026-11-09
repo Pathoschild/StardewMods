@@ -12,7 +12,7 @@
 * Fixed item lookups' fish spawn rules showing duplicate entries. These are now merged automatically.
 * Fixed item lookups' fish spawn locations not always sorted.
 * Fixed item/NPC lookup from a custom menu with an invalid field type.
-* Improved translations. Thanks to jjongleee (updated Korean)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), Fen1kks (updated Turkish), jjongleee (updated Korean), and kr0n0m3tr0-88 (updated Spanish)!
 
 ## 1.55.0
 Released 14 March 2026 for SMAPI 4.3.1 or later.

@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to jjongleee (updated Korean)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), jjongleee (updated Korean), kr0n0m3tr0-88 (updated Spanish), and zeashel (added Indonesian)!
 
 ## 1.17.4
 Released 14 March 2026 for SMAPI 4.1.10 or later.

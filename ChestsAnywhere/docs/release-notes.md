@@ -4,7 +4,7 @@
 ## Upcoming release
 * Fixed dressers or fish tanks becoming temporarily non-interactable if you open their inventory, then navigate to another chest before closing the menu.
 * Fixed support for shipping bins in custom locations.
-* Improved translations. Thanks to jjongleee (updated Korean)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), jjongleee (updated Korean), and kr0n0m3tr0-88 (updated Spanish)!
 
 ## 1.30.1
 Released 14 March 2026 for SMAPI 4.1.10 or later.

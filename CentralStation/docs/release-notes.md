@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to MakinDay (updated Italian) and Mingray1350 (updated Chinese)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), Fen1kks (updated Turkish), kr0n0m3tr0-88 (updated Spanish), MakinDay (updated Italian), and Mingray1350 (updated Chinese)!
 
 ## 1.7.0
 Released 14 March 2026 for SMAPI 4.3.1 or later.

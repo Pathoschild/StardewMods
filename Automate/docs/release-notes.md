@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to jjongleee (updated Korean)!
+* Improved translations. Thanks to AcTePuKc (added Bulgarian), AnyingSirius (updated Chinese), Fen1kks (updated Turkish), jjongleee (updated Korean), kr0n0m3tr0-88 (updated Spanish), and zeashel (added Indonesian)!
 
 ## 2.6.1
 Released 15 March 2026 for SMAPI 4.1.10 or later.
