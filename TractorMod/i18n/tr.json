@@ -1,4 +1,4 @@
-﻿{
+{
     /*********
     ** Tractor
     *********/
@@ -17,7 +17,7 @@
     "config.audio": "Ses",
     "config.controls": "Kontroller",
     "config.axe": "Balta Özellikleri",
-    "config.hoe": "Çapa özellikleri",
+    "config.hoe": "Çapa Özellikleri",
     "config.pickaxe": "Kazma Özellikleri",
     "config.scythe": "Tırpan Özellikleri",
     "config.melee-blunt": "Yakın Dövüş Kör Silah Özellikleri",
@@ -43,7 +43,7 @@
     "config.speed.tooltip": "Traktör sürerken hız değiştirici. Varsayılan {{defaultValue}}.",
 
     "config.magnetic-radius.name": "Manyetik Yarıçap",
-    "config.magnetic-radius.tooltip": "Eşya manyetizma miktarı (yüksek değerler eşyaları atadan uzağa çeker). Varsayılan {{defaultValue}}.",
+    "config.magnetic-radius.tooltip": "Eşya manyetizma miktarı (yüksek değerler eşyaları daha uzaktan çeker). Varsayılan {{defaultValue}}.",
 
     "config.build-price.name": "Yapı Fiyatı",
     "config.build-price.tooltip": "Traktör garajı satın almak için altın fiyatı. Varsayılan {{defaultValue}}g.",
@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "Ses efektlerinin ses seviyesi. Varsayılan: {{defaultValue}}%.",
 
     "config.tool-use-sounds-limit.name": "Kullanılan Araçların Sesleri",
-    "config.tool-use-sounds-limit.tooltip": "Traktör birden çok alana kullanılan araçlardan hangisinin sesinin oynatılacağı. Varsayılan seçenek: '{{defaultOption}}'. '{{unlimitedOption}}' seçeneği büyük alanlarda hatalara sebep olabilir.", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
+    "config.tool-use-sounds-limit.tooltip": "Traktör birden çok alana kullanılan araçlardan hangisinin sesinin oynatılacağı. Varsayılan seçenek: '{{defaultOption}}'. '{{unlimitedOption}}' seçeneği büyük alanlarda hatalara sebep olabilir.",
     "config.tool-use-sounds-limit.value.Default": "Varsayılan",
     "config.tool-use-sounds-limit.value.OncePerTick": "Uygulanan ilk kare",
     "config.tool-use-sounds-limit.value.Unlimited": "Tüm sesleri oynat (tavsiye edilmez)",
@@ -90,13 +90,13 @@
     "config.dismiss-key.tooltip": "Bindiğiniz traktörü evine geri götürür.",
 
     "config.hold-to-activate-key.name": "Etkinleştirmek için basılı tut",
-    "config.hold-to-activate-key.tooltip": "Belirtilirse, traktör yalnızca siz bu düğmeyi basılı tutarken bir şey yapacaktır. Hiçbir şey belirtilmezse, siz onu sürerken traktör otomatik olarak çalışacaktır. ",
+    "config.hold-to-activate-key.tooltip": "Belirtilirse, traktör yalnızca siz bu düğmeyi basılı tutarken bir şey yapacaktır. Hiçbir şey belirtilmezse, siz onu sürerken traktör otomatik olarak çalışacaktır.",
 
     "config.increase-distance-key.name": "Mesafeyi Arttır",
-    "config.increase-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 arttırır. Bu artış en fazla önerilen maksimum değere kadar ( {{maxRecommendedValue}} ) çıkar. Bu durum oyun kaydından çıkana kadar devam eder.",
+    "config.increase-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 arttırır. Bu artış en fazla önerilen maksimum değere kadar ({{maxRecommendedValue}}) çıkar. Bu durum oyun kaydından çıkana kadar devam eder.",
 
     "config.reduce-distance-key.name": "Mesafeyi Azalt",
-    "config.reduce-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 azaltır. Bu azaltma en az önerilen minimum değere kadar ( 1 ) iner. Bu durum oyun kaydından çıkana kadar devam eder.",
+    "config.reduce-distance-key.tooltip": "Traktörün aletleri uygulayacağı alanı geçici olarak 1 azaltır. Bu azaltma en az önerilen minimum değere kadar (1) iner. Bu durum oyun kaydından çıkana kadar devam eder.",
 
 
     /****
@@ -143,7 +143,7 @@
     "config.clear-dead-crops.tooltip": "Ölü ekinlerin yok edilip edilmeyeceği.",
 
     "config.clear-live-crops.name": "Canlı Ekinleri Temizle",
-    "config.clear-live-crops.tooltip": "Canlı ekinlerin yok edilip edilmeyeceği. ",
+    "config.clear-live-crops.tooltip": "Canlı ekinlerin yok edilip edilmeyeceği.",
 
     "config.harvest-giant-crops.name": "Dev Ekinleri Hasat Et",
     "config.harvest-giant-crops.tooltip": "Dev ekinlerin kesilip kesilmeyeceği.",
@@ -170,11 +170,10 @@
     "config.clear-debris.name": "Enkazı Temizle",
     "config.clear-debris.tooltip": "Yabani otlar, dallar, dev kütükler ve düşmüş kütükler gibi kalıntıları yok edip etmeyeceği.",
 
-    // TODO
-    "config.clear-mine-stones.name": "Break Mine Stones",
-    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+    "config.clear-mine-stones.name": "Maden Taşlarını Kır",
+    "config.clear-mine-stones.tooltip": "Madendeki taşların kırılıp kırılmayacağı.",
 
-    "config.clear-weeds.name": "Yabani Otları Temizle ",
+    "config.clear-weeds.name": "Yabani Otları Temizle",
     "config.clear-weeds.tooltip": "Yabani otların yok edilip edilmeyeceği.",
 
 
@@ -194,7 +193,7 @@
     "config.clear-dirt-without-fertilizer.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",
 
     "config.clear-dirt-with-fertilizer.name": "İşlenmiş Toprağı Temizle (Gübrelenmiş)",
-    "config.clear-dirt-with-fertilizer.tooltip": "İşlenmiş ve Gübrelenmiş toprağın temizlenip temizlenmeyeceği",
+    "config.clear-dirt-with-fertilizer.tooltip": "İşlenmiş ve Gübrelenmiş toprağın temizlenip temizlenmeyeceği.",
 
 
     /****
@@ -217,7 +216,7 @@
     "config.break-objects.tooltip": "Yerleştirilmiş nesnelerin kırılıp kırılmayacağı.",
 
     "config.break-mine-containers.name": "Maden Konteynerlerini Kır",
-    "config.break-mine-containers.tooltip": "Madende ki konteynerlerin kırılıp kırılmayacağı.",
+    "config.break-mine-containers.tooltip": "Madendeki konteynerlerin kırılıp kırılmayacağı.",
 
     "config.harvest-machines.name": "Makineleri Hasat Et",
     "config.harvest-machines.tooltip": "Makine çıktısının toplanıp toplanmayacağı.",
@@ -239,7 +238,7 @@
     "config.shears.name": "Makasları Etkinleştir",
     "config.shears.tooltip": "Makas kullanarak çiftlik hayvanlarından yün toplanıp toplanmayacağı.",
 
-    "config.watering-can.name": "Sulama Kabını Etkinleştir ",
+    "config.watering-can.name": "Sulama Kabını Etkinleştir",
     "config.watering-can.tooltip": "Sulama kabını kullanarak yakındaki fayansların sulanıp sulanmayacağı. Bu, sulama kabındaki suyu tüketmez.",
 
     "config.fertilizer.name": "Gübreyi Etkinleştir",
