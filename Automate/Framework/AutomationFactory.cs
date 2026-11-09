@@ -74,7 +74,7 @@ internal class AutomationFactory : IAutomationFactory
 
                 default:
                     if (chest.HasContextTag(AutomateConstants.StorageTag))
-                        return new ChestContainer(chest, location, tile, isTakeOnly: chest.HasContextTag(AutomateConstants.StorageTakeOnlyTag));
+                        return new ChestContainer(chest, location, tile, isTakeOnly: chest.HasContextTag(AutomateConstants.StorageTakeOnlyTag), getDefaultReserveStock: () => this.Config().DefaultReserveStock);
                     break;
             }
         }
@@ -96,7 +96,7 @@ internal class AutomationFactory : IAutomationFactory
 
         // machine in Data/Machines
         if (obj.GetMachineData() != null)
-            return new DataBasedObjectMachine(obj, location, tile, () => this.Config().MinMinutesForFairyDust);
+            return new DataBasedObjectMachine(obj, location, tile, () => this.Config().MinMinutesForFairyDust, () => this.Config().DefaultReserveStock);
 
         // connector
         if (this.IsConnector(obj))
@@ -204,10 +204,10 @@ internal class AutomationFactory : IAutomationFactory
         switch (location)
         {
             case FarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
-                return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
+                return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false, getDefaultReserveStock: () => this.Config().DefaultReserveStock);
 
             case IslandFarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
-                return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
+                return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false, getDefaultReserveStock: () => this.Config().DefaultReserveStock);
         }
 
         return null;

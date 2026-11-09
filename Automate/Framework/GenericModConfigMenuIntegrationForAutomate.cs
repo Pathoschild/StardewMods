@@ -155,6 +155,14 @@ internal class GenericModConfigMenuIntegrationForAutomate : IGenericModConfigMen
                 ? I18n.Config_ChestOverride_Values_Enabled()
                 : I18n.Config_ChestOverride_Values_Disabled()
         );
+        menu.AddNumberField(
+            name: I18n.Config_DefaultReserveStock_Name,
+            tooltip: I18n.Config_DefaultReserveStock_Desc,
+            get: config => config.DefaultReserveStock,
+            set: (config, value) => config.DefaultReserveStock = value,
+            min: 0,
+            max: 999
+        );
 
         // per-storage settings
         foreach (ChestType chestType in this.GetChestTypes())

@@ -21,13 +21,16 @@ internal class ChestContainer : IContainer
     ** Fields
     *********/
     /// <summary>A pattern which matches legacy option tags.</summary>
-    private static readonly Regex LegacyOptionPattern = new(@"\|automate:[a-z\-]*\|", RegexOptions.Compiled);
+    private static readonly Regex LegacyOptionPattern = new(@"\|automate:(?<tag>[a-z\-]+)(?::(?<value>\d+))?\|", RegexOptions.Compiled);
 
     /// <summary>The underlying chest.</summary>
     private readonly Chest Chest;
 
     /// <summary>Whether the chest type only allows retrieving items.</summary>
     private readonly bool IsTakeOnly;
+
+    /// <summary>Get the default reserve stock to use if this container doesn't specify its own override.</summary>
+    private readonly Func<int> GetDefaultReserveStock;
 
 
     /*********
@@ -70,14 +73,16 @@ internal class ChestContainer : IContainer
     /// <param name="tile">The tile area covered by the container.</param>
     /// <param name="isTakeOnly">Whether the chest type only allows retrieving items.</param>
     /// <param name="migrateLegacyOptions">Whether to migrate legacy chest options, if applicable.</param>
+    /// <param name="getDefaultReserveStock">Get the default reserve stock to use if this container doesn't specify its own override.</param>
     [SuppressMessage("SMAPI.CommonErrors", "AvoidImplicitNetFieldCast", Justification = "We're deliberately referencing the net list here.")]
-    public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool isTakeOnly = false, bool migrateLegacyOptions = true)
+    public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool isTakeOnly = false, bool migrateLegacyOptions = true, Func<int>? getDefaultReserveStock = null)
     {
         this.Chest = chest;
         this.Location = location;
         this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
         this.InventoryReferenceId = this.GetInventory();
         this.IsTakeOnly = isTakeOnly;
+        this.GetDefaultReserveStock = getDefaultReserveStock ?? (() => 0);
 
         if (migrateLegacyOptions)
             this.MigrateLegacyOptions();
@@ -145,10 +150,18 @@ internal class ChestContainer : IContainer
     /// <inheritdoc />
     public IEnumerator<ITrackedStack> GetEnumerator()
     {
+        int reserveStock = this.GetReserveStock(this.GetDefaultReserveStock());
+
         foreach (Item? item in this.GetInventory().ToArray())
         {
             ITrackedStack? stack = this.GetTrackedItem(item);
-            if (stack != null)
+            if (stack == null)
+                continue;
+
+            if (reserveStock > 0)
+                stack = new ReservedTrackedStack(stack, reserveStock);
+
+            if (stack.Count > 0)
                 yield return stack;
         }
     }
@@ -175,6 +188,8 @@ internal class ChestContainer : IContainer
     /// <remarks>If there aren't enough items in the pipe, it should return those it has.</remarks>
     private IEnumerable<ITrackedStack> GetImpl(Func<Item, bool> predicate, int count)
     {
+        int reserveStock = this.GetReserveStock(this.GetDefaultReserveStock());
+
         int countFound = 0;
         foreach (Item? item in this.GetInventory())
         {
@@ -184,7 +199,12 @@ internal class ChestContainer : IContainer
                 if (stack == null)
                     continue;
 
-                countFound += item.Stack;
+                if (reserveStock > 0)
+                    stack = new ReservedTrackedStack(stack, reserveStock);
+                if (stack.Count <= 0)
+                    continue;
+
+                countFound += stack.Count;
                 yield return stack;
                 if (countFound >= count)
                     yield break;
@@ -260,6 +280,11 @@ internal class ChestContainer : IContainer
                 case "ignore":
                     Set(AutomateContainerHelper.StoreItemsKey, AutomateContainerPreference.Disable);
                     Set(AutomateContainerHelper.TakeItemsKey, AutomateContainerPreference.Disable);
+                    break;
+
+                case "reserve":
+                    if (int.TryParse(match.Groups["value"].Value, out int reserveStock) && reserveStock >= 0)
+                        this.Chest.modData[AutomateContainerHelper.ReserveStockKey] = reserveStock.ToString();
                     break;
             }
 

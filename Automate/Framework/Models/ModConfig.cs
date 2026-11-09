@@ -55,6 +55,9 @@ internal class ModConfig
     /// <summary>Whether each chest type should be used as storage, for types which override <see cref="ChestsEnabledByDefault"/>.</summary>
     public Dictionary<string, ModConfigStorage> ChestOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>The minimum number of each item to leave in a chest when machines take input from it, unless a chest overrides this via its name (e.g. <c>|automate:reserve:2|</c>).</summary>
+    public int DefaultReserveStock { get; set; } = 1;
+
     /// <summary>The configuration for specific machines by ID.</summary>
     public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 

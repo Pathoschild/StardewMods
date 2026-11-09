@@ -327,6 +327,11 @@ This adds two options for Automate:
     and only try other chests if it doesn't have any input for a machine.
   * _Never take items from this chest._
 
+You can also override the _reserve stock_ setting (see [mod settings](#mod-settings)) for an
+individual chest by adding a tag like `|automate:reserve:2|` to its name (e.g. rename a chest to
+"Ore Chest|automate:reserve:2|" to always leave 2 of each item in that chest specifically). This
+isn't currently exposed through Chests Anywhere's UI.
+
 (To configure chest automation from another mod, see the [technical documentation](technical.md#can-i-change-in-game-settings-without-chests-anywhere).)
 
 ## Compatibility

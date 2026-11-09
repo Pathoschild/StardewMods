@@ -44,6 +44,8 @@
     "config.title.chest-settings": "Chest settings",
     "config.default-chest-override.name": "Default behavior",
     "config.default-chest-override.desc": "Whether chests should be enabled or disabled by default (except those you set below). Enabled chests will automate connected machines, while disabled ones are ignored entirely.",
+    "config.default-reserve-stock.name": "Reserve stock",
+    "config.default-reserve-stock.desc": "The number of each item to always leave in a chest when a machine takes input from it, so the chest never runs out completely. This helps mods which add items to an existing stack (like Convenient Inventory) find the right chest. Set to 0 to let machines take everything. You can override this for an individual chest by adding a tag like '|automate:reserve:2|' to its name.",
     "config.chest-override.name": "{{chestName}}",
     "config.chest-override.name.take-only": "{{chestName}} (take items only)",
     "config.chest-override.desc": "Whether placed {{chestName}} items should be enabled as chests. See the tooltip on '{{defaultBehaviorField}}'.",

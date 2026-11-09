@@ -1,3 +1,4 @@
+using System;
 using StardewValley.Mods;
 
 namespace Pathoschild.Stardew.Automate.Framework.Storage;
@@ -48,6 +49,19 @@ internal static class ContainerExtensions
     public static AutomateContainerPreference GetTakingItemsPreference(this IContainer container)
     {
         return container.ModData.ReadPreferenceField(AutomateContainerHelper.TakeItemsKey);
+    }
+
+    /// <summary>Get the minimum stock of each item to leave in this container when machines take input from it.</summary>
+    /// <param name="container">The container instance.</param>
+    /// <param name="defaultReserveStock">The reserve stock to use if the container doesn't specify its own override.</param>
+    public static int GetReserveStock(this IContainer container, int defaultReserveStock)
+    {
+        return
+            container.ModData.TryGetValue(AutomateContainerHelper.ReserveStockKey, out string rawValue)
+            && int.TryParse(rawValue, out int reserveStock)
+            && reserveStock >= 0
+                ? reserveStock
+                : Math.Max(0, defaultReserveStock);
     }
 
 
