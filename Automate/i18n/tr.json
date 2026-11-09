@@ -1,4 +1,4 @@
-﻿{
+{
     /*********
     ** Generic Mod Config Menu UI
     *********/
@@ -19,9 +19,7 @@
     "config.title.connectors": "Etkin bağlayıcılar",
     "config.connector.desc": "{{itemName}}'in makineleri ve sandıkları birbirine bağlayıp bağlamadığı.",
     "config.custom-connectors.name": "Özel bağlayıcılar",
-
-    // TODO
-    "config.custom-connectors.desc": "The items which connect adjacent machines together. You can specify either the internal English name (like \"Wood Path\") or qualified item ID (like \"(O)405\"), and list multiple items with commas.", // note: connector names must be English even when playing in other languages
+    "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan eşyalar. Dahili İngilizce ismini (\"Wood Path\" gibi) veya nitelikli eşya ID'sini (\"(O)405\" gibi) belirtebilir ve birden fazla eşyayı virgülle ayırarak listeleyebilirsiniz.",
 
     // Junimo hut options
     "config.title.junimo-huts": "Junimo kulübesi davranışı",
@@ -31,12 +29,10 @@
     "config.junimo-hut-fertilizer.desc": "Junimo kulübelerinin gübre öğeleriyle yapması gerekenler. Better Junimos kuruluysa 'Otomatik algılama' onları yok sayar, aksi takdirde onları kulübeden bağlı sandıklara taşır.",
     "config.junimo-hut-seeds.name": "Tohumlar",
     "config.junimo-hut-seeds.desc": "Junimo kulübelerinin tohum öğeleriyle yapması gerekenler. Better Junimos kuruluysa 'Otomatik algılama' onları yok sayacak, aksi takdirde onları kulübeden bağlı sandıklara taşıyacak.",
-
-    // TODO
-    "config.junimo-hut-move-items-into-hut.name": "Move item IDs into hut",
-    "config.junimo-hut-move-items-into-hut.desc": "The items which should be moved into Junimo huts (regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
-    "config.junimo-hut-ignore-items.name": "Ignore item IDs",
-    "config.junimo-hut-ignore-items.desc": "The items which should be ignored (not moved regardless of other fields like {{gemFieldName}}). This is a comma-delimited list of qualified item IDs (as shown by the Lookup Anything mod in its 'internal ID' field).",
+    "config.junimo-hut-move-items-into-hut.name": "Eşya ID'lerini kulübeye taşı",
+    "config.junimo-hut-move-items-into-hut.desc": "Junimo kulübelerine taşınması gereken eşyalar ({{gemFieldName}} gibi diğer alanlardan bağımsız olarak). Bu, virgülle ayrılmış nitelikli eşya ID'leri listesidir (Lookup Anything modunun 'Dahili ID' alanında gösterildiği gibi).",
+    "config.junimo-hut-ignore-items.name": "Eşya ID'lerini yoksay",
+    "config.junimo-hut-ignore-items.desc": "Yoksayılması gereken eşyalar ({{gemFieldName}} gibi diğer alanlardan bağımsız olarak taşınmaz). Bu, virgülle ayrılmış nitelikli eşya ID'leri listesidir (Lookup Anything modunun 'Dahili ID' alanında gösterildiği gibi).",
 
     // Junimo hut dropdown values
     "config.junimo-huts.auto-detect": "Otomatik algılama",
@@ -51,7 +47,7 @@
     "config.chest-override.name": "{{chestName}}",
     "config.chest-override.name.take-only": "{{chestName}} (Sadece eşyaları alır)",
     "config.chest-override.desc": "Yerleştirilen {{chestName}} eşyalarının sandık işlevi görüp görmeyeceği. '{{defaultBehaviorField}}' açıklamasını inceleyin.",
-    "config.chest-override.desc.take-only": "{{description}} (Etkin olduğunda, bu sandık tipi sadece eşyaların alınabileceği bir sandık olur.)", // {{description}} contains the previous translation line
+    "config.chest-override.desc.take-only": "{{description}} (Etkin olduğunda, bu sandık tipi sadece eşyaların alınabileceği bir sandık olur.)",
     "config.chest-override.values.default": "Varsayılan",
     "config.chest-override.values.enabled": "Etkin",
     "config.chest-override.values.disabled": "Etkin değil",
