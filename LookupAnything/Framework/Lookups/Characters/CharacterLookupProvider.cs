@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
@@ -136,14 +137,28 @@ internal class CharacterLookupProvider : BaseLookupProvider
                     }
                     if (selectedDay == -1)
                         return null;
+                    // don't bother scanning the NPCs if there's no texture to compare to
+                    if (!billboard.calendarDayData.TryGetValue(selectedDay, out Billboard.BillboardDay? dayData) || dayData.Texture is null)
+                        return null;
 
-                    // get villager with a birthday on that date
-                    NPC? target = this.GameHelper
+                    var birthdayCharacters = this.GameHelper
                         .GetAllCharacters()
-                        .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
-                        .MaxBy(p => p.CanSocialize); // SVE duplicates the Marlon NPC, but only one of them is marked social
-                    if (target != null)
-                        return this.BuildSubject(target);
+                        .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
+                    foreach (NPC p in birthdayCharacters)
+                    {
+                        // get the NPC's texture the same way the calendar does
+                        Texture2D characterTexture;
+                        try
+                        {
+                            characterTexture = Game1.content.Load<Texture2D>("Characters\\" + p.getTextureName());
+                        }
+                        catch
+                        {
+                            characterTexture = p.Sprite.Texture;
+                        }
+                        if (characterTexture == dayData.Texture)
+                            return this.BuildSubject(p);
+                    }
                 }
                 break;
 
