@@ -21,6 +21,9 @@ internal class ReloadCommand : BaseCommand
     /// <summary>Manages loaded patches.</summary>
     private readonly Func<PatchManager> GetPatchManager;
 
+    /// <summary>Manages content assets for a screen.</summary>
+    private readonly Func<ScreenManager> GetScreenManager;
+
     /// <summary>The loaded content packs.</summary>
     private readonly LoadedContentPack[] ContentPacks;
 
@@ -37,11 +40,12 @@ internal class ReloadCommand : BaseCommand
     /// <param name="getPatchManager">Manages loaded patches.</param>
     /// <param name="contentPacks">The loaded content packs.</param>
     /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-    public ReloadCommand(IMonitor monitor, Func<PatchLoader> getPatchLoader, Func<PatchManager> getPatchManager, LoadedContentPack[] contentPacks, Action updateContext)
+    public ReloadCommand(IMonitor monitor, Func<PatchLoader> getPatchLoader, Func<PatchManager> getPatchManager, Func<ScreenManager> getScreenManager, LoadedContentPack[] contentPacks, Action updateContext)
         : base(monitor, "reload")
     {
         this.GetPatchLoader = getPatchLoader;
         this.GetPatchManager = getPatchManager;
+        this.GetScreenManager = getScreenManager;
         this.ContentPacks = contentPacks;
         this.UpdateContext = updateContext;
     }
@@ -65,6 +69,7 @@ internal class ReloadCommand : BaseCommand
     {
         var patchLoader = this.GetPatchLoader();
         var patchManager = this.GetPatchManager();
+        var screenManager = this.GetScreenManager();
 
         // get args
         string packId = ArgUtility.Get(args, 0, allowBlank: false);
@@ -76,7 +81,7 @@ internal class ReloadCommand : BaseCommand
         }
 
         // get pack
-        RawContentPack? pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
+        LoadedContentPack? pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
         if (pack == null)
         {
             this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".", LogLevel.Error);
@@ -121,15 +126,16 @@ internal class ReloadCommand : BaseCommand
                 return;
             }
 
-            // reload patches
-            patchLoader.LoadPatches(
-                contentPack: pack,
-                rawPatches: pack.Content.Changes,
-                inheritLocalTokens: null,
-                rootIndexPath: [pack.Index],
-                path: new LogPathBuilder(pack.Manifest.Name),
-                parentPatch: null
-            );
+            try
+            {
+                pack.ReloadConfig();
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Error reloading configuration for content pack '{pack.ContentPack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
+            }
+
+            screenManager.ReloadContentPack(pack);
         }
 
         // make the changes apply

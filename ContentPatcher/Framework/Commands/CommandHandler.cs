@@ -57,6 +57,7 @@ internal class CommandHandler : GenericCommandHandler
                 monitor: monitor,
                 getPatchLoader: () => screenManager.Value.PatchLoader,
                 getPatchManager: () => screenManager.Value.PatchManager,
+                getScreenManager: () => screenManager.Value,
                 contentPacks: contentPacks,
                 updateContext: updateContext
             ),
