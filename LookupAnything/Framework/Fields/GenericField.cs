@@ -108,6 +108,18 @@ internal class GenericField : ICustomField
         return false;
     }
 
+    /// <inheritdoc />
+    public virtual string? GetSpokenText()
+    {
+        return SpokenText.FromFormatted(this.Value);
+    }
+
+    /// <inheritdoc />
+    public virtual IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        return [];
+    }
+
     /// <summary>Collapse the field content into an expandable link if it contains at least the given number of results.</summary>
     /// <param name="minResultsForCollapse">The minimum results needed before the field is collapsed.</param>
     /// <param name="countForLabel">The total number of results represented by the content (including grouped entries like "11 unrevealed items").</param>

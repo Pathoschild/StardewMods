@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,6 +23,12 @@ internal interface ICustomField
 
     /// <summary>Whether the field may have a clickable link returned by <see cref="TryGetLinkAt"/>.</summary>
     bool MayHaveLinks { get; }
+
+    /// <summary>Get the text a screen reader speaks for the field value, with everything a sighted player reads from layout, icons and colours put into words (or <c>null</c> if there is nothing to speak).</summary>
+    string? GetSpokenText();
+
+    /// <summary>Get the entries a screen reader user can step through one by one (like each recipe in a recipe list), or an empty list if the field isn't a list.</summary>
+    IReadOnlyList<SpokenEntry> GetSpokenEntries();
 
     /// <summary>If the field is currently collapsed, the link to click to expand it.</summary>
     LinkField? ExpandLink { get; }
