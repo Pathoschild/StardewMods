@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
@@ -29,6 +30,7 @@ internal class ChestOverlay : BaseChestOverlay
     private readonly TextBox ItemSearchBox;
     private bool SearchOpen;
     private bool ClearTextBoxNarration;
+    private bool PendingSearchAnnouncement;
 
     /// <summary>The underlying chest menu.</summary>
     private readonly ItemGrabMenu Menu;
@@ -103,6 +105,7 @@ internal class ChestOverlay : BaseChestOverlay
                 this.ItemSearchBox.Selected = false;
                 this.SearchOpen = false;
                 this.ClearTextBoxNarration = true;
+                this.PendingSearchAnnouncement = false;
                 this.SuppressAll(e.Pressed);
                 if (submit)
                 {
@@ -118,15 +121,17 @@ internal class ChestOverlay : BaseChestOverlay
             }
             else
             {
-                InputButton[][] blocked = [Game1.options.moveUpButton, Game1.options.moveDownButton, Game1.options.moveLeftButton, Game1.options.moveRightButton, Game1.options.menuButton];
-                foreach (InputButton button in blocked.SelectMany(p => p))
+                // Suppression keeps SMAPI keybinds from firing in menu draw patches;
+                // text input still arrives through the keyboard dispatcher.
+                KeyboardDispatcher dispatcher = Game1.keyboardDispatcher;
+                if (e.Pressed.Contains(SButton.V) && this.PasteKey.IsDown() && dispatcher?.Subscriber != null)
                 {
-                    SButton key = button.ToSButton();
-                    if (e.Pressed.Contains(key))
-                        this.InputHelper.Suppress(key);
+                    string? text = null;
+                    DesktopClipboard.GetText(ref text);
+                    if (text != null && !dispatcher.ShouldSuppress())
+                        dispatcher.Subscriber.RecieveTextInput(Regex.Replace(text, @"[\r\n]", ""));
                 }
-                if (e.Pressed.Contains(SButton.Delete))
-                    this.InputHelper.Suppress(SButton.Delete);
+                this.SuppressAll(e.Pressed.Except(this.PasteModifierKeys));
             }
             return;
         }
@@ -138,7 +143,7 @@ internal class ChestOverlay : BaseChestOverlay
             this.ItemSearchBox.Selected = true;
             this.SearchOpen = true;
             this.SuppressAll(e.Pressed);
-            this.StardewAccess.Say(I18n.Access_ItemSearchLabel(), true);
+            this.PendingSearchAnnouncement = true;
             return;
         }
 
@@ -241,10 +246,17 @@ internal class ChestOverlay : BaseChestOverlay
 
         base.DrawUi(batch); // run base logic last, to draw cursor over everything else
 
+        ChestItemSearch.CompletePendingJump(this.Menu, this.StardewAccess);
+
         if (this.SearchOpen || this.ClearTextBoxNarration)
         {
             this.ItemSearchBox.Draw(batch);
             this.ClearTextBoxNarration = false;
+            if (this.PendingSearchAnnouncement && this.SearchOpen)
+            {
+                this.PendingSearchAnnouncement = false;
+                this.StardewAccess.Say(I18n.Access_ItemSearchLabel(), true);
+            }
         }
     }
 

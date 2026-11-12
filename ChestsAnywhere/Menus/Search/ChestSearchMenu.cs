@@ -106,6 +106,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
 
     /// <summary>The pending search text field announcement to speak after the next textbox draw, so it fires after Stardew Access's TextBoxPatch narration.</summary>
     private ChestSearchBox? PendingSearchTextFieldAnnouncement;
+    private bool AnnounceInitialFocus = true;
 
 
     /*********
@@ -258,7 +259,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
             this.MoveCursorOffMenu();
             IClickableMenu openedMenu = pendingChest.OpenMenu();
             if (openedMenu is ItemGrabMenu grabMenu && !string.IsNullOrWhiteSpace(this.ItemSearchBox.TextBox.Text))
-                ChestItemSearch.Jump(grabMenu, this.ItemSearchBox.TextBox.Text, -1, this.StardewAccess);
+                ChestItemSearch.QueueJump(grabMenu, this.ItemSearchBox.TextBox.Text);
             return;
         }
 
@@ -267,6 +268,11 @@ internal sealed class ChestSearchMenu : IClickableMenu
         base.update(time);
 
         this.EnsureFocusedComponent();
+        if (this.AnnounceInitialFocus)
+        {
+            this.AnnounceInitialFocus = false;
+            this.TrySpeakFocusedComponent(force: true);
+        }
     }
 
     /// <inheritdoc />
@@ -892,7 +898,7 @@ internal sealed class ChestSearchMenu : IClickableMenu
             ? "blank"
             : searchBox.TextBox.Text;
 
-        return $"{searchBox.Label}, {value}";
+        return I18n.Access_SearchField(label: searchBox.Label, value: value);
     }
 
     /// <summary>Announce that a search text field is active for editing.</summary>

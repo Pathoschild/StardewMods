@@ -126,6 +126,7 @@
     "access.stacks-filled": "Moved {{count}} items into existing stacks",
     "access.stacks-nothing": "Nothing to add",
     "access.item-search-label": "Search chest items",
+    "access.search-field": "{{label}} text field, {{value}}",
     "access.item-search-no-match": "No match",
     "access.item-search-slot": "{{item}}, slot {{position}} of {{total}}",
 

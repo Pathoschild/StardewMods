@@ -122,13 +122,13 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
 
     /// <summary>The keybind which pastes text into a selected textbox.</summary>
     /// <remarks>Derived from <see cref="KeyboardDispatcher.Poll"/>.</remarks>
-    private readonly KeybindList PasteKey = new KeybindList(Constants.TargetPlatform == GamePlatform.Mac
+    protected readonly KeybindList PasteKey = new KeybindList(Constants.TargetPlatform == GamePlatform.Mac
         ? [new Keybind(SButton.LeftWindows, SButton.V), new Keybind(SButton.RightWindows, SButton.V)]
         : [new Keybind(SButton.LeftControl, SButton.V), new Keybind(SButton.RightControl, SButton.V)]
     );
 
     /// <summary>The modifier key that must be held to activate the <see cref="PasteKey"/>.</summary>
-    private readonly HashSet<SButton> PasteModifierKeys = Constants.TargetPlatform == GamePlatform.Mac
+    protected readonly HashSet<SButton> PasteModifierKeys = Constants.TargetPlatform == GamePlatform.Mac
         ? [SButton.LeftWindows, SButton.RightWindows]
         : [SButton.LeftControl, SButton.RightControl];
 
