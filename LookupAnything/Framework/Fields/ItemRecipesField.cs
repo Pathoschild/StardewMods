@@ -311,11 +311,11 @@ internal class ItemRecipesField : GenericField
                     continue;
                 }
 
-                entries.Add(new SpokenEntry(this.GetSpokenRecipe(entry)));
+                entries.Add(new SpokenEntry(this.GetSpokenRecipe(entry), group.Type));
             }
 
             if (hiddenUnknownRecipesCount > 0)
-                entries.Add(new SpokenEntry(I18n.Item_UnknownRecipes(hiddenUnknownRecipesCount)));
+                entries.Add(new SpokenEntry(I18n.Item_UnknownRecipes(hiddenUnknownRecipesCount), group.Type));
         }
 
         return entries;

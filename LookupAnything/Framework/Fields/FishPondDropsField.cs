@@ -80,9 +80,16 @@ internal class FishPondDropsField : GenericField
     /// <inheritdoc />
     public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
     {
-        return this
-            .GetSpokenDrops()
-            .Select(entry => new SpokenEntry(entry.Text, entry.Heading))
+        // the preface (daily production chance) goes with the first group's heading, so the percentages after it aren't mistaken for the daily chance
+        var drops = this.GetSpokenDrops().ToArray();
+        int? firstGroup = drops.Length > 0 ? drops[0].Drop.MinPopulation : null;
+        return drops
+            .Select(entry => new SpokenEntry(
+                entry.Text,
+                entry.Drop.MinPopulation == firstGroup && !string.IsNullOrWhiteSpace(this.Preface)
+                    ? $"{this.Preface.TrimEnd(':', ' ')}, {entry.Heading}"
+                    : entry.Heading
+            ))
             .ToArray();
     }
 
