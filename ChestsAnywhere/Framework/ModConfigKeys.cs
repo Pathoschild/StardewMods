@@ -31,7 +31,7 @@ internal class ModConfigKeys
     public KeybindList EditChest { get; set; } = new();
 
     /// <summary>The keys which sort the player inventory.</summary>
-    public KeybindList SortItems { get; set; } = KeybindList.Parse($"{SButton.LeftShift} + {SButton.O}");
+    public KeybindList SortItems { get; set; } = KeybindList.Parse($"{SButton.LeftShift} + {SButton.O}, {SButton.RightShift} + {SButton.O}");
 
     /// <summary>The keys which sort the chest inventory.</summary>
     public KeybindList SortChest { get; set; } = new(SButton.O);
