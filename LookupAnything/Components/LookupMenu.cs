@@ -89,6 +89,16 @@ internal class LookupMenu : BaseMenu, IScrollableMenu, IDisposable
 
 
     /*********
+    ** Accessors
+    *********/
+    /// <summary>The subject being shown, for the screen reader.</summary>
+    internal ISubject ShownSubject => this.Subject;
+
+    /// <summary>The fields being shown, for the screen reader.</summary>
+    internal ICustomField[] ShownFields => this.Fields;
+
+
+    /*********
     ** Public methods
     *********/
     /****
