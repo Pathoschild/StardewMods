@@ -225,6 +225,22 @@ You shouldn't change this file unless you know what you're doing.
             ]
         },
 
+        // Ghostfish (the mine's general fish list; water only exists on levels 20 and 60, and level 100 returns other items before that list)
+        "(O)156": {
+            "Locations": [
+                {
+                    "LocationId": "UndergroundMine",
+                    "Area": 20,
+                    "Seasons": [ "spring", "summer", "fall", "winter" ]
+                },
+                {
+                    "LocationId": "UndergroundMine",
+                    "Area": 60,
+                    "Seasons": [ "spring", "summer", "fall", "winter" ]
+                }
+            ]
+        },
+
         // Stonefish
         "(O)158": {
             "Locations": [
