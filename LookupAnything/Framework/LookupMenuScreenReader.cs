@@ -100,7 +100,7 @@ internal static class LookupMenuScreenReader
         {
             SuppressConfiguredButtons(Game1.options.moveRightButton, e.Pressed);
             if (_expandedFieldState == null && TryEnterExpandedField(menu))
-                SpeakExpandedFieldEntry(menu, includeCollapseHint: true, previousIndex: null);
+                SpeakExpandedFieldEntry(menu, previousIndex: null);
             else if (_expandedFieldState == null && TryExpandCurrentField(menu))
                 SpeakCurrentField(menu, announceSubject: false);
             return;
@@ -175,7 +175,7 @@ internal static class LookupMenuScreenReader
         else if (_expandedFieldState.EntryIndex >= _expandedFieldState.Entries.Count)
             _expandedFieldState.EntryIndex = 0;
 
-        SpeakExpandedFieldEntry(menu, includeCollapseHint: false, previousIndex);
+        SpeakExpandedFieldEntry(menu, previousIndex);
     }
 
     /// <summary>Speak the selected field (or the header).</summary>
@@ -206,7 +206,7 @@ internal static class LookupMenuScreenReader
 
         string text = string.IsNullOrWhiteSpace(value) ? label : $"{label}, {value}";
         if (field.GetSpokenEntries().Count >= 2)
-            text = AppendInstruction(text, I18n.ScreenReader_ListExpandHint());
+            text = AppendPart(text, I18n.ScreenReader_ListEntryCount(field.GetSpokenEntries().Count));
 
         if (announceSubject && !string.IsNullOrWhiteSpace(subjectInfo))
             text = SpokenText.Sentences([subjectInfo, text]);
@@ -216,9 +216,8 @@ internal static class LookupMenuScreenReader
 
     /// <summary>Speak the selected entry of the field being stepped through.</summary>
     /// <param name="menu">The lookup menu.</param>
-    /// <param name="includeCollapseHint">Whether to add the hint for leaving the entry list.</param>
     /// <param name="previousIndex">The entry index before the move, if any.</param>
-    private static void SpeakExpandedFieldEntry(IClickableMenu menu, bool includeCollapseHint, int? previousIndex)
+    private static void SpeakExpandedFieldEntry(IClickableMenu menu, int? previousIndex)
     {
         if (_expandedFieldState == null || _expandedFieldState.Entries.Count == 0)
             return;
@@ -247,8 +246,6 @@ internal static class LookupMenuScreenReader
         parts.Add(position);
 
         string text = string.Join(", ", parts);
-        if (includeCollapseHint)
-            text = AppendInstruction(text, I18n.ScreenReader_ListCollapseHint());
 
         StardewAccess?.SayWithMenuChecker(text, true, $"lookup-entry:{_expandedFieldState.FieldIndex}:{_expandedFieldState.EntryIndex}:{text}");
     }
@@ -385,14 +382,14 @@ internal static class LookupMenuScreenReader
         return field.GetSpokenText();
     }
 
-    /// <summary>Append a hint to some spoken text.</summary>
+    /// <summary>Append a part to some spoken text.</summary>
     /// <param name="text">The spoken text.</param>
-    /// <param name="instruction">The hint to add.</param>
-    private static string AppendInstruction(string text, string instruction)
+    /// <param name="suffix">The part to add.</param>
+    private static string AppendPart(string text, string suffix)
     {
-        return string.IsNullOrWhiteSpace(instruction)
+        return string.IsNullOrWhiteSpace(suffix)
             ? text
-            : $"{text}, {instruction}";
+            : $"{text}, {suffix}";
     }
 
     /// <summary>Get whether a configured game button was pressed.</summary>
