@@ -69,6 +69,22 @@ internal class FishSpawnRulesField : CheckboxListField
 
 
     /*********
+    ** Protected methods
+    *********/
+    /// <inheritdoc />
+    protected override bool CheckboxesAreConditions => true;
+
+    /// <inheritdoc />
+    protected override string? GetSpokenHiddenListsText()
+    {
+        int hiddenCount = this.CheckboxLists.Count(checkboxList => checkboxList.IsHidden);
+        return hiddenCount > 0
+            ? I18n.Item_UncaughtFish(hiddenCount)
+            : null;
+    }
+
+
+    /*********
     ** Private methods
     *********/
     /// <summary>Construct an instance.</summary>
@@ -199,20 +215,24 @@ internal class FishSpawnRulesField : CheckboxListField
                 .GroupBy(p => p.Season, p => p.LocationName, StringComparer.OrdinalIgnoreCase)
                 .ToDictionary(p => p.Key, p => p.ToArray(), StringComparer.OrdinalIgnoreCase);
 
+            // the sighted view greys out seasons other than the current one; the spoken version names the current one instead
             var summary = new List<IFormattedText> { new FormattedText(I18n.Item_FishSpawnRules_LocationsBySeason_Label()) };
+            var spokenSummary = new List<string> { I18n.Item_FishSpawnRules_LocationsBySeason_Label() };
             foreach (string season in FishSpawnRulesField.Seasons)
             {
                 if (locationsBySeason.TryGetValue(season, out string[]? locationNames))
                 {
+                    string seasonText = I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: I18n.List(locationNames.OrderBy(p => p).Distinct()));
                     summary.Add(new FormattedText(
-                        text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: I18n.List(locationNames.OrderBy(p => p).Distinct())),
+                        text: Environment.NewLine + seasonText,
                         color: season == Game1.currentSeason ? Color.Black : Color.Gray
                     ));
+                    spokenSummary.Add(season == Game1.currentSeason ? I18n.ScreenReader_SeasonCurrent(seasonText) : seasonText);
                 }
             }
 
             bool hasMatch = spawnRules.Locations.Any(p => p.LocationId == Game1.currentLocation.Name && p.Seasons.Contains(Game1.currentSeason));
-            yield return FishSpawnRulesField.GetCondition(summary, hasMatch);
+            yield return new Checkbox(hasMatch, summary.ToArray()) { SpokenText = SpokenText.Sentences(spokenSummary) };
         }
     }
 

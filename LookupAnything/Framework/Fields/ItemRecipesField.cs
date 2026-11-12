@@ -287,6 +287,40 @@ internal class ItemRecipesField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        string text = SpokenText.Sentences(this.GetSpokenEntries().Select(entry => entry.Text));
+        return text.Length > 0 ? text : null;
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        List<SpokenEntry> entries = [];
+        foreach (RecipeByTypeGroup group in this.RecipesByType)
+        {
+            int hiddenUnknownRecipesCount = 0;
+            foreach (RecipeEntry entry in group.Recipes)
+            {
+                if (!this.ShowInvalidRecipes && !entry.IsValid)
+                    continue;
+                if (!this.ShowUnknownRecipes && !entry.IsKnown)
+                {
+                    hiddenUnknownRecipesCount++;
+                    continue;
+                }
+
+                entries.Add(new SpokenEntry(this.GetSpokenRecipe(entry)));
+            }
+
+            if (hiddenUnknownRecipesCount > 0)
+                entries.Add(new SpokenEntry(I18n.Item_UnknownRecipes(hiddenUnknownRecipesCount)));
+        }
+
+        return entries;
+    }
+
     public override void CollapseIfLengthExceeds(int minResultsForCollapse, int countForLabel)
     {
         // if recipes are grouped by type, we need to compute the field length
@@ -330,6 +364,7 @@ internal class ItemRecipesField : GenericField
                     return new RecipeEntry(
                         name: recipe.Key,
                         type: recipe.DisplayType,
+                        kind: recipe.Type,
                         isKnown: recipe.IsKnown(),
                         inputs: [],
                         output: this.CreateItemEntry(
@@ -392,7 +427,8 @@ internal class ItemRecipesField : GenericField
                             new SpriteInfo(Game1.debrisSpriteSheet, new Rectangle(5, 69, 6, 6)),
                             Utility.getNumberWithCommas(recipe.GoldPrice),
                             null,
-                            IsGoldPrice: true
+                            IsGoldPrice: true,
+                            SpokenText: I18n.ScreenReader_GoldAmount(Utility.getNumberWithCommas(recipe.GoldPrice))
                         )
                     ]);
                 }
@@ -401,6 +437,7 @@ internal class ItemRecipesField : GenericField
                 return new RecipeEntry(
                     name: recipe.Key,
                     type: recipe.DisplayType,
+                    kind: recipe.Type,
                     isKnown: recipe.IsKnown(),
                     inputs: inputs.ToArray(),
                     output: output,
@@ -462,6 +499,39 @@ internal class ItemRecipesField : GenericField
 
     /// <summary>Get the lookup subject for an entity.</summary>
     /// <param name="entity">The entity to check.</param>
+    /// <summary>Get the sentence a screen reader speaks for a recipe, with the product first, then where it's made and what it needs.</summary>
+    /// <param name="recipe">The recipe to describe.</param>
+    private string GetSpokenRecipe(RecipeEntry recipe)
+    {
+        string output = recipe.Output.SpokenText ?? recipe.Output.DisplayText.TrimEnd(':');
+        string inputs = SpokenText.AndList(recipe.Inputs.Select(input => input.SpokenText ?? input.DisplayText.TrimEnd(':')));
+
+        string text;
+        if (inputs.Length == 0)
+            text = output;
+        else if (!this.ShowOutputLabels)
+            text = I18n.ScreenReader_RecipeNeeds(inputs);
+        else
+        {
+            text = recipe.Kind switch
+            {
+                RecipeType.Cooking => I18n.ScreenReader_RecipeCooking(output: output, inputs: inputs),
+                RecipeType.Crafting => I18n.ScreenReader_RecipeCrafting(output: output, inputs: inputs),
+                RecipeType.TailorInput => I18n.ScreenReader_RecipeTailoring(output: output, inputs: inputs),
+                RecipeType.BuildingBlueprint => I18n.ScreenReader_RecipeConstruction(output: output, inputs: inputs),
+                RecipeType.BuildingInput => I18n.ScreenReader_RecipeBuildingMachine(output: output, machine: recipe.Type, inputs: inputs),
+                _ => I18n.ScreenReader_RecipeMachine(output: output, machine: recipe.Type, inputs: inputs)
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(recipe.Conditions))
+            text += $", {I18n.ScreenReader_Conditions(recipe.Conditions)}";
+        if (!recipe.IsKnown)
+            text = I18n.ScreenReader_RecipeUnlearned(text);
+
+        return text;
+    }
+
     private ISubject? GetSubject(object? entity)
     {
         if (entity is null)
@@ -617,13 +687,19 @@ internal class ItemRecipesField : GenericField
                 text += ":";
         }
 
+        // get spoken text (count, quality and chance are shown as number text, a quality star and a percentage)
+        string spokenText = SpokenText.ItemWithCount(SpokenText.ItemWithQuality(name, quality), minCount, maxCount);
+        if (chance is > 0 and < 100)
+            spokenText = I18n.Generic_PercentChanceOf(percent: chance, label: spokenText);
+
         return new RecipeItemEntry(
             Sprite: sprite ?? this.GameHelper.GetSprite(item),
             DisplayText: text,
             Quality: quality,
             IsGoldPrice: false,
             IsValid: isValid ?? (item != null && ItemRegistry.Exists(item.QualifiedItemId)),
-            Entity: entity ?? item
+            Entity: entity ?? item,
+            SpokenText: spokenText
         );
     }
 }

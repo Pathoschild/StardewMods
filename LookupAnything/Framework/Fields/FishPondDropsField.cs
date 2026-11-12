@@ -57,6 +57,35 @@ internal class FishPondDropsField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        List<string> parts = [this.Preface];
+
+        int? lastGroup = null;
+        foreach ((FishPondDrop drop, string text, string heading, bool _) in this.GetSpokenDrops())
+        {
+            if (lastGroup != drop.MinPopulation)
+            {
+                lastGroup = drop.MinPopulation;
+                parts.Add(heading);
+            }
+            parts.Add(text);
+        }
+
+        string result = SpokenText.Sentences(parts);
+        return result.Length > 0 ? result : null;
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        return this
+            .GetSpokenDrops()
+            .Select(entry => new SpokenEntry(entry.Text, entry.Heading))
+            .ToArray();
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         this.LinkTextAreas.Clear();
@@ -180,6 +209,28 @@ internal class FishPondDropsField : GenericField
     /// <param name="fish">The fish in the fish pond, if any.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
+    /// <summary>Get the spoken text for each drop and the population group it belongs to. The sighted view ticks a group once the pond has enough fish, and greys out and crosses out drops which can't happen because an earlier unlocked drop is guaranteed.</summary>
+    private IEnumerable<(FishPondDrop Drop, string Text, string Heading, bool IsBlocked)> GetSpokenDrops()
+    {
+        bool isPrevDropGuaranteed = false;
+        foreach (FishPondDrop drop in this.Drops)
+        {
+            string? conditions = drop.Conditions != null
+                ? HumanReadableConditionParser.Format(drop.Conditions)
+                : null;
+
+            string heading = SpokenText.Condition(I18n.Building_FishPond_Drops_MinFish(count: drop.MinPopulation).TrimEnd(':', ' '), drop.IsUnlocked);
+            string text = SpokenText.Drop(drop.SampleItem.DisplayName, drop.Probability, drop.MinDrop, drop.MaxDrop, conditions, alwaysShowChance: true);
+            if (isPrevDropGuaranteed)
+                text = I18n.ScreenReader_PondDropBlocked(text);
+
+            yield return (drop, text, heading, isPrevDropGuaranteed);
+
+            if (drop.IsUnlocked && drop.Probability > .99f)
+                isPrevDropGuaranteed = true;
+        }
+    }
+
     private IEnumerable<FishPondDrop> GetEntries(int currentPopulation, FishPondData data, SObject? fish, GameHelper gameHelper)
     {
         foreach (FishPondDropData rawDrop in gameHelper.GetFishPondDrops(data))
