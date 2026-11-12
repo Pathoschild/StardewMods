@@ -31,17 +31,17 @@ internal class SkillBarField : PercentageBarField
     }
 
     /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        return this.GetProgressText(out _);
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         int[] pointsPerLevel = this.SkillPointsPerLevel;
 
         // generate text
-        int nextLevelExp = pointsPerLevel.FirstOrDefault(p => p - this.CurrentValue > 0);
-        int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
-        int currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
-        string text = pointsForNextLevel > 0
-            ? I18n.Player_Skill_Progress(level: currentLevel, expNeeded: pointsForNextLevel)
-            : I18n.Player_Skill_ProgressLast(level: currentLevel);
+        string text = this.GetProgressText(out int currentLevel);
 
         // draw bars
         const int barWidth = 25;
@@ -68,5 +68,23 @@ internal class SkillBarField : PercentageBarField
         // draw text
         Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(leftOffset, 0), wrapWidth - leftOffset);
         return new Vector2(leftOffset + textSize.X, Math.Max(barHeight, textSize.Y));
+    }
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Get the text describing the skill level and the experience needed for the next one.</summary>
+    /// <param name="currentLevel">The current skill level.</param>
+    private string GetProgressText(out int currentLevel)
+    {
+        int[] pointsPerLevel = this.SkillPointsPerLevel;
+
+        int nextLevelExp = pointsPerLevel.FirstOrDefault(p => p - this.CurrentValue > 0);
+        int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
+        currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
+        return pointsForNextLevel > 0
+            ? I18n.Player_Skill_Progress(level: currentLevel, expNeeded: pointsForNextLevel)
+            : I18n.Player_Skill_ProgressLast(level: currentLevel);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -31,6 +32,36 @@ internal class CharacterFriendshipField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        // the sighted view shows the status, a row of hearts (filled, empty, or dark for hearts which are locked until dating),
+        // a faint stardrop if the spouse still has one to give, and a caption for what is needed for the next heart
+        FriendshipModel friendship = this.Friendship;
+
+        List<string> parts = [I18n.For(friendship.Status, friendship.IsHousemate)];
+        if (friendship.TotalHearts > 0)
+            parts.Add(I18n.ScreenReader_FriendshipHearts(filled: friendship.FilledHearts, total: friendship.TotalHearts));
+        if (friendship.LockedHearts > 0)
+            parts.Add(I18n.ScreenReader_FriendshipLockedHearts(count: friendship.LockedHearts));
+        if (friendship.MaxPoints > 0)
+            parts.Add(I18n.ScreenReader_FriendshipPoints(points: friendship.Points, max: friendship.MaxPoints));
+
+        if (friendship is { EmptyHearts: 0, LockedHearts: > 0 })
+            parts.Add(I18n.Npc_Friendship_NeedBouquet());
+        else
+        {
+            int pointsToNext = friendship.GetPointsToNext();
+            if (pointsToNext > 0)
+                parts.Add(I18n.Npc_Friendship_NeedPoints(pointsToNext));
+        }
+
+        if (friendship.HasStardrop)
+            parts.Add(I18n.ScreenReader_FriendshipStardrop());
+
+        return SpokenText.Sentences(parts);
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         FriendshipModel friendship = this.Friendship;

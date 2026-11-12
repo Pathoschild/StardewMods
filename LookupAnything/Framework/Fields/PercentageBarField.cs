@@ -48,6 +48,18 @@ internal class PercentageBarField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        // the bar itself shows the ratio; the text next to it (if any) says it in words
+        if (!string.IsNullOrWhiteSpace(this.Text))
+            return SpokenText.Clean(this.Text);
+
+        return this.MaxValue > 0
+            ? I18n.Generic_Ratio(value: this.CurrentValue, max: this.MaxValue)
+            : null;
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         Vector2 barSize = this.DrawBar(spriteBatch, position, this.CurrentValue / (this.MaxValue * 1f), this.FilledColor, this.EmptyColor, wrapWidth);
