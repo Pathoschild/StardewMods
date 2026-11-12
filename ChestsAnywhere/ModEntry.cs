@@ -254,6 +254,7 @@ internal class ModEntry : Mod
         // already matches menu
         if (this.ForMenuInstance.Value == menu)
             return;
+        IClickableMenu? previousMenu = this.ForMenuInstance.Value;
         this.ForMenuInstance.Value = menu;
 
         // remove old overlay
@@ -284,6 +285,9 @@ internal class ModEntry : Mod
                 this.ForMenuInstance.Value = menu = (ItemGrabMenu)chest.OpenMenu();
         }
 
+        // keep the snapped slot when the menu was rebuilt for the same chest
+        this.CarrySnappedComponentAcrossRebuild(previousMenu, menu, chest);
+
         // add overlay
         RangeHandler range = this.GetCurrentRange();
         ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysInclude: chest).ToArray();
@@ -311,6 +315,33 @@ internal class ModEntry : Mod
             };
             this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
         }
+    }
+
+    /// <summary>Copy the snapped slot from a chest menu to the menu which replaced it for the same chest.</summary>
+    /// <param name="previousMenu">The menu which was open before this one.</param>
+    /// <param name="menu">The newly opened menu.</param>
+    /// <param name="chest">The chest shown by the new menu.</param>
+    /// <remarks>
+    ///   The game replaces the chest menu with a new instance whenever an item is moved (see <see cref="StardewValley.Objects.Chest.ShowMenu"/>).
+    ///   <see cref="ItemGrabMenu.receiveLeftClick"/> and <see cref="ItemGrabMenu.receiveRightClick"/> copy the snapped component to the new menu,
+    ///   and the new menu's constructor snaps to a default slot, but only if <see cref="Options.SnappyMenus"/> is true. That property is false
+    ///   while a mouse button is down, so a click delivered as a mouse button press while snappy menus are enabled (e.g. a click simulated
+    ///   through SMAPI's input API by an accessibility mod) leaves the new menu with no snapped component, and the next movement key snaps
+    ///   back to the first chest slot.
+    /// </remarks>
+    private void CarrySnappedComponentAcrossRebuild(IClickableMenu? previousMenu, IClickableMenu menu, ManagedChest chest)
+    {
+        if (!Game1.options.snappyMenus || !Game1.options.gamepadControls)
+            return;
+
+        if (previousMenu is not ItemGrabMenu { currentlySnappedComponent: { } snapped } oldMenu || menu is not ItemGrabMenu newMenu)
+            return;
+
+        if (newMenu.currentlySnappedComponent != null || !chest.Container.IsSameAs(oldMenu.ItemsToGrabMenu.actualInventory))
+            return;
+
+        newMenu.setCurrentlySnappedComponentTo(snapped.myID);
+        newMenu.snapCursorToCurrentSnappedComponent();
     }
 
     /// <summary>Open the menu UI.</summary>
