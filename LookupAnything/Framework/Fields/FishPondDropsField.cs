@@ -34,6 +34,12 @@ internal class FishPondDropsField : GenericField
     /// <summary>The text to display before the list, if any.</summary>
     private readonly string Preface;
 
+    /// <summary>The text a screen reader speaks before the list (the daily chance of any drop), if any.</summary>
+    private readonly string? SpokenPreface;
+
+    /// <summary>The number of fish in the pond, or a negative number if this isn't for a specific pond (like an item lookup).</summary>
+    private readonly int CurrentPopulation;
+
 
     /*********
     ** Public methods
@@ -46,9 +52,12 @@ internal class FishPondDropsField : GenericField
     /// <param name="data">The fish pond data.</param>
     /// <param name="fish">The fish in the fish pond, if any.</param>
     /// <param name="preface">The text to display before the list, if any.</param>
-    public FishPondDropsField(GameHelper gameHelper, ISubjectRegistry codex, string label, int currentPopulation, FishPondData data, SObject? fish, string preface)
+    /// <param name="spokenPreface">The text a screen reader speaks before the list, if different from <paramref name="preface"/>.</param>
+    public FishPondDropsField(GameHelper gameHelper, ISubjectRegistry codex, string label, int currentPopulation, FishPondData data, SObject? fish, string preface, string? spokenPreface = null)
         : base(label)
     {
+        this.CurrentPopulation = currentPopulation;
+        this.SpokenPreface = spokenPreface;
         this.GameHelper = gameHelper;
         this.Codex = codex;
         this.Drops = this.GetEntries(currentPopulation, data, fish, gameHelper).OrderBy(drop => drop.Precedence).ThenByDescending(drop => drop.MinPopulation).ToArray();
@@ -60,7 +69,7 @@ internal class FishPondDropsField : GenericField
     /// <inheritdoc />
     public override string? GetSpokenText()
     {
-        List<string> parts = [this.Preface];
+        List<string> parts = [this.SpokenPreface ?? this.Preface, I18n.ScreenReader_PondOrder()];
 
         int? lastGroup = null;
         foreach ((FishPondDrop drop, string text, string heading, bool _) in this.GetSpokenDrops())
@@ -86,8 +95,8 @@ internal class FishPondDropsField : GenericField
         return drops
             .Select(entry => new SpokenEntry(
                 entry.Text,
-                entry.Drop.MinPopulation == firstGroup && !string.IsNullOrWhiteSpace(this.Preface)
-                    ? $"{this.Preface.TrimEnd(':', ' ')}, {entry.Heading}"
+                entry.Drop.MinPopulation == firstGroup && !string.IsNullOrWhiteSpace(this.SpokenPreface ?? this.Preface)
+                    ? $"{(this.SpokenPreface ?? this.Preface).TrimEnd(':', ' ')}, {entry.Heading}"
                     : entry.Heading
             ))
             .ToArray();
@@ -226,8 +235,22 @@ internal class FishPondDropsField : GenericField
                 ? HumanReadableConditionParser.Format(drop.Conditions)
                 : null;
 
-            string heading = SpokenText.Condition(I18n.Building_FishPond_Drops_MinFish(count: drop.MinPopulation).TrimEnd(':', ' '), drop.IsUnlocked);
-            string text = SpokenText.Drop(drop.SampleItem.DisplayName, drop.Probability, drop.MinDrop, drop.MaxDrop, conditions, alwaysShowChance: true);
+            // the sighted view ticks a group once the pond has enough fish; an item lookup has no pond, so it shows no state
+            string heading = I18n.ScreenReader_PondGroup(drop.MinPopulation);
+            if (this.CurrentPopulation >= 0)
+            {
+                heading = drop.IsUnlocked
+                    ? I18n.ScreenReader_PondGroupReached(drop.MinPopulation)
+                    : I18n.ScreenReader_PondGroupNeeds(count: drop.MinPopulation, needed: drop.MinPopulation - this.CurrentPopulation);
+            }
+
+            // each chance is that drop's own chance when the game gets to it (drops are checked in order)
+            string text = I18n.ScreenReader_PondDrop(
+                name: SpokenText.ItemWithCount(drop.SampleItem.DisplayName, drop.MinDrop, drop.MaxDrop),
+                percent: CommonHelper.GetFormattedPercentageNumber(drop.Probability)
+            );
+            if (!string.IsNullOrWhiteSpace(conditions))
+                text += $", {I18n.ScreenReader_Conditions(conditions)}";
             if (isPrevDropGuaranteed)
                 text = I18n.ScreenReader_PondDropBlocked(text);
 

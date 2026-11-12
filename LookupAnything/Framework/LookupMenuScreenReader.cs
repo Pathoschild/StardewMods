@@ -204,9 +204,11 @@ internal static class LookupMenuScreenReader
         string label = SpokenText.Clean(field.Label) ?? field.Label;
         string? value = GetFieldValueText(field);
 
+        // for lists, the entry count comes first so the player knows how long the text is before hearing it
+        int entryCount = field.GetSpokenEntries().Count;
+        if (entryCount >= 2)
+            label = AppendPart(label, I18n.ScreenReader_ListEntryCount(entryCount));
         string text = string.IsNullOrWhiteSpace(value) ? label : $"{label}, {value}";
-        if (field.GetSpokenEntries().Count >= 2)
-            text = AppendPart(text, I18n.ScreenReader_ListEntryCount(field.GetSpokenEntries().Count));
 
         if (announceSubject && !string.IsNullOrWhiteSpace(subjectInfo))
             text = SpokenText.Sentences([subjectInfo, text]);
