@@ -116,6 +116,16 @@
     "config.sort-items.name": "Sort player items",
     "config.sort-items.desc": "The keys which sort items in the player's inventory while a chest is open.",
 
+    "config.sort-chest.name": "Sort chest items",
+    "config.sort-chest.desc": "The keys which sort items in the current chest.",
+    "config.fill-stacks.name": "Add to existing stacks",
+    "config.fill-stacks.desc": "The keys which add backpack items to existing chest stacks.",
+
+    "access.backpack-sorted": "Backpack sorted",
+    "access.chest-sorted": "Chest sorted",
+    "access.stacks-filled": "Moved {{count}} items into existing stacks",
+    "access.stacks-nothing": "Nothing to add",
+
     "config.navigate-prev-chest.name": "Navigate: previous chest",
     "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
 

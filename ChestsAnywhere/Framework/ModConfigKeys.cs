@@ -30,8 +30,14 @@ internal class ModConfigKeys
     /// <summary>The keys which edit the current chest.</summary>
     public KeybindList EditChest { get; set; } = new();
 
-    /// <summary>The keys which sort items in the chest.</summary>
-    public KeybindList SortItems { get; set; } = new();
+    /// <summary>The keys which sort the player inventory.</summary>
+    public KeybindList SortItems { get; set; } = KeybindList.Parse($"{SButton.LeftShift} + {SButton.O}");
+
+    /// <summary>The keys which sort the chest inventory.</summary>
+    public KeybindList SortChest { get; set; } = new(SButton.O);
+
+    /// <summary>The keys which add items to existing chest stacks.</summary>
+    public KeybindList FillStacks { get; set; } = new(SButton.G);
 
     /// <summary>The keys which, when held, enable scrolling the chest dropdown with the mouse scroll wheel.</summary>
     public KeybindList HoldToMouseWheelScrollChests { get; set; } = new(SButton.LeftControl);
@@ -63,6 +69,8 @@ internal class ModConfigKeys
         this.NextCategory ??= new KeybindList();
         this.EditChest ??= new KeybindList();
         this.SortItems ??= new KeybindList();
+        this.SortChest ??= new KeybindList();
+        this.FillStacks ??= new KeybindList();
         this.HoldToMouseWheelScrollChests ??= new KeybindList();
         this.HoldToMouseWheelScrollCategories ??= new KeybindList();
     }

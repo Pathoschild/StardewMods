@@ -424,8 +424,25 @@ internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
                     this.SelectNextCategory();
                 else if (keys.EditChest.JustPressed() && canNavigate)
                     this.OpenEdit();
-                else if (keys.SortItems.JustPressed())
+                else if (this.Menu is ItemGrabMenu && !anyTextboxSelected && keys.SortItems.JustPressed())
+                {
                     this.SortInventory();
+                    this.StardewAccess.Say(I18n.Access_BackpackSorted(), true);
+                }
+                else if (this.Menu is ItemGrabMenu chestMenu && !anyTextboxSelected && keys.SortChest.JustPressed())
+                {
+                    ItemGrabMenu.organizeItemsInList(chestMenu.ItemsToGrabMenu.actualInventory);
+                    Game1.playSound("Ship");
+                    this.StardewAccess.Say(I18n.Access_ChestSorted(), true);
+                }
+                else if (this.Menu is ItemGrabMenu fillMenu && !anyTextboxSelected && keys.FillStacks.JustPressed())
+                {
+                    int before = fillMenu.inventory.actualInventory.Sum(item => item?.Stack ?? 0);
+                    fillMenu.FillOutStacks();
+                    int moved = before - fillMenu.inventory.actualInventory.Sum(item => item?.Stack ?? 0);
+                    Game1.playSound("Ship");
+                    this.StardewAccess.Say(moved > 0 ? I18n.Access_StacksFilled(count: moved) : I18n.Access_StacksNothing(), true);
+                }
                 else
                     return; // don't suppress if the key wasn't handled
 
