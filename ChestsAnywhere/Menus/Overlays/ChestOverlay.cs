@@ -23,7 +23,6 @@ internal class ChestOverlay : BaseChestOverlay
     /*********
     ** Fields
     *********/
-    private static readonly PerScreen<string> PreviousSearch = new(() => "");
     private static readonly PerScreen<IList<Item>?> LastSearchInventory = new();
     private static readonly PerScreen<string> LastSearchText = new(() => "");
     private readonly ModConfigKeys SearchKeys;
@@ -109,14 +108,26 @@ internal class ChestOverlay : BaseChestOverlay
                 this.SuppressAll(e.Pressed);
                 if (submit)
                 {
-                    PreviousSearch.Value = this.ItemSearchBox.Text;
                     InventoryMenu inventory = this.Menu.ItemsToGrabMenu;
-                    bool repeat = ReferenceEquals(LastSearchInventory.Value, inventory.actualInventory)
-                        && string.Equals(LastSearchText.Value, this.ItemSearchBox.Text, StringComparison.OrdinalIgnoreCase);
-                    int current = repeat ? inventory.inventory.IndexOf(this.Menu.currentlySnappedComponent) : -1;
+                    string searchText = this.ItemSearchBox.Text;
+                    bool repeatLastSearch = string.IsNullOrWhiteSpace(searchText);
+                    if (repeatLastSearch)
+                    {
+                        searchText = LastSearchText.Value;
+                        if (string.IsNullOrWhiteSpace(searchText))
+                        {
+                            this.StardewAccess.Say("No search yet", true);
+                            return;
+                        }
+                    }
+
+                    bool sameChest = ReferenceEquals(LastSearchInventory.Value, inventory.actualInventory);
+                    int current = repeatLastSearch && sameChest
+                        ? inventory.inventory.IndexOf(this.Menu.currentlySnappedComponent)
+                        : -1;
                     LastSearchInventory.Value = inventory.actualInventory;
-                    LastSearchText.Value = this.ItemSearchBox.Text;
-                    ChestItemSearch.Jump(this.Menu, this.ItemSearchBox.Text, current, this.StardewAccess);
+                    LastSearchText.Value = searchText;
+                    ChestItemSearch.Jump(this.Menu, searchText, current, this.StardewAccess);
                 }
             }
             else
@@ -139,7 +150,7 @@ internal class ChestOverlay : BaseChestOverlay
         if (this.IsInitialized && this.ActiveElement == Element.Menu && !this.SearchKeys.OpenSearchMenu.IsDown()
             && this.SearchKeys.SearchChestItems.JustPressed() && Game1.keyboardDispatcher.Subscriber == null)
         {
-            this.ItemSearchBox.Text = PreviousSearch.Value;
+            this.ItemSearchBox.Text = "";
             this.ItemSearchBox.Selected = true;
             this.SearchOpen = true;
             this.SuppressAll(e.Pressed);
@@ -255,7 +266,7 @@ internal class ChestOverlay : BaseChestOverlay
             if (this.PendingSearchAnnouncement && this.SearchOpen)
             {
                 this.PendingSearchAnnouncement = false;
-                this.StardewAccess.Say(I18n.Access_ItemSearchLabel(), true);
+                this.StardewAccess.Say($"{I18n.Access_ItemSearchLabel()}, empty", true);
             }
         }
     }
