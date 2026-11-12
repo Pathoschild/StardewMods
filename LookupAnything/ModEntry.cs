@@ -417,8 +417,11 @@ internal class ModEntry : Mod
         // open menu
         if (Game1.activeClickableMenu != null)
         {
-            logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
-            return this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
+            IClickableMenu menu = Game1.activeClickableMenu;
+            while (menu.GetChildMenu() is { } child)
+                menu = child;
+            logMessage.Append($" searching the open '{menu.GetType().Name}' menu...");
+            return this.TargetFactory.GetSubjectFrom(menu, cursorPos);
         }
 
         // HUD under cursor
