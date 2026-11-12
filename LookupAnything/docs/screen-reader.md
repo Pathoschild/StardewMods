@@ -6,7 +6,8 @@ navigation only; the spoken text comes from the fields themselves.
 ## Navigation
 
 * The game's move up / move down keys step through the header and the fields.
-* Move right on a field enters its entries (when it has two or more) or expands a collapsed field.
+* Move right on a field enters its entries (when it has two or more) or expands a collapsed field. A water tile spawn-rules field can be entered with one visible fish.
+* Water tile spawn rules group conditions under each fish. Catchable fish come first, then other fish, alphabetically in each group. Move right on a fish to enter its conditions; move left returns to that fish.
 * Move left leaves the entries or collapses a field the player expanded.
 
 ## Where the text comes from

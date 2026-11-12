@@ -99,7 +99,9 @@ internal static class LookupMenuScreenReader
         if (rightPressed)
         {
             SuppressConfiguredButtons(Game1.options.moveRightButton, e.Pressed);
-            if (_expandedFieldState == null && TryEnterExpandedField(menu))
+            if (_expandedFieldState != null && TryEnterChildEntries())
+                SpeakExpandedFieldEntry(menu, previousIndex: null);
+            else if (_expandedFieldState == null && TryEnterExpandedField(menu))
                 SpeakExpandedFieldEntry(menu, previousIndex: null);
             else if (_expandedFieldState == null && TryExpandCurrentField(menu))
                 SpeakCurrentField(menu, announceSubject: false);
@@ -110,7 +112,12 @@ internal static class LookupMenuScreenReader
         if (leftPressed)
         {
             SuppressConfiguredButtons(Game1.options.moveLeftButton, e.Pressed);
-            if (_expandedFieldState != null && TryExitExpandedField())
+            if (_expandedFieldState?.Parent != null)
+            {
+                _expandedFieldState = _expandedFieldState.Parent;
+                SpeakExpandedFieldEntry(menu, previousIndex: null);
+            }
+            else if (_expandedFieldState != null && TryExitExpandedField())
                 SpeakCurrentField(menu, announceSubject: false);
             else if (TryCollapseCurrentField(menu))
                 SpeakCurrentField(menu, announceSubject: false);
@@ -206,7 +213,9 @@ internal static class LookupMenuScreenReader
 
         // for lists, the entry count comes first so the player knows how long the text is before hearing it
         int entryCount = field.GetSpokenEntries().Count;
-        if (entryCount >= 2)
+        if (field is FishSpawnRulesField { IsWaterTile: true })
+            value = field.GetSpokenText();
+        else if (entryCount >= 2)
             label = AppendPart(label, I18n.ScreenReader_ListEntryCount(entryCount));
         string text = string.IsNullOrWhiteSpace(value) ? label : $"{label}, {value}";
 
@@ -325,7 +334,7 @@ internal static class LookupMenuScreenReader
 
         ICustomField field = fields[_selectedIndex];
         IReadOnlyList<SpokenEntry> entries = field.GetSpokenEntries();
-        if (entries.Count < 2)
+        if (entries.Count < 2 && !(field is FishSpawnRulesField { IsWaterTile: true } && entries.Count == 1))
             return false;
 
         string? collapseLinkText = null;
@@ -339,6 +348,17 @@ internal static class LookupMenuScreenReader
         }
 
         _expandedFieldState = new ExpandedFieldState(field, _selectedIndex, entries, collapseLinkText, restoreCollapsedState);
+        return true;
+    }
+
+    /// <summary>Enter the selected entry's children, if it has any.</summary>
+    private static bool TryEnterChildEntries()
+    {
+        ExpandedFieldState? parent = _expandedFieldState;
+        if (parent == null || parent.Entries[parent.EntryIndex].Children is not { Count: > 0 } children)
+            return false;
+
+        _expandedFieldState = new ExpandedFieldState(parent.Field, parent.FieldIndex, children, null, false) { Parent = parent };
         return true;
     }
 
@@ -443,6 +463,9 @@ internal static class LookupMenuScreenReader
 
         /// <summary>Whether to collapse the field again when leaving it.</summary>
         public bool RestoreCollapsedState { get; } = restoreCollapsedState;
+
+        /// <summary>The parent entry list, if this is a nested list.</summary>
+        public ExpandedFieldState? Parent { get; init; }
 
         /// <summary>The index of the selected entry.</summary>
         public int EntryIndex { get; set; }

@@ -17,6 +17,9 @@ internal class FishSpawnRulesField : CheckboxListField
     /*********
     ** Fields
     *********/
+    /// <summary>Whether the field describes a water tile.</summary>
+    private readonly bool IsTileLookup;
+
     /// <summary>The valid seasons.</summary>
     private static readonly string[] Seasons = ["spring", "summer", "fall", "winter"];
 
@@ -40,7 +43,50 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
     /// <param name="showUncaughtFishSpawnRules">Whether to show spawn conditions for uncaught fish.</param>
     public FishSpawnRulesField(GameHelper gameHelper, string label, GameLocation location, Vector2 tile, string fishAreaId, bool showUncaughtFishSpawnRules)
-        : this(label, FishSpawnRulesField.GetConditions(gameHelper, location, tile, fishAreaId, showUncaughtFishSpawnRules).ToArray()) { }
+        : this(label, FishSpawnRulesField.GetConditions(gameHelper, location, tile, fishAreaId, showUncaughtFishSpawnRules).ToArray()) { this.IsTileLookup = true; }
+
+    /// <summary>Whether this field describes a water tile rather than one fish.</summary>
+    public bool IsWaterTile => this.IsTileLookup;
+
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        if (!this.IsTileLookup)
+            return base.GetSpokenText();
+
+        CheckboxList[] visible = this.CheckboxLists.Where(p => !p.IsHidden).ToArray();
+        string summary = I18n.ScreenReader_FishSummary(count: visible.Length, catchable: visible.Count(p => p.Checkboxes.All(c => c.IsChecked)));
+        string? hidden = this.GetSpokenHiddenListsText();
+        return hidden == null ? summary : $"{summary}, {hidden}";
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        if (!this.IsTileLookup)
+            return base.GetSpokenEntries();
+
+        List<SpokenEntry> entries = this.CheckboxLists
+            .Where(p => !p.IsHidden)
+            .OrderByDescending(p => p.Checkboxes.All(c => c.IsChecked))
+            .ThenBy(p => p.Intro?.Text, StringComparer.CurrentCultureIgnoreCase)
+            .Select(p =>
+            {
+                string name = p.Intro?.Text ?? "";
+                string[] unmet = p.Checkboxes.Where(c => !c.IsChecked)
+                    .Select(c => c.UnmetText ?? c.SpokenText ?? SpokenText.FromFormatted(c.Text) ?? "")
+                    .Where(text => !string.IsNullOrWhiteSpace(text)).ToArray();
+                string text = p.Checkboxes.All(c => c.IsChecked)
+                    ? I18n.ScreenReader_FishCatchable(name)
+                    : I18n.ScreenReader_FishNotCatchable(name: name, conditions: string.Join(", ", unmet));
+                SpokenEntry[] children = this.GetSpokenCheckboxes(p).Select(text => new SpokenEntry(text)).ToArray();
+                return new SpokenEntry(text, Children: children);
+            }).ToList();
+        string? hidden = this.GetSpokenHiddenListsText();
+        if (hidden != null)
+            entries.Add(new SpokenEntry(hidden));
+        return entries;
+    }
 
     /// <inheritdoc/>
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
@@ -157,9 +203,9 @@ internal class FishSpawnRulesField : CheckboxListField
 
         // weather
         if (spawnRules.Weather == FishSpawnWeather.Sunny)
-            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.IsRainingHere());
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.IsRainingHere()) with { UnmetText = I18n.ScreenReader_FishWeatherSunny() };
         else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.IsRainingHere());
+            yield return FishSpawnRulesField.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.IsRainingHere()) with { UnmetText = I18n.ScreenReader_FishWeatherRainy() };
 
         // time of day
         if (spawnRules.TimesOfDay?.Any() == true)
@@ -171,7 +217,7 @@ internal class FishSpawnRulesField : CheckboxListField
                     )
                 ),
                 isMet: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
-            );
+            ) with { UnmetText = I18n.List(spawnRules.TimesOfDay.Select(p => I18n.Generic_Range(CommonHelper.FormatTime(p.MinTime), CommonHelper.FormatTime(p.MaxTime)).ToString())) };
         }
 
         // locations & seasons
@@ -191,7 +237,7 @@ internal class FishSpawnRulesField : CheckboxListField
                         )
                     ),
                     isMet: firstLocation.Seasons.Contains(Game1.currentSeason)
-                );
+                ) with { UnmetText = I18n.List(firstLocation.Seasons.Select(gameHelper.TranslateSeason)) };
             }
 
             // locations

@@ -32,6 +32,11 @@
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{price}}g for stack of {{count}}",
     "generic.show-x-results": "show {{count}} results",
+    "screen-reader.fish-summary": "{{count}} fish, {{catchable}} catchable now",
+    "screen-reader.fish-catchable": "{{name}}, catchable now",
+    "screen-reader.fish-not-catchable": "{{name}}, not now: needs {{conditions}}",
+    "screen-reader.fish-weather-sunny": "sunny weather",
+    "screen-reader.fish-weather-rainy": "rainy weather",
     "screen-reader.list-entry-count": "{{count}} entries",
     "screen-reader.list-position": "{{current}} of {{total}}",
 

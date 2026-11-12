@@ -11,7 +11,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework;
 /// <summary>One entry of a field that a screen reader user can step through (like one recipe or one condition).</summary>
 /// <param name="Text">The spoken text for the entry.</param>
 /// <param name="Context">A heading that applies to the entry (like the recipe type or fish name), spoken after the text when it changes.</param>
-internal readonly record struct SpokenEntry(string Text, string? Context = null);
+/// <param name="Children">Nested entries, if this entry can be expanded.</param>
+internal readonly record struct SpokenEntry(string Text, string? Context = null, IReadOnlyList<SpokenEntry>? Children = null);
 
 /// <summary>Builds the text a screen reader speaks for the lookup menu, so layout (line breaks, bullets, icons, colours) is turned into plain sentences.</summary>
 internal static class SpokenText
