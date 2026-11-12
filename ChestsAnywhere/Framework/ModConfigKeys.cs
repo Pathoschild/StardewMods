@@ -48,6 +48,9 @@ internal class ModConfigKeys
     /// <summary>The keys which open the chest search menu.</summary>
     public KeybindList OpenSearchMenu { get; set; } = KeybindList.Parse($"{SButton.LeftControl} + {SButton.F}, {SButton.LeftStick}");
 
+    /// <summary>The keys which search the open chest.</summary>
+    public KeybindList SearchChestItems { get; set; } = new(SButton.F);
+
     /// <summary>The keys which show a preview of the chest contents while on the search menu.</summary>
     public KeybindList SearchMenuPreviewChest { get; set; } = KeybindList.Parse($"{SButton.Tab}, {SButton.LeftTrigger}");
 
@@ -71,6 +74,7 @@ internal class ModConfigKeys
         this.SortItems ??= new KeybindList();
         this.SortChest ??= new KeybindList();
         this.FillStacks ??= new KeybindList();
+        this.SearchChestItems ??= new KeybindList();
         this.HoldToMouseWheelScrollChests ??= new KeybindList();
         this.HoldToMouseWheelScrollCategories ??= new KeybindList();
     }

@@ -125,6 +125,9 @@
     "access.chest-sorted": "Chest sorted",
     "access.stacks-filled": "Moved {{count}} items into existing stacks",
     "access.stacks-nothing": "Nothing to add",
+    "access.item-search-label": "Search chest items",
+    "access.item-search-no-match": "No match",
+    "access.item-search-slot": "{{item}}, slot {{position}} of {{total}}",
 
     "config.navigate-prev-chest.name": "Navigate: previous chest",
     "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
@@ -146,6 +149,9 @@
 
     "config.open-search-menu.name": "Open Search Menu",
     "config.open-search-menu.desc": "While viewing a chest UI, the keys which open the search menu for all chests.",
+
+    "config.search-chest-items.name": "Search chest items",
+    "config.search-chest-items.desc": "The keys which search for an item in the open chest.",
 
     "config.search-menu-preview.name": "Search Menu Preview Chest",
     "config.search-menu-preview.desc": "While viewing the search UI, the keys which can be held to show a preview tooltip of the hovered chest's contents.",

@@ -95,9 +95,6 @@ internal sealed class ChestSearchMenu : IClickableMenu
     /// <summary>The index of the first chest result to show in the list to match the scroll offset.</summary>
     private int ScrollIndex;
 
-    /// <summary>Whether the menu is on its first update tick.</summary>
-    private bool IsFirstTick = true;
-
     /// <summary>The last focused element query narrated by the search menu.</summary>
     private string? LastFocusedQuery;
 
@@ -259,20 +256,15 @@ internal sealed class ChestSearchMenu : IClickableMenu
         {
             this.PendingChestToOpen = null;
             this.MoveCursorOffMenu();
-            pendingChest.OpenMenu();
+            IClickableMenu openedMenu = pendingChest.OpenMenu();
+            if (openedMenu is ItemGrabMenu grabMenu && !string.IsNullOrWhiteSpace(this.ItemSearchBox.TextBox.Text))
+                ChestItemSearch.Jump(grabMenu, this.ItemSearchBox.TextBox.Text, -1, this.StardewAccess);
             return;
         }
 
         this.ApplySearchIfChanged();
 
         base.update(time);
-
-        if (this.IsFirstTick)
-        {
-            this.IsFirstTick = false;
-            this.FocusSearchBox(this.NameSearchBox, selectText: true, announce: true);
-            return;
-        }
 
         this.EnsureFocusedComponent();
     }
@@ -413,8 +405,17 @@ internal sealed class ChestSearchMenu : IClickableMenu
             if (key == Keys.Enter)
             {
                 this.DeselectSearchBoxes();
-                this.SetFocusedComponent(selectedSearchBox.Clickable);
-                this.AnnounceSearchResults(interrupt: false);
+                this.ApplySearchIfChanged();
+                if (ReferenceEquals(selectedSearchBox, this.ItemSearchBox) && this.VisibleChests.Count > 0)
+                {
+                    this.FocusResult(0);
+                    this.TrySpeakFocusedComponent(force: true);
+                }
+                else
+                {
+                    this.SetFocusedComponent(selectedSearchBox.Clickable);
+                    this.AnnounceSearchResults(interrupt: false);
+                }
             }
 
             return;
@@ -913,8 +914,8 @@ internal sealed class ChestSearchMenu : IClickableMenu
 
         this.PendingSearchTextFieldAnnouncement = null;
         string text = ReferenceEquals(searchBox, this.ItemSearchBox)
-            ? "Search item field open. Enter to exit."
-            : "Search chests field open. Enter to exit.";
+            ? I18n.Access_ItemSearchLabel()
+            : I18n.SearchBox_ChestName();
         string query = ReferenceEquals(searchBox, this.ItemSearchBox)
             ? "chests-search:textbox-open:item"
             : "chests-search:textbox-open:name";

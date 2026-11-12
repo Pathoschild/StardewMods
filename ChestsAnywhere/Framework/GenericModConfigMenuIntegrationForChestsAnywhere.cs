@@ -181,6 +181,12 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 set: (config, value) => config.Controls.OpenSearchMenu = value
             )
             .AddKeyBinding(
+                name: I18n.Config_SearchChestItems_Name,
+                tooltip: I18n.Config_SearchChestItems_Desc,
+                get: config => config.Controls.SearchChestItems,
+                set: (config, value) => config.Controls.SearchChestItems = value
+            )
+            .AddKeyBinding(
                 name: I18n.Config_SearchMenuPreview_Name,
                 tooltip: I18n.Config_SearchMenuPreview_Desc,
                 get: config => config.Controls.SearchMenuPreviewChest,

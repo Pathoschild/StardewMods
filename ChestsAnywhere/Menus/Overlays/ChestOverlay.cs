@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
+using StardewModdingAPI.Utilities;
 using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
@@ -17,6 +22,14 @@ internal class ChestOverlay : BaseChestOverlay
     /*********
     ** Fields
     *********/
+    private static readonly PerScreen<string> PreviousSearch = new(() => "");
+    private static readonly PerScreen<IList<Item>?> LastSearchInventory = new();
+    private static readonly PerScreen<string> LastSearchText = new(() => "");
+    private readonly ModConfigKeys SearchKeys;
+    private readonly TextBox ItemSearchBox;
+    private bool SearchOpen;
+    private bool ClearTextBoxNarration;
+
     /// <summary>The underlying chest menu.</summary>
     private readonly ItemGrabMenu Menu;
 
@@ -56,6 +69,14 @@ internal class ChestOverlay : BaseChestOverlay
         : base(menu, chest, chests, config, keys, events, input, reflection, stardewAccess, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
     {
         this.Menu = menu;
+        this.SearchKeys = keys;
+        this.ItemSearchBox = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black)
+        {
+            X = menu.xPositionOnScreen + 64,
+            Y = menu.yPositionOnScreen + 64,
+            Width = 320,
+            limitWidth = false
+        };
         this.MenuInventoryMenu = menu.ItemsToGrabMenu;
         this.DefaultChestHighlighter = this.MenuInventoryMenu.highlightMethod;
         this.DefaultInventoryHighlighter = menu.inventory.highlightMethod;
@@ -66,6 +87,64 @@ internal class ChestOverlay : BaseChestOverlay
     /*********
     ** Protected methods
     *********/
+    public override void Dispose()
+    {
+        this.ItemSearchBox.Selected = false;
+        base.Dispose();
+    }
+
+    protected override void ReceiveButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+    {
+        if (this.SearchOpen)
+        {
+            if (e.Pressed.Contains(SButton.Escape) || e.Pressed.Contains(SButton.Enter))
+            {
+                bool submit = e.Pressed.Contains(SButton.Enter);
+                this.ItemSearchBox.Selected = false;
+                this.SearchOpen = false;
+                this.ClearTextBoxNarration = true;
+                this.SuppressAll(e.Pressed);
+                if (submit)
+                {
+                    PreviousSearch.Value = this.ItemSearchBox.Text;
+                    InventoryMenu inventory = this.Menu.ItemsToGrabMenu;
+                    bool repeat = ReferenceEquals(LastSearchInventory.Value, inventory.actualInventory)
+                        && string.Equals(LastSearchText.Value, this.ItemSearchBox.Text, StringComparison.OrdinalIgnoreCase);
+                    int current = repeat ? inventory.inventory.IndexOf(this.Menu.currentlySnappedComponent) : -1;
+                    LastSearchInventory.Value = inventory.actualInventory;
+                    LastSearchText.Value = this.ItemSearchBox.Text;
+                    ChestItemSearch.Jump(this.Menu, this.ItemSearchBox.Text, current, this.StardewAccess);
+                }
+            }
+            else
+            {
+                InputButton[][] blocked = [Game1.options.moveUpButton, Game1.options.moveDownButton, Game1.options.moveLeftButton, Game1.options.moveRightButton, Game1.options.menuButton];
+                foreach (InputButton button in blocked.SelectMany(p => p))
+                {
+                    SButton key = button.ToSButton();
+                    if (e.Pressed.Contains(key))
+                        this.InputHelper.Suppress(key);
+                }
+                if (e.Pressed.Contains(SButton.Delete))
+                    this.InputHelper.Suppress(SButton.Delete);
+            }
+            return;
+        }
+
+        if (this.IsInitialized && this.ActiveElement == Element.Menu && !this.SearchKeys.OpenSearchMenu.IsDown()
+            && this.SearchKeys.SearchChestItems.JustPressed() && Game1.keyboardDispatcher.Subscriber == null)
+        {
+            this.ItemSearchBox.Text = PreviousSearch.Value;
+            this.ItemSearchBox.Selected = true;
+            this.SearchOpen = true;
+            this.SuppressAll(e.Pressed);
+            this.StardewAccess.Say(I18n.Access_ItemSearchLabel(), true);
+            return;
+        }
+
+        base.ReceiveButtonsChanged(sender, e);
+    }
+
     /// <inheritdoc />
     protected override void Update()
     {
@@ -161,6 +240,12 @@ internal class ChestOverlay : BaseChestOverlay
             IClickableMenu.drawHoverText(batch, this.HoverText, Game1.smallFont);
 
         base.DrawUi(batch); // run base logic last, to draw cursor over everything else
+
+        if (this.SearchOpen || this.ClearTextBoxNarration)
+        {
+            this.ItemSearchBox.Draw(batch);
+            this.ClearTextBoxNarration = false;
+        }
     }
 
     /// <inheritdoc />
