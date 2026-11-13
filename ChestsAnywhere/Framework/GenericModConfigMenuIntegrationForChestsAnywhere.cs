@@ -127,6 +127,18 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 set: (config, value) => config.Controls.SortItems = value
             )
             .AddKeyBinding(
+                name: I18n.Config_SortChest_Name,
+                tooltip: I18n.Config_SortChest_Desc,
+                get: config => config.Controls.SortChest,
+                set: (config, value) => config.Controls.SortChest = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_FillStacks_Name,
+                tooltip: I18n.Config_FillStacks_Desc,
+                get: config => config.Controls.FillStacks,
+                set: (config, value) => config.Controls.FillStacks = value
+            )
+            .AddKeyBinding(
                 name: I18n.Config_NavigatePrevChest_Name,
                 tooltip: I18n.Config_NavigatePrevChest_Desc,
                 get: config => config.Controls.PrevChest,
@@ -167,6 +179,12 @@ internal class GenericModConfigMenuIntegrationForChestsAnywhere : IGenericModCon
                 tooltip: I18n.Config_OpenSearchMenu_Desc,
                 get: config => config.Controls.OpenSearchMenu,
                 set: (config, value) => config.Controls.OpenSearchMenu = value
+            )
+            .AddKeyBinding(
+                name: I18n.Config_SearchChestItems_Name,
+                tooltip: I18n.Config_SearchChestItems_Desc,
+                get: config => config.Controls.SearchChestItems,
+                set: (config, value) => config.Controls.SearchChestItems = value
             )
             .AddKeyBinding(
                 name: I18n.Config_SearchMenuPreview_Name,

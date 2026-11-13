@@ -1,7 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Search;
+using StardewModdingAPI.Utilities;
+using Pathoschild.Stardew.Common.Integrations.StardewAccess;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -16,10 +23,18 @@ internal class ChestOverlay : BaseChestOverlay
     /*********
     ** Fields
     *********/
+    private static readonly PerScreen<IList<Item>?> LastSearchInventory = new();
+    private static readonly PerScreen<string> LastSearchText = new(() => "");
+    private readonly ModConfigKeys SearchKeys;
+    private readonly TextBox ItemSearchBox;
+    private bool SearchOpen;
+    private bool ClearTextBoxNarration;
+    private bool PendingSearchAnnouncement;
+
     /// <summary>The underlying chest menu.</summary>
     private readonly ItemGrabMenu Menu;
 
-    /// <summary>The underlying menu's player inventory submenu.</summary>
+    /// <summary>The underlying menu's chest inventory submenu.</summary>
     private readonly InventoryMenu MenuInventoryMenu;
 
     /// <summary>The default highlight function for the chest items.</summary>
@@ -51,13 +66,21 @@ internal class ChestOverlay : BaseChestOverlay
     /// <param name="input">An API for checking and changing input state.</param>
     /// <param name="reflection">Simplifies access to private code.</param>
     /// <param name="showAutomateOptions">Whether to show Automate options if applicable for this chest type.</param>
-    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
-        : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
+    public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, StardewAccessIntegration stardewAccess, bool showAutomateOptions)
+        : base(menu, chest, chests, config, keys, events, input, reflection, stardewAccess, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
     {
         this.Menu = menu;
+        this.SearchKeys = keys;
+        this.ItemSearchBox = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black)
+        {
+            X = menu.xPositionOnScreen + 64,
+            Y = menu.yPositionOnScreen + 64,
+            Width = 320,
+            limitWidth = false
+        };
         this.MenuInventoryMenu = menu.ItemsToGrabMenu;
-        this.DefaultChestHighlighter = menu.inventory.highlightMethod;
-        this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultChestHighlighter = this.MenuInventoryMenu.highlightMethod;
+        this.DefaultInventoryHighlighter = menu.inventory.highlightMethod;
         this.WasColorPickerShown = this.IsColorPickerShown(menu);
     }
 
@@ -65,6 +88,79 @@ internal class ChestOverlay : BaseChestOverlay
     /*********
     ** Protected methods
     *********/
+    public override void Dispose()
+    {
+        this.ItemSearchBox.Selected = false;
+        base.Dispose();
+    }
+
+    protected override void ReceiveButtonsChanged(object? sender, ButtonsChangedEventArgs e)
+    {
+        if (this.SearchOpen)
+        {
+            if (e.Pressed.Contains(SButton.Escape) || e.Pressed.Contains(SButton.Enter))
+            {
+                bool submit = e.Pressed.Contains(SButton.Enter);
+                this.ItemSearchBox.Selected = false;
+                this.SearchOpen = false;
+                this.ClearTextBoxNarration = true;
+                this.PendingSearchAnnouncement = false;
+                this.SuppressAll(e.Pressed);
+                if (submit)
+                {
+                    InventoryMenu inventory = this.Menu.ItemsToGrabMenu;
+                    string searchText = this.ItemSearchBox.Text;
+                    bool repeatLastSearch = string.IsNullOrWhiteSpace(searchText);
+                    if (repeatLastSearch)
+                    {
+                        searchText = LastSearchText.Value;
+                        if (string.IsNullOrWhiteSpace(searchText))
+                        {
+                            this.StardewAccess.Say("No search yet", true);
+                            return;
+                        }
+                    }
+
+                    bool sameChest = ReferenceEquals(LastSearchInventory.Value, inventory.actualInventory);
+                    int current = repeatLastSearch && sameChest
+                        ? inventory.inventory.IndexOf(this.Menu.currentlySnappedComponent)
+                        : -1;
+                    LastSearchInventory.Value = inventory.actualInventory;
+                    LastSearchText.Value = searchText;
+                    ChestItemSearch.Jump(this.Menu, searchText, current, this.StardewAccess);
+                }
+            }
+            else
+            {
+                // Suppression keeps SMAPI keybinds from firing in menu draw patches;
+                // text input still arrives through the keyboard dispatcher.
+                KeyboardDispatcher dispatcher = Game1.keyboardDispatcher;
+                if (e.Pressed.Contains(SButton.V) && this.PasteKey.IsDown() && dispatcher?.Subscriber != null)
+                {
+                    string? text = null;
+                    DesktopClipboard.GetText(ref text);
+                    if (text != null && !dispatcher.ShouldSuppress())
+                        dispatcher.Subscriber.RecieveTextInput(Regex.Replace(text, @"[\r\n]", ""));
+                }
+                this.SuppressAll(e.Pressed.Except(this.PasteModifierKeys));
+            }
+            return;
+        }
+
+        if (this.IsInitialized && this.ActiveElement == Element.Menu && !this.SearchKeys.OpenSearchMenu.IsDown()
+            && this.SearchKeys.SearchChestItems.JustPressed() && Game1.keyboardDispatcher.Subscriber == null)
+        {
+            this.ItemSearchBox.Text = "";
+            this.ItemSearchBox.Selected = true;
+            this.SearchOpen = true;
+            this.SuppressAll(e.Pressed);
+            this.PendingSearchAnnouncement = true;
+            return;
+        }
+
+        base.ReceiveButtonsChanged(sender, e);
+    }
+
     /// <inheritdoc />
     protected override void Update()
     {
@@ -135,12 +231,21 @@ internal class ChestOverlay : BaseChestOverlay
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(this.HoverText) && this.StardewAccess.IsLoaded)
+            this.StardewAccess.SayWithMenuChecker(this.HoverText, true, $"chests-hover:{this.HoverText}");
+
         return base.ReceiveCursorHover(x, y);
     }
 
     /// <inheritdoc />
     protected override void DrawUi(SpriteBatch batch)
     {
+        if (this.ActiveElement != Element.Menu)
+        {
+            this.SuppressHoveredSlotNarration(this.Menu.ItemsToGrabMenu);
+            this.SuppressHoveredSlotNarration(this.Menu.inventory);
+        }
+
         if (!this.ActiveElement.HasFlag(Element.EditForm))
         {
             float navOpacity = this.CanCloseChest ? 1f : 0.5f;
@@ -151,6 +256,19 @@ internal class ChestOverlay : BaseChestOverlay
             IClickableMenu.drawHoverText(batch, this.HoverText, Game1.smallFont);
 
         base.DrawUi(batch); // run base logic last, to draw cursor over everything else
+
+        ChestItemSearch.CompletePendingJump(this.Menu, this.StardewAccess);
+
+        if (this.SearchOpen || this.ClearTextBoxNarration)
+        {
+            this.ItemSearchBox.Draw(batch);
+            this.ClearTextBoxNarration = false;
+            if (this.PendingSearchAnnouncement && this.SearchOpen)
+            {
+                this.PendingSearchAnnouncement = false;
+                this.StardewAccess.Say($"{I18n.Access_ItemSearchLabel()}, empty", true);
+            }
+        }
     }
 
     /// <inheritdoc />
@@ -180,14 +298,35 @@ internal class ChestOverlay : BaseChestOverlay
     {
         if (clickable)
         {
-            this.Menu.inventory.highlightMethod = this.DefaultChestHighlighter;
-            this.MenuInventoryMenu.highlightMethod = this.DefaultInventoryHighlighter;
+            this.MenuInventoryMenu.highlightMethod = this.DefaultChestHighlighter;
+            this.Menu.inventory.highlightMethod = this.DefaultInventoryHighlighter;
         }
         else
         {
-            this.Menu.inventory.highlightMethod = _ => false;
             this.MenuInventoryMenu.highlightMethod = _ => false;
+            this.Menu.inventory.highlightMethod = _ => false;
         }
+    }
+
+    /// <inheritdoc />
+    protected override void SuppressPreSwitchSlotNarration()
+    {
+        base.SuppressPreSwitchSlotNarration();
+        this.SuppressHoveredSlotNarration(this.Menu.inventory);
+    }
+
+    /// <inheritdoc />
+    protected override (InventoryMenu? Menu, int Index) GetEditOpenHoveredSlot()
+    {
+        int chestHoveredIndex = this.GetHoveredSlotIndex(this.MenuInventoryMenu);
+        if (chestHoveredIndex >= 0)
+            return (this.MenuInventoryMenu, chestHoveredIndex);
+
+        int playerHoveredIndex = this.GetHoveredSlotIndex(this.Menu.inventory);
+        if (playerHoveredIndex >= 0)
+            return (this.Menu.inventory, playerHoveredIndex);
+
+        return (null, -1);
     }
 
     /// <inheritdoc />
@@ -219,5 +358,11 @@ internal class ChestOverlay : BaseChestOverlay
     private bool IsColorPickerShown(ItemGrabMenu menu)
     {
         return menu.chestColorPicker?.visible ?? false;
+    }
+
+    /// <inheritdoc />
+    protected override InventoryMenu? GetOverlayInventoryMenu()
+    {
+        return this.MenuInventoryMenu;
     }
 }
