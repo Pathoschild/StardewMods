@@ -13,53 +13,97 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
 internal class ScheduleField : GenericField
 {
     /*********
+    ** Fields
+    *********/
+    /// <summary>The sentences a screen reader speaks for the whole field.</summary>
+    private readonly string[] SpokenParts;
+
+    /// <summary>The scheduled stops, one entry per stop.</summary>
+    private readonly SpokenEntry[] SpokenStops;
+
+
+    /*********
     ** Public methods
     *********/
     /// <summary>Construct an instance.</summary>
     /// <param name="npc">The NPC whose schedule to display.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     public ScheduleField(NPC npc, GameHelper gameHelper)
-        : base(I18n.Npc_Schedule(), ScheduleField.GetText(npc, gameHelper)) { }
+        : this(npc, gameHelper, new ScheduleSpeech()) { }
+
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        string text = SpokenText.Sentences(this.SpokenParts);
+        return text.Length > 0 ? text : null;
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        return this.SpokenStops;
+    }
 
 
     /*********
     ** Private methods
     *********/
+    /// <summary>Construct an instance.</summary>
+    /// <param name="npc">The NPC whose schedule to display.</param>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="speech">Collects the spoken text while the displayed text is built.</param>
+    private ScheduleField(NPC npc, GameHelper gameHelper, ScheduleSpeech speech)
+        : base(I18n.Npc_Schedule(), ScheduleField.GetText(npc, gameHelper, speech))
+    {
+        this.SpokenParts = speech.Parts.ToArray();
+        this.SpokenStops = speech.Stops.ToArray();
+    }
+
     /// <summary>Get the text to display.</summary>
     /// <param name="npc">The NPC whose schedule to display.</param>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    private static IEnumerable<IFormattedText> GetText(NPC npc, GameHelper gameHelper)
+    /// <param name="speech">Collects the spoken text while the displayed text is built.</param>
+    private static IEnumerable<IFormattedText> GetText(NPC npc, GameHelper gameHelper, ScheduleSpeech speech)
     {
         bool isFarmhand = !Context.IsMainPlayer;
 
         // current location
         GameLocation? location = npc.currentLocation;
         if (isFarmhand && location?.IsActiveLocation() is not true)
+        {
+            speech.Parts.Add(I18n.Npc_Schedule_Farmhand_UnknownPosition());
             yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownPosition());
+        }
         else
         {
             string locationName = location is not null
                 ? gameHelper.GetLocationDisplayName(location.Name, location.GetData())
                 : "???";
 
+            speech.Parts.Add(I18n.ScreenReader_ScheduleCurrentPosition(locationName: locationName, x: npc.TilePoint.X, y: npc.TilePoint.Y));
             yield return new FormattedText(I18n.Npc_Schedule_CurrentPosition(locationName: locationName, x: npc.TilePoint.X, y: npc.TilePoint.Y));
         }
         yield return new FormattedText(Environment.NewLine + Environment.NewLine);
 
         // schedule
         if (isFarmhand)
+        {
+            speech.Parts.Add(I18n.Npc_Schedule_Farmhand_UnknownSchedule());
             yield return new FormattedText(I18n.Npc_Schedule_Farmhand_UnknownSchedule());
+        }
         else
         {
             // validate schedule
             ScheduleEntry[] schedule = ScheduleField.FormatSchedule(npc.Schedule).ToArray();
             if (schedule.Length is 0)
             {
+                speech.Parts.Add(I18n.Npc_Schedule_NoEntries());
                 yield return new FormattedText(I18n.Npc_Schedule_NoEntries());
                 yield break;
             }
             if (npc.ignoreScheduleToday || !npc.followSchedule)
             {
+                speech.Parts.Add(I18n.Npc_Schedule_NotFollowingSchedule());
                 yield return new FormattedText(I18n.Npc_Schedule_NotFollowingSchedule());
                 yield break;
             }
@@ -76,6 +120,13 @@ internal class ScheduleField : GenericField
                 Color textColor = isStarted
                     ? (isFinished ? Color.Gray : Color.Green)
                     : Color.Black;
+
+                // the sighted view colours past stops grey, the stop happening now green, and later stops black
+                string stop = I18n.ScreenReader_ScheduleStop(time: CommonHelper.FormatTime(time), locationName: locationName, x: entry.targetTile.X, y: entry.targetTile.Y);
+                if (isStarted)
+                    stop = isFinished ? I18n.ScreenReader_ScheduleFinished(stop) : I18n.ScreenReader_ScheduleNow(stop);
+                speech.Parts.Add(stop);
+                speech.Stops.Add(new SpokenEntry(stop));
 
                 if (i > 0)
                     yield return new FormattedText(Environment.NewLine);
@@ -109,4 +160,14 @@ internal class ScheduleField : GenericField
     /// <param name="Time">The time that the event starts.</param>
     /// <param name="Description">A description of the event.</param>
     private record ScheduleEntry(int Time, SchedulePathDescription Description);
+
+    /// <summary>Collects the spoken text while the displayed schedule text is built.</summary>
+    private class ScheduleSpeech
+    {
+        /// <summary>The sentences spoken for the whole field.</summary>
+        public List<string> Parts { get; } = [];
+
+        /// <summary>The scheduled stops.</summary>
+        public List<SpokenEntry> Stops { get; } = [];
+    }
 }

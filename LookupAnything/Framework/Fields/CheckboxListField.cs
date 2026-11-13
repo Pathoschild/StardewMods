@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
@@ -36,6 +37,44 @@ internal class CheckboxListField : GenericField
     }
 
     /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        List<string> parts = [];
+        foreach (CheckboxList checkboxList in this.CheckboxLists)
+        {
+            if (checkboxList.IsHidden)
+                continue;
+
+            parts.Add(SpokenText.Sentences([checkboxList.Intro?.Text, .. this.GetSpokenCheckboxes(checkboxList)]));
+        }
+
+        string? hiddenText = this.GetSpokenHiddenListsText();
+        if (hiddenText != null)
+            parts.Add(hiddenText);
+
+        string text = SpokenText.Sentences(parts);
+        return text.Length > 0 ? text : null;
+    }
+
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        List<SpokenEntry> entries = [];
+        foreach (CheckboxList checkboxList in this.CheckboxLists)
+        {
+            if (checkboxList.IsHidden)
+                continue;
+
+            foreach (string text in this.GetSpokenCheckboxes(checkboxList))
+                entries.Add(new SpokenEntry(text, checkboxList.Intro?.Text));
+        }
+
+        string? hiddenText = this.GetSpokenHiddenListsText();
+        if (hiddenText != null)
+            entries.Add(new SpokenEntry(hiddenText));
+
+        return entries;
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         float topOffset = 0;
@@ -72,6 +111,31 @@ internal class CheckboxListField : GenericField
     /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
     /// <param name="visibleHeight">The visible height available for drawing. Any content beyond this height won't be visible to the player.</param>
     /// <returns>Returns the drawn dimensions.</returns>
+    /// <summary>Whether the checkboxes show conditions that are met or not met at this moment (like the weather), as opposed to tasks that are done or not done.</summary>
+    protected virtual bool CheckboxesAreConditions => false;
+
+    /// <summary>Get the spoken text for lists which aren't shown, if any (like the number of uncaught fish).</summary>
+    protected virtual string? GetSpokenHiddenListsText()
+    {
+        return null;
+    }
+
+    /// <summary>Get the spoken text for each checkbox in a list, where the checkbox state (shown as a tick in the game) is put into words.</summary>
+    /// <param name="checkboxList">The list whose checkboxes to read.</param>
+    protected IEnumerable<string> GetSpokenCheckboxes(CheckboxList checkboxList)
+    {
+        foreach (Checkbox checkbox in checkboxList.Checkboxes)
+        {
+            string? text = checkbox.SpokenText ?? SpokenText.FromFormatted(checkbox.Text);
+            if (string.IsNullOrWhiteSpace(text))
+                continue;
+
+            yield return this.CheckboxesAreConditions
+                ? SpokenText.Condition(text, checkbox.IsChecked)
+                : SpokenText.Progress(text, checkbox.IsChecked);
+        }
+    }
+
     protected Vector2 DrawCheckboxList(CheckboxList checkboxList, SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         float topOffset = 0;

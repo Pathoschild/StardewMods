@@ -16,4 +16,8 @@ public interface IStardewAccessApi
     /// <param name="customQuery">If set, uses this instead of <paramref name="text"/> as query to check whether to speak the text or not.</param>
     /// <returns>true if the text was spoken otherwise false.</returns>
     public bool SayWithMenuChecker(string text, bool interrupt, string? customQuery = null);
+
+    /// <summary>Register a custom menu type so Stardew Access treats it as a manually accessible menu.</summary>
+    /// <param name="fullNameOfClass">The full type name of the custom menu.</param>
+    public void RegisterCustomMenuAsAccessible(string? fullNameOfClass);
 }

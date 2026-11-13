@@ -70,6 +70,40 @@ internal class ItemDropListField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        if (!this.Drops.Any())
+            return SpokenText.Clean(this.DefaultText);
+
+        string text = SpokenText.Sentences([this.Preface, .. this.GetSpokenEntries().Select(entry => entry.Text)]);
+        return text.Length > 0 ? text : null;
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        List<SpokenEntry> entries = [];
+        foreach ((ItemDropData drop, Item item, _) in this.Drops)
+        {
+            // the sighted view fades drops which aren't guaranteed, and crosses them out if they won't happen
+            bool isGuaranteed = drop.Probability > .99f;
+            string? conditions = drop.Conditions != null
+                ? HumanReadableConditionParser.Format(drop.Conditions)
+                : null;
+
+            string text = SpokenText.Drop(item.DisplayName, drop.Probability, drop.MinDrop, drop.MaxDrop, conditions);
+            if (!isGuaranteed && this.CrossOutNonGuaranteed)
+                text = I18n.ScreenReader_DropWontDrop(text);
+            else if (!isGuaranteed && this.FadeNonGuaranteed)
+                text = I18n.ScreenReader_DropBurglarsRing(text);
+
+            entries.Add(new SpokenEntry(text, this.Preface));
+        }
+
+        return entries;
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         if (!this.Drops.Any())

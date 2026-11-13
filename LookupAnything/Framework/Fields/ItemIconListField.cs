@@ -53,6 +53,34 @@ internal class ItemIconListField : GenericField
     }
 
     /// <inheritdoc />
+    /// <inheritdoc />
+    public override string? GetSpokenText()
+    {
+        string[] names = this.GetSpokenEntries().Select(entry => entry.Text).ToArray();
+        if (names.Length == 0)
+            return null;
+
+        return SpokenText.Sentences([this.IntroText, SpokenText.AndList(names)]);
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<SpokenEntry> GetSpokenEntries()
+    {
+        List<SpokenEntry> entries = [];
+        foreach ((Item item, _) in this.Items)
+        {
+            // the sighted view shows the stack size as small digits over the icon
+            string name = this.FormatItemName?.Invoke(item) ?? item.DisplayName;
+            if (this.ShowStackSize && item.Stack > 1)
+                name = I18n.ScreenReader_CountOf(count: item.Stack, name: name);
+
+            if (!string.IsNullOrWhiteSpace(name))
+                entries.Add(new SpokenEntry(name, this.IntroText));
+        }
+
+        return entries;
+    }
+
     public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth, float visibleHeight)
     {
         // get icon size

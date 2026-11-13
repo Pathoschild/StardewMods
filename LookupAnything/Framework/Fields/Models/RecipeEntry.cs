@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 
@@ -21,6 +22,9 @@ internal class RecipeEntry
 
     /// <summary>The recipe type.</summary>
     public string Type { get; }
+
+    /// <summary>The kind of recipe (like cooking or a machine rule).</summary>
+    public RecipeType Kind { get; }
 
     /// <summary>Whether the player knows the recipe.</summary>
     public bool IsKnown { get; }
@@ -47,14 +51,16 @@ internal class RecipeEntry
     /// <summary>Construct an instance.</summary>
     /// <param name="name">The recipe name or key.</param>
     /// <param name="type">The recipe type.</param>
+    /// <param name="kind">The kind of recipe.</param>
     /// <param name="isKnown">Whether the player knows the recipe.</param>
     /// <param name="inputs">The input items.</param>
     /// <param name="output">The output item.</param>
     /// <param name="conditions">The game state queries which indicate when this recipe is available, if any.</param>
-    public RecipeEntry(string? name, string type, bool isKnown, RecipeItemEntry[] inputs, RecipeItemEntry output, string? conditions)
+    public RecipeEntry(string? name, string type, RecipeType kind, bool isKnown, RecipeItemEntry[] inputs, RecipeItemEntry output, string? conditions)
     {
         this.Name = name;
         this.Type = type;
+        this.Kind = kind;
         this.IsKnown = isKnown;
         this.Inputs = inputs;
         this.Output = output;
