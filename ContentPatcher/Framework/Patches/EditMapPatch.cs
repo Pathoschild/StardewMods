@@ -31,6 +31,9 @@ internal class EditMapPatch : Patch
     /// <summary>Encapsulates monitoring and logging.</summary>
     private readonly IMonitor Monitor;
 
+    private readonly Func<string, Map?> TryGetMapCache;
+    private readonly Action<string, Map> PopulateMapCache;
+
     /// <summary>The map area from which to read tiles.</summary>
     private readonly TokenRectangle? FromArea;
 
@@ -89,7 +92,7 @@ internal class EditMapPatch : Patch
     /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
     /// <param name="monitor">Encapsulates monitoring and logging.</param>
     /// <param name="parseAssetName">Parse an asset name.</param>
-    public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString? assetLocale, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addNpcWarps, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, InvariantDictionary<IManagedTokenString>? inheritedLocalTokens, InvariantDictionary<IManagedTokenString>? localTokens, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
+    public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString? assetLocale, AssetEditPriority priority, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addNpcWarps, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<ITextOperation>? textOperations, UpdateRate updateRate, InvariantDictionary<IManagedTokenString>? inheritedLocalTokens, InvariantDictionary<IManagedTokenString>? localTokens, IContentPack contentPack, IRuntimeMigration migrator, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, Action<string, Map> populateMapCache, Func<string, Map?> tryGetMapCache)
         : base(
             indexPath: indexPath,
             path: path,
@@ -117,6 +120,8 @@ internal class EditMapPatch : Patch
         this.AddWarps = addWarps?.Reverse().ToArray() ?? [];
         this.TextOperations = textOperations?.ToArray() ?? [];
         this.Monitor = monitor;
+        this.TryGetMapCache = tryGetMapCache;
+        this.PopulateMapCache = populateMapCache;
 
         this.Contextuals
             .Add(this.FromArea)
@@ -150,7 +155,12 @@ internal class EditMapPatch : Patch
         // apply map area patch
         if (this.AppliesMapPatch)
         {
-            Map source = this.ContentPack.ModContent.Load<Map>(this.FromAsset!);
+            Map? source = this.TryGetMapCache(this.ContentPack.Manifest.UniqueID + "/" + this.FromAsset!);
+            if (source == null)
+            {
+                source = this.ContentPack.ModContent.Load<Map>(this.FromAsset!);
+                this.PopulateMapCache(this.ContentPack.Manifest.UniqueID + "/" + this.FromAsset!, source);
+            }
             if (!this.TryApplyMapPatch(source, targetAsset, out string? error))
                 this.WarnForPatch($"map patch couldn't be applied: {error}");
         }
