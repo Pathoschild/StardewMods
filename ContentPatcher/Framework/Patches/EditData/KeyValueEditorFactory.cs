@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace ContentPatcher.Framework.Patches.EditData;
 
@@ -14,6 +15,9 @@ internal class KeyValueEditorFactory
     *********/
     /// <summary>A cache of editor constructors by data type.</summary>
     private static readonly Dictionary<Type, Func<object, IKeyValueEditor>?> CachedConstructors = [];
+
+    // TODO: Cache expiry
+    private static readonly ConditionalWeakTable<object, IKeyValueEditor> CachedEditors = new();
 
 
     /*********
@@ -30,6 +34,11 @@ internal class KeyValueEditorFactory
         if (data == null || type == null)
             return false;
 
+        if (CachedEditors.TryGetValue(data, out editor))
+        {
+            return true;
+        }
+
         // get factory
         if (!KeyValueEditorFactory.CachedConstructors.TryGetValue(type, out Func<object, IKeyValueEditor>? getEditor))
         {
@@ -42,6 +51,7 @@ internal class KeyValueEditorFactory
         if (getEditor != null)
         {
             editor = getEditor(data);
+            CachedEditors.Add(data, editor);
             return true;
         }
 

@@ -18,6 +18,8 @@ internal class ListKeyValueEditor<TValue> : BaseDataEditor
     /// <summary>Get the unique key for an entry, if available.</summary>
     private readonly Lazy<Func<TValue, string?>?> GetAssetKeyImpl;
 
+    private Dictionary<string, int> KeyCache = [];
+
 
     /*********
     ** Public methods
@@ -61,16 +63,30 @@ internal class ListKeyValueEditor<TValue> : BaseDataEditor
     public override void RemoveEntry(object key)
     {
         if (this.TryGetEntry(key, out _, out int index))
+        {
             this.Data.RemoveAt(index);
+            // TODO: Modify entries to offset their values
+            this.KeyCache.Clear();
+        }
     }
 
     /// <inheritdoc />
     public override void SetEntry(object key, object value)
     {
-        if (this.TryGetEntry(key, out _, out int index))
+        if (this.TryGetEntry(key, out var oldVal, out int index))
+        {
             this.Data[index] = (TValue)value;
+
+            // TODO: Add null handling
+            this.KeyCache.Remove(this.GetKey(oldVal));
+            this.KeyCache[this.GetKey((TValue)value)] = index;
+        }
         else
+        {
             this.Data.Add((TValue)value);
+            this.KeyCache[this.GetKey((TValue)value)] = this.Data.Count - 1;
+        }
+            
     }
 
     /// <inheritdoc />
@@ -84,11 +100,13 @@ internal class ListKeyValueEditor<TValue> : BaseDataEditor
         switch (toPosition)
         {
             case MoveEntryPosition.Top:
+                this.KeyCache.Clear();
                 this.Data.RemoveAt(index);
                 this.Data.Insert(0, entry);
                 break;
 
             case MoveEntryPosition.Bottom:
+                this.KeyCache.Clear();
                 this.Data.RemoveAt(index);
                 this.Data.Add(entry);
                 break;
@@ -113,6 +131,8 @@ internal class ListKeyValueEditor<TValue> : BaseDataEditor
             return MoveResult.AnchorNotFound;
         if (entryIndex == anchorIndex)
             return MoveResult.AnchorIsMain;
+
+        this.KeyCache.Clear();
 
         // move to position
         int newIndex = afterAnchor
@@ -161,11 +181,28 @@ internal class ListKeyValueEditor<TValue> : BaseDataEditor
                 break;
 
             case string key:
+                if (this.KeyCache.TryGetValue(key, out int cachedIndex))
+                {
+                    value = this.Data[cachedIndex]!;
+                    index = cachedIndex;
+                    return true;
+                }
+                if (this.KeyCache.Count == this.Data.Count)
+                {
+                    // all entries are cached, so the key doesn't exist
+                    break;
+                }
                 for (int i = 0; i < this.Data.Count; i++)
                 {
                     value = this.Data[i]!;
 
-                    if (this.GetKey(value) == key)
+                    string? actualKey = this.GetKey(value);
+                    if (actualKey != null)
+                    {
+                        this.KeyCache[actualKey] = i;
+                    }
+
+                    if (actualKey == key)
                     {
                         index = i;
                         return true;
