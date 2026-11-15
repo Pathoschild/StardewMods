@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace Pathoschild.Stardew.Common.Utilities;
 
@@ -139,9 +140,9 @@ internal class InvariantSet : IInvariantSet
     }
 
     /// <inheritdoc cref="IInvariantSet" />
-    public IInvariantSet GetWith(ICollection<string> other)
+    public IInvariantSet GetWith(IEnumerable<string> other)
     {
-        if (other.Count == 0)
+        if (!other.Any())
             return this;
 
         if (this.Count == 0)

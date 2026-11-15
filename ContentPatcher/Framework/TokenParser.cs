@@ -107,6 +107,24 @@ internal class TokenParser
             : InputArguments.Empty;
     }
 
+    /// <summary>Fetch iterator of required but not loaded mods.</summary>
+    /// <param name="requiredModIDs">Mod IDs required</param>
+    /// <param name="notInstalledRequiredModIDs">Iterator of not installed mod ID</param>
+    /// <returns>True if there are any required but not loaded Mod IDs</returns>
+    public bool TryGetRequiredNotInstalledModIDs(ISet<string>? requiredModIDs, [NotNullWhen(true)] out IEnumerable<string>? notInstalledRequiredModIDs)
+    {
+        notInstalledRequiredModIDs = null;
+        if (requiredModIDs != null)
+        {
+            notInstalledRequiredModIDs = requiredModIDs.Where(modId => !this.InstalledMods.Contains(modId));
+            if (notInstalledRequiredModIDs.Any())
+                return true;
+            else
+                notInstalledRequiredModIDs = null;
+        }
+        return false;
+    }
+
     /// <summary>Parse a string which can contain tokens or be null, and validate that it's valid.</summary>
     /// <param name="rawValue">The raw string which may contain tokens.</param>
     /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
