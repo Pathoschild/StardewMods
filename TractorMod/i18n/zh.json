@@ -74,7 +74,7 @@
     "config.tractor-volume.tooltip": "拖拉机声音效果的大小。默认值：{{defaultValue}}%。",
 
     "config.tool-use-sounds-limit.name": "使用工具时播放音效",
-    "config.tool-use-sounds-limit.tooltip": "当使用拖拉机对周围的地块使用工具时，应播放哪些工具的声音。默认{{defaultOption}}。请注意，“{{unlimitedOption}}”可能会导致较大范围的错误。", // TODO: English warning about {{unlimitedOption}} was reworded to be clearer
+    "config.tool-use-sounds-limit.tooltip": "当对拖拉机周围的许多地块使用工具时，应播放哪些工具音效。默认选项为“{{defaultOption}}”。请注意，如果“{{distanceOption}}”选项设置得过高，“{{unlimitedOption}}”可能会因为同时播放过多音效而导致错误。",
     "config.tool-use-sounds-limit.value.Default": "默认",
     "config.tool-use-sounds-limit.value.OncePerTick": "仅播放首次音效",
     "config.tool-use-sounds-limit.value.Unlimited": "播放所有音效（不推荐）",
@@ -139,11 +139,11 @@
     /****
     ** Crops/forage/grass
     ****/
-    "config.clear-dead-crops.name": "清除枯萎的农作物",
-    "config.clear-dead-crops.tooltip": "是否清除枯萎的农作物。",
+    "config.clear-dead-crops.name": "清除枯死作物",
+    "config.clear-dead-crops.tooltip": "是否摧毁枯死作物。",
 
-    "config.clear-live-crops.name": "清除活的农作物",
-    "config.clear-live-crops.tooltip": "是否清除活的农作物。",
+    "config.clear-live-crops.name": "清除未枯死作物",
+    "config.clear-live-crops.tooltip": "是否摧毁未枯死的作物。",
 
     "config.harvest-giant-crops.name": "收获巨大作物",
     "config.harvest-giant-crops.tooltip": "是否收获巨大作物。",
@@ -170,9 +170,8 @@
     "config.clear-debris.name": "清除杂物",
     "config.clear-debris.tooltip": "是否清除杂物，如杂草、树枝、树桩。",
 
-    // TODO
-    "config.clear-mine-stones.name": "Break Mine Stones",
-    "config.clear-mine-stones.tooltip": "Whether to break stones in the mine.",
+    "config.clear-mine-stones.name": "打碎矿井石头",
+    "config.clear-mine-stones.tooltip": "是否打碎矿井中的石头。",
 
     "config.clear-weeds.name": "清除杂草",
     "config.clear-weeds.tooltip": "是否清除杂草。",
@@ -187,8 +186,8 @@
     "config.dig-artifact-spots.name": "挖掘远古斑点",
     "config.dig-artifact-spots.tooltip": "是否挖掘远古斑点。",
 
-    "config.dig-seed-spots.name": "挖掘种子斑点",
-    "config.dig-seed-spots.tooltip": "是否挖掘种子斑点。",
+    "config.dig-seed-spots.name": "挖掘绿色斑点",
+    "config.dig-seed-spots.tooltip": "是否挖掘绿色斑点（给种子的）。",
 
     "config.clear-dirt-without-fertilizer.name": "填平耕地",
     "config.clear-dirt-without-fertilizer.tooltip": "是否填平已耕的地块。",
@@ -252,7 +251,7 @@
     "config.seeds.tooltip": "是否能够播撒种子。",
 
     "config.seed-bags.name": "种子袋",
-    "config.seed-bags.tooltip": "是否能够使用种子袋mod播撒种子。",
+    "config.seed-bags.tooltip": "是否能够使用种子袋模组播撒种子。",
 
     "config.slingshot.name": "弹弓",
     "config.slingshot.tooltip": "是否能够发射弹弓。（由于拖拉机的攻速，基本上开了就无敌了，但是会消耗大量弹药）",
