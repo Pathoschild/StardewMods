@@ -12,14 +12,13 @@
     "destinations.stardew-valley": "星露谷",
 
     // default stops when shown in Central Station menu (中央车站菜单中显示的默认站点)
-    "destinations.stardew-valley.boat": "星露谷 - 码头站",
+    "destinations.stardew-valley.boat": "星露谷 - 码头",
     "destinations.stardew-valley.bus": "星露谷 - 巴士站",
-    "destinations.stardew-valley.train": "星露谷 - 铁路站",
+    "destinations.stardew-valley.train": "星露谷 - 火车站",
 
     // stops from other mods (其他模组站点)
-    // TODO
-    "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name (站点名称)
-    "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name (站点名称)
+    "destinations.from-bus-locations-mod": "{0} [公交站点模组]", // {0} = stop name (站点名称)
+    "destinations.from-train-station-mod": "{0} [火车站模组]", // {0} = stop name (站点名称)
 
 
     /*********
@@ -29,7 +28,7 @@
     "food-court.dialogue.2": "本店是这里最实惠的哦！", // note for translators: this is a joke, since it's the only food shop in the food court.
     "food-court.dialogue.3": "我们上次的食品安全检查勉强合格啦！",
     "food-court.dialogue.4": "哦，来客人了？要点什么吗？",
-    "food-court.dialogue.5": "新鲜又热乎的食物！呃... 微波炉加热也算热乎的吧？", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+    "food-court.dialogue.5": "新鲜又热乎的食物！呃……微波炉加热也算热乎的吧？", // note for translators: this is a joke which implies the food is neither hot nor fresh.
 
     "gift-shop.dialogue.1": "要出远门吗？检查下必需品都带齐了吗?",
     "gift-shop.dialogue.2": "准备回家吗？带些纪念品回去吧！",
@@ -39,7 +38,7 @@
     "gift-shop.dialogue.6": "试试这个耳罩，感受到没？这可是城堡村特产的丝绒！",
     "gift-shop.dialogue.7": "这是宝石海对岸的稀有木材，非常难找的。",
 
-    "vendor-shop.dialogue.coming-soon": "小告示牌上写着\"本地快闪店即将开业！\"，你能听到工人们在里面准备的声音。",
+    "vendor-shop.dialogue.coming-soon": "小告示牌上写着“本地快闪店即将开业！”，你能听到工人们在里面准备的声音。",
 
 
     /*********
@@ -78,13 +77,13 @@
     "location.transit-area-doors": "这扇门通往码头和站台，你需要先去售票处买票。",
 
     // rare messages in Central Station
-    "location.exit-door.strange-sounds": "...?",
+    "location.exit-door.strange-sounds": "……？",
 
     "location.ticket-counter.1": "（你试图窥视售票亭，但有色玻璃后只有模糊的影子）",
     "location.ticket-counter.2": "（你听到玻璃后传来奇怪的耳语声）",
     "location.ticket-counter.3": "（突然你短暂看透了有色玻璃。但回想时，却记不清看到了什么）",
 
-    "location.ticket-machine.1": "（总觉得售票亭那边投来反对的目光... 或许是错觉？）",
+    "location.ticket-machine.1": "（总觉得售票亭那边投来反对的目光……或许是错觉？）",
     "location.ticket-machine.2": "（跳过人工售票让你产生莫名的不安）",
     "location.ticket-machine.3": "（机器列出了几十个从未听过的站点，眨眼间又恢复了正常列表）",
 
@@ -93,7 +92,7 @@
     "location.cola-machine.3": "（不知为何，你觉得可乐机是个好机）",
 
     // employee lounge
-    "location.employee-lockers": "员工储物柜没上锁，但总觉得被什么注视着...",
+    "location.employee-lockers": "员工储物柜没上锁，但总觉得被什么注视着……",
     "location.employee-fridge": "员工的午餐，偷吃是不礼貌的行为哦",
 
 
@@ -102,19 +101,19 @@
     *********/
     "tourist.young-boy.1": "嗨！",
     "tourist.young-boy.2": "我在等妈妈。",
-    "tourist.young-boy.3": "妈妈说不能和陌生人说话...",
+    "tourist.young-boy.3": "妈妈说不能和陌生人说话……",
 
     "tourist.woman-in-black-dress": "我喜欢参加不同小镇的节日庆典，这是办公室生活的最佳调剂。",
 
     "tourist.man-with-drink.1": "旅行的精髓就是是品尝各地美食！",
-    "tourist.man-with-drink.2": "试过美食广场吗？说实话难吃得要命... 但这也是种体验嘛！",
+    "tourist.man-with-drink.2": "试过美食广场吗？说实话难吃得要命……但这也是种体验嘛！",
 
     "tourist.man-with-sunglasses": "看过售票亭里是谁吗？#我从来都看不清。#而且商店老板们也都不是车站员工。",
 
     "tourist.man-with-top-hat.1": "嘿小子，想知道致富秘诀吗？",
-    "tourist.man-with-top-hat.2": "快速致富计划！赌博... 不过赌博十赌九输，懂我意思吧？呵呵。",
+    "tourist.man-with-top-hat.2": "快速致富计划！赌博……不过赌博十赌九输，懂我意思吧？呵呵。",
 
-    "tourist.strong-man": "你和我一样强壮吗？能打碎石头！#可惜这儿没石头... 唉。",
+    "tourist.strong-man": "你和我一样强壮吗？能打碎石头！#可惜这儿没石头……唉。",
 
     "tourist.desert-racer-man.1": "我要去看比赛啦！",
     "tourist.desert-racer-man.2": "哦，这次是真的，退休后终于能亲临赛车现场了。#去过沙漠竞速赛吗？超有意思的！",
@@ -123,8 +122,8 @@
     "tourist.desert-scholar-man.2": "有几本我一直在找的书，但愿能在那找到。",
     "tourist.desert-scholar-man.3": "就算没有，肯定也有新书可以探索！",
 
-    "tourist.flamingo.1": "...",
-    "tourist.flamingo.2": "...？",
+    "tourist.flamingo.1": "……",
+    "tourist.flamingo.2": "……？",
     "tourist.flamingo.3": "*嘎！*",
     "tourist.flamingo.4": "（她正专心地无视你）",
 
@@ -134,26 +133,26 @@
     "tourist.welwick.2": "希望他没把你卷进那些古怪的计划里，呵呵~",
 
     "tourist.cashier-girl.1": "整天站着工作累死啦，连休息时间都没有",
-    "tourist.cashier-girl.2": "真想宅家躺平... 但人生怎能没有冒险？！",
+    "tourist.cashier-girl.2": "真想宅家躺平……但人生怎能没有冒险？！",
     "tourist.cashier-girl.3": "这么多免费能去的地方，我全都要打卡！",
 
     "tourist.governor.1": "很奇怪，没人知道车站是谁运营的。#所有手续都合规，但没人记得审批过程。#不过这一带怪事也不止这一件。",
     "tourist.governor.2": "终于能亲自坐火车了，真好。#下次该带夫人一起来。",
 
-    "tourist.lupini.1": "日安，年轻的${先生^女士^孩子}$。可曾赏鉴我的新作？", // note for translators: ${...}$ is a gender-switch block which switches between text for male, female, or non-binary players.
+    "tourist.lupini.1": "日安，年轻的${先生^女士^孩子}$。可曾赏鉴我的新作？", // note for translators: ${……}$ is a gender-switch block which switches between text for male, female, or non-binary players.
     "tourist.lupini.2": "我正要去开办新的画展，如果您想跟来随时欢迎。",
 
     "tourist.red-cap-guy.1": "旅行的妙处就是能见识各种人和时尚。",
     "tourist.red-cap-guy.2": "当大家风格迥异时，就不用担心穿得太夸张了！",
 
-    "tourist.shorts-man": "这儿冷得要命... #或许该去礼品店买点御寒装备...",
+    "tourist.shorts-man": "这儿冷得要命……#或许该去礼品店买点御寒装备……",
 
     "tourist.red-pirate": "（他专注喝酒没注意到你）",
 
-    "tourist.grim-pirate": "铁轨传来骇人传说...#车站深处回荡的广播...#唉，我错过了我那班车。",
+    "tourist.grim-pirate": "铁轨传来骇人传说……#车站深处回荡的广播……#唉，我错过了我那班车。",
 
     "tourist.blackgull-pirate.1": "我的天啊！其他船员呢？",
-    "tourist.blackgull-pirate.2": "我们马上要登船了...",
+    "tourist.blackgull-pirate.2": "我们马上要登船了……",
 
     "tourist.bag-dog.1": "（它正在冒险途中）",
     "tourist.bag-dog.2": "（它正在便携睡袋里小憩）",
