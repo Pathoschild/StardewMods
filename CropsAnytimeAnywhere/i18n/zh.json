@@ -15,15 +15,15 @@
     "config.use-fruit-trees-seasonal-sprites.name": "季节性的果树外观",
     "config.use-fruit-trees-seasonal-sprites.desc": "当“随时种植作物”启用时，果树的外观随季节变化（是），或一直保持夏季外观（否）。",
 
-    "config.force-till-dirt.name": "耕种所有土地瓦片",
-    "config.force-till-dirt.desc": "是否所有的土地瓦片都可以用锄头耕种，即使它们正常不能耕种。",
+    "config.force-till-dirt.name": "可锄任意泥土",
+    "config.force-till-dirt.desc": "是否允许用锄头耕作所有泥土地块，即使它们通常不可耕作。",
 
-    "config.force-till-grass.name": "耕种所有草地瓦片",
-    "config.force-till-grass.desc": "是否所有的草地瓦片都可以用锄头耕种，即使它们正常不能耕种。",
+    "config.force-till-grass.name": "可锄任意草地",
+    "config.force-till-grass.desc": "是否允许用锄头耕作所有草地地块，即使它们通常不可耕作。",
 
-    "config.force-till-stone.name": "耕种所有石头瓦片",
-    "config.force-till-stone.desc": "是否所有的石头瓦片都可以用锄头耕种，即使它们正常不能耕种。",
+    "config.force-till-stone.name": "可锄任意石头",
+    "config.force-till-stone.desc": "是否允许用锄头耕作所有石头地块，即使它们通常不可耕作。",
 
-    "config.force-till-other.name": "跟着所有其他瓦片",
-    "config.force-till-other.desc": "是否所有没有标记为土地、草地或石头的瓦片都可以用锄头耕种，即使它们正常不能耕种。"
+    "config.force-till-other.name": "可锄任意其他地块",
+    "config.force-till-other.desc": "是否允许用锄头耕作所有未标记为泥土、草地或石头的地块，即使它们通常不可耕作。"
 }
