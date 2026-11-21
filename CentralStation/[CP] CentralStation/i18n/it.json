@@ -17,24 +17,23 @@
     "destinations.stardew-valley.train": "Stardew Valley - Ferrovia",
 
     // stops from other mods
-    // TODO
-    "destinations.from-bus-locations-mod": "{0} [Bus Locations mod]", // {0} = stop name
-    "destinations.from-train-station-mod": "{0} [Train Station mod]", // {0} = stop name
+    "destinations.from-bus-locations-mod": "{0} [Mod Bus Locations]", // {0} = stop name
+    "destinations.from-train-station-mod": "{0} [Mod Train Station]", // {0} = stop name
 
 
     /*********
     ** Shop dialogues
     *********/
-    "food-court.dialogue.1": "Prendete le vostre larve qui! La maggior parte non è fatta di vere larve.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
-    "food-court.dialogue.2": "Prezzi più bassi garantiti nell'area ristorazione.", // note for translators: this is a joke, since it's the only food shop in the food court.
-    "food-court.dialogue.3": "Abbiamo superato per un soffio l'ultima ispezione sulla sicurezza alimentare!",
+    "food-court.dialogue.1": "Prendete il vostro cibo qui! La maggior parte non è fatta di larve.", // note for translators: this is a pun in English, since grub can mean either 'food' or 'larvae'. If you can't translate the pun, I suggest translating as "Get your food here! Mostly not made from grubs" or similar instead.
+    "food-court.dialogue.2": "Garantiti prezzi più bassi nell'area ristorazione.", // note for translators: this is a joke, since it's the only food shop in the food court.
+    "food-court.dialogue.3": "Abbiamo superato per un soffio l'ultima ispezione!",
     "food-court.dialogue.4": "Oh, un cliente. Cosa vuoi?",
-    "food-court.dialogue.5": "Abbiamo cibo fresco e caldo! Beh, caldo se lo si mette nel microonde.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
+    "food-court.dialogue.5": "Abbiamo cibo fresco e cibo caldo! Beh, caldo se lo si mette nel microonde.", // note for translators: this is a joke which implies the food is neither hot nor fresh.
 
     "gift-shop.dialogue.1": "Vai lontano? Assicurati di avere tutto il necessario!",
     "gift-shop.dialogue.2": "Stai tornando a casa? Prendi qualche souvenir da portare con te!",
     "gift-shop.dialogue.3": "Abbiamo un'ampia collezione di camicie fantasia. (Sono troppe, per favore comprane un paio.)",
-    "gift-shop.dialogue.4": "Abbiamo così tanta roba che non so dove conservarla. Per favore, compra qualcosa!",
+    "gift-shop.dialogue.4": "Abbiamo così tanta roba che non so dove metterla. Per favore, compra qualcosa!",
     "gift-shop.dialogue.5": "Stai andando in un posto freddo? Abbiamo in magazzino alcuni capi di abbigliamento per il freddo!",
     "gift-shop.dialogue.6": "Prova questi paraorecchie. Lo senti? È l'autentico velluto di Villaggio Castello!",
     "gift-shop.dialogue.7": "Si tratta di un legno raro proveniente dall'altra parte del Mar delle Gemme. Molto difficile da trovare.",
