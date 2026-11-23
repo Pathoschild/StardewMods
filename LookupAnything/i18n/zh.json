@@ -529,7 +529,7 @@
     "npc.schedule": "今日日程",
 
     // values
-    "npc.can-romance.married": "你们已结婚！<", // < turns into a heart
+    "npc.can-romance.married": "你们已结婚！♡", // < turns into a heart
     "npc.can-romance.housemate": "你们是室友！",
     "npc.friendship.not-met": "你们尚未见面",
     "npc.friendship.need-bouquet": "需要花束才能进入下一阶段",
