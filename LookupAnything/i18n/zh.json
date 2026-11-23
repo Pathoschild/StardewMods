@@ -1,40 +1,40 @@
-﻿{
+{
     /*************************************************
-    ** Generic translations (通用翻译)
+    ** Generic translations
     *************************************************/
-    // language info (语言信息)
-    "generic.list-separator": "、", // text between listed values (like ", " in "A, B, C") (所列数值之间的文本 (像 ", " in "A, B, C"))
-    "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed, even if there's no space (如果需要,我们可以在字符之后换行文本,即使没有空格)
+    // language info
+    "generic.list-separator": "、", // text between listed values (like "，" in "A，B，C")
+    "generic.line-wrap-on": "、", // characters after which we can line-wrap text if needed，even if there's no space
 
-    // date names (日期名称)
-    "generic.now": "现在",
+    // date names
+    "generic.now": "今天",
     "generic.tomorrow": "明天",
     "generic.yesterday": "昨天",
 
-    // generic values (通用值)
+    // generic values
     "generic.unknown": "未知",
 
-    // generic field values (通用字段值)
+    // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}%几率{{label}}",
-    "generic.percent-ratio": "{{percent}}%（{{max}}中的{{value}}）",
-    "generic.ratio": "总数{{max}}中的{{value}}",
-    "generic.range": "{{min}}到{{max}}",
+    "generic.percent-chance-of": "{{label}}：{{percent}}% 几率",
+    "generic.percent-ratio": "{{percent}}%（{{value}}/{{max}}）",
+    "generic.ratio": "{{value}}/{{max}}",
+    "generic.range": "{{min}} 至 {{max}}",
     "generic.yes": "是",
     "generic.no": "否",
-    "generic.seconds": "{{count}}秒",
-    "generic.minutes": "{{count}}分",
-    "generic.hours": "{{count}}时",
-    "generic.days": "{{count}}天",
-    "generic.in-x-days": "在{{count}}天内",
-    "generic.x-days-ago": "{{count}}天前",
-    "generic.price": "{{price}}金",
-    "generic.price-for-quality": "{{price}}金（{{quality}}）",
-    "generic.price-for-stack": "{{count}}个，总共价值{{price}}金",
+    "generic.seconds": "{{count}} 秒",
+    "generic.minutes": "{{count}} 分钟",
+    "generic.hours": "{{count}} 小时",
+    "generic.days": "{{count}} 天",
+    "generic.in-x-days": "在 {{count}} 天内",
+    "generic.x-days-ago": "{{count}} 天前",
+    "generic.price": "{{price}} 金",
+    "generic.price-for-quality": "{{price}} 金（{{quality}}）",
+    "generic.price-for-stack": "{{count}} 个，总价值 {{price}} 金",
     "generic.show-x-results": "显示 {{count}} 个结果",
 
-    // types (类别)
-    "type.achievement": "Achievement", // TODO
+    // types
+    "type.achievement": "成就",
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
@@ -42,49 +42,49 @@
     "type.player": "玩家",
     "type.tree": "树",
     "type.villager": "村民",
-    "type.other": "其它", // default type (默认类别)
+    "type.other": "其他", // default type
 
-    // item qualities (物品品质)
+    // item qualities
     "quality.normal": "普通",
     "quality.silver": "银星",
     "quality.gold": "金星",
     "quality.iridium": "铱星",
 
-    // item names shown in recipes (食谱中显示物品名称)
-    "item.wild-seeds": "野生种子 (任意)",
+    // item names shown in recipes
+    "item.wild-seeds": "野生种子（任意）",
 
-    // NPC friendship (NPC友谊)
-    "friendship-status.friendly": "友好的",
+    // NPC friendship
+    "friendship-status.friendly": "友好",
     "friendship-status.dating": "交往中",
     "friendship-status.engaged": "已订婚",
     "friendship-status.married": "已结婚",
     "friendship-status.divorced": "已离婚",
     "friendship-status.kicked-out": "关系解除",
 
-    // custom content (shows which mod added an item, NPC, etc) (自定义内容 (显示由哪个模组添加的物品, NPC, 等等))
+    // custom content (shows which mod added an item，NPC，etc)
     "added-by-mod": "由模组添加",
     "added-by-mod.summary": "{{modName}}",
 
     // internal ID
-    "internal-id": "内置ID",
+    "internal-id": "内部 ID",
 
 
     /*************************************************
     ** Lookup UI
     *************************************************/
     /*********
-    ** Data translations (数据翻译)
+    ** Data translations
     *********/
-    // Community Center bundle areas (社区中心献祭包)
+    // Community Center bundle areas
     "bundle-area.pantry": "茶水间",
     "bundle-area.crafts-room": "工艺室",
     "bundle-area.fish-tank": "鱼缸",
     "bundle-area.boiler-room": "锅炉房",
-    "bundle-area.vault": "地下室",
+    "bundle-area.vault": "金库",
     "bundle-area.bulletin-board": "布告栏",
-    "bundle-area.abandoned-joja-mart": "废弃的乔家超市",
+    "bundle-area.abandoned-joja-mart": "废弃的 Joja 超市",
 
-    // shop names (商店名称)
+    // shop names
     "shop.adventure-guild": "探险家公会",
     "shop.clint": "克林特",
     "shop.marnie": "玛妮",
@@ -93,45 +93,45 @@
     "shop.volcano": "火山商店",
     "shop.willy": "威利",
 
-    // recipe types (食谱类别)
+    // recipe types
     "recipe-type.cooking": "烹饪",
     "recipe-type.crafting": "制造",
-    "recipe-type.tailoring": "裁缝",
+    "recipe-type.tailoring": "缝纫",
 
-    // NPC descriptions (NPC描述)
+    // NPC descriptions
     "data.npc.pet.description": "对你忠心耿耿的宠物。",
     "data.npc.horse.description": "对你忠心耿耿的坐骑。",
-    "data.npc.junimo.description": "来自精神世界的森林精灵。人类对它们知之甚少。",
-    "data.npc.trash-bear.description": "清理垃圾的友好精灵。",
+    "data.npc.junimo.description": "来自精灵世界的森林精灵。人类对它们知之甚少。",
+    "data.npc.trash-bear.description": "清理垃圾的友善精灵。",
 
-    // item types (物品类别)
+    // item types
     "data.type.container": "容器",
 
-    // override item text (覆盖物品文本)
+    // override item text
     "data.item.egg-incubator.description": "将蛋孵化成小鸡或小鸭。",
     "data.item.barrel.name": "桶",
     "data.item.barrel.description": "打碎之后可以获得各种物品。",
     "data.item.box.name": "箱",
     "data.item.box.description": "打碎之后可以获得各种物品。",
 
-    // location names (地点名称)
-    "location.beach.east-pier": "海滩（码头东侧）",
+    // location names
+    "location.beach.east-pier": "潮汐池（东侧码头）",
     "location.bugLand": "突变虫穴",
     "location.desert.topPond": "沙漠池塘",
-    "location.farmCave": "农场洞穴",
+    "location.farmCave": "农场山洞",
     "location.farmHouse": "农舍",
-    "location.forest.island-tip": "煤矿森林（河流小岛南端）",
-    "location.forest.lake": "煤矿森林（湖泊）",
+    "location.forest.island-tip": "煤矿森林（大岛南端附近的河流）",
+    "location.forest.lake": "煤矿森林（池塘）",
     "location.forest.river": "煤矿森林（河流）",
     "location.HarveyRoom": "哈维的房间",
     "location.LeoTreeHouse": "树屋",
     "location.SandyHouse": "绿洲",
     "location.SebastianRoom": "塞巴斯蒂安的房间",
     "location.submarine": "夜市潜艇",
-    "location.town.northmost-bridge": "鹈鹕镇（北部桥区）",
+    "location.town.northmost-bridge": "鹈鹕镇（最北端的桥）",
     "location.undergroundMine": "矿井",
     "location.undergroundMine.level": "矿井层数：{{level}}",
-    "location.witchSwamp": "女巫的沼泽",
+    "location.witchSwamp": "巫婆沼泽",
 
     "location.caldera": "姜岛火山口",
     "location.islandEast": "姜岛东部",
@@ -140,345 +140,344 @@
     "location.islandSouthEast": "姜岛东南部",
     "location.islandSouthEastCave": "姜岛东南部洞穴",
     "location.islandWest": "姜岛西部",
-    "location.islandWest.freshwater": "姜岛西部（淡水）",
+    "location.islandWest.freshwater": "姜岛西部（池塘）",
     "location.islandWest.ocean": "姜岛西部（海洋）",
 
-    "location.fish-area": "{{locationName}} ({{areaName}})",
+    "location.fish-area": "{{locationName}}（{{areaName}}）",
     "location.unknown-fish-area": "{{locationName}}（钓鱼区 {{id}}）",
 
 
     /*********
     ** Conditions & context tags (条件 & 上下文标签)
     *********/
-    "conditions-summary": "[条件: {{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
+    "conditions-summary": "[条件：{{conditions}}]", // wraps 'game state query' conditions that often can't be translated. For example: "[conditions: ITEM_ID Input (O)128]".
 
-    "condition-or-context-tag.negate": "非{{value}}",
+    "condition-or-context-tag.negate": "并非{{value}}",
 
-    "condition.day-of-month": "每季指定日期 ({{days}})",
+    "condition.day-of-month": "在特定日期（{{days}}）",
     "condition.day-of-month.even": "偶数日",
     "condition.day-of-month.odd": "奇数日",
 
     "condition.item-type.input": "输入物品",
-    "condition.item-type.target": "产物",
+    "condition.item-type.target": "目标物品",
 
-    "condition.raw-context-tag": "标签 \"{{tag}}\"",
-    "condition.raw-condition": "要求 \"{{tag}}\"",
+    "condition.raw-context-tag": "‘{{tag}}’",
+    "condition.raw-condition": "{{tag}}",
 
-    "condition.item-context-tag": "{{item}}有{{tags}}标签",
-    "condition.item-context-tags": "{{item}}有{{tags}}标签",
-    "condition.item-context-tag.value": "'{{tag}}'", // the format of each context tag in the list (each context tag isn't translated) (列表中每个上下文标签的格式 (每个上下文标签没有翻译))
+    "condition.item-context-tag": "{{item}}带有标签{{tags}}",
+    "condition.item-context-tags": "{{item}}带有标签{{tags}}",
+    "condition.item-context-tag.value": "‘{{tag}}’", // the format of each context tag in the list (each context tag isn't translated)
 
-    "condition.item-edibility.edible": "{{item}}是可食用的",
-    "condition.item-edibility.min": "{{item}}的可食用性大于等于{{min}}",
-    "condition.item-edibility.range": "{{item}}的可食用性为{{min}}到{{max}}",
+    "condition.item-edibility.edible": "{{item}}可食用",
+    "condition.item-edibility.min": "{{item}}的可食用性不低于 {{min}}",
+    "condition.item-edibility.range": "{{item}}的可食用性介于 {{min}} 至 {{max}} 之间",
 
     "context-tag.bone": "骨头（任意）",
     "context-tag.egg": "鸡蛋（任意）",
     "context-tag.large-egg": "大鸡蛋（任意）",
-    "context-tag.preserved-item": "由{{name}}生产",
+    "context-tag.preserved-item": "{{name}}制品",
 
 
     /*********
     ** Achievement lookups
     *********/
-    // TODO
     // labels
-    "achievement.unlocked": "Unlocked",
-    "achievement.hat-shop": "Hat shop",
+    "achievement.unlocked": "是否解锁",
+    "achievement.hat-shop": "帽子店",
 
     // values
-    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
-    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+    "achievement.hat-shop.hats-added": "解锁该成就后，帽子店将新增以下帽子：",
+    "achievement.hat-shop.no-hats-added": "该成就不会解锁任何帽子。",
 
 
     /*********
-    ** Animal lookups (查询动物)
+    ** Animal lookups
     *********/
-    // labels (标签)
-    "animal.love": "友好度",
+    // labels
+    "animal.love": "友谊值",
     "animal.happiness": "心情值",
-    "animal.mood": "今天心情",
+    "animal.mood": "今日心情",
     "animal.complaints": "问题",
-    "animal.produce-ready": "动物制品",
+    "animal.produce-ready": "产物已就绪",
     "animal.growth": "生长",
-    "animal.sells-for": "出售",
-    "animal.golden-cracker": "金色动物饼干", // also used for fish ponds
+    "animal.sells-for": "售价",
+    "animal.golden-cracker": "金色动物饼干", // also used for fish ponds 
 
-    // values (数值)
+    // values
     "animal.complaints.hungry": "昨天没有喂食",
     "animal.complaints.left-out": "昨晚被关在外面",
     "animal.complaints.new-home": "刚搬到新家",
     "animal.complaints.no-heater": "冬天没有暖气",
-    "animal.complaints.not-petted": "今天还没有被爱抚",
+    "animal.complaints.not-petted": "今天尚未被抚摸",
     "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
-    "animal.golden-cracker.none": "未使用。使用可使其产出双倍产品。",
-    "animal.golden-cracker.applied": "已使用。将产出双倍产品。",
+    "animal.golden-cracker.none": "未使用。使用后产出翻倍。",
+    "animal.golden-cracker.applied": "已使用。产出翻倍。",
 
 
     /*********
-    ** Building > generic lookups (建筑 > 常规查询)
+    ** Building > generic lookups
     *********/
-    // labels (标签)
+    // labels
     "building.animals": "动物",
-    "building.construction": "施工",
-    "building.construction-costs": "建筑材料",
+    "building.construction": "建筑",
+    "building.construction-costs": "建筑所需资源",
     "building.feed-trough": "喂食槽",
     "building.horse": "马",
-    "building.horse-location": "马位置",
-    "building.owner": "屋主",
+    "building.horse-location": "马的位置",
+    "building.owner": "所有者",
     "building.slimes": "史莱姆",
     "building.stored-hay": "存放干草",
     "building.upgrades": "升级",
     "building.water-trough": "水槽",
 
-    // values (数值)
-    "building.animals.summary": "已容纳{{count}}只动物，最大可容纳{{max}}只动物",
-    "building.construction.summary": "{{date}} 完成",
+    // values
+    "building.animals.summary": "已容纳 {{count}} 只（最多 {{max}} 只）",
+    "building.construction.summary": "将于{{date}}完成",
     "building.feed-trough.automated": "自动喂食",
-    "building.feed-trough.summary": "{{filled}}个喂食槽已填充，最大可填充喂食槽为{{max}}个",
-    "building.horse-location.summary": "{{location}}（{{x}}, {{y}}）",
-    "building.junimo-harvesting-enabled": "自动收获已启用",
-    "building.owner.none": "没有屋主",
-    "building.output-processing": "产品处理中",
-    "building.output-ready": "产品完成",
-    "building.slimes.summary": "已容纳{{count}}只史莱姆，最大可容纳{{max}}只史莱姆",
-    "building.stored-hay.summary": "该地点已存放 {{hayCount}}/{{maxHayInLocation}} 个干草（该建筑最大容量：{{maxHayInBuilding}}）",
-    "building.upgrades.barn.0": "可容纳动物量上升至 4 只动物，解锁牛",
-    "building.upgrades.barn.1": "可容纳动物量上升至 8 只动物，解锁繁殖和山羊",
-    "building.upgrades.barn.2": "可容纳动物量上升至 12 只动物，解锁自动喂食、猪和绵羊",
+    "building.feed-trough.summary": "已填充 {{filled}}/{{max}} 个",
+    "building.horse-location.summary": "{{location}}（{{x}}，{{y}}）",
+    "building.junimo-harvesting-enabled": "自动收获是否启用",
+    "building.owner.none": "无",
+    "building.output-processing": "正在加工",
+    "building.output-ready": "加工完成",
+    "building.slimes.summary": "已容纳 {{count}} 只（最多 {{max}} 只）",
+    "building.stored-hay.summary": "此处已存放 {{hayCount}}/{{maxHayInLocation}} 个（建筑最大容量：{{maxHayInBuilding}}）",
+    "building.upgrades.barn.0": "动物容量提升至 4 只，解锁牛",
+    "building.upgrades.barn.1": "动物容量提升至 8 只，解锁繁殖和山羊",
+    "building.upgrades.barn.2": "动物容量提升至 12 只，解锁自动喂食、猪和绵羊",
     "building.upgrades.cabin.0": "初始小屋",
-    "building.upgrades.cabin.1": "添加厨房,解锁婚姻",
-    "building.upgrades.cabin.2": "解锁孩童",
-    "building.upgrades.coop.0": "可容纳动物量上升至 4 只动物，解锁鸡",
-    "building.upgrades.coop.1": "可容纳动物量上升至 8 只动物，解锁孵化器、恐龙和鸭",
-    "building.upgrades.coop.2": "可容纳动物量上升至 12 只动物，解锁自动喂食和兔子",
-    "building.water-trough.summary": "{{filled}}个水槽已填充，最大可填充{{max}}个水槽",
+    "building.upgrades.cabin.1": "添加厨房，可结婚",
+    "building.upgrades.cabin.2": "可养育孩子",
+    "building.upgrades.coop.0": "动物容量提升至 4 只，解锁鸡",
+    "building.upgrades.coop.1": "动物容量提升至 8 只，解锁孵化器、恐龙和鸭",
+    "building.upgrades.coop.2": "动物容量提升至 12 只，解锁自动喂食和兔子",
+    "building.water-trough.summary": "已填充 {{filled}}/{{max}} 个",
 
 
     /*********
-    ** Building > fish pond lookups (建筑 > 鱼塘查询)
+    ** Building > fish pond lookups
     *********/
-    // labels (标签)
+    // labels
     "building.fish-pond.population": "鱼群数量",
-    "building.fish-pond.drops": "鱼塘产出",
-    "building.fish-pond.quests": "鱼塘扩充任务",
+    "building.fish-pond.drops": "鱼塘产物",
+    "building.fish-pond.quests": "鱼塘任务",
 
-    // values (数值)
-    "building.fish-pond.population.empty": "往池塘里加一条鱼以开始养殖。",
-    "building.fish-pond.population.next-spawn": "{{relativeDate}}会繁殖新鱼",
-    "building.fish-pond.drops.preface": "当满足以下列表条件时每天有{{chance}}%几率收获水产品：",
-    "building.fish-pond.drops.min-fish": "当有{{count}}条鱼时：",
-    "building.fish-pond.quests.done": "扩充到{{count}}条鱼",
-    "building.fish-pond.quests.incomplete-one": "扩充到{{count}}条鱼：将需要{{itemName}}",
-    "building.fish-pond.quests.incomplete-random": "扩充到{{count}}条鱼：将需要{{itemList}}其中之一",
-    "building.fish-pond.quests.available": "{{relativeDate}}可以获取任务",
+    // values
+    "building.fish-pond.population.empty": "放入一条鱼即可开始养殖。",
+    "building.fish-pond.population.next-spawn": "{{relativeDate}}会繁殖出新鱼",
+    "building.fish-pond.drops.preface": "满足以下任一条件时，每天有 {{chance}}% 的几率产出第一个符合条件的物品：",
+    "building.fish-pond.drops.min-fish": "当有 {{count}} 条鱼时：",
+    "building.fish-pond.quests.done": "扩容到 {{count}} 条鱼",
+    "building.fish-pond.quests.incomplete-one": "扩容到 {{count}} 条鱼：需要{{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "扩容到 {{count}} 条鱼：需要{{itemList}}中的任意一种",
+    "building.fish-pond.quests.available": "{{relativeDate}}可接取",
 
 
     /*********
-    ** Bush lookups (丛林查询)
+    ** Bush lookups
     *********/
-    // labels (标签)
+    // labels
     "bush.name.berry": "莓类灌木丛",
     "bush.name.plain": "普通灌木丛",
-    "bush.name.tea": "茶树丛",
-    "bush.description.berry": "生长美洲大树莓和黑莓的灌木丛。",
-    "bush.description.plain": "不生长任何东西的普通灌木。",
-    "bush.description.Tea": "产出茶叶的茶树丛",
+    "bush.name.tea": "茶树",
+    "bush.description.berry": "结出美洲大树莓和黑莓的灌木丛。",
+    "bush.description.plain": "不结任何果实的普通灌木。",
+    "bush.description.Tea": "产出茶叶的茶树。",
     "bush.date-planted": "栽种日期",
     "bush.growth": "成熟日期",
     "bush.next-harvest": "下次收获日期",
 
-    // values (数值)
-    "bush.growth.summary": "将于 {{date}} 成熟",
-    "bush.schedule.berry": "春季15-18日有20%几率生长美洲大树莓，秋季8-11日有20%几率生长黑莓。",
-    "bush.schedule.tea": "每个季节22日开始茶叶可以收获（冬季除外，在温室里种植则四季可收）。",
+    // values
+    "bush.growth.summary": "将于{{date}}成熟",
+    "bush.schedule.berry": "春季 15 日至 18 日有 20% 几率结出美洲大树莓，秋季 8 日至 11 日有 20% 几率结出黑莓。",
+    "bush.schedule.tea": "每个季节的 22 日起可以收获茶叶（冬季除外，在温室中种植则四季可收）。",
 
 
     /*********
-    ** Fruit tree lookups (果树查询)
+    ** Fruit tree lookups
     *********/
-    // labels (标签)
+    // labels
     "fruit-tree.complaints": "问题",
     "fruit-tree.name": "{{fruitName}}树",
     "fruit-tree.growth": "生长",
     "fruit-tree.next-fruit": "下次结果",
     "fruit-tree.season": "季节",
-    "fruit-tree.quality": "质量",
+    "fruit-tree.quality": "品质",
 
-    // values (数值)
-    "fruit-tree.complaints.adjacent-objects": "因相邻的物体无法生长",
-    "fruit-tree.growth.summary": "将于 {{date}} 成熟",
-    "fruit-tree.next-fruit.max-fruit": "收获这批水果之前无法再次结果",
+    // values
+    "fruit-tree.complaints.adjacent-objects": "因周围有物体阻挡而无法生长",
+    "fruit-tree.growth.summary": "将于{{date}}成熟",
+    "fruit-tree.next-fruit.max-fruit": "收获当前果实之前不会再次结果",
     "fruit-tree.next-fruit.out-of-season": "过季",
-    "fruit-tree.next-fruit.struck-by-lightning": "被闪电击中！将在 {{count}} 天后复原。",
-    "fruit-tree.next-fruit.too-young": "树龄太小无法结果",
-    "fruit-tree.quality.now": "目前{{quality}}",
-    "fruit-tree.quality.on-date": "将于{{date}}获得{{quality}}",
-    "fruit-tree.quality.on-date-next-year": "将于第二年的{{date}}获得{{quality}}",
-    "fruit-tree.season.summary": "{{season}}（在温室内全年结果）",
+    "fruit-tree.next-fruit.struck-by-lightning": "被闪电击中！将在 {{count}} 天后恢复。",
+    "fruit-tree.next-fruit.too-young": "树龄太小，无法结果",
+    "fruit-tree.quality.now": "当前为{{quality}}",
+    "fruit-tree.quality.on-date": "将于{{date}}达到{{quality}}",
+    "fruit-tree.quality.on-date-next-year": "将于{{date}}达到{{quality}}",
+    "fruit-tree.season.summary": "{{season}}（温室内全年可结果）",
 
 
     /*********
-    ** Crop lookups (作物查询)
+    ** Crop lookups
     *********/
-    // labels (标签)
+    // labels
     "crop.summary": "作物",
-    "crop.harvest": "收割",
-    "crop.fertilized": "施肥",
-    "crop.watered": "浇水",
+    "crop.harvest": "收获",
+    "crop.fertilized": "已施肥",
+    "crop.watered": "是否已浇水",
 
-    // values (数值)
+    // values
     "crop.summary.dead": "作物死亡",
-    "crop.summary.drops-X": "收获{{count}}份",
-    "crop.summary.drops-X-to-Y": "收获{{min}}至{{max}}份（{{percent}}%几率收获额外作物）",
-    "crop.summary.harvest-once": "{{daysToFirstHarvest}}天后收获",
-    "crop.summary.harvest-multi": "{{daysToFirstHarvest}}天后收获，之后每隔{{daysToNextHarvests}}天收获一次",
-    "crop.summary.farming-xp": "每次收获给予+{{amount}}耕种经验",
-    "crop.summary.foraging-xp": "每次收获给予+{{amount}}采集经验",
+    "crop.summary.drops-X": "收获 {{count}} 份",
+    "crop.summary.drops-X-to-Y": "收获 {{min}} 至 {{max}} 份（{{percent}}% 几率额外收获作物）",
+    "crop.summary.harvest-once": "{{daysToFirstHarvest}} 天后收获",
+    "crop.summary.harvest-multi": "{{daysToFirstHarvest}} 天后收获，之后每隔 {{daysToNextHarvests}} 天收获一次",
+    "crop.summary.farming-xp": "每次收获获得 +{{amount}} 点耕种经验",
+    "crop.summary.foraging-xp": "每次收获获得 +{{amount}} 点采集经验",
     "crop.summary.seasons": "在{{seasons}}生长",
-    "crop.summary.sells-for": "以{{price}}出售",
-    "crop.harvest.too-late": "下次收获超出本季（下次收获将在{{date}}）",
+    "crop.summary.sells-for": "以 {{price}}出售",
+    "crop.harvest.too-late": "本季已来不及再次收获（下次收获将在{{date}}）",
 
 
     /*********
-    ** Item > generic lookups (物品 > 常规查询)
+    ** Item > generic lookups
     *********/
-    // labels (标签)
+    // labels
     "item.contents": "内容",
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
-    "item.neutral-about-this": "无感",
+    "item.neutral-about-this": "一般",
     "item.dislikes-this": "不喜欢",
     "item.hates-this": "讨厌",
     "item.needed-for": "用于",
     "item.flavor": "风味", // links to the flavor item (e.g. 'Blueberry' for Blueberry Wine)
     "item.number-owned": "拥有",
     "item.number-cooked": "已烹饪",
-    "item.number-crafted": "已打造",
+    "item.number-crafted": "已制造",
     "item.recipes": "配方",
     "item.see-also": "另请参阅",
     "item.sells-for": "售价为",
     "item.sells-to": "卖给",
-    "item.can-be-dyed": "可以染色",
-    "item.produces-dye": "产生染料",
+    "item.can-be-dyed": "是否可染色",
+    "item.produces-dye": "产出染料",
 
-    // values (数值)
+    // values
     "item.contents.placed": "已放置{{name}}",
-    "item.contents.ready": "目前{{name}}",
-    "item.contents.partial": "{{name}}在{{time}}后完成",
-    "item.undiscovered-gift-taste": "{{count}} 位没揭露的村民",
-    "item.undiscovered-gift-taste-appended": ", 和 {{count}} 位没揭露的村民",
+    "item.contents.ready": "{{name}}已就绪",
+    "item.contents.partial": "{{name}}将在 {{time}}后完成",
+    "item.undiscovered-gift-taste": "{{count}} 位尚未得知喜好的村民",
+    "item.undiscovered-gift-taste-appended": "，以及 {{count}} 位尚未得知喜好的村民",
     "item.needed-for.community-center": "社区中心（{{bundles}}）",
     "item.needed-for.full-shipment": "全部货物成就（出货一个）",
-    "item.needed-for.monoculture": "单一栽培成就（再出货{{count}}个）",
-    "item.needed-for.polyculture": "混合栽培成就（再出货{{count}}个）",
+    "item.needed-for.monoculture": "单一栽培成就（再出货 {{count}} 个）",
+    "item.needed-for.polyculture": "混合栽培成就（再出货 {{count}} 个）",
     "item.needed-for.full-collection": "全套收集成就（向博物馆捐赠一个）",
-    "item.needed-for.gourmet-chef": "美食大厨成就（烹饪{{recipes}}）",
-    "item.needed-for.craft-master": "制造大师成就（制造{{recipes}}）",
+    "item.needed-for.gourmet-chef": "美食大厨成就（需烹饪：{{recipes}}）",
+    "item.needed-for.craft-master": "制造大师成就（需制造：{{recipes}}）",
     "item.needed-for.quests": "当前任务（{{quests}}）",
     "item.needed-for.trash-bear": "垃圾清理熊（交付一个）",
-    "item.unknown-recipes": "{{count}}个未知配方",
+    "item.unknown-recipes": "{{count}} 个未知配方",
     "item.sells-to.shipping-box": "出货箱",
-    "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
+    "item.recipes-for-ingredient.entry": "{{name}}（需要 {{count}} 个）",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in (例如. 宝石复制机放入的物品和产出的物品一致)
-    "item.recipes-for-machine.too-complex": "一些生产规则因太复杂而无法显示",
-    "item.number-owned.summary": "你目前拥有的总数为{{count}}",
-    "item.number-owned-flavored.summary": "你目前拥有{{count}}个{{name}}（总共拥有{{baseCount}}个{{baseName}}）", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these" (例如，"你目前拥有5个鲟鱼籽（总共拥有20个鱼籽）")
-    "item.number-crafted.summary": "你已制造{{count}}个此物",
-    "item.internal-id.summary": "{{itemId}}（全局唯一'限定性ID'：{{qualifiedItemId}}）",
+    "item.recipes-for-machine.same-as-input": "[与输入物品相同]", // e.g. crystalarium produces same item that was put in
+    "item.recipes-for-machine.too-complex": "部分生产规则过于复杂，无法显示",
+    "item.number-owned.summary": "总共 {{count}} 个",
+    "item.number-owned-flavored.summary": "{{count}} 个{{name}}（同类共 {{baseCount}} 个{{baseName}}）", // e.g. "you own 5 (Sturgeon Roe) or 20 (Roe) of these"
+    "item.number-crafted.summary": "{{count}} 个",
+    "item.internal-id.summary": "{{itemId}}（全局唯一“限定性物品 ID”：{{qualifiedItemId}}）",
 
 
     /*********
-    ** Item > cask lookups (物品 > 陈酿木桶查询)
+    ** Item > cask lookups
     *********/
-    // labels (标签)
+    // labels
     "item.cask-contents": "内容",
     "item.cask-schedule": "陈酿中",
 
-    // values (数值)
-    "item.cask-schedule.now": "目前{{quality}}",
-    "item.cask-schedule.now-partial": "目前{{quality}}（用镐停止陈酿）",
-    "item.cask-schedule.tomorrow": "明天{{quality}}",
-    "item.cask-schedule.in-x-days": "将在{{count}}天（{{date}}）后提升到{{quality}}",
+    // values
+    "item.cask-schedule.now": "当前为{{quality}}品质",
+    "item.cask-schedule.now-partial": "当前为{{quality}}品质（用镐敲击可停止陈酿）",
+    "item.cask-schedule.tomorrow": "明天为{{quality}}品质",
+    "item.cask-schedule.in-x-days": "将在 {{count}} 天后（{{date}}）提升为{{quality}}品质",
 
 
     /*********
-    ** Item > crab pot lookups (物品 > 蟹笼查询)
+    ** Item > crab pot lookups
     *********/
-    // labels (标签)
+    // labels
     "item.crabpot-bait": "鱼饵",
     "item.crabpot-bait-needed": "需要鱼饵！",
-    "item.crabpot-bait-not-needed": "诱饵大师职业不需要鱼饵",
+    "item.crabpot-bait-not-needed": "“诱饵大师”职业无需鱼饵",
 
 
     /*********
-    ** Item > fence lookups (物品 > 围栏查询)
+    ** Item > fence lookups
     *********/
-    // labels (标签)
-    "item.fence-health": "耐久",
+    // labels
+    "item.fence-health": "耐久度",
 
-    // values (数值)
-    "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
-    "item.fence-health.summary": "{{percent}}%（大约还剩{{count}}天）",
+    // values
+    "item.fence-health.gold-clock": "受黄金时钟保护，不会腐坏",
+    "item.fence-health.summary": "{{percent}}%（大约还剩 {{count}} 天）",
 
 
     /*********
-    ** Item > fish lookups (物品 > 鱼类查询)
+    ** Item > fish lookups
     *********/
-    // labels (标签)
+    // labels
     "item.fish-pond-drops": "鱼塘产物",
-    "item.fish-spawn-rules": "捕获条件",
+    "item.fish-spawn-rules": "生成条件",
 
-    // values (数值)
+    // values
     "item.fish-spawn-rules.min-fishing-level": "最低钓鱼等级：{{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "尚未被抓住（只能被抓住一次）",
+    "item.fish-spawn-rules.not-caught-yet": "尚未捕获（只能捕获一次）",
     "item.fish-spawn-rules.extended-family-quest-active": "“大家族”任务正在进行",
     "item.fish-spawn-rules.locations": "地点：{{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "地点：",
-    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}：{{locations}}",
     "item.fish-spawn-rules.season-any": "任何季节",
     "item.fish-spawn-rules.season-list": "季节：{{seasons}}",
-    "item.fish-spawn-rules.time": "一天中出现时间： {{times}}",
+    "item.fish-spawn-rules.time": "出现时间：{{times}}",
     "item.fish-spawn-rules.weather-sunny": "天气：晴天",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
-    "item.uncaught-fish": "{{count}}只尚未捕获过的鱼",
+    "item.uncaught-fish": "{{count}} 种尚未捕获的鱼",
 
 
     /*********
-    ** Item > melee weapon lookups (物品 > 武器查询)
+    ** Item > melee weapon lookups
     *********/
-    // labels (标签)
+    // labels
     "item.melee-weapon.accuracy": "精准度",
     "item.melee-weapon.critical-chance": "暴击率",
-    "item.melee-weapon.critical-damage": "暴击伤害（力量）",
+    "item.melee-weapon.critical-damage": "暴击伤害",
     "item.melee-weapon.damage": "伤害",
     "item.melee-weapon.defense": "防御",
-    "item.melee-weapon.knockback": "击退（重量）",
+    "item.melee-weapon.knockback": "击退",
     "item.melee-weapon.reach": "范围",
-    "item.melee-weapon.speed": "攻速（速度）",
+    "item.melee-weapon.speed": "攻速",
 
-    // values (数值)
+    // values
     "item.melee-weapon.critical-damage.label": "{{multiplier}} 倍正常伤害（未计算玩家加成）",
     "item.melee-weapon.defense.label": "{{amount}}（装备时）",
     "item.melee-weapon.knockback.label": "{{amount}}（{{multiplier}} 倍正常距离）",
     "item.melee-weapon.reach.label": "{{amount}} 像素",
-    "item.melee-weapon.speed.shown-vs-actual": "显示: {{shownSpeed}}{{lineBreak}} 实际: {{actualSpeed}}",
+    "item.melee-weapon.speed.shown-vs-actual": "显示：{{shownSpeed}}{{lineBreak}}实际：{{actualSpeed}}",
     "item.melee-weapon.speed.summary": "{{speed}}（攻击动画 {{milliseconds}} 毫秒，未计算玩家加成）",
 
 
     /*********
-    ** Item > movie lookups (物品 > 电影查询)
+    ** Item > movie lookups
     *********/
-    // labels (标签)
+    // labels
     "item.movie-snack-preference": "喜好",
     "item.movie-ticket.movie-this-week": "本周电影",
     "item.movie-ticket.loves-movie": "最爱电影",
     "item.movie-ticket.likes-movie": "喜欢电影",
     "item.movie-ticket.dislikes-movie": "不喜欢电影",
-    "item.movie-ticket.rejects-movie": "拒绝电影",
+    "item.movie-ticket.rejects-movie": "不愿观看",
 
-    // values (数值)
+    // values
     "item.movie-snack-preference.love": "{{name}}最爱这个",
     "item.movie-snack-preference.like": "{{name}}喜欢这个",
     "item.movie-snack-preference.dislike": "{{name}}不喜欢这个",
@@ -486,165 +485,165 @@
 
 
     /*********
-    ** Item > music block lookups (物品 > 长笛块查询)
+    ** Item > music block lookups
     *********/
-    // labels (标签)
+    // labels
     "item.music-block.pitch": "音调",
     "item.music-block.drum-type": "鼓点类型",
 
 
     /*********
-    ** Monster lookups (怪物查询)
+    ** Monster lookups
     *********/
-    // labels (标签)
+    // labels
     "monster.invincible": "无敌",
     "monster.health": "生命值",
     "monster.drops": "掉落",
-    "monster.experience": "经验",
+    "monster.experience": "经验值",
     "monster.defense": "防御",
     "monster.attack": "攻击",
     "monster.adventure-guild": "探险家公会",
 
-    // values (数值)
+    // values
     "monster.drops.nothing": "无",
-    "monster.adventure-guild.eradication-goal": "击杀目标：{{name}}（要求击杀{{requiredCount}}个，已击杀{{count}}个）",
+    "monster.adventure-guild.eradication-goal": "击杀目标：{{name}}（要求击杀 {{requiredCount}} 个，已击杀 {{count}} 个）",
 
 
     /*********
-    ** NPC > generic lookups (NPC > 常规查询)
+    ** NPC > generic lookups
     *********/
-    // labels (标签)
+    // labels
     "npc.birthday": "生日",
-    "npc.can-romance": "可结婚",
+    "npc.can-romance": "可恋爱",
     "npc.friendship": "关系",
-    "npc.talked-today": "今天已交谈",
-    "npc.gifted-today": "今天已送礼",
-    "npc.gifted-this-week": "本周送礼",
-    "npc.kissed-today": "今日已接吻",
-    "npc.hugged-today": "今日已拥抱",
+    "npc.talked-today": "今日是否已交谈",
+    "npc.gifted-today": "今日是否已送礼",
+    "npc.gifted-this-week": "本周送礼次数",
+    "npc.kissed-today": "今日是否已接吻",
+    "npc.hugged-today": "今日是否已拥抱",
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
-    "npc.neutral-gifts": "无感",
+    "npc.neutral-gifts": "一般",
     "npc.dislikes-gifts": "不喜欢",
     "npc.hates-gifts": "讨厌",
-    "npc.schedule": "今天的日程",
+    "npc.schedule": "今日日程",
 
-    // values (数值)
-    "npc.can-romance.married": "你们已结婚! ♡", // < turns into a heart (< 变成了一颗心)
-    "npc.can-romance.housemate": "你们是室友!",
-    "npc.friendship.not-met": "你们还没有见过面",
-    "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
-    "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
-    "npc.undiscovered-gift-taste": "{{count}} 个未揭露的物品",
+    // values
+    "npc.can-romance.married": "你们已结婚！♡", // < turns into a heart
+    "npc.can-romance.housemate": "你们是室友！",
+    "npc.friendship.not-met": "你们尚未见面",
+    "npc.friendship.need-bouquet": "需要花束才能进入下一阶段",
+    "npc.friendship.need-points": "下一等级需要 {{count}} 点好感度",
+    "npc.undiscovered-gift-taste": "{{count}} 个尚未得知喜好的物品",
     "npc.unowned-gift-taste": "{{count}} 个未拥有的物品",
-    "npc.schedule.current-position": "当前位于{{locationName}} ({{x}}, {{y}})。",
-    "npc.schedule.no-entries": "未加载日程.",
-    "npc.schedule.not-following-schedule": "目前没有日程。通常意味着NPC在做着某项特别活动（比如在看电影）。",
-    "npc.schedule.entry": "{{time}}: 步行至{{locationName}} ({{x}}, {{y}})。",
-    "npc.schedule.farmhand.unknown-position": "当前位于一个房主可见的未知位置。",
-    "npc.schedule.farmhand.unknown-schedule": "日程无法显示（在多人游戏中，NPC的日程由房主管理）",
+    "npc.schedule.current-position": "当前位置：{{locationName}}（{{x}}，{{y}}）。",
+    "npc.schedule.no-entries": "尚未加载日程。",
+    "npc.schedule.not-following-schedule": "当前没有日程。这通常意味着 NPC 正在进行特殊活动（例如在看电影）。",
+    "npc.schedule.entry": "{{time}} 前往{{locationName}}（{{x}}，{{y}}）。",
+    "npc.schedule.farmhand.unknown-position": "当前位于房主端的未知位置。",
+    "npc.schedule.farmhand.unknown-schedule": "无法显示日程（多人游戏中，NPC 的日程由房主管理）",
 
 
     /*********
-    ** NPC > child lookups (NPC > 孩子查询)
+    ** NPC > child lookups
     *********/
-    // labels (标签)
+    // labels
     "npc.child.age": "年龄",
 
-    // values (数值)
-    "npc.child.age.description-partial": "目前位于{{label}}，还有（{{count}}天进入{{nextLabel}}）",
+    // values
+    "npc.child.age.description-partial": "目前处于{{label}}（还有 {{count}} 天进入{{nextLabel}}）",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "新生儿期",
     "npc.child.age.baby": "婴儿期",
-    "npc.child.age.crawler": "爬走期",
+    "npc.child.age.crawler": "爬行期",
     "npc.child.age.toddler": "幼童期",
 
 
     /*********
-    ** Pet lookups (宠物查询)
+    ** Pet lookups
     *********/
-    // labels (标签)
-    "pet.love": "友好度",
-    "pet.petted-today": "今日已抚摸",
+    // labels
+    "pet.love": "好感度",
+    "pet.petted-today": "今日是否已抚摸",
     "pet.last-petted": "最后一次抚摸",
-    "pet.water-bowl": "是否给水碗添水",
+    "pet.water-bowl": "水碗",
 
-    // values (数值)
-    "pet.last-petted.yes": "是（+12友好度）",
-    "pet.last-petted.days-ago": "{{days}}天前",
-    "pet.last-petted.never": "还没有抚摸",
-    "pet.water-bowl.empty": "水碗是空的",
-    "pet.water-bowl.filled": "水碗加满水了（+6友好度）",
+    // values
+    "pet.last-petted.yes": "是（+12 好感度）",
+    "pet.last-petted.days-ago": "{{days}} 天前",
+    "pet.last-petted.never": "从未",
+    "pet.water-bowl.empty": "为空",
+    "pet.water-bowl.filled": "已加满（+6 好感度）",
 
 
     /*********
-    ** Player lookups (玩家查询)
+    ** Player lookups
     *********/
-    // labels (标签)
-    "player.farm-name": "农场名字",
+    // labels
+    "player.farm-name": "农场名称",
     "player.farm-map": "农场地图",
-    "player.favorite-thing": "兴趣",
+    "player.favorite-thing": "最喜欢的东西",
     "player.gender": "性别",
     "player.housemate": "室友",
     "player.spouse": "配偶",
-    "player.watched-movie-this-week": "本周看过的电影",
+    "player.watched-movie-this-week": "本周是否看过电影",
     "player.combat-skill": "战斗",
     "player.farming-skill": "耕种",
     "player.fishing-skill": "钓鱼",
     "player.foraging-skill": "采集",
     "player.mining-skill": "采矿",
     "player.luck": "运气",
-    "player.save-format": "保存格式",
+    "player.save-format": "存档格式",
 
-    // values (数值)
+    // values
     "player.farm-map.custom": "自定义",
     "player.gender.male": "男",
     "player.gender.female": "女",
-    "player.luck.summary": "{{percent}}%随机事件概率",
-    "player.skill.progress": "{{level}}级，（下一等级需要{{expNeeded}}经验）",
-    "player.skill.progress-last": "{{level}}级",
+    "player.luck.summary": "对随机判定的影响 {{percent}}%",
+    "player.skill.progress": "{{level}} 级（下一级还需 {{expNeeded}} 经验）",
+    "player.skill.progress-last": "{{level}} 级",
 
 
     /*********
-    ** Puzzles (拼图)
+    ** Puzzles
     *********/
-    // labels (标签)
+    // labels
     "puzzle.solution": "解决方法",
 
-    // values (数值)
+    // values
     "puzzle.solution.solved": "谜题已解决！",
-    "puzzle.solution.hidden": "谜题解决方法根据您的设置隐藏",
+    "puzzle.solution.hidden": "根据你的设置，谜题解决方法已隐藏。",
 
 
     /*********
-    ** Puzzles > Fern Islands crystal cave (拼图 > 姜岛水晶洞穴谜题)
+    ** Puzzles > Fern Islands crystal cave
     *********/
-    // labels (标签)
+    // labels
     "puzzle.island-crystal-cave.title": "水晶洞穴谜题",
     "puzzle.island-crystal-cave.crystal-id": "水晶 ID",
 
-    // values (数值)
-    "puzzle.island-crystal-cave.solution.not-activated": "激活雕像以开始谜题。",
-    "puzzle.island-crystal-cave.solution.waiting": "等待游戏生成序列…",
-    "puzzle.island-crystal-cave.solution.activated": "重复激活水晶的序列：",
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "激活雕像即可开始谜题。",
+    "puzzle.island-crystal-cave.solution.waiting": "正在等待游戏生成序列……",
+    "puzzle.island-crystal-cave.solution.activated": "按以下序列重复激活水晶：",
 
 
     /*********
-    ** Puzzles > Fern Islands mermaid puzzle (拼图 > 姜岛美人鱼谜题)
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
-    // labels (标签)
-    "puzzle.island-mermaid.title": "岛屿美人鱼谜题",
-    "puzzle.island-mermaid.solution.intro": "使用长笛块播放夜市的美人鱼歌曲。音高值（你可以查找长笛块以查看其音调）：",
+    // labels
+    "puzzle.island-mermaid.title": "姜岛美人鱼谜题",
+    "puzzle.island-mermaid.solution.intro": "使用长笛块播放夜市的美人鱼歌曲。音高（可查询长笛块查看其音调）：",
 
 
     /*********
-    ** Puzzles > Fern Islands shrine puzzle (拼图 > 姜岛神庙谜题)
+    ** Puzzles > Fern Islands shrine puzzle
     *********/
-    // labels (标签)
-    "puzzle.island-shrine.title": "岛屿神庙谜题",
+    // labels
+    "puzzle.island-shrine.title": "姜岛神庙谜题",
 
-    // values (数值)
-    "puzzle.island-shrine.solution": "对于每个基座，下雨时将宝石鸟掉落的物品放在相应的岛上位置。每个存档都会随机分配物品。",
+    // values
+    "puzzle.island-shrine.solution": "下雨时，将宝石鸟掉落的物品放在其出现方位对应的基座上。每个存档的物品分配都是随机的。",
     "puzzle.island-shrine.solution.east": "东部：{{item}}",
     "puzzle.island-shrine.solution.north": "北部：{{item}}",
     "puzzle.island-shrine.solution.south": "南部：{{item}}",
@@ -652,52 +651,52 @@
 
 
     /*********
-    ** Tile lookups (贴图查询)
+    ** Tile lookups
     *********/
     // Note for translators:
     // The translations in this section are a bit more technical. Quick summary:
     //
     //  - A 'map' sets the layout and appearance for an in-game location (like the farmhouse).
-    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back', 'Front', 'Buildings', etc).
-    //  - Each tile's visual appearance is set by assigning it a 'tile index', which is its position in a larger texture called a 'tilesheet'.
+    //  - Each map is divided into a grid of 64x64 pixel 'tiles'. A map can have multiple 'layers' of tiles (e.g. 'Back'，'Front'，'Buildings'，etc).
+    //  - Each tile's visual appearance is set by assigning it a 'tile index'，which is its position in a larger texture called a 'tilesheet'.
     //  - Each tile can be assigned 'properties'. These are metadata which tell the game about the tile (like "Type: Dirt" or "Action: OpenShop HatMouse").
     //  - There are two property types: 'tile property' (set for a specific tile position) and 'index property' (set for all tiles which use that tile index).
 
-    // labels (标签)
-    "tile.title": "贴图 ({{x}}, {{y}})",
-    "tile.description": "地图上此位置的贴图。显示此信息是因为你在设置中启用了贴图查询功能。",
-    "tile.map-name": "地图名",
+    // labels
+    "tile.title": "图块（{{x}}，{{y}}）",
+    "tile.description": "地图上此位置的图块。显示此信息是因为你在设置中启用了图块查询功能。",
+    "tile.map-name": "地图名称",
     "tile.map-properties": "地图属性",
-    "tile.layer-tile": "{{layer}}贴图", // note from translator: this still doesn't work perfectly since the layer name remains untranslated in zh
-    "tile.layer-tile-none": "贴图",
+    "tile.layer-tile": "{{layer}} 图块", // note: this still doesn't work perfectly since the layer name remains untranslated in zh
+    "tile.layer-tile-none": "图块",
 
     // values (数值)
-    "tile.map-properties.value": "地图属性{{name}}的值为：{{value}}", // note from translator: 例如，Outdoors: T  -> 地图属性Outdoors的值为：T
-    "tile.layer-tile.appearance": "贴图表'{{tilesheetId}}'，索引编号：{{index}}（路径：'{{tilesheetPath}}'）",
-    "tile.layer-tile.blend-mode": "混合模式: {{value}}",
-    "tile.layer-tile.index-property": "索引属性: {{name}}: {{value}}",
-    "tile.layer-tile.tile-property": "贴图属性: {{name}}: {{value}}",
-    "tile.layer-tile.none-here": "此处无贴图",
+    "tile.map-properties.value": "{{name}}：{{value}}", // 例如，Outdoors: T  -> 地图属性 Outdoors：T
+    "tile.layer-tile.appearance": "贴图集：{{tilesheetId}}，索引编号：{{index}}（路径：“{{tilesheetPath}}”）",
+    "tile.layer-tile.blend-mode": "混合模式：{{value}}",
+    "tile.layer-tile.index-property": "索引属性 {{name}}：{{value}}",
+    "tile.layer-tile.tile-property": "图块属性 {{name}}：{{value}}",
+    "tile.layer-tile.none-here": "此处无图块",
 
 
     /*********
-    ** Trash Bear or Gourmand lookups (垃圾熊或美食家查询)
+    ** Trash Bear or Gourmand lookups
     *********/
-    // labels (标签)
+    // labels
     "trash-bear-or-gourmand.item-wanted": "想要的东西",
     "trash-bear-or-gourmand.quest-progress": "任务进度",
 
 
     /*********
-    ** Wild tree lookups (野生树木查询)
+    ** Wild tree lookups
     *********/
-    // labels (标签)
+    // labels
     "tree.stage": "生长阶段",
     "tree.next-growth": "下次生长",
     "tree.seed": "产出种子",
-    "tree.is-fertilized": "播洒树肥",
+    "tree.is-fertilized": "是否施树肥",
 
-    // values (数值)
+    // values
     "tree.name.big-mushroom": "大蘑菇",
     "tree.name.mahogany": "桃花心木",
     "tree.name.maple": "枫树",
@@ -708,15 +707,15 @@
     "tree.name.mystic": "神秘树",
     "tree.name.unknown": "未知",
     "tree.stage.done": "完全长成",
-    "tree.stage.partial": "{{stageName}}（总共{{max}}个阶段中的第{{step}}阶段）",
-    "tree.next-growth.winter": "除非施肥，冬天在温室之外无法生长",
-    "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
-    "tree.next-growth.chance": "明天有{{chance}}%几率成长到{{stage}}",
+    "tree.stage.partial": "{{stageName}}（进度 {{step}}/{{max}}）",
+    "tree.next-growth.winter": "冬季在温室之外无法生长，除非施肥",
+    "tree.next-growth.adjacent-trees": "因其他树靠得太近而无法生长",
+    "tree.next-growth.chance": "明天有 {{chance}}% 几率继续生长（下一阶段：{{stage}}）",
     "tree.seed.not-ready": "尚未就绪",
-    "tree.seed.probability-daily": "每天有{{chance}}%几率产生{{itemName}}。",
-    "tree.seed.probability-on-chop": "砍倒时有{{chance}}%几率掉落{{itemName}}。",
+    "tree.seed.probability-daily": "每天有 {{chance}}% 几率产生{{itemName}}。",
+    "tree.seed.probability-on-chop": "砍倒时有 {{chance}}% 几率掉落{{itemName}}。",
 
-    // growth stages (生长阶段)
+    // growth stages
     "tree.stages.seed": "种子",
     "tree.stages.sprout": "发芽",
     "tree.stages.sapling": "树苗",
@@ -729,130 +728,129 @@
     ** Data mining fields
     *********/
     "data-mining.name": "原始数据",
-    "data-mining.name.map-tile": "原始数据（地图土块）",
+    "data-mining.name.map-tile": "原始数据（地图图块）",
     "data-mining.name.map-location": "原始数据（位置）",
 
-    // TODO
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+    "data-mining.section-pinned": "已置顶", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*************************************************
     ** Search UI
     *************************************************/
     // screen reader text
-    "search-menu.screen-reader.instructions": "Lookup Anything 搜索菜单。搜索框已选中。输入文本以进行搜索。",
-    "search-menu.screen-reader.search-results": "搜索框。已找到关于 “{{search}}” 的 {{count}} 个结果。向下导航以查看结果。",
-    "search-menu.screen-reader.search-no-results": "搜索框。未找到任何关于 “{{search}}” 的结果。",
+    "search-menu.screen-reader.instructions": "查询一切的搜索菜单。已选中搜索框。请输入要搜索的文本。",
+    "search-menu.screen-reader.search-results": "搜索框。找到 {{count}} 个与“{{search}}”相关的结果。按向下方向键浏览。",
+    "search-menu.screen-reader.search-no-results": "搜索框。未找到与“{{search}}”相关的结果。",
     "search-menu.screen-reader.search-empty": "搜索框。当前为空。",
     "search-menu.screen-reader.result": "{{name}}（{{type}}）。",
 
 
     /*************************************************
-    ** Generic Mod Config Menu UI (通用模组管理菜单界面)
+    ** Generic Mod Config Menu UI
     *************************************************/
     // appearance
     "config.title.appearance": "外观",
 
-    "config.theme.name": "视觉样式",
-    "config.theme.desc": "物品查询与搜索菜单的视觉样式。",
+    "config.theme.name": "界面主题",
+    "config.theme.desc": "物品查询与搜索菜单的界面主题。",
 
     "config.theme.values.Parchment": "羊皮纸",
     "config.theme.values.Joja": "Joja",
     "config.theme.values.MenuBox_Border": "游戏菜单样式（带边框）",
-    "config.theme.values.MenuBox_Inset": "游戏菜单样式（窄边框）",
-    "config.theme.values.MenuBox_Raised": "游戏菜单样式（无边框）",
+    "config.theme.values.MenuBox_Inset": "游戏菜单样式（内嵌）",
+    "config.theme.values.MenuBox_Raised": "游戏菜单样式（凸起）",
     "config.theme.values.Plain": "纯色背景",
 
     "config.force-full-screen.name": "强制全屏",
-    "config.force-full-screen.desc": "是否强制使用全屏显示查询结果窗口，这对查看数据挖掘字段时非常有用",
+    "config.force-full-screen.desc": "是否强制将查询结果窗口全屏显示，而不是居中显示。在查看原始数据字段时非常有用。",
 
-    // progression mode (进度模式)
+    // progression mode
     "config.title.progression": "进度模式",
 
-    "config.progression.show-uncaught-fish-spawn-rules.name": "显示未捕获鱼的捕获条件",
-    "config.progression.show-uncaught-fish-spawn-rules.desc": "是否显示没有捕获过的鱼的捕获条件",
+    "config.progression.show-uncaught-fish-spawn-rules.name": "显示未捕获鱼的生成条件",
+    "config.progression.show-uncaught-fish-spawn-rules.desc": "是否显示尚未捕获的鱼的生成条件。",
 
-    "config.progression.show-unknown-gift-tastes.name": "显示未知的礼物品味",
-    "config.progression.show-unknown-gift-tastes.desc": "是否显示游戏中不知道的礼物品味（例如，从对话或实际送礼中）。",
+    "config.progression.show-unknown-gift-tastes.name": "显示未知的礼物喜好",
+    "config.progression.show-unknown-gift-tastes.desc": "是否显示游戏中尚未得知的礼物喜好（例如通过对话或实际送礼发现）。",
 
     "config.progression.show-unknown-recipes.name": "显示未知的配方",
-    "config.progression.show-unknown-recipes.desc": "是否显示游戏中尚未学习的配方。",
+    "config.progression.show-unknown-recipes.desc": "是否显示游戏中尚未学会的配方。",
 
     "config.progression.show-puzzle-solutions.name": "显示谜题的解决方法",
     "config.progression.show-puzzle-solutions.desc": "是否显示谜题的解决方法。",
 
-    // gift tastes (礼物品味)
-    "config.title.gift-tastes": "礼物品位",
+    // gift tastes
+    "config.title.gift-tastes": "礼物喜好",
     "config.show-gift-tastes.loved.name": "显示最爱的礼物",
-    "config.show-gift-tastes.loved.desc": "是否在NPC和物品查询中显示最爱的礼物",
+    "config.show-gift-tastes.loved.desc": "是否在 NPC 和物品查询中显示最爱的礼物",
     "config.show-gift-tastes.liked.name": "显示喜欢的礼物",
-    "config.show-gift-tastes.liked.desc": "是否在NPC和物品查询中显示喜欢的礼物",
-    "config.show-gift-tastes.neutral.name": "显示无感的礼物",
-    "config.show-gift-tastes.neutral.desc": "是否在NPC和物品查询中显示无感的礼物",
+    "config.show-gift-tastes.liked.desc": "是否在 NPC 和物品查询中显示喜欢的礼物",
+    "config.show-gift-tastes.neutral.name": "显示一般的礼物",
+    "config.show-gift-tastes.neutral.desc": "是否在 NPC 和物品查询中显示一般的礼物",
     "config.show-gift-tastes.disliked.name": "显示不喜欢的礼物",
-    "config.show-gift-tastes.disliked.desc": "是否在NPC和物品查询中显示不喜欢的礼物",
+    "config.show-gift-tastes.disliked.desc": "是否在 NPC 和物品查询中显示不喜欢的礼物",
     "config.show-gift-tastes.hated.name": "显示讨厌的礼物",
-    "config.show-gift-tastes.hated.desc": "是否在NPC和物品查询中显示讨厌的礼物",
+    "config.show-gift-tastes.hated.desc": "是否在 NPC 和物品查询中显示讨厌的礼物",
 
-    "config.show-unowned-gifts.name": "显示未拥有的礼物",
-    "config.show-unowned-gifts.desc": "是否在NPC和物品查询中显示未拥有的礼物",
+    "config.show-unowned-gifts.name": "显示未拥有物品的礼物喜好",
+    "config.show-unowned-gifts.desc": "是否在 NPC 和物品查询中显示未拥有物品的礼物喜好",
 
-    "config.highlight-unrevealed-gift-tastes.name": "加粗显示未揭露的礼物",
-    "config.highlight-unrevealed-gift-tastes.desc": "是否加粗显示未揭露的礼物品位",
+    "config.highlight-unrevealed-gift-tastes.name": "加粗显示未揭晓的礼物喜好",
+    "config.highlight-unrevealed-gift-tastes.desc": "是否加粗显示尚未揭晓的礼物喜好",
 
-    // collapse fields (文本折叠)
+    // collapse fields
     "config.title.collapse-fields": "折叠大型字段",
 
     "config.collapse-fields.enabled.name": "启用",
-    "config.collapse-fields.enabled.desc": "是否折叠大型字段。当启用时，查找菜单会用'显示X个结果'的链接来替代大型字段，点击该字段会显示全部信息。",
+    "config.collapse-fields.enabled.desc": "是否折叠大型字段。启用后，查询菜单会用“显示 X 个结果”的链接替换大型字段，点击即可展开全部内容。",
 
-    "config.collapse-fields.building-recipes.name": "建筑查看: 生产规则",
-    "config.collapse-fields.item-recipes.name": "物品查看: 配方",
-    "config.collapse-fields.npc-gift-tastes.name": "NPC查看: 礼物品味",
-    "config.collapse-fields.any.desc": "如果某个字段包含的信息数量超过你所设置的值，查找菜单会用'显示X个结果'的链接来替代该字段。",
+    "config.collapse-fields.building-recipes.name": "建筑查询：配方",
+    "config.collapse-fields.item-recipes.name": "物品查询：配方",
+    "config.collapse-fields.npc-gift-tastes.name": "NPC 查询：礼物喜好",
+    "config.collapse-fields.any.desc": "如果某个字段包含的条目数量超过设定值，查询菜单会用“显示 X 个结果”的链接替换该字段。",
 
-    // advanced options (高级选项)
-    "config.title.advanced-options": "高级",
-    "config.tile-lookups.name": "贴图查询",
-    "config.tile-lookups.desc": "是否将地图贴图变为可查询对象",
-    "config.data-mining-fields.name": "显示数据挖掘字段",
-    "config.data-mining-fields.desc": "是否显示对数据挖掘者有用的原始数据（作为查询结果底部的单独字段）。这是一个高级功能，不适合大多数玩家。",
+    // advanced options
+    "config.title.advanced-options": "高级选项",
+    "config.tile-lookups.name": "图块查询",
+    "config.tile-lookups.desc": "是否将地图图块作为可查询对象。",
+    "config.data-mining-fields.name": "显示原始数据字段",
+    "config.data-mining-fields.desc": "是否显示对想要查看原始数据的人有用的原始数据（作为查询结果底部的单独字段）。这是一个高级功能，不适合大多数玩家。",
     "config.show-invalid-recipes.name": "显示无效配方",
-    "config.show-invalid-recipes.desc": "是否显示含有错误物品的配方。",
+    "config.show-invalid-recipes.desc": "是否显示包含错误物品的配方。",
     "config.target-redirection.name": "目标重定向",
-    "config.target-redirection.desc": "游戏在某些情况下会生成一个暂时的替身来指代某个目标。比如，矿井中的阿比盖尔实际上只是一个暂时的npc，导致查询时并不会显示阿比盖尔的信息。开启该选项后，才能显示阿比盖尔的真正信息。",
-    "config.scroll-amount.name": "滚动值",
+    "config.target-redirection.desc": "游戏在某些情况下会生成一个临时的替身来指代另一个目标。例如，矿井中的阿比盖尔实际上只是一个临时的 NPC，因此查询她时不会显示阿比盖尔的真实信息。启用该选项后，将改为查询真正的阿比盖尔。",
+    "config.scroll-amount.name": "滚动距离",
     "config.scroll-amount.desc": "每次上下滚动时移动的像素数。",
 
-    // controls section (控制部分)
+    // controls section
     "config.title.controls": "快捷键",
     "config.hide-on-key-up.name": "松开时隐藏",
     "config.hide-on-key-up.desc": "松开查询键时自动关闭查询窗口",
     "config.toggle-lookup.name": "查询",
-    "config.toggle-lookup.desc": "自定义查询快捷键",
+    "config.toggle-lookup.desc": "设置切换查询界面的按键。",
 
-    // TODO
-    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
-    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
-    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
-    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-click.name": "双击鼠标切换查询",
+    "config.toggle-lookup-on-double-click.description": "是否通过双击鼠标左键来打开/关闭查询界面。此功能会尽量查询所点击的位置。",
+    "config.toggle-lookup-on-double-tap.name": "双击屏幕切换查询",
+    "config.toggle-lookup-on-double-tap.description": "是否通过双击屏幕来打开/关闭查询界面。此功能会尽量查询所点击的位置。",
+
     "config.toggle-search.name": "搜索",
-    "config.toggle-search.desc": "自定义搜索快捷键",
+    "config.toggle-search.desc": "设置打开/关闭搜索菜单的按键。",
     "config.scroll-up.name": "向上滚动",
-    "config.scroll-up.desc": "自定义长内容向上滚动快捷键",
+    "config.scroll-up.desc": "设置长内容向上滚动的按键。",
     "config.scroll-down.name": "向下滚动",
-    "config.scroll-down.desc": "自定义长内容向下滚动快捷键",
+    "config.scroll-down.desc": "设置长内容向下滚动的按键。",
     "config.page-up.name": "向上滚动一页",
-    "config.page-up.desc": "自定义长内容向上滚动一页快捷键",
+    "config.page-up.desc": "设置长内容向上翻一页的按键。",
     "config.page-down.name": "向下滚动一页",
-    "config.page-down.desc": "自定义长内容向下滚动一页快捷键",
+    "config.page-down.desc": "设置长内容向下翻一页的按键。",
     "config.toggle-debug.name": "调试模式",
-    "config.toggle-debug.desc": "自定义显示或隐藏调试信息快捷键",
+    "config.toggle-debug.desc": "设置显示或隐藏调试信息的按键。",
 
 
     /*************************************************
-    ** Iconic Framework icon (图标框架模组显示的图标)
+    ** Iconic Framework icons
     *************************************************/
     "icon.toggle-search.name": "查询一切",
-    "icon.toggle-search.desc": "切换查询搜索任意内容"
+    "icon.toggle-search.desc": "打开或关闭搜索菜单"
 }
