@@ -1031,6 +1031,16 @@ internal class PatchLoader
                         );
                     break;
 
+                case TextOperationType.Regex:
+                    if (string.IsNullOrWhiteSpace(search.Raw))
+                        return Fail($"{errorPrefix}: the {nameof(operation.Search)} value must be set for a {operationType} text operation.", out error);
+                    parsedOperation = new RegexTextOperation(
+                        target: target,
+                        value: value,
+                        search: search
+                    );
+                    break;
+
                 default:
                     return Fail($"{errorPrefix}: unsupported text operation type '{operationType}'", out error);
             }

@@ -16,6 +16,7 @@ They're set using the `TextOperations` field for an [`EditData`](action-editdata
   * [`Prepend`](#prepend)
   * [`RemoveDelimited`](#removedelimited)
   * [`ReplaceDelimited`](#replacedelimited)
+  * [`Regex`](#regex)
 * [See also](#see-also)
 
 ## Example
@@ -342,6 +343,78 @@ For example, this replaces Rabbit's Foot (item #446) in universal love gift tast
       }
    ]
 }
+```
+
+### `Regex`
+The `Regex` operation parses the search text into a [regular expression (regex)](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions)
+then performs [substitution](https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions) using the value. 
+
+This expects these fields:
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _[common fields](#common-fields)_ above.
+
+</td>
+</tr>
+<tr>
+<td><code>Search</code></td>
+<td>
+
+The [regex](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions) to match the entire target string by.
+
+This field supports [tokens](../author-guide.md#tokens), and capitalization **does** matter.
+
+</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td>
+
+The replacement for the match. Supports [regex substitution syntax](https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions) which allows you to reference capture groups.
+
+This field supports [tokens](../author-guide.md#tokens), and capitalization doesn't matter. Like
+most Content Patcher fields, whitespace is trimmed from the start and end.
+
+</td>
+</tr>
+<tr>
+
+For example, `Strings/StringsFromCSFiles:Fishing_Channel_Intro` has this value:
+```
+Thank you for tuning in to F.I.B.S., the Fishing Information Broadcast Service. Despite our unfortunate name, you can rest assured that we provide only the most trustworthy information about this season's fishing opportunities.
+```
+
+The following text operation replaces `"Fish"` with `"Fimsh"` in a sentence while retaining the capitalization.
+
+```js
+{
+   "Action": "EditData",
+   "Target": "Strings/StringsFromCSFiles",
+   "TextOperations": [
+      {
+         "Operation": "Regex",
+         "Target": [
+            "Entries",
+            "Fishing_Channel_Intro"
+         ],
+         "Search": "([Ff])ish", // 1st capture group: ([Ff])
+         "Value": "$1imsh", // $1 references the 1st capture group's value
+      }
+   ]
+}
+```
+
+Resulting text:
+```
+Thank you for tuning in to F.I.B.S., the Fimshing Information Broadcast Service. Despite our unfortunate name, you can rest assured that we provide only the most trustworthy information about this season's fimshing opportunities.
 ```
 
 ## See also

@@ -14,6 +14,7 @@
   * [`Prepend`](#prepend)
   * [`RemoveDelimited`](#removedelimited)
   * [`ReplaceDelimited`](#replacedelimited)
+  * [`Regex`](#regex)
 * [参见](#see-also)
 
 ## 示例<a name="example"></a>
@@ -322,6 +323,78 @@
    ]
 }
 ```
+
+### `Regex` <a name="regex"></a>
+`Regex`操作将Search作为[正则表达式](https://learn.microsoft.com/zh-cn/dotnet/standard/base-types/regular-expressions)使用然后
+用Value[替代](https://learn.microsoft.com/zh-cn/dotnet/standard/base-types/substitutions-in-regular-expressions)原字符串。
+
+所需要的字段包括：
+
+<table>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+以上的[公共字段](#common-fields)
+
+</td>
+</tr>
+<tr>
+<td><code>Search</code></td>
+<td>
+
+用于搜索整个字符串的[正则表达式](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions)。
+
+该字段支持[令牌](../author-guide.md#tokens)，且**区分大小写** 。
+
+</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td>
+
+用于替换该值的文本，支持[正则表达式替代语法](https://learn.microsoft.com/en-us/dotnet/standard/base-types/substitutions-in-regular-expressions)。可调用原文本里的捕获组。
+
+该字段支持[令牌](../author-guide.md#tokens)，不区分大小写。和大部分 Content Patcher 的字段一样，开头和末尾的空格字符会被删除。
+
+</td>
+</tr>
+<tr>
+
+例如，`Strings/StringsFromCSFiles:Fishing_Channel_Intro.zh-CN` 在原版游戏里是这个文本：
+```
+感谢您收听 F.I.B.S. 钓鱼信息广播服务。请您相信，我们绝不是来钓鱼的，我们只会向您提供本季节捕鱼时机的最可靠的消息。
+```
+
+这个补丁同时将 `"钓鱼"` 替换为 `"钓螃蟹"`，`"捕鱼"` 替换为 `"捕螃蟹"`，并且不替换`"来钓鱼"`。
+
+```js
+{
+   "Action": "EditData",
+   "Target": "Strings/StringsFromCSFiles",
+   "TextOperations": [
+      {
+         "Operation": "Regex",
+         "Target": [
+            "Entries",
+            "Fishing_Channel_Intro"
+         ],
+         "Search": "([^来][钓捕])鱼", // 第一捕获组：([钓捕])
+         "Value": "$1螃蟹", // 用$1调用第一捕获组
+      }
+   ]
+}
+```
+
+替换后的文本：
+```
+感谢您收听 F.I.B.S. 钓螃蟹信息广播服务。请您相信，我们绝不是来钓鱼的，我们只会向您提供本季节捕螃蟹时机的最可靠的消息。
+```
+
 
 ## 参见 <a name="see-also"></a>
 * 其他操作和选项请参考[模组作者指南](../author-guide.md)
