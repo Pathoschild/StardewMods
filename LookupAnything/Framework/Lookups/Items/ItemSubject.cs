@@ -399,6 +399,87 @@ internal class ItemSubject : BaseSubject
             // owned
             yield return new GenericField(I18n.Item_NumberOwned(), this.GetNumberOwnedText(item));
 
+            // crops planted
+            if (isSeed)
+            {
+                int cropsPlanted = 0;
+                Utility.ForEachCrop((crop) =>
+                {
+                    if (crop.netSeedIndex.Value == item.ItemId ||
+                            (CommonHelper.IsItemId(crop.whichForageCrop.Value, allowZero: false) && crop.whichForageCrop.Value == item.ItemId))
+                    {
+                        cropsPlanted++;
+                    }
+                    return true;
+                });
+                yield return new GenericField(I18n.Item_NumberPlanted(), I18n.Item_CropCount_Summary(count: cropsPlanted));
+            }
+
+            // wild tree seeds planted
+            if (obj?.IsWildTreeSapling() is true)
+            {
+                int seedsPlanted = 0;
+                Utility.ForEachLocation((location) =>
+                {
+                    // Only considers plantable locations (ie. ignore wild trees spawned on non-plantable locations)
+                    if (!this.IsLocationPlantable(location))
+                    {
+                        return true;
+                    }
+                    foreach (var terrainFeature in location.terrainFeatures.Values)
+                    {
+                        if (terrainFeature is Tree tree &&
+                                 ItemRegistry.QualifyItemId(tree.GetData()?.SeedItemId) == item.QualifiedItemId)
+                        {
+                            seedsPlanted++;
+                        }
+                    }
+                    return true;
+                });
+                yield return new GenericField(I18n.Item_NumberPlanted(), I18n.Item_WildTreeCount_Summary(count: seedsPlanted));
+            }
+
+            // fruit tree saplings planted
+            if (obj?.IsFruitTreeSapling() is true)
+            {
+                int saplingsPlanted = 0;
+                Utility.ForEachLocation((location) =>
+                {
+                    // Only considers plantable locations (ie. ignore "wild" fruit trees spawned on non-plantable locations by mods)
+                    if (!this.IsLocationPlantable(location))
+                    {
+                        return true;
+                    }
+                    foreach (var terrainFeature in location.terrainFeatures.Values)
+                    {
+                        if (terrainFeature is FruitTree fruitTree &&
+                                 fruitTree.treeId.Value == item.ItemId)
+                        {
+                            saplingsPlanted++;
+                        }
+                    }
+                    return true;
+                });
+                yield return new GenericField(I18n.Item_NumberPlanted(), I18n.Item_FruitTreeCount_Summary(count: saplingsPlanted));
+            }
+
+            if (obj?.IsTeaSapling() is true)
+            {
+                int bushesPlanted = 0;
+                Utility.ForEachLocation((location) =>
+                {
+                    foreach (var bush in this.GetEveryBushInLocation(location))
+                    {
+                        if (item.QualifiedItemId == this.GetSaplingQualifiedIdForBush(bush))
+                        {
+                            bushesPlanted++;
+                        }
+                    }
+                    return true;
+                });
+                yield return new GenericField(I18n.Item_NumberPlanted(), I18n.Item_BushCount_Summary(count: bushesPlanted));
+            }
+
             // times crafted
             RecipeModel[] recipes = this.GameHelper
                 .GetRecipes()
@@ -1088,6 +1169,52 @@ internal class ItemSubject : BaseSubject
             .Where(p => this.IsIngredientNeeded(bundle, p))
             .Sum(p => p.Stack);
     }
+
+    /// <summary>Returns whether this location is normally plantable by the farmer. We want to only check these locations when counting trees planted and to ignore "wild" trees spawned by other mods.</summary>
+    /// <param name="location">The location to check.</param>
+    private bool IsLocationPlantable(GameLocation location)
+    {
+        return location.GetData()?.CanPlantHere ?? location.IsFarm;
+    }
+
+    private string? GetSaplingQualifiedIdForBush(Bush bush)
+    {
+        // Is modded bush from Custom Bush
+        if (this.GameHelper.CustomBush.IsLoaded
+                && this.GameHelper.CustomBush.TryGetCustomBush(bush, out string? id))
+        {
+            return id;
+        }
+        // Is vanilla tea bush
+        else if (bush.size.Value == Bush.greenTeaBush)
+        {
+            return "(O)251";
+        }
+        return null;
+    }
+
+    /// <summary>Returns an iterator over every bush in the location, on the ground or in garden pots. The former will only be checked if the location is plantable.</summary>
+    private IEnumerable<Bush> GetEveryBushInLocation(GameLocation location)
+    {
+        if (this.IsLocationPlantable(location))
+        {
+            foreach (var terrainFeature in location.terrainFeatures.Values)
+            {
+                if (terrainFeature is Bush bush)
+                {
+                    yield return bush;
+                }
+            }
+        }
+        foreach (var obj in location.Objects.Values)
+        {
+            if (obj is IndoorPot pot && pot.bush.Value is not null)
+            {
+                yield return pot.bush.Value;
+            }
+        }
+    }
+
 
     /// <summary>The basic metadata for a recipe.</summary>
     /// <param name="Type">The recipe type.</param>
