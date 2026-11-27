@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common.Integrations.BetterGameMenu;
 using Pathoschild.Stardew.Common.Integrations.BushBloomMod;
 using Pathoschild.Stardew.Common.Integrations.CustomBush;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.ExtraAnimalConfig;
 using Pathoschild.Stardew.Common.Integrations.ExtraMachineConfig;
 using Pathoschild.Stardew.Common.Integrations.HaveMoreKids;
 using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
@@ -29,10 +30,13 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Extensions;
+using StardewValley.GameData;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.Crops;
+using StardewValley.GameData.FarmAnimals;
 using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Locations;
+using StardewValley.Internal;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -91,6 +95,9 @@ internal class GameHelper
     public CustomBushIntegration CustomBush { get; }
 
     /// <summary>The Extra Machine Config integration.</summary>
+    public ExtraAnimalConfigIntegration ExtraAnimalConfig { get; }
+
+    /// <summary>The Extra Machine Config integration.</summary>
     public ExtraMachineConfigIntegration ExtraMachineConfig { get; }
 
     /// <summary>The Have More Kids integration.</summary>
@@ -128,6 +135,7 @@ internal class GameHelper
         this.BushBloomMod = new BushBloomModIntegration(modRegistry, monitor);
         this.CustomBush = new CustomBushIntegration(modRegistry, monitor);
         this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, monitor);
+        this.ExtraAnimalConfig = new ExtraAnimalConfigIntegration(modRegistry, monitor);
         this.ExtraMachineConfig = new ExtraMachineConfigIntegration(modRegistry, monitor);
         this.HaveMoreKids = new HaveMoreKidsIntegration(modRegistry, monitor);
         this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
@@ -559,6 +567,85 @@ internal class GameHelper
         return this.ModRegistry.GetFromNamespacedId(id, requirePrefix: true);
     }
 
+    /// <summary>Get all animal produce items</summary>
+    /// <param name="animalId">Farm animal id</param>
+    /// <param name="animalData">Farm animal data</param>
+    /// <param name="isDeluxe">True to get deluxe produce, false for normal</param>
+    /// <returns>List of produce items</returns>
+    public IEnumerable<Item?>? GetAnimalProduceItems(string animalId, FarmAnimalData animalData, bool isDeluxe)
+    {
+        IEnumerable<FarmAnimalProduce>? prodIter = isDeluxe ? animalData.DeluxeProduceItemIds : animalData.ProduceItemIds;
+        if (prodIter == null)
+        {
+            return null;
+        }
+
+        HashSet<string> seenProduce = [];
+        ItemQueryContext itemQueryContext = new();
+
+        List<Item> produceItems = [];
+
+        foreach (FarmAnimalProduce prod in prodIter)
+        {
+            if (string.IsNullOrEmpty(prod.ItemId))
+                continue;
+
+            if (this.GetEACItemQueryOverrides(itemQueryContext, animalId, prod.ItemId, ref seenProduce, ref produceItems))
+            {
+                continue;
+            }
+            else
+            {
+                string qualifiedItemId = ItemRegistry.type_object + prod.ItemId;
+                if (
+                    !seenProduce.Contains(qualifiedItemId)
+                    && ItemRegistry.Create(qualifiedItemId, allowNull: true) is Item item
+                )
+                {
+                    produceItems.Add(item);
+                    seenProduce.Add(qualifiedItemId);
+                }
+            }
+        }
+
+        return produceItems;
+    }
+
+    /// <summary>Get all extra animal produce items (provided by ExtraAnimalConfig)</summary>
+    /// <param name="animalId">Farm animal id</param>
+    /// <returns>List of produce items</returns>
+    public IEnumerable<Item?>? GetAnimalProduceItemsExtraAnimalConfig(string animalId)
+    {
+        if (this.ExtraAnimalConfig?.GetExtraDrops(animalId) is not Dictionary<string, List<string>> extraDrops)
+        {
+            return null;
+        }
+
+        HashSet<string> seenProduce = [];
+        List<Item> produceItems = [];
+        ItemQueryContext itemQueryContext = new();
+
+        foreach (string itemId in extraDrops.Values.SelectMany(id => id))
+        {
+            if (this.GetEACItemQueryOverrides(itemQueryContext, animalId, itemId, ref seenProduce, ref produceItems))
+            {
+                continue;
+            }
+            else
+            {
+                string qualifiedItemId1 = ItemRegistry.type_object + itemId;
+                if (
+                    !seenProduce.Contains(qualifiedItemId1)
+                    && ItemRegistry.Create(qualifiedItemId1, allowNull: true) is Item item
+                )
+                {
+                    produceItems.Add(item);
+                    seenProduce.Add(qualifiedItemId1);
+                }
+            }
+        }
+        return produceItems;
+    }
 
     /****
     ** Coordinates
@@ -910,5 +997,41 @@ internal class GameHelper
             // fails for non-social NPCs
             return null;
         }
+    }
+
+
+    private bool GetEACItemQueryOverrides(
+        ItemQueryContext itemQueryContext,
+        string key,
+        string itemId,
+        ref HashSet<string> seenProduce,
+        ref List<Item> produceItems
+    )
+    {
+        if (
+            this.ExtraAnimalConfig?.GetItemQueryOverrides(key, itemId) is not List<GenericSpawnItemDataWithCondition> overrideList
+            || !overrideList.Any()
+        )
+        {
+            return false;
+        }
+        foreach (GenericSpawnItemDataWithCondition gsidwc in overrideList)
+        {
+            foreach (
+                var result in ItemQueryResolver.TryResolve(
+                    gsidwc,
+                    itemQueryContext,
+                    ItemQuerySearchMode.AllOfTypeItem
+                )
+            )
+            {
+                if (result.Item is Item item && !seenProduce.Contains(item.ItemId))
+                {
+                    seenProduce.Add(item.QualifiedItemId);
+                    produceItems.Add(item);
+                }
+            }
+        }
+        return true;
     }
 }

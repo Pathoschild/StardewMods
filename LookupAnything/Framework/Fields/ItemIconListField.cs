@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -29,6 +31,9 @@ internal class ItemIconListField : GenericField
     /// <summary>The pixel indent to apply before each entry in the list.</summary>
     private readonly int IconIndent;
 
+    /// <summary>Optional, the item registry to use for links.</summary>
+    private readonly ISubjectRegistry? Codex;
+
 
     /*********
     ** Public methods
@@ -41,7 +46,7 @@ internal class ItemIconListField : GenericField
     /// <param name="introText">The text to show before the item list, if any.</param>
     /// <param name="formatItemName">Get the name to show for an item, or <c>null</c> to use the item's display name.</param>
     /// <param name="iconIndent">The pixel indent to apply before each entry in the list.</param>
-    public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item?>? items, bool showStackSize, string? introText = null, Func<Item, string?>? formatItemName = null, int iconIndent = 0)
+    public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item?>? items, bool showStackSize, string? introText = null, Func<Item, string?>? formatItemName = null, int iconIndent = 0, ISubjectRegistry? codex = null)
         : base(label, hasValue: items != null)
     {
         this.Items = items?.WhereNotNull().Select(item => Tuple.Create(item, gameHelper.GetSprite(item))).ToArray() ?? [];
@@ -50,6 +55,7 @@ internal class ItemIconListField : GenericField
         this.IntroText = introText;
         this.FormatItemName = formatItemName;
         this.IconIndent = iconIndent;
+        this.Codex = codex;
     }
 
     /// <inheritdoc />
@@ -84,11 +90,22 @@ internal class ItemIconListField : GenericField
                 Utility.drawTinyDigits(item.Stack, spriteBatch, sizePos, scale: scale, layerDepth: 1f, Color.White);
             }
 
+            ISubject? subject = this.Codex?.GetByEntity(item, null);
+            Color textColor = subject is not null ? Color.Blue : Color.Black;
+
             // draw text
+            Vector2 textPosition = position + new Vector2(leftOffset + iconSize.X + padding, topOffset);
             string displayText = this.FormatItemName?.Invoke(item) ?? item.DisplayName;
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, displayText, position + new Vector2(leftOffset + iconSize.X + padding, topOffset), wrapWidth);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, displayText, textPosition, wrapWidth, textColor);
 
             topOffset += (int)Math.Max(iconSize.Y, textSize.Y) + padding;
+
+            // if codex is given, add links
+            if (subject != null)
+            {
+                Rectangle pixelArea = new((int)textPosition.X, (int)textPosition.Y, (int)textSize.X, (int)textSize.Y);
+                this.LinkTextAreas.Add(new LinkTextArea(subject, pixelArea));
+            }
         }
 
         // return size
