@@ -34,7 +34,7 @@
     "generic.show-x-results": "显示 {{count}} 个结果",
 
     // types (类别)
-    "type.achievement": "Achievement", // TODO
+    "type.achievement": "成就", // TODO
     "type.building": "建筑",
     "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
@@ -183,12 +183,12 @@
     *********/
     // TODO
     // labels
-    "achievement.unlocked": "Unlocked",
-    "achievement.hat-shop": "Hat shop",
+    "achievement.unlocked": "已解锁",
+    "achievement.hat-shop": "帽子店",
 
     // values
-    "achievement.hat-shop.hats-added": "These hats are added to the Hat Mouse shop when the achievement is unlocked:",
-    "achievement.hat-shop.no-hats-added": "No hats are unlocked by this achievement.",
+    "achievement.hat-shop.hats-added": "解锁该成就后，以下帽子会加入帽子鼠商店：",
+    "achievement.hat-shop.no-hats-added": "该成就不会解锁任何帽子。",
 
 
     /*********
@@ -733,7 +733,7 @@
     "data-mining.name.map-location": "原始数据（位置）",
 
     // TODO
-    "data-mining.section-pinned": "Pinned", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
+    "data-mining.section-pinned": "已固定", // 'pinned' section has notable values (i.e. it's pinned at the top of the list)
 
 
     /*************************************************
@@ -832,10 +832,10 @@
     "config.toggle-lookup.desc": "自定义查询快捷键",
 
     // TODO
-    "config.toggle-lookup-on-double-click.name": "Toggle lookup on double click",
-    "config.toggle-lookup-on-double-click.description": "Whether to toggle the lookup UI by clicking the left mouse button twice. This looks up the tapped position if possible.",
-    "config.toggle-lookup-on-double-tap.name": "Toggle lookup on double tap",
-    "config.toggle-lookup-on-double-tap.description": "Whether to toggle the lookup UI by tapping the screen twice. This looks up the tapped position if possible.",
+    "config.toggle-lookup-on-double-click.name": "双击鼠标左键切换查询界面",
+    "config.toggle-lookup-on-double-click.description": "是否通过点击两次鼠标左键来开关查询界面。若可行，会查询点击的位置。",
+    "config.toggle-lookup-on-double-tap.name": "双击屏幕切换查询界面",
+    "config.toggle-lookup-on-double-tap.description": "是否通过点按两次屏幕来开关查询界面。若可行，会查询点按的位置。",
     "config.toggle-search.name": "搜索",
     "config.toggle-search.desc": "自定义搜索快捷键",
     "config.scroll-up.name": "向上滚动",
